@@ -28,16 +28,18 @@ The Example for code looks like this:
       YahooFinanceData financeData = request.getFinanceData(request.invoke(builder));
 
 
-      if (financeData.getFinancialData() != null)
-        System.out.println(symbol + ": recMean "
-            + financeData.getFinancialData().getRecommendationMean().getRaw());
+      if (financeData.getFinancialData() != null) {
+        FinancialData financials = financeData.getFinancialData();
+
+        System.out.println(symbol + ": currentPrice: $" + financials.getCurrentPrice().getRaw()
+            + "; recommendationMean " + financials.getRecommendationMean().getRaw());
+      }
     }
 ```
 Which will output something like this:
 
 ```
-fb: recMean 1.8
-amzn: recMean 1.7
-googl: recMean 1.7
-nvda: recMean 2.2
+fb: currentPrice: $198.2235; recommendationMean 1.8
+amzn: currentPrice: $1723.34; recommendationMean 1.7
+baba: currentPrice: $208.42; recommendationMean 1.7
 ```
