@@ -2,6 +2,7 @@ import com.mainstringargs.yahoo.YahooFinanceData;
 import com.mainstringargs.yahoo.YahooFinanceModules;
 import com.mainstringargs.yahoo.YahooFinanceRequest;
 import com.mainstringargs.yahoo.YahooFinanceUrlBuilder;
+import com.mainstringargs.yahoo.domain.FinancialData;
 
 public class Example {
 
@@ -21,9 +22,12 @@ public class Example {
       YahooFinanceData financeData = request.getFinanceData(request.invoke(builder));
 
 
-      if (financeData.getFinancialData() != null)
-        System.out.println(symbol + ": recMean "
-            + financeData.getFinancialData().getRecommendationMean().getRaw());
+      if (financeData.getFinancialData() != null) {
+        FinancialData financials = financeData.getFinancialData();
+
+        System.out.println(symbol + ": currentPrice: $" + financials.getCurrentPrice().getRaw()
+            + "; recommendationMean " + financials.getRecommendationMean().getRaw());
+      }
     }
   }
 }
