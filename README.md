@@ -33,4 +33,11 @@ The Example for code looks like this:
             + financeData.getFinancialData().getRecommendationMean().getRaw());
     }
 ```
+Which will output something like this:
 
+```
+fb: recMean 1.8
+amzn: recMean 1.7
+googl: recMean 1.7
+nvda: recMean 2.2
+```
