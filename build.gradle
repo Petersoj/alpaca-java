@@ -207,3 +207,8 @@ jsonSchema2Pojo {
 // Define the main class for the application
 mainClassName = 'Example'
 
+run {
+  // arguments to pass to the application
+  args "fb","amzn","googl","nvda"
+}
+
