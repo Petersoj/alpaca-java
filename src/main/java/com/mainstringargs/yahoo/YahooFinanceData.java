@@ -35,7 +35,8 @@ public class YahooFinanceData {
   public YahooFinanceData(FinanceData financeData) {
     this.financeData = financeData;
 
-    if (financeData.getQuoteSummary() != null) {
+    if (financeData.getQuoteSummary() != null
+        && financeData.getQuoteSummary().getResult() != null) {
       List<Result> results = financeData.getQuoteSummary().getResult();
 
       if (results != null & results.size() > 0) {
