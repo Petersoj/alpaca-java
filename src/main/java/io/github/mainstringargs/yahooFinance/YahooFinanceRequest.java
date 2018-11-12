@@ -1,18 +1,14 @@
-package com.mainstringargs.yahoo;
+package io.github.mainstringargs.yahooFinance;
 
 import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.Reader;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.google.gson.JsonIOException;
-import com.google.gson.JsonSyntaxException;
-import com.mainstringargs.yahoo.domain.FinanceData;
 import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.JsonNode;
 import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.exceptions.UnirestException;
+import io.github.mainstringargs.yahooFinance.domain.FinanceData;
 
 public class YahooFinanceRequest {
 

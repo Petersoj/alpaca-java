@@ -1,8 +1,8 @@
-import com.mainstringargs.yahoo.YahooFinanceData;
-import com.mainstringargs.yahoo.YahooFinanceModules;
-import com.mainstringargs.yahoo.YahooFinanceRequest;
-import com.mainstringargs.yahoo.YahooFinanceUrlBuilder;
-import com.mainstringargs.yahoo.domain.FinancialData;
+import io.github.mainstringargs.yahooFinance.YahooFinanceData;
+import io.github.mainstringargs.yahooFinance.YahooFinanceModules;
+import io.github.mainstringargs.yahooFinance.YahooFinanceRequest;
+import io.github.mainstringargs.yahooFinance.YahooFinanceUrlBuilder;
+import io.github.mainstringargs.yahooFinance.domain.FinancialData;
 
 public class Example {
 

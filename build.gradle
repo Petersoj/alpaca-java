@@ -33,8 +33,9 @@ buildscript {
 repositories {
     // Use jcenter for resolving your dependencies.
     // You can declare any Maven/Ivy/file repository here.
-    jcenter()
-    maven { url "http://mvnrepository.com/artifact" }
+    maven { url "https://repo.maven.apache.org/maven2" }
+	jcenter()
+    //maven { url "http://mvnrepository.com/artifact" }
 }
 
 dependencies {
@@ -43,6 +44,7 @@ dependencies {
     compile "com.mashape.unirest:unirest-java:1.4.9"
     compile "com.google.code.gson:gson:2.8.5"
 	compile "commons-lang:commons-lang:2.6"
+	compile "io.github.mainstringargs:stock-data-spi:1.0"
 
     // Use JUnit test framework
     testCompile 'junit:junit:4.12'
@@ -73,7 +75,7 @@ jsonSchema2Pojo {
 
   // Package name used for generated Java classes (for types where a fully qualified name has not
   // been supplied in the schema using the 'javaType' property).
-  targetPackage = 'com.mainstringargs.yahoo.domain'
+  targetPackage = 'io.github.mainstringargs.yahooFinance.domain'
 
   // The characters that should be considered as word delimiters when creating Java Bean property
   // names from JSON property names. If blank or not set, JSON properties will be considered to

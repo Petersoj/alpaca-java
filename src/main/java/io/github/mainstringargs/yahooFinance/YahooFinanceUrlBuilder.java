@@ -1,4 +1,4 @@
-package com.mainstringargs.yahoo;
+package io.github.mainstringargs.yahooFinance;
 
 import java.util.Arrays;
 import java.util.HashSet;

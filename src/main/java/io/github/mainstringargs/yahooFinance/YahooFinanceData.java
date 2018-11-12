@@ -1,20 +1,21 @@
-package com.mainstringargs.yahoo;
+package io.github.mainstringargs.yahooFinance;
 
 import java.util.List;
-import com.mainstringargs.yahoo.domain.AssetProfile;
-import com.mainstringargs.yahoo.domain.BalanceSheetHistory;
-import com.mainstringargs.yahoo.domain.CalendarEvents;
-import com.mainstringargs.yahoo.domain.CashflowStatementHistory;
-import com.mainstringargs.yahoo.domain.DefaultKeyStatistics;
-import com.mainstringargs.yahoo.domain.EarningsHistory;
-import com.mainstringargs.yahoo.domain.EarningsTrend;
-import com.mainstringargs.yahoo.domain.FinanceData;
-import com.mainstringargs.yahoo.domain.FinancialData;
-import com.mainstringargs.yahoo.domain.IncomeStatementHistory;
-import com.mainstringargs.yahoo.domain.IndustryTrend;
-import com.mainstringargs.yahoo.domain.RecommendationTrend;
-import com.mainstringargs.yahoo.domain.Result;
-import com.mainstringargs.yahoo.domain.UpgradeDowngradeHistory;
+import io.github.mainstringargs.yahooFinance.domain.AssetProfile;
+import io.github.mainstringargs.yahooFinance.domain.BalanceSheetHistory;
+import io.github.mainstringargs.yahooFinance.domain.CalendarEvents;
+import io.github.mainstringargs.yahooFinance.domain.CashflowStatementHistory;
+import io.github.mainstringargs.yahooFinance.domain.DefaultKeyStatistics;
+import io.github.mainstringargs.yahooFinance.domain.EarningsHistory;
+import io.github.mainstringargs.yahooFinance.domain.EarningsTrend;
+import io.github.mainstringargs.yahooFinance.domain.FinanceData;
+import io.github.mainstringargs.yahooFinance.domain.FinancialData;
+import io.github.mainstringargs.yahooFinance.domain.IncomeStatementHistory;
+import io.github.mainstringargs.yahooFinance.domain.IndustryTrend;
+import io.github.mainstringargs.yahooFinance.domain.RecommendationTrend;
+import io.github.mainstringargs.yahooFinance.domain.Result;
+import io.github.mainstringargs.yahooFinance.domain.UpgradeDowngradeHistory;
+
 
 public class YahooFinanceData {
 
