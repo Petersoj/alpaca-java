@@ -5,7 +5,25 @@
  * For more details take a look at the Java Quickstart chapter in the Gradle
  * user guide available at https://docs.gradle.org/3.4.1/userguide/tutorial_java_projects.html
  */
+ 
+ buildscript {
+  repositories {
+    mavenCentral()
+    jcenter()
+  }
 
+  dependencies {
+    // this plugin
+    classpath 'org.jsonschema2pojo:jsonschema2pojo-gradle-plugin:0.5.1'
+    classpath 'com.bmuschko:gradle-nexus-plugin:2.3.1'
+    // add additional dependencies here if you wish to reference instead of generate them (see example directory)
+  }
+}
+ 
+ 
+plugins {
+    id 'io.codearte.nexus-staging' version '0.11.0'
+}
 // Apply the java plugin to add support for Java
 apply plugin: 'java'
 
@@ -16,17 +34,14 @@ apply plugin: 'eclipse'
 
 apply plugin: 'jsonschema2pojo'
 
-buildscript {
-  repositories {
-    mavenCentral()
-  }
 
-  dependencies {
-    // this plugin
-    classpath 'org.jsonschema2pojo:jsonschema2pojo-gradle-plugin:0.5.1'
-    // add additional dependencies here if you wish to reference instead of generate them (see example directory)
-  }
-}
+
+
+apply plugin: 'com.bmuschko.nexus'
+
+archivesBaseName = 'yahoo-finance-scraper'
+group = 'io.github.mainstringargs'
+version = '1.0'
 
 
 // In this section you declare where to find the dependencies of your project
@@ -48,6 +63,53 @@ dependencies {
 
     // Use JUnit test framework
     testCompile 'junit:junit:4.12'
+}
+
+sourceCompatibility = '1.8'
+[compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
+
+
+modifyPom {
+    project {
+        name 'yahoo-finance-scraper'
+        description 'Scraper Library for Yahoo Finance Stock Data.'
+        url 'https://github.com/mainstringargs/yahoo-finance-scraper'
+        inceptionYear '2018'
+        scm {
+            url 'https://github.com/mainstringargs/yahoo-finance-scraper'
+            connection 'https://github.com/mainstringargs/yahoo-finance-scraper.git'
+            developerConnection 'https://github.com/mainstringargs/yahoo-finance-scraper.git'
+        }
+        licenses {
+            license {
+                name 'MIT License'
+                url 'https://opensource.org/licenses/MIT'
+                distribution 'repo'
+            }
+        }
+        developers {
+            developer {
+                id 'mainstringargs'
+                name 'main(String[] args)'
+                email 'mainstringargs@github.io'
+            }
+        }
+    }
+}
+
+extraArchive {
+    sources = true
+    tests = true
+    javadoc = true
+}
+nexus {
+    sign = true
+    repositoryUrl = 'https://oss.sonatype.org/service/local/staging/deploy/maven2/'
+    snapshotRepositoryUrl = 'https://oss.sonatype.org/content/repositories/snapshots/'
+}
+
+nexusStaging {
+    packageGroup = "io.github.mainstringargs" //optional if packageGroup == project.getGroup()
 }
 
 // Each configuration is set to the default value
