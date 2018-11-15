@@ -8,17 +8,30 @@ import io.github.mainstringargs.yahooFinance.domain.FinancialData;
 import io.github.mainstringargs.yahooFinance.domain.RecommendationTrend;
 import io.github.mainstringargs.yahooFinance.domain.Trend;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class YahooFinanceService.
+ */
 public class YahooFinanceService implements StockDataService {
 
+  /* (non-Javadoc)
+   * @see io.github.mainstringargs.stockData.spi.StockDataService#init()
+   */
   public void init() {
 
 
   }
 
+  /* (non-Javadoc)
+   * @see io.github.mainstringargs.stockData.spi.StockDataService#getServiceName()
+   */
   public String getServiceName() {
     return "Yahoo Finance";
   }
 
+  /* (non-Javadoc)
+   * @see io.github.mainstringargs.stockData.spi.StockDataService#getStockData(java.lang.String[])
+   */
   public Map<String, Map<String, Object>> getStockData(String... tickers) {
 
     Map<String, Map<String, Object>> allStockData = new HashMap<String, Map<String, Object>>();
