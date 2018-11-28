@@ -1,7 +1,9 @@
 package io.github.mainstringargs.yahooFinance;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStreamReader;
+import org.apache.log4j.Logger;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.mashape.unirest.http.HttpResponse;
@@ -16,9 +18,11 @@ import io.github.mainstringargs.yahooFinance.domain.FinanceData;
  */
 public class YahooFinanceRequest {
 
+  private static Logger LOGGER = Logger.getLogger(YahooFinanceService.class);
+
   /** The Constant USER_AGENT_KEY. */
   private static final String USER_AGENT_KEY = "user-agent";
-  
+
   /** The user agent value. */
   private String userAgentValue =
       "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/67.0.3396.87 Safari/537.36";
@@ -52,7 +56,7 @@ public class YahooFinanceRequest {
     try {
       getRequest = Unirest.get(builder.getURL()).header(USER_AGENT_KEY, userAgentValue).asJson();
     } catch (UnirestException e) {
-      e.printStackTrace();
+      LOGGER.debug("UnirestException", e);
     }
 
     return getRequest;
@@ -82,13 +86,22 @@ public class YahooFinanceRequest {
     Gson gson = gsonBuilder.create();
 
     FinanceData rawFinanceData;
+
+    BufferedReader br = null;
     try {
-      BufferedReader br = new BufferedReader(new InputStreamReader(jsonNode.getRawBody()));
+      br = new BufferedReader(new InputStreamReader(jsonNode.getRawBody()));
       rawFinanceData = gson.fromJson(br, FinanceData.class);
-      br.close();
     } catch (Exception e) {
-      e.printStackTrace();
+      LOGGER.debug("Exception", e);
       rawFinanceData = new FinanceData();
+    } finally {
+      if (br != null) {
+        try {
+          br.close();
+        } catch (IOException e) {
+          LOGGER.debug("IOException", e);
+        }
+      }
     }
 
 

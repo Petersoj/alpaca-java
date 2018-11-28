@@ -41,7 +41,7 @@ apply plugin: 'com.bmuschko.nexus'
 
 archivesBaseName = 'yahoo-finance-scraper'
 group = 'io.github.mainstringargs'
-version = '1.0'
+version = '1.1'
 
 
 // In this section you declare where to find the dependencies of your project
@@ -59,7 +59,7 @@ dependencies {
     compile "com.mashape.unirest:unirest-java:1.4.9"
     compile "com.google.code.gson:gson:2.8.5"
 	compile "commons-lang:commons-lang:2.6"
-	compile "io.github.mainstringargs:stock-data-spi:1.0"
+	compile "io.github.mainstringargs:stock-data-spi:1.1"
 
     // Use JUnit test framework
     testCompile 'junit:junit:4.12'
