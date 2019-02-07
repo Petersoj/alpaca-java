@@ -60,7 +60,9 @@ dependencies {
     compile "com.google.code.gson:gson:2.8.5"
 	compile "commons-lang:commons-lang:2.6"
 
-
+ 	compile 'org.apache.logging.log4j:log4j-api:2.11.1'
+	compile 'org.apache.logging.log4j:log4j-core:2.11.1'
+  
     // Use JUnit test framework
     testCompile 'junit:junit:4.12'
 }
@@ -129,7 +131,7 @@ jsonSchema2Pojo {
   usePrimitives = true
 
   // Location of the JSON Schema file(s). This may refer to a single file or a directory of files.
-  source = files("${sourceSets.main.output.resourcesDir}/json/")
+  source = files("sampleJson")
 
   // Target directory for generated Java source files. The plugin will add this directory to the
   // java source set so the compiler will find and compile the newly generated source files.
@@ -142,7 +144,7 @@ jsonSchema2Pojo {
   // The characters that should be considered as word delimiters when creating Java Bean property
   // names from JSON property names. If blank or not set, JSON properties will be considered to
   // contain a single word when creating Java Bean property names.
-  propertyWordDelimiters = [] as char[]
+  propertyWordDelimiters = ['-','_']
 
   // Whether to use the java type long (or Long) instead of int (or Integer) when representing the
   // JSON Schema type 'integer'.
@@ -158,7 +160,7 @@ jsonSchema2Pojo {
   
   // Whether to use the java type BigDecimal when representing the JSON Schema type 'number'. Note
   // that this configuration overrides useDoubleNumbers
-  useBigDecimals = true
+  useBigDecimals = false
 
   // Whether to include hashCode and equals methods in generated Java types.
   includeHashcodeAndEquals = true
@@ -205,7 +207,7 @@ jsonSchema2Pojo {
   // that have been generated previously. <strong>Be warned</strong>, when activated this option
   // will cause jsonschema2pojo to <strong>indiscriminately delete the entire contents of the target
   // directory (all files and folders)</strong> before it begins generating sources.
-  removeOldOutput = false
+  removeOldOutput = true
 
   // The character encoding that should be used when writing the generated Java source files
   outputEncoding = 'UTF-8'
@@ -222,6 +224,9 @@ jsonSchema2Pojo {
   formatDates = true
   formatTimes = true
   
+  //2018-10-05T05:48:59Z
+  customDateTimePattern = "yyyy-MM-ddTHH:mm:ssZ"
+  
   // Whether to initialize Set and List fields as empty collections, or leave them as null.
   initializeCollections = true
   
@@ -235,19 +240,19 @@ jsonSchema2Pojo {
   fileExtensions = [] as String[]
 
   // Whether to generate constructors or not.
-  includeConstructors = false
+  includeConstructors = true
   
   // **EXPERIMENTAL** Whether to make the generated types Parcelable for Android
   parcelable = false
 
   // Whether to make the generated types Serializable
-  serializable = false
+  serializable = true
 
   // Whether to include getters or to omit these accessor methods and create public fields instead.
-  includeGetters = false
+  includeGetters = true
 
   // Whether to include setters or to omit these accessor methods and create public fields instead.
-  includeSetters = false
+  includeSetters = true
 
   // Whether to include dynamic getters, setters, and builders or to omit these methods.
   includeDynamicAccessors = false

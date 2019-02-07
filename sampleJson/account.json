@@ -1,0 +1,14 @@
+{
+  "id": "904837e3-3b76-47ec-b432-046db621571b",
+  "status": "ACTIVE",
+  "currency": "USD",
+  "buying_power": "4000.32",
+  "cash": "4000.32",
+  "cash_withdrawable": "4000.32",
+  "portfolio_value": "4321.98",
+  "pattern_day_trader": false,
+  "trading_blocked": false,
+  "transfers_blocked": false,
+  "account_blocked": false,
+  "created_at": "2018-10-01T13:35:25Z"
+}
