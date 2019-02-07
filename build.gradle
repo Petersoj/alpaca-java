@@ -39,9 +39,9 @@ apply plugin: 'jsonschema2pojo'
 
 apply plugin: 'com.bmuschko.nexus'
 
-archivesBaseName = 'yahoo-finance-scraper'
+archivesBaseName = 'alpaca-java'
 group = 'io.github.mainstringargs'
-version = '1.1'
+version = '1.0'
 
 
 // In this section you declare where to find the dependencies of your project
@@ -59,7 +59,7 @@ dependencies {
     compile "com.mashape.unirest:unirest-java:1.4.9"
     compile "com.google.code.gson:gson:2.8.5"
 	compile "commons-lang:commons-lang:2.6"
-	compile "io.github.mainstringargs:stock-data-spi:1.1"
+
 
     // Use JUnit test framework
     testCompile 'junit:junit:4.12'
@@ -71,14 +71,14 @@ sourceCompatibility = '1.8'
 
 modifyPom {
     project {
-        name 'yahoo-finance-scraper'
-        description 'Scraper Library for Yahoo Finance Stock Data.'
-        url 'https://github.com/mainstringargs/yahoo-finance-scraper'
+        name 'alpaca-java'
+        description 'Java API for Alpaca trading'
+        url 'https://github.com/mainstringargs/alpaca-java'
         inceptionYear '2018'
         scm {
-            url 'https://github.com/mainstringargs/yahoo-finance-scraper'
-            connection 'https://github.com/mainstringargs/yahoo-finance-scraper.git'
-            developerConnection 'https://github.com/mainstringargs/yahoo-finance-scraper.git'
+            url 'https://github.com/mainstringargs/alpaca-java'
+            connection 'https://github.com/mainstringargs/alpaca-java.git'
+            developerConnection 'https://github.com/mainstringargs/alpaca-java.git'
         }
         licenses {
             license {
@@ -137,7 +137,7 @@ jsonSchema2Pojo {
 
   // Package name used for generated Java classes (for types where a fully qualified name has not
   // been supplied in the schema using the 'javaType' property).
-  targetPackage = 'io.github.mainstringargs.yahooFinance.domain'
+  targetPackage = 'io.github.mainstringargs.alpaca.domain'
 
   // The characters that should be considered as word delimiters when creating Java Bean property
   // names from JSON property names. If blank or not set, JSON properties will be considered to
