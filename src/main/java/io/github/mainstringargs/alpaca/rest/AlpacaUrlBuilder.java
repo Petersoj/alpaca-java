@@ -1,4 +1,4 @@
-package io.github.mainstringargs.alpaca;
+package io.github.mainstringargs.alpaca.rest;
 
 /**
  * The Class AlpacaUrlBuilder.
@@ -7,8 +7,6 @@ public class AlpacaUrlBuilder {
 
   /** The builder. */
   private StringBuilder builder;
-  /** The base url. */
-  private final static String BASE_URL = AlpacaProperties.BASE_URL_VALUE;
 
   /** The Constant VERSION. */
   private final static String VERSION = "v1";
@@ -37,8 +35,8 @@ public class AlpacaUrlBuilder {
   /**
    * Instantiates a new alpaca url builder.
    */
-  public AlpacaUrlBuilder() {
-    builder = new StringBuilder(BASE_URL);
+  public AlpacaUrlBuilder(String baseUrl) {
+    builder = new StringBuilder(baseUrl);
     builder.append(URL_SEPARATOR);
     builder.append(VERSION);
     builder.append(URL_SEPARATOR);
@@ -90,7 +88,7 @@ public class AlpacaUrlBuilder {
    * @return the alpaca url builder
    */
   public AlpacaUrlBuilder calendar() {
-    builder.append(ASSETS_ENDPOINT);
+    builder.append(CALENDAR_ENDPOINT);
     return this;
   }
 

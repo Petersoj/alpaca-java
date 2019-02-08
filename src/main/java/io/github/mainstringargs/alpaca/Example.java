@@ -1,21 +1,31 @@
 package io.github.mainstringargs.alpaca;
 
-import com.mashape.unirest.http.HttpResponse;
-import com.mashape.unirest.http.JsonNode;
+import java.util.List;
 import io.github.mainstringargs.alpaca.domain.Account;
+import io.github.mainstringargs.alpaca.domain.Order;
+import io.github.mainstringargs.alpaca.domain.Position;
 
 public class Example {
 
   public static void main(String[] args) {
 
-    AlpacaUrlBuilder urlBuilder = new AlpacaUrlBuilder();
-    urlBuilder.account();
+    AlpacaAPI api = new AlpacaAPI();
 
-    HttpResponse<JsonNode> response = AlpacaRequest.invokeGet(urlBuilder);
-
-    Account account = AlpacaRequest.getResponseObject(response, Account.class);
+    Account account = api.getAccount();
 
     System.out.println(account);
+
+    List<Position> positions = api.getPositions();
+
+    for (Position position : positions) {
+      System.out.println(position);
+    }
+
+    List<Order> orders = api.getOrders();
+
+    for (Order order : orders) {
+      System.out.println(order);
+    }
 
   }
 
