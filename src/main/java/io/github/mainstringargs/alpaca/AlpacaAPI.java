@@ -9,8 +9,11 @@ import io.github.mainstringargs.alpaca.domain.Account;
 import io.github.mainstringargs.alpaca.domain.Order;
 import io.github.mainstringargs.alpaca.domain.Position;
 import io.github.mainstringargs.alpaca.properties.AlpacaProperties;
+import io.github.mainstringargs.alpaca.rest.AccountUrlBuilder;
 import io.github.mainstringargs.alpaca.rest.AlpacaRequest;
 import io.github.mainstringargs.alpaca.rest.AlpacaUrlBuilder;
+import io.github.mainstringargs.alpaca.rest.OrdersUrlBuilder;
+import io.github.mainstringargs.alpaca.rest.PositionsUrlBuilder;
 
 /**
  * The Class AlpacaAPI.
@@ -63,8 +66,8 @@ public class AlpacaAPI {
    * @return the account
    */
   public Account getAccount() {
-    AlpacaUrlBuilder urlBuilder = new AlpacaUrlBuilder(baseUrl);
-    urlBuilder.account();
+    AlpacaUrlBuilder urlBuilder = new AccountUrlBuilder(baseUrl);
+    urlBuilder.endpoint();
 
     HttpResponse<JsonNode> response = alpacaRequest.invokeGet(urlBuilder);
 
@@ -81,9 +84,8 @@ public class AlpacaAPI {
   public List<Position> getPositions() {
     Type listType = new TypeToken<List<Position>>() {}.getType();
 
-    AlpacaUrlBuilder urlBuilder = new AlpacaUrlBuilder(baseUrl);
-    urlBuilder.positions();
-
+    AlpacaUrlBuilder urlBuilder = new PositionsUrlBuilder(baseUrl);
+    urlBuilder.endpoint();
 
     HttpResponse<JsonNode> response = alpacaRequest.invokeGet(urlBuilder);
 
@@ -100,8 +102,8 @@ public class AlpacaAPI {
   public List<Order> getOrders() {
     Type listType = new TypeToken<List<Order>>() {}.getType();
 
-    AlpacaUrlBuilder urlBuilder = new AlpacaUrlBuilder(baseUrl);
-    urlBuilder.orders();
+    AlpacaUrlBuilder urlBuilder = new OrdersUrlBuilder(baseUrl);
+    urlBuilder.endpoint();
 
 
     HttpResponse<JsonNode> response = alpacaRequest.invokeGet(urlBuilder);

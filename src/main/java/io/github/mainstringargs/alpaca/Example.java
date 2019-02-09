@@ -5,8 +5,16 @@ import io.github.mainstringargs.alpaca.domain.Account;
 import io.github.mainstringargs.alpaca.domain.Order;
 import io.github.mainstringargs.alpaca.domain.Position;
 
+/**
+ * The Class Example.
+ */
 public class Example {
 
+  /**
+   * The main method.
+   *
+   * @param args the arguments
+   */
   public static void main(String[] args) {
 
     AlpacaAPI api = new AlpacaAPI();
