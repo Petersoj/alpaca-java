@@ -5,6 +5,10 @@ package io.github.mainstringargs.alpaca.rest;
  */
 public class AccountUrlBuilder extends AlpacaUrlBuilder {
 
+
+  /** The Constant ACCOUNT_ENDPOINT. */
+  public final static String ACCOUNT_ENDPOINT = "account";
+
   /**
    * Instantiates a new account url builder.
    *
@@ -14,13 +18,14 @@ public class AccountUrlBuilder extends AlpacaUrlBuilder {
     super(baseUrl);
   }
 
-  /* (non-Javadoc)
+  /*
+   * (non-Javadoc)
+   * 
    * @see io.github.mainstringargs.alpaca.rest.AlpacaUrlBuilder#endpoint()
    */
   @Override
-  public AlpacaUrlBuilder endpoint() {
-    builder.append(ACCOUNT_ENDPOINT);
-    return this;
+  public String getEndpoint() {
+    return ACCOUNT_ENDPOINT;
   }
 
 }

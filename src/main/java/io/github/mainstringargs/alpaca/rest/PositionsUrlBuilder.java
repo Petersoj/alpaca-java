@@ -5,6 +5,10 @@ package io.github.mainstringargs.alpaca.rest;
  */
 public class PositionsUrlBuilder extends AlpacaUrlBuilder {
 
+
+  /** The Constant POSITIONS_ENDPOINT. */
+  public final static String POSITIONS_ENDPOINT = "positions";
+
   /**
    * Instantiates a new positions url builder.
    *
@@ -14,13 +18,15 @@ public class PositionsUrlBuilder extends AlpacaUrlBuilder {
     super(baseUrl);
   }
 
-  /* (non-Javadoc)
+  /*
+   * (non-Javadoc)
+   * 
    * @see io.github.mainstringargs.alpaca.rest.AlpacaUrlBuilder#endpoint()
    */
   @Override
-  public AlpacaUrlBuilder endpoint() {
-    builder.append(POSITIONS_ENDPOINT);
-    return this;
+  public String getEndpoint() {
+    return POSITIONS_ENDPOINT;
   }
+
 
 }

@@ -5,6 +5,12 @@ package io.github.mainstringargs.alpaca.rest;
  */
 public class AssetsUrlBuilder extends AlpacaUrlBuilder {
 
+
+  /** The Constant ASSETS_ENDPOINT. */
+  public final static String ASSETS_ENDPOINT = "assets";
+
+
+
   /**
    * Instantiates a new assets url builder.
    *
@@ -14,13 +20,14 @@ public class AssetsUrlBuilder extends AlpacaUrlBuilder {
     super(baseUrl);
   }
 
-  /* (non-Javadoc)
+  /*
+   * (non-Javadoc)
+   * 
    * @see io.github.mainstringargs.alpaca.rest.AlpacaUrlBuilder#endpoint()
    */
   @Override
-  public AlpacaUrlBuilder endpoint() {
-    builder.append(ASSETS_ENDPOINT);
-    return this;
+  public String getEndpoint() {
+    return ASSETS_ENDPOINT;
   }
 
 }

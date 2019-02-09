@@ -5,6 +5,13 @@ package io.github.mainstringargs.alpaca.rest;
  */
 public class CalendarUrlBuilder extends AlpacaUrlBuilder {
 
+
+
+  /** The Constant CALENDAR_ENDPOINT. */
+  public final static String CALENDAR_ENDPOINT = "calendar";
+
+
+
   /**
    * Instantiates a new calendar url builder.
    *
@@ -14,13 +21,14 @@ public class CalendarUrlBuilder extends AlpacaUrlBuilder {
     super(baseUrl);
   }
 
-  /* (non-Javadoc)
+  /*
+   * (non-Javadoc)
+   * 
    * @see io.github.mainstringargs.alpaca.rest.AlpacaUrlBuilder#endpoint()
    */
   @Override
-  public AlpacaUrlBuilder endpoint() {
-    builder.append(CALENDAR_ENDPOINT);
-    return this;
+  public String getEndpoint() {
+    return CALENDAR_ENDPOINT;
   }
 
 

@@ -67,7 +67,6 @@ public class AlpacaAPI {
    */
   public Account getAccount() {
     AlpacaUrlBuilder urlBuilder = new AccountUrlBuilder(baseUrl);
-    urlBuilder.endpoint();
 
     HttpResponse<JsonNode> response = alpacaRequest.invokeGet(urlBuilder);
 
@@ -85,7 +84,6 @@ public class AlpacaAPI {
     Type listType = new TypeToken<List<Position>>() {}.getType();
 
     AlpacaUrlBuilder urlBuilder = new PositionsUrlBuilder(baseUrl);
-    urlBuilder.endpoint();
 
     HttpResponse<JsonNode> response = alpacaRequest.invokeGet(urlBuilder);
 
@@ -103,8 +101,6 @@ public class AlpacaAPI {
     Type listType = new TypeToken<List<Order>>() {}.getType();
 
     AlpacaUrlBuilder urlBuilder = new OrdersUrlBuilder(baseUrl);
-    urlBuilder.endpoint();
-
 
     HttpResponse<JsonNode> response = alpacaRequest.invokeGet(urlBuilder);
 

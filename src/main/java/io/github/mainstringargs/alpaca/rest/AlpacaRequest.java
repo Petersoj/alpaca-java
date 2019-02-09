@@ -63,10 +63,8 @@ public class AlpacaRequest {
       LOGGER.info("Get URL " + builder.getURL());
 
       response =
-          Unirest.get(builder.getURL())
-              .header(USER_AGENT_KEY, AlpacaProperties.USER_AGENT_VALUE)
-              .header(API_KEY_ID, keyId)
-              .header(API_SECRET_KEY, secret).asJson();
+          Unirest.get(builder.getURL()).header(USER_AGENT_KEY, AlpacaProperties.USER_AGENT_VALUE)
+              .header(API_KEY_ID, keyId).header(API_SECRET_KEY, secret).asJson();
 
 
     } catch (UnirestException e) {

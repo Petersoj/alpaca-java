@@ -14,23 +14,6 @@ public abstract class AlpacaUrlBuilder {
   /** The Constant URL_SEPARATOR. */
   public final static String URL_SEPARATOR = "/";
 
-  /** The Constant ACCOUNT_ENDPOINT. */
-  public final static String ACCOUNT_ENDPOINT = "account";
-
-  /** The Constant ORDERS_ENDPOINT. */
-  public final static String ORDERS_ENDPOINT = "orders";
-
-  /** The Constant POSITIONS_ENDPOINT. */
-  public final static String POSITIONS_ENDPOINT = "positions";
-
-  /** The Constant ASSETS_ENDPOINT. */
-  public final static String ASSETS_ENDPOINT = "assets";
-
-  /** The Constant CLOCK_ENDPOINT. */
-  public final static String CLOCK_ENDPOINT = "clock";
-
-  /** The Constant CALENDAR_ENDPOINT. */
-  public final static String CALENDAR_ENDPOINT = "calendar";
 
   /**
    * Instantiates a new alpaca url builder.
@@ -42,14 +25,18 @@ public abstract class AlpacaUrlBuilder {
     builder.append(URL_SEPARATOR);
     builder.append(VERSION);
     builder.append(URL_SEPARATOR);
+    builder.append(getEndpoint());
+
   }
 
+
   /**
-   * Clock.
+   * Gets the endpoint.
    *
-   * @return the alpaca url builder
+   * @return the endpoint
    */
-  public abstract AlpacaUrlBuilder endpoint();
+  public abstract String getEndpoint();
+
   /**
    * Gets the url.
    *

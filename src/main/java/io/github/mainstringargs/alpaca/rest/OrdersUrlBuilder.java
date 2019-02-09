@@ -3,7 +3,12 @@ package io.github.mainstringargs.alpaca.rest;
 /**
  * The Class OrdersUrlBuilder.
  */
-public class OrdersUrlBuilder  extends AlpacaUrlBuilder {
+public class OrdersUrlBuilder extends AlpacaUrlBuilder {
+
+  /** The Constant ORDERS_ENDPOINT. */
+  public final static String ORDERS_ENDPOINT = "orders";
+
+
 
   /**
    * Instantiates a new orders url builder.
@@ -14,13 +19,14 @@ public class OrdersUrlBuilder  extends AlpacaUrlBuilder {
     super(baseUrl);
   }
 
-  /* (non-Javadoc)
+  /*
+   * (non-Javadoc)
+   * 
    * @see io.github.mainstringargs.alpaca.rest.AlpacaUrlBuilder#endpoint()
    */
   @Override
-  public AlpacaUrlBuilder endpoint() {
-    builder.append(ORDERS_ENDPOINT);
-    return this;
+  public String getEndpoint() {
+    return ORDERS_ENDPOINT;
   }
 
 }

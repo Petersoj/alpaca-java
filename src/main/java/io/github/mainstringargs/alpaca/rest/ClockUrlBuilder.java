@@ -5,6 +5,10 @@ package io.github.mainstringargs.alpaca.rest;
  */
 public class ClockUrlBuilder extends AlpacaUrlBuilder {
 
+
+  /** The Constant CLOCK_ENDPOINT. */
+  public final static String CLOCK_ENDPOINT = "clock";
+
   /**
    * Instantiates a new clock url builder.
    *
@@ -14,13 +18,14 @@ public class ClockUrlBuilder extends AlpacaUrlBuilder {
     super(baseUrl);
   }
 
-  /* (non-Javadoc)
+  /*
+   * (non-Javadoc)
+   * 
    * @see io.github.mainstringargs.alpaca.rest.AlpacaUrlBuilder#endpoint()
    */
   @Override
-  public AlpacaUrlBuilder endpoint() {
-    builder.append(CLOCK_ENDPOINT);
-    return this;
+  public String getEndpoint() {
+    return CLOCK_ENDPOINT;
   }
 
 }
