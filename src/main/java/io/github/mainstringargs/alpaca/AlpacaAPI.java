@@ -1,6 +1,7 @@
 package io.github.mainstringargs.alpaca;
 
 import java.lang.reflect.Type;
+import java.time.LocalDateTime;
 import java.util.List;
 import com.google.gson.reflect.TypeToken;
 import com.mashape.unirest.http.HttpResponse;
@@ -10,6 +11,8 @@ import io.github.mainstringargs.alpaca.domain.Calendar;
 import io.github.mainstringargs.alpaca.domain.Clock;
 import io.github.mainstringargs.alpaca.domain.Order;
 import io.github.mainstringargs.alpaca.domain.Position;
+import io.github.mainstringargs.alpaca.enums.Direction;
+import io.github.mainstringargs.alpaca.enums.OrderStatus;
 import io.github.mainstringargs.alpaca.properties.AlpacaProperties;
 import io.github.mainstringargs.alpaca.rest.AccountUrlBuilder;
 import io.github.mainstringargs.alpaca.rest.AlpacaRequest;
@@ -112,6 +115,33 @@ public class AlpacaAPI {
 
     return orders;
   }
+
+
+  /**
+   * Gets the orders.
+   *
+   * @param status the status
+   * @param limit the limit
+   * @param after the after
+   * @param until the until
+   * @param direction the direction
+   * @return the orders
+   */
+  public List<Order> getOrders(OrderStatus status, Integer limit, LocalDateTime after,
+      LocalDateTime until, Direction direction) {
+    Type listType = new TypeToken<List<Order>>() {}.getType();
+
+    OrdersUrlBuilder urlBuilder = new OrdersUrlBuilder(baseUrl);
+
+    urlBuilder.status(status).limit(limit).after(after).until(until).direction(direction);
+
+    HttpResponse<JsonNode> response = alpacaRequest.invokeGet(urlBuilder);
+
+    List<Order> orders = alpacaRequest.getResponseObject(response, listType);
+
+    return orders;
+  }
+
 
 
   /**
