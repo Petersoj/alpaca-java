@@ -6,12 +6,16 @@ import com.google.gson.reflect.TypeToken;
 import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.JsonNode;
 import io.github.mainstringargs.alpaca.domain.Account;
+import io.github.mainstringargs.alpaca.domain.Calendar;
+import io.github.mainstringargs.alpaca.domain.Clock;
 import io.github.mainstringargs.alpaca.domain.Order;
 import io.github.mainstringargs.alpaca.domain.Position;
 import io.github.mainstringargs.alpaca.properties.AlpacaProperties;
 import io.github.mainstringargs.alpaca.rest.AccountUrlBuilder;
 import io.github.mainstringargs.alpaca.rest.AlpacaRequest;
 import io.github.mainstringargs.alpaca.rest.AlpacaUrlBuilder;
+import io.github.mainstringargs.alpaca.rest.CalendarUrlBuilder;
+import io.github.mainstringargs.alpaca.rest.ClockUrlBuilder;
 import io.github.mainstringargs.alpaca.rest.OrdersUrlBuilder;
 import io.github.mainstringargs.alpaca.rest.PositionsUrlBuilder;
 
@@ -107,6 +111,39 @@ public class AlpacaAPI {
     List<Order> orders = alpacaRequest.getResponseObject(response, listType);
 
     return orders;
+  }
+
+
+  /**
+   * Gets the calendar.
+   *
+   * @return the calendar
+   */
+  public List<Calendar> getCalendar() {
+    Type listType = new TypeToken<List<Calendar>>() {}.getType();
+
+    AlpacaUrlBuilder urlBuilder = new CalendarUrlBuilder(baseUrl);
+
+    HttpResponse<JsonNode> response = alpacaRequest.invokeGet(urlBuilder);
+
+    List<Calendar> calendar = alpacaRequest.getResponseObject(response, listType);
+
+    return calendar;
+  }
+
+  /**
+   * Gets the clock.
+   *
+   * @return the clock
+   */
+  public Clock getClock() {
+    AlpacaUrlBuilder urlBuilder = new ClockUrlBuilder(baseUrl);
+
+    HttpResponse<JsonNode> response = alpacaRequest.invokeGet(urlBuilder);
+
+    Clock clock = alpacaRequest.getResponseObject(response, Clock.class);
+
+    return clock;
   }
 
 }
