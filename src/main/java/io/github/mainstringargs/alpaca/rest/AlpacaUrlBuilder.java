@@ -1,8 +1,11 @@
 package io.github.mainstringargs.alpaca.rest;
 
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Set;
 
 /**
  * The Class AlpacaUrlBuilder.
@@ -21,6 +24,9 @@ public abstract class AlpacaUrlBuilder {
 
   /** The base url. */
   private String baseUrl;
+
+  /** The appended endpoints. */
+  private List<String> appendedEndpoints = new ArrayList<String>();
 
 
   /**
@@ -64,6 +70,12 @@ public abstract class AlpacaUrlBuilder {
     builder.append(URL_SEPARATOR);
     builder.append(getEndpoint());
 
+    for (String endpoint : appendedEndpoints) {
+      builder.append(URL_SEPARATOR);
+      builder.append(endpoint);
+    }
+
+
     if (!parameters.isEmpty()) {
       builder.append('?');
 
@@ -79,6 +91,16 @@ public abstract class AlpacaUrlBuilder {
     }
 
     return builder.toString();
+  }
+
+  /**
+   * Append endpoint.
+   *
+   * @param endpoint the endpoint
+   */
+  public void appendEndpoint(String endpoint) {
+    appendedEndpoints.add(endpoint);
+
   }
 
 

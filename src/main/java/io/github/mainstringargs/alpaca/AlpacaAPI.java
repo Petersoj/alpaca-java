@@ -12,7 +12,10 @@ import io.github.mainstringargs.alpaca.domain.Clock;
 import io.github.mainstringargs.alpaca.domain.Order;
 import io.github.mainstringargs.alpaca.domain.Position;
 import io.github.mainstringargs.alpaca.enums.Direction;
+import io.github.mainstringargs.alpaca.enums.OrderSide;
 import io.github.mainstringargs.alpaca.enums.OrderStatus;
+import io.github.mainstringargs.alpaca.enums.OrderTimeInForce;
+import io.github.mainstringargs.alpaca.enums.OrderType;
 import io.github.mainstringargs.alpaca.properties.AlpacaProperties;
 import io.github.mainstringargs.alpaca.rest.AccountUrlBuilder;
 import io.github.mainstringargs.alpaca.rest.AlpacaRequest;
@@ -99,8 +102,72 @@ public class AlpacaAPI {
     return positions;
   }
 
+
   /**
-   * Gets the orders.
+   * Gets the order.
+   *
+   * @param orderId the order id
+   * @return the order
+   */
+  public Order getOrder(String orderId) {
+    Type objectType = new TypeToken<Order>() {}.getType();
+
+    OrdersUrlBuilder urlBuilder = new OrdersUrlBuilder(baseUrl);
+
+    urlBuilder.orderId(orderId);
+
+    HttpResponse<JsonNode> response = alpacaRequest.invokeGet(urlBuilder);
+
+    Order order = alpacaRequest.getResponseObject(response, objectType);
+
+    return order;
+  }
+
+  // public Order deleteOrder(String orderId) {
+  // Type objectType = new TypeToken<Order>() {}.getType();
+  //
+  // OrdersUrlBuilder urlBuilder = new OrdersUrlBuilder(baseUrl);
+  //
+  // urlBuilder.orderId(orderId);
+  //
+  // HttpResponse<JsonNode> response = alpacaRequest.invokeGet(urlBuilder);
+  //
+  // Order order = alpacaRequest.getResponseObject(response, objectType);
+  //
+  // return order;
+  // }
+
+  /**
+   * Request new order.
+   *
+   * @param symbol the symbol
+   * @param quantity the quantity
+   * @param side the side
+   * @param type the type
+   * @param timeInForce the time in force
+   * @param limitPrice the limit price
+   * @param stopPrice the stop price
+   * @param clientOrderId the client order id
+   * @return the order
+   */
+  public Order requestNewOrder(String symbol, Integer quantity, OrderSide side, OrderType type,
+      OrderTimeInForce timeInForce, Double limitPrice, Double stopPrice, String clientOrderId) {
+
+    Type objectType = new TypeToken<Order>() {}.getType();
+
+    OrdersUrlBuilder urlBuilder = new OrdersUrlBuilder(baseUrl);
+
+    HttpResponse<JsonNode> response = alpacaRequest.invokeGet(urlBuilder);
+
+    Order order = alpacaRequest.getResponseObject(response, objectType);
+
+    return order;
+  }
+
+
+
+  /**
+   * Gets the orders with API defaults.
    *
    * @return the orders
    */

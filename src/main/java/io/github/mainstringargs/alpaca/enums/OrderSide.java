@@ -1,24 +1,25 @@
 package io.github.mainstringargs.alpaca.enums;
 
 /**
- * The Enum Direction.
+ * The Enum OrderSide.
  */
-public enum Direction {
+public enum OrderSide {
 
-  /** The asc. */
-  ASC("asc"),
-  /** The desc. */
-  DESC("desc");
+  /** The buy. */
+  BUY("buy"),
+  /** The sell. */
+  SELL("sell");
 
   /** The api name. */
   String apiName;
 
+
   /**
-   * Instantiates a new direction.
+   * Instantiates a new order side.
    *
    * @param apiName the api name
    */
-  Direction(String apiName) {
+  OrderSide(String apiName) {
     this.apiName = apiName;
   }
 

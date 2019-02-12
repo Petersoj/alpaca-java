@@ -109,4 +109,16 @@ public class OrdersUrlBuilder extends AlpacaUrlBuilder {
 
     return this;
   }
+
+  /**
+   * Order id.
+   *
+   * @param orderId the order id
+   */
+  public void orderId(String orderId) {
+    if (orderId != null) {
+      super.appendEndpoint(orderId);
+    }
+
+  }
 }
