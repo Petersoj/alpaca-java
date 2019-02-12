@@ -87,10 +87,9 @@ public class AlpacaRequest {
       LOGGER.info("Post URL " + builder.getURL());
       LOGGER.debug("Post Body " + builder.getBodyAsJSON());
 
-      response =
-          Unirest.post(builder.getURL()).header(USER_AGENT_KEY, AlpacaProperties.USER_AGENT_VALUE)
-              .header(API_KEY_ID, keyId).header(API_SECRET_KEY, secret).body(builder.getBodyAsJSON())
-              .asJson();
+      response = Unirest.post(builder.getURL())
+          .header(USER_AGENT_KEY, AlpacaProperties.USER_AGENT_VALUE).header(API_KEY_ID, keyId)
+          .header(API_SECRET_KEY, secret).body(builder.getBodyAsJSON()).asJson();
 
 
     } catch (UnirestException e) {
@@ -100,6 +99,29 @@ public class AlpacaRequest {
     return response;
   }
 
+  /**
+   * Invoke delete.
+   *
+   * @param builder the builder
+   * @return the http response
+   */
+  public HttpResponse<JsonNode> invokeDelete(AlpacaRequestBuilder builder) {
+    HttpResponse<JsonNode> response = null;
+    try {
+
+      LOGGER.info("Delete URL " + builder.getURL());
+
+      response =
+          Unirest.delete(builder.getURL()).header(USER_AGENT_KEY, AlpacaProperties.USER_AGENT_VALUE)
+              .header(API_KEY_ID, keyId).header(API_SECRET_KEY, secret).asJson();
+
+
+    } catch (UnirestException e) {
+      LOGGER.info("UnirestException", e);
+    }
+
+    return response;
+  }
 
 
   /**
@@ -120,9 +142,9 @@ public class AlpacaRequest {
 
     BufferedReader br = null;
 
-//    System.out.println(httpResponse.getStatus() + " " + httpResponse.getStatusText() + " "
-//        + httpResponse.getHeaders().entrySet());
-//    System.out.println(httpResponse.getBody());
+    // System.out.println(httpResponse.getStatus() + " " + httpResponse.getStatusText() + " "
+    // + httpResponse.getHeaders().entrySet());
+    // System.out.println(httpResponse.getBody());
 
     try {
       br = new BufferedReader(new InputStreamReader(httpResponse.getRawBody()));

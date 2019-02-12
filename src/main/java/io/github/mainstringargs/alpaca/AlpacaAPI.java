@@ -145,19 +145,21 @@ public class AlpacaAPI {
 
 
 
-  // public Order deleteOrder(String orderId) {
-  // Type objectType = new TypeToken<Order>() {}.getType();
-  //
-  // OrdersUrlBuilder urlBuilder = new OrdersUrlBuilder(baseUrl);
-  //
-  // urlBuilder.orderId(orderId);
-  //
-  // HttpResponse<JsonNode> response = alpacaRequest.invokeGet(urlBuilder);
-  //
-  // Order order = alpacaRequest.getResponseObject(response, objectType);
-  //
-  // return order;
-  // }
+  /**
+   * Cancel order.
+   *
+   * @param orderId the order id
+   * @return true, if successful
+   */
+  public boolean cancelOrder(String orderId) {
+    OrdersRequestBuilder urlBuilder = new OrdersRequestBuilder(baseUrl);
+
+    urlBuilder.orderId(orderId);
+
+    HttpResponse<JsonNode> response = alpacaRequest.invokeDelete(urlBuilder);
+
+    return response.getStatus() == 200;
+  }
 
   /**
    * Request new order.
