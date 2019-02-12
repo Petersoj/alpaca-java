@@ -3,7 +3,7 @@ package io.github.mainstringargs.alpaca.rest;
 /**
  * The Class CalendarUrlBuilder.
  */
-public class CalendarUrlBuilder extends AlpacaUrlBuilder {
+public class CalendarRequestBuilder extends AlpacaRequestBuilder {
 
 
 
@@ -17,7 +17,7 @@ public class CalendarUrlBuilder extends AlpacaUrlBuilder {
    *
    * @param baseUrl the base url
    */
-  public CalendarUrlBuilder(String baseUrl) {
+  public CalendarRequestBuilder(String baseUrl) {
     super(baseUrl);
   }
 

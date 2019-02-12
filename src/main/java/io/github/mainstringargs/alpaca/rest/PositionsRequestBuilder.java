@@ -3,7 +3,7 @@ package io.github.mainstringargs.alpaca.rest;
 /**
  * The Class PositionsUrlBuilder.
  */
-public class PositionsUrlBuilder extends AlpacaUrlBuilder {
+public class PositionsRequestBuilder extends AlpacaRequestBuilder {
 
 
   /** The Constant POSITIONS_ENDPOINT. */
@@ -14,7 +14,7 @@ public class PositionsUrlBuilder extends AlpacaUrlBuilder {
    *
    * @param baseUrl the base url
    */
-  public PositionsUrlBuilder(String baseUrl) {
+  public PositionsRequestBuilder(String baseUrl) {
     super(baseUrl);
   }
 

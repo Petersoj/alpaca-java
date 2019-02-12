@@ -56,7 +56,7 @@ public class AlpacaRequest {
    * @param builder the builder
    * @return the http response
    */
-  public HttpResponse<JsonNode> invokeGet(AlpacaUrlBuilder builder) {
+  public HttpResponse<JsonNode> invokeGet(AlpacaRequestBuilder builder) {
     HttpResponse<JsonNode> response = null;
     try {
 
@@ -80,15 +80,17 @@ public class AlpacaRequest {
    * @param builder the builder
    * @return the http response
    */
-  public HttpResponse<JsonNode> invokePost(AlpacaUrlBuilder builder) {
+  public HttpResponse<JsonNode> invokePost(AlpacaRequestBuilder builder) {
     HttpResponse<JsonNode> response = null;
     try {
 
-      LOGGER.info("Get URL " + builder.getURL());
+      LOGGER.info("Post URL " + builder.getURL());
+      LOGGER.debug("Post Body " + builder.getBodyAsJSON());
 
       response =
           Unirest.post(builder.getURL()).header(USER_AGENT_KEY, AlpacaProperties.USER_AGENT_VALUE)
-              .header(API_KEY_ID, keyId).header(API_SECRET_KEY, secret).asJson();
+              .header(API_KEY_ID, keyId).header(API_SECRET_KEY, secret).body(builder.getBodyAsJSON())
+              .asJson();
 
 
     } catch (UnirestException e) {
@@ -117,6 +119,11 @@ public class AlpacaRequest {
     T responseObjectFromJson = null;
 
     BufferedReader br = null;
+
+//    System.out.println(httpResponse.getStatus() + " " + httpResponse.getStatusText() + " "
+//        + httpResponse.getHeaders().entrySet());
+//    System.out.println(httpResponse.getBody());
+
     try {
       br = new BufferedReader(new InputStreamReader(httpResponse.getRawBody()));
       responseObjectFromJson = gson.fromJson(br, type);

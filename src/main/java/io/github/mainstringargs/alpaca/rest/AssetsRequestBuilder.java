@@ -3,7 +3,7 @@ package io.github.mainstringargs.alpaca.rest;
 /**
  * The Class AssetsUrlBuilder.
  */
-public class AssetsUrlBuilder extends AlpacaUrlBuilder {
+public class AssetsRequestBuilder extends AlpacaRequestBuilder {
 
 
   /** The Constant ASSETS_ENDPOINT. */
@@ -16,7 +16,7 @@ public class AssetsUrlBuilder extends AlpacaUrlBuilder {
    *
    * @param baseUrl the base url
    */
-  public AssetsUrlBuilder(String baseUrl) {
+  public AssetsRequestBuilder(String baseUrl) {
     super(baseUrl);
   }
 

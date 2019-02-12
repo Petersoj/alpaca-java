@@ -17,13 +17,13 @@ import io.github.mainstringargs.alpaca.enums.OrderStatus;
 import io.github.mainstringargs.alpaca.enums.OrderTimeInForce;
 import io.github.mainstringargs.alpaca.enums.OrderType;
 import io.github.mainstringargs.alpaca.properties.AlpacaProperties;
-import io.github.mainstringargs.alpaca.rest.AccountUrlBuilder;
+import io.github.mainstringargs.alpaca.rest.AccountRequestBuilder;
 import io.github.mainstringargs.alpaca.rest.AlpacaRequest;
-import io.github.mainstringargs.alpaca.rest.AlpacaUrlBuilder;
-import io.github.mainstringargs.alpaca.rest.CalendarUrlBuilder;
-import io.github.mainstringargs.alpaca.rest.ClockUrlBuilder;
-import io.github.mainstringargs.alpaca.rest.OrdersUrlBuilder;
-import io.github.mainstringargs.alpaca.rest.PositionsUrlBuilder;
+import io.github.mainstringargs.alpaca.rest.AlpacaRequestBuilder;
+import io.github.mainstringargs.alpaca.rest.CalendarRequestBuilder;
+import io.github.mainstringargs.alpaca.rest.ClockRequestBuilder;
+import io.github.mainstringargs.alpaca.rest.OrdersRequestBuilder;
+import io.github.mainstringargs.alpaca.rest.PositionsRequestBuilder;
 
 /**
  * The Class AlpacaAPI.
@@ -76,7 +76,7 @@ public class AlpacaAPI {
    * @return the account
    */
   public Account getAccount() {
-    AlpacaUrlBuilder urlBuilder = new AccountUrlBuilder(baseUrl);
+    AlpacaRequestBuilder urlBuilder = new AccountRequestBuilder(baseUrl);
 
     HttpResponse<JsonNode> response = alpacaRequest.invokeGet(urlBuilder);
 
@@ -93,7 +93,7 @@ public class AlpacaAPI {
   public List<Position> getPositions() {
     Type listType = new TypeToken<List<Position>>() {}.getType();
 
-    AlpacaUrlBuilder urlBuilder = new PositionsUrlBuilder(baseUrl);
+    AlpacaRequestBuilder urlBuilder = new PositionsRequestBuilder(baseUrl);
 
     HttpResponse<JsonNode> response = alpacaRequest.invokeGet(urlBuilder);
 
@@ -112,7 +112,7 @@ public class AlpacaAPI {
   public Order getOrder(String orderId) {
     Type objectType = new TypeToken<Order>() {}.getType();
 
-    OrdersUrlBuilder urlBuilder = new OrdersUrlBuilder(baseUrl);
+    OrdersRequestBuilder urlBuilder = new OrdersRequestBuilder(baseUrl);
 
     urlBuilder.orderId(orderId);
 
@@ -122,6 +122,28 @@ public class AlpacaAPI {
 
     return order;
   }
+
+  /**
+   * Gets the order by client id.
+   *
+   * @param clientOrderId the cleint order id
+   * @return the order
+   */
+  public Order getOrderByClientId(String clientOrderId) {
+    Type objectType = new TypeToken<Order>() {}.getType();
+
+    OrdersRequestBuilder urlBuilder = new OrdersRequestBuilder(baseUrl);
+
+    urlBuilder.ordersByClientOrderId(clientOrderId);
+
+    HttpResponse<JsonNode> response = alpacaRequest.invokeGet(urlBuilder);
+
+    Order order = alpacaRequest.getResponseObject(response, objectType);
+
+    return order;
+  }
+
+
 
   // public Order deleteOrder(String orderId) {
   // Type objectType = new TypeToken<Order>() {}.getType();
@@ -155,9 +177,12 @@ public class AlpacaAPI {
 
     Type objectType = new TypeToken<Order>() {}.getType();
 
-    OrdersUrlBuilder urlBuilder = new OrdersUrlBuilder(baseUrl);
+    OrdersRequestBuilder urlBuilder = new OrdersRequestBuilder(baseUrl);
 
-    HttpResponse<JsonNode> response = alpacaRequest.invokeGet(urlBuilder);
+    urlBuilder.symbol(symbol).quantity(quantity).side(side).type(type).timeInForce(timeInForce)
+        .limitPrice(limitPrice).stopPrice(stopPrice).clientOrderId(clientOrderId);
+
+    HttpResponse<JsonNode> response = alpacaRequest.invokePost(urlBuilder);
 
     Order order = alpacaRequest.getResponseObject(response, objectType);
 
@@ -174,7 +199,7 @@ public class AlpacaAPI {
   public List<Order> getOrders() {
     Type listType = new TypeToken<List<Order>>() {}.getType();
 
-    AlpacaUrlBuilder urlBuilder = new OrdersUrlBuilder(baseUrl);
+    AlpacaRequestBuilder urlBuilder = new OrdersRequestBuilder(baseUrl);
 
     HttpResponse<JsonNode> response = alpacaRequest.invokeGet(urlBuilder);
 
@@ -198,7 +223,7 @@ public class AlpacaAPI {
       LocalDateTime until, Direction direction) {
     Type listType = new TypeToken<List<Order>>() {}.getType();
 
-    OrdersUrlBuilder urlBuilder = new OrdersUrlBuilder(baseUrl);
+    OrdersRequestBuilder urlBuilder = new OrdersRequestBuilder(baseUrl);
 
     urlBuilder.status(status).limit(limit).after(after).until(until).direction(direction);
 
@@ -219,7 +244,7 @@ public class AlpacaAPI {
   public List<Calendar> getCalendar() {
     Type listType = new TypeToken<List<Calendar>>() {}.getType();
 
-    AlpacaUrlBuilder urlBuilder = new CalendarUrlBuilder(baseUrl);
+    AlpacaRequestBuilder urlBuilder = new CalendarRequestBuilder(baseUrl);
 
     HttpResponse<JsonNode> response = alpacaRequest.invokeGet(urlBuilder);
 
@@ -234,7 +259,7 @@ public class AlpacaAPI {
    * @return the clock
    */
   public Clock getClock() {
-    AlpacaUrlBuilder urlBuilder = new ClockUrlBuilder(baseUrl);
+    AlpacaRequestBuilder urlBuilder = new ClockRequestBuilder(baseUrl);
 
     HttpResponse<JsonNode> response = alpacaRequest.invokeGet(urlBuilder);
 

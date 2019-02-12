@@ -6,11 +6,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
+import com.google.gson.JsonObject;
 
 /**
  * The Class AlpacaUrlBuilder.
  */
-public abstract class AlpacaUrlBuilder {
+public abstract class AlpacaRequestBuilder {
 
 
   /** The Constant VERSION. */
@@ -19,8 +20,11 @@ public abstract class AlpacaUrlBuilder {
   /** The Constant URL_SEPARATOR. */
   public final static String URL_SEPARATOR = "/";
 
-  /** The parameters. */
-  public final Map<String, String> parameters = new LinkedHashMap<String, String>();
+  /** The urlParameters. */
+  public final Map<String, String> urlParameters = new LinkedHashMap<String, String>();
+
+  /** The bodyParameters. */
+  public final Map<String, String> bodyProperties = new LinkedHashMap<String, String>();
 
   /** The base url. */
   private String baseUrl;
@@ -28,13 +32,16 @@ public abstract class AlpacaUrlBuilder {
   /** The appended endpoints. */
   private List<String> appendedEndpoints = new ArrayList<String>();
 
+  /** The default endpoint. */
+  private boolean defaultEndpoint = true;
+
 
   /**
    * Instantiates a new alpaca url builder.
    *
    * @param baseUrl the base url
    */
-  public AlpacaUrlBuilder(String baseUrl) {
+  public AlpacaRequestBuilder(String baseUrl) {
     this.baseUrl = baseUrl;
 
   }
@@ -45,8 +52,64 @@ public abstract class AlpacaUrlBuilder {
    * @param parameterKey the parameter key
    * @param parameterValue the parameter value
    */
-  public void appendURLParameters(String parameterKey, String parameterValue) {
-    parameters.put(parameterKey, parameterValue);
+  public void appendURLParameter(String parameterKey, String parameterValue) {
+    urlParameters.put(parameterKey, parameterValue);
+  }
+
+  /**
+   * Append body property.
+   *
+   * @param parameterKey the parameter key
+   * @param parameterValue the parameter value
+   */
+  public void appendBodyProperty(String parameterKey, String parameterValue) {
+
+    bodyProperties.put(parameterKey, parameterValue);
+  }
+
+  /**
+   * Checks if is default endpoint.
+   *
+   * @return true, if is default endpoint
+   */
+  public boolean isDefaultEndpoint() {
+    return defaultEndpoint;
+  }
+
+  /**
+   * Sets the default endpoint.
+   *
+   * @param defaultEndpoint the new default endpoint
+   */
+  public void setDefaultEndpoint(boolean defaultEndpoint) {
+    this.defaultEndpoint = defaultEndpoint;
+  }
+
+  /**
+   * Gets the body as JSON.
+   *
+   * @return the body as JSON
+   */
+  public String getBodyAsJSON() {
+    JsonObject jsonBody = new JsonObject();
+
+    for (Entry<String, String> entry : bodyProperties.entrySet()) {
+      jsonBody.addProperty(entry.getKey(), entry.getValue());
+    }
+
+    return jsonBody.toString();
+
+  }
+
+
+  /**
+   * Append endpoint.
+   *
+   * @param endpoint the endpoint
+   */
+  public void appendEndpoint(String endpoint) {
+    appendedEndpoints.add(endpoint);
+
   }
 
 
@@ -67,8 +130,11 @@ public abstract class AlpacaUrlBuilder {
     StringBuilder builder = new StringBuilder(baseUrl);
     builder.append(URL_SEPARATOR);
     builder.append(VERSION);
-    builder.append(URL_SEPARATOR);
-    builder.append(getEndpoint());
+
+    if (defaultEndpoint) {
+      builder.append(URL_SEPARATOR);
+      builder.append(getEndpoint());
+    }
 
     for (String endpoint : appendedEndpoints) {
       builder.append(URL_SEPARATOR);
@@ -76,10 +142,10 @@ public abstract class AlpacaUrlBuilder {
     }
 
 
-    if (!parameters.isEmpty()) {
+    if (!urlParameters.isEmpty()) {
       builder.append('?');
 
-      for (Entry<String, String> entry : parameters.entrySet()) {
+      for (Entry<String, String> entry : urlParameters.entrySet()) {
         builder.append(entry.getKey().trim());
         builder.append('=');
         builder.append(entry.getValue().trim());
@@ -91,16 +157,6 @@ public abstract class AlpacaUrlBuilder {
     }
 
     return builder.toString();
-  }
-
-  /**
-   * Append endpoint.
-   *
-   * @param endpoint the endpoint
-   */
-  public void appendEndpoint(String endpoint) {
-    appendedEndpoints.add(endpoint);
-
   }
 
 

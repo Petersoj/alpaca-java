@@ -3,7 +3,7 @@ package io.github.mainstringargs.alpaca.rest;
 /**
  * The Class AccountUrlBuilder.
  */
-public class AccountUrlBuilder extends AlpacaUrlBuilder {
+public class AccountRequestBuilder extends AlpacaRequestBuilder {
 
 
   /** The Constant ACCOUNT_ENDPOINT. */
@@ -14,7 +14,7 @@ public class AccountUrlBuilder extends AlpacaUrlBuilder {
    *
    * @param baseUrl the base url
    */
-  public AccountUrlBuilder(String baseUrl) {
+  public AccountRequestBuilder(String baseUrl) {
     super(baseUrl);
   }
 
