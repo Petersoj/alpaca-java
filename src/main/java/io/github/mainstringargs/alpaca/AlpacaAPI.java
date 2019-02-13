@@ -28,6 +28,7 @@ import io.github.mainstringargs.alpaca.rest.assets.GetAssetsRequestBuilder;
 import io.github.mainstringargs.alpaca.rest.calendar.CalendarRequestBuilder;
 import io.github.mainstringargs.alpaca.rest.calendar.GetCalendarRequestBuilder;
 import io.github.mainstringargs.alpaca.rest.clock.ClockRequestBuilder;
+import io.github.mainstringargs.alpaca.rest.clock.GetClockRequestBuilder;
 import io.github.mainstringargs.alpaca.rest.orders.DeleteOrderRequestBuilder;
 import io.github.mainstringargs.alpaca.rest.orders.GetListOfOrdersRequestBuilder;
 import io.github.mainstringargs.alpaca.rest.orders.GetOrderByClientIdRequestBuilder;
@@ -35,7 +36,6 @@ import io.github.mainstringargs.alpaca.rest.orders.GetOrderRequestBuilder;
 import io.github.mainstringargs.alpaca.rest.orders.PostOrderRequestBuilder;
 import io.github.mainstringargs.alpaca.rest.positions.GetOpenPositionBySymbolRequestBuilder;
 import io.github.mainstringargs.alpaca.rest.positions.GetOpenPositionsRequestBuilder;
-import io.github.mainstringargs.alpaca.rest.positions.PositionsRequestBuilder;
 
 /**
  * The Class AlpacaAPI.
@@ -339,7 +339,7 @@ public class AlpacaAPI {
   public List<Calendar> getCalendar() {
     Type listType = new TypeToken<List<Calendar>>() {}.getType();
 
-    AlpacaRequestBuilder urlBuilder = new CalendarRequestBuilder(baseUrl);
+    GetCalendarRequestBuilder urlBuilder = new GetCalendarRequestBuilder(baseUrl);
 
     HttpResponse<JsonNode> response = alpacaRequest.invokeGet(urlBuilder);
 
@@ -375,7 +375,7 @@ public class AlpacaAPI {
    * @return the clock
    */
   public Clock getClock() {
-    AlpacaRequestBuilder urlBuilder = new ClockRequestBuilder(baseUrl);
+    GetClockRequestBuilder urlBuilder = new GetClockRequestBuilder(baseUrl);
 
     HttpResponse<JsonNode> response = alpacaRequest.invokeGet(urlBuilder);
 

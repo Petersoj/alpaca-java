@@ -4,7 +4,7 @@ package io.github.mainstringargs.alpaca.rest.assets;
 /**
  * The Class GetAssetBySymbolRequestBuilder.
  */
-public class GetAssetBySymbolRequestBuilder extends AssetsRequestBuilder{
+public class GetAssetBySymbolRequestBuilder extends AssetsRequestBuilder {
 
 
   /**
