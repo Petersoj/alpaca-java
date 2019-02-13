@@ -17,13 +17,17 @@ import io.github.mainstringargs.alpaca.enums.OrderStatus;
 import io.github.mainstringargs.alpaca.enums.OrderTimeInForce;
 import io.github.mainstringargs.alpaca.enums.OrderType;
 import io.github.mainstringargs.alpaca.properties.AlpacaProperties;
-import io.github.mainstringargs.alpaca.rest.AccountRequestBuilder;
 import io.github.mainstringargs.alpaca.rest.AlpacaRequest;
 import io.github.mainstringargs.alpaca.rest.AlpacaRequestBuilder;
-import io.github.mainstringargs.alpaca.rest.CalendarRequestBuilder;
-import io.github.mainstringargs.alpaca.rest.ClockRequestBuilder;
-import io.github.mainstringargs.alpaca.rest.OrdersRequestBuilder;
-import io.github.mainstringargs.alpaca.rest.PositionsRequestBuilder;
+import io.github.mainstringargs.alpaca.rest.accounts.AccountRequestBuilder;
+import io.github.mainstringargs.alpaca.rest.calendar.CalendarRequestBuilder;
+import io.github.mainstringargs.alpaca.rest.clock.ClockRequestBuilder;
+import io.github.mainstringargs.alpaca.rest.orders.DeleteOrderRequestBuilder;
+import io.github.mainstringargs.alpaca.rest.orders.GetListOfOrdersRequestBuilder;
+import io.github.mainstringargs.alpaca.rest.orders.GetOrderByClientIdRequestBuilder;
+import io.github.mainstringargs.alpaca.rest.orders.GetOrderRequestBuilder;
+import io.github.mainstringargs.alpaca.rest.orders.PostOrderRequestBuilder;
+import io.github.mainstringargs.alpaca.rest.positions.PositionsRequestBuilder;
 
 /**
  * The Class AlpacaAPI.
@@ -112,7 +116,7 @@ public class AlpacaAPI {
   public Order getOrder(String orderId) {
     Type objectType = new TypeToken<Order>() {}.getType();
 
-    OrdersRequestBuilder urlBuilder = new OrdersRequestBuilder(baseUrl);
+    GetOrderRequestBuilder urlBuilder = new GetOrderRequestBuilder(baseUrl);
 
     urlBuilder.orderId(orderId);
 
@@ -132,7 +136,7 @@ public class AlpacaAPI {
   public Order getOrderByClientId(String clientOrderId) {
     Type objectType = new TypeToken<Order>() {}.getType();
 
-    OrdersRequestBuilder urlBuilder = new OrdersRequestBuilder(baseUrl);
+    GetOrderByClientIdRequestBuilder urlBuilder = new GetOrderByClientIdRequestBuilder(baseUrl);
 
     urlBuilder.ordersByClientOrderId(clientOrderId);
 
@@ -152,7 +156,7 @@ public class AlpacaAPI {
    * @return true, if successful
    */
   public boolean cancelOrder(String orderId) {
-    OrdersRequestBuilder urlBuilder = new OrdersRequestBuilder(baseUrl);
+    DeleteOrderRequestBuilder urlBuilder = new DeleteOrderRequestBuilder(baseUrl);
 
     urlBuilder.orderId(orderId);
 
@@ -179,7 +183,7 @@ public class AlpacaAPI {
 
     Type objectType = new TypeToken<Order>() {}.getType();
 
-    OrdersRequestBuilder urlBuilder = new OrdersRequestBuilder(baseUrl);
+    PostOrderRequestBuilder urlBuilder = new PostOrderRequestBuilder(baseUrl);
 
     urlBuilder.symbol(symbol).quantity(quantity).side(side).type(type).timeInForce(timeInForce)
         .limitPrice(limitPrice).stopPrice(stopPrice).clientOrderId(clientOrderId);
@@ -201,7 +205,7 @@ public class AlpacaAPI {
   public List<Order> getOrders() {
     Type listType = new TypeToken<List<Order>>() {}.getType();
 
-    AlpacaRequestBuilder urlBuilder = new OrdersRequestBuilder(baseUrl);
+    GetListOfOrdersRequestBuilder urlBuilder = new GetListOfOrdersRequestBuilder(baseUrl);
 
     HttpResponse<JsonNode> response = alpacaRequest.invokeGet(urlBuilder);
 
@@ -225,7 +229,7 @@ public class AlpacaAPI {
       LocalDateTime until, Direction direction) {
     Type listType = new TypeToken<List<Order>>() {}.getType();
 
-    OrdersRequestBuilder urlBuilder = new OrdersRequestBuilder(baseUrl);
+    GetListOfOrdersRequestBuilder urlBuilder = new GetListOfOrdersRequestBuilder(baseUrl);
 
     urlBuilder.status(status).limit(limit).after(after).until(until).direction(direction);
 
