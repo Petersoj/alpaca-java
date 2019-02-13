@@ -5,7 +5,7 @@ import io.github.mainstringargs.alpaca.rest.AlpacaRequestBuilder;
 /**
  * The Class CalendarUrlBuilder.
  */
-public class CalendarRequestBuilder extends AlpacaRequestBuilder {
+public abstract class CalendarRequestBuilder extends AlpacaRequestBuilder {
 
 
 

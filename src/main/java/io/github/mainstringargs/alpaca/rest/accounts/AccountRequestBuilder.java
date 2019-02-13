@@ -5,7 +5,7 @@ import io.github.mainstringargs.alpaca.rest.AlpacaRequestBuilder;
 /**
  * The Class AccountUrlBuilder.
  */
-public class AccountRequestBuilder extends AlpacaRequestBuilder {
+public abstract class AccountRequestBuilder extends AlpacaRequestBuilder {
 
 
   /** The Constant ACCOUNT_ENDPOINT. */

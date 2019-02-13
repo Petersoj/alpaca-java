@@ -5,7 +5,7 @@ import io.github.mainstringargs.alpaca.rest.AlpacaRequestBuilder;
 /**
  * The Class ClockUrlBuilder.
  */
-public class ClockRequestBuilder extends AlpacaRequestBuilder {
+public abstract class ClockRequestBuilder extends AlpacaRequestBuilder {
 
 
   /** The Constant CLOCK_ENDPOINT. */

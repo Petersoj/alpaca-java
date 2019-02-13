@@ -5,7 +5,7 @@ import io.github.mainstringargs.alpaca.rest.AlpacaRequestBuilder;
 /**
  * The Class PositionsUrlBuilder.
  */
-public class PositionsRequestBuilder extends AlpacaRequestBuilder {
+public abstract class PositionsRequestBuilder extends AlpacaRequestBuilder {
 
 
   /** The Constant POSITIONS_ENDPOINT. */

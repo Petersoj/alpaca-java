@@ -5,7 +5,7 @@ import io.github.mainstringargs.alpaca.rest.AlpacaRequestBuilder;
 /**
  * The Class OrdersUrlBuilder.
  */
-public class OrdersRequestBuilder extends AlpacaRequestBuilder {
+public abstract class OrdersRequestBuilder extends AlpacaRequestBuilder {
 
   /** The Constant ORDERS_ENDPOINT. */
   public final static String ORDERS_ENDPOINT = "orders";

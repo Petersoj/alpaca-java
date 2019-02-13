@@ -65,6 +65,8 @@ public class AlpacaRequest {
       response =
           Unirest.get(builder.getURL()).header(USER_AGENT_KEY, AlpacaProperties.USER_AGENT_VALUE)
               .header(API_KEY_ID, keyId).header(API_SECRET_KEY, secret).asJson();
+      
+      System.out.println(response.getStatus() + " "+response.getStatusText() + " " +response.getBody());
 
 
     } catch (UnirestException e) {

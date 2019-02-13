@@ -5,7 +5,7 @@ import io.github.mainstringargs.alpaca.rest.AlpacaRequestBuilder;
 /**
  * The Class AssetsUrlBuilder.
  */
-public class AssetsRequestBuilder extends AlpacaRequestBuilder {
+public abstract class AssetsRequestBuilder extends AlpacaRequestBuilder {
 
 
   /** The Constant ASSETS_ENDPOINT. */
