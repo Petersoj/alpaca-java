@@ -27,6 +27,8 @@ import io.github.mainstringargs.alpaca.rest.orders.GetListOfOrdersRequestBuilder
 import io.github.mainstringargs.alpaca.rest.orders.GetOrderByClientIdRequestBuilder;
 import io.github.mainstringargs.alpaca.rest.orders.GetOrderRequestBuilder;
 import io.github.mainstringargs.alpaca.rest.orders.PostOrderRequestBuilder;
+import io.github.mainstringargs.alpaca.rest.positions.GetOpenPositionBySymbolRequestBuilder;
+import io.github.mainstringargs.alpaca.rest.positions.GetOpenPositionsRequestBuilder;
 import io.github.mainstringargs.alpaca.rest.positions.PositionsRequestBuilder;
 
 /**
@@ -89,21 +91,43 @@ public class AlpacaAPI {
     return account;
   }
 
+
   /**
-   * Gets the positions.
+   * Gets the open positions.
    *
-   * @return the positions
+   * @return the open positions
    */
-  public List<Position> getPositions() {
+  public List<Position> getOpenPositions() {
     Type listType = new TypeToken<List<Position>>() {}.getType();
 
-    AlpacaRequestBuilder urlBuilder = new PositionsRequestBuilder(baseUrl);
+    GetOpenPositionsRequestBuilder urlBuilder = new GetOpenPositionsRequestBuilder(baseUrl);
 
     HttpResponse<JsonNode> response = alpacaRequest.invokeGet(urlBuilder);
 
     List<Position> positions = alpacaRequest.getResponseObject(response, listType);
 
     return positions;
+  }
+
+
+  /**
+   * Gets the open position.
+   *
+   * @param symbol the symbol
+   * @return the open position
+   */
+  public Position getOpenPositionBySymbol(String symbol) {
+    Type listType = new TypeToken<Position>() {}.getType();
+
+    GetOpenPositionBySymbolRequestBuilder urlBuilder = new GetOpenPositionBySymbolRequestBuilder(baseUrl);
+
+    urlBuilder.symbol(symbol);
+
+    HttpResponse<JsonNode> response = alpacaRequest.invokeGet(urlBuilder);
+
+    Position position = alpacaRequest.getResponseObject(response, listType);
+
+    return position;
   }
 
 
@@ -162,7 +186,7 @@ public class AlpacaAPI {
 
     HttpResponse<JsonNode> response = alpacaRequest.invokeDelete(urlBuilder);
 
-    return response.getStatus() == 200;
+    return response.getStatus() == 204;
   }
 
   /**

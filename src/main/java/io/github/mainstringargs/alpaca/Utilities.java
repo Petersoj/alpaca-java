@@ -15,6 +15,7 @@ public class Utilities {
   private static DateTimeFormatter formatter =
       DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss'Z'").withZone(ZoneId.of("UTC"));
 
+  /** The number formatter. */
   private static NumberFormat numberFormatter = new DecimalFormat("#0.00");
 
   /**
@@ -27,6 +28,12 @@ public class Utilities {
     return formatter.format(ldt);
   }
 
+  /**
+   * To decimal format.
+   *
+   * @param numerToFormat the numer to format
+   * @return the string
+   */
   public static String toDecimalFormat(Number numerToFormat) {
     return numberFormatter.format(numerToFormat);
   }
