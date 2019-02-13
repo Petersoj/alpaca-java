@@ -1,7 +1,15 @@
 package io.github.mainstringargs.alpaca.rest.orders;
 
+/**
+ * The Class GetOrderRequestBuilder.
+ */
 public class GetOrderRequestBuilder extends OrdersRequestBuilder {
 
+  /**
+   * Instantiates a new gets the order request builder.
+   *
+   * @param baseUrl the base url
+   */
   public GetOrderRequestBuilder(String baseUrl) {
     super(baseUrl);
   }

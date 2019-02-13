@@ -5,8 +5,16 @@ import io.github.mainstringargs.alpaca.Utilities;
 import io.github.mainstringargs.alpaca.enums.Direction;
 import io.github.mainstringargs.alpaca.enums.OrderStatus;
 
+/**
+ * The Class GetListOfOrdersRequestBuilder.
+ */
 public class GetListOfOrdersRequestBuilder extends OrdersRequestBuilder {
 
+  /**
+   * Instantiates a new gets the list of orders request builder.
+   *
+   * @param baseUrl the base url
+   */
   public GetListOfOrdersRequestBuilder(String baseUrl) {
     super(baseUrl);
   }

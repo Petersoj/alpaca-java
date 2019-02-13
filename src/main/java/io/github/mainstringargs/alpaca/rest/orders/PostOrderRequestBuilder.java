@@ -5,8 +5,16 @@ import io.github.mainstringargs.alpaca.enums.OrderSide;
 import io.github.mainstringargs.alpaca.enums.OrderTimeInForce;
 import io.github.mainstringargs.alpaca.enums.OrderType;
 
+/**
+ * The Class PostOrderRequestBuilder.
+ */
 public class PostOrderRequestBuilder extends OrdersRequestBuilder {
 
+  /**
+   * Instantiates a new post order request builder.
+   *
+   * @param baseUrl the base url
+   */
   public PostOrderRequestBuilder(String baseUrl) {
     super(baseUrl);
   }

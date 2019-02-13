@@ -1,7 +1,15 @@
 package io.github.mainstringargs.alpaca.rest.orders;
 
+/**
+ * The Class GetOrderByClientIdRequestBuilder.
+ */
 public class GetOrderByClientIdRequestBuilder extends OrdersRequestBuilder {
 
+  /**
+   * Instantiates a new gets the order by client id request builder.
+   *
+   * @param baseUrl the base url
+   */
   public GetOrderByClientIdRequestBuilder(String baseUrl) {
     super(baseUrl);
   }
