@@ -1,6 +1,7 @@
 package io.github.mainstringargs.alpaca;
 
 import java.lang.reflect.Type;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import com.google.gson.reflect.TypeToken;
@@ -25,6 +26,7 @@ import io.github.mainstringargs.alpaca.rest.accounts.AccountRequestBuilder;
 import io.github.mainstringargs.alpaca.rest.assets.GetAssetBySymbolRequestBuilder;
 import io.github.mainstringargs.alpaca.rest.assets.GetAssetsRequestBuilder;
 import io.github.mainstringargs.alpaca.rest.calendar.CalendarRequestBuilder;
+import io.github.mainstringargs.alpaca.rest.calendar.GetCalendarRequestBuilder;
 import io.github.mainstringargs.alpaca.rest.clock.ClockRequestBuilder;
 import io.github.mainstringargs.alpaca.rest.orders.DeleteOrderRequestBuilder;
 import io.github.mainstringargs.alpaca.rest.orders.GetListOfOrdersRequestBuilder;
@@ -338,6 +340,27 @@ public class AlpacaAPI {
     Type listType = new TypeToken<List<Calendar>>() {}.getType();
 
     AlpacaRequestBuilder urlBuilder = new CalendarRequestBuilder(baseUrl);
+
+    HttpResponse<JsonNode> response = alpacaRequest.invokeGet(urlBuilder);
+
+    List<Calendar> calendar = alpacaRequest.getResponseObject(response, listType);
+
+    return calendar;
+  }
+
+  /**
+   * Gets the calendar.
+   *
+   * @param start the start
+   * @param end the end
+   * @return the calendar
+   */
+  public List<Calendar> getCalendar(LocalDate start, LocalDate end) {
+    Type listType = new TypeToken<List<Calendar>>() {}.getType();
+
+    GetCalendarRequestBuilder urlBuilder = new GetCalendarRequestBuilder(baseUrl);
+
+    urlBuilder.start(start).end(end);
 
     HttpResponse<JsonNode> response = alpacaRequest.invokeGet(urlBuilder);
 
