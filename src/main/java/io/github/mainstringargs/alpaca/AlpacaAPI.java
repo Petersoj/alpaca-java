@@ -7,10 +7,12 @@ import com.google.gson.reflect.TypeToken;
 import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.JsonNode;
 import io.github.mainstringargs.alpaca.domain.Account;
+import io.github.mainstringargs.alpaca.domain.Asset;
 import io.github.mainstringargs.alpaca.domain.Calendar;
 import io.github.mainstringargs.alpaca.domain.Clock;
 import io.github.mainstringargs.alpaca.domain.Order;
 import io.github.mainstringargs.alpaca.domain.Position;
+import io.github.mainstringargs.alpaca.enums.AssetStatus;
 import io.github.mainstringargs.alpaca.enums.Direction;
 import io.github.mainstringargs.alpaca.enums.OrderSide;
 import io.github.mainstringargs.alpaca.enums.OrderStatus;
@@ -20,6 +22,8 @@ import io.github.mainstringargs.alpaca.properties.AlpacaProperties;
 import io.github.mainstringargs.alpaca.rest.AlpacaRequest;
 import io.github.mainstringargs.alpaca.rest.AlpacaRequestBuilder;
 import io.github.mainstringargs.alpaca.rest.accounts.AccountRequestBuilder;
+import io.github.mainstringargs.alpaca.rest.assets.GetAssetBySymbolRequestBuilder;
+import io.github.mainstringargs.alpaca.rest.assets.GetAssetsRequestBuilder;
 import io.github.mainstringargs.alpaca.rest.calendar.CalendarRequestBuilder;
 import io.github.mainstringargs.alpaca.rest.clock.ClockRequestBuilder;
 import io.github.mainstringargs.alpaca.rest.orders.DeleteOrderRequestBuilder;
@@ -119,7 +123,8 @@ public class AlpacaAPI {
   public Position getOpenPositionBySymbol(String symbol) {
     Type listType = new TypeToken<Position>() {}.getType();
 
-    GetOpenPositionBySymbolRequestBuilder urlBuilder = new GetOpenPositionBySymbolRequestBuilder(baseUrl);
+    GetOpenPositionBySymbolRequestBuilder urlBuilder =
+        new GetOpenPositionBySymbolRequestBuilder(baseUrl);
 
     urlBuilder.symbol(symbol);
 
@@ -130,6 +135,64 @@ public class AlpacaAPI {
     return position;
   }
 
+  /**
+   * Gets the assets.
+   *
+   * @return the assets
+   */
+  public List<Asset> getAssets() {
+    Type listType = new TypeToken<List<Asset>>() {}.getType();
+
+    GetAssetsRequestBuilder urlBuilder = new GetAssetsRequestBuilder(baseUrl);
+
+    HttpResponse<JsonNode> response = alpacaRequest.invokeGet(urlBuilder);
+
+    List<Asset> assets = alpacaRequest.getResponseObject(response, listType);
+
+    return assets;
+  }
+
+
+  /**
+   * Gets the assets.
+   *
+   * @param assetStatus the asset status
+   * @param assetClass the asset class
+   * @return the assets
+   */
+  public List<Asset> getAssets(AssetStatus assetStatus, String assetClass) {
+    Type listType = new TypeToken<List<Asset>>() {}.getType();
+
+    GetAssetsRequestBuilder urlBuilder = new GetAssetsRequestBuilder(baseUrl);
+
+    urlBuilder.status(assetStatus).assetClass(assetClass);
+
+    HttpResponse<JsonNode> response = alpacaRequest.invokeGet(urlBuilder);
+
+    List<Asset> assets = alpacaRequest.getResponseObject(response, listType);
+
+    return assets;
+  }
+
+  /**
+   * Gets the asset by symbol.
+   *
+   * @param symbol the symbol
+   * @return the asset by symbol
+   */
+  public Asset getAssetBySymbol(String symbol) {
+    Type listType = new TypeToken<Asset>() {}.getType();
+
+    GetAssetBySymbolRequestBuilder urlBuilder = new GetAssetBySymbolRequestBuilder(baseUrl);
+
+    urlBuilder.symbol(symbol);
+
+    HttpResponse<JsonNode> response = alpacaRequest.invokeGet(urlBuilder);
+
+    Asset asset = alpacaRequest.getResponseObject(response, listType);
+
+    return asset;
+  }
 
   /**
    * Gets the order.
