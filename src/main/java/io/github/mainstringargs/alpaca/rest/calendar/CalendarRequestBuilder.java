@@ -1,4 +1,6 @@
-package io.github.mainstringargs.alpaca.rest;
+package io.github.mainstringargs.alpaca.rest.calendar;
+
+import io.github.mainstringargs.alpaca.rest.AlpacaRequestBuilder;
 
 /**
  * The Class CalendarUrlBuilder.

@@ -1,4 +1,6 @@
-package io.github.mainstringargs.alpaca.rest;
+package io.github.mainstringargs.alpaca.rest.clock;
+
+import io.github.mainstringargs.alpaca.rest.AlpacaRequestBuilder;
 
 /**
  * The Class ClockUrlBuilder.
