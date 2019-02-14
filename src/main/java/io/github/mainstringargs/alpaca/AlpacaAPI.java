@@ -60,7 +60,8 @@ public class AlpacaAPI {
   private String baseDataUrl;
 
   /**
-   * Instantiates a new alpaca API.
+   * Instantiates a new Alpaca API using properties specified in alpaca.properties file (or relevant
+   * defaults)
    */
   public AlpacaAPI() {
 
@@ -73,16 +74,34 @@ public class AlpacaAPI {
   }
 
   /**
-   * Instantiates a new alpaca API.
+   * Instantiates a new Alpaca API using the specified keyId, secret, baseAccountUrl, & baseDataUrl.
    *
    * @param keyId the key id
    * @param secret the secret
-   * @param baseUrl the base url
+   * @param baseAccountUrl the base account url
+   * @param baseDataUrl the base data url
    */
-  public AlpacaAPI(String keyId, String secret, String baseUrl) {
+  public AlpacaAPI(String keyId, String secret, String baseAccountUrl, String baseDataUrl) {
     this.keyId = keyId;
     this.secret = secret;
-    this.baseAccountUrl = baseUrl;
+    this.baseAccountUrl = baseAccountUrl;
+    this.baseDataUrl = baseDataUrl;
+    alpacaRequest = new AlpacaRequest(keyId, secret);
+
+
+  }
+
+  /**
+   * Instantiates a new Alpaca API using the specified keyId, secret, baseAccountUrl, & baseDataUrl
+   *
+   * @param keyId the key id
+   * @param secret the secret
+   * @param baseAccountUrl the base account url
+   */
+  public AlpacaAPI(String keyId, String secret, String baseAccountUrl) {
+    this.keyId = keyId;
+    this.secret = secret;
+    this.baseAccountUrl = baseAccountUrl;
     alpacaRequest = new AlpacaRequest(keyId, secret);
 
 
@@ -90,6 +109,8 @@ public class AlpacaAPI {
 
   /**
    * Gets the account.
+   * 
+   * @see <a href="https://docs.alpaca.markets/api-documentation/web-api/account/#get-the-account">https://docs.alpaca.markets/api-documentation/web-api/account/#get-the-account</a>
    *
    * @return the account
    * @throws AlpacaAPIException the alpaca API exception
@@ -110,15 +131,21 @@ public class AlpacaAPI {
 
 
   /**
-   * Gets the open positions.
+   * Gets the orders using the following API defaults:
+   * 
+   * @see <a href="https://docs.alpaca.markets/api-documentation/web-api/orders/#get-a-list-of-orders">https://docs.alpaca.markets/api-documentation/web-api/orders/#get-a-list-of-orders</a>
    *
-   * @return the open positions
+   * Status: Open 
+   * Limit: 50 
+   * Direction: Descending
+   *
+   * @return the orders
    * @throws AlpacaAPIException the alpaca API exception
    */
-  public List<Position> getOpenPositions() throws AlpacaAPIException {
-    Type listType = new TypeToken<List<Position>>() {}.getType();
+  public List<Order> getOrders() throws AlpacaAPIException {
+    Type listType = new TypeToken<List<Order>>() {}.getType();
 
-    GetOpenPositionsRequestBuilder urlBuilder = new GetOpenPositionsRequestBuilder(baseAccountUrl);
+    GetListOfOrdersRequestBuilder urlBuilder = new GetListOfOrdersRequestBuilder(baseAccountUrl);
 
     HttpResponse<JsonNode> response = alpacaRequest.invokeGet(urlBuilder);
 
@@ -127,26 +154,31 @@ public class AlpacaAPI {
     }
 
 
-    List<Position> positions = alpacaRequest.getResponseObject(response, listType);
+    List<Order> orders = alpacaRequest.getResponseObject(response, listType);
 
-    return positions;
+    return orders;
   }
 
-
   /**
-   * Gets the open position by symbol.
+   * Gets the orders.
+   * 
+   * @see <a href="https://docs.alpaca.markets/api-documentation/web-api/orders/#get-a-list-of-orders">https://docs.alpaca.markets/api-documentation/web-api/orders/#get-a-list-of-orders</a>
    *
-   * @param symbol the symbol
-   * @return the open position by symbol
+   * @param status the status (Open if null)
+   * @param limit the limit (50 if null)
+   * @param after the after
+   * @param until the until
+   * @param direction the direction (Descending if null)
+   * @return the orders
    * @throws AlpacaAPIException the alpaca API exception
    */
-  public Position getOpenPositionBySymbol(String symbol) throws AlpacaAPIException {
-    Type listType = new TypeToken<Position>() {}.getType();
+  public List<Order> getOrders(OrderStatus status, Integer limit, LocalDateTime after,
+      LocalDateTime until, Direction direction) throws AlpacaAPIException {
+    Type listType = new TypeToken<List<Order>>() {}.getType();
 
-    GetOpenPositionBySymbolRequestBuilder urlBuilder =
-        new GetOpenPositionBySymbolRequestBuilder(baseAccountUrl);
+    GetListOfOrdersRequestBuilder urlBuilder = new GetListOfOrdersRequestBuilder(baseAccountUrl);
 
-    urlBuilder.symbol(symbol);
+    urlBuilder.status(status).limit(limit).after(after).until(until).direction(direction);
 
     HttpResponse<JsonNode> response = alpacaRequest.invokeGet(urlBuilder);
 
@@ -155,177 +187,24 @@ public class AlpacaAPI {
     }
 
 
-    Position position = alpacaRequest.getResponseObject(response, listType);
+    List<Order> orders = alpacaRequest.getResponseObject(response, listType);
 
-    return position;
+    return orders;
   }
 
   /**
-   * Gets the assets.
+   * Request/Submits new order.
+   * 
+   * @see <a href="https://docs.alpaca.markets/api-documentation/web-api/orders/#request-a-new-order">https://docs.alpaca.markets/api-documentation/web-api/orders/#request-a-new-order</a>
    *
-   * @return the assets
-   * @throws AlpacaAPIException the alpaca API exception
-   */
-  public List<Asset> getAssets() throws AlpacaAPIException {
-    Type listType = new TypeToken<List<Asset>>() {}.getType();
-
-    GetAssetsRequestBuilder urlBuilder = new GetAssetsRequestBuilder(baseAccountUrl);
-
-    HttpResponse<JsonNode> response = alpacaRequest.invokeGet(urlBuilder);
-
-    if (response.getStatus() != 200) {
-      throw new AlpacaAPIException(response);
-    }
-
-
-    List<Asset> assets = alpacaRequest.getResponseObject(response, listType);
-
-    return assets;
-  }
-
-
-  /**
-   * Gets the assets.
-   *
-   * @param assetStatus the asset status
-   * @param assetClass the asset class
-   * @return the assets
-   * @throws AlpacaAPIException the alpaca API exception
-   */
-  public List<Asset> getAssets(AssetStatus assetStatus, String assetClass)
-      throws AlpacaAPIException {
-    Type listType = new TypeToken<List<Asset>>() {}.getType();
-
-    GetAssetsRequestBuilder urlBuilder = new GetAssetsRequestBuilder(baseAccountUrl);
-
-    urlBuilder.status(assetStatus).assetClass(assetClass);
-
-    HttpResponse<JsonNode> response = alpacaRequest.invokeGet(urlBuilder);
-
-    if (response.getStatus() != 200) {
-      throw new AlpacaAPIException(response);
-    }
-
-
-    List<Asset> assets = alpacaRequest.getResponseObject(response, listType);
-
-    return assets;
-  }
-
-  /**
-   * Gets the asset by symbol.
-   *
-   * @param symbol the symbol
-   * @return the asset by symbol
-   * @throws AlpacaAPIException the alpaca API exception
-   */
-  public Asset getAssetBySymbol(String symbol) throws AlpacaAPIException {
-    Type listType = new TypeToken<Asset>() {}.getType();
-
-    GetAssetBySymbolRequestBuilder urlBuilder = new GetAssetBySymbolRequestBuilder(baseAccountUrl);
-
-    urlBuilder.symbol(symbol);
-
-    HttpResponse<JsonNode> response = alpacaRequest.invokeGet(urlBuilder);
-
-    if (response.getStatus() != 200) {
-      throw new AlpacaAPIException(response);
-    }
-
-
-    Asset asset = alpacaRequest.getResponseObject(response, listType);
-
-    return asset;
-  }
-
-  /**
-   * Gets the order.
-   *
-   * @param orderId the order id
-   * @return the order
-   * @throws AlpacaAPIException the alpaca API exception
-   */
-  public Order getOrder(String orderId) throws AlpacaAPIException {
-    Type objectType = new TypeToken<Order>() {}.getType();
-
-    GetOrderRequestBuilder urlBuilder = new GetOrderRequestBuilder(baseAccountUrl);
-
-    urlBuilder.orderId(orderId);
-
-    HttpResponse<JsonNode> response = alpacaRequest.invokeGet(urlBuilder);
-
-    if (response.getStatus() != 200) {
-      throw new AlpacaAPIException(response);
-    }
-
-
-    Order order = alpacaRequest.getResponseObject(response, objectType);
-
-    return order;
-  }
-
-  /**
-   * Gets the order by client id.
-   *
-   * @param clientOrderId the client order id
-   * @return the order by client id
-   * @throws AlpacaAPIException the alpaca API exception
-   */
-  public Order getOrderByClientId(String clientOrderId) throws AlpacaAPIException {
-    Type objectType = new TypeToken<Order>() {}.getType();
-
-    GetOrderByClientIdRequestBuilder urlBuilder =
-        new GetOrderByClientIdRequestBuilder(baseAccountUrl);
-
-    urlBuilder.ordersByClientOrderId(clientOrderId);
-
-    HttpResponse<JsonNode> response = alpacaRequest.invokeGet(urlBuilder);
-
-    if (response.getStatus() != 200) {
-      throw new AlpacaAPIException(response);
-    }
-
-
-    Order order = alpacaRequest.getResponseObject(response, objectType);
-
-    return order;
-  }
-
-
-
-  /**
-   * Cancel order.
-   *
-   * @param orderId the order id
-   * @return true, if successful
-   * @throws AlpacaAPIException the alpaca API exception
-   */
-  public boolean cancelOrder(String orderId) throws AlpacaAPIException {
-    DeleteOrderRequestBuilder urlBuilder = new DeleteOrderRequestBuilder(baseAccountUrl);
-
-    urlBuilder.orderId(orderId);
-
-    HttpResponse<JsonNode> response = alpacaRequest.invokeDelete(urlBuilder);
-
-    if (response.getStatus() != 200 || response.getStatus() != 204) {
-      throw new AlpacaAPIException(response);
-    }
-
-
-    return response.getStatus() == 200 || response.getStatus() == 204;
-  }
-
-  /**
-   * Request new order.
-   *
-   * @param symbol the symbol
-   * @param quantity the quantity
-   * @param side the side
-   * @param type the type
-   * @param timeInForce the time in force
-   * @param limitPrice the limit price
-   * @param stopPrice the stop price
-   * @param clientOrderId the client order id
+   * @param symbol the symbol or asset_id (required)
+   * @param quantity the quantity (required)
+   * @param side the side (required)
+   * @param type the type (required)
+   * @param timeInForce the time in force (required)
+   * @param limitPrice the limit price (required if Limit or Stop Limit)
+   * @param stopPrice the stop price (required if Stop or Stop Limit)
+   * @param clientOrderId the client order id (optional)
    * @return the order
    * @throws AlpacaAPIException the alpaca API exception
    */
@@ -352,18 +231,21 @@ public class AlpacaAPI {
     return order;
   }
 
-
-
   /**
-   * Gets the orders.
+   * Gets the order.
+   * 
+   * @see <a href="https://docs.alpaca.markets/api-documentation/web-api/orders/#get-an-order">https://docs.alpaca.markets/api-documentation/web-api/orders/#get-an-order</a>
    *
-   * @return the orders
+   * @param orderId the order id (required)
+   * @return the order
    * @throws AlpacaAPIException the alpaca API exception
    */
-  public List<Order> getOrders() throws AlpacaAPIException {
-    Type listType = new TypeToken<List<Order>>() {}.getType();
+  public Order getOrder(String orderId) throws AlpacaAPIException {
+    Type objectType = new TypeToken<Order>() {}.getType();
 
-    GetListOfOrdersRequestBuilder urlBuilder = new GetListOfOrdersRequestBuilder(baseAccountUrl);
+    GetOrderRequestBuilder urlBuilder = new GetOrderRequestBuilder(baseAccountUrl);
+
+    urlBuilder.orderId(orderId);
 
     HttpResponse<JsonNode> response = alpacaRequest.invokeGet(urlBuilder);
 
@@ -372,30 +254,27 @@ public class AlpacaAPI {
     }
 
 
-    List<Order> orders = alpacaRequest.getResponseObject(response, listType);
+    Order order = alpacaRequest.getResponseObject(response, objectType);
 
-    return orders;
+    return order;
   }
 
-
   /**
-   * Gets the orders.
+   * Gets the order by client id.
+   * 
+   * @see <a href="https://docs.alpaca.markets/api-documentation/web-api/orders/#get-an-order-by-client-order-id">https://docs.alpaca.markets/api-documentation/web-api/orders/#get-an-order-by-client-order-id</a>
    *
-   * @param status the status
-   * @param limit the limit
-   * @param after the after
-   * @param until the until
-   * @param direction the direction
-   * @return the orders
+   * @param clientOrderId the client order id (required)
+   * @return the order by client id
    * @throws AlpacaAPIException the alpaca API exception
    */
-  public List<Order> getOrders(OrderStatus status, Integer limit, LocalDateTime after,
-      LocalDateTime until, Direction direction) throws AlpacaAPIException {
-    Type listType = new TypeToken<List<Order>>() {}.getType();
+  public Order getOrderByClientId(String clientOrderId) throws AlpacaAPIException {
+    Type objectType = new TypeToken<Order>() {}.getType();
 
-    GetListOfOrdersRequestBuilder urlBuilder = new GetListOfOrdersRequestBuilder(baseAccountUrl);
+    GetOrderByClientIdRequestBuilder urlBuilder =
+        new GetOrderByClientIdRequestBuilder(baseAccountUrl);
 
-    urlBuilder.status(status).limit(limit).after(after).until(until).direction(direction);
+    urlBuilder.ordersByClientOrderId(clientOrderId);
 
     HttpResponse<JsonNode> response = alpacaRequest.invokeGet(urlBuilder);
 
@@ -404,15 +283,183 @@ public class AlpacaAPI {
     }
 
 
-    List<Order> orders = alpacaRequest.getResponseObject(response, listType);
+    Order order = alpacaRequest.getResponseObject(response, objectType);
 
-    return orders;
+    return order;
+  }
+
+  /**
+   * Cancel order.
+   * 
+   * @see <a href="https://docs.alpaca.markets/api-documentation/web-api/orders/#cancel-an-order">https://docs.alpaca.markets/api-documentation/web-api/orders/#cancel-an-order</a>
+   *
+   * @param orderId the order id (required)
+   * @return true, if successful
+   * @throws AlpacaAPIException the alpaca API exception
+   */
+  public boolean cancelOrder(String orderId) throws AlpacaAPIException {
+    DeleteOrderRequestBuilder urlBuilder = new DeleteOrderRequestBuilder(baseAccountUrl);
+
+    urlBuilder.orderId(orderId);
+
+    HttpResponse<JsonNode> response = alpacaRequest.invokeDelete(urlBuilder);
+
+    if (response.getStatus() != 200 || response.getStatus() != 204) {
+      throw new AlpacaAPIException(response);
+    }
+
+
+    return response.getStatus() == 200 || response.getStatus() == 204;
+  }
+
+  /**
+   * Gets the open positions.
+   * 
+   * @see <a href="https://docs.alpaca.markets/api-documentation/web-api/positions/#get-open-positions">https://docs.alpaca.markets/api-documentation/web-api/positions/#get-open-positions</a>
+   *
+   * @return the open positions
+   * @throws AlpacaAPIException the alpaca API exception
+   */
+  public List<Position> getOpenPositions() throws AlpacaAPIException {
+    Type listType = new TypeToken<List<Position>>() {}.getType();
+
+    GetOpenPositionsRequestBuilder urlBuilder = new GetOpenPositionsRequestBuilder(baseAccountUrl);
+
+    HttpResponse<JsonNode> response = alpacaRequest.invokeGet(urlBuilder);
+
+    if (response.getStatus() != 200) {
+      throw new AlpacaAPIException(response);
+    }
+
+
+    List<Position> positions = alpacaRequest.getResponseObject(response, listType);
+
+    return positions;
   }
 
 
+  /**
+   * Gets the open position by symbol.
+   * 
+   * @see <a href="https://docs.alpaca.markets/api-documentation/web-api/positions/#get-an-open-position">https://docs.alpaca.markets/api-documentation/web-api/positions/#get-an-open-position</a>
+   *
+   * @param symbol the symbol or asset_id (required)
+   * @return the open position by symbol
+   * @throws AlpacaAPIException the alpaca API exception
+   */
+  public Position getOpenPositionBySymbol(String symbol) throws AlpacaAPIException {
+    Type listType = new TypeToken<Position>() {}.getType();
+
+    GetOpenPositionBySymbolRequestBuilder urlBuilder =
+        new GetOpenPositionBySymbolRequestBuilder(baseAccountUrl);
+
+    urlBuilder.symbol(symbol);
+
+    HttpResponse<JsonNode> response = alpacaRequest.invokeGet(urlBuilder);
+
+    if (response.getStatus() != 200) {
+      throw new AlpacaAPIException(response);
+    }
+
+
+    Position position = alpacaRequest.getResponseObject(response, listType);
+
+    return position;
+  }
+
+  /**
+   * Gets the assets using the following API defaults:
+   * 
+   * Status: Active
+   * Asset Class: us_equity
+   * 
+   * @see <a href="https://docs.alpaca.markets/api-documentation/web-api/assets/#get-assets">https://docs.alpaca.markets/api-documentation/web-api/assets/#get-assets</a>
+   *
+   * @return the assets
+   * @throws AlpacaAPIException the alpaca API exception
+   */
+  public List<Asset> getAssets() throws AlpacaAPIException {
+    Type listType = new TypeToken<List<Asset>>() {}.getType();
+
+    GetAssetsRequestBuilder urlBuilder = new GetAssetsRequestBuilder(baseAccountUrl);
+
+    HttpResponse<JsonNode> response = alpacaRequest.invokeGet(urlBuilder);
+
+    if (response.getStatus() != 200) {
+      throw new AlpacaAPIException(response);
+    }
+
+
+    List<Asset> assets = alpacaRequest.getResponseObject(response, listType);
+
+    return assets;
+  }
+
+
+  /**
+   * Gets the assets.
+   * 
+   * @see <a href="https://docs.alpaca.markets/api-documentation/web-api/assets/#get-assets">https://docs.alpaca.markets/api-documentation/web-api/assets/#get-assets</a>
+   *
+   * @param assetStatus the asset status (Active if null)
+   * @param assetClass the asset class (us_equity if null)
+   * @return the assets
+   * @throws AlpacaAPIException the alpaca API exception
+   */
+  public List<Asset> getAssets(AssetStatus assetStatus, String assetClass)
+      throws AlpacaAPIException {
+    Type listType = new TypeToken<List<Asset>>() {}.getType();
+
+    GetAssetsRequestBuilder urlBuilder = new GetAssetsRequestBuilder(baseAccountUrl);
+
+    urlBuilder.status(assetStatus).assetClass(assetClass);
+
+    HttpResponse<JsonNode> response = alpacaRequest.invokeGet(urlBuilder);
+
+    if (response.getStatus() != 200) {
+      throw new AlpacaAPIException(response);
+    }
+
+
+    List<Asset> assets = alpacaRequest.getResponseObject(response, listType);
+
+    return assets;
+  }
+
+  /**
+   * Gets the asset by symbol or asset_id.
+   * 
+   * @see <a href=
+   *      "https://docs.alpaca.markets/api-documentation/web-api/assets/#get-an-asset">https://docs.alpaca.markets/api-documentation/web-api/assets/#get-an-asset</a>
+   *
+   * @param symbol the symbol (required)
+   * @return the asset by symbol
+   * @throws AlpacaAPIException the alpaca API exception
+   */
+  public Asset getAssetBySymbol(String symbol) throws AlpacaAPIException {
+    Type listType = new TypeToken<Asset>() {}.getType();
+
+    GetAssetBySymbolRequestBuilder urlBuilder = new GetAssetBySymbolRequestBuilder(baseAccountUrl);
+
+    urlBuilder.symbol(symbol);
+
+    HttpResponse<JsonNode> response = alpacaRequest.invokeGet(urlBuilder);
+
+    if (response.getStatus() != 200) {
+      throw new AlpacaAPIException(response);
+    }
+
+
+    Asset asset = alpacaRequest.getResponseObject(response, listType);
+
+    return asset;
+  }
 
   /**
    * Gets the calendar.
+   * 
+   * @see <a href=
+   *      "https://docs.alpaca.markets/api-documentation/web-api/calendar/#get-the-calendar">https://docs.alpaca.markets/api-documentation/web-api/calendar/#get-the-calendar</a>
    *
    * @return the calendar
    * @throws AlpacaAPIException the alpaca API exception
@@ -428,7 +475,6 @@ public class AlpacaAPI {
       throw new AlpacaAPIException(response);
     }
 
-
     List<Calendar> calendar = alpacaRequest.getResponseObject(response, listType);
 
     return calendar;
@@ -436,6 +482,9 @@ public class AlpacaAPI {
 
   /**
    * Gets the calendar.
+   * 
+   * @see <a href=
+   *      "https://docs.alpaca.markets/api-documentation/web-api/calendar/#get-the-calendar">https://docs.alpaca.markets/api-documentation/web-api/calendar/#get-the-calendar</a>
    *
    * @param start the start
    * @param end the end
@@ -463,6 +512,8 @@ public class AlpacaAPI {
 
   /**
    * Gets the clock.
+   * 
+   * @see <a href="https://docs.alpaca.markets/api-documentation/web-api/clock/#get-the-clock">https://docs.alpaca.markets/api-documentation/web-api/clock/#get-the-clock</a>
    *
    * @return the clock
    * @throws AlpacaAPIException the alpaca API exception
@@ -485,14 +536,17 @@ public class AlpacaAPI {
 
   /**
    * Gets the bars.
+   * 
+   * @see <a
+   *      href="https://docs.alpaca.markets/api-documentation/web-api/market-data/bars/#get-a-list-of-bars">https://docs.alpaca.markets/api-documentation/web-api/market-data/bars/#get-a-list-of-bars</a>
    *
-   * @param timeframe the timeframe
-   * @param symbols the symbols
-   * @param limit the limit
-   * @param start the start
-   * @param end the end
-   * @param after the after
-   * @param until the until
+   * @param timeframe the timeframe (required)
+   * @param symbols One or more (max 200) symbol names (required)
+   * @param limit The maximum number of bars to be returned for each symbol. It can be between 1 and 1000. Default is 100 if parameter is unspecified or 0. (100 if null)
+   * @param start Filter bars equal to or after this time. Cannot be used with after.
+   * @param end Filter bars equal to or before this time. Cannot be used with until.
+   * @param after Filter bars after this time. Cannot be used with start.
+   * @param until Filter bars before this time. Cannot be used with end.
    * @return the bars
    * @throws AlpacaAPIException the alpaca API exception
    */
@@ -519,14 +573,18 @@ public class AlpacaAPI {
 
   /**
    * Gets the bars.
+   * 
+   * @see <a
+   *      href="https://docs.alpaca.markets/api-documentation/web-api/market-data/bars/#get-a-list-of-bars">https://docs.alpaca.markets/api-documentation/web-api/market-data/bars/#get-a-list-of-bars</a>
    *
-   * @param timeframe the timeframe
-   * @param symbol the symbol
-   * @param limit the limit
-   * @param start the start
-   * @param end the end
-   * @param after the after
-   * @param until the until
+   * @param timeframe the timeframe (required)
+   * @param symbol One symbol name (required)
+   * @param limit The maximum number of bars to be returned for each symbol. It can be between 1 and
+   *        1000. Default is 100 if parameter is unspecified or 0. (100 if null)
+   * @param start Filter bars equal to or after this time. Cannot be used with after.
+   * @param end Filter bars equal to or before this time. Cannot be used with until.
+   * @param after Filter bars after this time. Cannot be used with start.
+   * @param until Filter bars before this time. Cannot be used with end.
    * @return the bars
    * @throws AlpacaAPIException the alpaca API exception
    */
