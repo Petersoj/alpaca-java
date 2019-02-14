@@ -74,7 +74,7 @@ public class AlpacaAPI {
   }
 
   /**
-   * Instantiates a new Alpaca API using the specified keyId, secret, baseAccountUrl, & baseDataUrl.
+   * Instantiates a new Alpaca API using the specified keyId, secret, baseAccountUrl, and baseDataUrl.
    *
    * @param keyId the key id
    * @param secret the secret
@@ -92,7 +92,7 @@ public class AlpacaAPI {
   }
 
   /**
-   * Instantiates a new Alpaca API using the specified keyId, secret, baseAccountUrl, & baseDataUrl
+   * Instantiates a new Alpaca API using the specified keyId, secret, baseAccountUrl, and baseDataUrl
    *
    * @param keyId the key id
    * @param secret the secret
