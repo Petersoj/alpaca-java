@@ -8,7 +8,7 @@ public class GetAssetBySymbolRequestBuilder extends AssetsRequestBuilder {
 
 
   /**
-   * Instantiates a new gets the open position request builder.
+   * Instantiates a new gets the asset by symbol request builder.
    *
    * @param baseUrl the base url
    */
@@ -22,7 +22,7 @@ public class GetAssetBySymbolRequestBuilder extends AssetsRequestBuilder {
    * Symbol.
    *
    * @param symbol the symbol
-   * @return the gets the open position request builder
+   * @return the gets the asset by symbol request builder
    */
   public GetAssetBySymbolRequestBuilder symbol(String symbol) {
     if (symbol != null) {

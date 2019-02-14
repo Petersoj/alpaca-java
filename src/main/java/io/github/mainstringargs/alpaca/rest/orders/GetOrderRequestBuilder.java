@@ -18,7 +18,7 @@ public class GetOrderRequestBuilder extends OrdersRequestBuilder {
    * Order id.
    *
    * @param orderId the order id
-   * @return the orders url builder
+   * @return the gets the order request builder
    */
   public GetOrderRequestBuilder orderId(String orderId) {
     if (orderId != null) {

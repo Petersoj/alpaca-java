@@ -7,8 +7,10 @@ public enum OrderTimeInForce {
 
   /** The day. */
   DAY("day"),
+
   /** The gtc. */
   GTC("gtc"),
+
   /** The opg. */
   OPG("opg");
 

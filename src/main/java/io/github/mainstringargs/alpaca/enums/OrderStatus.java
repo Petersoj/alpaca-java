@@ -7,8 +7,10 @@ public enum OrderStatus {
 
   /** The open. */
   OPEN("open"),
+
   /** The closed. */
   CLOSED("closed"),
+
   /** The all. */
   ALL("all");
 

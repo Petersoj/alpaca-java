@@ -7,6 +7,7 @@ public enum AssetStatus {
 
   /** The active. */
   ACTIVE("active"),
+
   /** The inactive. */
   INACTIVE("inactive");
 

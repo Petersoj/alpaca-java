@@ -24,7 +24,7 @@ public class PostOrderRequestBuilder extends OrdersRequestBuilder {
    * Symbol.
    *
    * @param symbol the symbol
-   * @return the orders url builder
+   * @return the post order request builder
    */
   public PostOrderRequestBuilder symbol(String symbol) {
     if (symbol != null) {
@@ -37,7 +37,7 @@ public class PostOrderRequestBuilder extends OrdersRequestBuilder {
    * Quantity.
    *
    * @param qty the qty
-   * @return the orders url builder
+   * @return the post order request builder
    */
   public PostOrderRequestBuilder quantity(Integer qty) {
     if (qty != null) {
@@ -50,7 +50,7 @@ public class PostOrderRequestBuilder extends OrdersRequestBuilder {
    * Side.
    *
    * @param side the side
-   * @return the orders url builder
+   * @return the post order request builder
    */
   public PostOrderRequestBuilder side(OrderSide side) {
     if (side != null) {
@@ -63,7 +63,7 @@ public class PostOrderRequestBuilder extends OrdersRequestBuilder {
    * Type.
    *
    * @param type the type
-   * @return the orders url builder
+   * @return the post order request builder
    */
   public PostOrderRequestBuilder type(OrderType type) {
     if (type != null) {
@@ -76,7 +76,7 @@ public class PostOrderRequestBuilder extends OrdersRequestBuilder {
    * Time in force.
    *
    * @param tif the tif
-   * @return the orders url builder
+   * @return the post order request builder
    */
   public PostOrderRequestBuilder timeInForce(OrderTimeInForce tif) {
     if (tif != null) {
@@ -89,7 +89,7 @@ public class PostOrderRequestBuilder extends OrdersRequestBuilder {
    * Limit price.
    *
    * @param limitPrice the limit price
-   * @return the orders url builder
+   * @return the post order request builder
    */
   public PostOrderRequestBuilder limitPrice(Number limitPrice) {
     if (limitPrice != null) {
@@ -102,7 +102,7 @@ public class PostOrderRequestBuilder extends OrdersRequestBuilder {
    * Stop price.
    *
    * @param stopPrice the stop price
-   * @return the orders url builder
+   * @return the post order request builder
    */
   public PostOrderRequestBuilder stopPrice(Number stopPrice) {
     if (stopPrice != null) {
@@ -115,7 +115,7 @@ public class PostOrderRequestBuilder extends OrdersRequestBuilder {
    * Client order id.
    *
    * @param clientOrderId the client order id
-   * @return the orders url builder
+   * @return the post order request builder
    */
   public PostOrderRequestBuilder clientOrderId(String clientOrderId) {
     if (clientOrderId != null) {

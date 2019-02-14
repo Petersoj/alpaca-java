@@ -1,13 +1,13 @@
 package io.github.mainstringargs.alpaca.rest.positions;
 
 /**
- * The Class GetOpenPositionRequestBuilder.
+ * The Class GetOpenPositionBySymbolRequestBuilder.
  */
 public class GetOpenPositionBySymbolRequestBuilder extends PositionsRequestBuilder {
 
 
   /**
-   * Instantiates a new gets the open position request builder.
+   * Instantiates a new gets the open position by symbol request builder.
    *
    * @param baseUrl the base url
    */
@@ -21,7 +21,7 @@ public class GetOpenPositionBySymbolRequestBuilder extends PositionsRequestBuild
    * Symbol.
    *
    * @param symbol the symbol
-   * @return the gets the open position request builder
+   * @return the gets the open position by symbol request builder
    */
   public GetOpenPositionBySymbolRequestBuilder symbol(String symbol) {
     if (symbol != null) {

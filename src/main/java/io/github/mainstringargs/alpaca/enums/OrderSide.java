@@ -7,6 +7,7 @@ public enum OrderSide {
 
   /** The buy. */
   BUY("buy"),
+
   /** The sell. */
   SELL("sell");
 

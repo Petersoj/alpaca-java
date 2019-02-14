@@ -60,13 +60,14 @@ public class AlpacaRequest {
     HttpResponse<JsonNode> response = null;
     try {
 
-      LOGGER.info("Get URL " + builder.getURL());
+      LOGGER.debug("Get URL " + builder.getURL());
 
       response =
           Unirest.get(builder.getURL()).header(USER_AGENT_KEY, AlpacaProperties.USER_AGENT_VALUE)
               .header(API_KEY_ID, keyId).header(API_SECRET_KEY, secret).asJson();
-      
-      System.out.println(response.getStatus() + " "+response.getStatusText() + " " +response.getBody());
+
+      LOGGER.debug("GET status: " + response.getStatus() + "\n\t\t\t\t\tstatusText: "
+          + response.getStatusText() + "\n\t\t\t\t\tBody: " + response.getBody());
 
 
     } catch (UnirestException e) {
@@ -86,12 +87,15 @@ public class AlpacaRequest {
     HttpResponse<JsonNode> response = null;
     try {
 
-      LOGGER.info("Post URL " + builder.getURL());
+      LOGGER.debug("Post URL " + builder.getURL());
       LOGGER.debug("Post Body " + builder.getBodyAsJSON());
 
       response = Unirest.post(builder.getURL())
           .header(USER_AGENT_KEY, AlpacaProperties.USER_AGENT_VALUE).header(API_KEY_ID, keyId)
           .header(API_SECRET_KEY, secret).body(builder.getBodyAsJSON()).asJson();
+
+      LOGGER.debug("POST status: " + response.getStatus() + "\n\t\t\t\t\tstatusText: "
+          + response.getStatusText() + "\n\t\t\t\t\tBody: " + response.getBody());
 
 
     } catch (UnirestException e) {
@@ -111,11 +115,14 @@ public class AlpacaRequest {
     HttpResponse<JsonNode> response = null;
     try {
 
-      LOGGER.info("Delete URL " + builder.getURL());
+      LOGGER.debug("Delete URL " + builder.getURL());
 
       response =
           Unirest.delete(builder.getURL()).header(USER_AGENT_KEY, AlpacaProperties.USER_AGENT_VALUE)
               .header(API_KEY_ID, keyId).header(API_SECRET_KEY, secret).asJson();
+
+      LOGGER.debug("DELETE status: " + response.getStatus() + "\n\t\t\t\t\tstatusText: "
+          + response.getStatusText() + "\n\t\t\t\t\tBody: " + response.getBody());
 
 
     } catch (UnirestException e) {
@@ -143,10 +150,6 @@ public class AlpacaRequest {
     T responseObjectFromJson = null;
 
     BufferedReader br = null;
-
-    // System.out.println(httpResponse.getStatus() + " " + httpResponse.getStatusText() + " "
-    // + httpResponse.getHeaders().entrySet());
-    // System.out.println(httpResponse.getBody());
 
     try {
       br = new BufferedReader(new InputStreamReader(httpResponse.getRawBody()));

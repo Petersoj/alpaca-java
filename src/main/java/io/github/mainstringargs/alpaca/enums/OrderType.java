@@ -7,10 +7,13 @@ public enum OrderType {
 
   /** The market. */
   MARKET("market"),
+
   /** The limit. */
   LIMIT("limit"),
+
   /** The stop. */
   STOP("stop"),
+
   /** The stop limit. */
   STOP_LIMIT("stop_limit");
 

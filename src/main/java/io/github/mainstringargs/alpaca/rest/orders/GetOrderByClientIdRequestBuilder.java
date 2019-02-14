@@ -18,7 +18,7 @@ public class GetOrderByClientIdRequestBuilder extends OrdersRequestBuilder {
    * Orders by client order id.
    *
    * @param clientOrderId the client order id
-   * @return the orders request builder
+   * @return the gets the order by client id request builder
    */
   public GetOrderByClientIdRequestBuilder ordersByClientOrderId(String clientOrderId) {
     if (clientOrderId != null) {

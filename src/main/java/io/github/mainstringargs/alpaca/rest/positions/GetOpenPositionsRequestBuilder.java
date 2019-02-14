@@ -1,13 +1,13 @@
 package io.github.mainstringargs.alpaca.rest.positions;
 
 /**
- * The Class GetPositionsRequestBuilder.
+ * The Class GetOpenPositionsRequestBuilder.
  */
 public class GetOpenPositionsRequestBuilder extends PositionsRequestBuilder {
 
 
   /**
-   * Instantiates a new gets the positions request builder.
+   * Instantiates a new gets the open positions request builder.
    *
    * @param baseUrl the base url
    */

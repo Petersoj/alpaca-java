@@ -9,7 +9,7 @@ public class GetAssetsRequestBuilder extends AssetsRequestBuilder {
 
 
   /**
-   * Instantiates a new gets the positions request builder.
+   * Instantiates a new gets the assets request builder.
    *
    * @param baseUrl the base url
    */

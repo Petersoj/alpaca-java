@@ -18,7 +18,7 @@ public class DeleteOrderRequestBuilder extends OrdersRequestBuilder {
    * Order id.
    *
    * @param orderId the order id
-   * @return the orders url builder
+   * @return the delete order request builder
    */
   public DeleteOrderRequestBuilder orderId(String orderId) {
     if (orderId != null) {
