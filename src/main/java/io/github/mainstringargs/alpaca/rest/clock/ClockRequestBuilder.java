@@ -3,7 +3,7 @@ package io.github.mainstringargs.alpaca.rest.clock;
 import io.github.mainstringargs.alpaca.rest.AlpacaRequestBuilder;
 
 /**
- * The Class ClockUrlBuilder.
+ * The Class ClockRequestBuilder.
  */
 public abstract class ClockRequestBuilder extends AlpacaRequestBuilder {
 
@@ -12,7 +12,7 @@ public abstract class ClockRequestBuilder extends AlpacaRequestBuilder {
   public final static String CLOCK_ENDPOINT = "clock";
 
   /**
-   * Instantiates a new clock url builder.
+   * Instantiates a new clock request builder.
    *
    * @param baseUrl the base url
    */

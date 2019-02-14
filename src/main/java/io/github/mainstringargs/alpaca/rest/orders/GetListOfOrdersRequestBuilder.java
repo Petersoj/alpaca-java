@@ -23,7 +23,7 @@ public class GetListOfOrdersRequestBuilder extends OrdersRequestBuilder {
    * Status.
    *
    * @param status the status
-   * @return the orders url builder
+   * @return the gets the list of orders request builder
    */
   public GetListOfOrdersRequestBuilder status(OrderStatus status) {
     if (status != null) {
@@ -37,7 +37,7 @@ public class GetListOfOrdersRequestBuilder extends OrdersRequestBuilder {
    * Limit.
    *
    * @param limit the limit
-   * @return the orders url builder
+   * @return the gets the list of orders request builder
    */
   public GetListOfOrdersRequestBuilder limit(Integer limit) {
     if (limit != null) {
@@ -51,7 +51,7 @@ public class GetListOfOrdersRequestBuilder extends OrdersRequestBuilder {
    * After.
    *
    * @param after the after
-   * @return the orders url builder
+   * @return the gets the list of orders request builder
    */
   public GetListOfOrdersRequestBuilder after(LocalDateTime after) {
     if (after != null) {
@@ -65,7 +65,7 @@ public class GetListOfOrdersRequestBuilder extends OrdersRequestBuilder {
    * Until.
    *
    * @param until the until
-   * @return the orders url builder
+   * @return the gets the list of orders request builder
    */
   public GetListOfOrdersRequestBuilder until(LocalDateTime until) {
     if (until != null) {
@@ -79,7 +79,7 @@ public class GetListOfOrdersRequestBuilder extends OrdersRequestBuilder {
    * Direction.
    *
    * @param direction the direction
-   * @return the orders url builder
+   * @return the gets the list of orders request builder
    */
   public GetListOfOrdersRequestBuilder direction(Direction direction) {
     if (direction != null) {

@@ -3,7 +3,7 @@ package io.github.mainstringargs.alpaca.rest.accounts;
 import io.github.mainstringargs.alpaca.rest.AlpacaRequestBuilder;
 
 /**
- * The Class AccountUrlBuilder.
+ * The Class AccountRequestBuilder.
  */
 public abstract class AccountRequestBuilder extends AlpacaRequestBuilder {
 
@@ -12,7 +12,7 @@ public abstract class AccountRequestBuilder extends AlpacaRequestBuilder {
   public final static String ACCOUNT_ENDPOINT = "account";
 
   /**
-   * Instantiates a new account url builder.
+   * Instantiates a new account request builder.
    *
    * @param baseUrl the base url
    */

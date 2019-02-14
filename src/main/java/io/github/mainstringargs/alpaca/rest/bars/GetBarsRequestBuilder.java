@@ -1,6 +1,5 @@
 package io.github.mainstringargs.alpaca.rest.bars;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import io.github.mainstringargs.alpaca.Utilities;
 import io.github.mainstringargs.alpaca.enums.BarsTimeFrame;
@@ -19,6 +18,12 @@ public class GetBarsRequestBuilder extends BarsRequestBuilder {
     super(baseUrl);
   }
 
+  /**
+   * Timeframe.
+   *
+   * @param timeframe the timeframe
+   * @return the gets the bars request builder
+   */
   public GetBarsRequestBuilder timeframe(BarsTimeFrame timeframe) {
     if (timeframe != null) {
       super.appendEndpoint(timeframe.getAPIName());
@@ -31,7 +36,7 @@ public class GetBarsRequestBuilder extends BarsRequestBuilder {
    * Start.
    *
    * @param start the start
-   * @return the gets the calendar request builder
+   * @return the gets the bars request builder
    */
   public GetBarsRequestBuilder start(LocalDateTime start) {
     if (start != null) {
@@ -46,7 +51,7 @@ public class GetBarsRequestBuilder extends BarsRequestBuilder {
    * End.
    *
    * @param end the end
-   * @return the gets the calendar request builder
+   * @return the gets the bars request builder
    */
   public GetBarsRequestBuilder end(LocalDateTime end) {
     if (end != null) {

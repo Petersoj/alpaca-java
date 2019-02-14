@@ -3,7 +3,7 @@ package io.github.mainstringargs.alpaca.rest.positions;
 import io.github.mainstringargs.alpaca.rest.AlpacaRequestBuilder;
 
 /**
- * The Class PositionsUrlBuilder.
+ * The Class PositionsRequestBuilder.
  */
 public abstract class PositionsRequestBuilder extends AlpacaRequestBuilder {
 
@@ -12,7 +12,7 @@ public abstract class PositionsRequestBuilder extends AlpacaRequestBuilder {
   public final static String POSITIONS_ENDPOINT = "positions";
 
   /**
-   * Instantiates a new positions url builder.
+   * Instantiates a new positions request builder.
    *
    * @param baseUrl the base url
    */

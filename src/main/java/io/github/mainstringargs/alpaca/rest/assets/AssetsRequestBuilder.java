@@ -3,7 +3,7 @@ package io.github.mainstringargs.alpaca.rest.assets;
 import io.github.mainstringargs.alpaca.rest.AlpacaRequestBuilder;
 
 /**
- * The Class AssetsUrlBuilder.
+ * The Class AssetsRequestBuilder.
  */
 public abstract class AssetsRequestBuilder extends AlpacaRequestBuilder {
 
@@ -14,7 +14,7 @@ public abstract class AssetsRequestBuilder extends AlpacaRequestBuilder {
 
 
   /**
-   * Instantiates a new assets url builder.
+   * Instantiates a new assets request builder.
    *
    * @param baseUrl the base url
    */

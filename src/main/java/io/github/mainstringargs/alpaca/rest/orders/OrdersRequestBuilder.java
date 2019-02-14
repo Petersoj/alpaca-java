@@ -3,7 +3,7 @@ package io.github.mainstringargs.alpaca.rest.orders;
 import io.github.mainstringargs.alpaca.rest.AlpacaRequestBuilder;
 
 /**
- * The Class OrdersUrlBuilder.
+ * The Class OrdersRequestBuilder.
  */
 public abstract class OrdersRequestBuilder extends AlpacaRequestBuilder {
 
@@ -13,7 +13,7 @@ public abstract class OrdersRequestBuilder extends AlpacaRequestBuilder {
 
 
   /**
-   * Instantiates a new orders url builder.
+   * Instantiates a new orders request builder.
    *
    * @param baseUrl the base url
    */
