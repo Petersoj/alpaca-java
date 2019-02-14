@@ -184,9 +184,7 @@ Gets the assets.
 
 Gets the asset by symbol or asset_id.
 
- * **See also:** <a href=
-
-     "https://docs.alpaca.markets/api-documentation/web-api/assets/#get-an-asset">https://docs.alpaca.markets/api-documentation/web-api/assets/#get-an-asset</a>
+ * **See also:** <a href="https://docs.alpaca.markets/api-documentation/web-api/assets/#get-an-asset">https://docs.alpaca.markets/api-documentation/web-api/assets/#get-an-asset</a>
 
      <p>
  * **Parameters:** `symbol` — the symbol (required)
@@ -197,9 +195,7 @@ Gets the asset by symbol or asset_id.
 
 Gets the calendar.
 
- * **See also:** <a href=
-
-     "https://docs.alpaca.markets/api-documentation/web-api/calendar/#get-the-calendar">https://docs.alpaca.markets/api-documentation/web-api/calendar/#get-the-calendar</a>
+ * **See also:** <a href="https://docs.alpaca.markets/api-documentation/web-api/calendar/#get-the-calendar">https://docs.alpaca.markets/api-documentation/web-api/calendar/#get-the-calendar</a>
 
      <p>
  * **Returns:** the calendar
@@ -209,9 +205,7 @@ Gets the calendar.
 
 Gets the calendar.
 
- * **See also:** <a href=
-
-     "https://docs.alpaca.markets/api-documentation/web-api/calendar/#get-the-calendar">https://docs.alpaca.markets/api-documentation/web-api/calendar/#get-the-calendar</a>
+ * **See also:** <a href="https://docs.alpaca.markets/api-documentation/web-api/calendar/#get-the-calendar">https://docs.alpaca.markets/api-documentation/web-api/calendar/#get-the-calendar</a>
 
      <p>
  * **Parameters:**
@@ -234,9 +228,7 @@ Gets the clock.
 
 Gets the bars.
 
- * **See also:** <a
-
-     href="https://docs.alpaca.markets/api-documentation/web-api/market-data/bars/#get-a-list-of-bars">https://docs.alpaca.markets/api-documentation/web-api/market-data/bars/#get-a-list-of-bars</a>
+ * **See also:** <a href="https://docs.alpaca.markets/api-documentation/web-api/market-data/bars/#get-a-list-of-bars">https://docs.alpaca.markets/api-documentation/web-api/market-data/bars/#get-a-list-of-bars</a>
 
      <p>
  * **Parameters:**
@@ -254,9 +246,7 @@ Gets the bars.
 
 Gets the bars.
 
- * **See also:** <a
-
-     href="https://docs.alpaca.markets/api-documentation/web-api/market-data/bars/#get-a-list-of-bars>https://docs.alpaca.markets/api-documentation/web-api/market-data/bars/#get-a-list-of-bars</a>
+ * **See also:** <a href="https://docs.alpaca.markets/api-documentation/web-api/market-data/bars/#get-a-list-of-bars>https://docs.alpaca.markets/api-documentation/web-api/market-data/bars/#get-a-list-of-bars</a>
 
      <p>
  * **Parameters:**
