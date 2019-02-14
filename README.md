@@ -9,6 +9,14 @@ To build this project yourself, clone the project and run:
 
 # Alpaca Java Gradle Integration
 
+Add the following dependency to your build.gradle file:
+
+```
+dependencies {
+	compile "io.github.mainstringargs:alpaca-java:1.0"
+}
+```
+
 # Alpaca Java Maven Integration
 
 # Alpaca API
@@ -246,7 +254,7 @@ Gets the bars.
 
 Gets the bars.
 
- * **See also:** <a href="https://docs.alpaca.markets/api-documentation/web-api/market-data/bars/#get-a-list-of-bars>https://docs.alpaca.markets/api-documentation/web-api/market-data/bars/#get-a-list-of-bars</a>
+ * **See also:** <a href="https://docs.alpaca.markets/api-documentation/web-api/market-data/bars/#get-a-list-of-bars">https://docs.alpaca.markets/api-documentation/web-api/market-data/bars/#get-a-list-of-bars</a>
 
      <p>
  * **Parameters:**
