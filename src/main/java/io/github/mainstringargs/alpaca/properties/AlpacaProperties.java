@@ -30,10 +30,10 @@ public class AlpacaProperties {
   /** The Constant SECRET_KEY. */
   private static final String SECRET_KEY = "secret";
 
-  /** The Constant BASE_URL_KEY. */
+  /** The Constant BASE_ACCOUNT_URL_KEY. */
   private static final String BASE_ACCOUNT_URL_KEY = "base_url";
 
-  /** The Constant BASE_URL_KEY. */
+  /** The Constant BASE_DATA_URL_KEY. */
   private static final String BASE_DATA_URL_KEY = "base_data_url";
 
 

@@ -7,6 +7,7 @@ public enum Direction {
 
   /** The asc. */
   ASC("asc"),
+
   /** The desc. */
   DESC("desc");
 

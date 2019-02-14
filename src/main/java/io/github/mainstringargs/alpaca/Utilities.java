@@ -6,18 +6,13 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
-import java.util.HashMap;
-import java.util.List;
-import com.mashape.unirest.http.HttpResponse;
-import com.mashape.unirest.http.JsonNode;
-import io.github.mainstringargs.alpaca.domain.Bar;
 
 /**
  * The Class Utilities.
  */
 public class Utilities {
 
-  /** The formatter. */
+  /** The date time formatter. */
   private static DateTimeFormatter dateTimeFormatter =
       DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss'Z'").withZone(ZoneId.of("UTC"));
 

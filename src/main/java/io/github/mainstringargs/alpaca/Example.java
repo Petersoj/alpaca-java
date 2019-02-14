@@ -15,7 +15,7 @@ import io.github.mainstringargs.alpaca.enums.OrderSide;
 import io.github.mainstringargs.alpaca.enums.OrderStatus;
 import io.github.mainstringargs.alpaca.enums.OrderTimeInForce;
 import io.github.mainstringargs.alpaca.enums.OrderType;
-import io.github.mainstringargs.alpaca.rest.exception.AlpacaAPIException;
+import io.github.mainstringargs.alpaca.rest.exceptions.AlpacaAPIException;
 
 /**
  * The Class Example.

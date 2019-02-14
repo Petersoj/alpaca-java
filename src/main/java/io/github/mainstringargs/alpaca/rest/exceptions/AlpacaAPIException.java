@@ -1,4 +1,4 @@
-package io.github.mainstringargs.alpaca.rest.exception;
+package io.github.mainstringargs.alpaca.rest.exceptions;
 
 import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.JsonNode;
@@ -12,7 +12,7 @@ public class AlpacaAPIException extends Exception {
   private static final long serialVersionUID = 1L;
 
   /** The http response. */
-  private HttpResponse<JsonNode> httpResponse;
+  private transient HttpResponse<JsonNode> httpResponse;
 
   /** The http response code. */
   private int httpResponseCode = -1;

@@ -7,14 +7,19 @@ public enum BarsTimeFrame {
 
   /** The minute. */
   MINUTE("minute"),
+
   /** The one min. */
   ONE_MIN("1Min"),
+
   /** The five min. */
   FIVE_MIN("5<in"),
+
   /** The fifteen min. */
   FIFTEEN_MIN("1Min"),
+
   /** The day. */
   DAY("day"),
+
   /** The one day. */
   ONE_DAY("1D");
 

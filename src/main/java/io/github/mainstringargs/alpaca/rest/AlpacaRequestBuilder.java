@@ -8,7 +8,7 @@ import java.util.Map.Entry;
 import com.google.gson.JsonObject;
 
 /**
- * The Class AlpacaUrlBuilder.
+ * The Class AlpacaRequestBuilder.
  */
 public abstract class AlpacaRequestBuilder {
 
@@ -19,10 +19,10 @@ public abstract class AlpacaRequestBuilder {
   /** The Constant URL_SEPARATOR. */
   public final static String URL_SEPARATOR = "/";
 
-  /** The urlParameters. */
+  /** The url parameters. */
   public final Map<String, String> urlParameters = new LinkedHashMap<String, String>();
 
-  /** The bodyParameters. */
+  /** The body properties. */
   public final Map<String, String> bodyProperties = new LinkedHashMap<String, String>();
 
   /** The base url. */
@@ -36,7 +36,7 @@ public abstract class AlpacaRequestBuilder {
 
 
   /**
-   * Instantiates a new alpaca url builder.
+   * Instantiates a new alpaca request builder.
    *
    * @param baseUrl the base url
    */
@@ -46,7 +46,7 @@ public abstract class AlpacaRequestBuilder {
   }
 
   /**
-   * Append URL parameters.
+   * Append URL parameter.
    *
    * @param parameterKey the parameter key
    * @param parameterValue the parameter value

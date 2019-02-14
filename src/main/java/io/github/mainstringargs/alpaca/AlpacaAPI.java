@@ -3,7 +3,6 @@ package io.github.mainstringargs.alpaca;
 import java.lang.reflect.Type;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import com.google.gson.reflect.TypeToken;
@@ -25,17 +24,13 @@ import io.github.mainstringargs.alpaca.enums.OrderTimeInForce;
 import io.github.mainstringargs.alpaca.enums.OrderType;
 import io.github.mainstringargs.alpaca.properties.AlpacaProperties;
 import io.github.mainstringargs.alpaca.rest.AlpacaRequest;
-import io.github.mainstringargs.alpaca.rest.AlpacaRequestBuilder;
-import io.github.mainstringargs.alpaca.rest.accounts.AccountRequestBuilder;
 import io.github.mainstringargs.alpaca.rest.accounts.GetAccountRequestBuilder;
 import io.github.mainstringargs.alpaca.rest.assets.GetAssetBySymbolRequestBuilder;
 import io.github.mainstringargs.alpaca.rest.assets.GetAssetsRequestBuilder;
 import io.github.mainstringargs.alpaca.rest.bars.GetBarsRequestBuilder;
-import io.github.mainstringargs.alpaca.rest.calendar.CalendarRequestBuilder;
 import io.github.mainstringargs.alpaca.rest.calendar.GetCalendarRequestBuilder;
-import io.github.mainstringargs.alpaca.rest.clock.ClockRequestBuilder;
 import io.github.mainstringargs.alpaca.rest.clock.GetClockRequestBuilder;
-import io.github.mainstringargs.alpaca.rest.exception.AlpacaAPIException;
+import io.github.mainstringargs.alpaca.rest.exceptions.AlpacaAPIException;
 import io.github.mainstringargs.alpaca.rest.orders.DeleteOrderRequestBuilder;
 import io.github.mainstringargs.alpaca.rest.orders.GetListOfOrdersRequestBuilder;
 import io.github.mainstringargs.alpaca.rest.orders.GetOrderByClientIdRequestBuilder;
@@ -55,7 +50,7 @@ public class AlpacaAPI {
   /** The secret. */
   private String secret;
 
-  /** The base url. */
+  /** The base account url. */
   private String baseAccountUrl;
 
   /** The alpaca request. */
@@ -65,7 +60,7 @@ public class AlpacaAPI {
   private String baseDataUrl;
 
   /**
-   * Instantiates a new alpaca API. Uses alpaca.properties for configuration.
+   * Instantiates a new alpaca API.
    */
   public AlpacaAPI() {
 
@@ -97,6 +92,7 @@ public class AlpacaAPI {
    * Gets the account.
    *
    * @return the account
+   * @throws AlpacaAPIException the alpaca API exception
    */
   public Account getAccount() throws AlpacaAPIException {
     GetAccountRequestBuilder urlBuilder = new GetAccountRequestBuilder(baseAccountUrl);
@@ -117,6 +113,7 @@ public class AlpacaAPI {
    * Gets the open positions.
    *
    * @return the open positions
+   * @throws AlpacaAPIException the alpaca API exception
    */
   public List<Position> getOpenPositions() throws AlpacaAPIException {
     Type listType = new TypeToken<List<Position>>() {}.getType();
@@ -137,10 +134,11 @@ public class AlpacaAPI {
 
 
   /**
-   * Gets the open position.
+   * Gets the open position by symbol.
    *
    * @param symbol the symbol
-   * @return the open position
+   * @return the open position by symbol
+   * @throws AlpacaAPIException the alpaca API exception
    */
   public Position getOpenPositionBySymbol(String symbol) throws AlpacaAPIException {
     Type listType = new TypeToken<Position>() {}.getType();
@@ -166,6 +164,7 @@ public class AlpacaAPI {
    * Gets the assets.
    *
    * @return the assets
+   * @throws AlpacaAPIException the alpaca API exception
    */
   public List<Asset> getAssets() throws AlpacaAPIException {
     Type listType = new TypeToken<List<Asset>>() {}.getType();
@@ -191,6 +190,7 @@ public class AlpacaAPI {
    * @param assetStatus the asset status
    * @param assetClass the asset class
    * @return the assets
+   * @throws AlpacaAPIException the alpaca API exception
    */
   public List<Asset> getAssets(AssetStatus assetStatus, String assetClass)
       throws AlpacaAPIException {
@@ -217,6 +217,7 @@ public class AlpacaAPI {
    *
    * @param symbol the symbol
    * @return the asset by symbol
+   * @throws AlpacaAPIException the alpaca API exception
    */
   public Asset getAssetBySymbol(String symbol) throws AlpacaAPIException {
     Type listType = new TypeToken<Asset>() {}.getType();
@@ -242,6 +243,7 @@ public class AlpacaAPI {
    *
    * @param orderId the order id
    * @return the order
+   * @throws AlpacaAPIException the alpaca API exception
    */
   public Order getOrder(String orderId) throws AlpacaAPIException {
     Type objectType = new TypeToken<Order>() {}.getType();
@@ -265,8 +267,9 @@ public class AlpacaAPI {
   /**
    * Gets the order by client id.
    *
-   * @param clientOrderId the cleint order id
-   * @return the order
+   * @param clientOrderId the client order id
+   * @return the order by client id
+   * @throws AlpacaAPIException the alpaca API exception
    */
   public Order getOrderByClientId(String clientOrderId) throws AlpacaAPIException {
     Type objectType = new TypeToken<Order>() {}.getType();
@@ -295,6 +298,7 @@ public class AlpacaAPI {
    *
    * @param orderId the order id
    * @return true, if successful
+   * @throws AlpacaAPIException the alpaca API exception
    */
   public boolean cancelOrder(String orderId) throws AlpacaAPIException {
     DeleteOrderRequestBuilder urlBuilder = new DeleteOrderRequestBuilder(baseAccountUrl);
@@ -323,6 +327,7 @@ public class AlpacaAPI {
    * @param stopPrice the stop price
    * @param clientOrderId the client order id
    * @return the order
+   * @throws AlpacaAPIException the alpaca API exception
    */
   public Order requestNewOrder(String symbol, Integer quantity, OrderSide side, OrderType type,
       OrderTimeInForce timeInForce, Double limitPrice, Double stopPrice, String clientOrderId)
@@ -350,9 +355,10 @@ public class AlpacaAPI {
 
 
   /**
-   * Gets the orders with API defaults.
+   * Gets the orders.
    *
    * @return the orders
+   * @throws AlpacaAPIException the alpaca API exception
    */
   public List<Order> getOrders() throws AlpacaAPIException {
     Type listType = new TypeToken<List<Order>>() {}.getType();
@@ -381,6 +387,7 @@ public class AlpacaAPI {
    * @param until the until
    * @param direction the direction
    * @return the orders
+   * @throws AlpacaAPIException the alpaca API exception
    */
   public List<Order> getOrders(OrderStatus status, Integer limit, LocalDateTime after,
       LocalDateTime until, Direction direction) throws AlpacaAPIException {
@@ -408,6 +415,7 @@ public class AlpacaAPI {
    * Gets the calendar.
    *
    * @return the calendar
+   * @throws AlpacaAPIException the alpaca API exception
    */
   public List<Calendar> getCalendar() throws AlpacaAPIException {
     Type listType = new TypeToken<List<Calendar>>() {}.getType();
@@ -432,6 +440,7 @@ public class AlpacaAPI {
    * @param start the start
    * @param end the end
    * @return the calendar
+   * @throws AlpacaAPIException the alpaca API exception
    */
   public List<Calendar> getCalendar(LocalDate start, LocalDate end) throws AlpacaAPIException {
     Type listType = new TypeToken<List<Calendar>>() {}.getType();
@@ -456,6 +465,7 @@ public class AlpacaAPI {
    * Gets the clock.
    *
    * @return the clock
+   * @throws AlpacaAPIException the alpaca API exception
    */
   public Clock getClock() throws AlpacaAPIException {
     GetClockRequestBuilder urlBuilder = new GetClockRequestBuilder(baseAccountUrl);
@@ -484,6 +494,7 @@ public class AlpacaAPI {
    * @param after the after
    * @param until the until
    * @return the bars
+   * @throws AlpacaAPIException the alpaca API exception
    */
   public Map<String, List<Bar>> getBars(BarsTimeFrame timeframe, String[] symbols, Integer limit,
       LocalDateTime start, LocalDateTime end, LocalDateTime after, LocalDateTime until)
@@ -517,6 +528,7 @@ public class AlpacaAPI {
    * @param after the after
    * @param until the until
    * @return the bars
+   * @throws AlpacaAPIException the alpaca API exception
    */
   public List<Bar> getBars(BarsTimeFrame timeframe, String symbol, Integer limit,
       LocalDateTime start, LocalDateTime end, LocalDateTime after, LocalDateTime until)
