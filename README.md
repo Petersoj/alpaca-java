@@ -17,7 +17,7 @@ Add the following dependency to your build.gradle file:
 
 ```
 dependencies {
-	compile "io.github.mainstringargs:alpaca-java:1.0"
+	compile "io.github.mainstringargs:alpaca-java:1.1"
 }
 ```
 
@@ -29,7 +29,7 @@ Add the following dependency to your pom.xml file:
     <dependency>
       <groupId>io.github.mainstringargs</groupId>
       <artifactId>alpaca-java</artifactId>
-      <version>1.0</version>
+      <version>1.1</version>
       <scope>compile</scope>
     </dependency>
 ```
@@ -45,7 +45,139 @@ base_url = https://api.alpaca.markets
 
 # Simple Example
 
-This example uses the AlpacaAPI class to print out account information and then submit an order:
+This example uses the AlpacaAPI class to print out account information, submit a limit order, and print out bars.
+
+```java
+
+    // This logs into Alpaca using the alpaca.properties file on the classpath.
+    AlpacaAPI alpacaApi = new AlpacaAPI();
+
+    // Get Account Information
+    try {
+      Account alpacaAccount = alpacaApi.getAccount();
+
+      System.out.println("\n\nAccount Information:");
+      System.out
+          .println("\tCreated At: " + Utilities.fromDateTimeString(alpacaAccount.getCreatedAt())
+              + "\n\tBuying Power: " + alpacaAccount.getBuyingPower() + "\n\tPortfolio Value: "
+              + alpacaAccount.getPortfolioValue());
+
+    } catch (AlpacaAPIException e) {
+      e.printStackTrace();
+    }
+
+    // Get Stock Market Hours
+    try {
+      Clock alpacaClock = alpacaApi.getClock();
+
+      System.out.println("\n\nClock:");
+      System.out.println("\tCurrent Time: "
+          + Utilities.fromDateTimeString(alpacaClock.getTimestamp()) + "\n\tIs Open: "
+          + alpacaClock.isIsOpen() + "\n\tMarket Next Open Time: "
+          + Utilities.fromDateTimeString(alpacaClock.getNextOpen()) + "\n\tMark Next Close Time: "
+          + Utilities.fromDateTimeString(alpacaClock.getNextClose()));
+
+
+    } catch (AlpacaAPIException e) {
+      e.printStackTrace();
+    }
+
+    Order limitOrder = null;
+    String orderClientId = UUID.randomUUID().toString();
+
+    // Request an Order
+    try {
+      // Lets submit a limit order for when AMZN gets down to $100.0!
+      limitOrder = alpacaApi.requestNewOrder("AMZN", 1, OrderSide.BUY, OrderType.LIMIT,
+          OrderTimeInForce.DAY, 100.0, null, orderClientId);
+
+      System.out.println("\n\nLimit Order Response:");
+
+      System.out.println("\tSymbol: " + limitOrder.getSymbol() + "\n\tClient Order Id: "
+          + limitOrder.getClientOrderId() + "\n\tQty: " + limitOrder.getQty() + "\n\tType: "
+          + limitOrder.getType() + "\n\tLimit Price: $" + limitOrder.getLimitPrice()
+          + "\n\tCreated At: " + Utilities.fromDateTimeString(limitOrder.getCreatedAt()));
+
+
+
+    } catch (AlpacaAPIException e) {
+      e.printStackTrace();
+    }
+
+    // Get an existing Order by Id
+    try {
+      Order limitOrderById = alpacaApi.getOrder(limitOrder.getId());
+
+      System.out.println("\n\nLimit Order By Id Response:");
+
+      System.out.println("\tSymbol: " + limitOrderById.getSymbol() + "\n\tClient Order Id: "
+          + limitOrderById.getClientOrderId() + "\n\tQty: " + limitOrderById.getQty() + "\n\tType: "
+          + limitOrderById.getType() + "\n\tLimit Price: $" + limitOrderById.getLimitPrice()
+          + "\n\tCreated At: " + Utilities.fromDateTimeString(limitOrderById.getCreatedAt()));
+
+
+
+    } catch (AlpacaAPIException e) {
+      e.printStackTrace();
+    }
+
+    // Get an existing Order by Client Id
+    try {
+      Order limitOrderByClientId = alpacaApi.getOrderByClientId(limitOrder.getClientOrderId());
+
+      System.out.println("\n\nLimit Order By Id Response:");
+
+      System.out.println("\tSymbol: " + limitOrderByClientId.getSymbol() + "\n\tClient Order Id: "
+          + limitOrderByClientId.getClientOrderId() + "\n\tQty: " + limitOrderByClientId.getQty()
+          + "\n\tType: " + limitOrderByClientId.getType() + "\n\tLimit Price: $"
+          + limitOrderByClientId.getLimitPrice() + "\n\tCreated At: "
+          + Utilities.fromDateTimeString(limitOrderByClientId.getCreatedAt()));
+
+
+
+    } catch (AlpacaAPIException e) {
+      e.printStackTrace();
+    }
+
+    // Cancel the existing order
+    try {
+      boolean orderCanceled = alpacaApi.cancelOrder(limitOrder.getId());
+
+      System.out.println("\n\nCancel order response:");
+
+      System.out.println("\tCancelled: " + orderCanceled);
+
+
+
+    } catch (AlpacaAPIException e) {
+      e.printStackTrace();
+    }
+
+    // Get bars
+    try {
+      List<Bar> bars = alpacaApi.getBars(BarsTimeFrame.ONE_DAY, "AMZN", 10,
+          LocalDateTime.of(2019, 2, 13, 10, 30), LocalDateTime.of(2019, 2, 14, 10, 30), null, null);
+
+      System.out.println("\n\nBars response:");
+
+      for (Bar bar : bars) {
+        System.out.println("\t==========");
+        System.out.println("\tUnix Time "
+            + LocalDateTime.ofInstant(Instant.ofEpochMilli(bar.getT() * 1000), ZoneId.of("UTC")));
+        System.out.println("\tOpen: $" + bar.getO());
+        System.out.println("\tHigh: $" + bar.getH());
+        System.out.println("\tLow: $" + bar.getL());
+        System.out.println("\tClose: $" + bar.getC());
+        System.out.println("\tVolume: " + bar.getV());
+      }
+
+
+
+    } catch (AlpacaAPIException e) {
+      e.printStackTrace();
+    }
+
+```
 
 # Alpaca API
 
