@@ -179,6 +179,70 @@ This example uses the AlpacaAPI class to print out account information, submit a
 
 ```
 
+This code will output the following:
+
+```
+Account Information:
+	Created At: 2018-12-29T20:02:27.328159
+	Buying Power: 3901.0089
+	Portfolio Value: 8070.0289
+
+
+Clock:
+	Current Time: 2019-02-15T13:51:05.774672683
+	Is Open: true
+	Market Next Open Time: 2019-02-19T08:30
+	Mark Next Close Time: 2019-02-15T15:00
+
+
+Limit Order Response:
+	Symbol: AMZN
+	Client Order Id: 9b31e674-9775-4357-bfb8-4841f22427de
+	Qty: 1
+	Type: limit
+	Limit Price: $100
+	Created At: 2019-02-15T18:51:06.377720987
+
+
+Limit Order By Id Response:
+	Symbol: AMZN
+	Client Order Id: 9b31e674-9775-4357-bfb8-4841f22427de
+	Qty: 1
+	Type: limit
+	Limit Price: $100
+	Created At: 2019-02-15T18:51:06.377721
+
+
+Limit Order By Id Response:
+	Symbol: AMZN
+	Client Order Id: 9b31e674-9775-4357-bfb8-4841f22427de
+	Qty: 1
+	Type: limit
+	Limit Price: $100
+	Created At: 2019-02-15T18:51:06.377721
+
+
+Cancel order response:
+	Cancelled: true
+
+
+Bars response:
+	==========
+	Unix Time 2019-02-13T05:00
+	Open: $1647.0
+	High: $1656.38
+	Low: $1637.11
+	Close: $1640.0
+	Volume: 3544703
+	==========
+	Unix Time 2019-02-14T05:00
+	Open: $1624.5
+	High: $1637.9
+	Low: $1606.06
+	Close: $1622.65
+	Volume: 4105694
+```
+
 # Alpaca API
 
 See https://docs.alpaca.markets/api-documentation/web-api/ for general Alpaca API documentation
