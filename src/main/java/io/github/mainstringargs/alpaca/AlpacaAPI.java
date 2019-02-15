@@ -5,6 +5,8 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import com.google.gson.reflect.TypeToken;
 import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.JsonNode;
@@ -58,6 +60,9 @@ public class AlpacaAPI {
 
   /** The base data url. */
   private String baseDataUrl;
+  
+  /** The logger. */
+  private static Logger LOGGER = LogManager.getLogger(AlpacaAPI.class);
 
   /**
    * Instantiates a new Alpaca API using properties specified in alpaca.properties file (or relevant
@@ -69,6 +74,11 @@ public class AlpacaAPI {
     secret = AlpacaProperties.SECRET_VALUE;
     baseAccountUrl = AlpacaProperties.BASE_ACCOUNT_URL_VALUE;
     baseDataUrl = AlpacaProperties.BASE_DATA_URL_VALUE;
+    
+    LOGGER.info("AlpacaAPI is using the following properties: \nkeyId: " + keyId + "\nsecret: "
+        + secret + "\nbaseAccountUrl: " + baseAccountUrl + "\nbaseDataUrl: " + baseDataUrl);
+ 
+    
     alpacaRequest = new AlpacaRequest(keyId, secret);
 
   }
@@ -86,13 +96,17 @@ public class AlpacaAPI {
     this.secret = secret;
     this.baseAccountUrl = baseAccountUrl;
     this.baseDataUrl = baseDataUrl;
+    
+    LOGGER.info("AlpacaAPI is using the following properties: \nkeyId: " + keyId + "\nsecret: "
+        + secret + "\nbaseAccountUrl: " + baseAccountUrl + "\nbaseDataUrl: " + baseDataUrl);
+    
     alpacaRequest = new AlpacaRequest(keyId, secret);
 
 
   }
 
   /**
-   * Instantiates a new Alpaca API using the specified keyId, secret, baseAccountUrl, and baseDataUrl
+   * Instantiates a new Alpaca API using the specified keyId, secret, and baseAccountUrl.
    *
    * @param keyId the key id
    * @param secret the secret
@@ -102,6 +116,11 @@ public class AlpacaAPI {
     this.keyId = keyId;
     this.secret = secret;
     this.baseAccountUrl = baseAccountUrl;
+    baseDataUrl = AlpacaProperties.BASE_DATA_URL_VALUE;
+    
+    LOGGER.info("AlpacaAPI is using the following properties: \nkeyId: " + keyId + "\nsecret: "
+        + secret + "\nbaseAccountUrl: " + baseAccountUrl + "\nbaseDataUrl: " + baseDataUrl);
+    
     alpacaRequest = new AlpacaRequest(keyId, secret);
 
 
@@ -304,7 +323,7 @@ public class AlpacaAPI {
 
     HttpResponse<JsonNode> response = alpacaRequest.invokeDelete(urlBuilder);
 
-    if (response.getStatus() != 200 || response.getStatus() != 204) {
+    if ((response.getStatus() != 200 && response.getStatus() != 204)) {
       throw new AlpacaAPIException(response);
     }
 

@@ -1,18 +1,16 @@
 package io.github.mainstringargs.alpaca;
 
-import java.time.LocalDate;
+import java.time.Instant;
 import java.time.LocalDateTime;
-import java.time.Month;
+import java.time.ZoneId;
 import java.util.List;
+import java.util.UUID;
 import io.github.mainstringargs.alpaca.domain.Account;
-import io.github.mainstringargs.alpaca.domain.Calendar;
+import io.github.mainstringargs.alpaca.domain.Bar;
 import io.github.mainstringargs.alpaca.domain.Clock;
 import io.github.mainstringargs.alpaca.domain.Order;
-import io.github.mainstringargs.alpaca.domain.Position;
 import io.github.mainstringargs.alpaca.enums.BarsTimeFrame;
-import io.github.mainstringargs.alpaca.enums.Direction;
 import io.github.mainstringargs.alpaca.enums.OrderSide;
-import io.github.mainstringargs.alpaca.enums.OrderStatus;
 import io.github.mainstringargs.alpaca.enums.OrderTimeInForce;
 import io.github.mainstringargs.alpaca.enums.OrderType;
 import io.github.mainstringargs.alpaca.rest.exceptions.AlpacaAPIException;
@@ -29,89 +27,134 @@ public class Example {
    */
   public static void main(String[] args) {
 
-    AlpacaAPI api = new AlpacaAPI();
+    // This logs into Alpaca using the alpaca.properties file on the classpath.
+    AlpacaAPI alpacaApi = new AlpacaAPI();
 
-    Clock clock = null;
+    // Get Account Information
     try {
-      clock = api.getClock();
-    } catch (AlpacaAPIException e) {
+      Account alpacaAccount = alpacaApi.getAccount();
 
+      System.out.println("\n\nAccount Information:");
+      System.out
+          .println("\tCreated At: " + Utilities.fromDateTimeString(alpacaAccount.getCreatedAt())
+              + "\n\tBuying Power: " + alpacaAccount.getBuyingPower() + "\n\tPortfolio Value: "
+              + alpacaAccount.getPortfolioValue());
+
+    } catch (AlpacaAPIException e) {
       e.printStackTrace();
     }
 
-
+    // Get Stock Market Hours
     try {
-      System.out.println(api.getBars(BarsTimeFrame.ONE_MIN, new String[] {"ZZ", "AMZN"}, 2, null,
-          LocalDateTime.of(2019, Month.JANUARY, 6, 10, 10, 10), null, null));
-    } catch (AlpacaAPIException e) {
+      Clock alpacaClock = alpacaApi.getClock();
 
+      System.out.println("\n\nClock:");
+      System.out.println("\tCurrent Time: "
+          + Utilities.fromDateTimeString(alpacaClock.getTimestamp()) + "\n\tIs Open: "
+          + alpacaClock.isIsOpen() + "\n\tMarket Next Open Time: "
+          + Utilities.fromDateTimeString(alpacaClock.getNextOpen()) + "\n\tMark Next Close Time: "
+          + Utilities.fromDateTimeString(alpacaClock.getNextClose()));
+
+
+    } catch (AlpacaAPIException e) {
       e.printStackTrace();
     }
 
+    Order limitOrder = null;
+    String orderClientId = UUID.randomUUID().toString();
+
+    // Request an Order
     try {
-      Account account = api.getAccount();
+      // Lets submit a limit order for when AMZN gets down to $100.0!
+      limitOrder = alpacaApi.requestNewOrder("AMZN", 1, OrderSide.BUY, OrderType.LIMIT,
+          OrderTimeInForce.DAY, 100.0, null, orderClientId);
 
-      System.out.println(account);
+      System.out.println("\n\nLimit Order Response:");
+
+      System.out.println("\tSymbol: " + limitOrder.getSymbol() + "\n\tClient Order Id: "
+          + limitOrder.getClientOrderId() + "\n\tQty: " + limitOrder.getQty() + "\n\tType: "
+          + limitOrder.getType() + "\n\tLimit Price: $" + limitOrder.getLimitPrice()
+          + "\n\tCreated At: " + Utilities.fromDateTimeString(limitOrder.getCreatedAt()));
+
+
+
     } catch (AlpacaAPIException e) {
-
       e.printStackTrace();
     }
 
+    // Get an existing Order by Id
     try {
-      List<Position> positions = api.getOpenPositions();
+      Order limitOrderById = alpacaApi.getOrder(limitOrder.getId());
 
-      for (Position position : positions) {
-        System.out.println(position);
+      System.out.println("\n\nLimit Order By Id Response:");
+
+      System.out.println("\tSymbol: " + limitOrderById.getSymbol() + "\n\tClient Order Id: "
+          + limitOrderById.getClientOrderId() + "\n\tQty: " + limitOrderById.getQty() + "\n\tType: "
+          + limitOrderById.getType() + "\n\tLimit Price: $" + limitOrderById.getLimitPrice()
+          + "\n\tCreated At: " + Utilities.fromDateTimeString(limitOrderById.getCreatedAt()));
+
+
+
+    } catch (AlpacaAPIException e) {
+      e.printStackTrace();
+    }
+
+    // Get an existing Order by Client Id
+    try {
+      Order limitOrderByClientId = alpacaApi.getOrderByClientId(limitOrder.getClientOrderId());
+
+      System.out.println("\n\nLimit Order By Id Response:");
+
+      System.out.println("\tSymbol: " + limitOrderByClientId.getSymbol() + "\n\tClient Order Id: "
+          + limitOrderByClientId.getClientOrderId() + "\n\tQty: " + limitOrderByClientId.getQty()
+          + "\n\tType: " + limitOrderByClientId.getType() + "\n\tLimit Price: $"
+          + limitOrderByClientId.getLimitPrice() + "\n\tCreated At: "
+          + Utilities.fromDateTimeString(limitOrderByClientId.getCreatedAt()));
+
+
+
+    } catch (AlpacaAPIException e) {
+      e.printStackTrace();
+    }
+
+    // Cancel the existing order
+    try {
+      boolean orderCanceled = alpacaApi.cancelOrder(limitOrder.getId());
+
+      System.out.println("\n\nCancel order response:");
+
+      System.out.println("\tCancelled: " + orderCanceled);
+
+
+
+    } catch (AlpacaAPIException e) {
+      e.printStackTrace();
+    }
+
+    // Get bars
+    try {
+      List<Bar> bars = alpacaApi.getBars(BarsTimeFrame.ONE_DAY, "AMZN", 10,
+          LocalDateTime.of(2019, 2, 13, 10, 30), LocalDateTime.of(2019, 2, 14, 10, 30), null, null);
+
+      System.out.println("\n\nBars response:");
+
+      for (Bar bar : bars) {
+        System.out.println("\t==========");
+        System.out.println("\tUnix Time "
+            + LocalDateTime.ofInstant(Instant.ofEpochMilli(bar.getT() * 1000), ZoneId.of("UTC")));
+        System.out.println("\tOpen: $" + bar.getO());
+        System.out.println("\tHigh: $" + bar.getH());
+        System.out.println("\tLow: $" + bar.getL());
+        System.out.println("\tClose: $" + bar.getC());
+        System.out.println("\tVolume: " + bar.getV());
       }
-    } catch (AlpacaAPIException e) {
 
+
+
+    } catch (AlpacaAPIException e) {
       e.printStackTrace();
     }
 
-
-    try {
-      LocalDateTime startDateTime = LocalDateTime.of(2019, Month.JANUARY, 5, 10, 10, 10);
-
-      LocalDateTime endDateTime = LocalDateTime.of(2019, Month.JANUARY, 8, 13, 10, 10);
-
-      List<Order> orders =
-          api.getOrders(OrderStatus.ALL, 3, startDateTime, endDateTime, Direction.ASC);
-
-      for (Order order : orders) {
-        // System.out.println(order);
-        System.out.println(api.getOrder(order.getId()));
-      }
-    } catch (AlpacaAPIException e) {
-
-      e.printStackTrace();
-    }
-
-    try {
-      List<Calendar> calendar =
-          api.getCalendar(LocalDate.of(2029, 11, 1), LocalDate.of(2029, 11, 7));
-
-      for (Calendar cal : calendar) {
-        System.out.println(cal);
-      }
-    } catch (AlpacaAPIException e) {
-
-      e.printStackTrace();
-    }
-
-    try {
-      System.out.println(api.requestNewOrder("DIA", 3, OrderSide.SELL, OrderType.MARKET,
-          OrderTimeInForce.DAY, null, null, null));
-    } catch (AlpacaAPIException e) {
-
-      e.printStackTrace();
-    }
-
-    try {
-      System.out.println(api.getOrderByClientId("MYCLIENTreID"));
-    } catch (AlpacaAPIException e) {
-
-      e.printStackTrace();
-    }
   }
 
 }

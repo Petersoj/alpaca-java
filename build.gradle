@@ -41,7 +41,7 @@ apply plugin: 'com.bmuschko.nexus'
 
 archivesBaseName = 'alpaca-java'
 group = 'io.github.mainstringargs'
-version = '1.0'
+version = '1.1'
 
 
 // In this section you declare where to find the dependencies of your project

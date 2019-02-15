@@ -1,5 +1,8 @@
 package io.github.mainstringargs.alpaca.rest.orders;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+
 /**
  * The Class GetOrderByClientIdRequestBuilder.
  */
@@ -24,6 +27,13 @@ public class GetOrderByClientIdRequestBuilder extends OrdersRequestBuilder {
     if (clientOrderId != null) {
       super.setDefaultEndpoint(false);
       super.appendEndpoint("orders:by_client_order_id");
+
+      try {
+        clientOrderId = URLEncoder.encode(clientOrderId, "UTF-8");
+      } catch (UnsupportedEncodingException e) {
+        e.printStackTrace();
+      }
+
       super.appendURLParameter("client_order_id", clientOrderId);
     }
     return this;

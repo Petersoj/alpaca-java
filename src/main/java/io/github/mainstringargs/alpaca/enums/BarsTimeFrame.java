@@ -12,7 +12,7 @@ public enum BarsTimeFrame {
   ONE_MIN("1Min"),
 
   /** The five min. */
-  FIVE_MIN("5<in"),
+  FIVE_MIN("5Min"),
 
   /** The fifteen min. */
   FIFTEEN_MIN("1Min"),
