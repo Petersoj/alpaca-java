@@ -1,3 +1,7 @@
+# Overview
+
+This is a Java implementation for the Alpaca @ https://alpaca.markets/ (See https://docs.alpaca.markets/api-documentation/web-api/ for general Alpaca API documentation).  Alpaca API lets you build and trade with real-time market data for free. 
+
 # Alpaca Java Building
 This project exposes that data as a Java project.  
 
