@@ -19,6 +19,30 @@ dependencies {
 
 # Alpaca Java Maven Integration
 
+Add the following dependency to your pom.xml file:
+
+```
+    <dependency>
+      <groupId>io.github.mainstringargs</groupId>
+      <artifactId>alpaca-java</artifactId>
+      <version>1.0</version>
+      <scope>compile</scope>
+    </dependency>
+```
+# Configuration
+
+If you plan on using the alpaca.properties, generate a secret and a key at Alpaca and set the following properties in an alpaca.properties file on the classpath:
+
+```
+key_id = <YOUR KEY>
+secret = <YOUR SECRET>
+base_url = https://api.alpaca.markets
+```
+
+# Simple Example
+
+This example uses the AlpacaAPI class to print out account information and then submit an order:
+
 # Alpaca API
 
 See https://docs.alpaca.markets/api-documentation/web-api/ for general Alpaca API documentation
