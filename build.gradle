@@ -59,9 +59,12 @@ dependencies {
     compile "com.mashape.unirest:unirest-java:1.4.9"
     compile "com.google.code.gson:gson:2.8.5"
 	compile "commons-lang:commons-lang:2.6"
-
- 	compile 'org.apache.logging.log4j:log4j-api:2.11.1'
+	compile 'org.apache.logging.log4j:log4j-api:2.11.1'
 	compile 'org.apache.logging.log4j:log4j-core:2.11.1'
+	
+	compile "javax.websocket:javax.websocket-api:1.1"	
+	compile "org.glassfish.tyrus.bundles:tyrus-standalone-client-jdk:1.12"
+
   
     // Use JUnit test framework
     testCompile 'junit:junit:4.12'
