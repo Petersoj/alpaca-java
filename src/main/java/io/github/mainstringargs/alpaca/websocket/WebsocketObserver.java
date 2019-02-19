@@ -10,4 +10,6 @@ import io.github.mainstringargs.alpaca.enums.MessageType;
 public interface WebsocketObserver {
 
   public Set<MessageType> getMessageTypes();
+
+  public void streamUpdate(MessageType messageType, Object message);
 }

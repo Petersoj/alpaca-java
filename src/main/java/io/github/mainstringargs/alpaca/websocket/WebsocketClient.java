@@ -10,6 +10,8 @@ import java.util.List;
 import java.util.Set;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import io.github.mainstringargs.alpaca.enums.MessageType;
 import io.github.mainstringargs.alpaca.websocket.WebsocketClientEndpoint.MessageHandler;
@@ -38,6 +40,14 @@ public class WebsocketClient implements MessageHandler {
   private static Logger LOGGER = LogManager.getLogger(WebsocketClient.class);
 
   /** The authorized object. */
+
+  // {
+  // "stream": "authorization",
+  // "data": {
+  // "status": "authorized",
+  // "action": "authenticate"
+  // }
+  // }
   private JsonObject authorizedObject = new JsonObject();
   {
     authorizedObject.addProperty("stream", "authorization");
@@ -143,26 +153,91 @@ public class WebsocketClient implements MessageHandler {
   @Override
   public void handleMessage(JsonObject message) {
 
-    // {
-    // "stream": "authorization",
-    // "data": {
-    // "status": "authorized",
-    // "action": "authenticate"
-    // }
-    // }
+    if (message.has("stream")) {
 
-    if (authorizedObject.equals(message)) {
-      LOGGER.info("Authorized by Alpaca");
+      String streamType = message.get("stream").getAsString();
 
-//      {
-//        "action": "listen",
-//        "data": {
-//            "streams": ["account_updates", "trade_updates"]
-//        }
-//      }
+      switch (streamType) {
+        case "authorization":
+          if (authorizedObject.equals(message)) {
+            LOGGER.debug("Authorized by Alpaca");
+            submitStreamRequest();
+          }
+          break;
+        case "listening":
+          break;
+        case "trade_updates":
+
+          sendStreamMessageToObservers(MessageType.ORDER_UPDATES, message);
+
+          break;
+        case "account_updates":
+
+
+          sendStreamMessageToObservers(MessageType.ACCOUNT_UPDATES, message);
+
+
+          break;
+      }
+
+    } else {
+      LOGGER.error("Invalid message received " + message);
+    }
+
+
+  }
+
+  /**
+   * Send stream message to observers.
+   *
+   * @param messageType the message type
+   * @param message the message
+   */
+  private synchronized void sendStreamMessageToObservers(MessageType messageType,
+      JsonObject message) {
+
+    for (WebsocketObserver observer : observers) {
+
+      Object messageObject = null;
+
+      if (observer.getMessageTypes() == null || observer.getMessageTypes().isEmpty()
+          || observer.getMessageTypes().contains(messageType)) {
+        observer.streamUpdate(messageType, message);
+      }
+
 
     }
 
+
+  }
+
+  /**
+   * Submit stream request.
+   */
+  private void submitStreamRequest() {
+    // {
+    // "action": "listen",
+    // "data": {
+    // "streams": ["account_updates", "trade_updates"]
+    // }
+    // }
+
+
+    JsonObject streamRequest = new JsonObject();
+
+    JsonArray array = new JsonArray();
+
+    for (MessageType mType : getRegisteredMessageTypes()) {
+      array.add(mType.getAPIName());
+    }
+
+    streamRequest.addProperty("action", "listen");
+    JsonObject dataObject = new JsonObject();
+    dataObject.add("streams", array);
+
+    streamRequest.add("data", dataObject);
+
+    clientEndPoint.sendMessage(streamRequest.toString());
   }
 
   /**
@@ -177,7 +252,7 @@ public class WebsocketClient implements MessageHandler {
     for (WebsocketObserver observer : observers) {
 
       // if its empty, assume they want everything
-      if (observer.getMessageTypes().isEmpty()) {
+      if (observer.getMessageTypes() == null || observer.getMessageTypes().isEmpty()) {
         registeredMessageTypes.addAll(Arrays.asList(MessageType.values()));
         break;
       }

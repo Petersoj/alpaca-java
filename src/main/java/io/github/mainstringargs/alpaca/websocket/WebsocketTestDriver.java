@@ -25,14 +25,20 @@ public class WebsocketTestDriver {
 
       @Override
       public Set<MessageType> getMessageTypes() {
-        return new HashSet<MessageType>(Arrays.asList(MessageType.values()));
+        return new HashSet<MessageType>();
+      }
+
+      @Override
+      public void streamUpdate(MessageType messageType, Object message) {
+        System.out.println(messageType + " " + message);
+
       }
     });
 
 
 
     try {
-      Thread.sleep(10000);
+      Thread.sleep(1000000);
     } catch (InterruptedException e) {
       // TODO Auto-generated catch block
       e.printStackTrace();
