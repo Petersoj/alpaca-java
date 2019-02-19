@@ -4,10 +4,14 @@ import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import com.google.gson.JsonObject;
+import io.github.mainstringargs.alpaca.enums.MessageType;
 import io.github.mainstringargs.alpaca.websocket.WebsocketClientEndpoint.MessageHandler;
 
 /**
@@ -147,16 +151,43 @@ public class WebsocketClient implements MessageHandler {
     // }
     // }
 
-
-
     if (authorizedObject.equals(message)) {
-      System.out.println("AUTHORIZED");
-      
-      
+      LOGGER.info("Authorized by Alpaca");
+
+//      {
+//        "action": "listen",
+//        "data": {
+//            "streams": ["account_updates", "trade_updates"]
+//        }
+//      }
+
     }
 
   }
 
+  /**
+   * Gets the registered message types.
+   *
+   * @return the registered message types
+   */
+  public Set<MessageType> getRegisteredMessageTypes() {
+
+    Set<MessageType> registeredMessageTypes = new HashSet<MessageType>();
+
+    for (WebsocketObserver observer : observers) {
+
+      // if its empty, assume they want everything
+      if (observer.getMessageTypes().isEmpty()) {
+        registeredMessageTypes.addAll(Arrays.asList(MessageType.values()));
+        break;
+      }
+
+      registeredMessageTypes.addAll(observer.getMessageTypes());
+    }
+
+    return registeredMessageTypes;
+
+  }
 
 
 }
