@@ -11,10 +11,11 @@ import java.util.Set;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import io.github.mainstringargs.alpaca.enums.MessageType;
 import io.github.mainstringargs.alpaca.websocket.WebsocketClientEndpoint.MessageHandler;
+import io.github.mainstringargs.alpaca.websocket.message.AccountUpdateMessage;
+import io.github.mainstringargs.alpaca.websocket.message.OrderUpdateMessage;
 
 /**
  * The Class WebsocketClient.
@@ -41,13 +42,6 @@ public class WebsocketClient implements MessageHandler {
 
   /** The authorized object. */
 
-  // {
-  // "stream": "authorization",
-  // "data": {
-  // "status": "authorized",
-  // "action": "authenticate"
-  // }
-  // }
   private JsonObject authorizedObject = new JsonObject();
   {
     authorizedObject.addProperty("stream", "authorization");
@@ -76,10 +70,12 @@ public class WebsocketClient implements MessageHandler {
    * @param observer the observer
    */
   public void addObserver(WebsocketObserver observer) {
+
+    observers.add(observer);
+    
     if (observers.isEmpty()) {
       connect();
     }
-    observers.add(observer);
   }
 
 
@@ -160,11 +156,12 @@ public class WebsocketClient implements MessageHandler {
       switch (streamType) {
         case "authorization":
           if (authorizedObject.equals(message)) {
-            LOGGER.debug("Authorized by Alpaca");
+            LOGGER.debug("Authorized by Alpaca "+message);
             submitStreamRequest();
           }
           break;
         case "listening":
+          LOGGER.debug("Listening response "+message);
           break;
         case "trade_updates":
 
@@ -173,9 +170,7 @@ public class WebsocketClient implements MessageHandler {
           break;
         case "account_updates":
 
-
           sendStreamMessageToObservers(MessageType.ACCOUNT_UPDATES, message);
-
 
           break;
       }
@@ -198,17 +193,46 @@ public class WebsocketClient implements MessageHandler {
 
     for (WebsocketObserver observer : observers) {
 
-      Object messageObject = null;
+      Object messageObject = getMessageToObject(messageType, message);
 
       if (observer.getMessageTypes() == null || observer.getMessageTypes().isEmpty()
           || observer.getMessageTypes().contains(messageType)) {
-        observer.streamUpdate(messageType, message);
+        observer.streamUpdate(messageType, messageObject);
       }
 
 
     }
 
 
+  }
+
+  /**
+   * Gets the message to object.
+   *
+   * @param messageType the message type
+   * @param message the message
+   * @return the message to object
+   */
+  private Object getMessageToObject(MessageType messageType, JsonObject message) {
+
+    if (message.has("data")) {
+      JsonObject data = message.getAsJsonObject("data");
+
+      switch (messageType) {
+        case ACCOUNT_UPDATES:
+          AccountUpdateMessage accountUpdateMessage = new AccountUpdateMessage(data);
+
+          return accountUpdateMessage;
+
+        case ORDER_UPDATES:
+          OrderUpdateMessage orderUpdateMessage = new OrderUpdateMessage(data);
+
+          return orderUpdateMessage;
+
+      }
+
+    }
+    return null;
   }
 
   /**

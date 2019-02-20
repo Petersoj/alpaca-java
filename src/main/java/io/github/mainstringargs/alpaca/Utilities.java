@@ -31,12 +31,11 @@ public class Utilities {
    * @return the string
    */
   public static String toDateTimeString(LocalDateTime ldt) {
-    
 
     ZonedDateTime ldtZoned = ldt.atZone(ZoneId.systemDefault());
 
     ZonedDateTime localTimeZoned = ldtZoned.withZoneSameInstant(ZoneId.of("UTC"));
-    
+
     return outputDateTimeFormatter.format(localTimeZoned);
   }
 
@@ -71,7 +70,13 @@ public class Utilities {
 
     LocalDateTime ldt = LocalDateTime.parse(dateTimeString, inputDateTimeFormatter);
 
-    ZonedDateTime ldtZoned = ldt.atZone(ZoneId.of("America/New_York"));
+    ZonedDateTime ldtZoned;
+
+    if (dateTimeString.endsWith("Z")) {
+      ldtZoned = ldt.atZone(ZoneId.of("UTC"));
+    } else {
+      ldtZoned = ldt.atZone(ZoneId.of("America/New_York"));
+    }
 
     ZonedDateTime localTimeZoned = ldtZoned.withZoneSameInstant(ZoneId.systemDefault());
 
