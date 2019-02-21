@@ -19,7 +19,7 @@ import com.google.gson.JsonParser;
  * The Class WebsocketClientEndpoint.
  */
 @ClientEndpoint
-public class WebsocketClientEndpoint {
+public class AlpacaWebsocketClientEndpoint {
 
   /** The user session. */
   Session userSession = null;
@@ -28,14 +28,14 @@ public class WebsocketClientEndpoint {
   private MessageHandler messageHandler;
 
   /** The logger. */
-  private static Logger LOGGER = LogManager.getLogger(WebsocketClientEndpoint.class);
+  private static Logger LOGGER = LogManager.getLogger(AlpacaWebsocketClientEndpoint.class);
 
   /**
    * Instantiates a new websocket client endpoint.
    *
    * @param endpointURI the endpoint URI
    */
-  public WebsocketClientEndpoint(URI endpointURI) {
+  public AlpacaWebsocketClientEndpoint(URI endpointURI) {
     try {
       WebSocketContainer container = ContainerProvider.getWebSocketContainer();
       LOGGER.info("Connecting to " + endpointURI);

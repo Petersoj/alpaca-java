@@ -13,14 +13,14 @@ import org.apache.logging.log4j.Logger;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import io.github.mainstringargs.alpaca.enums.MessageType;
-import io.github.mainstringargs.alpaca.websocket.WebsocketClientEndpoint.MessageHandler;
+import io.github.mainstringargs.alpaca.websocket.AlpacaWebsocketClientEndpoint.MessageHandler;
 import io.github.mainstringargs.alpaca.websocket.message.AccountUpdateMessage;
 import io.github.mainstringargs.alpaca.websocket.message.OrderUpdateMessage;
 
 /**
  * The Class WebsocketClient.
  */
-public class WebsocketClient implements MessageHandler {
+public class AlpacaWebsocketClient implements MessageHandler {
 
   /** The base account url. */
   private String baseAccountUrl;
@@ -32,13 +32,13 @@ public class WebsocketClient implements MessageHandler {
   private String secret;
 
   /** The observers. */
-  private List<WebsocketObserver> observers = new ArrayList<WebsocketObserver>();
+  private List<AlpacaStreamListener> observers = new ArrayList<AlpacaStreamListener>();
 
   /** The client end point. */
-  private WebsocketClientEndpoint clientEndPoint = null;
+  private AlpacaWebsocketClientEndpoint clientEndPoint = null;
 
   /** The logger. */
-  private static Logger LOGGER = LogManager.getLogger(WebsocketClient.class);
+  private static Logger LOGGER = LogManager.getLogger(AlpacaWebsocketClient.class);
 
   /** The authorized object. */
 
@@ -58,7 +58,7 @@ public class WebsocketClient implements MessageHandler {
    * @param secret the secret
    * @param baseAccountUrl the base account url
    */
-  public WebsocketClient(String keyId, String secret, String baseAccountUrl) {
+  public AlpacaWebsocketClient(String keyId, String secret, String baseAccountUrl) {
     this.keyId = keyId;
     this.secret = secret;
     this.baseAccountUrl = baseAccountUrl.replace("https", "wss") + "/stream";
@@ -69,7 +69,7 @@ public class WebsocketClient implements MessageHandler {
    *
    * @param observer the observer
    */
-  public void addObserver(WebsocketObserver observer) {
+  public void addObserver(AlpacaStreamListener observer) {
 
     observers.add(observer);
     
@@ -85,7 +85,7 @@ public class WebsocketClient implements MessageHandler {
    *
    * @param observer the observer
    */
-  public void removeObserver(WebsocketObserver observer) {
+  public void removeObserver(AlpacaStreamListener observer) {
 
     observers.remove(observer);
 
@@ -101,7 +101,7 @@ public class WebsocketClient implements MessageHandler {
 
 
     try {
-      clientEndPoint = new WebsocketClientEndpoint(new URI(baseAccountUrl));
+      clientEndPoint = new AlpacaWebsocketClientEndpoint(new URI(baseAccountUrl));
 
       clientEndPoint.addMessageHandler(this);
 
@@ -191,7 +191,7 @@ public class WebsocketClient implements MessageHandler {
   private synchronized void sendStreamMessageToObservers(MessageType messageType,
       JsonObject message) {
 
-    for (WebsocketObserver observer : observers) {
+    for (AlpacaStreamListener observer : observers) {
 
       Object messageObject = getMessageToObject(messageType, message);
 
@@ -273,7 +273,7 @@ public class WebsocketClient implements MessageHandler {
 
     Set<MessageType> registeredMessageTypes = new HashSet<MessageType>();
 
-    for (WebsocketObserver observer : observers) {
+    for (AlpacaStreamListener observer : observers) {
 
       // if its empty, assume they want everything
       if (observer.getMessageTypes() == null || observer.getMessageTypes().isEmpty()) {

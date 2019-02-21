@@ -7,7 +7,7 @@ import io.github.mainstringargs.alpaca.enums.MessageType;
  * An asynchronous update interface for receiving notifications about Websocket information as the
  * Websocket is constructed.
  */
-public interface WebsocketObserver {
+public interface AlpacaStreamListener {
 
   public Set<MessageType> getMessageTypes();
 
