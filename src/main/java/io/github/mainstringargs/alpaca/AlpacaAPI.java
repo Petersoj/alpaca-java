@@ -40,6 +40,8 @@ import io.github.mainstringargs.alpaca.rest.orders.GetOrderRequestBuilder;
 import io.github.mainstringargs.alpaca.rest.orders.PostOrderRequestBuilder;
 import io.github.mainstringargs.alpaca.rest.positions.GetOpenPositionBySymbolRequestBuilder;
 import io.github.mainstringargs.alpaca.rest.positions.GetOpenPositionsRequestBuilder;
+import io.github.mainstringargs.alpaca.websocket.AlpacaStreamListener;
+import io.github.mainstringargs.alpaca.websocket.AlpacaWebsocketClient;
 
 /**
  * The Class AlpacaAPI.
@@ -64,6 +66,8 @@ public class AlpacaAPI {
   /** The logger. */
   private static Logger LOGGER = LogManager.getLogger(AlpacaAPI.class);
 
+  private AlpacaWebsocketClient alpacaWebSocketClient;
+
   /**
    * Instantiates a new Alpaca API using properties specified in alpaca.properties file (or relevant
    * defaults)
@@ -80,6 +84,7 @@ public class AlpacaAPI {
  
     
     alpacaRequest = new AlpacaRequest(keyId, secret);
+    alpacaWebSocketClient = new AlpacaWebsocketClient(keyId, secret, baseAccountUrl);
 
   }
 
@@ -627,6 +632,13 @@ public class AlpacaAPI {
 
     return bars.get(symbol);
   }
-
-
+  
+  /**
+   * Adds the alpaca stream listener.
+   *
+   * @param streamListener the stream listener
+   */
+  public void addAlpacaStreamListener(AlpacaStreamListener streamListener) {
+    alpacaWebSocketClient.addObserver(streamListener);
+  }
 }
