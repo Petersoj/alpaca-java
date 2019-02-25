@@ -10,15 +10,35 @@ import io.github.mainstringargs.alpaca.domain.Bar;
 import io.github.mainstringargs.alpaca.domain.Clock;
 import io.github.mainstringargs.alpaca.domain.Order;
 import io.github.mainstringargs.alpaca.enums.BarsTimeFrame;
+import io.github.mainstringargs.alpaca.enums.MessageType;
 import io.github.mainstringargs.alpaca.enums.OrderSide;
 import io.github.mainstringargs.alpaca.enums.OrderTimeInForce;
 import io.github.mainstringargs.alpaca.enums.OrderType;
 import io.github.mainstringargs.alpaca.rest.exceptions.AlpacaAPIException;
+import io.github.mainstringargs.alpaca.websocket.AlpacaStreamListenerAdapter;
+import io.github.mainstringargs.alpaca.websocket.message.AccountUpdateMessage;
+import io.github.mainstringargs.alpaca.websocket.message.OrderUpdateMessage;
+import io.github.mainstringargs.alpaca.websocket.message.UpdateMessage;
 
 /**
  * The Class Example.
  */
-public class Example {
+public class Example extends AlpacaStreamListenerAdapter {
+
+  @Override
+  public void streamUpdate(MessageType messageType, UpdateMessage message) {
+
+    switch (messageType) {
+      case ACCOUNT_UPDATES:
+        AccountUpdateMessage accounUpdateMessage = (AccountUpdateMessage) message;
+        System.out.println("\nReceived Account Update: \n\t" + accounUpdateMessage.toString());
+        break;
+      case ORDER_UPDATES:
+        OrderUpdateMessage orderUpdateMessage = (OrderUpdateMessage) message;
+        System.out.println("\nReceived Order Update: \n\t" + orderUpdateMessage.toString());
+        break;
+    }
+  }
 
   /**
    * The main method.
@@ -29,6 +49,9 @@ public class Example {
 
     // This logs into Alpaca using the alpaca.properties file on the classpath.
     AlpacaAPI alpacaApi = new AlpacaAPI();
+
+    // Register for Messages
+    alpacaApi.addAlpacaStreamListener(new Example());
 
     // Get Account Information
     try {

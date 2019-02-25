@@ -639,6 +639,15 @@ public class AlpacaAPI {
    * @param streamListener the stream listener
    */
   public void addAlpacaStreamListener(AlpacaStreamListener streamListener) {
-    alpacaWebSocketClient.addObserver(streamListener);
+    alpacaWebSocketClient.addListener(streamListener);
+  }
+  
+  /**
+   * Removes the alpaca stream listener.
+   *
+   * @param streamListener the stream listener
+   */
+  public void removeAlpacaStreamListener(AlpacaStreamListener streamListener) {
+    alpacaWebSocketClient.removeListener(streamListener);
   }
 }

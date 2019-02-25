@@ -21,7 +21,7 @@ public class AlpacaWebsocketTestDriver {
     AlpacaWebsocketClient client = new AlpacaWebsocketClient(AlpacaProperties.KEY_ID_VALUE,
         AlpacaProperties.SECRET_VALUE, AlpacaProperties.BASE_ACCOUNT_URL_VALUE);
 
-    client.addObserver(new AlpacaStreamListener() {
+    client.addListener(new AlpacaStreamListener() {
 
       @Override
       public Set<MessageType> getMessageTypes() {

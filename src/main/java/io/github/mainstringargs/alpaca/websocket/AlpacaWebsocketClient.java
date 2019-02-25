@@ -33,7 +33,7 @@ public class AlpacaWebsocketClient implements MessageHandler {
   private String secret;
 
   /** The observers. */
-  private List<AlpacaStreamListener> observers = new ArrayList<AlpacaStreamListener>();
+  private List<AlpacaStreamListener> listeners = new ArrayList<AlpacaStreamListener>();
 
   /** The client end point. */
   private AlpacaWebsocketClientEndpoint clientEndPoint = null;
@@ -66,31 +66,32 @@ public class AlpacaWebsocketClient implements MessageHandler {
   }
 
   /**
-   * Adds the observer.
+   * Adds the listener.
    *
-   * @param observer the observer
+   * @param listener the listener
    */
-  public void addObserver(AlpacaStreamListener observer) {
+  public void addListener(AlpacaStreamListener listener) {
 
-    observers.add(observer);
-    
-    if (observers.isEmpty()) {
+    if (listeners.isEmpty()) {
       connect();
     }
+
+    listeners.add(listener);
+
   }
 
 
 
   /**
-   * Removes the observer.
+   * Removes the listener.
    *
-   * @param observer the observer
+   * @param listener the listener
    */
-  public void removeObserver(AlpacaStreamListener observer) {
+  public void removeListener(AlpacaStreamListener listener) {
 
-    observers.remove(observer);
+    listeners.remove(listener);
 
-    if (observers.isEmpty()) {
+    if (listeners.isEmpty()) {
       disconnect();
     }
   }
@@ -157,12 +158,12 @@ public class AlpacaWebsocketClient implements MessageHandler {
       switch (streamType) {
         case "authorization":
           if (authorizedObject.equals(message)) {
-            LOGGER.debug("Authorized by Alpaca "+message);
+            LOGGER.debug("Authorized by Alpaca " + message);
             submitStreamRequest();
           }
           break;
         case "listening":
-          LOGGER.debug("Listening response "+message);
+          LOGGER.debug("Listening response " + message);
           break;
         case "trade_updates":
 
@@ -192,7 +193,7 @@ public class AlpacaWebsocketClient implements MessageHandler {
   private synchronized void sendStreamMessageToObservers(MessageType messageType,
       JsonObject message) {
 
-    for (AlpacaStreamListener observer : observers) {
+    for (AlpacaStreamListener observer : listeners) {
 
       UpdateMessage messageObject = getMessageToObject(messageType, message);
 
@@ -274,7 +275,7 @@ public class AlpacaWebsocketClient implements MessageHandler {
 
     Set<MessageType> registeredMessageTypes = new HashSet<MessageType>();
 
-    for (AlpacaStreamListener observer : observers) {
+    for (AlpacaStreamListener observer : listeners) {
 
       // if its empty, assume they want everything
       if (observer.getMessageTypes() == null || observer.getMessageTypes().isEmpty()) {
