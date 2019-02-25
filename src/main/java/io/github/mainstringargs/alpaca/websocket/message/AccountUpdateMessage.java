@@ -4,11 +4,12 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 import io.github.mainstringargs.alpaca.domain.Account;
+import io.github.mainstringargs.alpaca.enums.MessageType;
 
 /**
  * The Class AccountUpdateMessage.
  */
-public class AccountUpdateMessage {
+public class AccountUpdateMessage implements UpdateMessage {
 
   /** The account. */
   private Account account;
@@ -81,5 +82,10 @@ public class AccountUpdateMessage {
     } else if (!account.equals(other.account))
       return false;
     return true;
+  }
+
+  @Override
+  public MessageType getMessageType() {
+    return MessageType.ACCOUNT_UPDATES;
   }
 }

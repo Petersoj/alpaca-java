@@ -16,6 +16,7 @@ import io.github.mainstringargs.alpaca.enums.MessageType;
 import io.github.mainstringargs.alpaca.websocket.AlpacaWebsocketClientEndpoint.MessageHandler;
 import io.github.mainstringargs.alpaca.websocket.message.AccountUpdateMessage;
 import io.github.mainstringargs.alpaca.websocket.message.OrderUpdateMessage;
+import io.github.mainstringargs.alpaca.websocket.message.UpdateMessage;
 
 /**
  * The Class WebsocketClient.
@@ -193,7 +194,7 @@ public class AlpacaWebsocketClient implements MessageHandler {
 
     for (AlpacaStreamListener observer : observers) {
 
-      Object messageObject = getMessageToObject(messageType, message);
+      UpdateMessage messageObject = getMessageToObject(messageType, message);
 
       if (observer.getMessageTypes() == null || observer.getMessageTypes().isEmpty()
           || observer.getMessageTypes().contains(messageType)) {
@@ -213,7 +214,7 @@ public class AlpacaWebsocketClient implements MessageHandler {
    * @param message the message
    * @return the message to object
    */
-  private Object getMessageToObject(MessageType messageType, JsonObject message) {
+  private UpdateMessage getMessageToObject(MessageType messageType, JsonObject message) {
 
     if (message.has("data")) {
       JsonObject data = message.getAsJsonObject("data");

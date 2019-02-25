@@ -4,6 +4,7 @@ import java.util.HashSet;
 import java.util.Set;
 import io.github.mainstringargs.alpaca.enums.MessageType;
 import io.github.mainstringargs.alpaca.properties.AlpacaProperties;
+import io.github.mainstringargs.alpaca.websocket.message.UpdateMessage;
 
 /**
  * The Class WebsocketTestDriver.
@@ -28,7 +29,7 @@ public class AlpacaWebsocketTestDriver {
       }
 
       @Override
-      public void streamUpdate(MessageType messageType, Object message) {
+      public void streamUpdate(MessageType messageType, UpdateMessage message) {
         System.out.println(messageType + " " + message);
 
       }

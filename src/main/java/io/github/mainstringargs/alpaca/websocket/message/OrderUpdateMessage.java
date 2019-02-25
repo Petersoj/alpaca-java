@@ -6,12 +6,13 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 import io.github.mainstringargs.alpaca.Utilities;
 import io.github.mainstringargs.alpaca.domain.Order;
+import io.github.mainstringargs.alpaca.enums.MessageType;
 import io.github.mainstringargs.alpaca.enums.OrderEvent;
 
 /**
  * The Class OrderUpdateMessage.
  */
-public class OrderUpdateMessage {
+public class OrderUpdateMessage implements UpdateMessage {
 
   /** The event. */
   private OrderEvent event;
@@ -140,6 +141,11 @@ public class OrderUpdateMessage {
 
   public Order getOrder() {
     return order;
+  }
+
+  @Override
+  public MessageType getMessageType() {
+    return MessageType.ORDER_UPDATES;
   }
 
 }
