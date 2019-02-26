@@ -18,7 +18,7 @@ Add the following dependency to your build.gradle file:
 
 ```
 dependencies {
-	compile "io.github.mainstringargs:alpaca-java:1.1"
+	compile "io.github.mainstringargs:alpaca-java:2.0"
 }
 ```
 
@@ -30,7 +30,7 @@ Add the following dependency to your pom.xml file:
     <dependency>
       <groupId>io.github.mainstringargs</groupId>
       <artifactId>alpaca-java</artifactId>
-      <version>1.1</version>
+      <version>2.0</version>
       <scope>compile</scope>
     </dependency>
 ```
@@ -52,6 +52,26 @@ This example uses the AlpacaAPI class to print out account information, submit a
 
     // This logs into Alpaca using the alpaca.properties file on the classpath.
     AlpacaAPI alpacaApi = new AlpacaAPI();
+
+    // Register explicitly for ACCOUNT_UPDATES and ORDER_UPDATES Messages via stream listener
+    alpacaApi.addAlpacaStreamListener(
+        new AlpacaStreamListenerAdapter(MessageType.ACCOUNT_UPDATES, MessageType.ORDER_UPDATES) {
+          @Override
+          public void streamUpdate(MessageType messageType, UpdateMessage message) {
+
+            switch (messageType) {
+              case ACCOUNT_UPDATES:
+                AccountUpdateMessage accounUpdateMessage = (AccountUpdateMessage) message;
+                System.out
+                    .println("\nReceived Account Update: \n\t" + accounUpdateMessage.toString());
+                break;
+              case ORDER_UPDATES:
+                OrderUpdateMessage orderUpdateMessage = (OrderUpdateMessage) message;
+                System.out.println("\nReceived Order Update: \n\t" + orderUpdateMessage.toString());
+                break;
+            }
+          }
+        });
 
     // Get Account Information
     try {
@@ -204,6 +224,9 @@ Limit Order Response:
 	Limit Price: $100
 	Created At: 2019-02-15T18:51:06.377720987
 
+Received Order Update: 
+	OrderUpdateMessage [event=NEW, price=null, timestamp=null, order=io.github.mainstringargs.alpaca.domain.Order@5c728415[id=ed02131f-d1c6-4815-a941-888ce1addd84,clientOrderId=e23ca503-ebec-4754-b65a-ee42806fc67d,createdAt=2019-02-26T14:41:05.503352Z,updatedAt=2019-02-26T14:41:05.599835871Z,submittedAt=2019-02-26T14:41:05.445148Z,filledAt=<null>,expiredAt=<null>,canceledAt=<null>,failedAt=<null>,assetId=f801f835-bfe6-4a9d-a6b1-ccbb84bfd75f,symbol=AMZN,exchange=<null>,assetClass=us_equity,qty=1,filledQty=0,type=limit,side=buy,timeInForce=day,limitPrice=100,stopPrice=<null>,filledAvgPrice=<null>,status=new]]
+
 
 Limit Order By Id Response:
 	Symbol: AMZN
@@ -225,6 +248,9 @@ Limit Order By Id Response:
 
 Cancel order response:
 	Cancelled: true
+
+Received Order Update: 
+	OrderUpdateMessage [event=CANCELED, price=null, timestamp=2019-02-26T08:41:05.990, order=io.github.mainstringargs.alpaca.domain.Order@2da73a2c[id=ed02131f-d1c6-4815-a941-888ce1addd84,clientOrderId=e23ca503-ebec-4754-b65a-ee42806fc67d,createdAt=2019-02-26T14:41:05.503352Z,updatedAt=2019-02-26T14:41:06.076159839Z,submittedAt=2019-02-26T14:41:05.445148Z,filledAt=<null>,expiredAt=<null>,canceledAt=2019-02-26T14:41:05.99Z,failedAt=<null>,assetId=f801f835-bfe6-4a9d-a6b1-ccbb84bfd75f,symbol=AMZN,exchange=<null>,assetClass=us_equity,qty=1,filledQty=0,type=limit,side=buy,timeInForce=day,limitPrice=100,stopPrice=<null>,filledAvgPrice=<null>,status=canceled]]
 
 
 Bars response:

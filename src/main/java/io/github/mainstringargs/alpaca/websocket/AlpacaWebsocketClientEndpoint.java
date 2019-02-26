@@ -1,9 +1,11 @@
 package io.github.mainstringargs.alpaca.websocket;
 
+import java.io.IOException;
 import java.net.URI;
 import javax.websocket.ClientEndpoint;
 import javax.websocket.CloseReason;
 import javax.websocket.ContainerProvider;
+import javax.websocket.DeploymentException;
 import javax.websocket.OnClose;
 import javax.websocket.OnMessage;
 import javax.websocket.OnOpen;
@@ -27,6 +29,9 @@ public class AlpacaWebsocketClientEndpoint {
   /** The message handler. */
   private MessageHandler messageHandler;
 
+  /** The endpoint URI. */
+  private URI endpointURI;
+
   /** The logger. */
   private static Logger LOGGER = LogManager.getLogger(AlpacaWebsocketClientEndpoint.class);
 
@@ -36,13 +41,27 @@ public class AlpacaWebsocketClientEndpoint {
    * @param endpointURI the endpoint URI
    */
   public AlpacaWebsocketClientEndpoint(URI endpointURI) {
+
+    this.endpointURI = endpointURI;
+
     try {
-      WebSocketContainer container = ContainerProvider.getWebSocketContainer();
-      LOGGER.info("Connecting to " + endpointURI);
-      container.connectToServer(this, endpointURI);
+      connect(endpointURI);
     } catch (Exception e) {
       throw new RuntimeException(e);
     }
+  }
+
+  /**
+   * Connect.
+   *
+   * @param endpointURI the endpoint URI
+   * @throws DeploymentException the deployment exception
+   * @throws IOException Signals that an I/O exception has occurred.
+   */
+  private void connect(URI endpointURI) throws DeploymentException, IOException {
+    WebSocketContainer container = ContainerProvider.getWebSocketContainer();
+    LOGGER.info("Connecting to " + endpointURI);
+    container.connectToServer(this, endpointURI);
   }
 
   /**
@@ -68,6 +87,12 @@ public class AlpacaWebsocketClientEndpoint {
     this.userSession = null;
 
     LOGGER.info("onClose " + userSession + " " + reason);
+
+    try {
+      connect(endpointURI);
+    } catch (Exception e) {
+      LOGGER.catching(e);
+    }
   }
 
   /**

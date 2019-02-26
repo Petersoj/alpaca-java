@@ -23,22 +23,8 @@ import io.github.mainstringargs.alpaca.websocket.message.UpdateMessage;
 /**
  * The Class Example.
  */
-public class Example extends AlpacaStreamListenerAdapter {
+public class Example {
 
-  @Override
-  public void streamUpdate(MessageType messageType, UpdateMessage message) {
-
-    switch (messageType) {
-      case ACCOUNT_UPDATES:
-        AccountUpdateMessage accounUpdateMessage = (AccountUpdateMessage) message;
-        System.out.println("\nReceived Account Update: \n\t" + accounUpdateMessage.toString());
-        break;
-      case ORDER_UPDATES:
-        OrderUpdateMessage orderUpdateMessage = (OrderUpdateMessage) message;
-        System.out.println("\nReceived Order Update: \n\t" + orderUpdateMessage.toString());
-        break;
-    }
-  }
 
   /**
    * The main method.
@@ -50,8 +36,25 @@ public class Example extends AlpacaStreamListenerAdapter {
     // This logs into Alpaca using the alpaca.properties file on the classpath.
     AlpacaAPI alpacaApi = new AlpacaAPI();
 
-    // Register for Messages
-    alpacaApi.addAlpacaStreamListener(new Example());
+    // Register explicitly for ACCOUNT_UPDATES and ORDER_UPDATES Messages via stream listener
+    alpacaApi.addAlpacaStreamListener(
+        new AlpacaStreamListenerAdapter(MessageType.ACCOUNT_UPDATES, MessageType.ORDER_UPDATES) {
+          @Override
+          public void streamUpdate(MessageType messageType, UpdateMessage message) {
+
+            switch (messageType) {
+              case ACCOUNT_UPDATES:
+                AccountUpdateMessage accounUpdateMessage = (AccountUpdateMessage) message;
+                System.out
+                    .println("\nReceived Account Update: \n\t" + accounUpdateMessage.toString());
+                break;
+              case ORDER_UPDATES:
+                OrderUpdateMessage orderUpdateMessage = (OrderUpdateMessage) message;
+                System.out.println("\nReceived Order Update: \n\t" + orderUpdateMessage.toString());
+                break;
+            }
+          }
+        });
 
     // Get Account Information
     try {
