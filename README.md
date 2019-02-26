@@ -520,3 +520,15 @@ Gets the bars.
    * `until` — Filter bars before this time. Cannot be used with end.
  * **Returns:** the bars
  * **Exceptions:** `AlpacaAPIException` — the alpaca API exception
+
+#### `public void addAlpacaStreamListener(AlpacaStreamListener streamListener)`
+
+Adds the alpaca stream listener.
+
+ * **Parameters:** `streamListener` — the stream listener
+
+#### `public void removeAlpacaStreamListener(AlpacaStreamListener streamListener)`
+
+Removes the alpaca stream listener.
+
+ * **Parameters:** `streamListener` — the stream listener
