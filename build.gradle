@@ -14,7 +14,7 @@
 
   dependencies {
     // this plugin
-    classpath 'org.jsonschema2pojo:jsonschema2pojo-gradle-plugin:0.5.1'
+    classpath 'org.jsonschema2pojo:jsonschema2pojo-gradle-plugin:1.0.0'
     classpath 'com.bmuschko:gradle-nexus-plugin:2.3.1'
     // add additional dependencies here if you wish to reference instead of generate them (see example directory)
   }
