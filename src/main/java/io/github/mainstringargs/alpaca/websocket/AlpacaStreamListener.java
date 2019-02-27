@@ -8,7 +8,7 @@ import io.github.mainstringargs.alpaca.websocket.message.UpdateMessage;
  * An asynchronous update interface for receiving notifications about Websocket information as the
  * Websocket is constructed.
  *
- * @see AlpacaStreamEvent
+ * @see UpdateMessage
  */
 public interface AlpacaStreamListener {
 
