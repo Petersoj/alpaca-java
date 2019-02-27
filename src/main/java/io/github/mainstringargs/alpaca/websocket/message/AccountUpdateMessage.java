@@ -84,6 +84,9 @@ public class AccountUpdateMessage implements UpdateMessage {
     return true;
   }
 
+  /* (non-Javadoc)
+   * @see io.github.mainstringargs.alpaca.websocket.message.UpdateMessage#getMessageType()
+   */
   @Override
   public MessageType getMessageType() {
     return MessageType.ACCOUNT_UPDATES;

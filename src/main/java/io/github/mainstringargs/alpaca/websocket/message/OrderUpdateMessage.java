@@ -127,22 +127,45 @@ public class OrderUpdateMessage implements UpdateMessage {
     return true;
   }
 
+  /**
+   * Gets the event.
+   *
+   * @return the event
+   */
   public OrderEvent getEvent() {
     return event;
   }
 
+  /**
+   * Gets the price.
+   *
+   * @return the price
+   */
   public Double getPrice() {
     return price;
   }
 
+  /**
+   * Gets the timestamp.
+   *
+   * @return the timestamp
+   */
   public LocalDateTime getTimestamp() {
     return timestamp;
   }
 
+  /**
+   * Gets the order.
+   *
+   * @return the order
+   */
   public Order getOrder() {
     return order;
   }
 
+  /* (non-Javadoc)
+   * @see io.github.mainstringargs.alpaca.websocket.message.UpdateMessage#getMessageType()
+   */
   @Override
   public MessageType getMessageType() {
     return MessageType.ORDER_UPDATES;
