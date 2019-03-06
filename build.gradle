@@ -136,7 +136,7 @@ jsonSchema2Pojo {
   usePrimitives = true
 
   // Location of the JSON Schema file(s). This may refer to a single file or a directory of files.
-  source = files("sampleJson/alpaca")
+  source = files(System.getProperty("jsonSchema2Pojo.source" ,"sampleJson/alpaca"))
 
   // Target directory for generated Java source files. The plugin will add this directory to the
   // java source set so the compiler will find and compile the newly generated source files.
@@ -144,7 +144,7 @@ jsonSchema2Pojo {
 
   // Package name used for generated Java classes (for types where a fully qualified name has not
   // been supplied in the schema using the 'javaType' property).
-  targetPackage = 'io.github.mainstringargs.alpaca.domain'
+  targetPackage = System.getProperty("jsonSchema2Pojo.targetPackage" ,'io.github.mainstringargs.alpaca.domain')
 
   // The characters that should be considered as word delimiters when creating Java Bean property
   // names from JSON property names. If blank or not set, JSON properties will be considered to
@@ -212,7 +212,7 @@ jsonSchema2Pojo {
   // that have been generated previously. <strong>Be warned</strong>, when activated this option
   // will cause jsonschema2pojo to <strong>indiscriminately delete the entire contents of the target
   // directory (all files and folders)</strong> before it begins generating sources.
-  removeOldOutput = true
+  removeOldOutput = System.getProperty("jsonSchema2Pojo.removeOldOutput" ,'true')
 
   // The character encoding that should be used when writing the generated Java source files
   outputEncoding = 'UTF-8'
