@@ -49,24 +49,24 @@ import io.github.mainstringargs.alpaca.websocket.AlpacaWebsocketClient;
 public class AlpacaAPI {
 
   /** The key id. */
-  private String keyId;
+  private final String keyId;
 
   /** The secret. */
-  private String secret;
+  private final String secret;
 
   /** The base account url. */
-  private String baseAccountUrl;
+  private final String baseAccountUrl;
 
   /** The alpaca request. */
-  private AlpacaRequest alpacaRequest;
+  private final AlpacaRequest alpacaRequest;
 
   /** The base data url. */
-  private String baseDataUrl;
+  private final String baseDataUrl;
   
   /** The logger. */
   private static Logger LOGGER = LogManager.getLogger(AlpacaAPI.class);
 
-  private AlpacaWebsocketClient alpacaWebSocketClient;
+  private final AlpacaWebsocketClient alpacaWebSocketClient;
 
   /**
    * Instantiates a new Alpaca API using properties specified in alpaca.properties file (or relevant
@@ -106,7 +106,7 @@ public class AlpacaAPI {
         + secret + "\nbaseAccountUrl: " + baseAccountUrl + "\nbaseDataUrl: " + baseDataUrl);
     
     alpacaRequest = new AlpacaRequest(keyId, secret);
-
+    alpacaWebSocketClient = new AlpacaWebsocketClient(keyId, secret, baseAccountUrl);
 
   }
 
@@ -127,7 +127,7 @@ public class AlpacaAPI {
         + secret + "\nbaseAccountUrl: " + baseAccountUrl + "\nbaseDataUrl: " + baseDataUrl);
     
     alpacaRequest = new AlpacaRequest(keyId, secret);
-
+    alpacaWebSocketClient = new AlpacaWebsocketClient(keyId, secret, baseAccountUrl);
 
   }
 

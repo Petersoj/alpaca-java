@@ -5,21 +5,23 @@
  * For more details take a look at the Java Quickstart chapter in the Gradle
  * user guide available at https://docs.gradle.org/3.4.1/userguide/tutorial_java_projects.html
  */
- 
- buildscript {
-  repositories {
-    mavenCentral()
-    jcenter()
-  }
 
-  dependencies {
-    classpath 'com.bmuschko:gradle-nexus-plugin:2.3.1'
-    // add additional dependencies here if you wish to reference instead of generate them (see example directory)
-  }
+buildscript {
+    repositories {
+        mavenLocal()
+        mavenCentral()
+        jcenter()
+    }
+
+    dependencies {
+        classpath 'com.bmuschko:gradle-nexus-plugin:2.3.1'
+        // add additional dependencies here if you wish to reference instead of generate them (see example directory)
+    }
 }
- 
- 
+
+
 plugins {
+    id 'maven-publish'
     id 'io.codearte.nexus-staging' version '0.11.0'
 }
 // Apply the java plugin to add support for Java
@@ -34,7 +36,7 @@ apply plugin: 'com.bmuschko.nexus'
 
 archivesBaseName = 'alpaca-java'
 group = 'io.github.mainstringargs'
-version = '2.0'
+version = '2.0.1-SNAPSHOT'
 
 
 // In this section you declare where to find the dependencies of your project
@@ -42,7 +44,7 @@ repositories {
     // Use jcenter for resolving your dependencies.
     // You can declare any Maven/Ivy/file repository here.
     maven { url "https://repo.maven.apache.org/maven2" }
-	jcenter()
+    jcenter()
     //maven { url "http://mvnrepository.com/artifact" }
 }
 
@@ -51,15 +53,15 @@ dependencies {
     compile 'com.google.guava:guava:20.0'
     compile "com.mashape.unirest:unirest-java:1.4.9"
     compile "com.google.code.gson:gson:2.8.5"
-	compile "commons-lang:commons-lang:2.6"
-	compile 'org.apache.logging.log4j:log4j-api:2.11.1'
-	compile 'org.apache.logging.log4j:log4j-core:2.11.1'
-	
-	compile "javax.websocket:javax.websocket-api:1.1"	
-	compile "org.glassfish.tyrus.bundles:tyrus-standalone-client-jdk:1.12"
+    compile "commons-lang:commons-lang:2.6"
+    compile 'org.apache.logging.log4j:log4j-api:2.11.1'
+    compile 'org.apache.logging.log4j:log4j-core:2.11.1'
+
+    compile "javax.websocket:javax.websocket-api:1.1"
+    compile "org.glassfish.tyrus.bundles:tyrus-standalone-client-jdk:1.12"
 
     compile 'io.nats:jnats:2.2.0'
-      
+
     // Use JUnit test framework
     testCompile 'junit:junit:4.12'
 }
@@ -97,6 +99,16 @@ modifyPom {
     }
 }
 
+publishing {
+    publications {
+        maven(MavenPublication) {
+ 
+            from components.java
+            artifact sourcesJar
+            artifact javadocJar
+        }
+    }
+}
 extraArchive {
     sources = true
     tests = true
@@ -123,26 +135,26 @@ sourceSets {
 
 
 task generateAlpacaPOJOs(type: GradleBuild) {
-  startParameter.projectProperties = ['jsonSchema2Pojo.source':'sampleJson/alpaca',"jsonSchema2Pojo.targetPackage":'io.github.mainstringargs.alpaca.domain',"jsonSchema2Pojo.removeOldOutput":'true']
-  
-  buildFile = 'jsonSchema2Pojo.gradle'
-  tasks = ['generateJsonSchema2Pojo']
+    startParameter.projectProperties = ['jsonSchema2Pojo.source': 'sampleJson/alpaca', "jsonSchema2Pojo.targetPackage": 'io.github.mainstringargs.alpaca.domain', "jsonSchema2Pojo.removeOldOutput": 'true']
+
+    buildFile = 'jsonSchema2Pojo.gradle'
+    tasks = ['generateJsonSchema2Pojo']
 
 }
 
 task generatePolygonPOJOs(type: GradleBuild) {
 
-  startParameter.projectProperties = ['jsonSchema2Pojo.source':'sampleJson/polygon',"jsonSchema2Pojo.targetPackage":'io.github.mainstringargs.polygon.domain',"jsonSchema2Pojo.removeOldOutput":'false']
-  
-  buildFile = 'jsonSchema2Pojo.gradle'
-  tasks = ['generateJsonSchema2Pojo']
+    startParameter.projectProperties = ['jsonSchema2Pojo.source': 'sampleJson/polygon', "jsonSchema2Pojo.targetPackage": 'io.github.mainstringargs.polygon.domain', "jsonSchema2Pojo.removeOldOutput": 'false']
+
+    buildFile = 'jsonSchema2Pojo.gradle'
+    tasks = ['generateJsonSchema2Pojo']
 }
 
 
 task generatePOJOs {
-  dependsOn generateAlpacaPOJOs, generatePolygonPOJOs
+    dependsOn generateAlpacaPOJOs, generatePolygonPOJOs
 }
 
-compileJava{
+compileJava {
     dependsOn generatePOJOs
 }
