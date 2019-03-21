@@ -5,22 +5,22 @@ node {
         checkout scm
     }
 
-        stage('check java') {
-            sh "java -version"
-        }
+    stage('check java') {
+        sh "java -version"
+    }
 
-        stage('clean') {
-            sh "chmod +x gradlew"
-            sh "./gradlew clean"
-        }
+    stage('clean') {
+        sh "chmod +x gradlew"
+        sh "./gradlew clean"
+    }
 
 
-        stage('install') {
-            try {
-                sh "./gradlew build publishToMavenLocal"
-            } catch(err) {
-                throw err
-            }
+    stage('install') {
+        try {
+            sh "./gradlew build publishToMavenLocal"
+        } catch (err) {
+            throw err
         }
     }
 }
+
