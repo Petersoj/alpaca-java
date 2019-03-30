@@ -1,6 +1,5 @@
 package io.github.mainstringargs.polygon.nats;
 
-import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import io.github.mainstringargs.alpaca.properties.AlpacaProperties;
 import io.nats.client.Connection;
