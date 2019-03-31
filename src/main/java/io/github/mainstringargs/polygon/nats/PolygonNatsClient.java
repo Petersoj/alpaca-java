@@ -1,30 +1,35 @@
 package io.github.mainstringargs.polygon.nats;
 
 import java.io.IOException;
-import java.net.URI;
-import java.net.URISyntaxException;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashSet;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import io.github.mainstringargs.alpaca.enums.MessageType;
-import io.github.mainstringargs.alpaca.websocket.AlpacaWebsocketClientEndpoint.MessageHandler;
 import io.github.mainstringargs.alpaca.websocket.message.AccountUpdateMessage;
 import io.github.mainstringargs.alpaca.websocket.message.OrderUpdateMessage;
 import io.github.mainstringargs.alpaca.websocket.message.UpdateMessage;
+import io.github.mainstringargs.polygon.enums.ChannelType;
+import io.nats.client.Connection;
+import io.nats.client.Dispatcher;
+import io.nats.client.Nats;
+import io.nats.client.Options;
+import io.nats.client.Options.Builder;
 
 /**
  * The Class WebsocketClient.
  */
-public class PolygonNatsClient implements MessageHandler {
+public class PolygonNatsClient {
 
-  /** The key id. */
-  private String keyId;
+
 
   /** The observers. */
   private List<PolygonStreamListener> listeners = new ArrayList<PolygonStreamListener>();
@@ -34,13 +39,33 @@ public class PolygonNatsClient implements MessageHandler {
   private static Logger LOGGER = LogManager.getLogger(PolygonNatsClient.class);
 
 
-  private String[] polygonNatsServers;
+  private Options polygonOptions;
+
+  private Connection polygonConnection;
+
+  private Dispatcher polygonDispatcher;
 
 
   public PolygonNatsClient(String keyId, String... polygonNatsServers) {
-    this.keyId = keyId;
-    this.polygonNatsServers = polygonNatsServers;
+    this(keyId, -1, polygonNatsServers);
+
   }
+
+  public PolygonNatsClient(String keyId, int maxReconnects, String... polygonNatsServers) {
+    Builder optionsBuilder = new Options.Builder();
+
+    for (String serverUrl : polygonNatsServers) {
+      optionsBuilder.server("nats://" + keyId + "@" + serverUrl);
+    }
+
+    optionsBuilder.maxReconnects(maxReconnects);
+
+    polygonOptions = optionsBuilder.verbose().build();
+
+    LOGGER.info("Polygon Options set to " + polygonOptions);
+  }
+
+
 
   /**
    * Adds the listener.
@@ -54,6 +79,8 @@ public class PolygonNatsClient implements MessageHandler {
     }
 
     listeners.add(listener);
+
+//    updateSubscriptions();
 
   }
 
@@ -71,6 +98,9 @@ public class PolygonNatsClient implements MessageHandler {
     if (listeners.isEmpty()) {
       disconnect();
     }
+
+//    updateSubscriptions();
+
   }
 
   /**
@@ -80,29 +110,27 @@ public class PolygonNatsClient implements MessageHandler {
 
 
     try {
-      clientEndPoint = new AlpacaWebsocketClientEndpoint(new URI(baseAccountUrl));
+      polygonConnection = Nats.connect(polygonOptions);
 
-      clientEndPoint.addMessageHandler(this);
 
-    } catch (URISyntaxException e) {
+      polygonDispatcher = polygonConnection.createDispatcher((msg) -> {
+        String response = new String(msg.getData(), StandardCharsets.UTF_8);
+
+        if (LOGGER.isDebugEnabled()) {
+          LOGGER.debug("onMessage " + new String(response));
+
+        }
+
+        handleMessage(response);
+
+      });
+
+    } catch (IOException e) {
+      e.printStackTrace();
+    } catch (InterruptedException e) {
       e.printStackTrace();
     }
 
-    /**
-     * Format of message is:
-     * 
-     * { "action": "authenticate", "data": { "key_id": "{YOUR_API_KEY_ID}", "secret_key":
-     * "{YOUR_API_SECRET_KEY}" } }
-     */
-
-    JsonObject authRequest = new JsonObject();
-    authRequest.addProperty("action", "authenticate");
-    JsonObject payload = new JsonObject();
-    payload.addProperty("key_id", keyId);
-    payload.addProperty("secret_key", secret);
-    authRequest.add("data", payload);
-
-    clientEndPoint.sendMessage(authRequest.toString());
 
   }
 
@@ -110,53 +138,57 @@ public class PolygonNatsClient implements MessageHandler {
    * Disconnect.
    */
   private void disconnect() {
-    try {
-      clientEndPoint.getUserSession().close();
-    } catch (IOException e) {
-      e.printStackTrace();
+
+    if (polygonConnection != null) {
+      try {
+        polygonConnection.close();
+      } catch (InterruptedException e) {
+        e.printStackTrace();
+      }
     }
+
 
   }
 
-  /*
-   * (non-Javadoc)
-   * 
-   * @see
-   * io.github.mainstringargs.alpaca.websocket.WebsocketClientEndpoint.MessageHandler#handleMessage(
-   * com.google.gson.JsonObject)
-   */
-  @Override
-  public void handleMessage(JsonObject message) {
+  public JsonObject getAsJsonObject(String message) {
+    JsonElement jelement = new JsonParser().parse(new String(message));
+    JsonObject jobject = jelement.getAsJsonObject();
 
-    if (message.has("stream")) {
+    return jobject;
+  }
 
-      String streamType = message.get("stream").getAsString();
 
-      switch (streamType) {
-        case "authorization":
-          if (authorizedObject.equals(message)) {
-            LOGGER.debug("Authorized by Alpaca " + message);
-            submitStreamRequest();
-          }
-          break;
-        case "listening":
-          LOGGER.debug("Listening response " + message);
-          break;
-        case "trade_updates":
+  public void handleMessage(String response) {
 
-          sendStreamMessageToObservers(MessageType.ORDER_UPDATES, message);
-
-          break;
-        case "account_updates":
-
-          sendStreamMessageToObservers(MessageType.ACCOUNT_UPDATES, message);
-
-          break;
-      }
-
-    } else {
-      LOGGER.error("Invalid message received " + message);
-    }
+    // if (response.has("stream")) {
+    //
+    // String streamType = response.get("stream").getAsString();
+    //
+    // switch (streamType) {
+    // case "authorization":
+    // if (authorizedObject.equals(response)) {
+    // LOGGER.debug("Authorized by Alpaca " + response);
+    // submitStreamRequest();
+    // }
+    // break;
+    // case "listening":
+    // LOGGER.debug("Listening response " + response);
+    // break;
+    // case "trade_updates":
+    //
+    // sendStreamMessageToObservers(MessageType.ORDER_UPDATES, response);
+    //
+    // break;
+    // case "account_updates":
+    //
+    // sendStreamMessageToObservers(MessageType.ACCOUNT_UPDATES, response);
+    //
+    // break;
+    // }
+    //
+    // } else {
+    // LOGGER.error("Invalid message received " + response);
+    // }
 
 
   }
@@ -170,14 +202,14 @@ public class PolygonNatsClient implements MessageHandler {
   private synchronized void sendStreamMessageToObservers(MessageType messageType,
       JsonObject message) {
 
-    for (AlpacaStreamListener observer : listeners) {
+    for (PolygonStreamListener observer : listeners) {
 
-      UpdateMessage messageObject = getMessageToObject(messageType, message);
-
-      if (observer.getMessageTypes() == null || observer.getMessageTypes().isEmpty()
-          || observer.getMessageTypes().contains(messageType)) {
-        observer.streamUpdate(messageType, messageObject);
-      }
+      // UpdateMessage messageObject = getMessageToObject(messageType, message);
+      //
+      // if (observer.getMessageTypes() == null || observer.getMessageTypes().isEmpty()
+      // || observer.getMessageTypes().contains(messageType)) {
+      // observer.streamUpdate(messageType, messageObject);
+      // }
 
 
     }
@@ -218,52 +250,38 @@ public class PolygonNatsClient implements MessageHandler {
    * Submit stream request.
    */
   private void submitStreamRequest() {
-    // {
-    // "action": "listen",
-    // "data": {
-    // "streams": ["account_updates", "trade_updates"]
-    // }
-    // }
 
-
-    JsonObject streamRequest = new JsonObject();
-
-    JsonArray array = new JsonArray();
-
-    for (MessageType mType : getRegisteredMessageTypes()) {
-      array.add(mType.getAPIName());
-    }
-
-    streamRequest.addProperty("action", "listen");
-    JsonObject dataObject = new JsonObject();
-    dataObject.add("streams", array);
-
-    streamRequest.add("data", dataObject);
-
-    clientEndPoint.sendMessage(streamRequest.toString());
   }
 
+
   /**
-   * Gets the registered message types.
+   * Gets the registered stock channel types.
    *
-   * @return the registered message types
+   * @return the registered stock channel types
    */
-  public Set<MessageType> getRegisteredMessageTypes() {
+  public Map<String, Set<ChannelType>> getRegisteredStockChannelTypes() {
 
-    Set<MessageType> registeredMessageTypes = new HashSet<MessageType>();
+    Map<String, Set<ChannelType>> stockChannelTypes = new HashMap<>();
 
-    for (AlpacaStreamListener observer : listeners) {
+    for (PolygonStreamListener observer : listeners) {
 
-      // if its empty, assume they want everything
-      if (observer.getMessageTypes() == null || observer.getMessageTypes().isEmpty()) {
-        registeredMessageTypes.addAll(Arrays.asList(MessageType.values()));
-        break;
+      Map<String, Set<ChannelType>> listenerStockChannelType = observer.getStockChannelTypes();
+
+      if (listenerStockChannelType != null) {
+        for (Entry<String, Set<ChannelType>> entry : listenerStockChannelType.entrySet()) {
+
+          if (!stockChannelTypes.containsKey(entry.getKey())) {
+            stockChannelTypes.put(entry.getKey(), entry.getValue());
+          } else {
+            stockChannelTypes.get(entry.getKey()).addAll(entry.getValue());
+          }
+
+        }
       }
 
-      registeredMessageTypes.addAll(observer.getMessageTypes());
     }
 
-    return registeredMessageTypes;
+    return stockChannelTypes;
 
   }
 

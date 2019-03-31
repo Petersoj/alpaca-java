@@ -78,6 +78,8 @@ public class AlpacaWebsocketClient implements MessageHandler {
 
     listeners.add(listener);
 
+//    updateSubscriptions();
+
   }
 
 
@@ -94,6 +96,9 @@ public class AlpacaWebsocketClient implements MessageHandler {
     if (listeners.isEmpty()) {
       disconnect();
     }
+    
+//    updateSubscriptions();
+
   }
 
   /**

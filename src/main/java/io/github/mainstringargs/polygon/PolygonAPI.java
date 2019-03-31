@@ -9,9 +9,6 @@ import io.github.mainstringargs.polygon.nats.PolygonStreamListener;
 
 public class PolygonAPI {
 
-  /** The key id. */
-  private final String keyId;
-
   /** The logger. */
   private static Logger LOGGER = LogManager.getLogger(PolygonAPI.class);
 
@@ -31,7 +28,6 @@ public class PolygonAPI {
   }
 
   public PolygonAPI(String keyId, String... polygonNatsServers) {
-    this.keyId = keyId;
 
     LOGGER.info("PolygonAPI is using the following properties: \nkeyId: " + keyId
         + "\npolygonNatsServers " + Arrays.toString(polygonNatsServers));
