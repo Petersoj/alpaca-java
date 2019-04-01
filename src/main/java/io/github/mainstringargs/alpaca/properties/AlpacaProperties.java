@@ -79,7 +79,7 @@ public class AlpacaProperties {
    * @return the property
    */
   public static String getProperty(String key, String defaultValue) {
-    return propertyFile.getProperty(key, defaultValue);
+    return propertyFile.getProperty(key, defaultValue).trim();
   }
 
 }
