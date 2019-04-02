@@ -6,13 +6,14 @@ import io.github.mainstringargs.polygon.enums.ChannelType;
 import io.github.mainstringargs.polygon.nats.message.ChannelMessage;
 
 
+
 /**
  * The listener interface for receiving polygonStream events. The class that is interested in
- * processing a polygonStream event implements this interface, and the object created with that
- * class is registered with a component using the component's <code>addPolygonStreamListener<code>
- * method. When the polygonStream event occurs, that object's appropriate method is invoked.
+ * processing a ChannelMessage event implements this interface, and the object created with that
+ * class is registered with a component using the component's <code>addPolygonStreamListener</code>
+ * method. When the ChannelMessage event occurs, that object's appropriate method is invoked.
  *
- * @see PolygonStreamEvent
+ * @see ChannelMessage
  */
 public interface PolygonStreamListener {
 
