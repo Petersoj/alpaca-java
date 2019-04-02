@@ -2,6 +2,7 @@ package io.github.mainstringargs.alpaca.websocket;
 
 import java.io.IOException;
 import java.net.URI;
+import java.util.concurrent.ExecutorService;
 import javax.websocket.ClientEndpoint;
 import javax.websocket.CloseReason;
 import javax.websocket.ContainerProvider;
@@ -16,6 +17,7 @@ import org.apache.logging.log4j.Logger;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import io.github.mainstringargs.util.concurrency.ExecutorTracer;
 
 /**
  * The Class WebsocketClientEndpoint.
@@ -34,6 +36,8 @@ public class AlpacaWebsocketClientEndpoint {
 
   /** The logger. */
   private static Logger LOGGER = LogManager.getLogger(AlpacaWebsocketClientEndpoint.class);
+
+  private static final ExecutorService executor = ExecutorTracer.newSingleThreadExecutor();
 
   /**
    * Instantiates a new websocket client endpoint.
@@ -103,15 +107,22 @@ public class AlpacaWebsocketClientEndpoint {
   @OnMessage
   public void onMessage(byte[] message) {
 
-    if (LOGGER.isDebugEnabled())
-      LOGGER.debug("onMessage " + new String(message));
+    executor.execute(new Runnable() {
 
-    if (this.messageHandler != null) {
-      JsonElement jelement = new JsonParser().parse(new String(message));
-      JsonObject jobject = jelement.getAsJsonObject();
+      @Override
+      public void run() {
+        if (LOGGER.isDebugEnabled())
+          LOGGER.debug("onMessage " + new String(message));
 
-      this.messageHandler.handleMessage(jobject);
-    }
+        if (messageHandler != null) {
+          JsonElement jelement = new JsonParser().parse(new String(message));
+          JsonObject jobject = jelement.getAsJsonObject();
+
+          messageHandler.handleMessage(jobject);
+        }
+      }
+    });
+
   }
 
   /**
