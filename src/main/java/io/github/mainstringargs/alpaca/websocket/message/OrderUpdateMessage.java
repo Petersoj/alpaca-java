@@ -25,7 +25,7 @@ public class OrderUpdateMessage implements UpdateMessage {
 
   /** The order. */
   private Order order;
-  
+
   private static Gson gson;
   static {
     GsonBuilder gsonBuilder = new GsonBuilder();
@@ -167,7 +167,9 @@ public class OrderUpdateMessage implements UpdateMessage {
     return order;
   }
 
-  /* (non-Javadoc)
+  /*
+   * (non-Javadoc)
+   * 
    * @see io.github.mainstringargs.alpaca.websocket.message.UpdateMessage#getMessageType()
    */
   @Override

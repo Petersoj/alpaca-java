@@ -78,7 +78,7 @@ public class AlpacaWebsocketClient implements MessageHandler {
 
     listeners.add(listener);
 
-//    updateSubscriptions();
+    submitStreamRequest();
 
   }
 
@@ -93,19 +93,25 @@ public class AlpacaWebsocketClient implements MessageHandler {
 
     listeners.remove(listener);
 
+
+    submitStreamRequest();
+
+
+
     if (listeners.isEmpty()) {
       disconnect();
     }
-    
-//    updateSubscriptions();
+
 
   }
+
 
   /**
    * Connect.
    */
   private void connect() {
 
+    LOGGER.info("Connecting...");
 
     try {
       clientEndPoint = new AlpacaWebsocketClientEndpoint(new URI(baseAccountUrl));
@@ -115,6 +121,9 @@ public class AlpacaWebsocketClient implements MessageHandler {
     } catch (URISyntaxException e) {
       e.printStackTrace();
     }
+
+    LOGGER.info("Connected.");
+
 
     /**
      * Format of message is:
@@ -138,8 +147,11 @@ public class AlpacaWebsocketClient implements MessageHandler {
    * Disconnect.
    */
   private void disconnect() {
+    LOGGER.info("Disconnecting...");
+
     try {
       clientEndPoint.getUserSession().close();
+      LOGGER.info("Disconnected.");
     } catch (IOException e) {
       e.printStackTrace();
     }
@@ -164,7 +176,6 @@ public class AlpacaWebsocketClient implements MessageHandler {
         case "authorization":
           if (authorizedObject.equals(message)) {
             LOGGER.debug("Authorized by Alpaca " + message);
-            submitStreamRequest();
           }
           break;
         case "listening":
@@ -269,6 +280,8 @@ public class AlpacaWebsocketClient implements MessageHandler {
     streamRequest.add("data", dataObject);
 
     clientEndPoint.sendMessage(streamRequest.toString());
+
+    LOGGER.info("Updating streams to " + array);
   }
 
   /**
