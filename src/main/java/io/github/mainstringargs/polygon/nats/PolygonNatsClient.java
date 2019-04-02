@@ -3,21 +3,27 @@ package io.github.mainstringargs.polygon.nats;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
+import java.util.concurrent.ExecutorService;
+import java.util.stream.Collectors;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import io.github.mainstringargs.alpaca.enums.MessageType;
-import io.github.mainstringargs.alpaca.websocket.message.AccountUpdateMessage;
-import io.github.mainstringargs.alpaca.websocket.message.OrderUpdateMessage;
-import io.github.mainstringargs.alpaca.websocket.message.UpdateMessage;
 import io.github.mainstringargs.polygon.enums.ChannelType;
+import io.github.mainstringargs.polygon.nats.message.AggregatePerMinuteMessage;
+import io.github.mainstringargs.polygon.nats.message.AggregatePerSecondMessage;
+import io.github.mainstringargs.polygon.nats.message.ChannelMessage;
+import io.github.mainstringargs.polygon.nats.message.QuotesMessage;
+import io.github.mainstringargs.polygon.nats.message.TradesMessage;
+import io.github.mainstringargs.util.concurrency.ExecutorTracer;
 import io.nats.client.Connection;
 import io.nats.client.Dispatcher;
 import io.nats.client.Nats;
@@ -39,18 +45,41 @@ public class PolygonNatsClient {
   private static Logger LOGGER = LogManager.getLogger(PolygonNatsClient.class);
 
 
+  /** The polygon options. */
   private Options polygonOptions;
 
+  /** The polygon connection. */
   private Connection polygonConnection;
 
+  /** The polygon dispatcher. */
   private Dispatcher polygonDispatcher;
 
+  /** The current subscriptions. */
+  Map<String, Set<ChannelType>> currentSubscriptions = new HashMap<>();
 
+  /** The Constant executor. */
+  private static final ExecutorService executor = ExecutorTracer.newSingleThreadExecutor();
+
+
+
+  /**
+   * Instantiates a new polygon nats client.
+   *
+   * @param keyId the key id
+   * @param polygonNatsServers the polygon nats servers
+   */
   public PolygonNatsClient(String keyId, String... polygonNatsServers) {
     this(keyId, -1, polygonNatsServers);
 
   }
 
+  /**
+   * Instantiates a new polygon nats client.
+   *
+   * @param keyId the key id
+   * @param maxReconnects the max reconnects
+   * @param polygonNatsServers the polygon nats servers
+   */
   public PolygonNatsClient(String keyId, int maxReconnects, String... polygonNatsServers) {
     Builder optionsBuilder = new Options.Builder();
 
@@ -62,7 +91,8 @@ public class PolygonNatsClient {
 
     polygonOptions = optionsBuilder.verbose().build();
 
-    LOGGER.info("Polygon Options set to " + polygonOptions);
+    LOGGER.info(
+        "Polygon Server set to " + Arrays.toString(polygonNatsServers) + " " + polygonOptions);
   }
 
 
@@ -74,16 +104,16 @@ public class PolygonNatsClient {
    */
   public void addListener(PolygonStreamListener listener) {
 
+
     if (listeners.isEmpty()) {
       connect();
     }
 
     listeners.add(listener);
 
-//    updateSubscriptions();
+    updateSubscriptions(listener, true);
 
   }
-
 
 
   /**
@@ -93,35 +123,132 @@ public class PolygonNatsClient {
    */
   public void removeListener(PolygonStreamListener listener) {
 
+
     listeners.remove(listener);
+
+    updateSubscriptions(listener, false);
+
 
     if (listeners.isEmpty()) {
       disconnect();
     }
 
-//    updateSubscriptions();
+  }
+
+
+  /**
+   * Update subscriptions.
+   *
+   * @param listener the listener
+   * @param isAdd the is add
+   */
+  private void updateSubscriptions(PolygonStreamListener listener, boolean isAdd) {
+
+    Map<String, Set<ChannelType>> toRemove = listener.getStockChannelTypes().entrySet().stream()
+        .collect(Collectors.toMap(e -> e.getKey(), e -> new HashSet<ChannelType>(e.getValue())));
+    Map<String, Set<ChannelType>> toAdd = listener.getStockChannelTypes().entrySet().stream()
+        .collect(Collectors.toMap(e -> e.getKey(), e -> new HashSet<ChannelType>(e.getValue())));
+
+
+
+    if (isAdd) {
+
+      for (Entry<String, Set<ChannelType>> entry : toAdd.entrySet()) {
+
+        Set<ChannelType> currentSubbedChannels = currentSubscriptions.get(entry.getKey());
+
+        if (currentSubbedChannels == null) {
+          currentSubbedChannels = new HashSet<>();
+          currentSubscriptions.put(entry.getKey(), currentSubbedChannels);
+        }
+
+        for (ChannelType channel : entry.getValue()) {
+          String subscriptionName = channel.getAPIName() + '.' + entry.getKey();
+          if (!currentSubbedChannels.contains(channel)) {
+            currentSubbedChannels.add(channel);
+
+            LOGGER.info(("Subscribing to " + subscriptionName));
+            polygonDispatcher.subscribe(subscriptionName);
+          } else {
+            LOGGER.info(("Already subscribed to " + subscriptionName));
+          }
+
+
+        }
+
+      }
+
+
+    } else {
+
+
+      for (PolygonStreamListener polyListener : listeners) {
+        for (Entry<String, Set<ChannelType>> entry : polyListener.getStockChannelTypes()
+            .entrySet()) {
+
+          if (toRemove.containsKey(entry.getKey())) {
+
+            for (ChannelType cType : entry.getValue()) {
+              toRemove.get(entry.getKey()).remove(cType);
+            }
+
+          }
+
+        }
+      }
+
+      for (Entry<String, Set<ChannelType>> entry : toRemove.entrySet()) {
+        for (ChannelType channel : entry.getValue()) {
+
+          if (currentSubscriptions.containsKey(entry.getKey())) {
+            currentSubscriptions.get(entry.getKey()).remove(channel);
+          }
+
+          String subscriptionName = channel.getAPIName() + "." + entry.getKey();
+          LOGGER.info(("Unsubscribing from " + subscriptionName));
+          polygonDispatcher.unsubscribe(subscriptionName);
+
+
+        }
+      }
+    }
+
+    LOGGER.info(("Subscriptions updated to " + currentSubscriptions));
 
   }
+
 
   /**
    * Connect.
    */
   private void connect() {
 
+    LOGGER.info("Connecting...");
 
     try {
       polygonConnection = Nats.connect(polygonOptions);
 
 
+      LOGGER.info("Connected.");
+
       polygonDispatcher = polygonConnection.createDispatcher((msg) -> {
-        String response = new String(msg.getData(), StandardCharsets.UTF_8);
 
-        if (LOGGER.isDebugEnabled()) {
-          LOGGER.debug("onMessage " + new String(response));
+        executor.execute(new Runnable() {
 
-        }
+          @Override
+          public void run() {
+            String response = new String(msg.getData(), StandardCharsets.UTF_8);
 
-        handleMessage(response);
+            if (LOGGER.isDebugEnabled()) {
+              LOGGER.debug("onMessage " + new String(response));
+
+            }
+
+            handleMessage(msg.getSubject(), response);
+          }
+        });
+
+
 
       });
 
@@ -139,17 +266,28 @@ public class PolygonNatsClient {
    */
   private void disconnect() {
 
+    LOGGER.info("Disconnecting...");
+
+
     if (polygonConnection != null) {
       try {
         polygonConnection.close();
       } catch (InterruptedException e) {
         e.printStackTrace();
       }
+
+      LOGGER.info("Disconnected.");
     }
 
 
   }
 
+  /**
+   * Gets the as json object.
+   *
+   * @param message the message
+   * @return the as json object
+   */
   public JsonObject getAsJsonObject(String message) {
     JsonElement jelement = new JsonParser().parse(new String(message));
     JsonObject jobject = jelement.getAsJsonObject();
@@ -158,37 +296,27 @@ public class PolygonNatsClient {
   }
 
 
-  public void handleMessage(String response) {
+  /**
+   * Handle message.
+   *
+   * @param subject the subject
+   * @param response the response
+   */
+  public void handleMessage(String subject, String response) {
 
-    // if (response.has("stream")) {
-    //
-    // String streamType = response.get("stream").getAsString();
-    //
-    // switch (streamType) {
-    // case "authorization":
-    // if (authorizedObject.equals(response)) {
-    // LOGGER.debug("Authorized by Alpaca " + response);
-    // submitStreamRequest();
-    // }
-    // break;
-    // case "listening":
-    // LOGGER.debug("Listening response " + response);
-    // break;
-    // case "trade_updates":
-    //
-    // sendStreamMessageToObservers(MessageType.ORDER_UPDATES, response);
-    //
-    // break;
-    // case "account_updates":
-    //
-    // sendStreamMessageToObservers(MessageType.ACCOUNT_UPDATES, response);
-    //
-    // break;
-    // }
-    //
-    // } else {
-    // LOGGER.error("Invalid message received " + response);
-    // }
+
+
+    String[] subjectSplit = subject.split("\\.");
+    String apiNameString = subjectSplit[0].trim();
+    String tickerString = subjectSplit[1].trim();
+
+    ChannelType cType = ChannelType.fromAPIName(apiNameString);
+
+
+    ChannelMessage cMessage = getMessageToObject(cType, tickerString, getAsJsonObject(response));
+
+    sendStreamMessageToObservers(tickerString, cType, cMessage);
+
 
 
   }
@@ -196,62 +324,61 @@ public class PolygonNatsClient {
   /**
    * Send stream message to observers.
    *
-   * @param messageType the message type
-   * @param message the message
+   * @param ticker the ticker
+   * @param channelType the channel type
+   * @param cMessage the c message
    */
-  private synchronized void sendStreamMessageToObservers(MessageType messageType,
-      JsonObject message) {
+  private synchronized void sendStreamMessageToObservers(String ticker, ChannelType channelType,
+      ChannelMessage cMessage) {
 
     for (PolygonStreamListener observer : listeners) {
 
-      // UpdateMessage messageObject = getMessageToObject(messageType, message);
-      //
-      // if (observer.getMessageTypes() == null || observer.getMessageTypes().isEmpty()
-      // || observer.getMessageTypes().contains(messageType)) {
-      // observer.streamUpdate(messageType, messageObject);
-      // }
+      boolean sendToObserver = false;
 
+      if (observer.getStockChannelTypes().containsKey(ticker)) {
+        if (observer.getStockChannelTypes().get(ticker).contains(channelType)) {
+          sendToObserver = true;
+        }
+      }
+
+      if (sendToObserver) {
+        observer.streamUpdate(ticker, channelType, cMessage);
+      }
 
     }
 
 
   }
 
+
+
   /**
    * Gets the message to object.
    *
-   * @param messageType the message type
-   * @param message the message
+   * @param cType the c type
+   * @param tickerString the ticker string
+   * @param asJsonObject the as json object
    * @return the message to object
    */
-  private UpdateMessage getMessageToObject(MessageType messageType, JsonObject message) {
+  private ChannelMessage getMessageToObject(ChannelType cType, String tickerString,
+      JsonObject asJsonObject) {
+    switch (cType) {
+      case QUOTES:
+        return new QuotesMessage(cType, tickerString, asJsonObject);
 
-    if (message.has("data")) {
-      JsonObject data = message.getAsJsonObject("data");
+      case TRADES:
+        return new TradesMessage(cType, tickerString, asJsonObject);
 
-      switch (messageType) {
-        case ACCOUNT_UPDATES:
-          AccountUpdateMessage accountUpdateMessage = new AccountUpdateMessage(data);
+      case AGGREGATE_PER_MINUTE:
+        return new AggregatePerMinuteMessage(cType, tickerString, asJsonObject);
 
-          return accountUpdateMessage;
-
-        case ORDER_UPDATES:
-          OrderUpdateMessage orderUpdateMessage = new OrderUpdateMessage(data);
-
-          return orderUpdateMessage;
-
-      }
+      case AGGREGATE_PER_SECOND:
+        return new AggregatePerSecondMessage(cType, tickerString, asJsonObject);
 
     }
     return null;
   }
 
-  /**
-   * Submit stream request.
-   */
-  private void submitStreamRequest() {
-
-  }
 
 
   /**

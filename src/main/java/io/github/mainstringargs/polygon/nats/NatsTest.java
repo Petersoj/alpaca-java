@@ -7,8 +7,16 @@ import io.nats.client.Dispatcher;
 import io.nats.client.Nats;
 import io.nats.client.Options;
 
+/**
+ * The Class NatsTest.
+ */
 public class NatsTest {
 
+  /**
+   * The main method.
+   *
+   * @param args the arguments
+   */
   public static void main(String[] args) {
 
     String ticker = "SNAP";

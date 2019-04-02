@@ -14,6 +14,13 @@ public class AccountUpdateMessage implements UpdateMessage {
   /** The account. */
   private Account account;
 
+  private static Gson gson;
+  static {
+    GsonBuilder gsonBuilder = new GsonBuilder();
+    gsonBuilder.setLenient();
+    gson = gsonBuilder.create();
+  }
+
   /**
    * Instantiates a new account update message.
    *
@@ -23,9 +30,6 @@ public class AccountUpdateMessage implements UpdateMessage {
 
     JsonObject jsonAccount = data.getAsJsonObject();
 
-    GsonBuilder gsonBuilder = new GsonBuilder();
-    gsonBuilder.setLenient();
-    Gson gson = gsonBuilder.create();
     account = gson.fromJson(jsonAccount, Account.class);
 
   }
@@ -84,7 +88,9 @@ public class AccountUpdateMessage implements UpdateMessage {
     return true;
   }
 
-  /* (non-Javadoc)
+  /*
+   * (non-Javadoc)
+   * 
    * @see io.github.mainstringargs.alpaca.websocket.message.UpdateMessage#getMessageType()
    */
   @Override
