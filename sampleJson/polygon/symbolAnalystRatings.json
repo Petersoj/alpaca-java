@@ -1,0 +1,46 @@
+{
+  "symbol": "AAPL",
+  "analysts": 27,
+  "change": -0.04,
+  "strongBuy": {
+    "current": 0,
+    "month1": 1,
+    "month2": 3,
+    "month3": 4,
+    "month4": 3,
+    "month5": 2
+  },
+  "buy": {
+    "current": 0,
+    "month1": 1,
+    "month2": 3,
+    "month3": 4,
+    "month4": 3,
+    "month5": 2
+  },
+  "hold": {
+    "current": 0,
+    "month1": 1,
+    "month2": 3,
+    "month3": 4,
+    "month4": 3,
+    "month5": 2
+  },
+  "sell": {
+    "current": 0,
+    "month1": 1,
+    "month2": 3,
+    "month3": 4,
+    "month4": 3,
+    "month5": 2
+  },
+  "strongSell": {
+    "current": 0,
+    "month1": 1,
+    "month2": 3,
+    "month3": 4,
+    "month4": 3,
+    "month5": 2
+  },
+  "updated": "11/10/2018"
+}
