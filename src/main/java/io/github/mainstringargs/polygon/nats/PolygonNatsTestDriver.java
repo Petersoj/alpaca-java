@@ -3,10 +3,9 @@ package io.github.mainstringargs.polygon.nats;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
-import io.github.mainstringargs.alpaca.properties.AlpacaProperties;
-import io.github.mainstringargs.polygon.PolygonAPI;
 import io.github.mainstringargs.polygon.enums.ChannelType;
 import io.github.mainstringargs.polygon.nats.message.ChannelMessage;
+import io.github.mainstringargs.polygon.properties.PolygonProperties;
 
 
 public class PolygonNatsTestDriver {
@@ -18,8 +17,8 @@ public class PolygonNatsTestDriver {
    */
   public static void main(String[] args) {
 
-    PolygonNatsClient client =
-        new PolygonNatsClient(AlpacaProperties.KEY_ID_VALUE, PolygonAPI.POLYGON_NATS_SERVERS);
+    PolygonNatsClient client = new PolygonNatsClient(PolygonProperties.KEY_ID_VALUE,
+        PolygonProperties.POLYGON_NATS_SERVERS_VALUE);
 
 
     PolygonStreamListener listener1 = new PolygonStreamListener() {

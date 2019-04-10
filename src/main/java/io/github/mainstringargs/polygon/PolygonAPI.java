@@ -3,9 +3,9 @@ package io.github.mainstringargs.polygon;
 import java.util.Arrays;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import io.github.mainstringargs.alpaca.properties.AlpacaProperties;
 import io.github.mainstringargs.polygon.nats.PolygonNatsClient;
 import io.github.mainstringargs.polygon.nats.PolygonStreamListener;
+import io.github.mainstringargs.polygon.properties.PolygonProperties;
 
 /**
  * The Class PolygonAPI.
@@ -18,16 +18,13 @@ public class PolygonAPI {
   /** The polygon nats client. */
   private final PolygonNatsClient polygonNatsClient;
 
-  /** The Constant POLYGON_NATS_SERVERS. */
-  public final static String[] POLYGON_NATS_SERVERS =
-      new String[] {"nats1.polygon.io:31101", "nats2.polygon.io:31102", "nats3.polygon.io:31103"};
 
   /**
    * Instantiates a new polygon API.
    */
   public PolygonAPI() {
 
-    this(AlpacaProperties.KEY_ID_VALUE);
+    this(PolygonProperties.KEY_ID_VALUE);
   }
 
   /**
@@ -36,7 +33,7 @@ public class PolygonAPI {
    * @param keyId the key id
    */
   public PolygonAPI(String keyId) {
-    this(AlpacaProperties.KEY_ID_VALUE, POLYGON_NATS_SERVERS);
+    this(PolygonProperties.KEY_ID_VALUE, PolygonProperties.POLYGON_NATS_SERVERS_VALUE);
 
   }
 
