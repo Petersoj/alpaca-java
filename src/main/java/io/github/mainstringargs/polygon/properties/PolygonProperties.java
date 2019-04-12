@@ -1,20 +1,21 @@
-package io.github.mainstringargs.alpaca.properties;
+package io.github.mainstringargs.polygon.properties;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
+import io.github.mainstringargs.alpaca.properties.AlpacaProperties;
 
 /**
  * The Class AlpacaProperties.
  */
-public class AlpacaProperties {
+public class PolygonProperties {
 
   /** The property file. */
   private static Properties propertyFile;
 
 
   static {
-    InputStream is = AlpacaProperties.class.getResourceAsStream("/alpaca.properties");
+    InputStream is = PolygonProperties.class.getResourceAsStream("/polygon.properties");
     propertyFile = new Properties();
     try {
       propertyFile.load(is);
@@ -27,15 +28,9 @@ public class AlpacaProperties {
   /** The Constant KEY_ID_KEY. */
   private static final String KEY_ID_KEY = "key_id";
 
-  /** The Constant SECRET_KEY. */
-  private static final String SECRET_KEY = "secret";
-
-  /** The Constant BASE_ACCOUNT_URL_KEY. */
-  private static final String BASE_ACCOUNT_URL_KEY = "base_url";
 
   /** The Constant BASE_DATA_URL_KEY. */
   private static final String BASE_DATA_URL_KEY = "base_data_url";
-
 
   /** The Constant USER_AGENT_KEY. */
   private static final String USER_AGENT_KEY = "user_agent";
@@ -45,28 +40,32 @@ public class AlpacaProperties {
   private static final String DEFAULT_USER_AGENT =
       "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/67.0.3396.87 Safari/537.36";
 
-  /** The Constant DEFAULT_ACCOUNT_URL. */
-  private static final String DEFAULT_ACCOUNT_URL = "https://paper-api.alpaca.markets";
-
   /** The Constant DEFAULT_DATA_URL. */
-  private static final String DEFAULT_DATA_URL = "https://data.alpaca.markets";
+  private static final String DEFAULT_DATA_URL = "https://api.polygon.io";
 
   /** The Constant INVALID_VALUE. */
   public static final String INVALID_VALUE = "INVALID";
 
   /** The Constant KEY_ID_VALUE. */
-  public static final String KEY_ID_VALUE = getProperty(KEY_ID_KEY, INVALID_VALUE);
-
-  /** The Constant SECRET_VALUE. */
-  public static final String SECRET_VALUE = getProperty(SECRET_KEY, INVALID_VALUE);
-
-  /** The Constant BASE_ACCOUNT_URL_VALUE. */
-  public static final String BASE_ACCOUNT_URL_VALUE =
-      getProperty(BASE_ACCOUNT_URL_KEY, DEFAULT_ACCOUNT_URL);
+  public static final String KEY_ID_VALUE = getProperty(KEY_ID_KEY, AlpacaProperties.KEY_ID_VALUE);
 
 
   /** The base data url value. */
   public static String BASE_DATA_URL_VALUE = getProperty(BASE_DATA_URL_KEY, DEFAULT_DATA_URL);
+
+
+  /** The polygon nats servers key. */
+  private static String POLYGON_NATS_SERVERS_KEY = "nats_urls";
+
+
+  /** The default polygon nats servers. */
+  private static String DEFAULT_POLYGON_NATS_SERVERS =
+      "nats1.polygon.io:31101,nats2.polygon.io:31102,nats3.polygon.io:31103";
+
+
+  /** The polygon nats servers value. */
+  public static String[] POLYGON_NATS_SERVERS_VALUE =
+      getProperty(POLYGON_NATS_SERVERS_KEY, DEFAULT_POLYGON_NATS_SERVERS).split(",");
 
   /** The Constant USER_AGENT_VALUE. */
   public static final String USER_AGENT_VALUE = getProperty(USER_AGENT_KEY, DEFAULT_USER_AGENT);

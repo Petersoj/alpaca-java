@@ -26,6 +26,13 @@ public class OrderUpdateMessage implements UpdateMessage {
   /** The order. */
   private Order order;
 
+  private static Gson gson;
+  static {
+    GsonBuilder gsonBuilder = new GsonBuilder();
+    gsonBuilder.setLenient();
+    gson = gsonBuilder.create();
+  }
+
   /**
    * Instantiates a new order update message.
    *
@@ -59,9 +66,6 @@ public class OrderUpdateMessage implements UpdateMessage {
     if (data.has("order")) {
       JsonObject jsonOrder = data.get("order").getAsJsonObject();
 
-      GsonBuilder gsonBuilder = new GsonBuilder();
-      gsonBuilder.setLenient();
-      Gson gson = gsonBuilder.create();
       order = gson.fromJson(jsonOrder, Order.class);
     }
   }
@@ -163,7 +167,9 @@ public class OrderUpdateMessage implements UpdateMessage {
     return order;
   }
 
-  /* (non-Javadoc)
+  /*
+   * (non-Javadoc)
+   * 
    * @see io.github.mainstringargs.alpaca.websocket.message.UpdateMessage#getMessageType()
    */
   @Override

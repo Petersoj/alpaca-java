@@ -37,4 +37,22 @@ public enum ChannelType {
   public String getAPIName() {
     return apiName;
   }
+
+  /**
+   * From API name.
+   *
+   * @param apiName the api name
+   * @return the channel type
+   */
+  public static ChannelType fromAPIName(String apiName) {
+    String apiNameString = apiName.trim();
+
+    for (ChannelType cType : ChannelType.values()) {
+      if (apiNameString.equals(cType.apiName)) {
+        return cType;
+      }
+    }
+
+    return null;
+  }
 }

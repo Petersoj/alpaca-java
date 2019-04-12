@@ -91,9 +91,9 @@ public class Example {
 
     // Request an Order
     try {
-      // Lets submit a limit order for when AMZN gets down to $100.0!
+      // Lets submit a limit order for when AMZN gets down to $10.0!
       limitOrder = alpacaApi.requestNewOrder("AMZN", 1, OrderSide.BUY, OrderType.LIMIT,
-          OrderTimeInForce.DAY, 100.0, null, orderClientId);
+          OrderTimeInForce.DAY, 10.0, null, orderClientId);
 
       System.out.println("\n\nLimit Order Response:");
 
