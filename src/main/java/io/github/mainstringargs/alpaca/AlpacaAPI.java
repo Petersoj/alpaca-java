@@ -66,6 +66,7 @@ public class AlpacaAPI {
   /** The logger. */
   private static Logger LOGGER = LogManager.getLogger(AlpacaAPI.class);
 
+  /** The alpaca web socket client. */
   private final AlpacaWebsocketClient alpacaWebSocketClient;
 
   /**

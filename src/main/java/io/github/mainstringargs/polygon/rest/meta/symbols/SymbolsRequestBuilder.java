@@ -1,15 +1,15 @@
 package io.github.mainstringargs.polygon.rest.meta.symbols;
 
-import io.github.mainstringargs.polygon.rest.meta.MetaRequestBuilder;
+import io.github.mainstringargs.polygon.rest.PolygonRequestBuilder;
 
 /**
  * The Class SymbolsRequestBuilder.
  */
-public abstract class SymbolsRequestBuilder extends MetaRequestBuilder {
+public abstract class SymbolsRequestBuilder extends PolygonRequestBuilder {
 
 
   /** The Constant SYMBOLS_ENDPOINT. */
-  public final static String SYMBOLS_ENDPOINT = "symbols";
+  public final static String SYMBOLS_ENDPOINT = "meta/symbols";
 
 
 

@@ -1,13 +1,24 @@
 [
-  {
-    "symbol": "AAPL",
-    "type": "Dividend income",
-    "exDate": "2016-11-03T04:00:00.000Z",
-    "paymentDate": "2016-11-03T04:00:00.000Z",
-    "recordDate": "2016-11-03T04:00:00.000Z",
-    "declaredDate": "2016-11-03T04:00:00.000Z",
-    "amount": 0.57,
-    "qualified": "Q",
-    "flag": "YE"
-  }
+	{
+		"symbol": "AAPL",
+		"type": "Dividend income",
+		"exDate": "2016-11-03T04:00:00.000Z",
+		"paymentDate": "2016-11-03T04:00:00.000Z",
+		"recordDate": "2016-11-03T04:00:00.000Z",
+		"declaredDate": "2016-11-03T04:00:00.000Z",
+		"amount": 0.57,
+		"qualified": "Q",
+		"flag": "YE"
+	},
+	{
+		"symbol": "AAPL",
+		"type": "Dividend income",
+		"exDate": "2016-11-03T04:00:00.000Z",
+		"paymentDate": "2016-11-03T04:00:00.000Z",
+		"recordDate": "2016-11-03T04:00:00.000Z",
+		"declaredDate": "2016-11-03T04:00:00.000Z",
+		"amount": 0.57,
+		"qualified": "Q",
+		"flag": "YE"
+	}
 ]

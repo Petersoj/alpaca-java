@@ -23,7 +23,7 @@ import io.github.mainstringargs.alpaca.websocket.message.UpdateMessage;
 /**
  * The Class Example.
  */
-public class Example {
+public class AlpacaExample {
 
 
   /**

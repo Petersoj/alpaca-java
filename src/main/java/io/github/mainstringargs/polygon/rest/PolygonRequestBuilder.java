@@ -14,7 +14,7 @@ public abstract class PolygonRequestBuilder {
 
 
   /** The Constant VERSION. */
-  private final static String VERSION = "v1";
+  private String VERSION = "v1";
 
   /** The Constant URL_SEPARATOR. */
   public final static String URL_SEPARATOR = "/";
