@@ -1,13 +1,12 @@
 package io.github.mainstringargs.polygon.nats;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
 import com.google.common.collect.Sets;
 import io.github.mainstringargs.polygon.enums.ChannelType;
 import io.github.mainstringargs.polygon.nats.message.ChannelMessage;
 import io.github.mainstringargs.polygon.properties.PolygonProperties;
-
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
 
 
 public class PolygonNatsTestDriver {
