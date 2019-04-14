@@ -13,8 +13,8 @@ import com.google.gson.JsonObject;
 public abstract class PolygonRequestBuilder {
 
 
-  /** The Constant VERSION. */
-  private String VERSION = "v1";
+  /** The version. */
+  private String version = "v1";
 
   /** The Constant URL_SEPARATOR. */
   public final static String URL_SEPARATOR = "/";
@@ -42,6 +42,17 @@ public abstract class PolygonRequestBuilder {
    */
   public PolygonRequestBuilder(String baseUrl) {
     this.baseUrl = baseUrl;
+
+  }
+
+
+  /**
+   * Sets the version.
+   *
+   * @param version the new version
+   */
+  public void setVersion(String version) {
+    this.version = version;
 
   }
 
@@ -128,7 +139,7 @@ public abstract class PolygonRequestBuilder {
 
     StringBuilder builder = new StringBuilder(baseUrl);
     builder.append(URL_SEPARATOR);
-    builder.append(VERSION);
+    builder.append(version);
 
     if (defaultEndpoint) {
       builder.append(URL_SEPARATOR);
