@@ -1,4 +1,4 @@
-package io.github.mainstringargs.polygon.rest.marksetStatus;
+package io.github.mainstringargs.polygon.rest.marketStatus;
 
 import io.github.mainstringargs.polygon.rest.PolygonRequestBuilder;
 
