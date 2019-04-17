@@ -11,8 +11,6 @@ public abstract class ReferenceRequestBuilder extends PolygonRequestBuilder {
   /** The Constant REFERENCE_ENDPOINT. */
   public final static String REFERENCE_ENDPOINT = "reference";
 
-
-
   /**
    * Instantiates a new symbols request builder.
    *
