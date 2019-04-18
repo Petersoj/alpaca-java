@@ -10,7 +10,7 @@ import java.util.concurrent.ThreadFactory;
  * The Class ScheduledThreadPoolExecutorTracer.
  */
 class ScheduledThreadPoolExecutorTracer extends ScheduledThreadPoolExecutor {
-  
+
   /**
    * Instantiates a new scheduled thread pool executor tracer.
    *
@@ -30,8 +30,11 @@ class ScheduledThreadPoolExecutorTracer extends ScheduledThreadPoolExecutor {
     super(corePoolSize);
   }
 
-  /* (non-Javadoc)
-   * @see java.util.concurrent.ThreadPoolExecutor#afterExecute(java.lang.Runnable, java.lang.Throwable)
+  /*
+   * (non-Javadoc)
+   * 
+   * @see java.util.concurrent.ThreadPoolExecutor#afterExecute(java.lang.Runnable,
+   * java.lang.Throwable)
    */
   @Override
   protected void afterExecute(final Runnable r, Throwable t) {

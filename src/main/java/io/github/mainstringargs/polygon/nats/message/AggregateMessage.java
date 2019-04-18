@@ -109,7 +109,9 @@ public class AggregateMessage implements ChannelMessage {
     return end;
   }
 
-  /* (non-Javadoc)
+  /*
+   * (non-Javadoc)
+   * 
    * @see java.lang.Object#hashCode()
    */
   @Override
@@ -124,7 +126,9 @@ public class AggregateMessage implements ChannelMessage {
     return result;
   }
 
-  /* (non-Javadoc)
+  /*
+   * (non-Javadoc)
+   * 
    * @see java.lang.Object#equals(java.lang.Object)
    */
   @Override
@@ -161,7 +165,9 @@ public class AggregateMessage implements ChannelMessage {
     return true;
   }
 
-  /* (non-Javadoc)
+  /*
+   * (non-Javadoc)
+   * 
    * @see java.lang.Object#toString()
    */
   @Override

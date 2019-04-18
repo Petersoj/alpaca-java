@@ -7,7 +7,7 @@ public enum OrderEvent {
 
   /** The new. */
   NEW("new"),
-  
+
   /** The fill. */
   FILL("fill"),
 
