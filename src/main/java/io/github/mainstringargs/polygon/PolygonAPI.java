@@ -21,6 +21,7 @@ import io.github.mainstringargs.polygon.properties.PolygonProperties;
 import io.github.mainstringargs.polygon.rest.PolygonRequest;
 import io.github.mainstringargs.polygon.rest.exceptions.PolygonAPIException;
 import io.github.mainstringargs.polygon.rest.meta.symbols.GetSymbolEndpointsRequestBuilder;
+import io.github.mainstringargs.polygon.rest.meta.symbols.GetSymbolNewsRequestBuilder;
 
 /**
  * The Class PolygonAPI.
@@ -242,7 +243,7 @@ public class PolygonAPI {
    */
   public List<SymbolNews> getSymbolNews(String symbol) throws PolygonAPIException {
 
-    GetSymbolEndpointsRequestBuilder urlBuilder = new GetSymbolEndpointsRequestBuilder(baseDataUrl);
+    GetSymbolNewsRequestBuilder urlBuilder = new GetSymbolNewsRequestBuilder(baseDataUrl);
 
     urlBuilder.symbol(symbol);
     urlBuilder.symbolEndpoint("news");
@@ -260,6 +261,31 @@ public class PolygonAPI {
 
     return symbolDetails;
   }
+
+  public List<SymbolNews> getSymbolNews(String symbol, int perpage, int page)
+      throws PolygonAPIException {
+
+    GetSymbolNewsRequestBuilder urlBuilder = new GetSymbolNewsRequestBuilder(baseDataUrl);
+
+    urlBuilder.symbol(symbol);
+    urlBuilder.symbolEndpoint("news");
+    urlBuilder.perpage(perpage);
+    urlBuilder.page(page);
+
+    HttpResponse<JsonNode> response = polygonRequest.invokeGet(urlBuilder);
+
+    if (response.getStatus() != 200) {
+      throw new PolygonAPIException(response);
+    }
+
+    Type listType = new TypeToken<List<SymbolNews>>() {}.getType();
+
+
+    List<SymbolNews> symbolDetails = polygonRequest.getResponseObject(response, listType);
+
+    return symbolDetails;
+  }
+
 
 
   /**
