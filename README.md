@@ -1,5 +1,7 @@
 # Overview
 
+[![Build Status](https://travis-ci.org/mainstringargs/alpaca-java.svg?branch=master)](https://travis-ci.org/mainstringargs/alpaca-java)
+
 This is a Java implementation for the Alpaca @ <a href="https://alpaca.markets/">https://alpaca.markets/</a> (See <a href="https://docs.alpaca.markets/api-documentation/web-api/">https://docs.alpaca.markets/api-documentation/web-api/</a> for general Alpaca API documentation).  Alpaca API lets you build and trade with real-time market data for free. 
 
 # Alpaca Java Building
