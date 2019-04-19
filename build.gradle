@@ -158,3 +158,5 @@ task generatePOJOs {
 compileJava {
     dependsOn generatePOJOs
 }
+
+buildScan { licenseAgreementUrl = 'https://gradle.com/terms-of-service'; licenseAgree = 'yes' }
