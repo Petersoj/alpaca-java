@@ -1,15 +1,15 @@
 package io.github.mainstringargs.polygon.enums;
 
 /**
- * The Enum SymbolsLocale.
+ * The Enum SymbolsType.
  */
-public enum SymbolsLocale {
+public enum Type {
 
-  /** The us. */
-  US("us"),
+  /** The etfs. */
+  ETFS("etp"),
 
-  /** The global. */
-  GLOBAL("g");
+  /** The common stocks. */
+  COMMON_STOCKS("cs");
 
   /** The api name. */
   String apiName;
@@ -19,7 +19,7 @@ public enum SymbolsLocale {
    *
    * @param apiName the api name
    */
-  SymbolsLocale(String apiName) {
+  Type(String apiName) {
     this.apiName = apiName;
   }
 
@@ -38,10 +38,10 @@ public enum SymbolsLocale {
    * @param apiName the api name
    * @return the channel type
    */
-  public static SymbolsLocale fromAPIName(String apiName) {
+  public static Type fromAPIName(String apiName) {
     String apiNameString = apiName.trim();
 
-    for (SymbolsLocale cType : SymbolsLocale.values()) {
+    for (Type cType : Type.values()) {
       if (apiNameString.equals(cType.apiName)) {
         return cType;
       }

@@ -1,15 +1,15 @@
 package io.github.mainstringargs.polygon.enums;
 
 /**
- * The Enum SymbolsType.
+ * The Enum SymbolsSort.
  */
-public enum SymbolsType {
+public enum Sort {
 
-  /** The etfs. */
-  ETFS("etp"),
+  /** The ticker. */
+  TICKER("ticker"),
 
-  /** The common stocks. */
-  COMMON_STOCKS("cs");
+  /** The type. */
+  TYPE("type");
 
   /** The api name. */
   String apiName;
@@ -19,7 +19,7 @@ public enum SymbolsType {
    *
    * @param apiName the api name
    */
-  SymbolsType(String apiName) {
+  Sort(String apiName) {
     this.apiName = apiName;
   }
 
@@ -38,10 +38,10 @@ public enum SymbolsType {
    * @param apiName the api name
    * @return the channel type
    */
-  public static SymbolsType fromAPIName(String apiName) {
+  public static Sort fromAPIName(String apiName) {
     String apiNameString = apiName.trim();
 
-    for (SymbolsType cType : SymbolsType.values()) {
+    for (Sort cType : Sort.values()) {
       if (apiNameString.equals(cType.apiName)) {
         return cType;
       }
