@@ -20,6 +20,7 @@ public abstract class MarketStatusRequestBuilder extends PolygonRequestBuilder {
    */
   public MarketStatusRequestBuilder(String baseUrl) {
     super(baseUrl);
+    super.setVersion("v1");
   }
 
   /*
