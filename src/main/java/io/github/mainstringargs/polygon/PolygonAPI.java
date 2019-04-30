@@ -19,9 +19,8 @@ import io.github.mainstringargs.polygon.nats.PolygonNatsClient;
 import io.github.mainstringargs.polygon.nats.PolygonStreamListener;
 import io.github.mainstringargs.polygon.properties.PolygonProperties;
 import io.github.mainstringargs.polygon.rest.PolygonRequest;
+import io.github.mainstringargs.polygon.rest.PolygonRequestBuilder;
 import io.github.mainstringargs.polygon.rest.exceptions.PolygonAPIException;
-import io.github.mainstringargs.polygon.rest.meta.symbols.GetSymbolEndpointsRequestBuilder;
-import io.github.mainstringargs.polygon.rest.meta.symbols.GetSymbolNewsRequestBuilder;
 
 /**
  * The Class PolygonAPI.
@@ -85,11 +84,11 @@ public class PolygonAPI {
    */
   public SymbolEndpoints getSymbolEndpoints(String symbol) throws PolygonAPIException {
 
-    GetSymbolEndpointsRequestBuilder urlBuilder = new GetSymbolEndpointsRequestBuilder(baseDataUrl);
+    PolygonRequestBuilder builder = new PolygonRequestBuilder(baseDataUrl, "meta/symbols");
 
-    urlBuilder.symbol(symbol);
+    builder.appendEndpoint(symbol);
 
-    HttpResponse<JsonNode> response = polygonRequest.invokeGet(urlBuilder);
+    HttpResponse<JsonNode> response = polygonRequest.invokeGet(builder);
 
     if (response.getStatus() != 200) {
       throw new PolygonAPIException(response);
@@ -110,12 +109,13 @@ public class PolygonAPI {
    */
   public SymbolDetails getSymbolDetails(String symbol) throws PolygonAPIException {
 
-    GetSymbolEndpointsRequestBuilder urlBuilder = new GetSymbolEndpointsRequestBuilder(baseDataUrl);
+    PolygonRequestBuilder builder = new PolygonRequestBuilder(baseDataUrl, "meta/symbols");
 
-    urlBuilder.symbol(symbol);
-    urlBuilder.symbolEndpoint("company");
+    builder.appendEndpoint(symbol);
+    builder.appendEndpoint("company");
 
-    HttpResponse<JsonNode> response = polygonRequest.invokeGet(urlBuilder);
+    HttpResponse<JsonNode> response = polygonRequest.invokeGet(builder);
+
 
     if (response.getStatus() != 200) {
       throw new PolygonAPIException(response);
@@ -135,12 +135,14 @@ public class PolygonAPI {
    */
   public SymbolAnalystRatings getSymbolAnalystRatings(String symbol) throws PolygonAPIException {
 
-    GetSymbolEndpointsRequestBuilder urlBuilder = new GetSymbolEndpointsRequestBuilder(baseDataUrl);
 
-    urlBuilder.symbol(symbol);
-    urlBuilder.symbolEndpoint("analysts");
+    PolygonRequestBuilder builder = new PolygonRequestBuilder(baseDataUrl, "meta/symbols");
 
-    HttpResponse<JsonNode> response = polygonRequest.invokeGet(urlBuilder);
+    builder.appendEndpoint(symbol);
+    builder.appendEndpoint("analysts");
+
+
+    HttpResponse<JsonNode> response = polygonRequest.invokeGet(builder);
 
     if (response.getStatus() != 200) {
       throw new PolygonAPIException(response);
@@ -161,12 +163,13 @@ public class PolygonAPI {
    */
   public List<SymbolDividend> getSymbolDividends(String symbol) throws PolygonAPIException {
 
-    GetSymbolEndpointsRequestBuilder urlBuilder = new GetSymbolEndpointsRequestBuilder(baseDataUrl);
+    PolygonRequestBuilder builder = new PolygonRequestBuilder(baseDataUrl, "meta/symbols");
 
-    urlBuilder.symbol(symbol);
-    urlBuilder.symbolEndpoint("dividends");
+    builder.appendEndpoint(symbol);
+    builder.appendEndpoint("dividends");
 
-    HttpResponse<JsonNode> response = polygonRequest.invokeGet(urlBuilder);
+
+    HttpResponse<JsonNode> response = polygonRequest.invokeGet(builder);
 
     if (response.getStatus() != 200) {
       throw new PolygonAPIException(response);
@@ -188,12 +191,14 @@ public class PolygonAPI {
    */
   public List<SymbolEarning> getSymbolEarnings(String symbol) throws PolygonAPIException {
 
-    GetSymbolEndpointsRequestBuilder urlBuilder = new GetSymbolEndpointsRequestBuilder(baseDataUrl);
 
-    urlBuilder.symbol(symbol);
-    urlBuilder.symbolEndpoint("earnings");
+    PolygonRequestBuilder builder = new PolygonRequestBuilder(baseDataUrl, "meta/symbols");
 
-    HttpResponse<JsonNode> response = polygonRequest.invokeGet(urlBuilder);
+    builder.appendEndpoint(symbol);
+    builder.appendEndpoint("earnings");
+
+
+    HttpResponse<JsonNode> response = polygonRequest.invokeGet(builder);
 
     if (response.getStatus() != 200) {
       throw new PolygonAPIException(response);
@@ -216,12 +221,14 @@ public class PolygonAPI {
    */
   public List<SymbolFinancial> getSymbolFinancials(String symbol) throws PolygonAPIException {
 
-    GetSymbolEndpointsRequestBuilder urlBuilder = new GetSymbolEndpointsRequestBuilder(baseDataUrl);
 
-    urlBuilder.symbol(symbol);
-    urlBuilder.symbolEndpoint("financials");
+    PolygonRequestBuilder builder = new PolygonRequestBuilder(baseDataUrl, "meta/symbols");
 
-    HttpResponse<JsonNode> response = polygonRequest.invokeGet(urlBuilder);
+    builder.appendEndpoint(symbol);
+    builder.appendEndpoint("financials");
+
+
+    HttpResponse<JsonNode> response = polygonRequest.invokeGet(builder);
 
     if (response.getStatus() != 200) {
       throw new PolygonAPIException(response);
@@ -243,12 +250,14 @@ public class PolygonAPI {
    */
   public List<SymbolNews> getSymbolNews(String symbol) throws PolygonAPIException {
 
-    GetSymbolNewsRequestBuilder urlBuilder = new GetSymbolNewsRequestBuilder(baseDataUrl);
 
-    urlBuilder.symbol(symbol);
-    urlBuilder.symbolEndpoint("news");
+    PolygonRequestBuilder builder = new PolygonRequestBuilder(baseDataUrl, "meta/symbols");
 
-    HttpResponse<JsonNode> response = polygonRequest.invokeGet(urlBuilder);
+    builder.appendEndpoint(symbol);
+    builder.appendEndpoint("news");
+
+
+    HttpResponse<JsonNode> response = polygonRequest.invokeGet(builder);
 
     if (response.getStatus() != 200) {
       throw new PolygonAPIException(response);
@@ -265,14 +274,14 @@ public class PolygonAPI {
   public List<SymbolNews> getSymbolNews(String symbol, int perpage, int page)
       throws PolygonAPIException {
 
-    GetSymbolNewsRequestBuilder urlBuilder = new GetSymbolNewsRequestBuilder(baseDataUrl);
+    PolygonRequestBuilder builder = new PolygonRequestBuilder(baseDataUrl, "meta/symbols");
 
-    urlBuilder.symbol(symbol);
-    urlBuilder.symbolEndpoint("news");
-    urlBuilder.perpage(perpage);
-    urlBuilder.page(page);
+    builder.appendEndpoint(symbol);
+    builder.appendEndpoint("news");
+    builder.appendURLParameter("perpage", perpage + "");
+    builder.appendURLParameter("page", page + "");
 
-    HttpResponse<JsonNode> response = polygonRequest.invokeGet(urlBuilder);
+    HttpResponse<JsonNode> response = polygonRequest.invokeGet(builder);
 
     if (response.getStatus() != 200) {
       throw new PolygonAPIException(response);

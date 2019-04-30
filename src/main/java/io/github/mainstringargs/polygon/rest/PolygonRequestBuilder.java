@@ -10,7 +10,7 @@ import com.google.gson.JsonObject;
 /**
  * The Class PolygonRequestBuilder.
  */
-public abstract class PolygonRequestBuilder {
+public class PolygonRequestBuilder {
 
 
   /** The version. */
@@ -34,6 +34,9 @@ public abstract class PolygonRequestBuilder {
   /** The default endpoint. */
   private boolean defaultEndpoint = true;
 
+  /** The endpoint. */
+  private String endpoint;
+
 
   /**
    * Instantiates a new polygon request builder.
@@ -42,6 +45,18 @@ public abstract class PolygonRequestBuilder {
    */
   public PolygonRequestBuilder(String baseUrl) {
     this.baseUrl = baseUrl;
+
+  }
+  
+  /**
+   * Instantiates a new polygon request builder.
+   *
+   * @param baseUrl the base url
+   * @param endpoint the endpoint
+   */
+  public PolygonRequestBuilder(String baseUrl, String endpoint) {
+    this.baseUrl = baseUrl;
+    this.endpoint = endpoint;
 
   }
 
@@ -128,7 +143,9 @@ public abstract class PolygonRequestBuilder {
    *
    * @return the endpoint
    */
-  public abstract String getEndpoint();
+  public String getEndpoint() {
+    return endpoint;
+  }
 
   /**
    * Gets the url.
