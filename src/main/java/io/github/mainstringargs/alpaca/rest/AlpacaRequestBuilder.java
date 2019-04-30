@@ -10,7 +10,7 @@ import com.google.gson.JsonObject;
 /**
  * The Class AlpacaRequestBuilder.
  */
-public abstract class AlpacaRequestBuilder {
+public class AlpacaRequestBuilder {
 
 
   /** The Constant VERSION. */
@@ -34,6 +34,9 @@ public abstract class AlpacaRequestBuilder {
   /** The default endpoint. */
   private boolean defaultEndpoint = true;
 
+  /** The endpoint. */
+  private String endpoint;
+
 
   /**
    * Instantiates a new alpaca request builder.
@@ -46,13 +49,27 @@ public abstract class AlpacaRequestBuilder {
   }
 
   /**
+   * Instantiates a new alpaca request builder.
+   *
+   * @param baseUrl the base url
+   * @param endpoint the endpoint
+   */
+  public AlpacaRequestBuilder(String baseUrl, String endpoint) {
+    this.baseUrl = baseUrl;
+    this.endpoint = endpoint;
+
+  }
+
+  /**
    * Append URL parameter.
    *
    * @param parameterKey the parameter key
    * @param parameterValue the parameter value
    */
   public void appendURLParameter(String parameterKey, String parameterValue) {
-    urlParameters.put(parameterKey, parameterValue);
+    if (parameterValue != null) {
+      urlParameters.put(parameterKey, parameterValue);
+    }
   }
 
   /**
@@ -62,8 +79,9 @@ public abstract class AlpacaRequestBuilder {
    * @param parameterValue the parameter value
    */
   public void appendBodyProperty(String parameterKey, String parameterValue) {
-
-    bodyProperties.put(parameterKey, parameterValue);
+    if (parameterValue != null) {
+      bodyProperties.put(parameterKey, parameterValue);
+    }
   }
 
   /**
@@ -107,7 +125,9 @@ public abstract class AlpacaRequestBuilder {
    * @param endpoint the endpoint
    */
   public void appendEndpoint(String endpoint) {
-    appendedEndpoints.add(endpoint);
+    if (endpoint != null) {
+      appendedEndpoints.add(endpoint);
+    }
 
   }
 
@@ -117,7 +137,9 @@ public abstract class AlpacaRequestBuilder {
    *
    * @return the endpoint
    */
-  public abstract String getEndpoint();
+  public String getEndpoint() {
+    return endpoint;
+  }
 
   /**
    * Gets the url.
