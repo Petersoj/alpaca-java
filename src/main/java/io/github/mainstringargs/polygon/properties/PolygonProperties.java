@@ -35,7 +35,6 @@ public class PolygonProperties {
   /** The Constant USER_AGENT_KEY. */
   private static final String USER_AGENT_KEY = "user_agent";
 
-
   /** The Constant DEFAULT_USER_AGENT. */
   private static final String DEFAULT_USER_AGENT =
       "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/67.0.3396.87 Safari/537.36";
@@ -49,19 +48,15 @@ public class PolygonProperties {
   /** The Constant KEY_ID_VALUE. */
   public static final String KEY_ID_VALUE = getProperty(KEY_ID_KEY, AlpacaProperties.KEY_ID_VALUE);
 
-
   /** The base data url value. */
   public static String BASE_DATA_URL_VALUE = getProperty(BASE_DATA_URL_KEY, DEFAULT_DATA_URL);
-
 
   /** The polygon nats servers key. */
   private static String POLYGON_NATS_SERVERS_KEY = "nats_urls";
 
-
   /** The default polygon nats servers. */
   private static String DEFAULT_POLYGON_NATS_SERVERS =
       "nats1.polygon.io:31101,nats2.polygon.io:31102,nats3.polygon.io:31103";
-
 
   /** The polygon nats servers value. */
   public static String[] POLYGON_NATS_SERVERS_VALUE =
