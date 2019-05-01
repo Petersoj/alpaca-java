@@ -15,6 +15,10 @@ import io.github.mainstringargs.polygon.domain.SymbolEarning;
 import io.github.mainstringargs.polygon.domain.SymbolEndpoints;
 import io.github.mainstringargs.polygon.domain.SymbolFinancial;
 import io.github.mainstringargs.polygon.domain.SymbolNews;
+import io.github.mainstringargs.polygon.domain.Ticker;
+import io.github.mainstringargs.polygon.enums.Locale;
+import io.github.mainstringargs.polygon.enums.Market;
+import io.github.mainstringargs.polygon.enums.Sort;
 import io.github.mainstringargs.polygon.nats.PolygonNatsClient;
 import io.github.mainstringargs.polygon.nats.PolygonStreamListener;
 import io.github.mainstringargs.polygon.properties.PolygonProperties;
@@ -271,6 +275,15 @@ public class PolygonAPI {
     return symbolDetails;
   }
 
+  /**
+   * Gets the symbol news.
+   *
+   * @param symbol the symbol
+   * @param perpage the perpage
+   * @param page the page
+   * @return the symbol news
+   * @throws PolygonAPIException the polygon API exception
+   */
   public List<SymbolNews> getSymbolNews(String symbol, int perpage, int page)
       throws PolygonAPIException {
 
@@ -291,6 +304,67 @@ public class PolygonAPI {
 
 
     List<SymbolNews> symbolDetails = polygonRequest.getResponseObject(response, listType);
+
+    return symbolDetails;
+  }
+
+  /**
+   * Gets the tickers.
+   *
+   * @param sort the sort
+   * @param type the type
+   * @param market the market
+   * @param locale the locale
+   * @param search the search
+   * @param perpage the perpage
+   * @param page the page
+   * @param active the active
+   * @return the tickers
+   * @throws PolygonAPIException the polygon API exception
+   */
+  public List<Ticker> getTickers(Sort sort, io.github.mainstringargs.polygon.enums.Type type,
+      Market market, Locale locale, String search, int perpage, int page, boolean active)
+      throws PolygonAPIException {
+
+    PolygonRequestBuilder builder = new PolygonRequestBuilder(baseDataUrl, "reference/tickers");
+
+    builder.setVersion("v2");
+
+    if (sort != null) {
+      builder.appendURLParameter("sort", sort.getAPIName());
+    }
+
+    if (type != null) {
+      builder.appendURLParameter("type", type.getAPIName());
+    }
+
+    if (market != null) {
+      builder.appendURLParameter("market", market.getAPIName());
+    }
+
+    if (locale != null) {
+      builder.appendURLParameter("locale", locale.getAPIName());
+    }
+
+    if (search != null) {
+      builder.appendURLParameter("search", search);
+    }
+
+    builder.appendURLParameter("perpage", perpage + "");
+
+    builder.appendURLParameter("page", page + "");
+
+    builder.appendURLParameter("active", active + "");
+
+    HttpResponse<JsonNode> response = polygonRequest.invokeGet(builder);
+
+    if (response.getStatus() != 200) {
+      throw new PolygonAPIException(response);
+    }
+
+    Type listType = new TypeToken<List<Ticker>>() {}.getType();
+
+    List<Ticker> symbolDetails = polygonRequest.getResponseObject(response, listType);
 
     return symbolDetails;
   }
