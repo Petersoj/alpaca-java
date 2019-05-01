@@ -125,15 +125,15 @@ public class AlpacaAPI {
 
   /**
    * Gets the account.
-   * 
-   * @see <a href=
-   *      "https://docs.alpaca.markets/api-documentation/web-api/account/#get-the-account">https://docs.alpaca.markets/api-documentation/web-api/account/#get-the-account</a>
    *
    * @return the account
    * @throws AlpacaAPIException the alpaca API exception
+   * @see <a href=
+   *      "https://docs.alpaca.markets/api-documentation/web-api/account/#get-the-account">https://docs.alpaca.markets/api-documentation/web-api/account/#get-the-account</a>
    */
   public Account getAccount() throws AlpacaAPIException {
-    AlpacaRequestBuilder urlBuilder = new AlpacaRequestBuilder(baseAccountUrl, "account");
+    AlpacaRequestBuilder urlBuilder =
+        new AlpacaRequestBuilder(baseAccountUrl, AlpacaConstants.ACCOUNT_ENDPOINT);
 
     HttpResponse<JsonNode> response = alpacaRequest.invokeGet(urlBuilder);
 
@@ -148,20 +148,20 @@ public class AlpacaAPI {
 
 
   /**
-   * Gets the orders using the following API defaults:
-   * 
-   * @see <a href=
-   *      "https://docs.alpaca.markets/api-documentation/web-api/orders/#get-a-list-of-orders">https://docs.alpaca.markets/api-documentation/web-api/orders/#get-a-list-of-orders</a>
-   *
-   *      Status: Open Limit: 50 Direction: Descending
+   * Gets the orders using the following API defaults:.
    *
    * @return the orders
    * @throws AlpacaAPIException the alpaca API exception
+   * @see <a href=
+   *      "https://docs.alpaca.markets/api-documentation/web-api/orders/#get-a-list-of-orders">https://docs.alpaca.markets/api-documentation/web-api/orders/#get-a-list-of-orders</a>
+   * 
+   *      Status: Open Limit: 50 Direction: Descending
    */
   public List<Order> getOrders() throws AlpacaAPIException {
     Type listType = new TypeToken<List<Order>>() {}.getType();
 
-    AlpacaRequestBuilder urlBuilder = new AlpacaRequestBuilder(baseAccountUrl, "orders");
+    AlpacaRequestBuilder urlBuilder =
+        new AlpacaRequestBuilder(baseAccountUrl, AlpacaConstants.ORDERS_ENDPOINT);
 
     HttpResponse<JsonNode> response = alpacaRequest.invokeGet(urlBuilder);
 
@@ -177,9 +177,6 @@ public class AlpacaAPI {
 
   /**
    * Gets the orders.
-   * 
-   * @see <a href=
-   *      "https://docs.alpaca.markets/api-documentation/web-api/orders/#get-a-list-of-orders">https://docs.alpaca.markets/api-documentation/web-api/orders/#get-a-list-of-orders</a>
    *
    * @param status the status (Open if null)
    * @param limit the limit (50 if null)
@@ -188,31 +185,37 @@ public class AlpacaAPI {
    * @param direction the direction (Descending if null)
    * @return the orders
    * @throws AlpacaAPIException the alpaca API exception
+   * @see <a href=
+   *      "https://docs.alpaca.markets/api-documentation/web-api/orders/#get-a-list-of-orders">https://docs.alpaca.markets/api-documentation/web-api/orders/#get-a-list-of-orders</a>
    */
   public List<Order> getOrders(OrderStatus status, Integer limit, LocalDateTime after,
       LocalDateTime until, Direction direction) throws AlpacaAPIException {
     Type listType = new TypeToken<List<Order>>() {}.getType();
 
-    AlpacaRequestBuilder urlBuilder = new AlpacaRequestBuilder(baseAccountUrl, "orders");
+    AlpacaRequestBuilder urlBuilder =
+        new AlpacaRequestBuilder(baseAccountUrl, AlpacaConstants.ORDERS_ENDPOINT);
 
     if (status != null) {
-      urlBuilder.appendURLParameter("status", status.getAPIName());
+      urlBuilder.appendURLParameter(AlpacaConstants.STATUS_URL_PARAMETER, status.getAPIName());
     }
 
     if (limit != null) {
-      urlBuilder.appendURLParameter("limit", limit.toString());
+      urlBuilder.appendURLParameter(AlpacaConstants.LIMIT_URL_PARAMETER, limit.toString());
     }
 
     if (after != null) {
-      urlBuilder.appendURLParameter("after", Utilities.toDateTimeString(after));
+      urlBuilder.appendURLParameter(AlpacaConstants.AFTER_URL_PARAMETER,
+          Utilities.toDateTimeString(after));
     }
 
     if (until != null) {
-      urlBuilder.appendURLParameter("until", Utilities.toDateTimeString(until));
+      urlBuilder.appendURLParameter(AlpacaConstants.UNTIL_URL_PARAMETER,
+          Utilities.toDateTimeString(until));
     }
 
     if (direction != null) {
-      urlBuilder.appendURLParameter("direction", direction.getAPIName());
+      urlBuilder.appendURLParameter(AlpacaConstants.DIRECTION_URL_PARAMETER,
+          direction.getAPIName());
     }
 
     HttpResponse<JsonNode> response = alpacaRequest.invokeGet(urlBuilder);
@@ -229,9 +232,6 @@ public class AlpacaAPI {
 
   /**
    * Request/Submits new order.
-   * 
-   * @see <a href=
-   *      "https://docs.alpaca.markets/api-documentation/web-api/orders/#request-a-new-order">https://docs.alpaca.markets/api-documentation/web-api/orders/#request-a-new-order</a>
    *
    * @param symbol the symbol or asset_id (required)
    * @param quantity the quantity (required)
@@ -243,6 +243,8 @@ public class AlpacaAPI {
    * @param clientOrderId the client order id (optional)
    * @return the order
    * @throws AlpacaAPIException the alpaca API exception
+   * @see <a href=
+   *      "https://docs.alpaca.markets/api-documentation/web-api/orders/#request-a-new-order">https://docs.alpaca.markets/api-documentation/web-api/orders/#request-a-new-order</a>
    */
   public Order requestNewOrder(String symbol, Integer quantity, OrderSide side, OrderType type,
       OrderTimeInForce timeInForce, Double limitPrice, Double stopPrice, String clientOrderId)
@@ -250,38 +252,42 @@ public class AlpacaAPI {
 
     Type objectType = new TypeToken<Order>() {}.getType();
 
-    AlpacaRequestBuilder urlBuilder = new AlpacaRequestBuilder(baseAccountUrl, "orders");
+    AlpacaRequestBuilder urlBuilder =
+        new AlpacaRequestBuilder(baseAccountUrl, AlpacaConstants.ORDERS_ENDPOINT);
 
     if (symbol != null) {
-      urlBuilder.appendBodyProperty("symbol", symbol);
+      urlBuilder.appendBodyProperty(AlpacaConstants.SYMBOL_URL_PARAMETER, symbol);
     }
 
     if (quantity != null) {
-      urlBuilder.appendBodyProperty("qty", quantity.toString());
+      urlBuilder.appendBodyProperty(AlpacaConstants.QTY_URL_PARAMETER, quantity.toString());
     }
 
     if (side != null) {
-      urlBuilder.appendBodyProperty("side", side.getAPIName());
+      urlBuilder.appendBodyProperty(AlpacaConstants.SIDE_URL_PARAMETER, side.getAPIName());
     }
 
     if (type != null) {
-      urlBuilder.appendBodyProperty("type", type.getAPIName());
+      urlBuilder.appendBodyProperty(AlpacaConstants.TYPE_URL_PARAMETER, type.getAPIName());
     }
 
     if (timeInForce != null) {
-      urlBuilder.appendBodyProperty("time_in_force", timeInForce.getAPIName());
+      urlBuilder.appendBodyProperty(AlpacaConstants.TIME_IN_FORCE_URL_PARAMETER,
+          timeInForce.getAPIName());
     }
 
     if (limitPrice != null) {
-      urlBuilder.appendBodyProperty("limit_price", Utilities.toDecimalFormat(limitPrice));
+      urlBuilder.appendBodyProperty(AlpacaConstants.LIMIT_PRICE_URL_PARAMETER,
+          Utilities.toDecimalFormat(limitPrice));
     }
 
     if (stopPrice != null) {
-      urlBuilder.appendBodyProperty("stop_price", Utilities.toDecimalFormat(stopPrice));
+      urlBuilder.appendBodyProperty(AlpacaConstants.STOP_PRICE_URL_PARAMETER,
+          Utilities.toDecimalFormat(stopPrice));
     }
 
     if (clientOrderId != null) {
-      urlBuilder.appendBodyProperty("client_order_id", clientOrderId);
+      urlBuilder.appendBodyProperty(AlpacaConstants.CLIENT_ORDER_ID_URL_PARAMETER, clientOrderId);
     }
 
     HttpResponse<JsonNode> response = alpacaRequest.invokePost(urlBuilder);
@@ -298,19 +304,19 @@ public class AlpacaAPI {
 
   /**
    * Gets the order.
-   * 
-   * @see <a href=
-   *      "https://docs.alpaca.markets/api-documentation/web-api/orders/#get-an-order">https://docs.alpaca.markets/api-documentation/web-api/orders/#get-an-order</a>
    *
    * @param orderId the order id (required)
    * @return the order
    * @throws AlpacaAPIException the alpaca API exception
+   * @see <a href=
+   *      "https://docs.alpaca.markets/api-documentation/web-api/orders/#get-an-order">https://docs.alpaca.markets/api-documentation/web-api/orders/#get-an-order</a>
    */
   public Order getOrder(String orderId) throws AlpacaAPIException {
     Type objectType = new TypeToken<Order>() {}.getType();
 
 
-    AlpacaRequestBuilder urlBuilder = new AlpacaRequestBuilder(baseAccountUrl, "orders");
+    AlpacaRequestBuilder urlBuilder =
+        new AlpacaRequestBuilder(baseAccountUrl, AlpacaConstants.ORDERS_ENDPOINT);
 
     if (orderId != null) {
       urlBuilder.appendEndpoint(orderId);
@@ -330,29 +336,28 @@ public class AlpacaAPI {
 
   /**
    * Gets the order by client id.
-   * 
-   * @see <a href=
-   *      "https://docs.alpaca.markets/api-documentation/web-api/orders/#get-an-order-by-client-order-id">https://docs.alpaca.markets/api-documentation/web-api/orders/#get-an-order-by-client-order-id</a>
    *
    * @param clientOrderId the client order id (required)
    * @return the order by client id
    * @throws AlpacaAPIException the alpaca API exception
+   * @see <a href=
+   *      "https://docs.alpaca.markets/api-documentation/web-api/orders/#get-an-order-by-client-order-id">https://docs.alpaca.markets/api-documentation/web-api/orders/#get-an-order-by-client-order-id</a>
    */
   public Order getOrderByClientId(String clientOrderId) throws AlpacaAPIException {
     Type objectType = new TypeToken<Order>() {}.getType();
 
-    AlpacaRequestBuilder urlBuilder =
-        new AlpacaRequestBuilder(baseAccountUrl, "orders:by_client_order_id");
+    AlpacaRequestBuilder urlBuilder = new AlpacaRequestBuilder(baseAccountUrl,
+        AlpacaConstants.ORDERS_BY_CLIENT_ORDER_ID_ENDPOINT);
 
     if (clientOrderId != null) {
 
       try {
-        clientOrderId = URLEncoder.encode(clientOrderId, "UTF-8");
+        clientOrderId = URLEncoder.encode(clientOrderId, AlpacaConstants.UTF_ENCODING);
       } catch (UnsupportedEncodingException e) {
         e.printStackTrace();
       }
 
-      urlBuilder.appendURLParameter("client_order_id", clientOrderId);
+      urlBuilder.appendURLParameter(AlpacaConstants.CLIENT_ORDER_ID_URL_PARAMETER, clientOrderId);
     }
 
     HttpResponse<JsonNode> response = alpacaRequest.invokeGet(urlBuilder);
@@ -369,17 +374,17 @@ public class AlpacaAPI {
 
   /**
    * Cancel order.
-   * 
-   * @see <a href=
-   *      "https://docs.alpaca.markets/api-documentation/web-api/orders/#cancel-an-order">https://docs.alpaca.markets/api-documentation/web-api/orders/#cancel-an-order</a>
    *
    * @param orderId the order id (required)
    * @return true, if successful
    * @throws AlpacaAPIException the alpaca API exception
+   * @see <a href=
+   *      "https://docs.alpaca.markets/api-documentation/web-api/orders/#cancel-an-order">https://docs.alpaca.markets/api-documentation/web-api/orders/#cancel-an-order</a>
    */
   public boolean cancelOrder(String orderId) throws AlpacaAPIException {
 
-    AlpacaRequestBuilder urlBuilder = new AlpacaRequestBuilder(baseAccountUrl, "orders");
+    AlpacaRequestBuilder urlBuilder =
+        new AlpacaRequestBuilder(baseAccountUrl, AlpacaConstants.ORDERS_ENDPOINT);
 
     if (orderId != null) {
       urlBuilder.appendEndpoint(orderId);
@@ -397,17 +402,17 @@ public class AlpacaAPI {
 
   /**
    * Gets the open positions.
-   * 
-   * @see <a href=
-   *      "https://docs.alpaca.markets/api-documentation/web-api/positions/#get-open-positions">https://docs.alpaca.markets/api-documentation/web-api/positions/#get-open-positions</a>
    *
    * @return the open positions
    * @throws AlpacaAPIException the alpaca API exception
+   * @see <a href=
+   *      "https://docs.alpaca.markets/api-documentation/web-api/positions/#get-open-positions">https://docs.alpaca.markets/api-documentation/web-api/positions/#get-open-positions</a>
    */
   public List<Position> getOpenPositions() throws AlpacaAPIException {
     Type listType = new TypeToken<List<Position>>() {}.getType();
 
-    AlpacaRequestBuilder urlBuilder = new AlpacaRequestBuilder(baseAccountUrl, "positions");
+    AlpacaRequestBuilder urlBuilder =
+        new AlpacaRequestBuilder(baseAccountUrl, AlpacaConstants.POSITIONS_ENDPOINT);
 
     HttpResponse<JsonNode> response = alpacaRequest.invokeGet(urlBuilder);
 
@@ -424,18 +429,18 @@ public class AlpacaAPI {
 
   /**
    * Gets the open position by symbol.
-   * 
-   * @see <a href=
-   *      "https://docs.alpaca.markets/api-documentation/web-api/positions/#get-an-open-position">https://docs.alpaca.markets/api-documentation/web-api/positions/#get-an-open-position</a>
    *
    * @param symbol the symbol or asset_id (required)
    * @return the open position by symbol
    * @throws AlpacaAPIException the alpaca API exception
+   * @see <a href=
+   *      "https://docs.alpaca.markets/api-documentation/web-api/positions/#get-an-open-position">https://docs.alpaca.markets/api-documentation/web-api/positions/#get-an-open-position</a>
    */
   public Position getOpenPositionBySymbol(String symbol) throws AlpacaAPIException {
     Type listType = new TypeToken<Position>() {}.getType();
 
-    AlpacaRequestBuilder urlBuilder = new AlpacaRequestBuilder(baseAccountUrl, "positions");
+    AlpacaRequestBuilder urlBuilder =
+        new AlpacaRequestBuilder(baseAccountUrl, AlpacaConstants.POSITIONS_ENDPOINT);
 
 
     if (symbol != null) {
@@ -457,19 +462,19 @@ public class AlpacaAPI {
   /**
    * Gets the assets using the following API defaults:
    * 
-   * Status: Active Asset Class: us_equity
-   * 
-   * @see <a href=
-   *      "https://docs.alpaca.markets/api-documentation/web-api/assets/#get-assets">https://docs.alpaca.markets/api-documentation/web-api/assets/#get-assets</a>
+   * Status: Active Asset Class: us_equity.
    *
    * @return the assets
    * @throws AlpacaAPIException the alpaca API exception
+   * @see <a href=
+   *      "https://docs.alpaca.markets/api-documentation/web-api/assets/#get-assets">https://docs.alpaca.markets/api-documentation/web-api/assets/#get-assets</a>
    */
   public List<Asset> getAssets() throws AlpacaAPIException {
     Type listType = new TypeToken<List<Asset>>() {}.getType();
 
 
-    AlpacaRequestBuilder urlBuilder = new AlpacaRequestBuilder(baseAccountUrl, "assets");
+    AlpacaRequestBuilder urlBuilder =
+        new AlpacaRequestBuilder(baseAccountUrl, AlpacaConstants.ASSETS_ENDPOINT);
 
 
     HttpResponse<JsonNode> response = alpacaRequest.invokeGet(urlBuilder);
@@ -487,27 +492,27 @@ public class AlpacaAPI {
 
   /**
    * Gets the assets.
-   * 
-   * @see <a href=
-   *      "https://docs.alpaca.markets/api-documentation/web-api/assets/#get-assets">https://docs.alpaca.markets/api-documentation/web-api/assets/#get-assets</a>
    *
    * @param assetStatus the asset status (Active if null)
    * @param assetClass the asset class (us_equity if null)
    * @return the assets
    * @throws AlpacaAPIException the alpaca API exception
+   * @see <a href=
+   *      "https://docs.alpaca.markets/api-documentation/web-api/assets/#get-assets">https://docs.alpaca.markets/api-documentation/web-api/assets/#get-assets</a>
    */
   public List<Asset> getAssets(AssetStatus assetStatus, String assetClass)
       throws AlpacaAPIException {
     Type listType = new TypeToken<List<Asset>>() {}.getType();
 
-    AlpacaRequestBuilder urlBuilder = new AlpacaRequestBuilder(baseAccountUrl, "assets");
+    AlpacaRequestBuilder urlBuilder =
+        new AlpacaRequestBuilder(baseAccountUrl, AlpacaConstants.ASSETS_ENDPOINT);
 
     if (assetStatus != null) {
-      urlBuilder.appendURLParameter("status", assetStatus.getAPIName());
+      urlBuilder.appendURLParameter(AlpacaConstants.STATUS_URL_PARAMETER, assetStatus.getAPIName());
     }
 
     if (assetClass != null) {
-      urlBuilder.appendURLParameter("asset_class", assetClass.trim());
+      urlBuilder.appendURLParameter(AlpacaConstants.ASSET_CLASS_URL_PARAMETER, assetClass.trim());
     }
 
     HttpResponse<JsonNode> response = alpacaRequest.invokeGet(urlBuilder);
@@ -524,18 +529,18 @@ public class AlpacaAPI {
 
   /**
    * Gets the asset by symbol or asset_id.
-   * 
-   * @see <a href=
-   *      "https://docs.alpaca.markets/api-documentation/web-api/assets/#get-an-asset">https://docs.alpaca.markets/api-documentation/web-api/assets/#get-an-asset</a>
    *
    * @param symbol the symbol (required)
    * @return the asset by symbol
    * @throws AlpacaAPIException the alpaca API exception
+   * @see <a href=
+   *      "https://docs.alpaca.markets/api-documentation/web-api/assets/#get-an-asset">https://docs.alpaca.markets/api-documentation/web-api/assets/#get-an-asset</a>
    */
   public Asset getAssetBySymbol(String symbol) throws AlpacaAPIException {
     Type listType = new TypeToken<Asset>() {}.getType();
 
-    AlpacaRequestBuilder urlBuilder = new AlpacaRequestBuilder(baseAccountUrl, "assets");
+    AlpacaRequestBuilder urlBuilder =
+        new AlpacaRequestBuilder(baseAccountUrl, AlpacaConstants.ASSETS_ENDPOINT);
 
     if (symbol != null) {
       urlBuilder.appendEndpoint(symbol.trim());
@@ -554,17 +559,17 @@ public class AlpacaAPI {
 
   /**
    * Gets the calendar.
-   * 
-   * @see <a href=
-   *      "https://docs.alpaca.markets/api-documentation/web-api/calendar/#get-the-calendar">https://docs.alpaca.markets/api-documentation/web-api/calendar/#get-the-calendar</a>
    *
    * @return the calendar
    * @throws AlpacaAPIException the alpaca API exception
+   * @see <a href=
+   *      "https://docs.alpaca.markets/api-documentation/web-api/calendar/#get-the-calendar">https://docs.alpaca.markets/api-documentation/web-api/calendar/#get-the-calendar</a>
    */
   public List<Calendar> getCalendar() throws AlpacaAPIException {
     Type listType = new TypeToken<List<Calendar>>() {}.getType();
 
-    AlpacaRequestBuilder urlBuilder = new AlpacaRequestBuilder(baseAccountUrl, "calendar");
+    AlpacaRequestBuilder urlBuilder =
+        new AlpacaRequestBuilder(baseAccountUrl, AlpacaConstants.CALENDAR_ENDPOINT);
 
     HttpResponse<JsonNode> response = alpacaRequest.invokeGet(urlBuilder);
 
@@ -579,26 +584,27 @@ public class AlpacaAPI {
 
   /**
    * Gets the calendar.
-   * 
-   * @see <a href=
-   *      "https://docs.alpaca.markets/api-documentation/web-api/calendar/#get-the-calendar">https://docs.alpaca.markets/api-documentation/web-api/calendar/#get-the-calendar</a>
    *
    * @param start the start
    * @param end the end
    * @return the calendar
    * @throws AlpacaAPIException the alpaca API exception
+   * @see <a href=
+   *      "https://docs.alpaca.markets/api-documentation/web-api/calendar/#get-the-calendar">https://docs.alpaca.markets/api-documentation/web-api/calendar/#get-the-calendar</a>
    */
   public List<Calendar> getCalendar(LocalDate start, LocalDate end) throws AlpacaAPIException {
     Type listType = new TypeToken<List<Calendar>>() {}.getType();
 
-    AlpacaRequestBuilder urlBuilder = new AlpacaRequestBuilder(baseAccountUrl, "calendar");
+    AlpacaRequestBuilder urlBuilder =
+        new AlpacaRequestBuilder(baseAccountUrl, AlpacaConstants.CALENDAR_ENDPOINT);
 
     if (start != null) {
-      urlBuilder.appendURLParameter("start", Utilities.toDateString(start));
+      urlBuilder.appendURLParameter(AlpacaConstants.START_URL_PARAMETER,
+          Utilities.toDateString(start));
     }
 
     if (end != null) {
-      urlBuilder.appendURLParameter("end", Utilities.toDateString(end));
+      urlBuilder.appendURLParameter(AlpacaConstants.END_URL_PARAMETER, Utilities.toDateString(end));
     }
 
     HttpResponse<JsonNode> response = alpacaRequest.invokeGet(urlBuilder);
@@ -615,15 +621,15 @@ public class AlpacaAPI {
 
   /**
    * Gets the clock.
-   * 
-   * @see <a href=
-   *      "https://docs.alpaca.markets/api-documentation/web-api/clock/#get-the-clock">https://docs.alpaca.markets/api-documentation/web-api/clock/#get-the-clock</a>
    *
    * @return the clock
    * @throws AlpacaAPIException the alpaca API exception
+   * @see <a href=
+   *      "https://docs.alpaca.markets/api-documentation/web-api/clock/#get-the-clock">https://docs.alpaca.markets/api-documentation/web-api/clock/#get-the-clock</a>
    */
   public Clock getClock() throws AlpacaAPIException {
-    AlpacaRequestBuilder urlBuilder = new AlpacaRequestBuilder(baseAccountUrl, "clock");
+    AlpacaRequestBuilder urlBuilder =
+        new AlpacaRequestBuilder(baseAccountUrl, AlpacaConstants.CLOCK_ENDPOINT);
 
     HttpResponse<JsonNode> response = alpacaRequest.invokeGet(urlBuilder);
 
@@ -640,9 +646,6 @@ public class AlpacaAPI {
 
   /**
    * Gets the bars.
-   * 
-   * @see <a href=
-   *      "https://docs.alpaca.markets/api-documentation/web-api/market-data/bars/#get-a-list-of-bars">https://docs.alpaca.markets/api-documentation/web-api/market-data/bars/#get-a-list-of-bars</a>
    *
    * @param timeframe the timeframe (required)
    * @param symbols One or more (max 200) symbol names (required)
@@ -654,39 +657,47 @@ public class AlpacaAPI {
    * @param until Filter bars before this time. Cannot be used with end.
    * @return the bars
    * @throws AlpacaAPIException the alpaca API exception
+   * @see <a href=
+   *      "https://docs.alpaca.markets/api-documentation/web-api/market-data/bars/#get-a-list-of-bars">https://docs.alpaca.markets/api-documentation/web-api/market-data/bars/#get-a-list-of-bars</a>
    */
   public Map<String, List<Bar>> getBars(BarsTimeFrame timeframe, String[] symbols, Integer limit,
       LocalDateTime start, LocalDateTime end, LocalDateTime after, LocalDateTime until)
       throws AlpacaAPIException {
 
-    AlpacaRequestBuilder urlBuilder = new AlpacaRequestBuilder(baseDataUrl, "bars");
+    AlpacaRequestBuilder urlBuilder =
+        new AlpacaRequestBuilder(baseDataUrl, AlpacaConstants.BARS_ENDPOINT);
 
     if (timeframe != null) {
       urlBuilder.appendEndpoint(timeframe.getAPIName());
     }
 
     if (start != null) {
-      urlBuilder.appendURLParameter("start", Utilities.toDateTimeString(start));
+      urlBuilder.appendURLParameter(AlpacaConstants.START_URL_PARAMETER,
+          Utilities.toDateTimeString(start));
     }
 
     if (end != null) {
-      urlBuilder.appendURLParameter("end", Utilities.toDateTimeString(end));
+      urlBuilder.appendURLParameter(AlpacaConstants.END_URL_PARAMETER,
+          Utilities.toDateTimeString(end));
     }
 
     if (after != null) {
-      urlBuilder.appendURLParameter("after", Utilities.toDateTimeString(after));
+      urlBuilder.appendURLParameter(AlpacaConstants.AFTER_URL_PARAMETER,
+          Utilities.toDateTimeString(after));
     }
 
     if (until != null) {
-      urlBuilder.appendURLParameter("until", Utilities.toDateTimeString(until));
+      urlBuilder.appendURLParameter(AlpacaConstants.UNTIL_URL_PARAMETER,
+          Utilities.toDateTimeString(until));
     }
 
     if (limit != null) {
-      urlBuilder.appendURLParameter("limit", limit.toString());
+      urlBuilder.appendURLParameter(AlpacaConstants.LIMIT_URL_PARAMETER, limit.toString());
     }
 
     if (symbols != null) {
-      urlBuilder.appendURLParameter("symbols", String.join(",", symbols));
+      urlBuilder.appendURLParameter(AlpacaConstants.SYMBOLS_URL_PARAMETER,
+          String.join(",", symbols));
     }
 
     HttpResponse<JsonNode> response = alpacaRequest.invokeGet(urlBuilder);
@@ -705,9 +716,6 @@ public class AlpacaAPI {
 
   /**
    * Gets the bars.
-   * 
-   * @see <a href=
-   *      "https://docs.alpaca.markets/api-documentation/web-api/market-data/bars/#get-a-list-of-bars">https://docs.alpaca.markets/api-documentation/web-api/market-data/bars/#get-a-list-of-bars</a>
    *
    * @param timeframe the timeframe (required)
    * @param symbol One symbol name (required)
@@ -719,38 +727,46 @@ public class AlpacaAPI {
    * @param until Filter bars before this time. Cannot be used with end.
    * @return the bars
    * @throws AlpacaAPIException the alpaca API exception
+   * @see <a href=
+   *      "https://docs.alpaca.markets/api-documentation/web-api/market-data/bars/#get-a-list-of-bars">https://docs.alpaca.markets/api-documentation/web-api/market-data/bars/#get-a-list-of-bars</a>
    */
   public List<Bar> getBars(BarsTimeFrame timeframe, String symbol, Integer limit,
       LocalDateTime start, LocalDateTime end, LocalDateTime after, LocalDateTime until)
       throws AlpacaAPIException {
-    AlpacaRequestBuilder urlBuilder = new AlpacaRequestBuilder(baseDataUrl, "bars");
+    AlpacaRequestBuilder urlBuilder =
+        new AlpacaRequestBuilder(baseDataUrl, AlpacaConstants.BARS_ENDPOINT);
 
     if (timeframe != null) {
       urlBuilder.appendEndpoint(timeframe.getAPIName());
     }
 
     if (start != null) {
-      urlBuilder.appendURLParameter("start", Utilities.toDateTimeString(start));
+      urlBuilder.appendURLParameter(AlpacaConstants.START_URL_PARAMETER,
+          Utilities.toDateTimeString(start));
     }
 
     if (end != null) {
-      urlBuilder.appendURLParameter("end", Utilities.toDateTimeString(end));
+      urlBuilder.appendURLParameter(AlpacaConstants.END_URL_PARAMETER,
+          Utilities.toDateTimeString(end));
     }
 
     if (after != null) {
-      urlBuilder.appendURLParameter("after", Utilities.toDateTimeString(after));
+      urlBuilder.appendURLParameter(AlpacaConstants.AFTER_URL_PARAMETER,
+          Utilities.toDateTimeString(after));
     }
 
     if (until != null) {
-      urlBuilder.appendURLParameter("until", Utilities.toDateTimeString(until));
+      urlBuilder.appendURLParameter(AlpacaConstants.UNTIL_URL_PARAMETER,
+          Utilities.toDateTimeString(until));
     }
 
     if (limit != null) {
-      urlBuilder.appendURLParameter("limit", limit.toString());
+      urlBuilder.appendURLParameter(AlpacaConstants.LIMIT_URL_PARAMETER, limit.toString());
     }
 
     if (symbol != null) {
-      urlBuilder.appendURLParameter("symbols", String.join(",", symbol));
+      urlBuilder.appendURLParameter(AlpacaConstants.SYMBOLS_URL_PARAMETER,
+          String.join(",", symbol));
     }
 
     HttpResponse<JsonNode> response = alpacaRequest.invokeGet(urlBuilder);
