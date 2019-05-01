@@ -1,5 +1,8 @@
 package io.github.mainstringargs.alpaca;
 
+/**
+ * The Class AlpacaConstants.
+ */
 public class AlpacaConstants {
 
 
