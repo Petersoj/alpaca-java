@@ -5,11 +5,17 @@ package io.github.mainstringargs.polygon.enums;
  */
 public enum Sort {
 
-  /** The ticker. */
-  TICKER("ticker"),
+  /** The ticker asc. */
+  TICKER_ASC("ticker"),
 
-  /** The type. */
-  TYPE("type");
+  /** The type asc. */
+  TYPE_ASC("type"),
+
+  /** The ticker desc. */
+  TICKER_DESC("-ticker"),
+
+  /** The type desc. */
+  TYPE_DESC("-type");
 
   /** The api name. */
   String apiName;

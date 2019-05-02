@@ -12,6 +12,7 @@ import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.JsonNode;
 import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.exceptions.UnirestException;
+import com.mashape.unirest.request.GetRequest;
 import io.github.mainstringargs.alpaca.properties.AlpacaProperties;
 
 /**
@@ -56,8 +57,10 @@ public class PolygonRequest {
 
       LOGGER.debug("Get URL " + builder.getURL());
 
-      response = Unirest.get(builder.getURL())
-          .header(USER_AGENT_KEY, AlpacaProperties.USER_AGENT_VALUE).asJson();
+      GetRequest getResponse = Unirest.get(builder.getURL())
+          .header(USER_AGENT_KEY, AlpacaProperties.USER_AGENT_VALUE);
+           
+      response = getResponse.asJson();
 
       LOGGER.debug("GET status: " + response.getStatus() + "\n\t\t\t\t\tstatusText: "
           + response.getStatusText() + "\n\t\t\t\t\tBody: " + response.getBody());

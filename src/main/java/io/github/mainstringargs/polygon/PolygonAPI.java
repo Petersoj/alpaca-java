@@ -16,6 +16,7 @@ import io.github.mainstringargs.polygon.domain.SymbolEndpoints;
 import io.github.mainstringargs.polygon.domain.SymbolFinancial;
 import io.github.mainstringargs.polygon.domain.SymbolNews;
 import io.github.mainstringargs.polygon.domain.Ticker;
+import io.github.mainstringargs.polygon.domain.Tickers;
 import io.github.mainstringargs.polygon.enums.Locale;
 import io.github.mainstringargs.polygon.enums.Market;
 import io.github.mainstringargs.polygon.enums.Sort;
@@ -284,15 +285,20 @@ public class PolygonAPI {
    * @return the symbol news
    * @throws PolygonAPIException the polygon API exception
    */
-  public List<SymbolNews> getSymbolNews(String symbol, int perpage, int page)
+  public List<SymbolNews> getSymbolNews(String symbol, Integer perpage, Integer page)
       throws PolygonAPIException {
 
     PolygonRequestBuilder builder = new PolygonRequestBuilder(baseDataUrl, "meta/symbols");
 
     builder.appendEndpoint(symbol);
     builder.appendEndpoint("news");
-    builder.appendURLParameter("perpage", perpage + "");
-    builder.appendURLParameter("page", page + "");
+    if (perpage != null) {
+      builder.appendURLParameter("perpage", perpage + "");
+    }
+
+    if (page != null) {
+      builder.appendURLParameter("page", page + "");
+    }
 
     HttpResponse<JsonNode> response = polygonRequest.invokeGet(builder);
 
@@ -322,8 +328,8 @@ public class PolygonAPI {
    * @return the tickers
    * @throws PolygonAPIException the polygon API exception
    */
-  public List<Ticker> getTickers(Sort sort, io.github.mainstringargs.polygon.enums.Type type,
-      Market market, Locale locale, String search, int perpage, int page, boolean active)
+  public Tickers getTickers(Sort sort, io.github.mainstringargs.polygon.enums.Type type,
+      Market market, Locale locale, String search, Integer perpage, Integer page, Boolean active)
       throws PolygonAPIException {
 
     PolygonRequestBuilder builder = new PolygonRequestBuilder(baseDataUrl, "reference/tickers");
@@ -350,11 +356,17 @@ public class PolygonAPI {
       builder.appendURLParameter("search", search);
     }
 
-    builder.appendURLParameter("perpage", perpage + "");
+    if (perpage != null) {
+      builder.appendURLParameter("perpage", perpage + "");
+    }
 
-    builder.appendURLParameter("page", page + "");
+    if (page != null) {
+      builder.appendURLParameter("page", page + "");
+    }
 
-    builder.appendURLParameter("active", active + "");
+    if (active != null) {
+      builder.appendURLParameter("active", active + "");
+    }
 
     HttpResponse<JsonNode> response = polygonRequest.invokeGet(builder);
 
@@ -362,9 +374,7 @@ public class PolygonAPI {
       throw new PolygonAPIException(response);
     }
 
-    Type listType = new TypeToken<List<Ticker>>() {}.getType();
-
-    List<Ticker> symbolDetails = polygonRequest.getResponseObject(response, listType);
+    Tickers symbolDetails = polygonRequest.getResponseObject(response, Tickers.class);
 
     return symbolDetails;
   }

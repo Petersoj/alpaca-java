@@ -12,7 +12,12 @@ import io.github.mainstringargs.polygon.domain.SymbolEarning;
 import io.github.mainstringargs.polygon.domain.SymbolEndpoints;
 import io.github.mainstringargs.polygon.domain.SymbolFinancial;
 import io.github.mainstringargs.polygon.domain.SymbolNews;
+import io.github.mainstringargs.polygon.domain.Ticker;
 import io.github.mainstringargs.polygon.enums.ChannelType;
+import io.github.mainstringargs.polygon.enums.Locale;
+import io.github.mainstringargs.polygon.enums.Market;
+import io.github.mainstringargs.polygon.enums.Sort;
+import io.github.mainstringargs.polygon.enums.Type;
 import io.github.mainstringargs.polygon.nats.PolygonStreamListener;
 import io.github.mainstringargs.polygon.nats.message.ChannelMessage;
 import io.github.mainstringargs.polygon.rest.exceptions.PolygonAPIException;
@@ -118,6 +123,20 @@ public class PolygonExample {
       System.out.println("\n\n" + ticker + " Symbol News:");
       for (SymbolNews newsItem : symbolNews)
         System.out.println("\t" + newsItem);
+
+
+    } catch (PolygonAPIException e) {
+      e.printStackTrace();
+    }
+
+    try {
+      List<Ticker> tickers =
+          polygonAPI.getTickers(Sort.TICKER_ASC, null, null, Locale.US, "Tech", null, null, null)
+              .getTickers();
+
+      System.out.println("\n\n" + "Tech" + " Search US Tickers");
+      for (Ticker tickerItem : tickers)
+        System.out.println("\t" + tickerItem);
 
 
     } catch (PolygonAPIException e) {
