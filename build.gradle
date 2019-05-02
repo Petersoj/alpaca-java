@@ -159,4 +159,6 @@ compileJava {
     dependsOn generatePOJOs
 }
 
-buildScan { licenseAgreementUrl = 'https://gradle.com/terms-of-service'; licenseAgree = 'yes' }
+if (hasProperty('buildScan')) {
+	buildScan { licenseAgreementUrl = 'https://gradle.com/terms-of-service'; licenseAgree = 'yes' }
+}
