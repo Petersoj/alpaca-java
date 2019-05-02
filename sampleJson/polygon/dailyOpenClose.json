@@ -1,0 +1,33 @@
+{
+	"symbol": "AAPL",
+	"open": {
+		"condition1": 14,
+		"condition2": 12,
+		"condition3": 0,
+		"condition4": 0,
+		"exchange": 12,
+		"price": 172.17,
+		"size": 50,
+		"timestamp": "2018-03-05T14:30:00.080Z"
+	},
+	"close": {
+		"condition1": 14,
+		"condition2": 12,
+		"condition3": 0,
+		"condition4": 0,
+		"exchange": 12,
+		"price": 172.17,
+		"size": 50,
+		"timestamp": "2018-03-05T14:30:00.080Z"
+	},
+	"afterHours": {
+		"condition1": 14,
+		"condition2": 12,
+		"condition3": 0,
+		"condition4": 0,
+		"exchange": 12,
+		"price": 172.17,
+		"size": 50,
+		"timestamp": "2018-03-05T14:30:00.080Z"
+	}
+}
