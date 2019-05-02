@@ -5,19 +5,19 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import com.google.common.collect.Sets;
-import io.github.mainstringargs.polygon.domain.SymbolAnalystRatings;
-import io.github.mainstringargs.polygon.domain.SymbolDetails;
-import io.github.mainstringargs.polygon.domain.SymbolDividend;
-import io.github.mainstringargs.polygon.domain.SymbolEarning;
-import io.github.mainstringargs.polygon.domain.SymbolEndpoints;
-import io.github.mainstringargs.polygon.domain.SymbolFinancial;
-import io.github.mainstringargs.polygon.domain.SymbolNews;
-import io.github.mainstringargs.polygon.domain.Ticker;
+import io.github.mainstringargs.polygon.domain.reference.Markets;
+import io.github.mainstringargs.polygon.domain.reference.Result;
+import io.github.mainstringargs.polygon.domain.reference.Ticker;
+import io.github.mainstringargs.polygon.domain.meta.SymbolAnalystRatings;
+import io.github.mainstringargs.polygon.domain.meta.SymbolDetails;
+import io.github.mainstringargs.polygon.domain.meta.SymbolDividend;
+import io.github.mainstringargs.polygon.domain.meta.SymbolEarning;
+import io.github.mainstringargs.polygon.domain.meta.SymbolEndpoints;
+import io.github.mainstringargs.polygon.domain.meta.SymbolFinancial;
+import io.github.mainstringargs.polygon.domain.meta.SymbolNews;
 import io.github.mainstringargs.polygon.enums.ChannelType;
 import io.github.mainstringargs.polygon.enums.Locale;
-import io.github.mainstringargs.polygon.enums.Market;
 import io.github.mainstringargs.polygon.enums.Sort;
-import io.github.mainstringargs.polygon.enums.Type;
 import io.github.mainstringargs.polygon.nats.PolygonStreamListener;
 import io.github.mainstringargs.polygon.nats.message.ChannelMessage;
 import io.github.mainstringargs.polygon.rest.exceptions.PolygonAPIException;
@@ -142,6 +142,19 @@ public class PolygonExample {
     } catch (PolygonAPIException e) {
       e.printStackTrace();
     }
+    
+    try {
+      Markets markets = polygonAPI.getMarkets();
+
+      System.out.println("\n\n" + ticker + " Markets:");
+      for (Result market : markets.getResults())
+        System.out.println("\t" + market);
+
+
+    } catch (PolygonAPIException e) {
+      e.printStackTrace();
+    }
+
 
     polygonAPI.addPolygonStreamListener(new PolygonStreamListener() {
 

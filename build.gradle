@@ -150,9 +150,26 @@ task generatePolygonPOJOs(type: GradleBuild) {
     tasks = ['generateJsonSchema2Pojo']
 }
 
+task generatePolygonMetaPOJOs(type: GradleBuild) {
+
+    startParameter.projectProperties = ['jsonSchema2Pojo.source': 'sampleJson/polygon/meta', "jsonSchema2Pojo.targetPackage": 'io.github.mainstringargs.polygon.domain.meta', "jsonSchema2Pojo.removeOldOutput": 'false']
+
+    buildFile = 'jsonSchema2Pojo.gradle'
+    tasks = ['generateJsonSchema2Pojo']
+}
+
+task generatePolygonReferencePOJOs(type: GradleBuild) {
+
+    startParameter.projectProperties = ['jsonSchema2Pojo.source': 'sampleJson/polygon/reference', "jsonSchema2Pojo.targetPackage": 'io.github.mainstringargs.polygon.domain.reference', "jsonSchema2Pojo.removeOldOutput": 'false']
+
+    buildFile = 'jsonSchema2Pojo.gradle'
+    tasks = ['generateJsonSchema2Pojo']
+}
+
+
 
 task generatePOJOs {
-    dependsOn generateAlpacaPOJOs, generatePolygonPOJOs
+    dependsOn generateAlpacaPOJOs, generatePolygonPOJOs, generatePolygonMetaPOJOs, generatePolygonReferencePOJOs
 }
 
 compileJava {

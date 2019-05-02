@@ -8,15 +8,15 @@ import org.apache.logging.log4j.Logger;
 import com.google.gson.reflect.TypeToken;
 import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.JsonNode;
-import io.github.mainstringargs.polygon.domain.SymbolAnalystRatings;
-import io.github.mainstringargs.polygon.domain.SymbolDetails;
-import io.github.mainstringargs.polygon.domain.SymbolDividend;
-import io.github.mainstringargs.polygon.domain.SymbolEarning;
-import io.github.mainstringargs.polygon.domain.SymbolEndpoints;
-import io.github.mainstringargs.polygon.domain.SymbolFinancial;
-import io.github.mainstringargs.polygon.domain.SymbolNews;
-import io.github.mainstringargs.polygon.domain.Ticker;
-import io.github.mainstringargs.polygon.domain.Tickers;
+import io.github.mainstringargs.polygon.domain.meta.SymbolAnalystRatings;
+import io.github.mainstringargs.polygon.domain.meta.SymbolDetails;
+import io.github.mainstringargs.polygon.domain.meta.SymbolDividend;
+import io.github.mainstringargs.polygon.domain.meta.SymbolEarning;
+import io.github.mainstringargs.polygon.domain.meta.SymbolEndpoints;
+import io.github.mainstringargs.polygon.domain.meta.SymbolFinancial;
+import io.github.mainstringargs.polygon.domain.meta.SymbolNews;
+import io.github.mainstringargs.polygon.domain.reference.Markets;
+import io.github.mainstringargs.polygon.domain.reference.Tickers;
 import io.github.mainstringargs.polygon.enums.Locale;
 import io.github.mainstringargs.polygon.enums.Market;
 import io.github.mainstringargs.polygon.enums.Sort;
@@ -379,7 +379,31 @@ public class PolygonAPI {
     return symbolDetails;
   }
 
+  /**
+   * Gets the markets.
+   *
+   * @return the markets
+   * @throws PolygonAPIException the polygon API exception
+   */
+  public Markets getMarkets() throws PolygonAPIException {
 
+
+    PolygonRequestBuilder builder = new PolygonRequestBuilder(baseDataUrl, "reference/markets");
+
+    builder.setVersion("v2");
+
+
+    HttpResponse<JsonNode> response = polygonRequest.invokeGet(builder);
+
+    if (response.getStatus() != 200) {
+      throw new PolygonAPIException(response);
+    }
+
+
+    Markets markets = polygonRequest.getResponseObject(response, Markets.class);
+
+    return markets;
+  }
 
   /**
    * Adds the polygon stream listener.
