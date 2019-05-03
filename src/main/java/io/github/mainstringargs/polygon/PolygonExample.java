@@ -5,9 +5,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import com.google.common.collect.Sets;
-import io.github.mainstringargs.polygon.domain.reference.Markets;
-import io.github.mainstringargs.polygon.domain.reference.Result;
-import io.github.mainstringargs.polygon.domain.reference.Ticker;
 import io.github.mainstringargs.polygon.domain.meta.SymbolAnalystRatings;
 import io.github.mainstringargs.polygon.domain.meta.SymbolDetails;
 import io.github.mainstringargs.polygon.domain.meta.SymbolDividend;
@@ -15,6 +12,10 @@ import io.github.mainstringargs.polygon.domain.meta.SymbolEarning;
 import io.github.mainstringargs.polygon.domain.meta.SymbolEndpoints;
 import io.github.mainstringargs.polygon.domain.meta.SymbolFinancial;
 import io.github.mainstringargs.polygon.domain.meta.SymbolNews;
+import io.github.mainstringargs.polygon.domain.reference.Market;
+import io.github.mainstringargs.polygon.domain.reference.Split;
+import io.github.mainstringargs.polygon.domain.reference.Ticker;
+import io.github.mainstringargs.polygon.domain.reference.TypesMapping;
 import io.github.mainstringargs.polygon.enums.ChannelType;
 import io.github.mainstringargs.polygon.enums.Locale;
 import io.github.mainstringargs.polygon.enums.Sort;
@@ -142,18 +143,57 @@ public class PolygonExample {
     } catch (PolygonAPIException e) {
       e.printStackTrace();
     }
-    
-    try {
-      Markets markets = polygonAPI.getMarkets();
 
-      System.out.println("\n\n" + ticker + " Markets:");
-      for (Result market : markets.getResults())
+    try {
+      List<Market> markets = polygonAPI.getMarkets();
+
+      System.out.println("\n\n" + " Markets:");
+      for (Market market : markets)
         System.out.println("\t" + market);
 
 
     } catch (PolygonAPIException e) {
       e.printStackTrace();
     }
+
+
+    try {
+      List<io.github.mainstringargs.polygon.domain.reference.Locale> locales =
+          polygonAPI.getLocales();
+
+      System.out.println("\n\n" + " Locales:");
+      for (io.github.mainstringargs.polygon.domain.reference.Locale locale : locales)
+        System.out.println("\t" + locale);
+
+
+    } catch (PolygonAPIException e) {
+      e.printStackTrace();
+    }
+
+
+    try {
+      TypesMapping typesMapping = polygonAPI.getTypesMapping();
+
+      System.out.println("\n\n" + "typesMapping");
+      System.out.println("\t" + typesMapping.getTypes());
+      System.out.println("\t" + typesMapping.getIndexTypes());
+
+    } catch (PolygonAPIException e) {
+      e.printStackTrace();
+    }
+
+    try {
+      List<Split> splits = polygonAPI.getSplits(ticker);
+
+      System.out.println("\n\n" + ticker + " Split:");
+      for (Split splitItems : splits)
+        System.out.println("\t" + splitItems);
+
+
+    } catch (PolygonAPIException e) {
+      e.printStackTrace();
+    }
+
 
 
     polygonAPI.addPolygonStreamListener(new PolygonStreamListener() {

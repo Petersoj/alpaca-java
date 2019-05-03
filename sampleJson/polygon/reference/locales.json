@@ -1,0 +1,15 @@
+
+[
+	{
+		"locale": "US",
+		"name": "United States"
+	},
+	{
+		"locale": "GB",
+		"name": "Great Britain / UK"
+	},
+	{
+		"locale": "CA",
+		"name": "Canada"
+	}
+]

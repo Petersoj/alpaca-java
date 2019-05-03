@@ -15,10 +15,11 @@ import io.github.mainstringargs.polygon.domain.meta.SymbolEarning;
 import io.github.mainstringargs.polygon.domain.meta.SymbolEndpoints;
 import io.github.mainstringargs.polygon.domain.meta.SymbolFinancial;
 import io.github.mainstringargs.polygon.domain.meta.SymbolNews;
-import io.github.mainstringargs.polygon.domain.reference.Markets;
+import io.github.mainstringargs.polygon.domain.reference.Market;
+import io.github.mainstringargs.polygon.domain.reference.Split;
 import io.github.mainstringargs.polygon.domain.reference.Tickers;
+import io.github.mainstringargs.polygon.domain.reference.TypesMapping;
 import io.github.mainstringargs.polygon.enums.Locale;
-import io.github.mainstringargs.polygon.enums.Market;
 import io.github.mainstringargs.polygon.enums.Sort;
 import io.github.mainstringargs.polygon.nats.PolygonNatsClient;
 import io.github.mainstringargs.polygon.nats.PolygonStreamListener;
@@ -329,8 +330,8 @@ public class PolygonAPI {
    * @throws PolygonAPIException the polygon API exception
    */
   public Tickers getTickers(Sort sort, io.github.mainstringargs.polygon.enums.Type type,
-      Market market, Locale locale, String search, Integer perpage, Integer page, Boolean active)
-      throws PolygonAPIException {
+      io.github.mainstringargs.polygon.enums.Market market, Locale locale, String search,
+      Integer perpage, Integer page, Boolean active) throws PolygonAPIException {
 
     PolygonRequestBuilder builder = new PolygonRequestBuilder(baseDataUrl, "reference/tickers");
 
@@ -385,7 +386,7 @@ public class PolygonAPI {
    * @return the markets
    * @throws PolygonAPIException the polygon API exception
    */
-  public Markets getMarkets() throws PolygonAPIException {
+  public List<Market> getMarkets() throws PolygonAPIException {
 
 
     PolygonRequestBuilder builder = new PolygonRequestBuilder(baseDataUrl, "reference/markets");
@@ -400,9 +401,92 @@ public class PolygonAPI {
     }
 
 
-    Markets markets = polygonRequest.getResponseObject(response, Markets.class);
+    Type listType = new TypeToken<List<Market>>() {}.getType();
+
+    List<Market> markets = polygonRequest.getResponseObject(response, listType);
 
     return markets;
+  }
+
+  /**
+   * Gets the locales.
+   *
+   * @return the locales
+   * @throws PolygonAPIException the polygon API exception
+   */
+  public List<io.github.mainstringargs.polygon.domain.reference.Locale> getLocales()
+      throws PolygonAPIException {
+
+
+    PolygonRequestBuilder builder = new PolygonRequestBuilder(baseDataUrl, "reference/locales");
+
+    builder.setVersion("v2");
+
+
+    HttpResponse<JsonNode> response = polygonRequest.invokeGet(builder);
+
+    if (response.getStatus() != 200) {
+      throw new PolygonAPIException(response);
+    }
+
+
+    Type listType =
+        new TypeToken<List<io.github.mainstringargs.polygon.domain.reference.Locale>>() {}
+            .getType();
+
+    List<io.github.mainstringargs.polygon.domain.reference.Locale> locales =
+        polygonRequest.getResponseObject(response, listType);
+
+    return locales;
+  }
+
+  /**
+   * Gets the types mapping.
+   *
+   * @return the types mapping
+   * @throws PolygonAPIException the polygon API exception
+   */
+  public TypesMapping getTypesMapping() throws PolygonAPIException {
+
+
+    PolygonRequestBuilder builder = new PolygonRequestBuilder(baseDataUrl, "reference/types");
+
+    builder.setVersion("v2");
+
+
+    HttpResponse<JsonNode> response = polygonRequest.invokeGet(builder);
+
+    if (response.getStatus() != 200) {
+      throw new PolygonAPIException(response);
+    }
+
+
+    TypesMapping typesMapping = polygonRequest.getResponseObject(response, TypesMapping.class);
+
+    return typesMapping;
+  }
+
+  public List<Split> getSplits(String symbol) throws PolygonAPIException {
+
+    PolygonRequestBuilder builder = new PolygonRequestBuilder(baseDataUrl, "reference/splits");
+
+    builder.setVersion("v2");
+
+    builder.appendEndpoint(symbol);
+
+
+    HttpResponse<JsonNode> response = polygonRequest.invokeGet(builder);
+
+    if (response.getStatus() != 200) {
+      throw new PolygonAPIException(response);
+    }
+
+    Type listType = new TypeToken<List<Split>>() {}.getType();
+
+
+    List<Split> splits = polygonRequest.getResponseObject(response, listType);
+
+    return splits;
   }
 
   /**

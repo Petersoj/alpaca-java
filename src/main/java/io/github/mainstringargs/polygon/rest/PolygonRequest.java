@@ -55,11 +55,11 @@ public class PolygonRequest {
 
       builder.appendURLParameter(API_KEY_ID, keyId);
 
-      LOGGER.debug("Get URL " + builder.getURL());
+      LOGGER.info("Get URL " + builder.getURL());
 
-      GetRequest getResponse = Unirest.get(builder.getURL())
-          .header(USER_AGENT_KEY, AlpacaProperties.USER_AGENT_VALUE);
-           
+      GetRequest getResponse =
+          Unirest.get(builder.getURL()).header(USER_AGENT_KEY, AlpacaProperties.USER_AGENT_VALUE);
+
       response = getResponse.asJson();
 
       LOGGER.debug("GET status: " + response.getStatus() + "\n\t\t\t\t\tstatusText: "
@@ -150,21 +150,22 @@ public class PolygonRequest {
 
     T responseObjectFromJson = null;
 
-    BufferedReader br = null;
 
     try {
-      br = new BufferedReader(new InputStreamReader(httpResponse.getRawBody()));
-      responseObjectFromJson = gson.fromJson(br, type);
+
+      JsonNode node = httpResponse.getBody();
+
+      String rawNodeString = null;
+
+      if (!node.isArray() && node.getObject().has("results")) {
+        rawNodeString = node.getObject().get("results").toString();
+      } else {
+        rawNodeString = httpResponse.getBody().toString();
+      }
+
+      responseObjectFromJson = gson.fromJson(rawNodeString, type);
     } catch (Exception e) {
       LOGGER.info("Exception", e);
-    } finally {
-      if (br != null) {
-        try {
-          br.close();
-        } catch (IOException e) {
-          LOGGER.info("IOException", e);
-        }
-      }
     }
 
     return responseObjectFromJson;
