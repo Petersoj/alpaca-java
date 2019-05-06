@@ -159,6 +159,8 @@ public class PolygonRequest {
 
       if (!node.isArray() && node.getObject().has("results")) {
         rawNodeString = node.getObject().get("results").toString();
+      } else if (!node.isArray() && node.getObject().has("last")) {
+        rawNodeString = node.getObject().get("last").toString();
       } else {
         rawNodeString = httpResponse.getBody().toString();
       }

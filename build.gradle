@@ -166,6 +166,21 @@ task generatePolygonReferencePOJOs(type: GradleBuild) {
     tasks = ['generateJsonSchema2Pojo']
 }
 
+task generatePolygonHistoricQuotesPOJOs(type: GradleBuild) {
+
+    startParameter.projectProperties = ['jsonSchema2Pojo.source': 'sampleJson/polygon/historic/quotes', "jsonSchema2Pojo.targetPackage": 'io.github.mainstringargs.polygon.domain.historic.quotes', "jsonSchema2Pojo.removeOldOutput": 'false']
+
+    buildFile = 'jsonSchema2Pojo.gradle'
+    tasks = ['generateJsonSchema2Pojo']
+}
+
+task generatePolygonHistoricTradesPOJOs(type: GradleBuild) {
+
+    startParameter.projectProperties = ['jsonSchema2Pojo.source': 'sampleJson/polygon/historic/trades', "jsonSchema2Pojo.targetPackage": 'io.github.mainstringargs.polygon.domain.historic.trades', "jsonSchema2Pojo.removeOldOutput": 'false']
+
+    buildFile = 'jsonSchema2Pojo.gradle'
+    tasks = ['generateJsonSchema2Pojo']
+}
 
 
 task generatePOJOs {
