@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import com.google.common.collect.Sets;
+import io.github.mainstringargs.polygon.domain.meta.Exchange;
 import io.github.mainstringargs.polygon.domain.meta.SymbolAnalystRatings;
 import io.github.mainstringargs.polygon.domain.meta.SymbolDetails;
 import io.github.mainstringargs.polygon.domain.meta.SymbolDividend;
@@ -188,6 +189,18 @@ public class PolygonExample {
       System.out.println("\n\n" + ticker + " Split:");
       for (Split splitItems : splits)
         System.out.println("\t" + splitItems);
+
+
+    } catch (PolygonAPIException e) {
+      e.printStackTrace();
+    }
+
+    try {
+      List<Exchange> exchanges = polygonAPI.getExchanges();
+
+      System.out.println("\n\n" + "exchanges");
+      for (Exchange exchange : exchanges)
+        System.out.println("\t" + exchange);
 
 
     } catch (PolygonAPIException e) {

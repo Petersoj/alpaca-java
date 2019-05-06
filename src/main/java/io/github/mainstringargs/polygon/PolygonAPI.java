@@ -8,6 +8,7 @@ import org.apache.logging.log4j.Logger;
 import com.google.gson.reflect.TypeToken;
 import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.JsonNode;
+import io.github.mainstringargs.polygon.domain.meta.Exchange;
 import io.github.mainstringargs.polygon.domain.meta.SymbolAnalystRatings;
 import io.github.mainstringargs.polygon.domain.meta.SymbolDetails;
 import io.github.mainstringargs.polygon.domain.meta.SymbolDividend;
@@ -466,6 +467,13 @@ public class PolygonAPI {
     return typesMapping;
   }
 
+  /**
+   * Gets the splits.
+   *
+   * @param symbol the symbol
+   * @return the splits
+   * @throws PolygonAPIException the polygon API exception
+   */
   public List<Split> getSplits(String symbol) throws PolygonAPIException {
 
     PolygonRequestBuilder builder = new PolygonRequestBuilder(baseDataUrl, "reference/splits");
@@ -487,6 +495,30 @@ public class PolygonAPI {
     List<Split> splits = polygonRequest.getResponseObject(response, listType);
 
     return splits;
+  }
+
+  /**
+   * Gets the exchange.
+   *
+   * @return the exchange
+   * @throws PolygonAPIException the polygon API exception
+   */
+  public List<Exchange> getExchanges() throws PolygonAPIException {
+
+    PolygonRequestBuilder builder = new PolygonRequestBuilder(baseDataUrl, "meta/exchanges");
+
+    HttpResponse<JsonNode> response = polygonRequest.invokeGet(builder);
+
+    if (response.getStatus() != 200) {
+      throw new PolygonAPIException(response);
+    }
+
+    Type listType = new TypeToken<List<Exchange>>() {}.getType();
+
+
+    List<Exchange> exchanges = polygonRequest.getResponseObject(response, listType);
+
+    return exchanges;
   }
 
   /**
