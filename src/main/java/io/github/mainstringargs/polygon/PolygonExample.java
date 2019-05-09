@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import com.google.common.collect.Sets;
+import io.github.mainstringargs.polygon.domain.Quote;
+import io.github.mainstringargs.polygon.domain.Trade;
 import io.github.mainstringargs.polygon.domain.historic.quotes.Quotes;
 import io.github.mainstringargs.polygon.domain.historic.trades.Tick;
 import io.github.mainstringargs.polygon.domain.historic.trades.Trades;
@@ -215,8 +217,8 @@ public class PolygonExample {
       Trades trades = polygonAPI.getHistoricTrades(ticker, LocalDate.of(2019, 5, 7), null, null);
 
       System.out.println("\n\n" + ticker + " Trades on " + LocalDate.of(2019, 5, 7) + ": ");
-      System.out.println("map " + trades.getMap());
-      System.out.println("ticks");
+      System.out.println("\t" + "map " + trades.getMap());
+      System.out.println("\t" + "ticks");
       for (Tick tick : trades.getTicks())
         System.out.println("\t" + tick);
 
@@ -228,8 +230,8 @@ public class PolygonExample {
       Quotes quotes = polygonAPI.getHistoricQuotes(ticker, LocalDate.of(2019, 5, 7), null, null);
 
       System.out.println("\n\n" + ticker + " Quotes on " + LocalDate.of(2019, 5, 1) + ": ");
-      System.out.println("map " + quotes.getMap());
-      System.out.println("ticks");
+      System.out.println("\t" + "map " + quotes.getMap());
+      System.out.println("\t" + "ticks");
       for (io.github.mainstringargs.polygon.domain.historic.quotes.Tick tick : quotes.getTicks())
         System.out.println("\t" + tick);
 
@@ -237,7 +239,27 @@ public class PolygonExample {
       e.printStackTrace();
     }
 
+    try {
+      Trade trade = polygonAPI.getLastTrade(ticker);
 
+      System.out.println("\n\n" + ticker + " Last Trade: ");
+      System.out.println("\t" + trade);
+
+
+    } catch (PolygonAPIException e) {
+      e.printStackTrace();
+    }
+
+    try {
+      Quote quote = polygonAPI.getLastQuote(ticker);
+
+      System.out.println("\n\n" + ticker + " Last Quote: ");
+      System.out.println("\t" + quote);
+
+
+    } catch (PolygonAPIException e) {
+      e.printStackTrace();
+    }
 
     polygonAPI.addPolygonStreamListener(new PolygonStreamListener() {
 

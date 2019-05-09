@@ -10,6 +10,9 @@ import com.google.gson.reflect.TypeToken;
 import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.JsonNode;
 import io.github.mainstringargs.alpaca.Utilities;
+import io.github.mainstringargs.polygon.domain.Quote;
+import io.github.mainstringargs.polygon.domain.StockTrade;
+import io.github.mainstringargs.polygon.domain.Trade;
 import io.github.mainstringargs.polygon.domain.historic.quotes.Quotes;
 import io.github.mainstringargs.polygon.domain.historic.trades.Trades;
 import io.github.mainstringargs.polygon.domain.meta.Exchange;
@@ -595,6 +598,54 @@ public class PolygonAPI {
     Quotes quotesDetails = polygonRequest.getResponseObject(response, Quotes.class);
 
     return quotesDetails;
+  }
+
+  /**
+   * Gets the last trade.
+   *
+   * @param symbol the symbol
+   * @return the last trade
+   * @throws PolygonAPIException the polygon API exception
+   */
+  public Trade getLastTrade(String symbol) throws PolygonAPIException {
+
+    PolygonRequestBuilder builder = new PolygonRequestBuilder(baseDataUrl, "last/stocks");
+
+    builder.appendEndpoint(symbol);
+
+    HttpResponse<JsonNode> response = polygonRequest.invokeGet(builder);
+
+    if (response.getStatus() != 200) {
+      throw new PolygonAPIException(response);
+    }
+
+    Trade stockTrade = polygonRequest.getResponseObject(response, Trade.class);
+
+    return stockTrade;
+  }
+
+  /**
+   * Gets the last quote.
+   *
+   * @param symbol the symbol
+   * @return the last quote
+   * @throws PolygonAPIException the polygon API exception
+   */
+  public Quote getLastQuote(String symbol) throws PolygonAPIException {
+
+    PolygonRequestBuilder builder = new PolygonRequestBuilder(baseDataUrl, "last_quote/stocks");
+
+    builder.appendEndpoint(symbol);
+
+    HttpResponse<JsonNode> response = polygonRequest.invokeGet(builder);
+
+    if (response.getStatus() != 200) {
+      throw new PolygonAPIException(response);
+    }
+
+    Quote stockQuote = polygonRequest.getResponseObject(response, Quote.class);
+
+    return stockQuote;
   }
 
   /**
