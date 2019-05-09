@@ -10,6 +10,7 @@ import com.google.gson.reflect.TypeToken;
 import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.JsonNode;
 import io.github.mainstringargs.alpaca.Utilities;
+import io.github.mainstringargs.polygon.domain.historic.quotes.Quotes;
 import io.github.mainstringargs.polygon.domain.historic.trades.Trades;
 import io.github.mainstringargs.polygon.domain.meta.Exchange;
 import io.github.mainstringargs.polygon.domain.meta.SymbolAnalystRatings;
@@ -558,6 +559,42 @@ public class PolygonAPI {
     Trades tradesDetails = polygonRequest.getResponseObject(response, Trades.class);
 
     return tradesDetails;
+  }
+
+  /**
+   * Gets the historic quotes.
+   *
+   * @param symbol the symbol
+   * @param date the date
+   * @param offset the offset
+   * @param limit the limit
+   * @return the historic quotes
+   * @throws PolygonAPIException the polygon API exception
+   */
+  public Quotes getHistoricQuotes(String symbol, LocalDate date, Integer offset, Integer limit)
+      throws PolygonAPIException {
+
+    PolygonRequestBuilder builder = new PolygonRequestBuilder(baseDataUrl, "historic/quotes");
+
+    builder.appendEndpoint(symbol);
+    builder.appendEndpoint(Utilities.toDateString(date));
+    if (offset != null) {
+      builder.appendURLParameter("offset", offset + "");
+    }
+
+    if (limit != null) {
+      builder.appendURLParameter("limit", limit + "");
+    }
+
+    HttpResponse<JsonNode> response = polygonRequest.invokeGet(builder);
+
+    if (response.getStatus() != 200) {
+      throw new PolygonAPIException(response);
+    }
+
+    Quotes quotesDetails = polygonRequest.getResponseObject(response, Quotes.class);
+
+    return quotesDetails;
   }
 
   /**

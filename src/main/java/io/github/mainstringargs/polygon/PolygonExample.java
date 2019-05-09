@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import com.google.common.collect.Sets;
+import io.github.mainstringargs.polygon.domain.historic.quotes.Quotes;
 import io.github.mainstringargs.polygon.domain.historic.trades.Tick;
 import io.github.mainstringargs.polygon.domain.historic.trades.Trades;
 import io.github.mainstringargs.polygon.domain.meta.Exchange;
@@ -222,6 +223,20 @@ public class PolygonExample {
     } catch (PolygonAPIException e) {
       e.printStackTrace();
     }
+
+    try {
+      Quotes quotes = polygonAPI.getHistoricQuotes(ticker, LocalDate.of(2019, 5, 7), null, null);
+
+      System.out.println("\n\n" + ticker + " Quotes on " + LocalDate.of(2019, 5, 1) + ": ");
+      System.out.println("map " + quotes.getMap());
+      System.out.println("ticks");
+      for (io.github.mainstringargs.polygon.domain.historic.quotes.Tick tick : quotes.getTicks())
+        System.out.println("\t" + tick);
+
+    } catch (PolygonAPIException e) {
+      e.printStackTrace();
+    }
+
 
 
     polygonAPI.addPolygonStreamListener(new PolygonStreamListener() {
