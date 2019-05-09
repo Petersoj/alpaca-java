@@ -1,10 +1,13 @@
 package io.github.mainstringargs.polygon;
 
+import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import com.google.common.collect.Sets;
+import io.github.mainstringargs.polygon.domain.historic.trades.Tick;
+import io.github.mainstringargs.polygon.domain.historic.trades.Trades;
 import io.github.mainstringargs.polygon.domain.meta.Exchange;
 import io.github.mainstringargs.polygon.domain.meta.SymbolAnalystRatings;
 import io.github.mainstringargs.polygon.domain.meta.SymbolDetails;
@@ -207,6 +210,18 @@ public class PolygonExample {
       e.printStackTrace();
     }
 
+    try {
+      Trades trades = polygonAPI.getHistoricTrades(ticker, LocalDate.of(2019, 5, 7), null, null);
+
+      System.out.println("\n\n" + ticker + " Trades on " + LocalDate.of(2019, 5, 7) + ": ");
+      System.out.println("map " + trades.getMap());
+      System.out.println("ticks");
+      for (Tick tick : trades.getTicks())
+        System.out.println("\t" + tick);
+
+    } catch (PolygonAPIException e) {
+      e.printStackTrace();
+    }
 
 
     polygonAPI.addPolygonStreamListener(new PolygonStreamListener() {

@@ -1,6 +1,7 @@
 package io.github.mainstringargs.polygon;
 
 import java.lang.reflect.Type;
+import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
 import org.apache.logging.log4j.LogManager;
@@ -8,6 +9,8 @@ import org.apache.logging.log4j.Logger;
 import com.google.gson.reflect.TypeToken;
 import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.JsonNode;
+import io.github.mainstringargs.alpaca.Utilities;
+import io.github.mainstringargs.polygon.domain.historic.trades.Trades;
 import io.github.mainstringargs.polygon.domain.meta.Exchange;
 import io.github.mainstringargs.polygon.domain.meta.SymbolAnalystRatings;
 import io.github.mainstringargs.polygon.domain.meta.SymbolDetails;
@@ -519,6 +522,42 @@ public class PolygonAPI {
     List<Exchange> exchanges = polygonRequest.getResponseObject(response, listType);
 
     return exchanges;
+  }
+
+  /**
+   * Gets the historic trades.
+   *
+   * @param symbol the symbol
+   * @param date the date
+   * @param offset the offset
+   * @param limit the limit
+   * @return the historic trades
+   * @throws PolygonAPIException the polygon API exception
+   */
+  public Trades getHistoricTrades(String symbol, LocalDate date, Integer offset, Integer limit)
+      throws PolygonAPIException {
+
+    PolygonRequestBuilder builder = new PolygonRequestBuilder(baseDataUrl, "historic/trades");
+
+    builder.appendEndpoint(symbol);
+    builder.appendEndpoint(Utilities.toDateString(date));
+    if (offset != null) {
+      builder.appendURLParameter("offset", offset + "");
+    }
+
+    if (limit != null) {
+      builder.appendURLParameter("limit", limit + "");
+    }
+
+    HttpResponse<JsonNode> response = polygonRequest.invokeGet(builder);
+
+    if (response.getStatus() != 200) {
+      throw new PolygonAPIException(response);
+    }
+
+    Trades tradesDetails = polygonRequest.getResponseObject(response, Trades.class);
+
+    return tradesDetails;
   }
 
   /**
