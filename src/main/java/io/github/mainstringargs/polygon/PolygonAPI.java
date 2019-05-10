@@ -12,6 +12,7 @@ import com.mashape.unirest.http.JsonNode;
 import io.github.mainstringargs.alpaca.Utilities;
 import io.github.mainstringargs.polygon.domain.DailyOpenClose;
 import io.github.mainstringargs.polygon.domain.Quote;
+import io.github.mainstringargs.polygon.domain.Snapshot;
 import io.github.mainstringargs.polygon.domain.StockTrade;
 import io.github.mainstringargs.polygon.domain.Trade;
 import io.github.mainstringargs.polygon.domain.historic.quotes.Quotes;
@@ -675,6 +676,111 @@ public class PolygonAPI {
         polygonRequest.getResponseObject(response, DailyOpenClose.class);
 
     return dailyOpenClose;
+  }
+
+  /**
+   * Gets the snapshot all tickers.
+   *
+   * @return the snapshot all tickers
+   * @throws PolygonAPIException the polygon API exception
+   */
+  public List<Snapshot> getSnapshotAllTickers() throws PolygonAPIException {
+
+    PolygonRequestBuilder builder =
+        new PolygonRequestBuilder(baseDataUrl, "snapshot/locale/us/markets/stocks/tickers");
+
+    builder.setVersion("v2");
+
+    HttpResponse<JsonNode> response = polygonRequest.invokeGet(builder);
+
+    if (response.getStatus() != 200) {
+      throw new PolygonAPIException(response);
+    }
+
+    Type listType = new TypeToken<List<Snapshot>>() {}.getType();
+
+    List<Snapshot> snapshots = polygonRequest.getResponseObject(response, listType);
+
+    return snapshots;
+  }
+
+  /**
+   * Gets the snapshot.
+   *
+   * @param symbol the symbol
+   * @return the snapshot
+   * @throws PolygonAPIException the polygon API exception
+   */
+  public Snapshot getSnapshot(String symbol) throws PolygonAPIException {
+
+    PolygonRequestBuilder builder =
+        new PolygonRequestBuilder(baseDataUrl, "snapshot/locale/us/markets/stocks/tickers");
+
+    builder.setVersion("v2");
+    builder.appendEndpoint(symbol);
+
+    HttpResponse<JsonNode> response = polygonRequest.invokeGet(builder);
+
+    if (response.getStatus() != 200) {
+      throw new PolygonAPIException(response);
+    }
+
+
+    Snapshot snapshot = polygonRequest.getResponseObject(response, Snapshot.class);
+
+    return snapshot;
+  }
+
+  /**
+   * Gets the snapshots gainers.
+   *
+   * @return the snapshots gainers
+   * @throws PolygonAPIException the polygon API exception
+   */
+  public List<Snapshot> getSnapshotsGainers() throws PolygonAPIException {
+
+    PolygonRequestBuilder builder =
+        new PolygonRequestBuilder(baseDataUrl, "snapshot/locale/us/markets/stocks/gainers");
+
+    builder.setVersion("v2");
+
+    HttpResponse<JsonNode> response = polygonRequest.invokeGet(builder);
+
+    if (response.getStatus() != 200) {
+      throw new PolygonAPIException(response);
+    }
+
+    Type listType = new TypeToken<List<Snapshot>>() {}.getType();
+
+    List<Snapshot> snapshots = polygonRequest.getResponseObject(response, listType);
+
+    return snapshots;
+  }
+
+  /**
+   * Gets the snapshots losers.
+   *
+   * @return the snapshots losers
+   * @throws PolygonAPIException the polygon API exception
+   */
+  public List<Snapshot> getSnapshotsLosers() throws PolygonAPIException {
+
+    PolygonRequestBuilder builder =
+        new PolygonRequestBuilder(baseDataUrl, "snapshot/locale/us/markets/stocks/losers");
+
+    builder.setVersion("v2");
+
+    HttpResponse<JsonNode> response = polygonRequest.invokeGet(builder);
+
+    if (response.getStatus() != 200) {
+      throw new PolygonAPIException(response);
+    }
+
+    Type listType = new TypeToken<List<Snapshot>>() {}.getType();
+
+    List<Snapshot> snapshots = polygonRequest.getResponseObject(response, listType);
+
+    return snapshots;
   }
 
   /**

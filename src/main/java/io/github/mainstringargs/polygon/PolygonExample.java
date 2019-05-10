@@ -8,6 +8,7 @@ import java.util.Set;
 import com.google.common.collect.Sets;
 import io.github.mainstringargs.polygon.domain.DailyOpenClose;
 import io.github.mainstringargs.polygon.domain.Quote;
+import io.github.mainstringargs.polygon.domain.Snapshot;
 import io.github.mainstringargs.polygon.domain.Trade;
 import io.github.mainstringargs.polygon.domain.historic.quotes.Quotes;
 import io.github.mainstringargs.polygon.domain.historic.trades.Tick;
@@ -273,6 +274,56 @@ public class PolygonExample {
     } catch (PolygonAPIException e) {
       e.printStackTrace();
     }
+
+
+    try {
+      Snapshot snapshot = polygonAPI.getSnapshot(ticker);
+
+      System.out.println("\n\n" + ticker + " Snapshot: ");
+      System.out.println("\t" + snapshot);
+
+
+    } catch (PolygonAPIException e) {
+      e.printStackTrace();
+    }
+
+    try {
+      List<Snapshot> snapshots = polygonAPI.getSnapshotAllTickers();
+
+      System.out.println("\n\n" + "snapshots " + snapshots.size());
+      for (Snapshot snapshot : snapshots)
+        System.out.println("\t" + snapshot);
+
+
+    } catch (PolygonAPIException e) {
+      e.printStackTrace();
+    }
+
+    try {
+      List<Snapshot> snapshots = polygonAPI.getSnapshotsGainers();
+
+      System.out.println("\n\n" + "gainers snapshots " + snapshots.size());
+      for (Snapshot snapshot : snapshots)
+        System.out.println("\t" + snapshot);
+
+
+    } catch (PolygonAPIException e) {
+      e.printStackTrace();
+    }
+
+    try {
+      List<Snapshot> snapshots = polygonAPI.getSnapshotsLosers();
+
+      System.out.println("\n\n" + "losers snapshots " + snapshots.size());
+      for (Snapshot snapshot : snapshots)
+        System.out.println("\t" + snapshot);
+
+
+    } catch (PolygonAPIException e) {
+      e.printStackTrace();
+    }
+
+
 
     polygonAPI.addPolygonStreamListener(new PolygonStreamListener() {
 

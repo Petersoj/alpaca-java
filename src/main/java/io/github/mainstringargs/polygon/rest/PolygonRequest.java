@@ -156,6 +156,16 @@ public class PolygonRequest {
 
       if (!node.isArray() && node.getObject().has("results")) {
         rawNodeString = node.getObject().get("results").toString();
+      } else if (!node.isArray() && node.getObject().has("ticker") && node.getObject().has("status")
+          && node.getObject().length() == 2) {
+        rawNodeString = node.getObject().get("ticker").toString();
+      } else if (!node.isArray() && node.getObject().has("tickers")
+          && node.getObject().has("status") && node.getObject().length() == 2) {
+        rawNodeString = node.getObject().get("tickers").toString();
+      } else if (!node.isArray() && node.getObject().has("tickers")
+          && node.getObject().has("status") && node.getObject().has("count")
+          && node.getObject().length() == 3) {
+        rawNodeString = node.getObject().get("tickers").toString();
       } else if (!node.isArray() && node.getObject().has("last")) {
         rawNodeString = node.getObject().get("last").toString();
       } else {
