@@ -52,7 +52,7 @@ public class PolygonRequest {
 
       builder.appendURLParameter(API_KEY_ID, keyId);
 
-      LOGGER.debug("Get URL " + builder.getURL());
+      LOGGER.info("Get URL " + builder.getURL());
 
       GetRequest getResponse =
           Unirest.get(builder.getURL()).header(USER_AGENT_KEY, AlpacaProperties.USER_AGENT_VALUE);

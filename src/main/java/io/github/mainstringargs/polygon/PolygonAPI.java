@@ -10,6 +10,7 @@ import com.google.gson.reflect.TypeToken;
 import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.JsonNode;
 import io.github.mainstringargs.alpaca.Utilities;
+import io.github.mainstringargs.polygon.domain.DailyOpenClose;
 import io.github.mainstringargs.polygon.domain.Quote;
 import io.github.mainstringargs.polygon.domain.StockTrade;
 import io.github.mainstringargs.polygon.domain.Trade;
@@ -646,6 +647,34 @@ public class PolygonAPI {
     Quote stockQuote = polygonRequest.getResponseObject(response, Quote.class);
 
     return stockQuote;
+  }
+
+  /**
+   * Gets the daily open close.
+   *
+   * @param symbol the symbol
+   * @param date the date
+   * @return the daily open close
+   * @throws PolygonAPIException the polygon API exception
+   */
+  public DailyOpenClose getDailyOpenClose(String symbol, LocalDate date)
+      throws PolygonAPIException {
+
+    PolygonRequestBuilder builder = new PolygonRequestBuilder(baseDataUrl, "open-close");
+
+    builder.appendEndpoint(symbol);
+    builder.appendEndpoint(Utilities.toDateString(date));
+
+    HttpResponse<JsonNode> response = polygonRequest.invokeGet(builder);
+
+    if (response.getStatus() != 200) {
+      throw new PolygonAPIException(response);
+    }
+
+    DailyOpenClose dailyOpenClose =
+        polygonRequest.getResponseObject(response, DailyOpenClose.class);
+
+    return dailyOpenClose;
   }
 
   /**

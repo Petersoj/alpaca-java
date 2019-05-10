@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import com.google.common.collect.Sets;
+import io.github.mainstringargs.polygon.domain.DailyOpenClose;
 import io.github.mainstringargs.polygon.domain.Quote;
 import io.github.mainstringargs.polygon.domain.Trade;
 import io.github.mainstringargs.polygon.domain.historic.quotes.Quotes;
@@ -255,6 +256,18 @@ public class PolygonExample {
 
       System.out.println("\n\n" + ticker + " Last Quote: ");
       System.out.println("\t" + quote);
+
+
+    } catch (PolygonAPIException e) {
+      e.printStackTrace();
+    }
+
+    try {
+      DailyOpenClose dailyOpenClose =
+          polygonAPI.getDailyOpenClose(ticker, LocalDate.of(2019, 5, 7));
+
+      System.out.println("\n\n" + ticker + " DailyOpenClose on " + LocalDate.of(2019, 5, 1) + ": ");
+      System.out.println("\t" + dailyOpenClose);
 
 
     } catch (PolygonAPIException e) {
