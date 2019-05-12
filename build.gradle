@@ -28,7 +28,7 @@ plugins {
 apply plugin: 'java'
 
 // Apply the application plugin to add support for building an application
-//apply plugin: 'application'
+apply plugin: 'application'
 
 apply plugin: 'eclipse'
 
@@ -64,7 +64,9 @@ dependencies {
 
     // Use JUnit test framework
     testCompile 'junit:junit:4.12'
+    
 }
+
 
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
@@ -144,6 +146,8 @@ sourceSets {
 }
 
 
+
+
 task generateAlpacaPOJOs(type: GradleBuild) {
     startParameter.projectProperties = ['jsonSchema2Pojo.source': 'sampleJson/alpaca', "jsonSchema2Pojo.targetPackage": 'io.github.mainstringargs.alpaca.domain', "jsonSchema2Pojo.removeOldOutput": 'true']
 
@@ -204,3 +208,29 @@ compileJava {
 if (hasProperty('buildScan')) {
 	buildScan { licenseAgreementUrl = 'https://gradle.com/terms-of-service'; licenseAgree = 'yes' }
 }
+
+
+applicationDistribution.from("src/main/resources") {
+    into "lib/resources"
+    include "**/*.properties.default"
+    rename {
+        filename -> filename.replace '.properties.default', '.properties'
+    }
+    
+}
+
+startScripts {
+   classpath += files('resources')
+}
+
+
+
+run {
+    
+}
+
+
+//mainClassName = 'io.github.mainstringargs.alpaca.AlpacaExample'
+mainClassName = 'io.github.mainstringargs.polygon.PolygonExample'
+
+

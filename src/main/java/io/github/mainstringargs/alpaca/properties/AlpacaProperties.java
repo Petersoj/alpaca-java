@@ -2,6 +2,9 @@ package io.github.mainstringargs.alpaca.properties;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URL;
+import java.util.Enumeration;
+import java.util.LinkedHashSet;
 import java.util.Properties;
 
 /**
@@ -10,18 +13,44 @@ import java.util.Properties;
 public class AlpacaProperties {
 
   /** The property file. */
-  private static Properties propertyFile;
+  private static LinkedHashSet<Properties> propertyFiles = new LinkedHashSet<>();
 
 
   static {
-    InputStream is = AlpacaProperties.class.getResourceAsStream("/alpaca.properties");
-    propertyFile = new Properties();
+
+    Enumeration<URL> urls = null;
     try {
-      propertyFile.load(is);
-    } catch (IOException e) {
-      e.printStackTrace();
+      urls = ClassLoader.getSystemClassLoader().getResources("alpaca.properties");
+    } catch (IOException e2) {
+      e2.printStackTrace();
     }
 
+    while (urls.hasMoreElements()) {
+      InputStream is = null;
+      try {
+        URL url = urls.nextElement();
+        is = (url.openStream());
+      } catch (IOException e1) {
+        e1.printStackTrace();
+      }
+
+      Properties propertyFile = new Properties();
+      try {
+        propertyFile.load(is);
+      } catch (IOException e) {
+        e.printStackTrace();
+      }
+
+      if (is != null) {
+        try {
+          is.close();
+        } catch (IOException e) {
+          e.printStackTrace();
+        }
+      }
+
+      propertyFiles.add(propertyFile);
+    }
   }
 
   /** The Constant KEY_ID_KEY. */
@@ -52,7 +81,7 @@ public class AlpacaProperties {
   private static final String DEFAULT_DATA_URL = "https://data.alpaca.markets";
 
   /** The Constant INVALID_VALUE. */
-  public static final String INVALID_VALUE = "INVALID";
+  public static final String INVALID_VALUE = "<PLACEHOLDER>";
 
   /** The Constant KEY_ID_VALUE. */
   public static final String KEY_ID_VALUE = getProperty(KEY_ID_KEY, INVALID_VALUE);
@@ -79,7 +108,18 @@ public class AlpacaProperties {
    * @return the property
    */
   public static String getProperty(String key, String defaultValue) {
-    return propertyFile.getProperty(key, defaultValue).trim();
+
+    for (Properties prop : propertyFiles) {
+
+      if (prop.containsKey(key)) {
+        String propertyVal = prop.getProperty(key);
+        if (!propertyVal.equals(INVALID_VALUE)) {
+          return propertyVal;
+        }
+      }
+    }
+
+    return defaultValue;
   }
 
 }
