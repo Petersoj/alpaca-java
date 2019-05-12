@@ -47,7 +47,7 @@ public class PolygonRequestBuilder {
     this.baseUrl = baseUrl;
 
   }
-  
+
   /**
    * Instantiates a new polygon request builder.
    *

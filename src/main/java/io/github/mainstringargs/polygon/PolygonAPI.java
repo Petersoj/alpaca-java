@@ -13,7 +13,6 @@ import io.github.mainstringargs.alpaca.Utilities;
 import io.github.mainstringargs.polygon.domain.DailyOpenClose;
 import io.github.mainstringargs.polygon.domain.Quote;
 import io.github.mainstringargs.polygon.domain.Snapshot;
-import io.github.mainstringargs.polygon.domain.StockTrade;
 import io.github.mainstringargs.polygon.domain.Trade;
 import io.github.mainstringargs.polygon.domain.historic.quotes.Quotes;
 import io.github.mainstringargs.polygon.domain.historic.trades.Trades;
