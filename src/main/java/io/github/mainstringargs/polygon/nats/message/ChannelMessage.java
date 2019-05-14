@@ -2,12 +2,10 @@ package io.github.mainstringargs.polygon.nats.message;
 
 import io.github.mainstringargs.polygon.enums.ChannelType;
 
-
 /**
  * The Interface UpdateMessage.
  */
 public interface ChannelMessage {
-
 
   /**
    * Gets the ticker.

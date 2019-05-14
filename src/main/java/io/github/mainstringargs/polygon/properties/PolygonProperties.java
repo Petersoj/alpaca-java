@@ -58,7 +58,6 @@ public class PolygonProperties {
   /** The Constant KEY_ID_KEY. */
   private static final String KEY_ID_KEY = "key_id";
 
-
   /** The Constant BASE_DATA_URL_KEY. */
   private static final String BASE_DATA_URL_KEY = "base_data_url";
 
