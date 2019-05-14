@@ -17,6 +17,24 @@ import io.github.mainstringargs.alpaca.properties.AlpacaProperties;
  */
 public class PolygonRequest {
 
+  /** The Constant LAST_JSON_KEY. */
+  private static final String LAST_JSON_KEY = "last";
+
+  /** The Constant COUNT_JSON_KEY. */
+  private static final String COUNT_JSON_KEY = "count";
+
+  /** The Constant TICKERS_JSON_KEY. */
+  private static final String TICKERS_JSON_KEY = "tickers";
+
+  /** The Constant TICKER_JSON_KEY. */
+  private static final String TICKER_JSON_KEY = "ticker";
+
+  /** The Constant STATUS_JSON_KEY. */
+  private static final String STATUS_JSON_KEY = "status";
+
+  /** The Constant RESULTS_JSON_KEY. */
+  private static final String RESULTS_JSON_KEY = "results";
+
   /** The logger. */
   private static Logger LOGGER = LogManager.getLogger(PolygonRequest.class);
 
@@ -154,20 +172,20 @@ public class PolygonRequest {
 
       String rawNodeString = null;
 
-      if (!node.isArray() && node.getObject().has("results")) {
-        rawNodeString = node.getObject().get("results").toString();
-      } else if (!node.isArray() && node.getObject().has("ticker") && node.getObject().has("status")
+      if (!node.isArray() && node.getObject().has(RESULTS_JSON_KEY)) {
+        rawNodeString = node.getObject().get(RESULTS_JSON_KEY).toString();
+      } else if (!node.isArray() && node.getObject().has(TICKER_JSON_KEY) && node.getObject().has(STATUS_JSON_KEY)
           && node.getObject().length() == 2) {
-        rawNodeString = node.getObject().get("ticker").toString();
-      } else if (!node.isArray() && node.getObject().has("tickers")
-          && node.getObject().has("status") && node.getObject().length() == 2) {
-        rawNodeString = node.getObject().get("tickers").toString();
-      } else if (!node.isArray() && node.getObject().has("tickers")
-          && node.getObject().has("status") && node.getObject().has("count")
+        rawNodeString = node.getObject().get(TICKER_JSON_KEY).toString();
+      } else if (!node.isArray() && node.getObject().has(TICKERS_JSON_KEY)
+          && node.getObject().has(STATUS_JSON_KEY) && node.getObject().length() == 2) {
+        rawNodeString = node.getObject().get(TICKERS_JSON_KEY).toString();
+      } else if (!node.isArray() && node.getObject().has(TICKERS_JSON_KEY)
+          && node.getObject().has(STATUS_JSON_KEY) && node.getObject().has(COUNT_JSON_KEY)
           && node.getObject().length() == 3) {
-        rawNodeString = node.getObject().get("tickers").toString();
-      } else if (!node.isArray() && node.getObject().has("last")) {
-        rawNodeString = node.getObject().get("last").toString();
+        rawNodeString = node.getObject().get(TICKERS_JSON_KEY).toString();
+      } else if (!node.isArray() && node.getObject().has(LAST_JSON_KEY)) {
+        rawNodeString = node.getObject().get(LAST_JSON_KEY).toString();
       } else {
         rawNodeString = httpResponse.getBody().toString();
       }
