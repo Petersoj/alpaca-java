@@ -1,0 +1,18 @@
+{
+	"ticker": "AMZN",
+	"status": "OK",
+	"queryCount": 1,
+	"resultsCount": 1,
+	"adjusted": true,
+	"results": [
+		{
+
+			"v": 4.717842e+06,
+			"o": 1839.9,
+			"c": 1840.12,
+			"h": 1852.44,
+			"l": 1815.75,
+			"t": 1557864000000
+		}
+	]
+}
