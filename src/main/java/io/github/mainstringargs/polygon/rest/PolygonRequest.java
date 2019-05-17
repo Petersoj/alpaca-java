@@ -174,8 +174,8 @@ public class PolygonRequest {
 
       if (!node.isArray() && node.getObject().has(RESULTS_JSON_KEY)) {
         rawNodeString = node.getObject().get(RESULTS_JSON_KEY).toString();
-      } else if (!node.isArray() && node.getObject().has(TICKER_JSON_KEY) && node.getObject().has(STATUS_JSON_KEY)
-          && node.getObject().length() == 2) {
+      } else if (!node.isArray() && node.getObject().has(TICKER_JSON_KEY)
+          && node.getObject().has(STATUS_JSON_KEY) && node.getObject().length() == 2) {
         rawNodeString = node.getObject().get(TICKER_JSON_KEY).toString();
       } else if (!node.isArray() && node.getObject().has(TICKERS_JSON_KEY)
           && node.getObject().has(STATUS_JSON_KEY) && node.getObject().length() == 2) {
