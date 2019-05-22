@@ -14,6 +14,7 @@ import io.github.mainstringargs.polygon.domain.DailyOpenClose;
 import io.github.mainstringargs.polygon.domain.Quote;
 import io.github.mainstringargs.polygon.domain.Snapshot;
 import io.github.mainstringargs.polygon.domain.Trade;
+import io.github.mainstringargs.polygon.domain.aggregate.Aggregates;
 import io.github.mainstringargs.polygon.domain.historic.quotes.Quotes;
 import io.github.mainstringargs.polygon.domain.historic.trades.Trades;
 import io.github.mainstringargs.polygon.domain.meta.Exchange;
@@ -781,6 +782,39 @@ public class PolygonAPI {
 
     return snapshots;
   }
+
+  /**
+   * Gets the previous close.
+   *
+   * @param ticker the ticker
+   * @return the previous close
+   * @throws PolygonAPIException the polygon API exception
+   */
+  public Aggregates getPreviousClose(String ticker) throws PolygonAPIException {
+
+    PolygonRequestBuilder builder = new PolygonRequestBuilder(baseDataUrl, "/aggs/ticker");
+
+    builder.setVersion("v2");
+    builder.appendEndpoint(ticker);
+    builder.appendEndpoint("prev");
+
+    HttpResponse<JsonNode> response = polygonRequest.invokeGet(builder);
+
+    if (response.getStatus() != 200) {
+      throw new PolygonAPIException(response);
+    }
+
+
+    Aggregates aggregates = polygonRequest.getResponseObject(response, Aggregates.class);
+
+    if (aggregates.getResultsCount() == 1) {
+      aggregates.getResults().get(0).setTicker(ticker);
+    }
+
+    return aggregates;
+  }
+
+
 
   /**
    * Adds the polygon stream listener.
