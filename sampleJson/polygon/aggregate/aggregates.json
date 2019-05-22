@@ -1,11 +1,11 @@
 {
-	"ticker": "AMZN",
 	"status": "OK",
 	"queryCount": 1,
 	"resultsCount": 1,
 	"adjusted": true,
 	"results": [
 		{
+			"ticker": "AMZN",
 			"v": 4.717842e+06,
 			"o": 1839.9,
 			"c": 1840.12,
