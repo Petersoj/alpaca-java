@@ -11,6 +11,7 @@ import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.exceptions.UnirestException;
 import com.mashape.unirest.request.GetRequest;
 import io.github.mainstringargs.alpaca.properties.AlpacaProperties;
+import io.github.mainstringargs.polygon.domain.aggregate.Aggregates;
 
 /**
  * The Class PolygonRequest.
@@ -70,7 +71,7 @@ public class PolygonRequest {
 
       builder.appendURLParameter(API_KEY_ID, keyId);
 
-      LOGGER.info("Get URL " + builder.getURL());
+      LOGGER.debug("Get URL " + builder.getURL());
 
       GetRequest getResponse =
           Unirest.get(builder.getURL()).header(USER_AGENT_KEY, AlpacaProperties.USER_AGENT_VALUE);
@@ -172,7 +173,11 @@ public class PolygonRequest {
 
       String rawNodeString = null;
 
-      if (!node.isArray() && node.getObject().has(RESULTS_JSON_KEY)) {
+      //hack :-(
+      if(type == Aggregates.class) {
+        rawNodeString = httpResponse.getBody().toString();
+      }
+      else if (!node.isArray() && node.getObject().has(RESULTS_JSON_KEY)) {
         rawNodeString = node.getObject().get(RESULTS_JSON_KEY).toString();
       } else if (!node.isArray() && node.getObject().has(TICKER_JSON_KEY)
           && node.getObject().has(STATUS_JSON_KEY) && node.getObject().length() == 2) {

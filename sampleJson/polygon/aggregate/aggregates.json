@@ -1,17 +1,17 @@
 {
-	"status": "OK",
-	"queryCount": 1,
 	"resultsCount": 1,
 	"adjusted": true,
+	"queryCount": 1,
 	"results": [
 		{
-			"ticker": "AMZN",
-			"v": 4.717842e+06,
-			"o": 1839.9,
-			"c": 1840.12,
-			"h": 1852.44,
-			"l": 1815.75,
-			"t": 1557864000000
+			"c": 127.67,
+			"ticker": "MSFT",
+			"t": 1558555200000,
+			"v": 1.725695E7,
+			"h": 128.24,
+			"l": 126.52,
+			"o": 126.62
 		}
-	]
+	],
+	"status": "OK"
 }

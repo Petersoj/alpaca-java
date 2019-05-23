@@ -6,6 +6,8 @@ import java.util.Arrays;
 import java.util.List;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.json.JSONArray;
+import org.json.JSONObject;
 import com.google.gson.reflect.TypeToken;
 import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.JsonNode;
@@ -31,6 +33,7 @@ import io.github.mainstringargs.polygon.domain.reference.Tickers;
 import io.github.mainstringargs.polygon.domain.reference.TypesMapping;
 import io.github.mainstringargs.polygon.enums.Locale;
 import io.github.mainstringargs.polygon.enums.Sort;
+import io.github.mainstringargs.polygon.enums.Timespan;
 import io.github.mainstringargs.polygon.nats.PolygonNatsClient;
 import io.github.mainstringargs.polygon.nats.PolygonStreamListener;
 import io.github.mainstringargs.polygon.properties.PolygonProperties;
@@ -787,16 +790,21 @@ public class PolygonAPI {
    * Gets the previous close.
    *
    * @param ticker the ticker
+   * @param unadjusted the unadjusted
    * @return the previous close
    * @throws PolygonAPIException the polygon API exception
    */
-  public Aggregates getPreviousClose(String ticker) throws PolygonAPIException {
+  public Aggregates getPreviousClose(String ticker, Boolean unadjusted) throws PolygonAPIException {
 
-    PolygonRequestBuilder builder = new PolygonRequestBuilder(baseDataUrl, "/aggs/ticker");
+    PolygonRequestBuilder builder = new PolygonRequestBuilder(baseDataUrl, "aggs/ticker");
 
     builder.setVersion("v2");
     builder.appendEndpoint(ticker);
     builder.appendEndpoint("prev");
+
+    if (unadjusted != null) {
+      builder.appendURLParameter("unadjusted", unadjusted.toString());
+    }
 
     HttpResponse<JsonNode> response = polygonRequest.invokeGet(builder);
 
@@ -814,7 +822,107 @@ public class PolygonAPI {
     return aggregates;
   }
 
+  /**
+   * Gets the aggregates.
+   *
+   * @param ticker the ticker
+   * @param multiplier the multiplier
+   * @param timeSpan the time span
+   * @param fromDate the from date
+   * @param toDate the to date
+   * @param unadjusted the unadjusted
+   * @return the aggregates
+   * @throws PolygonAPIException the polygon API exception
+   */
+  public Aggregates getAggregates(String ticker, Integer multiplier, Timespan timeSpan,
+      LocalDate fromDate, LocalDate toDate, Boolean unadjusted) throws PolygonAPIException {
 
+    PolygonRequestBuilder builder = new PolygonRequestBuilder(baseDataUrl, "aggs/ticker");
+
+    builder.setVersion("v2");
+    builder.appendEndpoint(ticker);
+    builder.appendEndpoint("range");
+    builder.appendEndpoint(Integer.toString((multiplier != null) ? multiplier : 1));
+    builder.appendEndpoint(timeSpan.getAPIName());
+    builder.appendEndpoint(Utilities.toDateString(fromDate));
+    builder.appendEndpoint(Utilities.toDateString(toDate));
+
+    if (unadjusted != null) {
+      builder.appendURLParameter("unadjusted", unadjusted.toString());
+    }
+
+    HttpResponse<JsonNode> response = polygonRequest.invokeGet(builder);
+
+    if (response.getStatus() != 200) {
+      throw new PolygonAPIException(response);
+    }
+
+
+    Aggregates aggregates = polygonRequest.getResponseObject(response, Aggregates.class);
+
+    if (aggregates.getResultsCount() != 0) {
+      List<io.github.mainstringargs.polygon.domain.aggregate.Result> results =
+          aggregates.getResults();
+      for (io.github.mainstringargs.polygon.domain.aggregate.Result result : results) {
+        result.setTicker(ticker);
+      }
+    }
+
+    return aggregates;
+  }
+
+  /**
+   * Gets the grouped daily.
+   *
+   * @param locale the locale
+   * @param market the market
+   * @param date the date
+   * @param unadjusted the unadjusted
+   * @return the grouped daily
+   * @throws PolygonAPIException the polygon API exception
+   */
+  public Aggregates getGroupedDaily(Locale locale,
+      io.github.mainstringargs.polygon.enums.Market market, LocalDate date, Boolean unadjusted)
+      throws PolygonAPIException {
+
+    PolygonRequestBuilder builder = new PolygonRequestBuilder(baseDataUrl, "aggs/grouped/locale");
+
+    builder.setVersion("v2");
+    builder.appendEndpoint(locale.getAPIName());
+    builder.appendEndpoint("market");
+    builder.appendEndpoint(market.getAPIName());
+    builder.appendEndpoint(Utilities.toDateString(date));
+
+    if (unadjusted != null) {
+      builder.appendURLParameter("unadjusted", unadjusted.toString());
+    }
+
+    HttpResponse<JsonNode> response = polygonRequest.invokeGet(builder);
+
+    if (response.getStatus() != 200) {
+      throw new PolygonAPIException(response);
+    }
+
+
+    Aggregates aggregates = polygonRequest.getResponseObject(response, Aggregates.class);
+
+    if (aggregates.getResultsCount() != 0) {
+      List<io.github.mainstringargs.polygon.domain.aggregate.Result> results =
+          aggregates.getResults();
+      JsonNode responseJson = response.getBody();
+      JSONArray resultsArr = (JSONArray) responseJson.getObject().get("results");
+
+      for (int i = 0; i < results.size(); i++) {
+        io.github.mainstringargs.polygon.domain.aggregate.Result result = results.get(i);
+        JSONObject jsonObj = (JSONObject) resultsArr.get(i);
+        result.setTicker(jsonObj.get("T").toString());
+
+
+      }
+    }
+
+    return aggregates;
+  }
 
   /**
    * Adds the polygon stream listener.

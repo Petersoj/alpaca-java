@@ -10,6 +10,8 @@ import io.github.mainstringargs.polygon.domain.DailyOpenClose;
 import io.github.mainstringargs.polygon.domain.Quote;
 import io.github.mainstringargs.polygon.domain.Snapshot;
 import io.github.mainstringargs.polygon.domain.Trade;
+import io.github.mainstringargs.polygon.domain.aggregate.Aggregates;
+import io.github.mainstringargs.polygon.domain.aggregate.Result;
 import io.github.mainstringargs.polygon.domain.historic.quotes.Quotes;
 import io.github.mainstringargs.polygon.domain.historic.trades.Tick;
 import io.github.mainstringargs.polygon.domain.historic.trades.Trades;
@@ -28,6 +30,7 @@ import io.github.mainstringargs.polygon.domain.reference.TypesMapping;
 import io.github.mainstringargs.polygon.enums.ChannelType;
 import io.github.mainstringargs.polygon.enums.Locale;
 import io.github.mainstringargs.polygon.enums.Sort;
+import io.github.mainstringargs.polygon.enums.Timespan;
 import io.github.mainstringargs.polygon.nats.PolygonStreamListener;
 import io.github.mainstringargs.polygon.nats.message.ChannelMessage;
 import io.github.mainstringargs.polygon.rest.exceptions.PolygonAPIException;
@@ -323,6 +326,43 @@ public class PolygonExample {
       e.printStackTrace();
     }
 
+    try {
+      Aggregates aggs = polygonAPI.getPreviousClose(ticker, false);
+
+      System.out.println("\n\n" + "previous close aggregates " + aggs.getResultsCount());
+      for (Result result : aggs.getResults())
+        System.out.println("\t" + result);
+
+
+    } catch (PolygonAPIException e) {
+      e.printStackTrace();
+    }
+
+    try {
+      Aggregates aggs = polygonAPI.getAggregates(ticker, null, Timespan.Hour,
+          LocalDate.of(2019, 4, 23), LocalDate.of(2019, 4, 26), false);
+
+      System.out.println("\n\n" + "Aggs over time " + aggs.getResultsCount());
+      for (Result result : aggs.getResults())
+        System.out.println("\t" + result);
+
+
+    } catch (PolygonAPIException e) {
+      e.printStackTrace();
+    }
+
+    try {
+      Aggregates aggs = polygonAPI.getGroupedDaily(Locale.US,
+          io.github.mainstringargs.polygon.enums.Market.STOCKS, LocalDate.of(2019, 4, 26), false);
+
+      System.out.println("\n\n" + "Grouped Daily " + aggs.getResultsCount());
+      for (Result result : aggs.getResults())
+        System.out.println("\t" + result);
+
+
+    } catch (PolygonAPIException e) {
+      e.printStackTrace();
+    }
 
 
     polygonAPI.addPolygonStreamListener(new PolygonStreamListener() {
