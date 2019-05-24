@@ -6,56 +6,56 @@ package io.github.mainstringargs.alpaca;
 public class AlpacaConstants {
 
 
-  /** The Constant SYMBOLS_URL_PARAMETER. */
-  public static final String SYMBOLS_URL_PARAMETER = "symbols";
+  /** The Constant SYMBOLS_PARAMETER. */
+  public static final String SYMBOLS_PARAMETER = "symbols";
 
-  /** The Constant END_URL_PARAMETER. */
-  public static final String END_URL_PARAMETER = "end";
+  /** The Constant END_PARAMETER. */
+  public static final String END_PARAMETER = "end";
 
-  /** The Constant START_URL_PARAMETER. */
-  public static final String START_URL_PARAMETER = "start";
+  /** The Constant START_PARAMETER. */
+  public static final String START_PARAMETER = "start";
 
-  /** The Constant ASSET_CLASS_URL_PARAMETER. */
-  public static final String ASSET_CLASS_URL_PARAMETER = "asset_class";
+  /** The Constant ASSET_CLASS_PARAMETER. */
+  public static final String ASSET_CLASS_PARAMETER = "asset_class";
 
-  /** The Constant CLIENT_ORDER_ID_URL_PARAMETER. */
-  public static final String CLIENT_ORDER_ID_URL_PARAMETER = "client_order_id";
+  /** The Constant CLIENT_ORDER_ID_PARAMETER. */
+  public static final String CLIENT_ORDER_ID_PARAMETER = "client_order_id";
 
-  /** The Constant STOP_PRICE_URL_PARAMETER. */
-  public static final String STOP_PRICE_URL_PARAMETER = "stop_price";
+  /** The Constant STOP_PRICE_PARAMETER. */
+  public static final String STOP_PRICE_PARAMETER = "stop_price";
 
-  /** The Constant LIMIT_PRICE_URL_PARAMETER. */
-  public static final String LIMIT_PRICE_URL_PARAMETER = "limit_price";
+  /** The Constant LIMIT_PRICE_PARAMETER. */
+  public static final String LIMIT_PRICE_PARAMETER = "limit_price";
 
-  /** The Constant TIME_IN_FORCE_URL_PARAMETER. */
-  public static final String TIME_IN_FORCE_URL_PARAMETER = "time_in_force";
+  /** The Constant TIME_IN_FORCE_PARAMETER. */
+  public static final String TIME_IN_FORCE_PARAMETER = "time_in_force";
 
-  /** The Constant TYPE_URL_PARAMETER. */
-  public static final String TYPE_URL_PARAMETER = "type";
+  /** The Constant TYPE_PARAMETER. */
+  public static final String TYPE_PARAMETER = "type";
 
-  /** The Constant SIDE_URL_PARAMETER. */
-  public static final String SIDE_URL_PARAMETER = "side";
+  /** The Constant SIDE_PARAMETER. */
+  public static final String SIDE_PARAMETER = "side";
 
-  /** The Constant QTY_URL_PARAMETER. */
-  public static final String QTY_URL_PARAMETER = "qty";
+  /** The Constant QTY_PARAMETER. */
+  public static final String QTY_PARAMETER = "qty";
 
-  /** The Constant SYMBOL_URL_PARAMETER. */
-  public static final String SYMBOL_URL_PARAMETER = "symbol";
+  /** The Constant SYMBOL_PARAMETER. */
+  public static final String SYMBOL_PARAMETER = "symbol";
 
-  /** The Constant DIRECTION_URL_PARAMETER. */
-  public static final String DIRECTION_URL_PARAMETER = "direction";
+  /** The Constant DIRECTION_PARAMETER. */
+  public static final String DIRECTION_PARAMETER = "direction";
 
-  /** The Constant UNTIL_URL_PARAMETER. */
-  public static final String UNTIL_URL_PARAMETER = "until";
+  /** The Constant UNTIL_PARAMETER. */
+  public static final String UNTIL_PARAMETER = "until";
 
-  /** The Constant AFTER_URL_PARAMETER. */
-  public static final String AFTER_URL_PARAMETER = "after";
+  /** The Constant AFTER_PARAMETER. */
+  public static final String AFTER_PARAMETER = "after";
 
-  /** The Constant LIMIT_URL_PARAMETER. */
-  public static final String LIMIT_URL_PARAMETER = "limit";
+  /** The Constant LIMIT_PARAMETER. */
+  public static final String LIMIT_PARAMETER = "limit";
 
-  /** The Constant STATUS_URL_PARAMETER. */
-  public static final String STATUS_URL_PARAMETER = "status";
+  /** The Constant STATUS_PARAMETER. */
+  public static final String STATUS_PARAMETER = "status";
 
   /** The Constant BARS_ENDPOINT. */
   public static final String BARS_ENDPOINT = "bars";

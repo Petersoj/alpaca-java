@@ -180,6 +180,8 @@ public class AlpacaExample {
     } catch (AlpacaAPIException e) {
       e.printStackTrace();
     }
+    
+    System.exit(0);
 
   }
 

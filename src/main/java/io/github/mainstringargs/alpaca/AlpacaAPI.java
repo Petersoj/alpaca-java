@@ -196,25 +196,25 @@ public class AlpacaAPI {
         new AlpacaRequestBuilder(baseAccountUrl, AlpacaConstants.ORDERS_ENDPOINT);
 
     if (status != null) {
-      urlBuilder.appendURLParameter(AlpacaConstants.STATUS_URL_PARAMETER, status.getAPIName());
+      urlBuilder.appendURLParameter(AlpacaConstants.STATUS_PARAMETER, status.getAPIName());
     }
 
     if (limit != null) {
-      urlBuilder.appendURLParameter(AlpacaConstants.LIMIT_URL_PARAMETER, limit.toString());
+      urlBuilder.appendURLParameter(AlpacaConstants.LIMIT_PARAMETER, limit.toString());
     }
 
     if (after != null) {
-      urlBuilder.appendURLParameter(AlpacaConstants.AFTER_URL_PARAMETER,
+      urlBuilder.appendURLParameter(AlpacaConstants.AFTER_PARAMETER,
           Utilities.toDateTimeString(after));
     }
 
     if (until != null) {
-      urlBuilder.appendURLParameter(AlpacaConstants.UNTIL_URL_PARAMETER,
+      urlBuilder.appendURLParameter(AlpacaConstants.UNTIL_PARAMETER,
           Utilities.toDateTimeString(until));
     }
 
     if (direction != null) {
-      urlBuilder.appendURLParameter(AlpacaConstants.DIRECTION_URL_PARAMETER,
+      urlBuilder.appendURLParameter(AlpacaConstants.DIRECTION_PARAMETER,
           direction.getAPIName());
     }
 
@@ -256,38 +256,38 @@ public class AlpacaAPI {
         new AlpacaRequestBuilder(baseAccountUrl, AlpacaConstants.ORDERS_ENDPOINT);
 
     if (symbol != null) {
-      urlBuilder.appendBodyProperty(AlpacaConstants.SYMBOL_URL_PARAMETER, symbol);
+      urlBuilder.appendBodyProperty(AlpacaConstants.SYMBOL_PARAMETER, symbol);
     }
 
     if (quantity != null) {
-      urlBuilder.appendBodyProperty(AlpacaConstants.QTY_URL_PARAMETER, quantity.toString());
+      urlBuilder.appendBodyProperty(AlpacaConstants.QTY_PARAMETER, quantity.toString());
     }
 
     if (side != null) {
-      urlBuilder.appendBodyProperty(AlpacaConstants.SIDE_URL_PARAMETER, side.getAPIName());
+      urlBuilder.appendBodyProperty(AlpacaConstants.SIDE_PARAMETER, side.getAPIName());
     }
 
     if (type != null) {
-      urlBuilder.appendBodyProperty(AlpacaConstants.TYPE_URL_PARAMETER, type.getAPIName());
+      urlBuilder.appendBodyProperty(AlpacaConstants.TYPE_PARAMETER, type.getAPIName());
     }
 
     if (timeInForce != null) {
-      urlBuilder.appendBodyProperty(AlpacaConstants.TIME_IN_FORCE_URL_PARAMETER,
+      urlBuilder.appendBodyProperty(AlpacaConstants.TIME_IN_FORCE_PARAMETER,
           timeInForce.getAPIName());
     }
 
     if (limitPrice != null) {
-      urlBuilder.appendBodyProperty(AlpacaConstants.LIMIT_PRICE_URL_PARAMETER,
+      urlBuilder.appendBodyProperty(AlpacaConstants.LIMIT_PRICE_PARAMETER,
           Utilities.toDecimalFormat(limitPrice));
     }
 
     if (stopPrice != null) {
-      urlBuilder.appendBodyProperty(AlpacaConstants.STOP_PRICE_URL_PARAMETER,
+      urlBuilder.appendBodyProperty(AlpacaConstants.STOP_PRICE_PARAMETER,
           Utilities.toDecimalFormat(stopPrice));
     }
 
     if (clientOrderId != null) {
-      urlBuilder.appendBodyProperty(AlpacaConstants.CLIENT_ORDER_ID_URL_PARAMETER, clientOrderId);
+      urlBuilder.appendBodyProperty(AlpacaConstants.CLIENT_ORDER_ID_PARAMETER, clientOrderId);
     }
 
     HttpResponse<JsonNode> response = alpacaRequest.invokePost(urlBuilder);
@@ -357,7 +357,7 @@ public class AlpacaAPI {
         e.printStackTrace();
       }
 
-      urlBuilder.appendURLParameter(AlpacaConstants.CLIENT_ORDER_ID_URL_PARAMETER, clientOrderId);
+      urlBuilder.appendURLParameter(AlpacaConstants.CLIENT_ORDER_ID_PARAMETER, clientOrderId);
     }
 
     HttpResponse<JsonNode> response = alpacaRequest.invokeGet(urlBuilder);
@@ -508,11 +508,11 @@ public class AlpacaAPI {
         new AlpacaRequestBuilder(baseAccountUrl, AlpacaConstants.ASSETS_ENDPOINT);
 
     if (assetStatus != null) {
-      urlBuilder.appendURLParameter(AlpacaConstants.STATUS_URL_PARAMETER, assetStatus.getAPIName());
+      urlBuilder.appendURLParameter(AlpacaConstants.STATUS_PARAMETER, assetStatus.getAPIName());
     }
 
     if (assetClass != null) {
-      urlBuilder.appendURLParameter(AlpacaConstants.ASSET_CLASS_URL_PARAMETER, assetClass.trim());
+      urlBuilder.appendURLParameter(AlpacaConstants.ASSET_CLASS_PARAMETER, assetClass.trim());
     }
 
     HttpResponse<JsonNode> response = alpacaRequest.invokeGet(urlBuilder);
@@ -599,12 +599,12 @@ public class AlpacaAPI {
         new AlpacaRequestBuilder(baseAccountUrl, AlpacaConstants.CALENDAR_ENDPOINT);
 
     if (start != null) {
-      urlBuilder.appendURLParameter(AlpacaConstants.START_URL_PARAMETER,
+      urlBuilder.appendURLParameter(AlpacaConstants.START_PARAMETER,
           Utilities.toDateString(start));
     }
 
     if (end != null) {
-      urlBuilder.appendURLParameter(AlpacaConstants.END_URL_PARAMETER, Utilities.toDateString(end));
+      urlBuilder.appendURLParameter(AlpacaConstants.END_PARAMETER, Utilities.toDateString(end));
     }
 
     HttpResponse<JsonNode> response = alpacaRequest.invokeGet(urlBuilder);
@@ -672,31 +672,31 @@ public class AlpacaAPI {
     }
 
     if (start != null) {
-      urlBuilder.appendURLParameter(AlpacaConstants.START_URL_PARAMETER,
+      urlBuilder.appendURLParameter(AlpacaConstants.START_PARAMETER,
           Utilities.toDateTimeString(start));
     }
 
     if (end != null) {
-      urlBuilder.appendURLParameter(AlpacaConstants.END_URL_PARAMETER,
+      urlBuilder.appendURLParameter(AlpacaConstants.END_PARAMETER,
           Utilities.toDateTimeString(end));
     }
 
     if (after != null) {
-      urlBuilder.appendURLParameter(AlpacaConstants.AFTER_URL_PARAMETER,
+      urlBuilder.appendURLParameter(AlpacaConstants.AFTER_PARAMETER,
           Utilities.toDateTimeString(after));
     }
 
     if (until != null) {
-      urlBuilder.appendURLParameter(AlpacaConstants.UNTIL_URL_PARAMETER,
+      urlBuilder.appendURLParameter(AlpacaConstants.UNTIL_PARAMETER,
           Utilities.toDateTimeString(until));
     }
 
     if (limit != null) {
-      urlBuilder.appendURLParameter(AlpacaConstants.LIMIT_URL_PARAMETER, limit.toString());
+      urlBuilder.appendURLParameter(AlpacaConstants.LIMIT_PARAMETER, limit.toString());
     }
 
     if (symbols != null) {
-      urlBuilder.appendURLParameter(AlpacaConstants.SYMBOLS_URL_PARAMETER,
+      urlBuilder.appendURLParameter(AlpacaConstants.SYMBOLS_PARAMETER,
           String.join(",", symbols));
     }
 
@@ -741,31 +741,31 @@ public class AlpacaAPI {
     }
 
     if (start != null) {
-      urlBuilder.appendURLParameter(AlpacaConstants.START_URL_PARAMETER,
+      urlBuilder.appendURLParameter(AlpacaConstants.START_PARAMETER,
           Utilities.toDateTimeString(start));
     }
 
     if (end != null) {
-      urlBuilder.appendURLParameter(AlpacaConstants.END_URL_PARAMETER,
+      urlBuilder.appendURLParameter(AlpacaConstants.END_PARAMETER,
           Utilities.toDateTimeString(end));
     }
 
     if (after != null) {
-      urlBuilder.appendURLParameter(AlpacaConstants.AFTER_URL_PARAMETER,
+      urlBuilder.appendURLParameter(AlpacaConstants.AFTER_PARAMETER,
           Utilities.toDateTimeString(after));
     }
 
     if (until != null) {
-      urlBuilder.appendURLParameter(AlpacaConstants.UNTIL_URL_PARAMETER,
+      urlBuilder.appendURLParameter(AlpacaConstants.UNTIL_PARAMETER,
           Utilities.toDateTimeString(until));
     }
 
     if (limit != null) {
-      urlBuilder.appendURLParameter(AlpacaConstants.LIMIT_URL_PARAMETER, limit.toString());
+      urlBuilder.appendURLParameter(AlpacaConstants.LIMIT_PARAMETER, limit.toString());
     }
 
     if (symbol != null) {
-      urlBuilder.appendURLParameter(AlpacaConstants.SYMBOLS_URL_PARAMETER,
+      urlBuilder.appendURLParameter(AlpacaConstants.SYMBOLS_PARAMETER,
           String.join(",", symbol));
     }
 
