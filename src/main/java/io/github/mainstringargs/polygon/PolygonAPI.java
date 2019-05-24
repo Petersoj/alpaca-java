@@ -103,7 +103,8 @@ public class PolygonAPI {
    */
   public SymbolEndpoints getSymbolEndpoints(String symbol) throws PolygonAPIException {
 
-    PolygonRequestBuilder builder = new PolygonRequestBuilder(baseDataUrl, "meta/symbols");
+    PolygonRequestBuilder builder = new PolygonRequestBuilder(baseDataUrl,
+        PolygonConstants.META_ENDPOINT + "/" + PolygonConstants.SYMBOLS_ENDPOINT);
 
     builder.appendEndpoint(symbol);
 
@@ -128,7 +129,8 @@ public class PolygonAPI {
    */
   public SymbolDetails getSymbolDetails(String symbol) throws PolygonAPIException {
 
-    PolygonRequestBuilder builder = new PolygonRequestBuilder(baseDataUrl, "meta/symbols");
+    PolygonRequestBuilder builder = new PolygonRequestBuilder(baseDataUrl,
+        PolygonConstants.META_ENDPOINT + "/" + PolygonConstants.SYMBOLS_ENDPOINT);
 
     builder.appendEndpoint(symbol);
     builder.appendEndpoint("company");
@@ -155,7 +157,8 @@ public class PolygonAPI {
   public SymbolAnalystRatings getSymbolAnalystRatings(String symbol) throws PolygonAPIException {
 
 
-    PolygonRequestBuilder builder = new PolygonRequestBuilder(baseDataUrl, "meta/symbols");
+    PolygonRequestBuilder builder = new PolygonRequestBuilder(baseDataUrl,
+        PolygonConstants.META_ENDPOINT + "/" + PolygonConstants.SYMBOLS_ENDPOINT);
 
     builder.appendEndpoint(symbol);
     builder.appendEndpoint("analysts");
@@ -182,7 +185,8 @@ public class PolygonAPI {
    */
   public List<SymbolDividend> getSymbolDividends(String symbol) throws PolygonAPIException {
 
-    PolygonRequestBuilder builder = new PolygonRequestBuilder(baseDataUrl, "meta/symbols");
+    PolygonRequestBuilder builder = new PolygonRequestBuilder(baseDataUrl,
+        PolygonConstants.META_ENDPOINT + "/" + PolygonConstants.SYMBOLS_ENDPOINT);
 
     builder.appendEndpoint(symbol);
     builder.appendEndpoint("dividends");
@@ -211,7 +215,8 @@ public class PolygonAPI {
   public List<SymbolEarning> getSymbolEarnings(String symbol) throws PolygonAPIException {
 
 
-    PolygonRequestBuilder builder = new PolygonRequestBuilder(baseDataUrl, "meta/symbols");
+    PolygonRequestBuilder builder = new PolygonRequestBuilder(baseDataUrl,
+        PolygonConstants.META_ENDPOINT + "/" + PolygonConstants.SYMBOLS_ENDPOINT);
 
     builder.appendEndpoint(symbol);
     builder.appendEndpoint("earnings");
@@ -241,7 +246,8 @@ public class PolygonAPI {
   public List<SymbolFinancial> getSymbolFinancials(String symbol) throws PolygonAPIException {
 
 
-    PolygonRequestBuilder builder = new PolygonRequestBuilder(baseDataUrl, "meta/symbols");
+    PolygonRequestBuilder builder = new PolygonRequestBuilder(baseDataUrl,
+        PolygonConstants.META_ENDPOINT + "/" + PolygonConstants.SYMBOLS_ENDPOINT);
 
     builder.appendEndpoint(symbol);
     builder.appendEndpoint("financials");
@@ -270,7 +276,8 @@ public class PolygonAPI {
   public List<SymbolNews> getSymbolNews(String symbol) throws PolygonAPIException {
 
 
-    PolygonRequestBuilder builder = new PolygonRequestBuilder(baseDataUrl, "meta/symbols");
+    PolygonRequestBuilder builder = new PolygonRequestBuilder(baseDataUrl,
+        PolygonConstants.META_ENDPOINT + "/" + PolygonConstants.SYMBOLS_ENDPOINT);
 
     builder.appendEndpoint(symbol);
     builder.appendEndpoint("news");
@@ -302,7 +309,8 @@ public class PolygonAPI {
   public List<SymbolNews> getSymbolNews(String symbol, Integer perpage, Integer page)
       throws PolygonAPIException {
 
-    PolygonRequestBuilder builder = new PolygonRequestBuilder(baseDataUrl, "meta/symbols");
+    PolygonRequestBuilder builder = new PolygonRequestBuilder(baseDataUrl,
+        PolygonConstants.META_ENDPOINT + "/" + PolygonConstants.SYMBOLS_ENDPOINT);
 
     builder.appendEndpoint(symbol);
     builder.appendEndpoint("news");
