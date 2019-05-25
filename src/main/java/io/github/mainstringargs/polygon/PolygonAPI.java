@@ -133,7 +133,7 @@ public class PolygonAPI {
         PolygonConstants.META_ENDPOINT + "/" + PolygonConstants.SYMBOLS_ENDPOINT);
 
     builder.appendEndpoint(symbol);
-    builder.appendEndpoint("company");
+    builder.appendEndpoint(PolygonConstants.COMPANY_ENDPOINT);
 
     HttpResponse<JsonNode> response = polygonRequest.invokeGet(builder);
 
@@ -161,7 +161,7 @@ public class PolygonAPI {
         PolygonConstants.META_ENDPOINT + "/" + PolygonConstants.SYMBOLS_ENDPOINT);
 
     builder.appendEndpoint(symbol);
-    builder.appendEndpoint("analysts");
+    builder.appendEndpoint(PolygonConstants.ANALYSTS_ENDPOINT);
 
 
     HttpResponse<JsonNode> response = polygonRequest.invokeGet(builder);
@@ -189,7 +189,7 @@ public class PolygonAPI {
         PolygonConstants.META_ENDPOINT + "/" + PolygonConstants.SYMBOLS_ENDPOINT);
 
     builder.appendEndpoint(symbol);
-    builder.appendEndpoint("dividends");
+    builder.appendEndpoint(PolygonConstants.DIVIDENDS_ENDPOINT);
 
 
     HttpResponse<JsonNode> response = polygonRequest.invokeGet(builder);
@@ -219,7 +219,7 @@ public class PolygonAPI {
         PolygonConstants.META_ENDPOINT + "/" + PolygonConstants.SYMBOLS_ENDPOINT);
 
     builder.appendEndpoint(symbol);
-    builder.appendEndpoint("earnings");
+    builder.appendEndpoint(PolygonConstants.EARNINGS_ENDPOINT);
 
 
     HttpResponse<JsonNode> response = polygonRequest.invokeGet(builder);
@@ -250,7 +250,7 @@ public class PolygonAPI {
         PolygonConstants.META_ENDPOINT + "/" + PolygonConstants.SYMBOLS_ENDPOINT);
 
     builder.appendEndpoint(symbol);
-    builder.appendEndpoint("financials");
+    builder.appendEndpoint(PolygonConstants.FINANCIALS_ENDPOINT);
 
 
     HttpResponse<JsonNode> response = polygonRequest.invokeGet(builder);
@@ -280,7 +280,7 @@ public class PolygonAPI {
         PolygonConstants.META_ENDPOINT + "/" + PolygonConstants.SYMBOLS_ENDPOINT);
 
     builder.appendEndpoint(symbol);
-    builder.appendEndpoint("news");
+    builder.appendEndpoint(PolygonConstants.NEWS_ENDPOINT);
 
 
     HttpResponse<JsonNode> response = polygonRequest.invokeGet(builder);
@@ -313,13 +313,13 @@ public class PolygonAPI {
         PolygonConstants.META_ENDPOINT + "/" + PolygonConstants.SYMBOLS_ENDPOINT);
 
     builder.appendEndpoint(symbol);
-    builder.appendEndpoint("news");
+    builder.appendEndpoint(PolygonConstants.NEWS_ENDPOINT);
     if (perpage != null) {
-      builder.appendURLParameter("perpage", perpage + "");
+      builder.appendURLParameter(PolygonConstants.PERPAGE_PARAMETER, perpage + "");
     }
 
     if (page != null) {
-      builder.appendURLParameter("page", page + "");
+      builder.appendURLParameter(PolygonConstants.PAGE_PARAMETER, page + "");
     }
 
     HttpResponse<JsonNode> response = polygonRequest.invokeGet(builder);
@@ -354,40 +354,41 @@ public class PolygonAPI {
       io.github.mainstringargs.polygon.enums.Market market, Locale locale, String search,
       Integer perpage, Integer page, Boolean active) throws PolygonAPIException {
 
-    PolygonRequestBuilder builder = new PolygonRequestBuilder(baseDataUrl, "reference/tickers");
+    PolygonRequestBuilder builder = new PolygonRequestBuilder(baseDataUrl,
+        PolygonConstants.REFERENCE_ENDPOINT + "/" + PolygonConstants.TICKERS_ENDPOINT);
 
-    builder.setVersion("v2");
+    builder.setVersion(PolygonConstants.VERSION_2_ENDPOINT);
 
     if (sort != null) {
-      builder.appendURLParameter("sort", sort.getAPIName());
+      builder.appendURLParameter(PolygonConstants.SORT_PARAMETER, sort.getAPIName());
     }
 
     if (type != null) {
-      builder.appendURLParameter("type", type.getAPIName());
+      builder.appendURLParameter(PolygonConstants.TYPE_PARAMETER, type.getAPIName());
     }
 
     if (market != null) {
-      builder.appendURLParameter("market", market.getAPIName());
+      builder.appendURLParameter(PolygonConstants.MARKET_PARAMETER, market.getAPIName());
     }
 
     if (locale != null) {
-      builder.appendURLParameter("locale", locale.getAPIName());
+      builder.appendURLParameter(PolygonConstants.LOCALE_PARAMETER, locale.getAPIName());
     }
 
     if (search != null) {
-      builder.appendURLParameter("search", search);
+      builder.appendURLParameter(PolygonConstants.SEARCH_PARAMETER, search);
     }
 
     if (perpage != null) {
-      builder.appendURLParameter("perpage", perpage + "");
+      builder.appendURLParameter(PolygonConstants.PERPAGE_PARAMETER, perpage + "");
     }
 
     if (page != null) {
-      builder.appendURLParameter("page", page + "");
+      builder.appendURLParameter(PolygonConstants.PAGE_PARAMETER, page + "");
     }
 
     if (active != null) {
-      builder.appendURLParameter("active", active + "");
+      builder.appendURLParameter(PolygonConstants.ACTIVE_PARAMETER, active + "");
     }
 
     HttpResponse<JsonNode> response = polygonRequest.invokeGet(builder);
@@ -412,7 +413,7 @@ public class PolygonAPI {
 
     PolygonRequestBuilder builder = new PolygonRequestBuilder(baseDataUrl, "reference/markets");
 
-    builder.setVersion("v2");
+    builder.setVersion(PolygonConstants.VERSION_2_ENDPOINT);
 
 
     HttpResponse<JsonNode> response = polygonRequest.invokeGet(builder);
@@ -441,7 +442,7 @@ public class PolygonAPI {
 
     PolygonRequestBuilder builder = new PolygonRequestBuilder(baseDataUrl, "reference/locales");
 
-    builder.setVersion("v2");
+    builder.setVersion(PolygonConstants.VERSION_2_ENDPOINT);
 
 
     HttpResponse<JsonNode> response = polygonRequest.invokeGet(builder);
@@ -472,7 +473,7 @@ public class PolygonAPI {
 
     PolygonRequestBuilder builder = new PolygonRequestBuilder(baseDataUrl, "reference/types");
 
-    builder.setVersion("v2");
+    builder.setVersion(PolygonConstants.VERSION_2_ENDPOINT);
 
 
     HttpResponse<JsonNode> response = polygonRequest.invokeGet(builder);
@@ -498,7 +499,7 @@ public class PolygonAPI {
 
     PolygonRequestBuilder builder = new PolygonRequestBuilder(baseDataUrl, "reference/splits");
 
-    builder.setVersion("v2");
+    builder.setVersion(PolygonConstants.VERSION_2_ENDPOINT);
 
     builder.appendEndpoint(symbol);
 
@@ -700,7 +701,7 @@ public class PolygonAPI {
     PolygonRequestBuilder builder =
         new PolygonRequestBuilder(baseDataUrl, "snapshot/locale/us/markets/stocks/tickers");
 
-    builder.setVersion("v2");
+    builder.setVersion(PolygonConstants.VERSION_2_ENDPOINT);
 
     HttpResponse<JsonNode> response = polygonRequest.invokeGet(builder);
 
@@ -727,7 +728,7 @@ public class PolygonAPI {
     PolygonRequestBuilder builder =
         new PolygonRequestBuilder(baseDataUrl, "snapshot/locale/us/markets/stocks/tickers");
 
-    builder.setVersion("v2");
+    builder.setVersion(PolygonConstants.VERSION_2_ENDPOINT);
     builder.appendEndpoint(symbol);
 
     HttpResponse<JsonNode> response = polygonRequest.invokeGet(builder);
@@ -753,7 +754,7 @@ public class PolygonAPI {
     PolygonRequestBuilder builder =
         new PolygonRequestBuilder(baseDataUrl, "snapshot/locale/us/markets/stocks/gainers");
 
-    builder.setVersion("v2");
+    builder.setVersion(PolygonConstants.VERSION_2_ENDPOINT);
 
     HttpResponse<JsonNode> response = polygonRequest.invokeGet(builder);
 
@@ -779,7 +780,7 @@ public class PolygonAPI {
     PolygonRequestBuilder builder =
         new PolygonRequestBuilder(baseDataUrl, "snapshot/locale/us/markets/stocks/losers");
 
-    builder.setVersion("v2");
+    builder.setVersion(PolygonConstants.VERSION_2_ENDPOINT);
 
     HttpResponse<JsonNode> response = polygonRequest.invokeGet(builder);
 
@@ -806,7 +807,7 @@ public class PolygonAPI {
 
     PolygonRequestBuilder builder = new PolygonRequestBuilder(baseDataUrl, "aggs/ticker");
 
-    builder.setVersion("v2");
+    builder.setVersion(PolygonConstants.VERSION_2_ENDPOINT);
     builder.appendEndpoint(ticker);
     builder.appendEndpoint("prev");
 
@@ -847,7 +848,7 @@ public class PolygonAPI {
 
     PolygonRequestBuilder builder = new PolygonRequestBuilder(baseDataUrl, "aggs/ticker");
 
-    builder.setVersion("v2");
+    builder.setVersion(PolygonConstants.VERSION_2_ENDPOINT);
     builder.appendEndpoint(ticker);
     builder.appendEndpoint("range");
     builder.appendEndpoint(Integer.toString((multiplier != null) ? multiplier : 1));
@@ -895,9 +896,9 @@ public class PolygonAPI {
 
     PolygonRequestBuilder builder = new PolygonRequestBuilder(baseDataUrl, "aggs/grouped/locale");
 
-    builder.setVersion("v2");
+    builder.setVersion(PolygonConstants.VERSION_2_ENDPOINT);
     builder.appendEndpoint(locale.getAPIName());
-    builder.appendEndpoint("market");
+    builder.appendEndpoint(PolygonConstants.MARKET_PARAMETER);
     builder.appendEndpoint(market.getAPIName());
     builder.appendEndpoint(Utilities.toDateString(date));
 
