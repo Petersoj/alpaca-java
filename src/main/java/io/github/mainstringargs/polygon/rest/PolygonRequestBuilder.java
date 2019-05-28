@@ -60,6 +60,23 @@ public class PolygonRequestBuilder {
 
   }
 
+  /**
+   * Instantiates a new polygon request builder.
+   *
+   * @param baseUrl the base url
+   * @param endpoint the endpoint
+   * @param appendedEndpoints the appended endpoints
+   */
+  public PolygonRequestBuilder(String baseUrl, String endpoint, String... appendedEndpoints) {
+    this.baseUrl = baseUrl;
+    this.endpoint = endpoint;
+
+    for (String appendedEndpoint : appendedEndpoints) {
+      this.appendEndpoint(appendedEndpoint);
+    }
+
+  }
+
 
   /**
    * Sets the version.

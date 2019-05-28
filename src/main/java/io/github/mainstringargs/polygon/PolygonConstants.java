@@ -44,9 +44,6 @@ public class PolygonConstants {
   /** The Constant SORT_PARAMETER. */
   static final String SORT_PARAMETER = "sort";
 
-  /** The Constant TICKERS_ENDPOINT. */
-  static final String TICKERS_ENDPOINT = "tickers";
-
   /** The Constant REFERENCE_ENDPOINT. */
   static final String REFERENCE_ENDPOINT = "reference";
 
@@ -61,9 +58,6 @@ public class PolygonConstants {
 
   /** The Constant NEWS_ENDPOINT. */
   static final String NEWS_ENDPOINT = "news";
- 
-  /** The Constant LOCALE_ENDPOINT. */
-  static final String LOCALE_ENDPOINT = "locale";
 
   /** The Constant GROUPED_ENDPOINT. */
   static final String GROUPED_ENDPOINT = "grouped";
@@ -79,9 +73,6 @@ public class PolygonConstants {
 
   /** The Constant LAST_QUOTE_ENDPOINT. */
   static final String LAST_QUOTE_ENDPOINT = "last_quote";
-
-  /** The Constant STOCKS_ENDPOINT. */
-  static final String STOCKS_ENDPOINT = "stocks";
 
   /** The Constant LAST_ENDPOINT. */
   static final String LAST_ENDPOINT = "last";
@@ -112,5 +103,42 @@ public class PolygonConstants {
 
   /** The Constant MARKET_ENDPOINT. */
   static final String MARKET_ENDPOINT = "market";
+
+  /** The Constant LOSERS_ENDPOINT. */
+  static final String LOSERS_ENDPOINT = "losers";
+
+  /** The Constant GAINERS_ENDPOINT. */
+  static final String GAINERS_ENDPOINT = "gainers";
+
+  /** The Constant TICKERS_ENDPOINT. */
+  static final String TICKERS_ENDPOINT = "tickers";
+
+  /** The Constant STOCKS_ENDPOINT. */
+  static final String STOCKS_ENDPOINT = "stocks";
+
+  /** The Constant US_ENDPOINT. */
+  static final String US_ENDPOINT = "us";
+
+  /** The Constant LOCALE_ENDPOINT. */
+  static final String LOCALE_ENDPOINT = "locale";
+
+  /** The Constant SNAPSHOT_ENDPOINT. */
+  static final String SNAPSHOT_ENDPOINT = "snapshot";
+
+  /** The Constant LIMIT_PARAMETER. */
+  static final String LIMIT_PARAMETER = "limit";
+
+  /** The Constant OFFSET_PARAMETER. */
+  static final String OFFSET_PARAMETER = "offset";
+
+  /** The Constant RANGE_ENDPOINT. */
+  static final String RANGE_ENDPOINT = "range";
+
+  /** The Constant UNADJUSTED_PARAMETER. */
+  static final String UNADJUSTED_PARAMETER = "unadjusted";
+
+  /** The Constant PREV_ENDPOINT. */
+  static final String PREV_ENDPOINT = "prev";
+
 
 }

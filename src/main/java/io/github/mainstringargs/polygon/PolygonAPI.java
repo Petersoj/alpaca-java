@@ -104,7 +104,7 @@ public class PolygonAPI {
   public SymbolEndpoints getSymbolEndpoints(String symbol) throws PolygonAPIException {
 
     PolygonRequestBuilder builder = new PolygonRequestBuilder(baseDataUrl,
-        PolygonConstants.META_ENDPOINT + "/" + PolygonConstants.SYMBOLS_ENDPOINT);
+        PolygonConstants.META_ENDPOINT, PolygonConstants.SYMBOLS_ENDPOINT);
 
     builder.appendEndpoint(symbol);
 
@@ -130,7 +130,7 @@ public class PolygonAPI {
   public SymbolDetails getSymbolDetails(String symbol) throws PolygonAPIException {
 
     PolygonRequestBuilder builder = new PolygonRequestBuilder(baseDataUrl,
-        PolygonConstants.META_ENDPOINT + "/" + PolygonConstants.SYMBOLS_ENDPOINT);
+        PolygonConstants.META_ENDPOINT, PolygonConstants.SYMBOLS_ENDPOINT);
 
     builder.appendEndpoint(symbol);
     builder.appendEndpoint(PolygonConstants.COMPANY_ENDPOINT);
@@ -158,7 +158,7 @@ public class PolygonAPI {
 
 
     PolygonRequestBuilder builder = new PolygonRequestBuilder(baseDataUrl,
-        PolygonConstants.META_ENDPOINT + "/" + PolygonConstants.SYMBOLS_ENDPOINT);
+        PolygonConstants.META_ENDPOINT, PolygonConstants.SYMBOLS_ENDPOINT);
 
     builder.appendEndpoint(symbol);
     builder.appendEndpoint(PolygonConstants.ANALYSTS_ENDPOINT);
@@ -186,7 +186,7 @@ public class PolygonAPI {
   public List<SymbolDividend> getSymbolDividends(String symbol) throws PolygonAPIException {
 
     PolygonRequestBuilder builder = new PolygonRequestBuilder(baseDataUrl,
-        PolygonConstants.META_ENDPOINT + "/" + PolygonConstants.SYMBOLS_ENDPOINT);
+        PolygonConstants.META_ENDPOINT, PolygonConstants.SYMBOLS_ENDPOINT);
 
     builder.appendEndpoint(symbol);
     builder.appendEndpoint(PolygonConstants.DIVIDENDS_ENDPOINT);
@@ -216,7 +216,7 @@ public class PolygonAPI {
 
 
     PolygonRequestBuilder builder = new PolygonRequestBuilder(baseDataUrl,
-        PolygonConstants.META_ENDPOINT + "/" + PolygonConstants.SYMBOLS_ENDPOINT);
+        PolygonConstants.META_ENDPOINT, PolygonConstants.SYMBOLS_ENDPOINT);
 
     builder.appendEndpoint(symbol);
     builder.appendEndpoint(PolygonConstants.EARNINGS_ENDPOINT);
@@ -247,7 +247,7 @@ public class PolygonAPI {
 
 
     PolygonRequestBuilder builder = new PolygonRequestBuilder(baseDataUrl,
-        PolygonConstants.META_ENDPOINT + "/" + PolygonConstants.SYMBOLS_ENDPOINT);
+        PolygonConstants.META_ENDPOINT, PolygonConstants.SYMBOLS_ENDPOINT);
 
     builder.appendEndpoint(symbol);
     builder.appendEndpoint(PolygonConstants.FINANCIALS_ENDPOINT);
@@ -277,7 +277,7 @@ public class PolygonAPI {
 
 
     PolygonRequestBuilder builder = new PolygonRequestBuilder(baseDataUrl,
-        PolygonConstants.META_ENDPOINT + "/" + PolygonConstants.SYMBOLS_ENDPOINT);
+        PolygonConstants.META_ENDPOINT, PolygonConstants.SYMBOLS_ENDPOINT);
 
     builder.appendEndpoint(symbol);
     builder.appendEndpoint(PolygonConstants.NEWS_ENDPOINT);
@@ -310,16 +310,16 @@ public class PolygonAPI {
       throws PolygonAPIException {
 
     PolygonRequestBuilder builder = new PolygonRequestBuilder(baseDataUrl,
-        PolygonConstants.META_ENDPOINT + "/" + PolygonConstants.SYMBOLS_ENDPOINT);
+        PolygonConstants.META_ENDPOINT, PolygonConstants.SYMBOLS_ENDPOINT);
 
     builder.appendEndpoint(symbol);
     builder.appendEndpoint(PolygonConstants.NEWS_ENDPOINT);
     if (perpage != null) {
-      builder.appendURLParameter(PolygonConstants.PERPAGE_PARAMETER, perpage + "");
+      builder.appendURLParameter(PolygonConstants.PERPAGE_PARAMETER, String.valueOf(perpage));
     }
 
     if (page != null) {
-      builder.appendURLParameter(PolygonConstants.PAGE_PARAMETER, page + "");
+      builder.appendURLParameter(PolygonConstants.PAGE_PARAMETER, String.valueOf(page));
     }
 
     HttpResponse<JsonNode> response = polygonRequest.invokeGet(builder);
@@ -355,7 +355,7 @@ public class PolygonAPI {
       Integer perpage, Integer page, Boolean active) throws PolygonAPIException {
 
     PolygonRequestBuilder builder = new PolygonRequestBuilder(baseDataUrl,
-        PolygonConstants.REFERENCE_ENDPOINT + "/" + PolygonConstants.TICKERS_ENDPOINT);
+        PolygonConstants.REFERENCE_ENDPOINT, PolygonConstants.TICKERS_ENDPOINT);
 
     builder.setVersion(PolygonConstants.VERSION_2_ENDPOINT);
 
@@ -380,15 +380,15 @@ public class PolygonAPI {
     }
 
     if (perpage != null) {
-      builder.appendURLParameter(PolygonConstants.PERPAGE_PARAMETER, perpage + "");
+      builder.appendURLParameter(PolygonConstants.PERPAGE_PARAMETER, String.valueOf(perpage));
     }
 
     if (page != null) {
-      builder.appendURLParameter(PolygonConstants.PAGE_PARAMETER, page + "");
+      builder.appendURLParameter(PolygonConstants.PAGE_PARAMETER, String.valueOf(page));
     }
 
     if (active != null) {
-      builder.appendURLParameter(PolygonConstants.ACTIVE_PARAMETER, active + "");
+      builder.appendURLParameter(PolygonConstants.ACTIVE_PARAMETER, String.valueOf(active));
     }
 
     HttpResponse<JsonNode> response = polygonRequest.invokeGet(builder);
@@ -412,7 +412,7 @@ public class PolygonAPI {
 
 
     PolygonRequestBuilder builder = new PolygonRequestBuilder(baseDataUrl,
-        PolygonConstants.REFERENCE_ENDPOINT + "/" + PolygonConstants.MARKETS_ENDPOINT);
+        PolygonConstants.REFERENCE_ENDPOINT, PolygonConstants.MARKETS_ENDPOINT);
 
     builder.setVersion(PolygonConstants.VERSION_2_ENDPOINT);
 
@@ -442,7 +442,7 @@ public class PolygonAPI {
 
 
     PolygonRequestBuilder builder = new PolygonRequestBuilder(baseDataUrl,
-        PolygonConstants.REFERENCE_ENDPOINT + "/" + PolygonConstants.LOCALES_ENDPOINT);
+        PolygonConstants.REFERENCE_ENDPOINT, PolygonConstants.LOCALES_ENDPOINT);
 
     builder.setVersion(PolygonConstants.VERSION_2_ENDPOINT);
 
@@ -474,7 +474,7 @@ public class PolygonAPI {
 
 
     PolygonRequestBuilder builder = new PolygonRequestBuilder(baseDataUrl,
-        PolygonConstants.REFERENCE_ENDPOINT + "/" + PolygonConstants.TYPES_ENDPOINT);
+        PolygonConstants.REFERENCE_ENDPOINT, PolygonConstants.TYPES_ENDPOINT);
 
     builder.setVersion(PolygonConstants.VERSION_2_ENDPOINT);
 
@@ -501,7 +501,7 @@ public class PolygonAPI {
   public List<Split> getSplits(String symbol) throws PolygonAPIException {
 
     PolygonRequestBuilder builder = new PolygonRequestBuilder(baseDataUrl,
-        PolygonConstants.REFERENCE_ENDPOINT + "/" + PolygonConstants.SPLITS_ENDPOINT);
+        PolygonConstants.REFERENCE_ENDPOINT, PolygonConstants.SPLITS_ENDPOINT);
 
     builder.setVersion(PolygonConstants.VERSION_2_ENDPOINT);
 
@@ -531,7 +531,7 @@ public class PolygonAPI {
   public List<Exchange> getExchanges() throws PolygonAPIException {
 
     PolygonRequestBuilder builder = new PolygonRequestBuilder(baseDataUrl,
-        PolygonConstants.META_ENDPOINT + "/" + PolygonConstants.EXCHANGES_ENDPOINT);
+        PolygonConstants.META_ENDPOINT, PolygonConstants.EXCHANGES_ENDPOINT);
 
     HttpResponse<JsonNode> response = polygonRequest.invokeGet(builder);
 
@@ -561,16 +561,16 @@ public class PolygonAPI {
       throws PolygonAPIException {
 
     PolygonRequestBuilder builder = new PolygonRequestBuilder(baseDataUrl,
-        PolygonConstants.HISTORIC_ENDPOINT + "/" + PolygonConstants.TRADES_ENDPOINT);
+        PolygonConstants.HISTORIC_ENDPOINT, PolygonConstants.TRADES_ENDPOINT);
 
     builder.appendEndpoint(symbol);
     builder.appendEndpoint(Utilities.toDateString(date));
     if (offset != null) {
-      builder.appendURLParameter("offset", offset + "");
+      builder.appendURLParameter(PolygonConstants.OFFSET_PARAMETER, String.valueOf(offset));
     }
 
     if (limit != null) {
-      builder.appendURLParameter("limit", limit + "");
+      builder.appendURLParameter(PolygonConstants.LIMIT_PARAMETER, String.valueOf(limit));
     }
 
     HttpResponse<JsonNode> response = polygonRequest.invokeGet(builder);
@@ -598,16 +598,16 @@ public class PolygonAPI {
       throws PolygonAPIException {
 
     PolygonRequestBuilder builder = new PolygonRequestBuilder(baseDataUrl,
-        PolygonConstants.HISTORIC_ENDPOINT + "/" + PolygonConstants.QUOTES_ENDPOINT);
+        PolygonConstants.HISTORIC_ENDPOINT, PolygonConstants.QUOTES_ENDPOINT);
 
     builder.appendEndpoint(symbol);
     builder.appendEndpoint(Utilities.toDateString(date));
     if (offset != null) {
-      builder.appendURLParameter("offset", offset + "");
+      builder.appendURLParameter(PolygonConstants.OFFSET_PARAMETER, String.valueOf(offset));
     }
 
     if (limit != null) {
-      builder.appendURLParameter("limit", limit + "");
+      builder.appendURLParameter(PolygonConstants.LIMIT_PARAMETER, String.valueOf(limit));
     }
 
     HttpResponse<JsonNode> response = polygonRequest.invokeGet(builder);
@@ -631,7 +631,7 @@ public class PolygonAPI {
   public Trade getLastTrade(String symbol) throws PolygonAPIException {
 
     PolygonRequestBuilder builder = new PolygonRequestBuilder(baseDataUrl,
-        PolygonConstants.LAST_ENDPOINT + "/" + PolygonConstants.STOCKS_ENDPOINT);
+        PolygonConstants.LAST_ENDPOINT, PolygonConstants.STOCKS_ENDPOINT);
 
     builder.appendEndpoint(symbol);
 
@@ -656,7 +656,7 @@ public class PolygonAPI {
   public Quote getLastQuote(String symbol) throws PolygonAPIException {
 
     PolygonRequestBuilder builder = new PolygonRequestBuilder(baseDataUrl,
-        PolygonConstants.LAST_QUOTE_ENDPOINT + "/" + PolygonConstants.STOCKS_ENDPOINT);
+        PolygonConstants.LAST_QUOTE_ENDPOINT, PolygonConstants.STOCKS_ENDPOINT);
 
     builder.appendEndpoint(symbol);
 
@@ -708,8 +708,10 @@ public class PolygonAPI {
    */
   public List<Snapshot> getSnapshotAllTickers() throws PolygonAPIException {
 
-    PolygonRequestBuilder builder =
-        new PolygonRequestBuilder(baseDataUrl, "snapshot/locale/us/markets/stocks/tickers");
+    PolygonRequestBuilder builder = new PolygonRequestBuilder(baseDataUrl,
+        PolygonConstants.SNAPSHOT_ENDPOINT, PolygonConstants.LOCALE_ENDPOINT,
+        PolygonConstants.US_ENDPOINT, PolygonConstants.MARKETS_ENDPOINT,
+        PolygonConstants.STOCKS_ENDPOINT, PolygonConstants.TICKERS_ENDPOINT);
 
     builder.setVersion(PolygonConstants.VERSION_2_ENDPOINT);
 
@@ -735,8 +737,10 @@ public class PolygonAPI {
    */
   public Snapshot getSnapshot(String symbol) throws PolygonAPIException {
 
-    PolygonRequestBuilder builder =
-        new PolygonRequestBuilder(baseDataUrl, "snapshot/locale/us/markets/stocks/tickers");
+    PolygonRequestBuilder builder = new PolygonRequestBuilder(baseDataUrl,
+        PolygonConstants.SNAPSHOT_ENDPOINT, PolygonConstants.LOCALE_ENDPOINT,
+        PolygonConstants.US_ENDPOINT, PolygonConstants.MARKETS_ENDPOINT,
+        PolygonConstants.STOCKS_ENDPOINT, PolygonConstants.TICKERS_ENDPOINT);
 
     builder.setVersion(PolygonConstants.VERSION_2_ENDPOINT);
     builder.appendEndpoint(symbol);
@@ -761,8 +765,10 @@ public class PolygonAPI {
    */
   public List<Snapshot> getSnapshotsGainers() throws PolygonAPIException {
 
-    PolygonRequestBuilder builder =
-        new PolygonRequestBuilder(baseDataUrl, "snapshot/locale/us/markets/stocks/gainers");
+    PolygonRequestBuilder builder = new PolygonRequestBuilder(baseDataUrl,
+        PolygonConstants.SNAPSHOT_ENDPOINT, PolygonConstants.LOCALE_ENDPOINT,
+        PolygonConstants.US_ENDPOINT, PolygonConstants.MARKETS_ENDPOINT,
+        PolygonConstants.STOCKS_ENDPOINT, PolygonConstants.GAINERS_ENDPOINT);
 
     builder.setVersion(PolygonConstants.VERSION_2_ENDPOINT);
 
@@ -787,8 +793,10 @@ public class PolygonAPI {
    */
   public List<Snapshot> getSnapshotsLosers() throws PolygonAPIException {
 
-    PolygonRequestBuilder builder =
-        new PolygonRequestBuilder(baseDataUrl, "snapshot/locale/us/markets/stocks/losers");
+    PolygonRequestBuilder builder = new PolygonRequestBuilder(baseDataUrl,
+        PolygonConstants.SNAPSHOT_ENDPOINT, PolygonConstants.LOCALE_ENDPOINT,
+        PolygonConstants.US_ENDPOINT, PolygonConstants.MARKETS_ENDPOINT,
+        PolygonConstants.STOCKS_ENDPOINT, PolygonConstants.LOSERS_ENDPOINT);
 
     builder.setVersion(PolygonConstants.VERSION_2_ENDPOINT);
 
@@ -816,14 +824,14 @@ public class PolygonAPI {
   public Aggregates getPreviousClose(String ticker, Boolean unadjusted) throws PolygonAPIException {
 
     PolygonRequestBuilder builder = new PolygonRequestBuilder(baseDataUrl,
-        PolygonConstants.AGGS_ENDPOINT + "/" + PolygonConstants.TICKER_ENDPOINT);
+        PolygonConstants.AGGS_ENDPOINT, PolygonConstants.TICKER_ENDPOINT);
 
     builder.setVersion(PolygonConstants.VERSION_2_ENDPOINT);
     builder.appendEndpoint(ticker);
-    builder.appendEndpoint("prev");
+    builder.appendEndpoint(PolygonConstants.PREV_ENDPOINT);
 
     if (unadjusted != null) {
-      builder.appendURLParameter("unadjusted", unadjusted.toString());
+      builder.appendURLParameter(PolygonConstants.UNADJUSTED_PARAMETER, unadjusted.toString());
     }
 
     HttpResponse<JsonNode> response = polygonRequest.invokeGet(builder);
@@ -858,18 +866,18 @@ public class PolygonAPI {
       LocalDate fromDate, LocalDate toDate, Boolean unadjusted) throws PolygonAPIException {
 
     PolygonRequestBuilder builder = new PolygonRequestBuilder(baseDataUrl,
-        PolygonConstants.AGGS_ENDPOINT + "/" + PolygonConstants.TICKER_ENDPOINT);
+        PolygonConstants.AGGS_ENDPOINT, PolygonConstants.TICKER_ENDPOINT);
 
     builder.setVersion(PolygonConstants.VERSION_2_ENDPOINT);
     builder.appendEndpoint(ticker);
-    builder.appendEndpoint("range");
+    builder.appendEndpoint(PolygonConstants.RANGE_ENDPOINT);
     builder.appendEndpoint(Integer.toString((multiplier != null) ? multiplier : 1));
     builder.appendEndpoint(timeSpan.getAPIName());
     builder.appendEndpoint(Utilities.toDateString(fromDate));
     builder.appendEndpoint(Utilities.toDateString(toDate));
 
     if (unadjusted != null) {
-      builder.appendURLParameter("unadjusted", unadjusted.toString());
+      builder.appendURLParameter(PolygonConstants.UNADJUSTED_PARAMETER, unadjusted.toString());
     }
 
     HttpResponse<JsonNode> response = polygonRequest.invokeGet(builder);
@@ -907,8 +915,8 @@ public class PolygonAPI {
       throws PolygonAPIException {
 
     PolygonRequestBuilder builder =
-        new PolygonRequestBuilder(baseDataUrl, PolygonConstants.AGGS_ENDPOINT + "/"
-            + PolygonConstants.GROUPED_ENDPOINT + "/" + PolygonConstants.LOCALE_ENDPOINT);
+        new PolygonRequestBuilder(baseDataUrl, PolygonConstants.AGGS_ENDPOINT,
+            PolygonConstants.GROUPED_ENDPOINT, PolygonConstants.LOCALE_ENDPOINT);
 
     builder.setVersion(PolygonConstants.VERSION_2_ENDPOINT);
     builder.appendEndpoint(locale.getAPIName());
@@ -917,7 +925,7 @@ public class PolygonAPI {
     builder.appendEndpoint(Utilities.toDateString(date));
 
     if (unadjusted != null) {
-      builder.appendURLParameter("unadjusted", unadjusted.toString());
+      builder.appendURLParameter(PolygonConstants.UNADJUSTED_PARAMETER, unadjusted.toString());
     }
 
     HttpResponse<JsonNode> response = polygonRequest.invokeGet(builder);
@@ -930,15 +938,19 @@ public class PolygonAPI {
     Aggregates aggregates = polygonRequest.getResponseObject(response, Aggregates.class);
 
     if (aggregates.getResultsCount() != 0) {
+
+      final String tickerKey = "T";
+      final String resultsKey = "results";
+
       List<io.github.mainstringargs.polygon.domain.aggregate.Result> results =
           aggregates.getResults();
       JsonNode responseJson = response.getBody();
-      JSONArray resultsArr = (JSONArray) responseJson.getObject().get("results");
+      JSONArray resultsArr = (JSONArray) responseJson.getObject().get(resultsKey);
 
       for (int i = 0; i < results.size(); i++) {
         io.github.mainstringargs.polygon.domain.aggregate.Result result = results.get(i);
         JSONObject jsonObj = (JSONObject) resultsArr.get(i);
-        result.setTicker(jsonObj.get("T").toString());
+        result.setTicker(jsonObj.get(tickerKey).toString());
 
 
       }
