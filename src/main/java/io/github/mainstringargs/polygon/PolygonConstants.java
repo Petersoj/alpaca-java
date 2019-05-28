@@ -61,4 +61,56 @@ public class PolygonConstants {
 
   /** The Constant NEWS_ENDPOINT. */
   static final String NEWS_ENDPOINT = "news";
+ 
+  /** The Constant LOCALE_ENDPOINT. */
+  static final String LOCALE_ENDPOINT = "locale";
+
+  /** The Constant GROUPED_ENDPOINT. */
+  static final String GROUPED_ENDPOINT = "grouped";
+
+  /** The Constant TICKER_ENDPOINT. */
+  static final String TICKER_ENDPOINT = "ticker";
+
+  /** The Constant AGGS_ENDPOINT. */
+  static final String AGGS_ENDPOINT = "aggs";
+
+  /** The Constant OPEN_CLOSE_ENDPOINT. */
+  static final String OPEN_CLOSE_ENDPOINT = "open-close";
+
+  /** The Constant LAST_QUOTE_ENDPOINT. */
+  static final String LAST_QUOTE_ENDPOINT = "last_quote";
+
+  /** The Constant STOCKS_ENDPOINT. */
+  static final String STOCKS_ENDPOINT = "stocks";
+
+  /** The Constant LAST_ENDPOINT. */
+  static final String LAST_ENDPOINT = "last";
+
+  /** The Constant QUOTES_ENDPOINT. */
+  static final String QUOTES_ENDPOINT = "quotes";
+
+  /** The Constant TRADES_ENDPOINT. */
+  static final String TRADES_ENDPOINT = "trades";
+
+  /** The Constant HISTORIC_ENDPOINT. */
+  static final String HISTORIC_ENDPOINT = "historic";
+
+  /** The Constant EXCHANGES_ENDPOINT. */
+  static final String EXCHANGES_ENDPOINT = "exchanges";
+
+  /** The Constant SPLITS_ENDPOINT. */
+  static final String SPLITS_ENDPOINT = "splits";
+
+  /** The Constant TYPES_ENDPOINT. */
+  static final String TYPES_ENDPOINT = "types";
+
+  /** The Constant LOCALES_ENDPOINT. */
+  static final String LOCALES_ENDPOINT = "locales";
+
+  /** The Constant MARKETS_ENDPOINT. */
+  static final String MARKETS_ENDPOINT = "markets";
+
+  /** The Constant MARKET_ENDPOINT. */
+  static final String MARKET_ENDPOINT = "market";
+
 }

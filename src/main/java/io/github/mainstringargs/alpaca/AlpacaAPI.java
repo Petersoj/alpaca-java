@@ -214,8 +214,7 @@ public class AlpacaAPI {
     }
 
     if (direction != null) {
-      urlBuilder.appendURLParameter(AlpacaConstants.DIRECTION_PARAMETER,
-          direction.getAPIName());
+      urlBuilder.appendURLParameter(AlpacaConstants.DIRECTION_PARAMETER, direction.getAPIName());
     }
 
     HttpResponse<JsonNode> response = alpacaRequest.invokeGet(urlBuilder);
@@ -599,8 +598,7 @@ public class AlpacaAPI {
         new AlpacaRequestBuilder(baseAccountUrl, AlpacaConstants.CALENDAR_ENDPOINT);
 
     if (start != null) {
-      urlBuilder.appendURLParameter(AlpacaConstants.START_PARAMETER,
-          Utilities.toDateString(start));
+      urlBuilder.appendURLParameter(AlpacaConstants.START_PARAMETER, Utilities.toDateString(start));
     }
 
     if (end != null) {
@@ -677,8 +675,7 @@ public class AlpacaAPI {
     }
 
     if (end != null) {
-      urlBuilder.appendURLParameter(AlpacaConstants.END_PARAMETER,
-          Utilities.toDateTimeString(end));
+      urlBuilder.appendURLParameter(AlpacaConstants.END_PARAMETER, Utilities.toDateTimeString(end));
     }
 
     if (after != null) {
@@ -696,8 +693,7 @@ public class AlpacaAPI {
     }
 
     if (symbols != null) {
-      urlBuilder.appendURLParameter(AlpacaConstants.SYMBOLS_PARAMETER,
-          String.join(",", symbols));
+      urlBuilder.appendURLParameter(AlpacaConstants.SYMBOLS_PARAMETER, String.join(",", symbols));
     }
 
     HttpResponse<JsonNode> response = alpacaRequest.invokeGet(urlBuilder);
@@ -746,8 +742,7 @@ public class AlpacaAPI {
     }
 
     if (end != null) {
-      urlBuilder.appendURLParameter(AlpacaConstants.END_PARAMETER,
-          Utilities.toDateTimeString(end));
+      urlBuilder.appendURLParameter(AlpacaConstants.END_PARAMETER, Utilities.toDateTimeString(end));
     }
 
     if (after != null) {
@@ -765,8 +760,7 @@ public class AlpacaAPI {
     }
 
     if (symbol != null) {
-      urlBuilder.appendURLParameter(AlpacaConstants.SYMBOLS_PARAMETER,
-          String.join(",", symbol));
+      urlBuilder.appendURLParameter(AlpacaConstants.SYMBOLS_PARAMETER, String.join(",", symbol));
     }
 
     HttpResponse<JsonNode> response = alpacaRequest.invokeGet(urlBuilder);

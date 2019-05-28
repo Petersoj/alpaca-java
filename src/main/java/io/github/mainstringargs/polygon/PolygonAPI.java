@@ -411,7 +411,8 @@ public class PolygonAPI {
   public List<Market> getMarkets() throws PolygonAPIException {
 
 
-    PolygonRequestBuilder builder = new PolygonRequestBuilder(baseDataUrl, "reference/markets");
+    PolygonRequestBuilder builder = new PolygonRequestBuilder(baseDataUrl,
+        PolygonConstants.REFERENCE_ENDPOINT + "/" + PolygonConstants.MARKETS_ENDPOINT);
 
     builder.setVersion(PolygonConstants.VERSION_2_ENDPOINT);
 
@@ -440,7 +441,8 @@ public class PolygonAPI {
       throws PolygonAPIException {
 
 
-    PolygonRequestBuilder builder = new PolygonRequestBuilder(baseDataUrl, "reference/locales");
+    PolygonRequestBuilder builder = new PolygonRequestBuilder(baseDataUrl,
+        PolygonConstants.REFERENCE_ENDPOINT + "/" + PolygonConstants.LOCALES_ENDPOINT);
 
     builder.setVersion(PolygonConstants.VERSION_2_ENDPOINT);
 
@@ -471,7 +473,8 @@ public class PolygonAPI {
   public TypesMapping getTypesMapping() throws PolygonAPIException {
 
 
-    PolygonRequestBuilder builder = new PolygonRequestBuilder(baseDataUrl, "reference/types");
+    PolygonRequestBuilder builder = new PolygonRequestBuilder(baseDataUrl,
+        PolygonConstants.REFERENCE_ENDPOINT + "/" + PolygonConstants.TYPES_ENDPOINT);
 
     builder.setVersion(PolygonConstants.VERSION_2_ENDPOINT);
 
@@ -497,7 +500,8 @@ public class PolygonAPI {
    */
   public List<Split> getSplits(String symbol) throws PolygonAPIException {
 
-    PolygonRequestBuilder builder = new PolygonRequestBuilder(baseDataUrl, "reference/splits");
+    PolygonRequestBuilder builder = new PolygonRequestBuilder(baseDataUrl,
+        PolygonConstants.REFERENCE_ENDPOINT + "/" + PolygonConstants.SPLITS_ENDPOINT);
 
     builder.setVersion(PolygonConstants.VERSION_2_ENDPOINT);
 
@@ -526,7 +530,8 @@ public class PolygonAPI {
    */
   public List<Exchange> getExchanges() throws PolygonAPIException {
 
-    PolygonRequestBuilder builder = new PolygonRequestBuilder(baseDataUrl, "meta/exchanges");
+    PolygonRequestBuilder builder = new PolygonRequestBuilder(baseDataUrl,
+        PolygonConstants.META_ENDPOINT + "/" + PolygonConstants.EXCHANGES_ENDPOINT);
 
     HttpResponse<JsonNode> response = polygonRequest.invokeGet(builder);
 
@@ -555,7 +560,8 @@ public class PolygonAPI {
   public Trades getHistoricTrades(String symbol, LocalDate date, Integer offset, Integer limit)
       throws PolygonAPIException {
 
-    PolygonRequestBuilder builder = new PolygonRequestBuilder(baseDataUrl, "historic/trades");
+    PolygonRequestBuilder builder = new PolygonRequestBuilder(baseDataUrl,
+        PolygonConstants.HISTORIC_ENDPOINT + "/" + PolygonConstants.TRADES_ENDPOINT);
 
     builder.appendEndpoint(symbol);
     builder.appendEndpoint(Utilities.toDateString(date));
@@ -591,7 +597,8 @@ public class PolygonAPI {
   public Quotes getHistoricQuotes(String symbol, LocalDate date, Integer offset, Integer limit)
       throws PolygonAPIException {
 
-    PolygonRequestBuilder builder = new PolygonRequestBuilder(baseDataUrl, "historic/quotes");
+    PolygonRequestBuilder builder = new PolygonRequestBuilder(baseDataUrl,
+        PolygonConstants.HISTORIC_ENDPOINT + "/" + PolygonConstants.QUOTES_ENDPOINT);
 
     builder.appendEndpoint(symbol);
     builder.appendEndpoint(Utilities.toDateString(date));
@@ -623,7 +630,8 @@ public class PolygonAPI {
    */
   public Trade getLastTrade(String symbol) throws PolygonAPIException {
 
-    PolygonRequestBuilder builder = new PolygonRequestBuilder(baseDataUrl, "last/stocks");
+    PolygonRequestBuilder builder = new PolygonRequestBuilder(baseDataUrl,
+        PolygonConstants.LAST_ENDPOINT + "/" + PolygonConstants.STOCKS_ENDPOINT);
 
     builder.appendEndpoint(symbol);
 
@@ -647,7 +655,8 @@ public class PolygonAPI {
    */
   public Quote getLastQuote(String symbol) throws PolygonAPIException {
 
-    PolygonRequestBuilder builder = new PolygonRequestBuilder(baseDataUrl, "last_quote/stocks");
+    PolygonRequestBuilder builder = new PolygonRequestBuilder(baseDataUrl,
+        PolygonConstants.LAST_QUOTE_ENDPOINT + "/" + PolygonConstants.STOCKS_ENDPOINT);
 
     builder.appendEndpoint(symbol);
 
@@ -673,7 +682,8 @@ public class PolygonAPI {
   public DailyOpenClose getDailyOpenClose(String symbol, LocalDate date)
       throws PolygonAPIException {
 
-    PolygonRequestBuilder builder = new PolygonRequestBuilder(baseDataUrl, "open-close");
+    PolygonRequestBuilder builder =
+        new PolygonRequestBuilder(baseDataUrl, PolygonConstants.OPEN_CLOSE_ENDPOINT);
 
     builder.appendEndpoint(symbol);
     builder.appendEndpoint(Utilities.toDateString(date));
@@ -805,7 +815,8 @@ public class PolygonAPI {
    */
   public Aggregates getPreviousClose(String ticker, Boolean unadjusted) throws PolygonAPIException {
 
-    PolygonRequestBuilder builder = new PolygonRequestBuilder(baseDataUrl, "aggs/ticker");
+    PolygonRequestBuilder builder = new PolygonRequestBuilder(baseDataUrl,
+        PolygonConstants.AGGS_ENDPOINT + "/" + PolygonConstants.TICKER_ENDPOINT);
 
     builder.setVersion(PolygonConstants.VERSION_2_ENDPOINT);
     builder.appendEndpoint(ticker);
@@ -846,7 +857,8 @@ public class PolygonAPI {
   public Aggregates getAggregates(String ticker, Integer multiplier, Timespan timeSpan,
       LocalDate fromDate, LocalDate toDate, Boolean unadjusted) throws PolygonAPIException {
 
-    PolygonRequestBuilder builder = new PolygonRequestBuilder(baseDataUrl, "aggs/ticker");
+    PolygonRequestBuilder builder = new PolygonRequestBuilder(baseDataUrl,
+        PolygonConstants.AGGS_ENDPOINT + "/" + PolygonConstants.TICKER_ENDPOINT);
 
     builder.setVersion(PolygonConstants.VERSION_2_ENDPOINT);
     builder.appendEndpoint(ticker);
@@ -894,11 +906,13 @@ public class PolygonAPI {
       io.github.mainstringargs.polygon.enums.Market market, LocalDate date, Boolean unadjusted)
       throws PolygonAPIException {
 
-    PolygonRequestBuilder builder = new PolygonRequestBuilder(baseDataUrl, "aggs/grouped/locale");
+    PolygonRequestBuilder builder =
+        new PolygonRequestBuilder(baseDataUrl, PolygonConstants.AGGS_ENDPOINT + "/"
+            + PolygonConstants.GROUPED_ENDPOINT + "/" + PolygonConstants.LOCALE_ENDPOINT);
 
     builder.setVersion(PolygonConstants.VERSION_2_ENDPOINT);
     builder.appendEndpoint(locale.getAPIName());
-    builder.appendEndpoint(PolygonConstants.MARKET_PARAMETER);
+    builder.appendEndpoint(PolygonConstants.MARKET_ENDPOINT);
     builder.appendEndpoint(market.getAPIName());
     builder.appendEndpoint(Utilities.toDateString(date));
 
