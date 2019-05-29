@@ -1,4 +1,16 @@
-# Table of Contents
+<p align="center"><img src="https://i.imgur.com/bikpBmA.png"></p>
+<p align="center">
+<a href="https://travis-ci.org/mainstringargs/alpaca-java"><img src="https://travis-ci.org/mainstringargs/alpaca-java.svg?branch=master" alt="Build Status"></a>
+<a href="https://javadoc.io/doc/io.github.mainstringargs/alpaca-java"><img src="https://javadoc.io/badge/io.github.mainstringargs/alpaca-java.svg" alt="Javadocs"></a>
+</p>
+
+# Overview
+
+
+
+This is a Java implementation for the <a href="https://alpaca.markets/">Alpaca</a> (<a href="https://docs.alpaca.markets/api-documentation/web-api/">General Alpaca API Documentation</a>).  Alpaca API lets you build and trade with real-time market data for free. 
+
+## Table of Contents
 1. [Alpaca Java Building](#alpaca-java-building)
 2. [Alpaca Java Gradle Integration](#alpaca-java-gradle-integration)
 3. [Alpaca Java Maven Integration](#alpaca-java-maven-integration)
@@ -8,13 +20,7 @@
 7. [Simple Polygon Example](#simple-polygon-example)
 8. [Polygon API](#polygon-api)
 
-# Overview
-
-[![Build Status](https://travis-ci.org/mainstringargs/alpaca-java.svg?branch=master)](https://travis-ci.org/mainstringargs/alpaca-java)
-
-This is a Java implementation for the Alpaca @ <a href="https://alpaca.markets/">https://alpaca.markets/</a> (See <a href="https://docs.alpaca.markets/api-documentation/web-api/">https://docs.alpaca.markets/api-documentation/web-api/</a> for general Alpaca API documentation).  Alpaca API lets you build and trade with real-time market data for free. 
-
-# Alpaca Java Building
+## Alpaca Java Building
 
 This project exposes that data as a Java project.  
 
@@ -24,7 +30,7 @@ To build this project yourself, clone the project and run:
 ./gradlew build
 ```
 
-# Alpaca Java Gradle Integration
+## Alpaca Java Gradle Integration
 
 Add the following dependency to your build.gradle file:
 
@@ -34,7 +40,7 @@ dependencies {
 }
 ```
 
-# Alpaca Java Maven Integration
+## Alpaca Java Maven Integration
 
 Add the following dependency to your pom.xml file:
 
@@ -46,7 +52,7 @@ Add the following dependency to your pom.xml file:
       <scope>compile</scope>
     </dependency>
 ```
-# Configuration
+## Configuration
 
 If you plan on using the alpaca.properties, generate a secret and a key at Alpaca and set the following properties in an alpaca.properties file on the classpath:
 
@@ -56,7 +62,7 @@ secret = <YOUR SECRET>
 base_url = https://api.alpaca.markets
 ```
 
-# Simple Alpaca Example
+## Simple Alpaca Example
 
 This example uses the AlpacaAPI class to print out account information, submit a limit order, and print out bars.
 
@@ -549,7 +555,7 @@ Removes the alpaca stream listener.
 
 This example uses the PolygonAPI class to provide sample calls into the PolygonAPI endpoints.
 
-```
+```java
     PolygonAPI polygonAPI = new PolygonAPI();
 
     String ticker = "MSFT";
