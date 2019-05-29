@@ -1,3 +1,13 @@
+# Table of Contents
+1. [Alpaca Java Building](#alpaca-java-building)
+2. [Alpaca Java Gradle Integration](#alpaca-java-gradle-integration)
+3. [Alpaca Java Maven Integration](#alpaca-java-maven-integration)
+4. [Configuration](#configuration)
+5. [Simple Alpaca Example](#simple-alpaca-example)
+6. [Alpaca Java Building](#alpaca-java-building)
+7. [Alpaca API](#alpaca-api)
+8. [Polygon API](#polygon-api)
+
 # Overview
 
 [![Build Status](https://travis-ci.org/mainstringargs/alpaca-java.svg?branch=master)](https://travis-ci.org/mainstringargs/alpaca-java)
@@ -46,7 +56,7 @@ secret = <YOUR SECRET>
 base_url = https://api.alpaca.markets
 ```
 
-# Simple Example
+# Simple Alpaca Example
 
 This example uses the AlpacaAPI class to print out account information, submit a limit order, and print out bars.
 
