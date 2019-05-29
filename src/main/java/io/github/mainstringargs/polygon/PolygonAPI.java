@@ -101,7 +101,8 @@ public class PolygonAPI {
    * @param symbol we want the endpoint list for.
    * @return the symbol endpoints
    * @throws PolygonAPIException the polygon API exception
-   * @see https://polygon.io/docs/#!/Meta-Data/get_v1_meta_symbols_symbol
+   * @see <a href=
+   *      "https://polygon.io/docs/#!/Meta-Data/get_v1_meta_symbols_symbol">https://polygon.io/docs/#!/Meta-Data/get_v1_meta_symbols_symbol</a>
    */
   public SymbolEndpoints getSymbolEndpoints(String symbol) throws PolygonAPIException {
 
@@ -129,7 +130,8 @@ public class PolygonAPI {
    * @param symbol we want details for
    * @return the symbol details
    * @throws PolygonAPIException the polygon API exception
-   * @see https://polygon.io/docs/#!/Meta-Data/get_v1_meta_symbols_symbol_company
+   * @see <a href=
+   *      "https://polygon.io/docs/#!/Meta-Data/get_v1_meta_symbols_symbol_company">https://polygon.io/docs/#!/Meta-Data/get_v1_meta_symbols_symbol_company</a>
    */
   public SymbolDetails getSymbolDetails(String symbol) throws PolygonAPIException {
 
@@ -158,7 +160,8 @@ public class PolygonAPI {
    * @param symbol we want analyst ratings for
    * @return the symbol analyst ratings
    * @throws PolygonAPIException the polygon API exception
-   * @see https://polygon.io/docs/#!/Meta-Data/get_v1_meta_symbols_symbol_analysts
+   * @see <a href=
+   *      "https://polygon.io/docs/#!/Meta-Data/get_v1_meta_symbols_symbol_analysts">https://polygon.io/docs/#!/Meta-Data/get_v1_meta_symbols_symbol_analysts</a>
    */
   public SymbolAnalystRatings getSymbolAnalystRatings(String symbol) throws PolygonAPIException {
 
@@ -188,7 +191,8 @@ public class PolygonAPI {
    * @param symbol we want details for
    * @return the symbol dividends
    * @throws PolygonAPIException the polygon API exception
-   * @see https://polygon.io/docs/#!/Meta-Data/get_v1_meta_symbols_symbol_dividends
+   * @see <a href=
+   *      "https://polygon.io/docs/#!/Meta-Data/get_v1_meta_symbols_symbol_dividends">https://polygon.io/docs/#!/Meta-Data/get_v1_meta_symbols_symbol_dividends</a>
    */
   public List<SymbolDividend> getSymbolDividends(String symbol) throws PolygonAPIException {
 
@@ -218,7 +222,8 @@ public class PolygonAPI {
    * @param symbol we want details for
    * @return the symbol earnings
    * @throws PolygonAPIException the polygon API exception
-   * @see https://polygon.io/docs/#!/Meta-Data/get_v1_meta_symbols_symbol_earnings
+   * @see <a href=
+   *      "https://polygon.io/docs/#!/Meta-Data/get_v1_meta_symbols_symbol_earnings">https://polygon.io/docs/#!/Meta-Data/get_v1_meta_symbols_symbol_earnings</a>
    */
   public List<SymbolEarning> getSymbolEarnings(String symbol) throws PolygonAPIException {
 
@@ -250,7 +255,8 @@ public class PolygonAPI {
    * @param symbol we want details for
    * @return the symbol financials
    * @throws PolygonAPIException the polygon API exception
-   * @see https://polygon.io/docs/#!/Meta-Data/get_v1_meta_symbols_symbol_financials
+   * @see <a href=
+   *      "https://polygon.io/docs/#!/Meta-Data/get_v1_meta_symbols_symbol_financials">https://polygon.io/docs/#!/Meta-Data/get_v1_meta_symbols_symbol_financials</a>
    */
   public List<SymbolFinancial> getSymbolFinancials(String symbol) throws PolygonAPIException {
 
@@ -281,7 +287,8 @@ public class PolygonAPI {
    * @param symbol the symbol we want details for
    * @return the symbol news
    * @throws PolygonAPIException the polygon API exception
-   * @see https://polygon.io/docs/#!/Meta-Data/get_v1_meta_symbols_symbol_news
+   * @see <a href=
+   *      "https://polygon.io/docs/#!/Meta-Data/get_v1_meta_symbols_symbol_news">https://polygon.io/docs/#!/Meta-Data/get_v1_meta_symbols_symbol_news</a>
    */
   public List<SymbolNews> getSymbolNews(String symbol) throws PolygonAPIException {
 
@@ -315,7 +322,8 @@ public class PolygonAPI {
    * @param page Which page of results to return
    * @return the symbol news
    * @throws PolygonAPIException the polygon API exception
-   * @see https://polygon.io/docs/#!/Meta-Data/get_v1_meta_symbols_symbol_news
+   * @see <a href=
+   *      "https://polygon.io/docs/#!/Meta-Data/get_v1_meta_symbols_symbol_news">https://polygon.io/docs/#!/Meta-Data/get_v1_meta_symbols_symbol_news</a>
    */
   public List<SymbolNews> getSymbolNews(String symbol, Integer perpage, Integer page)
       throws PolygonAPIException {
@@ -360,7 +368,8 @@ public class PolygonAPI {
    * @param active Filter for only active or inactive symbols
    * @return the tickers
    * @throws PolygonAPIException the polygon API exception
-   * @see https://polygon.io/docs/#!/Reference/get_v2_reference_tickers
+   * @see <a href=
+   *      "https://polygon.io/docs/#!/Reference/get_v2_reference_tickers">https://polygon.io/docs/#!/Reference/get_v2_reference_tickers</a>
    */
   public Tickers getTickers(Sort sort, io.github.mainstringargs.polygon.enums.Type type,
       io.github.mainstringargs.polygon.enums.Market market, Locale locale, String search,
@@ -419,7 +428,8 @@ public class PolygonAPI {
    *
    * @return the markets
    * @throws PolygonAPIException the polygon API exception
-   * @see https://polygon.io/docs/#!/Reference/get_v2_reference_markets
+   * @see <a href=
+   *      "https://polygon.io/docs/#!/Reference/get_v2_reference_markets">https://polygon.io/docs/#!/Reference/get_v2_reference_markets</a>
    */
   public List<Market> getMarkets() throws PolygonAPIException {
 
@@ -449,7 +459,8 @@ public class PolygonAPI {
    *
    * @return the locales
    * @throws PolygonAPIException the polygon API exception
-   * @see https://polygon.io/docs/#!/Reference/get_v2_reference_locales
+   * @see <a href=
+   *      "https://polygon.io/docs/#!/Reference/get_v2_reference_locales">https://polygon.io/docs/#!/Reference/get_v2_reference_locales</a>
    */
   public List<io.github.mainstringargs.polygon.domain.reference.Locale> getLocales()
       throws PolygonAPIException {
@@ -483,7 +494,8 @@ public class PolygonAPI {
    *
    * @return the types mapping
    * @throws PolygonAPIException the polygon API exception
-   * @see https://polygon.io/docs/#!/Reference/get_v2_reference_types
+   * @see <a href=
+   *      "https://polygon.io/docs/#!/Reference/get_v2_reference_types">https://polygon.io/docs/#!/Reference/get_v2_reference_types</a>
    */
   public TypesMapping getTypesMapping() throws PolygonAPIException {
 
@@ -512,7 +524,8 @@ public class PolygonAPI {
    * @param symbol we want details for
    * @return the splits
    * @throws PolygonAPIException the polygon API exception
-   * @see https://polygon.io/docs/#!/Reference/get_v2_reference_splits_symbol
+   * @see <a href=
+   *      "https://polygon.io/docs/#!/Reference/get_v2_reference_splits_symbol">https://polygon.io/docs/#!/Reference/get_v2_reference_splits_symbol</a>
    */
   public List<Split> getSplits(String symbol) throws PolygonAPIException {
 
@@ -543,7 +556,8 @@ public class PolygonAPI {
    *
    * @return the exchange
    * @throws PolygonAPIException the polygon API exception
-   * @see https://polygon.io/docs/#!/Stocks--Equities/get_v1_meta_exchanges
+   * @see <a href=
+   *      "https://polygon.io/docs/#!/Stocks--Equities/get_v1_meta_exchanges">https://polygon.io/docs/#!/Stocks--Equities/get_v1_meta_exchanges</a>
    */
   public List<Exchange> getExchanges() throws PolygonAPIException {
 
@@ -575,7 +589,8 @@ public class PolygonAPI {
    * @param limit Limit the size of response, Max 50000
    * @return the historic trades
    * @throws PolygonAPIException the polygon API exception
-   * @see https://polygon.io/docs/#!/Stocks--Equities/get_v1_historic_trades_symbol_date
+   * @see <a href=
+   *      "https://polygon.io/docs/#!/Stocks--Equities/get_v1_historic_trades_symbol_date">https://polygon.io/docs/#!/Stocks--Equities/get_v1_historic_trades_symbol_date</a>
    */
   public Trades getHistoricTrades(String symbol, LocalDate date, Integer offset, Integer limit)
       throws PolygonAPIException {
@@ -615,7 +630,8 @@ public class PolygonAPI {
    * @param limit Limit the size of response, Max 50000
    * @return the historic quotes
    * @throws PolygonAPIException the polygon API exception
-   * @see https://polygon.io/docs/#!/Stocks--Equities/get_v1_historic_quotes_symbol_date
+   * @see <a href=
+   *      "https://polygon.io/docs/#!/Stocks--Equities/get_v1_historic_quotes_symbol_date">https://polygon.io/docs/#!/Stocks--Equities/get_v1_historic_quotes_symbol_date</a>
    */
   public Quotes getHistoricQuotes(String symbol, LocalDate date, Integer offset, Integer limit)
       throws PolygonAPIException {
@@ -650,7 +666,8 @@ public class PolygonAPI {
    * @param symbol Symbol of the stock to get
    * @return the last trade
    * @throws PolygonAPIException the polygon API exception
-   * @see https://polygon.io/docs/#!/Stocks--Equities/get_v1_last_stocks_symbol
+   * @see <a href=
+   *      "https://polygon.io/docs/#!/Stocks--Equities/get_v1_last_stocks_symbol">https://polygon.io/docs/#!/Stocks--Equities/get_v1_last_stocks_symbol</a>
    */
   public Trade getLastTrade(String symbol) throws PolygonAPIException {
 
@@ -676,7 +693,8 @@ public class PolygonAPI {
    * @param symbol Symbol of the quote to get
    * @return the last quote
    * @throws PolygonAPIException the polygon API exception
-   * @see https://polygon.io/docs/#!/Stocks--Equities/get_v1_last_quote_stocks_symbol
+   * @see <a href=
+   *      "https://polygon.io/docs/#!/Stocks--Equities/get_v1_last_quote_stocks_symbol">https://polygon.io/docs/#!/Stocks--Equities/get_v1_last_quote_stocks_symbol</a>
    */
   public Quote getLastQuote(String symbol) throws PolygonAPIException {
 
@@ -700,10 +718,11 @@ public class PolygonAPI {
    * Get the open, close and afterhours prices of a symbol on a certain date.
    *
    * @param symbol Symbol of the stock to get
-   * @param dateDate of the requested open/close
+   * @param date Date of the requested open/close
    * @return the daily open close
    * @throws PolygonAPIException the polygon API exception
-   * @see https://polygon.io/docs/#!/Stocks--Equities/get_v1_open_close_symbol_date
+   * @see <a href=
+   *      "https://polygon.io/docs/#!/Stocks--Equities/get_v1_open_close_symbol_date">https://polygon.io/docs/#!/Stocks--Equities/get_v1_open_close_symbol_date</a>
    */
   public DailyOpenClose getDailyOpenClose(String symbol, LocalDate date)
       throws PolygonAPIException {
@@ -732,7 +751,8 @@ public class PolygonAPI {
    *
    * @return the snapshot all tickers
    * @throws PolygonAPIException the polygon API exception
-   * @see https://polygon.io/docs/#!/Stocks--Equities/get_v2_snapshot_locale_us_markets_stocks_tickers
+   * @see <a href=
+   *      "https://polygon.io/docs/#!/Stocks--Equities/get_v2_snapshot_locale_us_markets_stocks_tickers">https://polygon.io/docs/#!/Stocks--Equities/get_v2_snapshot_locale_us_markets_stocks_tickers</a>
    */
   public List<Snapshot> getSnapshotAllTickers() throws PolygonAPIException {
 
@@ -762,7 +782,8 @@ public class PolygonAPI {
    * @param symbol Ticker of the snapshot
    * @return the snapshot
    * @throws PolygonAPIException the polygon API exception
-   * @see https://polygon.io/docs/#!/Stocks--Equities/get_v2_snapshot_locale_us_markets_stocks_tickers_ticker
+   * @see <a href=
+   *      "https://polygon.io/docs/#!/Stocks--Equities/get_v2_snapshot_locale_us_markets_stocks_tickers_ticker">https://polygon.io/docs/#!/Stocks--Equities/get_v2_snapshot_locale_us_markets_stocks_tickers_ticker</a>
    */
   public Snapshot getSnapshot(String symbol) throws PolygonAPIException {
 
@@ -791,7 +812,8 @@ public class PolygonAPI {
    *
    * @return the snapshots gainers
    * @throws PolygonAPIException the polygon API exception
-   * @see https://polygon.io/docs/#!/Stocks--Equities/get_v2_snapshot_locale_us_markets_stocks_gainers
+   * @see <a href=
+   *      "https://polygon.io/docs/#!/Stocks--Equities/get_v2_snapshot_locale_us_markets_stocks_gainers">https://polygon.io/docs/#!/Stocks--Equities/get_v2_snapshot_locale_us_markets_stocks_gainers</a>
    */
   public List<Snapshot> getSnapshotsGainers() throws PolygonAPIException {
 
@@ -820,7 +842,8 @@ public class PolygonAPI {
    *
    * @return the snapshots losers
    * @throws PolygonAPIException the polygon API exception
-   * @see https://polygon.io/docs/#!/Stocks--Equities/get_v2_snapshot_locale_us_markets_stocks_losers
+   * @see <a href=
+   *      "https://polygon.io/docs/#!/Stocks--Equities/get_v2_snapshot_locale_us_markets_stocks_losers">https://polygon.io/docs/#!/Stocks--Equities/get_v2_snapshot_locale_us_markets_stocks_losers</a>
    */
   public List<Snapshot> getSnapshotsLosers() throws PolygonAPIException {
 
@@ -851,7 +874,8 @@ public class PolygonAPI {
    * @param unadjusted Set to true if the results should NOT be adjusted for splits.
    * @return the previous close
    * @throws PolygonAPIException the polygon API exception
-   * @see https://polygon.io/docs/#!/Stocks--Equities/get_v2_aggs_ticker_ticker_prev
+   * @see <a href=
+   *      "https://polygon.io/docs/#!/Stocks--Equities/get_v2_aggs_ticker_ticker_prev">https://polygon.io/docs/#!/Stocks--Equities/get_v2_aggs_ticker_ticker_prev</a>
    */
   public Aggregates getPreviousClose(String ticker, Boolean unadjusted) throws PolygonAPIException {
 
@@ -893,7 +917,8 @@ public class PolygonAPI {
    * @param unadjusted Set to true if the results should NOT be adjusted for splits
    * @return the aggregates
    * @throws PolygonAPIException the polygon API exception
-   * @see https://polygon.io/docs/#!/Stocks--Equities/get_v2_aggs_ticker_ticker_range_multiplier_timespan_from_to
+   * @see <a href=
+   *      "https://polygon.io/docs/#!/Stocks--Equities/get_v2_aggs_ticker_ticker_range_multiplier_timespan_from_to">https://polygon.io/docs/#!/Stocks--Equities/get_v2_aggs_ticker_ticker_range_multiplier_timespan_from_to</a>
    */
   public Aggregates getAggregates(String ticker, Integer multiplier, Timespan timeSpan,
       LocalDate fromDate, LocalDate toDate, Boolean unadjusted) throws PolygonAPIException {
@@ -942,7 +967,8 @@ public class PolygonAPI {
    * @param unadjusted Set to true if the results should NOT be adjusted for splits.
    * @return the grouped daily
    * @throws PolygonAPIException the polygon API exception
-   * @see https://polygon.io/docs/#!/Stocks--Equities/get_v2_aggs_grouped_locale_locale_market_market_date
+   * @see <a href=
+   *      "https://polygon.io/docs/#!/Stocks--Equities/get_v2_aggs_grouped_locale_locale_market_market_date">https://polygon.io/docs/#!/Stocks--Equities/get_v2_aggs_grouped_locale_locale_market_market_date</a>
    */
   public Aggregates getGroupedDaily(Locale locale,
       io.github.mainstringargs.polygon.enums.Market market, LocalDate date, Boolean unadjusted)
