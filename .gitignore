@@ -2,6 +2,3 @@
 build
 .gradle
 .settings
-gradlew
-gradlew.bat
-gradle/
