@@ -6,6 +6,9 @@ import java.net.URL;
 import java.util.Enumeration;
 import java.util.LinkedHashSet;
 import java.util.Properties;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import io.github.mainstringargs.alpaca.AlpacaAPI;
 import io.github.mainstringargs.alpaca.properties.AlpacaProperties;
 
 /**
@@ -16,28 +19,40 @@ public class PolygonProperties {
   /** The property file. */
   private static LinkedHashSet<Properties> propertyFiles = new LinkedHashSet<>();
 
+  /** The logger. */
+  private static Logger LOGGER = LogManager.getLogger(PolygonProperties.class);
 
   static {
 
+    LinkedHashSet<URL> propertyUrls = new LinkedHashSet<>();
+    String propertyFile = "polygon.properties";
+    URL url = AlpacaProperties.class.getResource("/" + propertyFile);
+    propertyUrls.add(url);
     Enumeration<URL> urls = null;
     try {
-      urls = ClassLoader.getSystemClassLoader().getResources("polygon.properties");
+      urls = ClassLoader.getSystemClassLoader().getResources(propertyFile);
     } catch (IOException e2) {
       e2.printStackTrace();
     }
-
     while (urls.hasMoreElements()) {
+      propertyUrls.add(urls.nextElement());
+    }
+
+    for (URL propUrl : propertyUrls) {
+
+      LOGGER.info("Found " + propertyFile + " File: " + propUrl);
+
       InputStream is = null;
       try {
-        URL url = urls.nextElement();
+
         is = (url.openStream());
       } catch (IOException e1) {
         e1.printStackTrace();
       }
 
-      Properties propertyFile = new Properties();
+      Properties propFile = new Properties();
       try {
-        propertyFile.load(is);
+        propFile.load(is);
       } catch (IOException e) {
         e.printStackTrace();
       }
@@ -50,10 +65,10 @@ public class PolygonProperties {
         }
       }
 
-      propertyFiles.add(propertyFile);
+      propertyFiles.add(propFile);
     }
-  }
 
+  }
 
   /** The Constant KEY_ID_KEY. */
   private static final String KEY_ID_KEY = "key_id";
@@ -107,14 +122,15 @@ public class PolygonProperties {
 
       if (prop.containsKey(key)) {
         String propertyVal = prop.getProperty(key);
-        if (!propertyVal.equals(INVALID_VALUE)) {
-          return propertyVal;
+        if (!propertyVal.equals(INVALID_VALUE) && !propertyVal.trim().isEmpty()) {
+          LOGGER.debug("Loading " + key + " " + propertyVal);
+          return propertyVal.trim();
         }
       }
     }
 
-    return defaultValue;
+    LOGGER.debug("Loading " + key + " " + defaultValue);
+    return defaultValue.trim();
   }
-
 
 }

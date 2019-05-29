@@ -85,9 +85,6 @@ public class PolygonAPI {
    */
   public PolygonAPI(String keyId, String... polygonNatsServers) {
 
-    LOGGER.info("PolygonAPI is using the following properties: \nkeyId: " + keyId
-        + "\npolygonNatsServers " + Arrays.toString(polygonNatsServers));
-
     polygonRequest = new PolygonRequest(keyId);
     polygonNatsClient = new PolygonNatsClient(keyId, polygonNatsServers);
     baseDataUrl = PolygonProperties.BASE_DATA_URL_VALUE;

@@ -70,10 +70,6 @@ public class AlpacaAPI {
     baseAccountUrl = AlpacaProperties.BASE_ACCOUNT_URL_VALUE;
     baseDataUrl = AlpacaProperties.BASE_DATA_URL_VALUE;
 
-    LOGGER.info("AlpacaAPI is using the following properties: \nkeyId: " + keyId + "\nsecret: "
-        + secret + "\nbaseAccountUrl: " + baseAccountUrl + "\nbaseDataUrl: " + baseDataUrl);
-
-
     alpacaRequest = new AlpacaRequest(keyId, secret);
     alpacaWebSocketClient = new AlpacaWebsocketClient(keyId, secret, baseAccountUrl);
 
@@ -93,10 +89,6 @@ public class AlpacaAPI {
     this.secret = secret;
     this.baseAccountUrl = baseAccountUrl;
     this.baseDataUrl = baseDataUrl;
-
-    LOGGER.info("AlpacaAPI is using the following properties: \nkeyId: " + keyId + "\nsecret: "
-        + secret + "\nbaseAccountUrl: " + baseAccountUrl + "\nbaseDataUrl: " + baseDataUrl);
-
     alpacaRequest = new AlpacaRequest(keyId, secret);
     alpacaWebSocketClient = new AlpacaWebsocketClient(keyId, secret, baseAccountUrl);
 
@@ -114,10 +106,6 @@ public class AlpacaAPI {
     this.secret = secret;
     this.baseAccountUrl = baseAccountUrl;
     baseDataUrl = AlpacaProperties.BASE_DATA_URL_VALUE;
-
-    LOGGER.info("AlpacaAPI is using the following properties: \nkeyId: " + keyId + "\nsecret: "
-        + secret + "\nbaseAccountUrl: " + baseAccountUrl + "\nbaseDataUrl: " + baseDataUrl);
-
     alpacaRequest = new AlpacaRequest(keyId, secret);
     alpacaWebSocketClient = new AlpacaWebsocketClient(keyId, secret, baseAccountUrl);
 
