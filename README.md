@@ -4,7 +4,7 @@
 3. [Alpaca Java Maven Integration](#alpaca-java-maven-integration)
 4. [Configuration](#configuration)
 5. [Simple Alpaca Example](#simple-alpaca-example)
-6. [Alpaca Java Building](#alpaca-java-building)
+6. [Simple Polygon Example](#simple-polygon-example)
 7. [Alpaca API](#alpaca-api)
 8. [Polygon API](#polygon-api)
 
