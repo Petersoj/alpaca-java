@@ -95,11 +95,13 @@ public class PolygonAPI {
   }
 
   /**
-   * Gets the symbol endpoints.
+   * Get gets the endpoints that are supported for a symbol. Note: The endpoints object is
+   * key/values of the endpoint name and url. These will almost always be the same of all symbols.
    *
-   * @param symbol the symbol
+   * @param symbol we want the endpoint list for.
    * @return the symbol endpoints
    * @throws PolygonAPIException the polygon API exception
+   * @see https://polygon.io/docs/#!/Meta-Data/get_v1_meta_symbols_symbol
    */
   public SymbolEndpoints getSymbolEndpoints(String symbol) throws PolygonAPIException {
 
@@ -121,11 +123,13 @@ public class PolygonAPI {
   }
 
   /**
-   * Gets the symbol details.
+   * Get the details of the symbol company/entity. These are important details which offer an
+   * overview of the entity. Things like name, sector, description, logo and similar companies.
    *
-   * @param symbol the symbol
+   * @param symbol we want details for
    * @return the symbol details
    * @throws PolygonAPIException the polygon API exception
+   * @see https://polygon.io/docs/#!/Meta-Data/get_v1_meta_symbols_symbol_company
    */
   public SymbolDetails getSymbolDetails(String symbol) throws PolygonAPIException {
 
@@ -148,11 +152,13 @@ public class PolygonAPI {
   }
 
   /**
-   * Gets the symbol analyst ratings.
+   * Get the analyst ratings of the symbol company/entity. Ratings are from current date, up to
+   * 5months into the future.
    *
-   * @param symbol the symbol
+   * @param symbol we want analyst ratings for
    * @return the symbol analyst ratings
    * @throws PolygonAPIException the polygon API exception
+   * @see https://polygon.io/docs/#!/Meta-Data/get_v1_meta_symbols_symbol_analysts
    */
   public SymbolAnalystRatings getSymbolAnalystRatings(String symbol) throws PolygonAPIException {
 
@@ -177,11 +183,12 @@ public class PolygonAPI {
   }
 
   /**
-   * Gets the symbol dividends.
+   * Get the historical dividends for this symbol.
    *
-   * @param symbol the symbol
+   * @param symbol we want details for
    * @return the symbol dividends
    * @throws PolygonAPIException the polygon API exception
+   * @see https://polygon.io/docs/#!/Meta-Data/get_v1_meta_symbols_symbol_dividends
    */
   public List<SymbolDividend> getSymbolDividends(String symbol) throws PolygonAPIException {
 
@@ -206,11 +213,12 @@ public class PolygonAPI {
   }
 
   /**
-   * Gets the symbol earnings.
+   * Get the historical earnings for a company
    *
-   * @param symbol the symbol
+   * @param symbol we want details for
    * @return the symbol earnings
    * @throws PolygonAPIException the polygon API exception
+   * @see https://polygon.io/docs/#!/Meta-Data/get_v1_meta_symbols_symbol_earnings
    */
   public List<SymbolEarning> getSymbolEarnings(String symbol) throws PolygonAPIException {
 
@@ -237,11 +245,12 @@ public class PolygonAPI {
 
 
   /**
-   * Gets the symbol financials.
+   * Get the historical financials for a company
    *
-   * @param symbol the symbol
+   * @param symbol we want details for
    * @return the symbol financials
    * @throws PolygonAPIException the polygon API exception
+   * @see https://polygon.io/docs/#!/Meta-Data/get_v1_meta_symbols_symbol_financials
    */
   public List<SymbolFinancial> getSymbolFinancials(String symbol) throws PolygonAPIException {
 
@@ -267,11 +276,12 @@ public class PolygonAPI {
   }
 
   /**
-   * Gets the symbol news.
+   * Get news articles for this symbol.
    *
-   * @param symbol the symbol
+   * @param symbol the symbol we want details for
    * @return the symbol news
    * @throws PolygonAPIException the polygon API exception
+   * @see https://polygon.io/docs/#!/Meta-Data/get_v1_meta_symbols_symbol_news
    */
   public List<SymbolNews> getSymbolNews(String symbol) throws PolygonAPIException {
 
@@ -298,13 +308,14 @@ public class PolygonAPI {
   }
 
   /**
-   * Gets the symbol news.
+   * Get news articles for this symbol.
    *
-   * @param symbol the symbol
-   * @param perpage the perpage
-   * @param page the page
+   * @param symbol the symbol we want details for
+   * @param perpage How many items to be on each page during pagination. Max 50
+   * @param page Which page of results to return
    * @return the symbol news
    * @throws PolygonAPIException the polygon API exception
+   * @see https://polygon.io/docs/#!/Meta-Data/get_v1_meta_symbols_symbol_news
    */
   public List<SymbolNews> getSymbolNews(String symbol, Integer perpage, Integer page)
       throws PolygonAPIException {
@@ -337,18 +348,19 @@ public class PolygonAPI {
   }
 
   /**
-   * Gets the tickers.
+   * Query all ticker symbols which are supported by Polygon.io.
    *
-   * @param sort the sort
-   * @param type the type
-   * @param market the market
-   * @param locale the locale
-   * @param search the search
-   * @param perpage the perpage
-   * @param page the page
-   * @param active the active
+   * @param sort Which field to sort by.
+   * @param type If you want the results to only container a certain type.
+   * @param market Get tickers for a specific market
+   * @param locale Get tickers for a specific region/locale
+   * @param search Search the name of tickers
+   * @param perpage How many items to be on each page during pagination. Max 50
+   * @param page Which page of results to return
+   * @param active Filter for only active or inactive symbols
    * @return the tickers
    * @throws PolygonAPIException the polygon API exception
+   * @see https://polygon.io/docs/#!/Reference/get_v2_reference_tickers
    */
   public Tickers getTickers(Sort sort, io.github.mainstringargs.polygon.enums.Type type,
       io.github.mainstringargs.polygon.enums.Market market, Locale locale, String search,
@@ -403,10 +415,11 @@ public class PolygonAPI {
   }
 
   /**
-   * Gets the markets.
+   * Get the list of currently supported markets
    *
    * @return the markets
    * @throws PolygonAPIException the polygon API exception
+   * @see https://polygon.io/docs/#!/Reference/get_v2_reference_markets
    */
   public List<Market> getMarkets() throws PolygonAPIException {
 
@@ -432,10 +445,11 @@ public class PolygonAPI {
   }
 
   /**
-   * Gets the locales.
+   * Get the list of currently supported locales
    *
    * @return the locales
    * @throws PolygonAPIException the polygon API exception
+   * @see https://polygon.io/docs/#!/Reference/get_v2_reference_locales
    */
   public List<io.github.mainstringargs.polygon.domain.reference.Locale> getLocales()
       throws PolygonAPIException {
@@ -465,10 +479,11 @@ public class PolygonAPI {
   }
 
   /**
-   * Gets the types mapping.
+   * Get the mapping of ticker types to descriptions / long names
    *
    * @return the types mapping
    * @throws PolygonAPIException the polygon API exception
+   * @see https://polygon.io/docs/#!/Reference/get_v2_reference_types
    */
   public TypesMapping getTypesMapping() throws PolygonAPIException {
 
@@ -492,11 +507,12 @@ public class PolygonAPI {
   }
 
   /**
-   * Gets the splits.
+   * Get the historical splits for this symbol
    *
-   * @param symbol the symbol
+   * @param symbol we want details for
    * @return the splits
    * @throws PolygonAPIException the polygon API exception
+   * @see https://polygon.io/docs/#!/Reference/get_v2_reference_splits_symbol
    */
   public List<Split> getSplits(String symbol) throws PolygonAPIException {
 
@@ -523,10 +539,11 @@ public class PolygonAPI {
   }
 
   /**
-   * Gets the exchange.
+   * List of stock exchanges which are supported by Polygon.io
    *
    * @return the exchange
    * @throws PolygonAPIException the polygon API exception
+   * @see https://polygon.io/docs/#!/Stocks--Equities/get_v1_meta_exchanges
    */
   public List<Exchange> getExchanges() throws PolygonAPIException {
 
@@ -548,14 +565,17 @@ public class PolygonAPI {
   }
 
   /**
-   * Gets the historic trades.
+   * Get historic trades for a symbol.
    *
-   * @param symbol the symbol
-   * @param date the date
-   * @param offset the offset
-   * @param limit the limit
+   * @param symbol the symbol of the company to retrieve
+   * @param date Date/Day of the historic ticks to retreive
+   * @param offset Timestamp offset, used for pagination. This is the offset at which to start the
+   *        results. Using the timestamp of the last result as the offset will give you the next
+   *        page of results.
+   * @param limit Limit the size of response, Max 50000
    * @return the historic trades
    * @throws PolygonAPIException the polygon API exception
+   * @see https://polygon.io/docs/#!/Stocks--Equities/get_v1_historic_trades_symbol_date
    */
   public Trades getHistoricTrades(String symbol, LocalDate date, Integer offset, Integer limit)
       throws PolygonAPIException {
@@ -585,14 +605,17 @@ public class PolygonAPI {
   }
 
   /**
-   * Gets the historic quotes.
+   * Get historic quotes for a symbol.
    *
-   * @param symbol the symbol
-   * @param date the date
-   * @param offset the offset
-   * @param limit the limit
+   * @param symbol the symbol of the company to retrieve
+   * @param date Date/Day of the historic ticks to retreive
+   * @param offset Timestamp offset, used for pagination. This is the offset at which to start the
+   *        results. Using the timestamp of the last result as the offset will give you the next
+   *        page of results.
+   * @param limit Limit the size of response, Max 50000
    * @return the historic quotes
    * @throws PolygonAPIException the polygon API exception
+   * @see https://polygon.io/docs/#!/Stocks--Equities/get_v1_historic_quotes_symbol_date
    */
   public Quotes getHistoricQuotes(String symbol, LocalDate date, Integer offset, Integer limit)
       throws PolygonAPIException {
@@ -622,11 +645,12 @@ public class PolygonAPI {
   }
 
   /**
-   * Gets the last trade.
+   * Get the last trade for a given stock.
    *
-   * @param symbol the symbol
+   * @param symbol Symbol of the stock to get
    * @return the last trade
    * @throws PolygonAPIException the polygon API exception
+   * @see https://polygon.io/docs/#!/Stocks--Equities/get_v1_last_stocks_symbol
    */
   public Trade getLastTrade(String symbol) throws PolygonAPIException {
 
@@ -647,11 +671,12 @@ public class PolygonAPI {
   }
 
   /**
-   * Gets the last quote.
+   * Get the last quote tick for a given stock.
    *
-   * @param symbol the symbol
+   * @param symbol Symbol of the quote to get
    * @return the last quote
    * @throws PolygonAPIException the polygon API exception
+   * @see https://polygon.io/docs/#!/Stocks--Equities/get_v1_last_quote_stocks_symbol
    */
   public Quote getLastQuote(String symbol) throws PolygonAPIException {
 
@@ -672,12 +697,13 @@ public class PolygonAPI {
   }
 
   /**
-   * Gets the daily open close.
+   * Get the open, close and afterhours prices of a symbol on a certain date.
    *
-   * @param symbol the symbol
-   * @param date the date
+   * @param symbol Symbol of the stock to get
+   * @param dateDate of the requested open/close
    * @return the daily open close
    * @throws PolygonAPIException the polygon API exception
+   * @see https://polygon.io/docs/#!/Stocks--Equities/get_v1_open_close_symbol_date
    */
   public DailyOpenClose getDailyOpenClose(String symbol, LocalDate date)
       throws PolygonAPIException {
@@ -701,10 +727,12 @@ public class PolygonAPI {
   }
 
   /**
-   * Gets the snapshot all tickers.
+   * Snapshot allows you to see all tickers current minute aggregate, daily aggregate and last
+   * trade. As well as previous days aggregate and calculated change for today.
    *
    * @return the snapshot all tickers
    * @throws PolygonAPIException the polygon API exception
+   * @see https://polygon.io/docs/#!/Stocks--Equities/get_v2_snapshot_locale_us_markets_stocks_tickers
    */
   public List<Snapshot> getSnapshotAllTickers() throws PolygonAPIException {
 
@@ -729,11 +757,12 @@ public class PolygonAPI {
   }
 
   /**
-   * Gets the snapshot.
+   * See the current snapshot of a single ticker
    *
-   * @param symbol the symbol
+   * @param symbol Ticker of the snapshot
    * @return the snapshot
    * @throws PolygonAPIException the polygon API exception
+   * @see https://polygon.io/docs/#!/Stocks--Equities/get_v2_snapshot_locale_us_markets_stocks_tickers_ticker
    */
   public Snapshot getSnapshot(String symbol) throws PolygonAPIException {
 
@@ -758,10 +787,11 @@ public class PolygonAPI {
   }
 
   /**
-   * Gets the snapshots gainers.
+   * See the current snapshot of the top 20 gainers of the day at the moment.
    *
    * @return the snapshots gainers
    * @throws PolygonAPIException the polygon API exception
+   * @see https://polygon.io/docs/#!/Stocks--Equities/get_v2_snapshot_locale_us_markets_stocks_gainers
    */
   public List<Snapshot> getSnapshotsGainers() throws PolygonAPIException {
 
@@ -786,10 +816,11 @@ public class PolygonAPI {
   }
 
   /**
-   * Gets the snapshots losers.
+   * See the current snapshot of the top 20 losers of the day at the moment.
    *
    * @return the snapshots losers
    * @throws PolygonAPIException the polygon API exception
+   * @see https://polygon.io/docs/#!/Stocks--Equities/get_v2_snapshot_locale_us_markets_stocks_losers
    */
   public List<Snapshot> getSnapshotsLosers() throws PolygonAPIException {
 
@@ -814,12 +845,13 @@ public class PolygonAPI {
   }
 
   /**
-   * Gets the previous close.
+   * Get the previous day close for the specified ticker
    *
-   * @param ticker the ticker
-   * @param unadjusted the unadjusted
+   * @param ticker Ticker symbol of the request
+   * @param unadjusted Set to true if the results should NOT be adjusted for splits.
    * @return the previous close
    * @throws PolygonAPIException the polygon API exception
+   * @see https://polygon.io/docs/#!/Stocks--Equities/get_v2_aggs_ticker_ticker_prev
    */
   public Aggregates getPreviousClose(String ticker, Boolean unadjusted) throws PolygonAPIException {
 
@@ -851,16 +883,17 @@ public class PolygonAPI {
   }
 
   /**
-   * Gets the aggregates.
+   * Get aggregates for a date range, in custom time window sizes
    *
-   * @param ticker the ticker
-   * @param multiplier the multiplier
-   * @param timeSpan the time span
+   * @param ticker Ticker symbol of the request
+   * @param multiplier Size of the timespan multiplier
+   * @param timeSpan Size of the time window
    * @param fromDate the from date
    * @param toDate the to date
-   * @param unadjusted the unadjusted
+   * @param unadjusted Set to true if the results should NOT be adjusted for splits
    * @return the aggregates
    * @throws PolygonAPIException the polygon API exception
+   * @see https://polygon.io/docs/#!/Stocks--Equities/get_v2_aggs_ticker_ticker_range_multiplier_timespan_from_to
    */
   public Aggregates getAggregates(String ticker, Integer multiplier, Timespan timeSpan,
       LocalDate fromDate, LocalDate toDate, Boolean unadjusted) throws PolygonAPIException {
@@ -901,14 +934,15 @@ public class PolygonAPI {
   }
 
   /**
-   * Gets the grouped daily.
+   * Get the daily OHLC for entire markets.
    *
-   * @param locale the locale
-   * @param market the market
-   * @param date the date
-   * @param unadjusted the unadjusted
+   * @param locale Locale of the aggregates ( See 'Locales' API )
+   * @param market Market of the aggregates ( See 'Markets' API )
+   * @param date to date
+   * @param unadjusted Set to true if the results should NOT be adjusted for splits.
    * @return the grouped daily
    * @throws PolygonAPIException the polygon API exception
+   * @see https://polygon.io/docs/#!/Stocks--Equities/get_v2_aggs_grouped_locale_locale_market_market_date
    */
   public Aggregates getGroupedDaily(Locale locale,
       io.github.mainstringargs.polygon.enums.Market market, LocalDate date, Boolean unadjusted)
