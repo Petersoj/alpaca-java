@@ -534,3 +534,7 @@ Adds the alpaca stream listener.
 Removes the alpaca stream listener.
 
  * **Parameters:** `streamListener` — the stream listener
+
+# Polygon API
+
+See <a href="https://polygon.io/docs/#getting-started">https://polygon.io/docs/#getting-started</a> for general Polygon API documentation
