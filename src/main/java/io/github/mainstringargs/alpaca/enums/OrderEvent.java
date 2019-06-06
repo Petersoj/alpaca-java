@@ -9,13 +9,10 @@ public enum OrderEvent {
   NEW("new"),
 
   /** The fill. */
-  FILL("fill"),
+  FILL("fill", "filled"),
 
   /** The partially filled. */
-  PARTIALLY_FILLED("partially_filled"),
-
-  /** The filled. */
-  FILLED("filled"),
+  PARTIALLY_FILLED("partially_filled", "partial_fill"),
 
   /** The done for day. */
   DONE_FOR_DAY("done_for_day"),
@@ -45,15 +42,19 @@ public enum OrderEvent {
   CALCULATED("calculated");
 
   /** The api name. */
-  private String apiName;
+  private String mainApiName;
+
+  /** The api names. */
+  private String[] apiNames;
 
   /**
    * Instantiates a new order event.
    *
-   * @param apiName the api name
+   * @param apiNames the api names
    */
-  OrderEvent(String apiName) {
-    this.apiName = apiName;
+  OrderEvent(String... apiNames) {
+    this.mainApiName = apiNames[0];
+    this.apiNames = apiNames;
   }
 
   /**
@@ -61,24 +62,35 @@ public enum OrderEvent {
    *
    * @return the API name
    */
-  public String getAPIName() {
-    return apiName;
+  public String getMainAPIName() {
+    return mainApiName;
   }
 
 
   /**
+   * Gets the api names.
+   *
+   * @return the api names
+   */
+  public String[] getApiNames() {
+    return apiNames;
+  }
+
+  /**
    * Gets the API name.
    *
-   * @param apiName the api name
+   * @param apiNameCheck the api name as a String
    * @return the API name
    */
-  public static OrderEvent fromAPIName(String apiName) {
+  public static OrderEvent fromAPIName(String apiNameCheck) {
 
-    for (OrderEvent event : values()) {
-      if (event.getAPIName().equals(apiName.trim())) {
-        return event;
+    for (OrderEvent event : values())
+      for (String apiName : event.getApiNames()) {
+        if (apiName.equals(apiNameCheck.trim())) {
+          return event;
+        }
       }
-    }
+
 
     return null;
   }
