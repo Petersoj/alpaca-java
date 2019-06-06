@@ -91,11 +91,13 @@ public class AlpacaWebsocketClient implements MessageHandler {
    */
   public void removeListener(AlpacaStreamListener listener) {
 
-    listeners.remove(listener);
+    if (listener != null) {
+      listeners.remove(listener);
 
 
-    submitStreamRequest();
+      submitStreamRequest();
 
+    }
 
 
     if (listeners.isEmpty()) {

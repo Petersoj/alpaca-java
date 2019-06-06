@@ -144,75 +144,76 @@ public class PolygonNatsClient {
    */
   private void updateSubscriptions(PolygonStreamListener listener, boolean isAdd) {
 
-    Map<String, Set<ChannelType>> toRemove = listener.getStockChannelTypes().entrySet().stream()
-        .collect(Collectors.toMap(e -> e.getKey(), e -> new HashSet<ChannelType>(e.getValue())));
-    Map<String, Set<ChannelType>> toAdd = listener.getStockChannelTypes().entrySet().stream()
-        .collect(Collectors.toMap(e -> e.getKey(), e -> new HashSet<ChannelType>(e.getValue())));
+    if (listener != null) {
+      Map<String, Set<ChannelType>> toRemove = listener.getStockChannelTypes().entrySet().stream()
+          .collect(Collectors.toMap(e -> e.getKey(), e -> new HashSet<ChannelType>(e.getValue())));
+      Map<String, Set<ChannelType>> toAdd = listener.getStockChannelTypes().entrySet().stream()
+          .collect(Collectors.toMap(e -> e.getKey(), e -> new HashSet<ChannelType>(e.getValue())));
 
 
 
-    if (isAdd) {
+      if (isAdd) {
 
-      for (Entry<String, Set<ChannelType>> entry : toAdd.entrySet()) {
+        for (Entry<String, Set<ChannelType>> entry : toAdd.entrySet()) {
 
-        Set<ChannelType> currentSubbedChannels = currentSubscriptions.get(entry.getKey());
+          Set<ChannelType> currentSubbedChannels = currentSubscriptions.get(entry.getKey());
 
-        if (currentSubbedChannels == null) {
-          currentSubbedChannels = new HashSet<>();
-          currentSubscriptions.put(entry.getKey(), currentSubbedChannels);
-        }
-
-        for (ChannelType channel : entry.getValue()) {
-          String subscriptionName = channel.getAPIName() + '.' + entry.getKey();
-          if (!currentSubbedChannels.contains(channel)) {
-            currentSubbedChannels.add(channel);
-
-            LOGGER.info(("Subscribing to " + subscriptionName));
-            polygonDispatcher.subscribe(subscriptionName);
-          } else {
-            LOGGER.info(("Already subscribed to " + subscriptionName));
+          if (currentSubbedChannels == null) {
+            currentSubbedChannels = new HashSet<>();
+            currentSubscriptions.put(entry.getKey(), currentSubbedChannels);
           }
 
+          for (ChannelType channel : entry.getValue()) {
+            String subscriptionName = channel.getAPIName() + '.' + entry.getKey();
+            if (!currentSubbedChannels.contains(channel)) {
+              currentSubbedChannels.add(channel);
+
+              LOGGER.info(("Subscribing to " + subscriptionName));
+              polygonDispatcher.subscribe(subscriptionName);
+            } else {
+              LOGGER.info(("Already subscribed to " + subscriptionName));
+            }
+
+
+          }
 
         }
 
-      }
+
+      } else {
 
 
-    } else {
+        for (PolygonStreamListener polyListener : listeners) {
+          for (Entry<String, Set<ChannelType>> entry : polyListener.getStockChannelTypes()
+              .entrySet()) {
 
+            if (toRemove.containsKey(entry.getKey())) {
 
-      for (PolygonStreamListener polyListener : listeners) {
-        for (Entry<String, Set<ChannelType>> entry : polyListener.getStockChannelTypes()
-            .entrySet()) {
+              for (ChannelType cType : entry.getValue()) {
+                toRemove.get(entry.getKey()).remove(cType);
+              }
 
-          if (toRemove.containsKey(entry.getKey())) {
-
-            for (ChannelType cType : entry.getValue()) {
-              toRemove.get(entry.getKey()).remove(cType);
             }
 
           }
-
         }
-      }
 
-      for (Entry<String, Set<ChannelType>> entry : toRemove.entrySet()) {
-        for (ChannelType channel : entry.getValue()) {
+        for (Entry<String, Set<ChannelType>> entry : toRemove.entrySet()) {
+          for (ChannelType channel : entry.getValue()) {
 
-          if (currentSubscriptions.containsKey(entry.getKey())) {
-            currentSubscriptions.get(entry.getKey()).remove(channel);
+            if (currentSubscriptions.containsKey(entry.getKey())) {
+              currentSubscriptions.get(entry.getKey()).remove(channel);
+            }
+
+            String subscriptionName = channel.getAPIName() + "." + entry.getKey();
+            LOGGER.info(("Unsubscribing from " + subscriptionName));
+            polygonDispatcher.unsubscribe(subscriptionName);
+
+
           }
-
-          String subscriptionName = channel.getAPIName() + "." + entry.getKey();
-          LOGGER.info(("Unsubscribing from " + subscriptionName));
-          polygonDispatcher.unsubscribe(subscriptionName);
-
-
         }
       }
     }
-
     LOGGER.info(("Subscriptions updated to " + currentSubscriptions));
 
   }
