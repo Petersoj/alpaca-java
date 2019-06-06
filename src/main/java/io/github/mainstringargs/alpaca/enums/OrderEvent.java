@@ -18,10 +18,13 @@ public enum OrderEvent {
   DONE_FOR_DAY("done_for_day"),
 
   /** The canceled. */
-  CANCELED("canceled"),
+  CANCELED("canceled", "cancelled"),
 
   /** The expired. */
   EXPIRED("expired"),
+
+  /** The order cancel rejected. */
+  ORDER_CANCEL_REJECTED("order_cancel_rejected"),
 
   /** The pending cancel. */
   PENDING_CANCEL("pending_cancel"),
