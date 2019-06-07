@@ -71,155 +71,146 @@ nats_urls = nats1.polygon.io:31101,nats2.polygon.io:31102,nats3.polygon.io:31103
 This example uses the AlpacaAPI class to print out account information, submit a limit order, and print out bars.
 
 ```java
+// This logs into Alpaca using the alpaca.properties file on the classpath.
+AlpacaAPI alpacaApi = new AlpacaAPI();
 
-    // This logs into Alpaca using the alpaca.properties file on the classpath.
-    AlpacaAPI alpacaApi = new AlpacaAPI();
-
-    // Register explicitly for ACCOUNT_UPDATES and ORDER_UPDATES Messages via stream listener
-    alpacaApi.addAlpacaStreamListener(
+// Register explicitly for ACCOUNT_UPDATES and ORDER_UPDATES Messages via stream listener
+alpacaApi.addAlpacaStreamListener(
         new AlpacaStreamListenerAdapter(MessageType.ACCOUNT_UPDATES, MessageType.ORDER_UPDATES) {
-          @Override
-          public void streamUpdate(MessageType messageType, UpdateMessage message) {
+            @Override
+            public void streamUpdate(MessageType messageType, UpdateMessage message) {
 
-            switch (messageType) {
-              case ACCOUNT_UPDATES:
-                AccountUpdateMessage accounUpdateMessage = (AccountUpdateMessage) message;
-                System.out
-                    .println("\nReceived Account Update: \n\t" + accounUpdateMessage.toString());
-                break;
-              case ORDER_UPDATES:
-                OrderUpdateMessage orderUpdateMessage = (OrderUpdateMessage) message;
-                System.out.println("\nReceived Order Update: \n\t" + orderUpdateMessage.toString());
-                break;
+                switch (messageType) {
+                    case ACCOUNT_UPDATES:
+                        AccountUpdateMessage accounUpdateMessage = (AccountUpdateMessage) message;
+                        System.out.println("\nReceived Account Update: \n\t" + accounUpdateMessage.toString());
+                        break;
+                    case ORDER_UPDATES:
+                        OrderUpdateMessage orderUpdateMessage = (OrderUpdateMessage) message;
+                        System.out.println("\nReceived Order Update: \n\t" + orderUpdateMessage.toString());
+                        break;
+                }
             }
-          }
         });
 
-    // Get Account Information
-    try {
-      Account alpacaAccount = alpacaApi.getAccount();
+// Get Account Information
+try {
+    Account alpacaAccount = alpacaApi.getAccount();
 
-      System.out.println("\n\nAccount Information:");
-      System.out
-          .println("\tCreated At: " + Utilities.fromDateTimeString(alpacaAccount.getCreatedAt())
-              + "\n\tBuying Power: " + alpacaAccount.getBuyingPower() + "\n\tPortfolio Value: "
-              + alpacaAccount.getPortfolioValue());
+    System.out.println("\n\nAccount Information:");
+    System.out.println("\tCreated At: " + Utilities.fromDateTimeString(alpacaAccount.getCreatedAt())
+                    + "\n\tBuying Power: " + alpacaAccount.getBuyingPower() + "\n\tPortfolio Value: "
+                    + alpacaAccount.getPortfolioValue());
 
-    } catch (AlpacaAPIException e) {
-      e.printStackTrace();
-    }
+} catch (AlpacaAPIException e) {
+    e.printStackTrace();
+}
 
-    // Get Stock Market Hours
-    try {
-      Clock alpacaClock = alpacaApi.getClock();
+// Get Stock Market Hours
+try {
+    Clock alpacaClock = alpacaApi.getClock();
 
-      System.out.println("\n\nClock:");
-      System.out.println("\tCurrent Time: "
-          + Utilities.fromDateTimeString(alpacaClock.getTimestamp()) + "\n\tIs Open: "
-          + alpacaClock.isIsOpen() + "\n\tMarket Next Open Time: "
-          + Utilities.fromDateTimeString(alpacaClock.getNextOpen()) + "\n\tMark Next Close Time: "
-          + Utilities.fromDateTimeString(alpacaClock.getNextClose()));
-
-
-    } catch (AlpacaAPIException e) {
-      e.printStackTrace();
-    }
-
-    Order limitOrder = null;
-    String orderClientId = UUID.randomUUID().toString();
-
-    // Request an Order
-    try {
-      // Lets submit a limit order for when AMZN gets down to $100.0!
-      limitOrder = alpacaApi.requestNewOrder("AMZN", 1, OrderSide.BUY, OrderType.LIMIT,
-          OrderTimeInForce.DAY, 100.0, null, orderClientId);
-
-      System.out.println("\n\nLimit Order Response:");
-
-      System.out.println("\tSymbol: " + limitOrder.getSymbol() + "\n\tClient Order Id: "
-          + limitOrder.getClientOrderId() + "\n\tQty: " + limitOrder.getQty() + "\n\tType: "
-          + limitOrder.getType() + "\n\tLimit Price: $" + limitOrder.getLimitPrice()
-          + "\n\tCreated At: " + Utilities.fromDateTimeString(limitOrder.getCreatedAt()));
+    System.out.println("\n\nClock:");
+    System.out.println("\tCurrent Time: "
+            + Utilities.fromDateTimeString(alpacaClock.getTimestamp()) + "\n\tIs Open: "
+            + alpacaClock.isIsOpen() + "\n\tMarket Next Open Time: "
+            + Utilities.fromDateTimeString(alpacaClock.getNextOpen()) + "\n\tMark Next Close Time: "
+            + Utilities.fromDateTimeString(alpacaClock.getNextClose()));
 
 
+} catch (AlpacaAPIException e) {
+    e.printStackTrace();
+}
 
-    } catch (AlpacaAPIException e) {
-      e.printStackTrace();
-    }
+Order limitOrder = null;
+String orderClientId = UUID.randomUUID().toString();
 
-    // Get an existing Order by Id
-    try {
-      Order limitOrderById = alpacaApi.getOrder(limitOrder.getId());
+// Request an Order
+try {
+    // Lets submit a limit order for when AMZN gets down to $100.0!
+    limitOrder = alpacaApi.requestNewOrder("AMZN", 1, OrderSide.BUY, OrderType.LIMIT,
+            OrderTimeInForce.DAY, 100.0, null, orderClientId);
 
-      System.out.println("\n\nLimit Order By Id Response:");
+    System.out.println("\n\nLimit Order Response:");
 
-      System.out.println("\tSymbol: " + limitOrderById.getSymbol() + "\n\tClient Order Id: "
-          + limitOrderById.getClientOrderId() + "\n\tQty: " + limitOrderById.getQty() + "\n\tType: "
-          + limitOrderById.getType() + "\n\tLimit Price: $" + limitOrderById.getLimitPrice()
-          + "\n\tCreated At: " + Utilities.fromDateTimeString(limitOrderById.getCreatedAt()));
-
-
-
-    } catch (AlpacaAPIException e) {
-      e.printStackTrace();
-    }
-
-    // Get an existing Order by Client Id
-    try {
-      Order limitOrderByClientId = alpacaApi.getOrderByClientId(limitOrder.getClientOrderId());
-
-      System.out.println("\n\nLimit Order By Id Response:");
-
-      System.out.println("\tSymbol: " + limitOrderByClientId.getSymbol() + "\n\tClient Order Id: "
-          + limitOrderByClientId.getClientOrderId() + "\n\tQty: " + limitOrderByClientId.getQty()
-          + "\n\tType: " + limitOrderByClientId.getType() + "\n\tLimit Price: $"
-          + limitOrderByClientId.getLimitPrice() + "\n\tCreated At: "
-          + Utilities.fromDateTimeString(limitOrderByClientId.getCreatedAt()));
+    System.out.println("\tSymbol: " + limitOrder.getSymbol() + "\n\tClient Order Id: "
+            + limitOrder.getClientOrderId() + "\n\tQty: " + limitOrder.getQty() + "\n\tType: "
+            + limitOrder.getType() + "\n\tLimit Price: $" + limitOrder.getLimitPrice()
+            + "\n\tCreated At: " + Utilities.fromDateTimeString(limitOrder.getCreatedAt()));
 
 
+} catch (AlpacaAPIException e) {
+    e.printStackTrace();
+}
 
-    } catch (AlpacaAPIException e) {
-      e.printStackTrace();
-    }
+// Get an existing Order by Id
+try {
+    Order limitOrderById = alpacaApi.getOrder(limitOrder.getId());
 
-    // Cancel the existing order
-    try {
-      boolean orderCanceled = alpacaApi.cancelOrder(limitOrder.getId());
+    System.out.println("\n\nLimit Order By Id Response:");
 
-      System.out.println("\n\nCancel order response:");
-
-      System.out.println("\tCancelled: " + orderCanceled);
-
+    System.out.println("\tSymbol: " + limitOrderById.getSymbol() + "\n\tClient Order Id: "
+            + limitOrderById.getClientOrderId() + "\n\tQty: " + limitOrderById.getQty() + "\n\tType: "
+            + limitOrderById.getType() + "\n\tLimit Price: $" + limitOrderById.getLimitPrice()
+            + "\n\tCreated At: " + Utilities.fromDateTimeString(limitOrderById.getCreatedAt()));
 
 
-    } catch (AlpacaAPIException e) {
-      e.printStackTrace();
-    }
+} catch (AlpacaAPIException e) {
+    e.printStackTrace();
+}
 
-    // Get bars
-    try {
-      List<Bar> bars = alpacaApi.getBars(BarsTimeFrame.ONE_DAY, "AMZN", 10,
-          LocalDateTime.of(2019, 2, 13, 10, 30), LocalDateTime.of(2019, 2, 14, 10, 30), null, null);
+// Get an existing Order by Client Id
+try {
+    Order limitOrderByClientId = alpacaApi.getOrderByClientId(limitOrder.getClientOrderId());
 
-      System.out.println("\n\nBars response:");
+    System.out.println("\n\nLimit Order By Id Response:");
 
-      for (Bar bar : bars) {
+    System.out.println("\tSymbol: " + limitOrderByClientId.getSymbol() + "\n\tClient Order Id: "
+            + limitOrderByClientId.getClientOrderId() + "\n\tQty: " + limitOrderByClientId.getQty()
+            + "\n\tType: " + limitOrderByClientId.getType() + "\n\tLimit Price: $"
+            + limitOrderByClientId.getLimitPrice() + "\n\tCreated At: "
+            + Utilities.fromDateTimeString(limitOrderByClientId.getCreatedAt()));
+
+
+} catch (AlpacaAPIException e) {
+    e.printStackTrace();
+}
+
+// Cancel the existing order
+try {
+    boolean orderCanceled = alpacaApi.cancelOrder(limitOrder.getId());
+
+    System.out.println("\n\nCancel order response:");
+
+    System.out.println("\tCancelled: " + orderCanceled);
+
+
+} catch (AlpacaAPIException e) {
+    e.printStackTrace();
+}
+
+// Get bars
+try {
+    List<Bar> bars = alpacaApi.getBars(BarsTimeFrame.ONE_DAY, "AMZN", 10,
+            LocalDateTime.of(2019, 2, 13, 10, 30), LocalDateTime.of(2019, 2, 14, 10, 30), null, null);
+
+    System.out.println("\n\nBars response:");
+
+    for (Bar bar : bars) {
         System.out.println("\t==========");
         System.out.println("\tUnix Time "
-            + LocalDateTime.ofInstant(Instant.ofEpochMilli(bar.getT() * 1000), ZoneId.of("UTC")));
+                + LocalDateTime.ofInstant(Instant.ofEpochMilli(bar.getT() * 1000), ZoneId.of("UTC")));
         System.out.println("\tOpen: $" + bar.getO());
         System.out.println("\tHigh: $" + bar.getH());
         System.out.println("\tLow: $" + bar.getL());
         System.out.println("\tClose: $" + bar.getC());
         System.out.println("\tVolume: " + bar.getV());
-      }
-
-
-
-    } catch (AlpacaAPIException e) {
-      e.printStackTrace();
     }
 
+
+} catch (AlpacaAPIException e) {
+    e.printStackTrace();
+}
 ```
 
 This code will output the following:
@@ -560,339 +551,336 @@ Removes the alpaca stream listener.
 This example uses the PolygonAPI class to provide sample calls into the PolygonAPI endpoints.
 
 ```java
-    PolygonAPI polygonAPI = new PolygonAPI();
+PolygonAPI polygonAPI = new PolygonAPI();
 
-    String ticker = "MSFT";
+String ticker = "MSFT";
 
+try {
+    SymbolEndpoints symbolEndPoints = polygonAPI.getSymbolEndpoints(ticker);
 
-    try {
-      SymbolEndpoints symbolEndPoints = polygonAPI.getSymbolEndpoints(ticker);
-
-      System.out.println("\n\n" + ticker + " Symbol Endpoints:");
-      System.out.println("\t" + symbolEndPoints.getSymbol().getSymbol() + " "
-          + symbolEndPoints.getSymbol().getName() + " " + symbolEndPoints.getSymbol().getType()
-          + symbolEndPoints.getSymbol().getUrl() + " " + symbolEndPoints.getSymbol().getUpdated());
-      System.out.println("\t" + symbolEndPoints.getEndpoints());
-
+    System.out.println("\n\n" + ticker + " Symbol Endpoints:");
+    System.out.println("\t" + symbolEndPoints.getSymbol().getSymbol() + " "
+            + symbolEndPoints.getSymbol().getName() + " " + symbolEndPoints.getSymbol().getType()
+            + symbolEndPoints.getSymbol().getUrl() + " " + symbolEndPoints.getSymbol().getUpdated());
+    System.out.println("\t" + symbolEndPoints.getEndpoints());
 
 
-    } catch (PolygonAPIException e) {
-      e.printStackTrace();
-    }
+} catch (PolygonAPIException e) {
+    e.printStackTrace();
+}
 
-    try {
-      SymbolDetails symbolDetails = polygonAPI.getSymbolDetails(ticker);
+try {
+    SymbolDetails symbolDetails = polygonAPI.getSymbolDetails(ticker);
 
-      System.out.println("\n\n" + ticker + " Symbol Details:");
-      System.out.println("\t" + symbolDetails);
-
-
-    } catch (PolygonAPIException e) {
-      e.printStackTrace();
-    }
-
-    try {
-      SymbolAnalystRatings symbolAnalystRatings = polygonAPI.getSymbolAnalystRatings(ticker);
-
-      System.out.println("\n\n" + ticker + " Symbol Analyst Ratings:");
-      System.out.println("\t" + symbolAnalystRatings);
+    System.out.println("\n\n" + ticker + " Symbol Details:");
+    System.out.println("\t" + symbolDetails);
 
 
-    } catch (PolygonAPIException e) {
-      e.printStackTrace();
-    }
+} catch (PolygonAPIException e) {
+    e.printStackTrace();
+}
 
-    try {
-      List<SymbolDividend> symbolDividends = polygonAPI.getSymbolDividends(ticker);
+try {
+    SymbolAnalystRatings symbolAnalystRatings = polygonAPI.getSymbolAnalystRatings(ticker);
 
-      System.out.println("\n\n" + ticker + " Symbol Dividends:");
+    System.out.println("\n\n" + ticker + " Symbol Analyst Ratings:");
+    System.out.println("\t" + symbolAnalystRatings);
 
-      for (SymbolDividend div : symbolDividends)
+
+} catch (PolygonAPIException e) {
+    e.printStackTrace();
+}
+
+try {
+    List<SymbolDividend> symbolDividends = polygonAPI.getSymbolDividends(ticker);
+
+    System.out.println("\n\n" + ticker + " Symbol Dividends:");
+
+    for (SymbolDividend div : symbolDividends)
         System.out.println("\t" + div);
 
 
-    } catch (PolygonAPIException e) {
-      e.printStackTrace();
-    }
+} catch (PolygonAPIException e) {
+    e.printStackTrace();
+}
 
 
-    try {
-      List<SymbolEarning> symbolEarnings = polygonAPI.getSymbolEarnings(ticker);
+try {
+    List<SymbolEarning> symbolEarnings = polygonAPI.getSymbolEarnings(ticker);
 
-      System.out.println("\n\n" + ticker + " Symbol Earnings:");
+    System.out.println("\n\n" + ticker + " Symbol Earnings:");
 
-      for (SymbolEarning earning : symbolEarnings)
+    for (SymbolEarning earning : symbolEarnings)
         System.out.println("\t" + earning);
 
 
-    } catch (PolygonAPIException e) {
-      e.printStackTrace();
-    }
+} catch (PolygonAPIException e) {
+    e.printStackTrace();
+}
 
 
-    try {
-      List<SymbolFinancial> symbolFinancials = polygonAPI.getSymbolFinancials(ticker);
+try {
+    List<SymbolFinancial> symbolFinancials = polygonAPI.getSymbolFinancials(ticker);
 
-      System.out.println("\n\n" + ticker + " Symbol Financials:");
-      for (SymbolFinancial financial : symbolFinancials)
+    System.out.println("\n\n" + ticker + " Symbol Financials:");
+    for (SymbolFinancial financial : symbolFinancials)
         System.out.println("\t" + financial);
 
 
-    } catch (PolygonAPIException e) {
-      e.printStackTrace();
-    }
+} catch (PolygonAPIException e) {
+    e.printStackTrace();
+}
 
 
-    try {
-      List<SymbolNews> symbolNews = polygonAPI.getSymbolNews(ticker);
+try {
+    List<SymbolNews> symbolNews = polygonAPI.getSymbolNews(ticker);
 
-      System.out.println("\n\n" + ticker + " Symbol News:");
-      for (SymbolNews newsItem : symbolNews)
+    System.out.println("\n\n" + ticker + " Symbol News:");
+    for (SymbolNews newsItem : symbolNews)
         System.out.println("\t" + newsItem);
 
 
-    } catch (PolygonAPIException e) {
-      e.printStackTrace();
-    }
+} catch (PolygonAPIException e) {
+    e.printStackTrace();
+}
 
-    try {
-      List<Ticker> tickers =
-          polygonAPI.getTickers(Sort.TICKER_ASC, null, null, Locale.US, "Tech", null, null, null)
-              .getTickers();
+try {
+    List<Ticker> tickers =
+            polygonAPI.getTickers(Sort.TICKER_ASC, null, null, Locale.US, "Tech", null, null, null)
+                    .getTickers();
 
-      System.out.println("\n\n" + "Tech" + " Search US Tickers");
-      for (Ticker tickerItem : tickers)
+    System.out.println("\n\n" + "Tech" + " Search US Tickers");
+    for (Ticker tickerItem : tickers)
         System.out.println("\t" + tickerItem);
 
 
-    } catch (PolygonAPIException e) {
-      e.printStackTrace();
-    }
+} catch (PolygonAPIException e) {
+    e.printStackTrace();
+}
 
-    try {
-      List<Market> markets = polygonAPI.getMarkets();
+try {
+    List<Market> markets = polygonAPI.getMarkets();
 
-      System.out.println("\n\n" + " Markets:");
-      for (Market market : markets)
+    System.out.println("\n\n" + " Markets:");
+    for (Market market : markets)
         System.out.println("\t" + market);
 
 
-    } catch (PolygonAPIException e) {
-      e.printStackTrace();
-    }
+} catch (PolygonAPIException e) {
+    e.printStackTrace();
+}
 
 
-    try {
-      List<io.github.mainstringargs.polygon.domain.reference.Locale> locales =
-          polygonAPI.getLocales();
+try {
+    List<io.github.mainstringargs.polygon.domain.reference.Locale> locales =
+            polygonAPI.getLocales();
 
-      System.out.println("\n\n" + " Locales:");
-      for (io.github.mainstringargs.polygon.domain.reference.Locale locale : locales)
+    System.out.println("\n\n" + " Locales:");
+    for (io.github.mainstringargs.polygon.domain.reference.Locale locale : locales)
         System.out.println("\t" + locale);
 
 
-    } catch (PolygonAPIException e) {
-      e.printStackTrace();
-    }
+} catch (PolygonAPIException e) {
+    e.printStackTrace();
+}
 
 
-    try {
-      TypesMapping typesMapping = polygonAPI.getTypesMapping();
+try {
+    TypesMapping typesMapping = polygonAPI.getTypesMapping();
 
-      System.out.println("\n\n" + "typesMapping");
-      System.out.println("\t" + typesMapping.getTypes());
-      System.out.println("\t" + typesMapping.getIndexTypes());
+    System.out.println("\n\n" + "typesMapping");
+    System.out.println("\t" + typesMapping.getTypes());
+    System.out.println("\t" + typesMapping.getIndexTypes());
 
-    } catch (PolygonAPIException e) {
-      e.printStackTrace();
-    }
+} catch (PolygonAPIException e) {
+    e.printStackTrace();
+}
 
-    try {
-      List<Split> splits = polygonAPI.getSplits(ticker);
+try {
+    List<Split> splits = polygonAPI.getSplits(ticker);
 
-      System.out.println("\n\n" + ticker + " Split:");
-      for (Split splitItems : splits)
+    System.out.println("\n\n" + ticker + " Split:");
+    for (Split splitItems : splits)
         System.out.println("\t" + splitItems);
 
 
-    } catch (PolygonAPIException e) {
-      e.printStackTrace();
-    }
+} catch (PolygonAPIException e) {
+    e.printStackTrace();
+}
 
-    try {
-      List<Exchange> exchanges = polygonAPI.getExchanges();
+try {
+    List<Exchange> exchanges = polygonAPI.getExchanges();
 
-      System.out.println("\n\n" + "exchanges");
-      for (Exchange exchange : exchanges)
+    System.out.println("\n\n" + "exchanges");
+    for (Exchange exchange : exchanges)
         System.out.println("\t" + exchange);
 
 
-    } catch (PolygonAPIException e) {
-      e.printStackTrace();
-    }
+} catch (PolygonAPIException e) {
+    e.printStackTrace();
+}
 
-    try {
-      Trades trades = polygonAPI.getHistoricTrades(ticker, LocalDate.of(2019, 5, 7), null, null);
+try {
+    Trades trades = polygonAPI.getHistoricTrades(ticker, LocalDate.of(2019, 5, 7), null, null);
 
-      System.out.println("\n\n" + ticker + " Trades on " + LocalDate.of(2019, 5, 7) + ": ");
-      System.out.println("\t" + "map " + trades.getMap());
-      System.out.println("\t" + "ticks");
-      for (Tick tick : trades.getTicks())
+    System.out.println("\n\n" + ticker + " Trades on " + LocalDate.of(2019, 5, 7) + ": ");
+    System.out.println("\t" + "map " + trades.getMap());
+    System.out.println("\t" + "ticks");
+    for (Tick tick : trades.getTicks())
         System.out.println("\t" + tick);
 
-    } catch (PolygonAPIException e) {
-      e.printStackTrace();
-    }
+} catch (PolygonAPIException e) {
+    e.printStackTrace();
+}
 
-    try {
-      Quotes quotes = polygonAPI.getHistoricQuotes(ticker, LocalDate.of(2019, 5, 7), null, null);
+try {
+    Quotes quotes = polygonAPI.getHistoricQuotes(ticker, LocalDate.of(2019, 5, 7), null, null);
 
-      System.out.println("\n\n" + ticker + " Quotes on " + LocalDate.of(2019, 5, 1) + ": ");
-      System.out.println("\t" + "map " + quotes.getMap());
-      System.out.println("\t" + "ticks");
-      for (io.github.mainstringargs.polygon.domain.historic.quotes.Tick tick : quotes.getTicks())
+    System.out.println("\n\n" + ticker + " Quotes on " + LocalDate.of(2019, 5, 1) + ": ");
+    System.out.println("\t" + "map " + quotes.getMap());
+    System.out.println("\t" + "ticks");
+    for (io.github.mainstringargs.polygon.domain.historic.quotes.Tick tick : quotes.getTicks())
         System.out.println("\t" + tick);
 
-    } catch (PolygonAPIException e) {
-      e.printStackTrace();
-    }
+} catch (PolygonAPIException e) {
+    e.printStackTrace();
+}
 
-    try {
-      Trade trade = polygonAPI.getLastTrade(ticker);
+try {
+    Trade trade = polygonAPI.getLastTrade(ticker);
 
-      System.out.println("\n\n" + ticker + " Last Trade: ");
-      System.out.println("\t" + trade);
-
-
-    } catch (PolygonAPIException e) {
-      e.printStackTrace();
-    }
-
-    try {
-      Quote quote = polygonAPI.getLastQuote(ticker);
-
-      System.out.println("\n\n" + ticker + " Last Quote: ");
-      System.out.println("\t" + quote);
+    System.out.println("\n\n" + ticker + " Last Trade: ");
+    System.out.println("\t" + trade);
 
 
-    } catch (PolygonAPIException e) {
-      e.printStackTrace();
-    }
+} catch (PolygonAPIException e) {
+    e.printStackTrace();
+}
 
-    try {
-      DailyOpenClose dailyOpenClose =
-          polygonAPI.getDailyOpenClose(ticker, LocalDate.of(2019, 5, 7));
+try {
+    Quote quote = polygonAPI.getLastQuote(ticker);
 
-      System.out.println("\n\n" + ticker + " DailyOpenClose on " + LocalDate.of(2019, 5, 1) + ": ");
-      System.out.println("\t" + dailyOpenClose);
-
-
-    } catch (PolygonAPIException e) {
-      e.printStackTrace();
-    }
+    System.out.println("\n\n" + ticker + " Last Quote: ");
+    System.out.println("\t" + quote);
 
 
-    try {
-      Snapshot snapshot = polygonAPI.getSnapshot(ticker);
+} catch (PolygonAPIException e) {
+    e.printStackTrace();
+}
 
-      System.out.println("\n\n" + ticker + " Snapshot: ");
-      System.out.println("\t" + snapshot);
+try {
+    DailyOpenClose dailyOpenClose =
+            polygonAPI.getDailyOpenClose(ticker, LocalDate.of(2019, 5, 7));
+
+    System.out.println("\n\n" + ticker + " DailyOpenClose on " + LocalDate.of(2019, 5, 1) + ": ");
+    System.out.println("\t" + dailyOpenClose);
 
 
-    } catch (PolygonAPIException e) {
-      e.printStackTrace();
-    }
+} catch (PolygonAPIException e) {
+    e.printStackTrace();
+}
 
-    try {
-      List<Snapshot> snapshots = polygonAPI.getSnapshotAllTickers();
 
-      System.out.println("\n\n" + "snapshots " + snapshots.size());
-      for (Snapshot snapshot : snapshots)
+try {
+    Snapshot snapshot = polygonAPI.getSnapshot(ticker);
+
+    System.out.println("\n\n" + ticker + " Snapshot: ");
+    System.out.println("\t" + snapshot);
+
+
+} catch (PolygonAPIException e) {
+    e.printStackTrace();
+}
+
+try {
+    List<Snapshot> snapshots = polygonAPI.getSnapshotAllTickers();
+
+    System.out.println("\n\n" + "snapshots " + snapshots.size());
+    for (Snapshot snapshot : snapshots)
         System.out.println("\t" + snapshot);
 
 
-    } catch (PolygonAPIException e) {
-      e.printStackTrace();
-    }
+} catch (PolygonAPIException e) {
+    e.printStackTrace();
+}
 
-    try {
-      List<Snapshot> snapshots = polygonAPI.getSnapshotsGainers();
+try {
+    List<Snapshot> snapshots = polygonAPI.getSnapshotsGainers();
 
-      System.out.println("\n\n" + "gainers snapshots " + snapshots.size());
-      for (Snapshot snapshot : snapshots)
+    System.out.println("\n\n" + "gainers snapshots " + snapshots.size());
+    for (Snapshot snapshot : snapshots)
         System.out.println("\t" + snapshot);
 
 
-    } catch (PolygonAPIException e) {
-      e.printStackTrace();
-    }
+} catch (PolygonAPIException e) {
+    e.printStackTrace();
+}
 
-    try {
-      List<Snapshot> snapshots = polygonAPI.getSnapshotsLosers();
+try {
+    List<Snapshot> snapshots = polygonAPI.getSnapshotsLosers();
 
-      System.out.println("\n\n" + "losers snapshots " + snapshots.size());
-      for (Snapshot snapshot : snapshots)
+    System.out.println("\n\n" + "losers snapshots " + snapshots.size());
+    for (Snapshot snapshot : snapshots)
         System.out.println("\t" + snapshot);
 
 
-    } catch (PolygonAPIException e) {
-      e.printStackTrace();
-    }
+} catch (PolygonAPIException e) {
+    e.printStackTrace();
+}
 
-    try {
-      Aggregates aggs = polygonAPI.getPreviousClose(ticker, false);
+try {
+    Aggregates aggs = polygonAPI.getPreviousClose(ticker, false);
 
-      System.out.println("\n\n" + "previous close aggregates " + aggs.getResultsCount());
-      for (Result result : aggs.getResults())
+    System.out.println("\n\n" + "previous close aggregates " + aggs.getResultsCount());
+    for (Result result : aggs.getResults())
         System.out.println("\t" + result);
 
 
-    } catch (PolygonAPIException e) {
-      e.printStackTrace();
-    }
+} catch (PolygonAPIException e) {
+    e.printStackTrace();
+}
 
-    try {
-      Aggregates aggs = polygonAPI.getAggregates(ticker, null, Timespan.Hour,
-          LocalDate.of(2019, 4, 23), LocalDate.of(2019, 4, 26), false);
+try {
+    Aggregates aggs = polygonAPI.getAggregates(ticker, null, Timespan.Hour,
+            LocalDate.of(2019, 4, 23), LocalDate.of(2019, 4, 26), false);
 
-      System.out.println("\n\n" + "Aggs over time " + aggs.getResultsCount());
-      for (Result result : aggs.getResults())
+    System.out.println("\n\n" + "Aggs over time " + aggs.getResultsCount());
+    for (Result result : aggs.getResults())
         System.out.println("\t" + result);
 
 
-    } catch (PolygonAPIException e) {
-      e.printStackTrace();
-    }
+} catch (PolygonAPIException e) {
+    e.printStackTrace();
+}
 
-    try {
-      Aggregates aggs = polygonAPI.getGroupedDaily(Locale.US,
-          io.github.mainstringargs.polygon.enums.Market.STOCKS, LocalDate.of(2019, 4, 26), false);
+try {
+    Aggregates aggs = polygonAPI.getGroupedDaily(Locale.US,
+            io.github.mainstringargs.polygon.enums.Market.STOCKS, LocalDate.of(2019, 4, 26), false);
 
-      System.out.println("\n\n" + "Grouped Daily " + aggs.getResultsCount());
-      for (Result result : aggs.getResults())
+    System.out.println("\n\n" + "Grouped Daily " + aggs.getResultsCount());
+    for (Result result : aggs.getResults())
         System.out.println("\t" + result);
 
 
-    } catch (PolygonAPIException e) {
-      e.printStackTrace();
-    }
+} catch (PolygonAPIException e) {
+    e.printStackTrace();
+}
 
 
-    polygonAPI.addPolygonStreamListener(new PolygonStreamListener() {
-
-      @Override
-      public void streamUpdate(String ticker, ChannelType channelType, ChannelMessage message) {
+polygonAPI.addPolygonStreamListener(new PolygonStreamListener() {
+    @Override
+    public void streamUpdate(String ticker, ChannelType channelType, ChannelMessage message) {
         System.out.println("===> streamUpdate " + ticker + " " + channelType + " " + message);
 
-      }
+    }
 
-      @Override
-      public Map<String, Set<ChannelType>> getStockChannelTypes() {
+    @Override
+    public Map<String, Set<ChannelType>> getStockChannelTypes() {
         Map<String, Set<ChannelType>> subscribedTypes = new HashMap<>();
         subscribedTypes.put(ticker, Sets.newHashSet(ChannelType.values()));
         return subscribedTypes;
-      }
-    });
+    }
+});
 ```
 This code will output the following:
 
