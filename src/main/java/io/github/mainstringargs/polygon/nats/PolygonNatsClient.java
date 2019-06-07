@@ -56,7 +56,10 @@ public class PolygonNatsClient {
   private Dispatcher polygonDispatcher;
 
   /** The current subscriptions. */
-  Map<String, Set<ChannelType>> currentSubscriptions = new HashMap<>();
+  private Map<String, Set<ChannelType>> currentSubscriptions = new HashMap<>();
+
+  /** The all tickers. */
+  private static final String ALL_TICKERS = "*";
 
   /** The Constant executor. */
   private static final ExecutorService executor =
@@ -346,6 +349,10 @@ public class PolygonNatsClient {
 
       if (observer.getStockChannelTypes().containsKey(ticker)) {
         if (observer.getStockChannelTypes().get(ticker).contains(channelType)) {
+          sendToObserver = true;
+        }
+      } else if (observer.getStockChannelTypes().containsKey(ALL_TICKERS)) {
+        if (observer.getStockChannelTypes().get(ALL_TICKERS).contains(channelType)) {
           sendToObserver = true;
         }
       }
