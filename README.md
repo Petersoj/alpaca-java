@@ -5,9 +5,6 @@
 </p>
 
 # Overview
-
-
-
 This is a Java implementation for the <a href="https://alpaca.markets/">Alpaca</a> (<a href="https://docs.alpaca.markets/api-documentation/web-api/">General Alpaca API Documentation</a>).  Alpaca API lets you build and trade with real-time market data for free. 
 
 ## Table of Contents
@@ -60,6 +57,13 @@ If you plan on using the alpaca.properties, generate a secret and a key at Alpac
 key_id = <YOUR KEY>
 secret = <YOUR SECRET>
 base_url = https://api.alpaca.markets
+```
+Similarly, set the following properties in a polygon.properties file on the classpath for using the PolygonAPI:
+```
+#key_id will default to what is set in alpaca.properties
+key_id = <YOUR KEY>
+base_url = https://api.polygon.io
+nats_urls = nats1.polygon.io:31101,nats2.polygon.io:31102,nats3.polygon.io:31103
 ```
 
 ## Simple Alpaca Example
