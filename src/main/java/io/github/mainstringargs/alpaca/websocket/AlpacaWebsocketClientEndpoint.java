@@ -3,6 +3,7 @@ package io.github.mainstringargs.alpaca.websocket;
 import java.io.IOException;
 import java.net.URI;
 import java.util.concurrent.ExecutorService;
+import java.util.concurrent.ThreadFactory;
 import javax.websocket.ClientEndpoint;
 import javax.websocket.CloseReason;
 import javax.websocket.ContainerProvider;
@@ -37,7 +38,14 @@ public class AlpacaWebsocketClientEndpoint {
   /** The logger. */
   private static Logger LOGGER = LogManager.getLogger(AlpacaWebsocketClientEndpoint.class);
 
-  private static final ExecutorService executor = ExecutorTracer.newSingleThreadExecutor();
+  private static final ExecutorService executor =
+      ExecutorTracer.newSingleThreadExecutor(new ThreadFactory() {
+
+        @Override
+        public Thread newThread(Runnable r) {
+          return new Thread(r, "AlpacaWebsocketThread");
+        }
+      });
 
   /**
    * Instantiates a new websocket client endpoint.

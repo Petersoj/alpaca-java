@@ -11,6 +11,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 import java.util.concurrent.ExecutorService;
+import java.util.concurrent.ThreadFactory;
 import java.util.stream.Collectors;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -58,7 +59,14 @@ public class PolygonNatsClient {
   Map<String, Set<ChannelType>> currentSubscriptions = new HashMap<>();
 
   /** The Constant executor. */
-  private static final ExecutorService executor = ExecutorTracer.newSingleThreadExecutor();
+  private static final ExecutorService executor =
+      ExecutorTracer.newSingleThreadExecutor(new ThreadFactory() {
+
+        @Override
+        public Thread newThread(Runnable r) {
+          return new Thread(r, "PolygonNatsThread");
+        }
+      });
 
 
 
