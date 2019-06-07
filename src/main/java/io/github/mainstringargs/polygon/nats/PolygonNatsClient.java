@@ -113,7 +113,7 @@ public class PolygonNatsClient {
    *
    * @param listener the listener
    */
-  public void addListener(PolygonStreamListener listener) {
+  public synchronized void addListener(PolygonStreamListener listener) {
 
 
     if (listeners.isEmpty()) {
@@ -132,7 +132,7 @@ public class PolygonNatsClient {
    *
    * @param listener the listener
    */
-  public void removeListener(PolygonStreamListener listener) {
+  public synchronized void removeListener(PolygonStreamListener listener) {
 
 
     listeners.remove(listener);
@@ -153,7 +153,7 @@ public class PolygonNatsClient {
    * @param listener the listener
    * @param isAdd the is add
    */
-  private void updateSubscriptions(PolygonStreamListener listener, boolean isAdd) {
+  private synchronized void updateSubscriptions(PolygonStreamListener listener, boolean isAdd) {
 
     if (listener != null) {
       Map<String, Set<ChannelType>> toRemove = listener.getStockChannelTypes().entrySet().stream()
@@ -402,7 +402,7 @@ public class PolygonNatsClient {
    *
    * @return the registered stock channel types
    */
-  public Map<String, Set<ChannelType>> getRegisteredStockChannelTypes() {
+  public synchronized Map<String, Set<ChannelType>> getRegisteredStockChannelTypes() {
 
     Map<String, Set<ChannelType>> stockChannelTypes = new HashMap<>();
 

@@ -70,7 +70,7 @@ public class AlpacaWebsocketClient implements MessageHandler {
    *
    * @param listener the listener
    */
-  public void addListener(AlpacaStreamListener listener) {
+  public synchronized void addListener(AlpacaStreamListener listener) {
 
     if (listeners.isEmpty()) {
       connect();
@@ -89,7 +89,7 @@ public class AlpacaWebsocketClient implements MessageHandler {
    *
    * @param listener the listener
    */
-  public void removeListener(AlpacaStreamListener listener) {
+  public synchronized void removeListener(AlpacaStreamListener listener) {
 
     if (listener != null) {
       listeners.remove(listener);
@@ -291,7 +291,7 @@ public class AlpacaWebsocketClient implements MessageHandler {
    *
    * @return the registered message types
    */
-  public Set<MessageType> getRegisteredMessageTypes() {
+  public synchronized Set<MessageType> getRegisteredMessageTypes() {
 
     Set<MessageType> registeredMessageTypes = new HashSet<MessageType>();
 
