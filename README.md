@@ -867,8 +867,7 @@ try {
 }
 
 
-polygonAPI.addPolygonStreamListener(new PolygonStreamListener(
-            new PolygonStreamListenerAdapter(ticker, ChannelType.values()) {
+polygonAPI.addPolygonStreamListener(new PolygonStreamListenerAdapter(ticker, ChannelType.values()) {
     @Override
     public void streamUpdate(String ticker, ChannelType channelType, ChannelMessage message) {
         System.out.println("===> streamUpdate " + ticker + " " + channelType + " " + message);
