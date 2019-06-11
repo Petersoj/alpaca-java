@@ -32,6 +32,7 @@ import io.github.mainstringargs.polygon.enums.Locale;
 import io.github.mainstringargs.polygon.enums.Sort;
 import io.github.mainstringargs.polygon.enums.Timespan;
 import io.github.mainstringargs.polygon.nats.PolygonStreamListener;
+import io.github.mainstringargs.polygon.nats.PolygonStreamListenerAdapter;
 import io.github.mainstringargs.polygon.nats.message.ChannelMessage;
 import io.github.mainstringargs.polygon.rest.exceptions.PolygonAPIException;
 
@@ -365,20 +366,14 @@ public class PolygonExample {
     }
 
 
-    polygonAPI.addPolygonStreamListener(new PolygonStreamListener() {
+    polygonAPI.addPolygonStreamListener(new PolygonStreamListenerAdapter(ticker, ChannelType.values()) {
 
       @Override
       public void streamUpdate(String ticker, ChannelType channelType, ChannelMessage message) {
         System.out.println("===> streamUpdate " + ticker + " " + channelType + " " + message);
 
       }
-
-      @Override
-      public Map<String, Set<ChannelType>> getStockChannelTypes() {
-        Map<String, Set<ChannelType>> subscribedTypes = new HashMap<>();
-        subscribedTypes.put(ticker, Sets.newHashSet(ChannelType.values()));
-        return subscribedTypes;
-      }
+      
     });
 
     try {

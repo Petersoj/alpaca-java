@@ -867,19 +867,14 @@ try {
 }
 
 
-polygonAPI.addPolygonStreamListener(new PolygonStreamListener() {
+polygonAPI.addPolygonStreamListener(new PolygonStreamListener(
+            new PolygonStreamListenerAdapter(ticker, ChannelType.values()) {
     @Override
     public void streamUpdate(String ticker, ChannelType channelType, ChannelMessage message) {
         System.out.println("===> streamUpdate " + ticker + " " + channelType + " " + message);
 
     }
 
-    @Override
-    public Map<String, Set<ChannelType>> getStockChannelTypes() {
-        Map<String, Set<ChannelType>> subscribedTypes = new HashMap<>();
-        subscribedTypes.put(ticker, Sets.newHashSet(ChannelType.values()));
-        return subscribedTypes;
-    }
 });
 ```
 This code will output the following:

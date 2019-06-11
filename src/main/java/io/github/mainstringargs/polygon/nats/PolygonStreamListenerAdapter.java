@@ -28,9 +28,9 @@ public class PolygonStreamListenerAdapter implements PolygonStreamListener {
    */
   public PolygonStreamListenerAdapter(String ticker, ChannelType... channelTypes) {
     if (channelTypes != null && channelTypes.length > 0) {
-      stockChannelTypes.put(ticker, new HashSet<ChannelType>(Arrays.asList(channelTypes)));
+      this.stockChannelTypes.put(ticker, new HashSet<ChannelType>(Arrays.asList(channelTypes)));
     } else {
-      stockChannelTypes.put(ticker, new HashSet<ChannelType>(Arrays.asList(ChannelType.values())));
+      this.stockChannelTypes.put(ticker, new HashSet<ChannelType>(Arrays.asList(ChannelType.values())));
     }
   }
 
@@ -44,9 +44,9 @@ public class PolygonStreamListenerAdapter implements PolygonStreamListener {
 
     for (String ticker : tickers) {
       if (channelTypes != null && channelTypes.length > 0) {
-        stockChannelTypes.put(ticker, new HashSet<ChannelType>(Arrays.asList(channelTypes)));
+        this.stockChannelTypes.put(ticker, new HashSet<ChannelType>(Arrays.asList(channelTypes)));
       } else {
-        stockChannelTypes.put(ticker,
+        this.stockChannelTypes.put(ticker,
             new HashSet<ChannelType>(Arrays.asList(ChannelType.values())));
       }
     }
@@ -60,7 +60,7 @@ public class PolygonStreamListenerAdapter implements PolygonStreamListener {
   public PolygonStreamListenerAdapter(Map<String, Set<ChannelType>> stockChannelTypes) {
 
     for (Entry<String, Set<ChannelType>> entry : stockChannelTypes.entrySet()) {
-      stockChannelTypes.put(entry.getKey(), new HashSet<ChannelType>(entry.getValue()));
+      this.stockChannelTypes.put(entry.getKey(), new HashSet<ChannelType>(entry.getValue()));
     }
 
   }
@@ -72,7 +72,7 @@ public class PolygonStreamListenerAdapter implements PolygonStreamListener {
    */
   @Override
   public Map<String, Set<ChannelType>> getStockChannelTypes() {
-    return stockChannelTypes;
+    return this.stockChannelTypes;
   }
 
   /*

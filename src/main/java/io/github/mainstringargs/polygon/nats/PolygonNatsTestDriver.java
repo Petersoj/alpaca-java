@@ -21,25 +21,19 @@ public class PolygonNatsTestDriver {
     PolygonNatsClient client = new PolygonNatsClient(PolygonProperties.KEY_ID_VALUE,
         PolygonProperties.POLYGON_NATS_SERVERS_VALUE);
 
+    Map<String, Set<ChannelType>> subscribedTypes = new HashMap<>();
 
-    PolygonStreamListener listener1 = new PolygonStreamListener() {
+    subscribedTypes.put("SNAP", Sets.newHashSet(ChannelType.values()));
+    subscribedTypes.put("AMZN",
+        Sets.newHashSet(ChannelType.AGGREGATE_PER_MINUTE, ChannelType.AGGREGATE_PER_SECOND));
+
+    PolygonStreamListener listener1 = new PolygonStreamListenerAdapter(subscribedTypes) {
 
       @Override
       public void streamUpdate(String ticker, ChannelType channelType, ChannelMessage message) {
         System.out.println(ticker + " " + channelType + " " + message);
       }
 
-      @Override
-      public Map<String, Set<ChannelType>> getStockChannelTypes() {
-
-        Map<String, Set<ChannelType>> subscribedTypes = new HashMap<>();
-
-        subscribedTypes.put("SNAP", Sets.newHashSet(ChannelType.values()));
-        subscribedTypes.put("AMZN",
-            Sets.newHashSet(ChannelType.AGGREGATE_PER_MINUTE, ChannelType.AGGREGATE_PER_SECOND));
-
-        return subscribedTypes;
-      }
     };
 
     client.addListener(listener1);
@@ -51,24 +45,15 @@ public class PolygonNatsTestDriver {
       e1.printStackTrace();
     }
 
-    PolygonStreamListener listener2 = new PolygonStreamListener() {
+    PolygonStreamListener listener2 =
+        new PolygonStreamListenerAdapter(Set.of("SNAP", "AMZN"), ChannelType.values()) {
 
-      @Override
-      public void streamUpdate(String ticker, ChannelType channelType, ChannelMessage message) {
-        System.out.println(ticker + " " + channelType + " " + message);
-      }
+          @Override
+          public void streamUpdate(String ticker, ChannelType channelType, ChannelMessage message) {
+            System.out.println(ticker + " " + channelType + " " + message);
+          }
 
-      @Override
-      public Map<String, Set<ChannelType>> getStockChannelTypes() {
-
-        Map<String, Set<ChannelType>> subscribedTypes = new HashMap<>();
-
-        subscribedTypes.put("SNAP", Sets.newHashSet(ChannelType.values()));
-        subscribedTypes.put("AMZN", Sets.newHashSet(ChannelType.values()));
-
-        return subscribedTypes;
-      }
-    };
+        };
 
     client.addListener(listener2);
 
