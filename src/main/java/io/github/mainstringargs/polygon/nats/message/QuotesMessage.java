@@ -49,9 +49,16 @@ public class QuotesMessage implements ChannelMessage {
     JsonObject jsonQuote = jsonObject.getAsJsonObject();
 
     stockQuote = gson.fromJson(jsonQuote, StockQuote.class);
+    
+    long time = stockQuote.getT();
+    
+    if (time > 1560447226296000000L) {
+      time = stockQuote.getT() / 1000000L;
+    }
+
 
     timestamp =
-        LocalDateTime.ofInstant(Instant.ofEpochMilli(stockQuote.getT()), ZoneId.systemDefault());
+        LocalDateTime.ofInstant(Instant.ofEpochMilli(time), ZoneId.systemDefault());
 
   }
 

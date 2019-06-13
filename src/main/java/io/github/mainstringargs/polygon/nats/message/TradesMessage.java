@@ -50,9 +50,15 @@ public class TradesMessage implements ChannelMessage {
 
 
     stockTrade = gson.fromJson(jsonQuote, StockTrade.class);
+    
+    long time = stockTrade.getT();
+    
+    if (time > 1560447226296000000L) {
+      time = stockTrade.getT() / 1000000L;
+    }
 
     timestamp =
-        LocalDateTime.ofInstant(Instant.ofEpochMilli(stockTrade.getT()), ZoneId.systemDefault());
+        LocalDateTime.ofInstant(Instant.ofEpochMilli(time), ZoneId.systemDefault());
 
   }
 
