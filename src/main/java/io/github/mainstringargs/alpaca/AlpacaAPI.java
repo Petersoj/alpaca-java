@@ -110,6 +110,22 @@ public class AlpacaAPI {
     alpacaWebSocketClient = new AlpacaWebsocketClient(keyId, secret, baseAccountUrl);
 
   }
+  
+  /**
+   * Instantiates a new Alpaca API using the specified keyId, and secret.
+   *
+   * @param keyId the key id
+   * @param secret the secret
+   */
+  public AlpacaAPI(String keyId, String secret) {
+    this.keyId = keyId;
+    this.secret = secret;
+    this.baseAccountUrl = AlpacaProperties.BASE_ACCOUNT_URL_VALUE;
+    baseDataUrl = AlpacaProperties.BASE_DATA_URL_VALUE;
+    alpacaRequest = new AlpacaRequest(keyId, secret);
+    alpacaWebSocketClient = new AlpacaWebsocketClient(keyId, secret, baseAccountUrl);
+
+  }
 
   /**
    * Gets the account.
