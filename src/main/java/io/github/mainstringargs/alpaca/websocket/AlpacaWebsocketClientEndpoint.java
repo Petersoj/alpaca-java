@@ -6,6 +6,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.ThreadFactory;
 import javax.websocket.ClientEndpoint;
 import javax.websocket.CloseReason;
+import javax.websocket.CloseReason.CloseCodes;
 import javax.websocket.ContainerProvider;
 import javax.websocket.DeploymentException;
 import javax.websocket.OnClose;
@@ -98,12 +99,24 @@ public class AlpacaWebsocketClientEndpoint {
   public void onClose(Session userSession, CloseReason reason) {
     this.userSession = null;
 
-    LOGGER.info("onClose " + userSession + " " + reason);
+    LOGGER.info("onClose " + userSession + " " + reason + " " + reason.getReasonPhrase());
 
-    try {
-      connect(endpointURI);
-    } catch (Exception e) {
-      LOGGER.catching(e);
+    if (!reason.getCloseCode().equals(CloseCodes.NORMAL_CLOSURE)) {
+
+      try {
+        Thread.sleep(10000);
+      } catch (InterruptedException e1) {
+        e1.printStackTrace();
+      }
+      LOGGER.info("Reconnecting due to closure "
+          + CloseCodes.getCloseCode(reason.getCloseCode().getCode()));
+      try {
+        connect(endpointURI);
+      } catch (Exception e) {
+        LOGGER.catching(e);
+      }
+    } else {
+      LOGGER.info("Normal close");
     }
   }
 
