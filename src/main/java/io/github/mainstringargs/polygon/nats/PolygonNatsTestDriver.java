@@ -1,6 +1,8 @@
 package io.github.mainstringargs.polygon.nats;
 
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import com.google.common.collect.Sets;
@@ -45,15 +47,15 @@ public class PolygonNatsTestDriver {
       e1.printStackTrace();
     }
 
-    PolygonStreamListener listener2 =
-        new PolygonStreamListenerAdapter(Set.of("SNAP", "AMZN"), ChannelType.values()) {
+    PolygonStreamListener listener2 = new PolygonStreamListenerAdapter(
+        new HashSet<String>(Arrays.asList("SNAP", "AMZN")), ChannelType.values()) {
 
-          @Override
-          public void streamUpdate(String ticker, ChannelType channelType, ChannelMessage message) {
-            System.out.println(ticker + " " + channelType + " " + message);
-          }
+      @Override
+      public void streamUpdate(String ticker, ChannelType channelType, ChannelMessage message) {
+        System.out.println(ticker + " " + channelType + " " + message);
+      }
 
-        };
+    };
 
     client.addListener(listener2);
 
