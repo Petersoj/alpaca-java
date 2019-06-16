@@ -19,5 +19,6 @@
   "limit_price": "107.00",
   "stop_price": "106.00",
   "filled_avg_price": "106.00",
-  "status": "accepted"
+  "status": "accepted",
+  "extended_hours": false
 }

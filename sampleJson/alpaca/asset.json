@@ -4,5 +4,8 @@
   "exchange": "NASDAQ",
   "symbol": "AAPL",
   "status": "active",
-  "tradable": true
+  "tradable": true,
+  "marginable": true,
+  "shortable": true,
+  "easy_to_borrow": true
 }
