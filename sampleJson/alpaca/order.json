@@ -10,7 +10,6 @@
   "failed_at": "2018-10-05T05:48:59Z",
   "asset_id": "904837e3-3b76-47ec-b432-046db621571b",
   "symbol": "AAPL",
-  "exchange": "NASDAQ",
   "asset_class": "us_equity",
   "qty": "15",
   "filled_qty": "0",
@@ -20,5 +19,6 @@
   "limit_price": "107.00",
   "stop_price": "106.00",
   "filled_avg_price": "106.00",
-  "status": "accepted"
+  "status": "accepted",
+  "extended_hours": false
 }
