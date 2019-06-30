@@ -70,6 +70,8 @@ public class AlpacaProperties {
 
   }
 
+  /** The Constant API_VERSION_KEY. */
+  private static final String API_VERSION_KEY = "api_version";
 
   /** The Constant KEY_ID_KEY. */
   private static final String KEY_ID_KEY = "key_id";
@@ -87,6 +89,8 @@ public class AlpacaProperties {
   /** The Constant USER_AGENT_KEY. */
   private static final String USER_AGENT_KEY = "user_agent";
 
+  /** The Constant DEFAULT_API_VERSION_VALUE. */
+  private static final String DEFAULT_API_VERSION_VALUE = "v1";
 
   /** The Constant DEFAULT_USER_AGENT. */
   private static final String DEFAULT_USER_AGENT =
@@ -101,6 +105,9 @@ public class AlpacaProperties {
   /** The Constant INVALID_VALUE. */
   public static final String INVALID_VALUE = "<PLACEHOLDER>";
 
+  /** The Constant API_VERSION_VALUE. */
+  public static final String API_VERSION_VALUE = getProperty(API_VERSION_KEY, DEFAULT_API_VERSION_VALUE);
+
   /** The Constant KEY_ID_VALUE. */
   public static final String KEY_ID_VALUE = getProperty(KEY_ID_KEY, INVALID_VALUE);
 
@@ -110,7 +117,6 @@ public class AlpacaProperties {
   /** The Constant BASE_ACCOUNT_URL_VALUE. */
   public static final String BASE_ACCOUNT_URL_VALUE =
       getProperty(BASE_ACCOUNT_URL_KEY, DEFAULT_ACCOUNT_URL);
-
 
   /** The base data url value. */
   public static String BASE_DATA_URL_VALUE = getProperty(BASE_DATA_URL_KEY, DEFAULT_DATA_URL);

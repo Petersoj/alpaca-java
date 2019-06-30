@@ -6,15 +6,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import com.google.gson.JsonObject;
+import io.github.mainstringargs.alpaca.properties.AlpacaProperties;
 
 /**
  * The Class AlpacaRequestBuilder.
  */
 public class AlpacaRequestBuilder {
-
-
-  /** The Constant VERSION. */
-  private final static String VERSION = "v1";
 
   /** The Constant URL_SEPARATOR. */
   public final static String URL_SEPARATOR = "/";
@@ -26,7 +23,10 @@ public class AlpacaRequestBuilder {
   public final Map<String, String> bodyProperties = new LinkedHashMap<String, String>();
 
   /** The base url. */
-  private String baseUrl;
+  private final String apiVersion;
+
+  /** The base url. */
+  private final String baseUrl;
 
   /** The appended endpoints. */
   private List<String> appendedEndpoints = new ArrayList<String>();
@@ -37,24 +37,15 @@ public class AlpacaRequestBuilder {
   /** The endpoint. */
   private String endpoint;
 
-
   /**
    * Instantiates a new alpaca request builder.
    *
-   * @param baseUrl the base url
-   */
-  public AlpacaRequestBuilder(String baseUrl) {
-    this.baseUrl = baseUrl;
-
-  }
-
-  /**
-   * Instantiates a new alpaca request builder.
-   *
+   * @param apiVersion the api version
    * @param baseUrl the base url
    * @param endpoint the endpoint
    */
-  public AlpacaRequestBuilder(String baseUrl, String endpoint) {
+  public AlpacaRequestBuilder(String apiVersion, String baseUrl, String endpoint) {
+    this.apiVersion = apiVersion;
     this.baseUrl = baseUrl;
     this.endpoint = endpoint;
 
@@ -150,7 +141,7 @@ public class AlpacaRequestBuilder {
 
     StringBuilder builder = new StringBuilder(baseUrl);
     builder.append(URL_SEPARATOR);
-    builder.append(VERSION);
+    builder.append(apiVersion);
 
     if (defaultEndpoint) {
       builder.append(URL_SEPARATOR);
