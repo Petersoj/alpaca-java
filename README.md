@@ -54,6 +54,7 @@ Add the following dependency to your pom.xml file:
 If you plan on using the alpaca.properties, generate a secret and a key at Alpaca and set the following properties in an alpaca.properties file on the classpath:
 
 ```
+api_version = <v1 or v2>
 key_id = <YOUR KEY>
 secret = <YOUR SECRET>
 base_url = https://api.alpaca.markets

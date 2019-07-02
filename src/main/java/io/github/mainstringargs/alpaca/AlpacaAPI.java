@@ -38,6 +38,9 @@ import io.github.mainstringargs.alpaca.websocket.AlpacaWebsocketClient;
  */
 public class AlpacaAPI {
 
+  /** The version. */
+  private final String apiVersion;
+
   /** The key id. */
   private final String keyId;
 
@@ -65,6 +68,7 @@ public class AlpacaAPI {
    */
   public AlpacaAPI() {
 
+    apiVersion = AlpacaProperties.API_VERSION_VALUE;
     keyId = AlpacaProperties.KEY_ID_VALUE;
     secret = AlpacaProperties.SECRET_VALUE;
     baseAccountUrl = AlpacaProperties.BASE_ACCOUNT_URL_VALUE;
@@ -79,12 +83,14 @@ public class AlpacaAPI {
    * Instantiates a new Alpaca API using the specified keyId, secret, baseAccountUrl, and
    * baseDataUrl.
    *
+   * @param apiVersion the api version
    * @param keyId the key id
    * @param secret the secret
    * @param baseAccountUrl the base account url
    * @param baseDataUrl the base data url
    */
-  public AlpacaAPI(String keyId, String secret, String baseAccountUrl, String baseDataUrl) {
+  public AlpacaAPI(String apiVersion, String keyId, String secret, String baseAccountUrl, String baseDataUrl) {
+    this.apiVersion = apiVersion;
     this.keyId = keyId;
     this.secret = secret;
     this.baseAccountUrl = baseAccountUrl;
@@ -95,13 +101,15 @@ public class AlpacaAPI {
   }
 
   /**
-   * Instantiates a new Alpaca API using the specified keyId, secret, and baseAccountUrl.
+   * Instantiates a new Alpaca API using the specified apiVersion, keyId, secret, and baseAccountUrl.
    *
+   * @param apiVersion the api version
    * @param keyId the key id
    * @param secret the secret
    * @param baseAccountUrl the base account url
    */
-  public AlpacaAPI(String keyId, String secret, String baseAccountUrl) {
+  public AlpacaAPI(String apiVersion, String keyId, String secret, String baseAccountUrl) {
+    this.apiVersion = apiVersion;
     this.keyId = keyId;
     this.secret = secret;
     this.baseAccountUrl = baseAccountUrl;
@@ -112,16 +120,35 @@ public class AlpacaAPI {
   }
   
   /**
-   * Instantiates a new Alpaca API using the specified keyId, and secret.
+   * Instantiates a new Alpaca API using the specified apiVersion, keyId, and secret.
    *
    * @param keyId the key id
    * @param secret the secret
    */
-  public AlpacaAPI(String keyId, String secret) {
+  public AlpacaAPI(String apiVersion, String keyId, String secret) {
+    this.apiVersion = apiVersion;
     this.keyId = keyId;
     this.secret = secret;
     this.baseAccountUrl = AlpacaProperties.BASE_ACCOUNT_URL_VALUE;
     baseDataUrl = AlpacaProperties.BASE_DATA_URL_VALUE;
+    alpacaRequest = new AlpacaRequest(keyId, secret);
+    alpacaWebSocketClient = new AlpacaWebsocketClient(keyId, secret, baseAccountUrl);
+
+  }
+
+  /**
+   * Instantiates a new Alpaca API using the specified apiVersion
+   *
+   * @param apiVersion the api version
+   */
+  public AlpacaAPI(String apiVersion) {
+
+    this.apiVersion = apiVersion;
+    keyId = AlpacaProperties.KEY_ID_VALUE;
+    secret = AlpacaProperties.SECRET_VALUE;
+    baseAccountUrl = AlpacaProperties.BASE_ACCOUNT_URL_VALUE;
+    baseDataUrl = AlpacaProperties.BASE_DATA_URL_VALUE;
+
     alpacaRequest = new AlpacaRequest(keyId, secret);
     alpacaWebSocketClient = new AlpacaWebsocketClient(keyId, secret, baseAccountUrl);
 
@@ -137,7 +164,7 @@ public class AlpacaAPI {
    */
   public Account getAccount() throws AlpacaAPIException {
     AlpacaRequestBuilder urlBuilder =
-        new AlpacaRequestBuilder(baseAccountUrl, AlpacaConstants.ACCOUNT_ENDPOINT);
+        new AlpacaRequestBuilder(apiVersion, baseAccountUrl, AlpacaConstants.ACCOUNT_ENDPOINT);
 
     HttpResponse<JsonNode> response = alpacaRequest.invokeGet(urlBuilder);
 
@@ -165,7 +192,7 @@ public class AlpacaAPI {
     Type listType = new TypeToken<List<Order>>() {}.getType();
 
     AlpacaRequestBuilder urlBuilder =
-        new AlpacaRequestBuilder(baseAccountUrl, AlpacaConstants.ORDERS_ENDPOINT);
+        new AlpacaRequestBuilder(apiVersion, baseAccountUrl, AlpacaConstants.ORDERS_ENDPOINT);
 
     HttpResponse<JsonNode> response = alpacaRequest.invokeGet(urlBuilder);
 
@@ -197,7 +224,7 @@ public class AlpacaAPI {
     Type listType = new TypeToken<List<Order>>() {}.getType();
 
     AlpacaRequestBuilder urlBuilder =
-        new AlpacaRequestBuilder(baseAccountUrl, AlpacaConstants.ORDERS_ENDPOINT);
+        new AlpacaRequestBuilder(apiVersion, baseAccountUrl, AlpacaConstants.ORDERS_ENDPOINT);
 
     if (status != null) {
       urlBuilder.appendURLParameter(AlpacaConstants.STATUS_PARAMETER, status.getAPIName());
@@ -256,7 +283,7 @@ public class AlpacaAPI {
     Type objectType = new TypeToken<Order>() {}.getType();
 
     AlpacaRequestBuilder urlBuilder =
-        new AlpacaRequestBuilder(baseAccountUrl, AlpacaConstants.ORDERS_ENDPOINT);
+        new AlpacaRequestBuilder(apiVersion, baseAccountUrl, AlpacaConstants.ORDERS_ENDPOINT);
 
     if (symbol != null) {
       urlBuilder.appendBodyProperty(AlpacaConstants.SYMBOL_PARAMETER, symbol);
@@ -319,7 +346,7 @@ public class AlpacaAPI {
 
 
     AlpacaRequestBuilder urlBuilder =
-        new AlpacaRequestBuilder(baseAccountUrl, AlpacaConstants.ORDERS_ENDPOINT);
+        new AlpacaRequestBuilder(apiVersion, baseAccountUrl, AlpacaConstants.ORDERS_ENDPOINT);
 
     if (orderId != null) {
       urlBuilder.appendEndpoint(orderId);
@@ -349,7 +376,7 @@ public class AlpacaAPI {
   public Order getOrderByClientId(String clientOrderId) throws AlpacaAPIException {
     Type objectType = new TypeToken<Order>() {}.getType();
 
-    AlpacaRequestBuilder urlBuilder = new AlpacaRequestBuilder(baseAccountUrl,
+    AlpacaRequestBuilder urlBuilder = new AlpacaRequestBuilder(apiVersion, baseAccountUrl,
         AlpacaConstants.ORDERS_BY_CLIENT_ORDER_ID_ENDPOINT);
 
     if (clientOrderId != null) {
@@ -387,7 +414,7 @@ public class AlpacaAPI {
   public boolean cancelOrder(String orderId) throws AlpacaAPIException {
 
     AlpacaRequestBuilder urlBuilder =
-        new AlpacaRequestBuilder(baseAccountUrl, AlpacaConstants.ORDERS_ENDPOINT);
+        new AlpacaRequestBuilder(apiVersion, baseAccountUrl, AlpacaConstants.ORDERS_ENDPOINT);
 
     if (orderId != null) {
       urlBuilder.appendEndpoint(orderId);
@@ -415,7 +442,7 @@ public class AlpacaAPI {
     Type listType = new TypeToken<List<Position>>() {}.getType();
 
     AlpacaRequestBuilder urlBuilder =
-        new AlpacaRequestBuilder(baseAccountUrl, AlpacaConstants.POSITIONS_ENDPOINT);
+        new AlpacaRequestBuilder(apiVersion, baseAccountUrl, AlpacaConstants.POSITIONS_ENDPOINT);
 
     HttpResponse<JsonNode> response = alpacaRequest.invokeGet(urlBuilder);
 
@@ -443,7 +470,7 @@ public class AlpacaAPI {
     Type listType = new TypeToken<Position>() {}.getType();
 
     AlpacaRequestBuilder urlBuilder =
-        new AlpacaRequestBuilder(baseAccountUrl, AlpacaConstants.POSITIONS_ENDPOINT);
+        new AlpacaRequestBuilder(apiVersion, baseAccountUrl, AlpacaConstants.POSITIONS_ENDPOINT);
 
 
     if (symbol != null) {
@@ -477,7 +504,7 @@ public class AlpacaAPI {
 
 
     AlpacaRequestBuilder urlBuilder =
-        new AlpacaRequestBuilder(baseAccountUrl, AlpacaConstants.ASSETS_ENDPOINT);
+        new AlpacaRequestBuilder(apiVersion, baseAccountUrl, AlpacaConstants.ASSETS_ENDPOINT);
 
 
     HttpResponse<JsonNode> response = alpacaRequest.invokeGet(urlBuilder);
@@ -508,7 +535,7 @@ public class AlpacaAPI {
     Type listType = new TypeToken<List<Asset>>() {}.getType();
 
     AlpacaRequestBuilder urlBuilder =
-        new AlpacaRequestBuilder(baseAccountUrl, AlpacaConstants.ASSETS_ENDPOINT);
+        new AlpacaRequestBuilder(apiVersion, baseAccountUrl, AlpacaConstants.ASSETS_ENDPOINT);
 
     if (assetStatus != null) {
       urlBuilder.appendURLParameter(AlpacaConstants.STATUS_PARAMETER, assetStatus.getAPIName());
@@ -543,7 +570,7 @@ public class AlpacaAPI {
     Type listType = new TypeToken<Asset>() {}.getType();
 
     AlpacaRequestBuilder urlBuilder =
-        new AlpacaRequestBuilder(baseAccountUrl, AlpacaConstants.ASSETS_ENDPOINT);
+        new AlpacaRequestBuilder(apiVersion, baseAccountUrl, AlpacaConstants.ASSETS_ENDPOINT);
 
     if (symbol != null) {
       urlBuilder.appendEndpoint(symbol.trim());
@@ -572,7 +599,7 @@ public class AlpacaAPI {
     Type listType = new TypeToken<List<Calendar>>() {}.getType();
 
     AlpacaRequestBuilder urlBuilder =
-        new AlpacaRequestBuilder(baseAccountUrl, AlpacaConstants.CALENDAR_ENDPOINT);
+        new AlpacaRequestBuilder(apiVersion, baseAccountUrl, AlpacaConstants.CALENDAR_ENDPOINT);
 
     HttpResponse<JsonNode> response = alpacaRequest.invokeGet(urlBuilder);
 
@@ -599,7 +626,7 @@ public class AlpacaAPI {
     Type listType = new TypeToken<List<Calendar>>() {}.getType();
 
     AlpacaRequestBuilder urlBuilder =
-        new AlpacaRequestBuilder(baseAccountUrl, AlpacaConstants.CALENDAR_ENDPOINT);
+        new AlpacaRequestBuilder(apiVersion, baseAccountUrl, AlpacaConstants.CALENDAR_ENDPOINT);
 
     if (start != null) {
       urlBuilder.appendURLParameter(AlpacaConstants.START_PARAMETER, Utilities.toDateString(start));
@@ -631,7 +658,7 @@ public class AlpacaAPI {
    */
   public Clock getClock() throws AlpacaAPIException {
     AlpacaRequestBuilder urlBuilder =
-        new AlpacaRequestBuilder(baseAccountUrl, AlpacaConstants.CLOCK_ENDPOINT);
+        new AlpacaRequestBuilder(apiVersion, baseAccountUrl, AlpacaConstants.CLOCK_ENDPOINT);
 
     HttpResponse<JsonNode> response = alpacaRequest.invokeGet(urlBuilder);
 
@@ -667,7 +694,7 @@ public class AlpacaAPI {
       throws AlpacaAPIException {
 
     AlpacaRequestBuilder urlBuilder =
-        new AlpacaRequestBuilder(baseDataUrl, AlpacaConstants.BARS_ENDPOINT);
+        new AlpacaRequestBuilder(apiVersion, baseDataUrl, AlpacaConstants.BARS_ENDPOINT);
 
     if (timeframe != null) {
       urlBuilder.appendEndpoint(timeframe.getAPIName());
@@ -734,7 +761,7 @@ public class AlpacaAPI {
       LocalDateTime start, LocalDateTime end, LocalDateTime after, LocalDateTime until)
       throws AlpacaAPIException {
     AlpacaRequestBuilder urlBuilder =
-        new AlpacaRequestBuilder(baseDataUrl, AlpacaConstants.BARS_ENDPOINT);
+        new AlpacaRequestBuilder(apiVersion, baseDataUrl, AlpacaConstants.BARS_ENDPOINT);
 
     if (timeframe != null) {
       urlBuilder.appendEndpoint(timeframe.getAPIName());
