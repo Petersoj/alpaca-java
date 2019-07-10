@@ -8,7 +8,6 @@ import java.util.LinkedHashSet;
 import java.util.Properties;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import io.github.mainstringargs.alpaca.AlpacaAPI;
 
 /**
  * The Class AlpacaProperties.

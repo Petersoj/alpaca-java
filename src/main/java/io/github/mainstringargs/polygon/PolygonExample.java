@@ -1,11 +1,7 @@
 package io.github.mainstringargs.polygon;
 
 import java.time.LocalDate;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import com.google.common.collect.Sets;
 import io.github.mainstringargs.polygon.domain.DailyOpenClose;
 import io.github.mainstringargs.polygon.domain.Quote;
 import io.github.mainstringargs.polygon.domain.Snapshot;
@@ -31,7 +27,6 @@ import io.github.mainstringargs.polygon.enums.ChannelType;
 import io.github.mainstringargs.polygon.enums.Locale;
 import io.github.mainstringargs.polygon.enums.Sort;
 import io.github.mainstringargs.polygon.enums.Timespan;
-import io.github.mainstringargs.polygon.nats.PolygonStreamListener;
 import io.github.mainstringargs.polygon.nats.PolygonStreamListenerAdapter;
 import io.github.mainstringargs.polygon.nats.message.ChannelMessage;
 import io.github.mainstringargs.polygon.rest.exceptions.PolygonAPIException;

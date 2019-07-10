@@ -2,7 +2,6 @@ package io.github.mainstringargs.polygon;
 
 import java.lang.reflect.Type;
 import java.time.LocalDate;
-import java.util.Arrays;
 import java.util.List;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -73,7 +72,7 @@ public class PolygonAPI {
    * @param keyId the key id
    */
   public PolygonAPI(String keyId) {
-    this(PolygonProperties.KEY_ID_VALUE, PolygonProperties.POLYGON_NATS_SERVERS_VALUE);
+    this(keyId, PolygonProperties.POLYGON_NATS_SERVERS_VALUE);
 
   }
 

@@ -68,14 +68,48 @@ public class AlpacaAPI {
    */
   public AlpacaAPI() {
 
-    apiVersion = AlpacaProperties.API_VERSION_VALUE;
-    keyId = AlpacaProperties.KEY_ID_VALUE;
-    secret = AlpacaProperties.SECRET_VALUE;
-    baseAccountUrl = AlpacaProperties.BASE_ACCOUNT_URL_VALUE;
-    baseDataUrl = AlpacaProperties.BASE_DATA_URL_VALUE;
+    this(AlpacaProperties.API_VERSION_VALUE, AlpacaProperties.KEY_ID_VALUE,
+        AlpacaProperties.SECRET_VALUE, AlpacaProperties.BASE_ACCOUNT_URL_VALUE,
+        AlpacaProperties.BASE_DATA_URL_VALUE);
 
-    alpacaRequest = new AlpacaRequest(keyId, secret);
-    alpacaWebSocketClient = new AlpacaWebsocketClient(keyId, secret, baseAccountUrl);
+  }
+
+
+
+  /**
+   * Instantiates a new Alpaca API using the specified apiVersion, keyId, secret, and
+   * baseAccountUrl.
+   *
+   * @param apiVersion the api version
+   * @param keyId the key id
+   * @param secret the secret
+   * @param baseAccountUrl the base account url
+   */
+  public AlpacaAPI(String apiVersion, String keyId, String secret, String baseAccountUrl) {
+    this(apiVersion, keyId, secret, baseAccountUrl, AlpacaProperties.BASE_DATA_URL_VALUE);
+  }
+
+  /**
+   * Instantiates a new Alpaca API using the specified apiVersion, keyId, and secret.
+   *
+   * @param keyId the key id
+   * @param secret the secret
+   */
+  public AlpacaAPI(String apiVersion, String keyId, String secret) {
+    this(apiVersion, keyId, secret, AlpacaProperties.BASE_ACCOUNT_URL_VALUE,
+        AlpacaProperties.BASE_DATA_URL_VALUE);
+  }
+
+  /**
+   * Instantiates a new Alpaca API using the specified apiVersion
+   *
+   * @param apiVersion the api version
+   */
+  public AlpacaAPI(String apiVersion) {
+
+    this(apiVersion, AlpacaProperties.KEY_ID_VALUE, AlpacaProperties.SECRET_VALUE,
+        AlpacaProperties.BASE_ACCOUNT_URL_VALUE, AlpacaProperties.BASE_DATA_URL_VALUE);
+
 
   }
 
@@ -89,7 +123,8 @@ public class AlpacaAPI {
    * @param baseAccountUrl the base account url
    * @param baseDataUrl the base data url
    */
-  public AlpacaAPI(String apiVersion, String keyId, String secret, String baseAccountUrl, String baseDataUrl) {
+  public AlpacaAPI(String apiVersion, String keyId, String secret, String baseAccountUrl,
+      String baseDataUrl) {
     this.apiVersion = apiVersion;
     this.keyId = keyId;
     this.secret = secret;
@@ -98,61 +133,11 @@ public class AlpacaAPI {
     alpacaRequest = new AlpacaRequest(keyId, secret);
     alpacaWebSocketClient = new AlpacaWebsocketClient(keyId, secret, baseAccountUrl);
 
-  }
-
-  /**
-   * Instantiates a new Alpaca API using the specified apiVersion, keyId, secret, and baseAccountUrl.
-   *
-   * @param apiVersion the api version
-   * @param keyId the key id
-   * @param secret the secret
-   * @param baseAccountUrl the base account url
-   */
-  public AlpacaAPI(String apiVersion, String keyId, String secret, String baseAccountUrl) {
-    this.apiVersion = apiVersion;
-    this.keyId = keyId;
-    this.secret = secret;
-    this.baseAccountUrl = baseAccountUrl;
-    baseDataUrl = AlpacaProperties.BASE_DATA_URL_VALUE;
-    alpacaRequest = new AlpacaRequest(keyId, secret);
-    alpacaWebSocketClient = new AlpacaWebsocketClient(keyId, secret, baseAccountUrl);
-
-  }
-  
-  /**
-   * Instantiates a new Alpaca API using the specified apiVersion, keyId, and secret.
-   *
-   * @param keyId the key id
-   * @param secret the secret
-   */
-  public AlpacaAPI(String apiVersion, String keyId, String secret) {
-    this.apiVersion = apiVersion;
-    this.keyId = keyId;
-    this.secret = secret;
-    this.baseAccountUrl = AlpacaProperties.BASE_ACCOUNT_URL_VALUE;
-    baseDataUrl = AlpacaProperties.BASE_DATA_URL_VALUE;
-    alpacaRequest = new AlpacaRequest(keyId, secret);
-    alpacaWebSocketClient = new AlpacaWebsocketClient(keyId, secret, baseAccountUrl);
+    LOGGER.info(this.toString());
 
   }
 
-  /**
-   * Instantiates a new Alpaca API using the specified apiVersion
-   *
-   * @param apiVersion the api version
-   */
-  public AlpacaAPI(String apiVersion) {
 
-    this.apiVersion = apiVersion;
-    keyId = AlpacaProperties.KEY_ID_VALUE;
-    secret = AlpacaProperties.SECRET_VALUE;
-    baseAccountUrl = AlpacaProperties.BASE_ACCOUNT_URL_VALUE;
-    baseDataUrl = AlpacaProperties.BASE_DATA_URL_VALUE;
-
-    alpacaRequest = new AlpacaRequest(keyId, secret);
-    alpacaWebSocketClient = new AlpacaWebsocketClient(keyId, secret, baseAccountUrl);
-
-  }
 
   /**
    * Gets the account.
@@ -825,4 +810,13 @@ public class AlpacaAPI {
   public void removeAlpacaStreamListener(AlpacaStreamListener streamListener) {
     alpacaWebSocketClient.removeListener(streamListener);
   }
+
+
+  @Override
+  public String toString() {
+    return "AlpacaAPI [apiVersion=" + apiVersion + ", keyId=" + keyId 
+        + ", baseAccountUrl=" + baseAccountUrl 
+        + ", baseDataUrl=" + baseDataUrl +"]";
+  }
+
 }
