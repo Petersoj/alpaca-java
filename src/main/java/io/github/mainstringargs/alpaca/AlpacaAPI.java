@@ -678,8 +678,9 @@ public class AlpacaAPI {
       LocalDateTime start, LocalDateTime end, LocalDateTime after, LocalDateTime until)
       throws AlpacaAPIException {
 
+    //data urls still use v1 (https://docs.alpaca.markets/api-documentation/api-v2/market-data/#endpoint)
     AlpacaRequestBuilder urlBuilder =
-        new AlpacaRequestBuilder(apiVersion, baseDataUrl, AlpacaConstants.BARS_ENDPOINT);
+        new AlpacaRequestBuilder("v1", baseDataUrl, AlpacaConstants.BARS_ENDPOINT);
 
     if (timeframe != null) {
       urlBuilder.appendEndpoint(timeframe.getAPIName());
@@ -745,8 +746,10 @@ public class AlpacaAPI {
   public List<Bar> getBars(BarsTimeFrame timeframe, String symbol, Integer limit,
       LocalDateTime start, LocalDateTime end, LocalDateTime after, LocalDateTime until)
       throws AlpacaAPIException {
+    
+    //data urls still use v1 (https://docs.alpaca.markets/api-documentation/api-v2/market-data/#endpoint)
     AlpacaRequestBuilder urlBuilder =
-        new AlpacaRequestBuilder(apiVersion, baseDataUrl, AlpacaConstants.BARS_ENDPOINT);
+        new AlpacaRequestBuilder("v1", baseDataUrl, AlpacaConstants.BARS_ENDPOINT);
 
     if (timeframe != null) {
       urlBuilder.appendEndpoint(timeframe.getAPIName());
