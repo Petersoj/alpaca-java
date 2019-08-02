@@ -588,7 +588,7 @@ public class PolygonAPI {
    * @see <a href=
    *      "https://polygon.io/docs/#!/Stocks--Equities/get_v1_historic_trades_symbol_date">https://polygon.io/docs/#!/Stocks--Equities/get_v1_historic_trades_symbol_date</a>
    */
-  public Trades getHistoricTrades(String symbol, LocalDate date, Integer offset, Integer limit)
+  public Trades getHistoricTrades(String symbol, LocalDate date, Long offset, Integer limit)
       throws PolygonAPIException {
 
     PolygonRequestBuilder builder = new PolygonRequestBuilder(baseDataUrl,
@@ -629,7 +629,7 @@ public class PolygonAPI {
    * @see <a href=
    *      "https://polygon.io/docs/#!/Stocks--Equities/get_v1_historic_quotes_symbol_date">https://polygon.io/docs/#!/Stocks--Equities/get_v1_historic_quotes_symbol_date</a>
    */
-  public Quotes getHistoricQuotes(String symbol, LocalDate date, Integer offset, Integer limit)
+  public Quotes getHistoricQuotes(String symbol, LocalDate date, Long offset, Integer limit)
       throws PolygonAPIException {
 
     PolygonRequestBuilder builder = new PolygonRequestBuilder(baseDataUrl,

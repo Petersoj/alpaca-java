@@ -33,7 +33,7 @@ Add the following dependency to your build.gradle file:
 
 ```
 dependencies {
-	compile "io.github.mainstringargs:alpaca-java:4.0.0"
+	compile "io.github.mainstringargs:alpaca-java:4.0.1"
 }
 ```
 
@@ -45,7 +45,7 @@ Add the following dependency to your pom.xml file:
     <dependency>
       <groupId>io.github.mainstringargs</groupId>
       <artifactId>alpaca-java</artifactId>
-      <version>4.0.0</version>
+      <version>4.0.1</version>
       <scope>compile</scope>
     </dependency>
 ```
@@ -1208,7 +1208,7 @@ List of stock exchanges which are supported by Polygon.io
  * **Exceptions:** `PolygonAPIException` — the polygon API exception
  * **See also:** https://polygon.io/docs/#!/Stocks--Equities/get_v1_meta_exchanges
 
-#### `public Trades getHistoricTrades(String symbol, LocalDate date, Integer offset, Integer limit) throws PolygonAPIException`
+#### `public Trades getHistoricTrades(String symbol, LocalDate date, Long offset, Integer limit) throws PolygonAPIException`
 
 Get historic trades for a symbol.
 
@@ -1225,7 +1225,7 @@ Get historic trades for a symbol.
  * **Exceptions:** `PolygonAPIException` — the polygon API exception
  * **See also:** https://polygon.io/docs/#!/Stocks--Equities/get_v1_historic_trades_symbol_date
 
-#### `public Quotes getHistoricQuotes(String symbol, LocalDate date, Integer offset, Integer limit) throws PolygonAPIException`
+#### `public Quotes getHistoricQuotes(String symbol, LocalDate date, Long offset, Integer limit) throws PolygonAPIException`
 
 Get historic quotes for a symbol.
 
