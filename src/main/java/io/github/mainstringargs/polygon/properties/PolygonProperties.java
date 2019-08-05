@@ -105,6 +105,17 @@ public class PolygonProperties {
   /** The polygon nats servers value. */
   public static String[] POLYGON_NATS_SERVERS_VALUE =
       getProperty(POLYGON_NATS_SERVERS_KEY, DEFAULT_POLYGON_NATS_SERVERS).split(",");
+  
+  /** The default polygon web socket server. */
+  private static String DEFAULT_POLYGON_WEB_SOCKET_SERVER_URL =
+      "wss://alpaca.socket.polygon.io/stocks";
+  
+  /** The polygon web socket server key. */
+  private static String POLYGON_WEB_SOCKET_SERVER_KEY = "web_socket_server_url";
+
+  /** The polygon web socket server value. */
+  public static String POLYGON_WEB_SOCKET_SERVER_VALUE =
+      getProperty(POLYGON_WEB_SOCKET_SERVER_KEY, DEFAULT_POLYGON_WEB_SOCKET_SERVER_URL);
 
   /** The Constant USER_AGENT_VALUE. */
   public static final String USER_AGENT_VALUE = getProperty(USER_AGENT_KEY, DEFAULT_USER_AGENT);
