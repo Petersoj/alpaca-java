@@ -5,54 +5,54 @@ package io.github.mainstringargs.polygon.enums;
  */
 public enum ChannelType {
 
-  /** The trades. */
-  TRADES("T"),
+    /** The trades. */
+    TRADES("T"),
 
-  /** The quotes. */
-  QUOTES("Q"),
+    /** The quotes. */
+    QUOTES("Q"),
 
-  /** The aggregate per second. */
-  AGGREGATE_PER_SECOND("A"),
+    /** The aggregate per second. */
+    AGGREGATE_PER_SECOND("A"),
 
-  /** The aggregate per minute. */
-  AGGREGATE_PER_MINUTE("AM");
+    /** The aggregate per minute. */
+    AGGREGATE_PER_MINUTE("AM");
 
-  /** The api name. */
-  String apiName;
+    /** The api name. */
+    String apiName;
 
-  /**
-   * Instantiates a new order type.
-   *
-   * @param apiName the api name
-   */
-  ChannelType(String apiName) {
-    this.apiName = apiName;
-  }
-
-  /**
-   * Gets the API name.
-   *
-   * @return the API name
-   */
-  public String getAPIName() {
-    return apiName;
-  }
-
-  /**
-   * From API name.
-   *
-   * @param apiName the api name
-   * @return the channel type
-   */
-  public static ChannelType fromAPIName(String apiName) {
-    String apiNameString = apiName.trim();
-
-    for (ChannelType cType : ChannelType.values()) {
-      if (apiNameString.equals(cType.apiName)) {
-        return cType;
-      }
+    /**
+     * Instantiates a new order type.
+     *
+     * @param apiName the api name
+     */
+    ChannelType(String apiName) {
+        this.apiName = apiName;
     }
 
-    return null;
-  }
+    /**
+     * From API name.
+     *
+     * @param apiName the api name
+     * @return the channel type
+     */
+    public static ChannelType fromAPIName(String apiName) {
+        String apiNameString = apiName.trim();
+
+        for (ChannelType cType : ChannelType.values()) {
+            if (apiNameString.equals(cType.apiName)) {
+                return cType;
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * Gets the API name.
+     *
+     * @return the API name
+     */
+    public String getAPIName() {
+        return apiName;
+    }
 }

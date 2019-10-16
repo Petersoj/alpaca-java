@@ -92,7 +92,6 @@ public class PolygonAPI {
         polygonRequest = new PolygonRequest(keyId);
         polygonNatsClient = new PolygonNatsClient(keyId, polygonNatsServers);
         baseDataUrl = PolygonProperties.BASE_DATA_URL_VALUE;
-
     }
 
     /**
@@ -139,7 +138,6 @@ public class PolygonAPI {
 
         HttpResponse<JsonNode> response = polygonRequest.invokeGet(builder);
 
-
         if (response.getStatus() != 200) {
             throw new PolygonAPIException(response);
         }
@@ -163,7 +161,6 @@ public class PolygonAPI {
 
         builder.appendEndpoint(symbol);
         builder.appendEndpoint(PolygonConstants.ANALYSTS_ENDPOINT);
-
 
         HttpResponse<JsonNode> response = polygonRequest.invokeGet(builder);
 
@@ -189,7 +186,6 @@ public class PolygonAPI {
 
         builder.appendEndpoint(symbol);
         builder.appendEndpoint(PolygonConstants.DIVIDENDS_ENDPOINT);
-
 
         HttpResponse<JsonNode> response = polygonRequest.invokeGet(builder);
 
@@ -249,7 +245,6 @@ public class PolygonAPI {
         builder.appendEndpoint(symbol);
         builder.appendEndpoint(PolygonConstants.FINANCIALS_ENDPOINT);
 
-
         HttpResponse<JsonNode> response = polygonRequest.invokeGet(builder);
 
         if (response.getStatus() != 200) {
@@ -278,7 +273,6 @@ public class PolygonAPI {
         builder.appendEndpoint(symbol);
         builder.appendEndpoint(PolygonConstants.NEWS_ENDPOINT);
 
-
         HttpResponse<JsonNode> response = polygonRequest.invokeGet(builder);
 
         if (response.getStatus() != 200) {
@@ -287,7 +281,6 @@ public class PolygonAPI {
 
         Type listType = new TypeToken<List<SymbolNews>>() {
         }.getType();
-
 
         return polygonRequest.getResponseObject(response, listType);
     }
@@ -409,13 +402,11 @@ public class PolygonAPI {
 
         builder.setVersion(PolygonConstants.VERSION_2_ENDPOINT);
 
-
         HttpResponse<JsonNode> response = polygonRequest.invokeGet(builder);
 
         if (response.getStatus() != 200) {
             throw new PolygonAPIException(response);
         }
-
 
         Type listType = new TypeToken<List<Market>>() {
         }.getType();
@@ -438,18 +429,15 @@ public class PolygonAPI {
 
         builder.setVersion(PolygonConstants.VERSION_2_ENDPOINT);
 
-
         HttpResponse<JsonNode> response = polygonRequest.invokeGet(builder);
 
         if (response.getStatus() != 200) {
             throw new PolygonAPIException(response);
         }
 
-
         Type listType =
                 new TypeToken<List<io.github.mainstringargs.polygon.domain.reference.Locale>>() {
-                }
-                        .getType();
+                }.getType();
 
         return polygonRequest.getResponseObject(response, listType);
     }
@@ -505,7 +493,6 @@ public class PolygonAPI {
         Type listType = new TypeToken<List<Split>>() {
         }.getType();
 
-
         return polygonRequest.getResponseObject(response, listType);
     }
 
@@ -529,7 +516,6 @@ public class PolygonAPI {
 
         Type listType = new TypeToken<List<Exchange>>() {
         }.getType();
-
 
         return polygonRequest.getResponseObject(response, listType);
     }
