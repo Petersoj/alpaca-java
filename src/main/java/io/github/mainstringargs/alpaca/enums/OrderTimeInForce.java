@@ -5,33 +5,33 @@ package io.github.mainstringargs.alpaca.enums;
  */
 public enum OrderTimeInForce {
 
-  /** The day. */
-  DAY("day"),
+    /** The day. */
+    DAY("day"),
 
-  /** The gtc. */
-  GTC("gtc"),
+    /** The gtc. */
+    GTC("gtc"),
 
-  /** The opg. */
-  OPG("opg");
+    /** The opg. */
+    OPG("opg");
 
-  /** The api name. */
-  String apiName;
+    /** The api name. */
+    String apiName;
 
-  /**
-   * Instantiates a new order time in force.
-   *
-   * @param apiName the api name
-   */
-  OrderTimeInForce(String apiName) {
-    this.apiName = apiName;
-  }
+    /**
+     * Instantiates a new order time in force.
+     *
+     * @param apiName the api name
+     */
+    OrderTimeInForce(String apiName) {
+        this.apiName = apiName;
+    }
 
-  /**
-   * Gets the API name.
-   *
-   * @return the API name
-   */
-  public String getAPIName() {
-    return apiName;
-  }
+    /**
+     * Gets the API name.
+     *
+     * @return the API name
+     */
+    public String getAPIName() {
+        return apiName;
+    }
 }

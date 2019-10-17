@@ -8,16 +8,15 @@ import io.github.mainstringargs.polygon.enums.ChannelType;
  */
 public class AggregatePerMinuteMessage extends AggregateMessage {
 
-  /**
-   * Instantiates a new aggregate per minute message.
-   *
-   * @param cType the c type
-   * @param tickerString the ticker string
-   * @param asJsonObject the as json object
-   */
-  public AggregatePerMinuteMessage(ChannelType cType, String tickerString,
-      JsonObject asJsonObject) {
-    super(cType, tickerString, asJsonObject);
-  }
-
+    /**
+     * Instantiates a new aggregate per minute message.
+     *
+     * @param cType        the c type
+     * @param tickerString the ticker string
+     * @param asJsonObject the as json object
+     */
+    public AggregatePerMinuteMessage(ChannelType cType, String tickerString,
+                                     JsonObject asJsonObject) {
+        super(cType, tickerString, asJsonObject);
+    }
 }

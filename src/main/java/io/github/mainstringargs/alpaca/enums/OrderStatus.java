@@ -5,33 +5,33 @@ package io.github.mainstringargs.alpaca.enums;
  */
 public enum OrderStatus {
 
-  /** The open. */
-  OPEN("open"),
+    /** The open. */
+    OPEN("open"),
 
-  /** The closed. */
-  CLOSED("closed"),
+    /** The closed. */
+    CLOSED("closed"),
 
-  /** The all. */
-  ALL("all");
+    /** The all. */
+    ALL("all");
 
-  /** The api name. */
-  String apiName;
+    /** The api name. */
+    String apiName;
 
-  /**
-   * Instantiates a new order status.
-   *
-   * @param apiName the api name
-   */
-  OrderStatus(String apiName) {
-    this.apiName = apiName;
-  }
+    /**
+     * Instantiates a new order status.
+     *
+     * @param apiName the api name
+     */
+    OrderStatus(String apiName) {
+        this.apiName = apiName;
+    }
 
-  /**
-   * Gets the API name.
-   *
-   * @return the API name
-   */
-  public String getAPIName() {
-    return apiName;
-  }
+    /**
+     * Gets the API name.
+     *
+     * @return the API name
+     */
+    public String getAPIName() {
+        return apiName;
+    }
 }

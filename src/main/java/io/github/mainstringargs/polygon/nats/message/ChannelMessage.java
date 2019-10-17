@@ -7,17 +7,17 @@ import io.github.mainstringargs.polygon.enums.ChannelType;
  */
 public interface ChannelMessage {
 
-  /**
-   * Gets the ticker.
-   *
-   * @return the ticker
-   */
-  public String getTicker();
+    /**
+     * Gets the ticker.
+     *
+     * @return the ticker
+     */
+    String getTicker();
 
-  /**
-   * Gets the channel type.
-   *
-   * @return the channel type
-   */
-  public ChannelType getChannelType();
+    /**
+     * Gets the channel type.
+     *
+     * @return the channel type
+     */
+    ChannelType getChannelType();
 }

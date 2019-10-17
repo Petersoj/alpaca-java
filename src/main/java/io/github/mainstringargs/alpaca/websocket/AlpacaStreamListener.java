@@ -1,8 +1,9 @@
 package io.github.mainstringargs.alpaca.websocket;
 
-import java.util.Set;
 import io.github.mainstringargs.alpaca.enums.MessageType;
 import io.github.mainstringargs.alpaca.websocket.message.UpdateMessage;
+
+import java.util.Set;
 
 /**
  * An asynchronous update interface for receiving notifications about Websocket information as the
@@ -12,18 +13,18 @@ import io.github.mainstringargs.alpaca.websocket.message.UpdateMessage;
  */
 public interface AlpacaStreamListener {
 
-  /**
-   * Gets the message types.
-   *
-   * @return the message types
-   */
-  public Set<MessageType> getMessageTypes();
+    /**
+     * Gets the message types.
+     *
+     * @return the message types
+     */
+    Set<MessageType> getMessageTypes();
 
-  /**
-   * Stream update.
-   *
-   * @param messageType the message type
-   * @param message the message
-   */
-  public void streamUpdate(MessageType messageType, UpdateMessage message);
+    /**
+     * Stream update.
+     *
+     * @param messageType the message type
+     * @param message     the message
+     */
+    void streamUpdate(MessageType messageType, UpdateMessage message);
 }

@@ -5,31 +5,30 @@ package io.github.mainstringargs.alpaca.enums;
  */
 public enum OrderSide {
 
-  /** The buy. */
-  BUY("buy"),
+    /** The buy. */
+    BUY("buy"),
 
-  /** The sell. */
-  SELL("sell");
+    /** The sell. */
+    SELL("sell");
 
-  /** The api name. */
-  String apiName;
+    /** The api name. */
+    String apiName;
 
+    /**
+     * Instantiates a new order side.
+     *
+     * @param apiName the api name
+     */
+    OrderSide(String apiName) {
+        this.apiName = apiName;
+    }
 
-  /**
-   * Instantiates a new order side.
-   *
-   * @param apiName the api name
-   */
-  OrderSide(String apiName) {
-    this.apiName = apiName;
-  }
-
-  /**
-   * Gets the API name.
-   *
-   * @return the API name
-   */
-  public String getAPIName() {
-    return apiName;
-  }
+    /**
+     * Gets the API name.
+     *
+     * @return the API name
+     */
+    public String getAPIName() {
+        return apiName;
+    }
 }

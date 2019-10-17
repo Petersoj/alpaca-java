@@ -7,33 +7,32 @@ package io.github.mainstringargs.alpaca.enums;
 public enum MessageType {
 
 
-  /** The order updates. */
-  ORDER_UPDATES("trade_updates"),
+    /** The order updates. */
+    ORDER_UPDATES("trade_updates"),
 
 
-  /** The account updates. */
-  ACCOUNT_UPDATES("account_updates");
+    /** The account updates. */
+    ACCOUNT_UPDATES("account_updates");
 
 
-  /** The api name. */
-  String apiName;
+    /** The api name. */
+    String apiName;
 
+    /**
+     * Instantiates a new observer type.
+     *
+     * @param apiName the api name
+     */
+    MessageType(String apiName) {
+        this.apiName = apiName;
+    }
 
-  /**
-   * Instantiates a new observer type.
-   *
-   * @param apiName the api name
-   */
-  MessageType(String apiName) {
-    this.apiName = apiName;
-  }
-
-  /**
-   * Gets the API name.
-   *
-   * @return the API name
-   */
-  public String getAPIName() {
-    return apiName;
-  }
+    /**
+     * Gets the API name.
+     *
+     * @return the API name
+     */
+    public String getAPIName() {
+        return apiName;
+    }
 }

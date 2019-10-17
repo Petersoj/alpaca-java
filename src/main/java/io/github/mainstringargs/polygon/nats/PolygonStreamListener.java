@@ -1,11 +1,10 @@
 package io.github.mainstringargs.polygon.nats;
 
-import java.util.Map;
-import java.util.Set;
 import io.github.mainstringargs.polygon.enums.ChannelType;
 import io.github.mainstringargs.polygon.nats.message.ChannelMessage;
 
-
+import java.util.Map;
+import java.util.Set;
 
 /**
  * The listener interface for receiving polygonStream events. The class that is interested in
@@ -17,23 +16,19 @@ import io.github.mainstringargs.polygon.nats.message.ChannelMessage;
  */
 public interface PolygonStreamListener {
 
+    /**
+     * Gets the stock channel types.
+     *
+     * @return the stock channel types
+     */
+    Map<String, Set<ChannelType>> getStockChannelTypes();
 
-
-  /**
-   * Gets the stock channel types.
-   *
-   * @return the stock channel types
-   */
-  public Map<String, Set<ChannelType>> getStockChannelTypes();
-
-
-
-  /**
-   * Stream update.
-   *
-   * @param ticker the ticker
-   * @param channelType the channel type
-   * @param message the message
-   */
-  public void streamUpdate(String ticker, ChannelType channelType, ChannelMessage message);
+    /**
+     * Stream update.
+     *
+     * @param ticker      the ticker
+     * @param channelType the channel type
+     * @param message     the message
+     */
+    void streamUpdate(String ticker, ChannelType channelType, ChannelMessage message);
 }

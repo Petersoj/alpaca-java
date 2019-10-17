@@ -7,10 +7,10 @@ import io.github.mainstringargs.alpaca.enums.MessageType;
  */
 public interface UpdateMessage {
 
-  /**
-   * Gets the message type.
-   *
-   * @return the message type
-   */
-  public MessageType getMessageType();
+    /**
+     * Gets the message type.
+     *
+     * @return the message type
+     */
+    MessageType getMessageType();
 }
