@@ -5,36 +5,36 @@ package io.github.mainstringargs.alpaca.enums;
  */
 public enum OrderType {
 
-  /** The market. */
-  MARKET("market"),
+    /** The market. */
+    MARKET("market"),
 
-  /** The limit. */
-  LIMIT("limit"),
+    /** The limit. */
+    LIMIT("limit"),
 
-  /** The stop. */
-  STOP("stop"),
+    /** The stop. */
+    STOP("stop"),
 
-  /** The stop limit. */
-  STOP_LIMIT("stop_limit");
+    /** The stop limit. */
+    STOP_LIMIT("stop_limit");
 
-  /** The api name. */
-  String apiName;
+    /** The api name. */
+    String apiName;
 
-  /**
-   * Instantiates a new order type.
-   *
-   * @param apiName the api name
-   */
-  OrderType(String apiName) {
-    this.apiName = apiName;
-  }
+    /**
+     * Instantiates a new order type.
+     *
+     * @param apiName the api name
+     */
+    OrderType(String apiName) {
+        this.apiName = apiName;
+    }
 
-  /**
-   * Gets the API name.
-   *
-   * @return the API name
-   */
-  public String getAPIName() {
-    return apiName;
-  }
+    /**
+     * Gets the API name.
+     *
+     * @return the API name
+     */
+    public String getAPIName() {
+        return apiName;
+    }
 }

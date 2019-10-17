@@ -101,7 +101,6 @@ public class PolygonExample {
             e.printStackTrace();
         }
 
-
         try {
             List<SymbolFinancial> symbolFinancials = polygonAPI.getSymbolFinancials(ticker);
 
@@ -113,7 +112,6 @@ public class PolygonExample {
         } catch (PolygonAPIException e) {
             e.printStackTrace();
         }
-
 
         try {
             List<SymbolNews> symbolNews = polygonAPI.getSymbolNews(ticker);
