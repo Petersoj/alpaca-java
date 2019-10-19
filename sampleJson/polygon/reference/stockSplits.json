@@ -1,0 +1,16 @@
+{
+  "status": "OK",
+  "count": 1,
+  "results": [
+    {
+      "ticker": "AAPL",
+      "exDate": "1999-03-28",
+      "paymentDate": "1999-03-28",
+      "recordDate": "1999-03-28",
+      "declaredDate": "1999-03-28",
+      "ratio": 0.142857,
+      "tofactor": 7,
+      "forfactor": 1
+    }
+  ]
+}

@@ -3,7 +3,7 @@
   "exchange": "Nasdaq Global Select",
   "name": "Apple Inc.",
   "symbol": "AAPL",
-  "listdate": "2019-04-04",
+  "listdate": "2019-10-19",
   "cik": "0000320193",
   "bloomberg": "EQ0010169500001000",
   "figi": "string",
@@ -28,5 +28,5 @@
     "Consumer Electronics",
     "Computer Hardware"
   ],
-  "updated": "2019-04-04T14:02:07.870Z"
+  "updated": "2019-10-19T13:46:50.376Z"
 }
