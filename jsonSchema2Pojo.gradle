@@ -8,13 +8,14 @@
 
 buildscript {
     repositories {
+        mavenLocal()
         mavenCentral()
         jcenter()
     }
 
     dependencies {
         // this plugin
-        classpath 'org.jsonschema2pojo:jsonschema2pojo-gradle-plugin:1.0.1'
+        classpath 'org.jsonschema2pojo:jsonschema2pojo-gradle-plugin:1.0.2-SNAPSHOT'
         // add additional dependencies here if you wish to reference instead of generate them (see example directory)
     }
 }
@@ -77,6 +78,10 @@ jsonSchema2Pojo {
     // The following word delimiters do not work on JSON keys with the same letter, but
     // different case (e.g. 'P' and 'p'), so it has to be ''
     propertyWordDelimiters = [] as char[]
+
+    // Set whether or not the getters and setters generated for fields are camel cased.
+    // (e.g. 't' has a getter of 'gett()')
+    getterSetterExact = true
 
     // Whether to use the java type long (or Long) instead of int (or Integer) when representing the
     // JSON Schema type 'integer'.

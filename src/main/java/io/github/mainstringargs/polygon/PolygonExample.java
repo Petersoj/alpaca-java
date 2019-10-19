@@ -162,7 +162,7 @@ public class PolygonExample {
         }
 
         try {
-            TypesMapping typesMapping = polygonAPI.getTypesMapping();
+            TypesMapping typesMapping = polygonAPI.getTickerTypes();
 
             System.out.println("\n\n" + "typesMapping");
             System.out.println("\t" + typesMapping.getTypes());
