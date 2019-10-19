@@ -65,6 +65,9 @@ public class PolygonConstants {
     /** The Constant TICKER_ENDPOINT. */
     static final String TICKER_ENDPOINT = "ticker";
 
+    /** The Constant TICKS_ENDPOINT. */
+    static final String TICKS_ENDPOINT = "ticks";
+
     /** The Constant AGGS_ENDPOINT. */
     static final String AGGS_ENDPOINT = "aggs";
 
@@ -78,7 +81,7 @@ public class PolygonConstants {
     static final String LAST_ENDPOINT = "last";
 
     /** The Constant QUOTES_ENDPOINT. */
-    static final String QUOTES_ENDPOINT = "quotes";
+    static final String NBBO_ENDPOINT = "nbbo";
 
     /** The Constant TRADES_ENDPOINT. */
     static final String TRADES_ENDPOINT = "trades";
@@ -104,12 +107,6 @@ public class PolygonConstants {
     /** The Constant MARKET_ENDPOINT. */
     static final String MARKET_ENDPOINT = "market";
 
-    /** The Constant LOSERS_ENDPOINT. */
-    static final String LOSERS_ENDPOINT = "losers";
-
-    /** The Constant GAINERS_ENDPOINT. */
-    static final String GAINERS_ENDPOINT = "gainers";
-
     /** The Constant TICKERS_ENDPOINT. */
     static final String TICKERS_ENDPOINT = "tickers";
 
@@ -128,8 +125,11 @@ public class PolygonConstants {
     /** The Constant LIMIT_PARAMETER. */
     static final String LIMIT_PARAMETER = "limit";
 
-    /** The Constant OFFSET_PARAMETER. */
-    static final String OFFSET_PARAMETER = "offset";
+    /** The Constant TIMESTAMP_OFFSET_PARAMETER. */
+    static final String TIMESTAMP_OFFSET_PARAMETER = "timestamp";
+
+    /** The Constant TIMESTAMP_LIMIT_PARAMETER. */
+    static final String TIMESTAMP_LIMIT_PARAMETER = "timestampLimit";
 
     /** The Constant RANGE_ENDPOINT. */
     static final String RANGE_ENDPOINT = "range";
@@ -139,5 +139,8 @@ public class PolygonConstants {
 
     /** The Constant PREV_ENDPOINT. */
     static final String PREV_ENDPOINT = "prev";
+
+    /** The Constant PREV_ENDPOINT. */
+    static final String REVERSE_ENDPOINT = "reverse";
 
 }

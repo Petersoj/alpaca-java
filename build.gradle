@@ -64,7 +64,7 @@ dependencies {
 
     // Use JUnit test framework
     testCompile 'junit:junit:4.12'
-    
+
 }
 
 
@@ -104,7 +104,7 @@ modifyPom {
 publishing {
     publications {
         maven(MavenPublication) {
- 
+
             from components.java
             artifact sourcesJar
             artifact javadocJar
@@ -132,7 +132,7 @@ processResources {
     rename {
         filename -> filename.replace '.properties.default', '.properties'
     }
-    
+
 }
 
 
@@ -144,8 +144,6 @@ sourceSets {
         }
     }
 }
-
-
 
 
 task generateAlpacaPOJOs(type: GradleBuild) {
@@ -205,7 +203,6 @@ task generateAggregatePOJOs(type: GradleBuild) {
 }
 
 
-
 task generatePOJOs {
     dependsOn generateAlpacaPOJOs, generatePolygonPOJOs, generatePolygonMetaPOJOs, generatePolygonReferencePOJOs, generateAggregatePOJOs
 }
@@ -215,7 +212,7 @@ compileJava {
 }
 
 if (hasProperty('buildScan')) {
-	buildScan { licenseAgreementUrl = 'https://gradle.com/terms-of-service'; licenseAgree = 'yes' }
+    buildScan { licenseAgreementUrl = 'https://gradle.com/terms-of-service'; licenseAgree = 'yes' }
 }
 
 
@@ -225,17 +222,16 @@ applicationDistribution.from("src/main/resources") {
     rename {
         filename -> filename.replace '.properties.default', '.properties'
     }
-    
+
 }
 
 startScripts {
-   classpath += files('resources')
+    classpath += files('resources')
 }
 
 
-
 run {
-    
+
 }
 
 

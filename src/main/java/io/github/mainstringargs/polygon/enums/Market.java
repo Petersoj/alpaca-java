@@ -5,11 +5,23 @@ package io.github.mainstringargs.polygon.enums;
  */
 public enum Market {
 
-    /** The stocks. */
-    STOCKS("stocks"),
+    /** The STOCKS. */
+    STOCKS("STOCKS"),
 
-    /** The indices. */
-    INDICES("indices");
+    /** The CRYPTO. */
+    CRYPTO("CRYPTO"),
+
+    /** The MF. */
+    MF("MF"),
+
+    /** The MMF. */
+    MMF("MMF"),
+
+    /** The INDICES. */
+    INDICES("INDICES"),
+
+    /** The FX. */
+    FX("FX");
 
     /** The api name. */
     String apiName;

@@ -22,6 +22,7 @@ import io.github.mainstringargs.polygon.domain.reference.Split;
 import io.github.mainstringargs.polygon.domain.reference.Ticker;
 import io.github.mainstringargs.polygon.domain.reference.TypesMapping;
 import io.github.mainstringargs.polygon.enums.ChannelType;
+import io.github.mainstringargs.polygon.enums.GainersLosers;
 import io.github.mainstringargs.polygon.enums.Locale;
 import io.github.mainstringargs.polygon.enums.Sort;
 import io.github.mainstringargs.polygon.enums.Timespan;
@@ -60,7 +61,7 @@ public class PolygonExample {
         }
 
         try {
-            SymbolDetails symbolDetails = polygonAPI.getSymbolDetails(ticker);
+            SymbolDetails symbolDetails = polygonAPI.getTickerDetails(ticker);
 
             System.out.println("\n\n" + ticker + " Symbol Details:");
             System.out.println("\t" + symbolDetails);
@@ -78,7 +79,7 @@ public class PolygonExample {
         }
 
         try {
-            List<SymbolDividend> symbolDividends = polygonAPI.getSymbolDividends(ticker);
+            List<SymbolDividend> symbolDividends = polygonAPI.getStockDividends(ticker);
 
             System.out.println("\n\n" + ticker + " Symbol Dividends:");
 
@@ -102,7 +103,7 @@ public class PolygonExample {
         }
 
         try {
-            List<SymbolFinancial> symbolFinancials = polygonAPI.getSymbolFinancials(ticker);
+            List<SymbolFinancial> symbolFinancials = polygonAPI.getStockFinancials(ticker);
 
             System.out.println("\n\n" + ticker + " Symbol Financials:");
             for (SymbolFinancial financial : symbolFinancials)
@@ -114,7 +115,7 @@ public class PolygonExample {
         }
 
         try {
-            List<SymbolNews> symbolNews = polygonAPI.getSymbolNews(ticker);
+            List<SymbolNews> symbolNews = polygonAPI.getTickerNews(ticker);
 
             System.out.println("\n\n" + ticker + " Symbol News:");
             for (SymbolNews newsItem : symbolNews) {
@@ -172,7 +173,7 @@ public class PolygonExample {
         }
 
         try {
-            List<Split> splits = polygonAPI.getSplits(ticker);
+            List<Split> splits = polygonAPI.getStockSplits(ticker);
 
             System.out.println("\n\n" + ticker + " Split:");
             for (Split splitItems : splits) {
@@ -194,7 +195,7 @@ public class PolygonExample {
         }
 
         try {
-            Trades trades = polygonAPI.getHistoricTrades(ticker, LocalDate.of(2019, 5, 7), null, null);
+            Trades trades = polygonAPI.getHistoricTrades(ticker, LocalDate.of(2019, 5, 7), null, null, false, null);
 
             System.out.println("\n\n" + ticker + " Trades on " + LocalDate.of(2019, 5, 7) + ": ");
             System.out.println("\t" + "map " + trades.getMap());
@@ -207,7 +208,7 @@ public class PolygonExample {
         }
 
         try {
-            Quotes quotes = polygonAPI.getHistoricQuotes(ticker, LocalDate.of(2019, 5, 7), null, null);
+            Quotes quotes = polygonAPI.getHistoricQuotes(ticker, LocalDate.of(2019, 5, 7), null, null, false, null);
 
             System.out.println("\n\n" + ticker + " Quotes on " + LocalDate.of(2019, 5, 1) + ": ");
             System.out.println("\t" + "map " + quotes.getMap());
@@ -268,9 +269,9 @@ public class PolygonExample {
         }
 
         try {
-            List<Snapshot> snapshots = polygonAPI.getSnapshotsGainers();
+            List<Snapshot> snapshots = polygonAPI.getSnapshotGainersLosers(GainersLosers.GAINERS);
 
-            System.out.println("\n\n" + "gainers snapshots " + snapshots.size());
+            System.out.println("\n\n" + "Gainers snapshots " + snapshots.size());
             for (Snapshot snapshot : snapshots) {
                 System.out.println("\t" + snapshot);
             }
@@ -279,9 +280,9 @@ public class PolygonExample {
         }
 
         try {
-            List<Snapshot> snapshots = polygonAPI.getSnapshotsLosers();
+            List<Snapshot> snapshots = polygonAPI.getSnapshotGainersLosers(GainersLosers.LOSERS);
 
-            System.out.println("\n\n" + "losers snapshots " + snapshots.size());
+            System.out.println("\n\n" + "Losers snapshots " + snapshots.size());
             for (Snapshot snapshot : snapshots) {
                 System.out.println("\t" + snapshot);
             }
