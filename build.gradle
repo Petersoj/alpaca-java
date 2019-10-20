@@ -154,14 +154,6 @@ task generateAlpacaPOJOs(type: GradleBuild) {
 
 }
 
-task generatePolygonPOJOs(type: GradleBuild) {
-
-    startParameter.projectProperties = ['jsonSchema2Pojo.source': 'sampleJson/polygon', "jsonSchema2Pojo.targetPackage": 'io.github.mainstringargs.polygon.domain', "jsonSchema2Pojo.removeOldOutput": 'false']
-
-    buildFile = 'jsonSchema2Pojo.gradle'
-    tasks = ['generateJsonSchema2Pojo']
-}
-
 task generatePolygonMetaPOJOs(type: GradleBuild) {
 
     startParameter.projectProperties = ['jsonSchema2Pojo.source': 'sampleJson/polygon/meta', "jsonSchema2Pojo.targetPackage": 'io.github.mainstringargs.polygon.domain.meta', "jsonSchema2Pojo.removeOldOutput": 'false']
@@ -178,9 +170,25 @@ task generatePolygonReferencePOJOs(type: GradleBuild) {
     tasks = ['generateJsonSchema2Pojo']
 }
 
+task generatePolygonOtherPOJOs(type: GradleBuild) {
+
+    startParameter.projectProperties = ['jsonSchema2Pojo.source': 'sampleJson/polygon/other', "jsonSchema2Pojo.targetPackage": 'io.github.mainstringargs.polygon.domain.other', "jsonSchema2Pojo.removeOldOutput": 'false']
+
+    buildFile = 'jsonSchema2Pojo.gradle'
+    tasks = ['generateJsonSchema2Pojo']
+}
+
+task generatePolygonSnapshotPOJOs(type: GradleBuild) {
+
+    startParameter.projectProperties = ['jsonSchema2Pojo.getterSetterExact': 'true', 'jsonSchema2Pojo.source': 'sampleJson/polygon/snapshot', "jsonSchema2Pojo.targetPackage": 'io.github.mainstringargs.polygon.domain.snapshot', "jsonSchema2Pojo.removeOldOutput": 'false']
+
+    buildFile = 'jsonSchema2Pojo.gradle'
+    tasks = ['generateJsonSchema2Pojo']
+}
+
 task generatePolygonHistoricQuotesPOJOs(type: GradleBuild) {
 
-    startParameter.projectProperties = ['jsonSchema2Pojo.source': 'sampleJson/polygon/historic/quotes', "jsonSchema2Pojo.targetPackage": 'io.github.mainstringargs.polygon.domain.historic.quotes', "jsonSchema2Pojo.removeOldOutput": 'false']
+    startParameter.projectProperties = ['jsonSchema2Pojo.getterSetterExact': 'true', 'jsonSchema2Pojo.source': 'sampleJson/polygon/historic/quotes', "jsonSchema2Pojo.targetPackage": 'io.github.mainstringargs.polygon.domain.historic.quotes', "jsonSchema2Pojo.removeOldOutput": 'false']
 
     buildFile = 'jsonSchema2Pojo.gradle'
     tasks = ['generateJsonSchema2Pojo']
@@ -188,7 +196,7 @@ task generatePolygonHistoricQuotesPOJOs(type: GradleBuild) {
 
 task generatePolygonHistoricTradesPOJOs(type: GradleBuild) {
 
-    startParameter.projectProperties = ['jsonSchema2Pojo.source': 'sampleJson/polygon/historic/trades', "jsonSchema2Pojo.targetPackage": 'io.github.mainstringargs.polygon.domain.historic.trades', "jsonSchema2Pojo.removeOldOutput": 'false']
+    startParameter.projectProperties = ['jsonSchema2Pojo.getterSetterExact': 'true', 'jsonSchema2Pojo.source': 'sampleJson/polygon/historic/trades', "jsonSchema2Pojo.targetPackage": 'io.github.mainstringargs.polygon.domain.historic.trades', "jsonSchema2Pojo.removeOldOutput": 'false']
 
     buildFile = 'jsonSchema2Pojo.gradle'
     tasks = ['generateJsonSchema2Pojo']
@@ -196,15 +204,19 @@ task generatePolygonHistoricTradesPOJOs(type: GradleBuild) {
 
 task generateAggregatePOJOs(type: GradleBuild) {
 
-    startParameter.projectProperties = ['jsonSchema2Pojo.source': 'sampleJson/polygon/aggregate', "jsonSchema2Pojo.targetPackage": 'io.github.mainstringargs.polygon.domain.aggregate', "jsonSchema2Pojo.removeOldOutput": 'false']
+    startParameter.projectProperties = ['jsonSchema2Pojo.getterSetterExact': 'true', 'jsonSchema2Pojo.source': 'sampleJson/polygon/aggregate', "jsonSchema2Pojo.targetPackage": 'io.github.mainstringargs.polygon.domain.aggregate', "jsonSchema2Pojo.removeOldOutput": 'false']
 
     buildFile = 'jsonSchema2Pojo.gradle'
     tasks = ['generateJsonSchema2Pojo']
 }
 
+task generatePolygonPOJOs(type: GradleBuild) {
+    dependsOn generateAggregatePOJOs, generatePolygonHistoricQuotesPOJOs, generatePolygonHistoricTradesPOJOs,
+            generatePolygonMetaPOJOs, generatePolygonOtherPOJOs, generatePolygonSnapshotPOJOs, generatePolygonReferencePOJOs
+}
 
 task generatePOJOs {
-    dependsOn generateAlpacaPOJOs, generatePolygonPOJOs, generatePolygonMetaPOJOs, generatePolygonReferencePOJOs, generateAggregatePOJOs
+    dependsOn generateAlpacaPOJOs, generatePolygonPOJOs
 }
 
 compileJava {

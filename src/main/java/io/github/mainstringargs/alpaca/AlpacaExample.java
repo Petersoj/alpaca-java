@@ -73,7 +73,7 @@ public class AlpacaExample {
 
             System.out.println("\n\nClock:");
             System.out.println("\tCurrent Time: " + Utilities.fromDateTimeString(alpacaClock.getTimestamp()) +
-                    "\n\tIs Open: " + alpacaClock.isIsOpen() +
+                    "\n\tIs Open: " + alpacaClock.getIsOpen() +
                     "\n\tMarket Next Open Time: " + Utilities.fromDateTimeString(alpacaClock.getNextOpen()) +
                     "\n\tMark Next Close Time: " + Utilities.fromDateTimeString(alpacaClock.getNextClose()));
         } catch (AlpacaAPIException e) {

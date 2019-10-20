@@ -19,5 +19,59 @@
       "p": 223.001,
       "z": 1
     }
-  ]
+  ],
+  "map": {
+    "f": {
+      "name": "trf_timestamp",
+      "type": "int64"
+    },
+    "s": {
+      "name": "size",
+      "type": "int"
+    },
+    "z": {
+      "name": "tape",
+      "type": "int"
+    },
+    "x": {
+      "name": "exchange",
+      "type": "int"
+    },
+    "t": {
+      "name": "sip_timestamp",
+      "type": "int64"
+    },
+    "y": {
+      "name": "participant_timestamp",
+      "type": "int64"
+    },
+    "q": {
+      "name": "sequence_number",
+      "type": "int"
+    },
+    "c": {
+      "name": "conditions",
+      "type": "[]int"
+    },
+    "i": {
+      "name": "id",
+      "type": "string"
+    },
+    "I": {
+      "name": "orig_id",
+      "type": "string"
+    },
+    "e": {
+      "name": "correction",
+      "type": "int"
+    },
+    "r": {
+      "name": "trf_id",
+      "type": "int"
+    },
+    "p": {
+      "name": "price",
+      "type": "float64"
+    }
+  }
 }

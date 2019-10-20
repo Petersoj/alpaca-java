@@ -8,6 +8,9 @@ public class PolygonConstants {
     /** The Constant META_ENDPOINT. */
     static final String META_ENDPOINT = "meta";
 
+    /** The Constant CONDITIONS_ENDPOINT. */
+    static final String CONDITIONS_ENDPOINT = "conditions";
+
     /** The Constant SYMBOLS_ENDPOINT. */
     static final String SYMBOLS_ENDPOINT = "symbols";
 

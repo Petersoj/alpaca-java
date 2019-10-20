@@ -4,18 +4,10 @@ import com.google.gson.reflect.TypeToken;
 import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.JsonNode;
 import io.github.mainstringargs.alpaca.Utilities;
-import io.github.mainstringargs.polygon.domain.DailyOpenClose;
-import io.github.mainstringargs.polygon.domain.Quote;
-import io.github.mainstringargs.polygon.domain.Snapshot;
-import io.github.mainstringargs.polygon.domain.SnapshotAllTickers;
-import io.github.mainstringargs.polygon.domain.SnapshotGainersLosers;
-import io.github.mainstringargs.polygon.domain.SnapshotSingleTicker;
-import io.github.mainstringargs.polygon.domain.StockQuote;
-import io.github.mainstringargs.polygon.domain.StockTrade;
-import io.github.mainstringargs.polygon.domain.Trade;
 import io.github.mainstringargs.polygon.domain.aggregate.Aggregates;
 import io.github.mainstringargs.polygon.domain.historic.quotes.Quotes;
 import io.github.mainstringargs.polygon.domain.historic.trades.Trades;
+import io.github.mainstringargs.polygon.domain.meta.ConditionMappings;
 import io.github.mainstringargs.polygon.domain.meta.Exchange;
 import io.github.mainstringargs.polygon.domain.meta.StockDividends;
 import io.github.mainstringargs.polygon.domain.meta.StockFinancials;
@@ -24,13 +16,20 @@ import io.github.mainstringargs.polygon.domain.meta.SymbolEarning;
 import io.github.mainstringargs.polygon.domain.meta.SymbolEndpoints;
 import io.github.mainstringargs.polygon.domain.meta.TickerDetails;
 import io.github.mainstringargs.polygon.domain.meta.TickerNews;
+import io.github.mainstringargs.polygon.domain.other.DailyOpenClose;
+import io.github.mainstringargs.polygon.domain.other.StockQuote;
+import io.github.mainstringargs.polygon.domain.other.StockTrade;
 import io.github.mainstringargs.polygon.domain.reference.Markets;
 import io.github.mainstringargs.polygon.domain.reference.StockSplits;
 import io.github.mainstringargs.polygon.domain.reference.TickerTypes;
 import io.github.mainstringargs.polygon.domain.reference.Tickers;
+import io.github.mainstringargs.polygon.domain.snapshot.SnapshotAllTickers;
+import io.github.mainstringargs.polygon.domain.snapshot.SnapshotGainersLosers;
+import io.github.mainstringargs.polygon.domain.snapshot.SnapshotSingleTicker;
 import io.github.mainstringargs.polygon.enums.GainersLosers;
 import io.github.mainstringargs.polygon.enums.Locale;
 import io.github.mainstringargs.polygon.enums.Sort;
+import io.github.mainstringargs.polygon.enums.TickType;
 import io.github.mainstringargs.polygon.enums.Timespan;
 import io.github.mainstringargs.polygon.nats.PolygonNatsClient;
 import io.github.mainstringargs.polygon.nats.PolygonStreamListener;
@@ -40,8 +39,6 @@ import io.github.mainstringargs.polygon.rest.PolygonRequestBuilder;
 import io.github.mainstringargs.polygon.rest.exceptions.PolygonAPIException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.json.JSONArray;
-import org.json.JSONObject;
 
 import java.lang.reflect.Type;
 import java.time.LocalDate;
@@ -180,7 +177,7 @@ public class PolygonAPI {
      * @throws PolygonAPIException the polygon API exception
      * @see <a href= "https://polygon.io/docs/#!/Reference/get_v2_reference_dividends_symbol">https://polygon.io/docs/#!/Reference/get_v2_reference_dividends_symbol</a>
      */
-    public List<StockDividends> getStockDividends(String symbol) throws PolygonAPIException {
+    public StockDividends getStockDividends(String symbol) throws PolygonAPIException {
         PolygonRequestBuilder builder = new PolygonRequestBuilder(baseDataUrl,
                 PolygonConstants.REFERENCE_ENDPOINT, PolygonConstants.DIVIDENDS_ENDPOINT);
         builder.setVersion(PolygonConstants.VERSION_2_ENDPOINT);
@@ -231,7 +228,7 @@ public class PolygonAPI {
      * @throws PolygonAPIException the polygon API exception
      * @see <a href= "https://polygon.io/docs/#!/Reference/get_v2_reference_financials_symbol">https://polygon.io/docs/#!/Reference/get_v2_reference_financials_symbol</a>
      */
-    public List<StockFinancials> getStockFinancials(String symbol) throws PolygonAPIException {
+    public StockFinancials getStockFinancials(String symbol) throws PolygonAPIException {
         PolygonRequestBuilder builder = new PolygonRequestBuilder(baseDataUrl,
                 PolygonConstants.REFERENCE_ENDPOINT, PolygonConstants.FINANCIALS_ENDPOINT);
         builder.setVersion(PolygonConstants.VERSION_2_ENDPOINT);
@@ -452,7 +449,7 @@ public class PolygonAPI {
      * @throws PolygonAPIException the polygon API exception
      * @see <a href= "https://polygon.io/docs/#!/Stocks--Equities/get_v1_meta_exchanges">https://polygon.io/docs/#!/Stocks--Equities/get_v1_meta_exchanges</a>
      */
-    public Exchange getExchanges() throws PolygonAPIException {
+    public List<Exchange> getExchanges() throws PolygonAPIException {
         PolygonRequestBuilder builder = new PolygonRequestBuilder(baseDataUrl,
                 PolygonConstants.META_ENDPOINT, PolygonConstants.EXCHANGES_ENDPOINT);
 
@@ -641,6 +638,27 @@ public class PolygonAPI {
     }
 
     /**
+     * The mappings for conditions on trades and quotes.
+     *
+     * @return the daily open close
+     * @throws PolygonAPIException the polygon API exception
+     * @see <a href= "https://polygon.io/docs/#!/Stocks--Equities/get_v1_meta_conditions_ticktype">https://polygon.io/docs/#!/Stocks--Equities/get_v1_meta_conditions_ticktype</a>
+     */
+    public ConditionMappings getConditionMappings(TickType tickType) throws PolygonAPIException {
+        PolygonRequestBuilder builder = new PolygonRequestBuilder(baseDataUrl,
+                PolygonConstants.META_ENDPOINT, PolygonConstants.CONDITIONS_ENDPOINT);
+        builder.appendEndpoint(tickType.getAPIName());
+
+        HttpResponse<JsonNode> response = polygonRequest.invokeGet(builder);
+
+        if (response.getStatus() != 200) {
+            throw new PolygonAPIException(response);
+        }
+
+        return polygonRequest.getResponseObject(response, ConditionMappings.class);
+    }
+
+    /**
      * Snapshot allows you to see all tickers current minute aggregate, daily aggregate and last
      * trade. As well as previous days aggregate and calculated change for today.
      *
@@ -740,13 +758,7 @@ public class PolygonAPI {
             throw new PolygonAPIException(response);
         }
 
-        Aggregates aggregates = polygonRequest.getResponseObject(response, Aggregates.class);
-
-        if (aggregates.getResultsCount() == 1) {
-            aggregates.getResults().get(0).setTicker(ticker);
-        }
-
-        return aggregates;
+        return polygonRequest.getResponseObject(response, Aggregates.class);
     }
 
     /**
@@ -784,17 +796,7 @@ public class PolygonAPI {
             throw new PolygonAPIException(response);
         }
 
-        Aggregates aggregates = polygonRequest.getResponseObject(response, Aggregates.class);
-
-        if (aggregates.getResultsCount() != 0) {
-            List<io.github.mainstringargs.polygon.domain.aggregate.Result> results =
-                    aggregates.getResults();
-            for (io.github.mainstringargs.polygon.domain.aggregate.Result result : results) {
-                result.setTicker(ticker);
-            }
-        }
-
-        return aggregates;
+        return polygonRequest.getResponseObject(response, Aggregates.class);
     }
 
     /**
@@ -830,25 +832,7 @@ public class PolygonAPI {
             throw new PolygonAPIException(response);
         }
 
-        Aggregates aggregates = polygonRequest.getResponseObject(response, Aggregates.class);
-
-        if (aggregates.getResultsCount() != 0) {
-            final String tickerKey = "T";
-            final String resultsKey = "results";
-
-            List<io.github.mainstringargs.polygon.domain.aggregate.Result> results =
-                    aggregates.getResults();
-            JsonNode responseJson = response.getBody();
-            JSONArray resultsArr = (JSONArray) responseJson.getObject().get(resultsKey);
-
-            for (int i = 0; i < results.size(); i++) {
-                io.github.mainstringargs.polygon.domain.aggregate.Result result = results.get(i);
-                JSONObject jsonObj = (JSONObject) resultsArr.get(i);
-                result.setTicker(jsonObj.get(tickerKey).toString());
-            }
-        }
-
-        return aggregates;
+        return polygonRequest.getResponseObject(response, Aggregates.class);
     }
 
     /**
