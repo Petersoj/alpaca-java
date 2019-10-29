@@ -43,6 +43,9 @@ public class AlpacaWebsocketClientEndpoint {
     /** The endpoint URI. */
     private URI endpointURI;
 
+    /** The Retry attempts. */
+    private int retryAttempts = 0;
+
     /**
      * Instantiates a new websocket client endpoint.
      *
@@ -96,14 +99,23 @@ public class AlpacaWebsocketClientEndpoint {
         LOGGER.info("onClose " + userSession + " " + reason + " " + reason.getReasonPhrase());
 
         if (!reason.getCloseCode().equals(CloseCodes.NORMAL_CLOSURE)) {
+            if (retryAttempts > 5) {
+                LOGGER.error("More than 5 attempts to reconnect were made.");
+                return;
+            }
+
+            LOGGER.info("Attempting a reconnect in 10 seconds.");
+            retryAttempts++;
 
             try {
                 Thread.sleep(10000);
             } catch (InterruptedException e1) {
                 e1.printStackTrace();
             }
-            LOGGER.info("Reconnecting due to closure "
-                    + CloseCodes.getCloseCode(reason.getCloseCode().getCode()));
+
+            LOGGER.info("Reconnecting due to closure " +
+                    CloseCodes.getCloseCode(reason.getCloseCode().getCode()));
+
             try {
                 connect(endpointURI);
             } catch (Exception e) {
