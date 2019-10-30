@@ -3,7 +3,7 @@ package io.github.mainstringargs.polygon;
 import com.google.gson.reflect.TypeToken;
 import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.JsonNode;
-import io.github.mainstringargs.alpaca.Utilities;
+import io.github.mainstringargs.util.time.TimeUtil;
 import io.github.mainstringargs.polygon.domain.DailyOpenClose;
 import io.github.mainstringargs.polygon.domain.Quote;
 import io.github.mainstringargs.polygon.domain.Snapshot;
@@ -537,7 +537,7 @@ public class PolygonAPI {
                 PolygonConstants.HISTORIC_ENDPOINT, PolygonConstants.TRADES_ENDPOINT);
 
         builder.appendEndpoint(symbol);
-        builder.appendEndpoint(Utilities.toDateString(date));
+        builder.appendEndpoint(TimeUtil.toDateString(date));
         if (offset != null) {
             builder.appendURLParameter(PolygonConstants.OFFSET_PARAMETER, String.valueOf(offset));
         }
@@ -575,7 +575,7 @@ public class PolygonAPI {
                 PolygonConstants.HISTORIC_ENDPOINT, PolygonConstants.QUOTES_ENDPOINT);
 
         builder.appendEndpoint(symbol);
-        builder.appendEndpoint(Utilities.toDateString(date));
+        builder.appendEndpoint(TimeUtil.toDateString(date));
         if (offset != null) {
             builder.appendURLParameter(PolygonConstants.OFFSET_PARAMETER, String.valueOf(offset));
         }
@@ -657,7 +657,7 @@ public class PolygonAPI {
                 new PolygonRequestBuilder(baseDataUrl, PolygonConstants.OPEN_CLOSE_ENDPOINT);
 
         builder.appendEndpoint(symbol);
-        builder.appendEndpoint(Utilities.toDateString(date));
+        builder.appendEndpoint(TimeUtil.toDateString(date));
 
         HttpResponse<JsonNode> response = polygonRequest.invokeGet(builder);
 
@@ -841,8 +841,8 @@ public class PolygonAPI {
         builder.appendEndpoint(PolygonConstants.RANGE_ENDPOINT);
         builder.appendEndpoint(Integer.toString((multiplier != null) ? multiplier : 1));
         builder.appendEndpoint(timeSpan.getAPIName());
-        builder.appendEndpoint(Utilities.toDateString(fromDate));
-        builder.appendEndpoint(Utilities.toDateString(toDate));
+        builder.appendEndpoint(TimeUtil.toDateString(fromDate));
+        builder.appendEndpoint(TimeUtil.toDateString(toDate));
 
         if (unadjusted != null) {
             builder.appendURLParameter(PolygonConstants.UNADJUSTED_PARAMETER, unadjusted.toString());
@@ -890,7 +890,7 @@ public class PolygonAPI {
         builder.appendEndpoint(locale.getAPIName());
         builder.appendEndpoint(PolygonConstants.MARKET_ENDPOINT);
         builder.appendEndpoint(market.getAPIName());
-        builder.appendEndpoint(Utilities.toDateString(date));
+        builder.appendEndpoint(TimeUtil.toDateString(date));
 
         if (unadjusted != null) {
             builder.appendURLParameter(PolygonConstants.UNADJUSTED_PARAMETER, unadjusted.toString());

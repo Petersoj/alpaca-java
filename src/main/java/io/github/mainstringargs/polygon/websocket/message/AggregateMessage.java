@@ -5,7 +5,6 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 import io.github.mainstringargs.polygon.domain.StockAggregate;
 import io.github.mainstringargs.polygon.enums.ChannelType;
-import io.github.mainstringargs.util.time.TimeUtil;
 
 import java.time.Instant;
 import java.time.LocalDateTime;

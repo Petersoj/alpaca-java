@@ -14,6 +14,7 @@ import io.github.mainstringargs.alpaca.websocket.AlpacaStreamListenerAdapter;
 import io.github.mainstringargs.alpaca.websocket.message.AccountUpdateMessage;
 import io.github.mainstringargs.alpaca.websocket.message.OrderUpdateMessage;
 import io.github.mainstringargs.alpaca.websocket.message.UpdateMessage;
+import io.github.mainstringargs.util.time.TimeUtil;
 
 import java.time.Instant;
 import java.time.LocalDateTime;
@@ -60,7 +61,7 @@ public class AlpacaExample {
             Account alpacaAccount = alpacaApi.getAccount();
 
             System.out.println("\n\nAccount Information:");
-            System.out.println("\tCreated At: " + Utilities.fromDateTimeString(alpacaAccount.getCreatedAt()) +
+            System.out.println("\tCreated At: " + TimeUtil.fromDateTimeString(alpacaAccount.getCreatedAt()) +
                     "\n\tBuying Power: " + alpacaAccount.getBuyingPower() +
                     "\n\tPortfolio Value: " + alpacaAccount.getPortfolioValue());
         } catch (AlpacaAPIException e) {
@@ -73,10 +74,10 @@ public class AlpacaExample {
 
             System.out.println("\n\nClock:");
             System.out.println("\tCurrent Time: " +
-                    Utilities.fromDateTimeString(alpacaClock.getTimestamp()) + "\n\tIs Open: " +
+                    TimeUtil.fromDateTimeString(alpacaClock.getTimestamp()) + "\n\tIs Open: " +
                     alpacaClock.isIsOpen() + "\n\tMarket Next Open Time: " +
-                    Utilities.fromDateTimeString(alpacaClock.getNextOpen()) + "\n\tMark Next Close Time: " +
-                    Utilities.fromDateTimeString(alpacaClock.getNextClose()));
+                    TimeUtil.fromDateTimeString(alpacaClock.getNextOpen()) + "\n\tMark Next Close Time: " +
+                    TimeUtil.fromDateTimeString(alpacaClock.getNextClose()));
         } catch (AlpacaAPIException e) {
             e.printStackTrace();
         }
@@ -96,7 +97,7 @@ public class AlpacaExample {
                     "\n\tQty: " + limitOrder.getQty() +
                     "\n\tType: " + limitOrder.getType() +
                     "\n\tLimit Price: $" + limitOrder.getLimitPrice() +
-                    "\n\tCreated At: " + Utilities.fromDateTimeString(limitOrder.getCreatedAt()));
+                    "\n\tCreated At: " + TimeUtil.fromDateTimeString(limitOrder.getCreatedAt()));
         } catch (AlpacaAPIException e) {
             e.printStackTrace();
         }
@@ -111,7 +112,7 @@ public class AlpacaExample {
                     "\n\tQty: " + limitOrderById.getQty() +
                     "\n\tType: " + limitOrderById.getType() +
                     "\n\tLimit Price: $" + limitOrderById.getLimitPrice() +
-                    "\n\tCreated At: " + Utilities.fromDateTimeString(limitOrderById.getCreatedAt()));
+                    "\n\tCreated At: " + TimeUtil.fromDateTimeString(limitOrderById.getCreatedAt()));
         } catch (AlpacaAPIException e) {
             e.printStackTrace();
         }
@@ -126,7 +127,7 @@ public class AlpacaExample {
                     "\n\tQty: " + limitOrderByClientId.getQty() +
                     "\n\tType: " + limitOrderByClientId.getType() +
                     "\n\tLimit Price: $" + limitOrderByClientId.getLimitPrice() +
-                    "\n\tCreated At: " + Utilities.fromDateTimeString(limitOrderByClientId.getCreatedAt()));
+                    "\n\tCreated At: " + TimeUtil.fromDateTimeString(limitOrderByClientId.getCreatedAt()));
         } catch (AlpacaAPIException e) {
             e.printStackTrace();
         }
