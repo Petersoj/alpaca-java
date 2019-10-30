@@ -132,13 +132,13 @@ public class AlpacaWebsocketClientEndpoint {
      * @param message The text message
      */
     @OnMessage
-    public void onMessage(byte[] message) {
+    public void onMessage(String message) {
         executor.execute(() -> {
             if (LOGGER.isDebugEnabled())
-                LOGGER.debug("onMessage " + new String(message));
+                LOGGER.debug("onMessage " + message);
 
             if (messageHandler != null) {
-                JsonElement jelement = new JsonParser().parse(new String(message));
+                JsonElement jelement = new JsonParser().parse(message);
                 JsonObject jobject = jelement.getAsJsonObject();
 
                 messageHandler.handleMessage(jobject);
