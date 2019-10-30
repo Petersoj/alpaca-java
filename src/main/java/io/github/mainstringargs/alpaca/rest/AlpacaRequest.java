@@ -30,7 +30,10 @@ public class AlpacaRequest {
     private static final String API_SECRET_KEY = "APCA-API-SECRET-KEY";
 
     /** The logger. */
-    private static Logger LOGGER = LogManager.getLogger(AlpacaRequest.class);
+    private static final Logger LOGGER = LogManager.getLogger(AlpacaRequest.class);
+
+    /** The Gson */
+    private static final Gson GSON = new GsonBuilder().setLenient().create();
 
     /** The key id. */
     private String keyId;
@@ -134,17 +137,13 @@ public class AlpacaRequest {
      * @return the response object
      */
     public <T> T getResponseObject(HttpResponse<JsonNode> httpResponse, Type type) {
-        GsonBuilder gsonBuilder = new GsonBuilder();
-        gsonBuilder.setLenient();
-        Gson gson = gsonBuilder.create();
-
         T responseObjectFromJson = null;
 
         BufferedReader br = null;
 
         try {
             br = new BufferedReader(new InputStreamReader(httpResponse.getRawBody()));
-            responseObjectFromJson = gson.fromJson(br, type);
+            responseObjectFromJson = GSON.fromJson(br, type);
         } catch (Exception e) {
             LOGGER.info("Exception", e);
         } finally {
