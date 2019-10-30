@@ -1,6 +1,7 @@
 package io.github.mainstringargs.polygon.rest;
 
 import com.google.gson.JsonObject;
+import io.github.mainstringargs.polygon.PolygonConstants;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -23,7 +24,7 @@ public class PolygonRequestBuilder {
     public final Map<String, String> bodyProperties = new LinkedHashMap<String, String>();
 
     /** The version. */
-    private String version = "v1";
+    private String version = PolygonConstants.VERSION_1_ENDPOINT;
 
     /** The base url. */
     private String baseUrl;
