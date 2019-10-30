@@ -1,7 +1,7 @@
-package io.github.mainstringargs.alpaca.websocket;
+package io.github.mainstringargs.polygon.websocket;
 
+import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import io.github.mainstringargs.util.concurrency.ExecutorTracer;
 import org.apache.logging.log4j.LogManager;
@@ -25,14 +25,14 @@ import java.util.concurrent.ExecutorService;
  * The Class WebsocketClientEndpoint.
  */
 @ClientEndpoint
-public class AlpacaWebsocketClientEndpoint {
+public class PolygonWebsocketClientEndpoint {
 
     /** The executor. */
-    private static final ExecutorService executor =
-            ExecutorTracer.newSingleThreadExecutor(r -> new Thread(r, "AlpacaWebsocketThread"));
+    private static final ExecutorService executor = ExecutorTracer.newSingleThreadExecutor(
+            r -> new Thread(r, "PolygonWebsocketThread"));
 
     /** The logger. */
-    private static Logger LOGGER = LogManager.getLogger(AlpacaWebsocketClientEndpoint.class);
+    private static Logger LOGGER = LogManager.getLogger(PolygonWebsocketClientEndpoint.class);
 
     /** The user session. */
     private Session userSession = null;
@@ -47,11 +47,11 @@ public class AlpacaWebsocketClientEndpoint {
     private int retryAttempts = 0;
 
     /**
-     * Instantiates a new websocket client endpoint.
+     * Instantiates a new Polygon websocket client endpoint.
      *
      * @param endpointURI the endpoint URI
      */
-    public AlpacaWebsocketClientEndpoint(URI endpointURI) {
+    public PolygonWebsocketClientEndpoint(URI endpointURI) {
         this.endpointURI = endpointURI;
 
         try {
@@ -83,7 +83,8 @@ public class AlpacaWebsocketClientEndpoint {
     public void onOpen(Session userSession) {
         this.userSession = userSession;
 
-        LOGGER.info("onOpen " + userSession);
+        LOGGER.debug("onOpen " + userSession);
+        LOGGER.info("The websocket has opened");
     }
 
     /**
@@ -96,7 +97,7 @@ public class AlpacaWebsocketClientEndpoint {
     public void onClose(Session userSession, CloseReason reason) {
         this.userSession = null;
 
-        LOGGER.info("onClose " + userSession + " " + reason + " " + reason.getReasonPhrase());
+        LOGGER.debug("onClose " + userSession + " " + reason + " " + reason.getReasonPhrase());
 
         if (!reason.getCloseCode().equals(CloseCodes.NORMAL_CLOSURE)) {
             if (retryAttempts > 5) {
@@ -122,7 +123,7 @@ public class AlpacaWebsocketClientEndpoint {
                 LOGGER.catching(e);
             }
         } else {
-            LOGGER.info("Normal close");
+            LOGGER.info("The websocket has closed");
         }
     }
 
@@ -134,24 +135,25 @@ public class AlpacaWebsocketClientEndpoint {
     @OnMessage
     public void onMessage(String message) {
         executor.execute(() -> {
-            if (LOGGER.isDebugEnabled())
+            if (LOGGER.isDebugEnabled()) {
                 LOGGER.debug("onMessage " + message);
+            }
 
             if (messageHandler != null) {
                 JsonElement jelement = new JsonParser().parse(message);
-                JsonObject jobject = jelement.getAsJsonObject();
+                JsonArray jarray = jelement.getAsJsonArray();
 
-                messageHandler.handleMessage(jobject);
+                messageHandler.handleMessage(jarray);
             }
         });
     }
 
     /**
-     * register message handler.
+     * Set message handler.
      *
      * @param msgHandler the msg handler
      */
-    public void addMessageHandler(MessageHandler msgHandler) {
+    public void setMessageHandler(MessageHandler msgHandler) {
         this.messageHandler = msgHandler;
     }
 
@@ -179,13 +181,13 @@ public class AlpacaWebsocketClientEndpoint {
     /**
      * Message handler.
      */
-    public static interface MessageHandler {
+    public interface MessageHandler {
 
         /**
          * Handle message.
          *
-         * @param message the message
+         * @param array the array
          */
-        void handleMessage(JsonObject message);
+        void handleMessage(JsonArray array);
     }
 }

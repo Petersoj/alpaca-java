@@ -15,6 +15,7 @@ public interface AlpacaStreamListener {
 
     /**
      * Gets the message types.
+     * Null or empty to listen to all other stream messages.
      *
      * @return the message types
      */

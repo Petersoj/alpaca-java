@@ -1,10 +1,11 @@
-package io.github.mainstringargs.polygon.nats.message;
+package io.github.mainstringargs.polygon.websocket.message;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 import io.github.mainstringargs.polygon.domain.StockAggregate;
 import io.github.mainstringargs.polygon.enums.ChannelType;
+import io.github.mainstringargs.util.time.TimeUtil;
 
 import java.time.Instant;
 import java.time.LocalDateTime;
@@ -13,7 +14,7 @@ import java.time.ZoneId;
 /**
  * The Class AggregateMessage.
  */
-public class AggregateMessage implements ChannelMessage {
+public abstract class AggregateMessage implements ChannelMessage {
 
     /** The gson. */
     private static Gson gson;
@@ -23,9 +24,6 @@ public class AggregateMessage implements ChannelMessage {
         gsonBuilder.setLenient();
         gson = gsonBuilder.create();
     }
-
-    /** The ticker. */
-    private String ticker;
 
     /** The channel type. */
     private ChannelType channelType;
@@ -42,22 +40,20 @@ public class AggregateMessage implements ChannelMessage {
     /**
      * Instantiates a new aggregate message.
      *
-     * @param cType      the c type
-     * @param ticker     the ticker
-     * @param jsonObject the json object
+     * @param channelType the channel type
+     * @param jsonObject  the json object
      */
-    public AggregateMessage(ChannelType cType, String ticker, JsonObject jsonObject) {
-        this.ticker = ticker;
-        this.channelType = cType;
+    public AggregateMessage(ChannelType channelType, JsonObject jsonObject) {
+        this.channelType = channelType;
 
         JsonObject jsonQuote = jsonObject.getAsJsonObject();
 
         stockAggregate = gson.fromJson(jsonQuote, StockAggregate.class);
 
-        start = LocalDateTime.ofInstant(Instant.ofEpochMilli(stockAggregate.getS()),
+        start = LocalDateTime.ofInstant(Instant.ofEpochMilli(TimeUtil.convertToMilli(stockAggregate.getS())),
                 ZoneId.systemDefault());
 
-        end = LocalDateTime.ofInstant(Instant.ofEpochMilli(stockAggregate.getE()),
+        end = LocalDateTime.ofInstant(Instant.ofEpochMilli(TimeUtil.convertToMilli(stockAggregate.getE())),
                 ZoneId.systemDefault());
     }
 
@@ -68,7 +64,7 @@ public class AggregateMessage implements ChannelMessage {
      */
     @Override
     public String getTicker() {
-        return ticker;
+        return stockAggregate.getSym();
     }
 
     /*
@@ -121,7 +117,6 @@ public class AggregateMessage implements ChannelMessage {
         result = prime * result + ((end == null) ? 0 : end.hashCode());
         result = prime * result + ((start == null) ? 0 : start.hashCode());
         result = prime * result + ((stockAggregate == null) ? 0 : stockAggregate.hashCode());
-        result = prime * result + ((ticker == null) ? 0 : ticker.hashCode());
         return result;
     }
 
@@ -156,11 +151,6 @@ public class AggregateMessage implements ChannelMessage {
                 return false;
         } else if (!stockAggregate.equals(other.stockAggregate))
             return false;
-        if (ticker == null) {
-            if (other.ticker != null)
-                return false;
-        } else if (!ticker.equals(other.ticker))
-            return false;
         return true;
     }
 
@@ -171,7 +161,7 @@ public class AggregateMessage implements ChannelMessage {
      */
     @Override
     public String toString() {
-        return "AggregateMessage [ticker=" + ticker + ", channelType=" + channelType
+        return "AggregateMessage [channelType=" + channelType
                 + ", stockAggregate=" + stockAggregate + ", start=" + start + ", end=" + end + "]";
     }
 }

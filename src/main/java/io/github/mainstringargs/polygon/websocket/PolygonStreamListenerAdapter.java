@@ -1,7 +1,7 @@
-package io.github.mainstringargs.polygon.nats;
+package io.github.mainstringargs.polygon.websocket;
 
 import io.github.mainstringargs.polygon.enums.ChannelType;
-import io.github.mainstringargs.polygon.nats.message.ChannelMessage;
+import io.github.mainstringargs.polygon.websocket.message.ChannelMessage;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -26,9 +26,9 @@ public class PolygonStreamListenerAdapter implements PolygonStreamListener {
      */
     public PolygonStreamListenerAdapter(String ticker, ChannelType... channelTypes) {
         if (channelTypes != null && channelTypes.length > 0) {
-            this.stockChannelTypes.put(ticker, new HashSet<ChannelType>(Arrays.asList(channelTypes)));
+            this.stockChannelTypes.put(ticker, new HashSet<>(Arrays.asList(channelTypes)));
         } else {
-            this.stockChannelTypes.put(ticker, new HashSet<ChannelType>(Arrays.asList(ChannelType.values())));
+            this.stockChannelTypes.put(ticker, new HashSet<>(Arrays.asList(ChannelType.values())));
         }
     }
 
@@ -41,10 +41,9 @@ public class PolygonStreamListenerAdapter implements PolygonStreamListener {
     public PolygonStreamListenerAdapter(Set<String> tickers, ChannelType... channelTypes) {
         for (String ticker : tickers) {
             if (channelTypes != null && channelTypes.length > 0) {
-                this.stockChannelTypes.put(ticker, new HashSet<ChannelType>(Arrays.asList(channelTypes)));
+                this.stockChannelTypes.put(ticker, new HashSet<>(Arrays.asList(channelTypes)));
             } else {
-                this.stockChannelTypes.put(ticker,
-                        new HashSet<ChannelType>(Arrays.asList(ChannelType.values())));
+                this.stockChannelTypes.put(ticker, new HashSet<>(Arrays.asList(ChannelType.values())));
             }
         }
     }
@@ -56,7 +55,7 @@ public class PolygonStreamListenerAdapter implements PolygonStreamListener {
      */
     public PolygonStreamListenerAdapter(Map<String, Set<ChannelType>> stockChannelTypes) {
         for (Entry<String, Set<ChannelType>> entry : stockChannelTypes.entrySet()) {
-            this.stockChannelTypes.put(entry.getKey(), new HashSet<ChannelType>(entry.getValue()));
+            this.stockChannelTypes.put(entry.getKey(), new HashSet<>(entry.getValue()));
         }
     }
 
