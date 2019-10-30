@@ -4,6 +4,7 @@ import com.google.gson.reflect.TypeToken;
 import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.JsonNode;
 import io.github.mainstringargs.alpaca.domain.Account;
+import io.github.mainstringargs.alpaca.domain.AccountConfiguration;
 import io.github.mainstringargs.alpaca.domain.Asset;
 import io.github.mainstringargs.alpaca.domain.Bar;
 import io.github.mainstringargs.alpaca.domain.Calendar;
@@ -47,9 +48,6 @@ public class AlpacaAPI {
 
     /** The key id. */
     private final String keyId;
-
-    /** The secret. */
-    private final String secret;
 
     /** The base account url. */
     private final String baseAccountUrl;
@@ -121,7 +119,6 @@ public class AlpacaAPI {
                      String baseDataUrl) {
         this.apiVersion = apiVersion;
         this.keyId = keyId;
-        this.secret = secret;
         this.baseAccountUrl = baseAccountUrl;
         this.baseDataUrl = baseDataUrl;
         alpacaRequest = new AlpacaRequest(keyId, secret);
@@ -151,6 +148,62 @@ public class AlpacaAPI {
         return alpacaRequest.getResponseObject(response, Account.class);
     }
 
+    /**
+     * Gets account activities.
+     *
+     * @return the account activities
+     * @throws AlpacaAPIException the alpaca api exception
+     * @see <a href=
+     * "https://docs.alpaca.markets/api-documentation/api-v2/account-activities/">https://docs.alpaca.markets/api-documentation/api-v2/account-activities/</a>
+     */
+    // public AccountActivities getAccountActivities() {
+    //     TODO account activities
+    // }
+
+    /**
+     * Gets account configurations.
+     *
+     * @return the account configurations
+     * @throws AlpacaAPIException the alpaca api exception
+     * @see <a href=
+     * "https://docs.alpaca.markets/api-documentation/api-v2/account-configuration/">https://docs.alpaca.markets/api-documentation/api-v2/account-configuration/</a>
+     */
+    public AccountConfiguration getAccountConfigurations() throws AlpacaAPIException {
+        AlpacaRequestBuilder urlBuilder =
+                new AlpacaRequestBuilder(apiVersion, baseAccountUrl, AlpacaConstants.ACCOUNT_ENDPOINT);
+        urlBuilder.appendEndpoint(AlpacaConstants.CONFIGURATIONS_ENDPOINT);
+
+        HttpResponse<JsonNode> response = alpacaRequest.invokeGet(urlBuilder);
+
+        if (response.getStatus() != 200) {
+            throw new AlpacaAPIException(response);
+        }
+
+        return alpacaRequest.getResponseObject(response, AccountConfiguration.class);
+    }
+
+    /**
+     * Sets account configuration.
+     *
+     * @param accountConfiguration the account configuration
+     * @return the updated account configuration
+     * @throws AlpacaAPIException the alpaca api exception
+     * @see <a href= "https://docs.alpaca.markets/api-documentation/api-v2/account-configuration/">https://docs.alpaca.markets/api-documentation/api-v2/account-configuration/</a>
+     */
+    public AccountConfiguration setAccountConfiguration(AccountConfiguration accountConfiguration)
+            throws AlpacaAPIException {
+        AlpacaRequestBuilder urlBuilder =
+                new AlpacaRequestBuilder(apiVersion, baseAccountUrl, AlpacaConstants.ACCOUNT_ENDPOINT);
+        urlBuilder.appendEndpoint(AlpacaConstants.CONFIGURATIONS_ENDPOINT);
+
+        HttpResponse<JsonNode> response = alpacaRequest.invokePatch(urlBuilder);
+
+        if (response.getStatus() != 200) {
+            throw new AlpacaAPIException(response);
+        }
+
+        return alpacaRequest.getResponseObject(response, AccountConfiguration.class);
+    }
 
     /**
      * Gets the orders using the following API defaults:.
@@ -634,8 +687,8 @@ public class AlpacaAPI {
                                           LocalDateTime after, LocalDateTime until)
             throws AlpacaAPIException {
         //data urls still use v1 (https://docs.alpaca.markets/api-documentation/api-v2/market-data/#endpoint)
-        AlpacaRequestBuilder urlBuilder =
-                new AlpacaRequestBuilder("v1", baseDataUrl, AlpacaConstants.BARS_ENDPOINT);
+        AlpacaRequestBuilder urlBuilder = new AlpacaRequestBuilder(AlpacaConstants.VERSION_1_ENDPOINT,
+                baseDataUrl, AlpacaConstants.BARS_ENDPOINT);
 
         if (timeframe != null) {
             urlBuilder.appendEndpoint(timeframe.getAPIName());
@@ -700,8 +753,8 @@ public class AlpacaAPI {
                              LocalDateTime start, LocalDateTime end, LocalDateTime after, LocalDateTime until)
             throws AlpacaAPIException {
         //data urls still use v1 (https://docs.alpaca.markets/api-documentation/api-v2/market-data/#endpoint)
-        AlpacaRequestBuilder urlBuilder =
-                new AlpacaRequestBuilder("v1", baseDataUrl, AlpacaConstants.BARS_ENDPOINT);
+        AlpacaRequestBuilder urlBuilder = new AlpacaRequestBuilder(AlpacaConstants.VERSION_1_ENDPOINT,
+                baseDataUrl, AlpacaConstants.BARS_ENDPOINT);
 
         if (timeframe != null) {
             urlBuilder.appendEndpoint(timeframe.getAPIName());

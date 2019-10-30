@@ -5,6 +5,12 @@ package io.github.mainstringargs.alpaca;
  */
 public class AlpacaConstants {
 
+    /** The Constant VERSION_1. */
+    public static final String VERSION_1_ENDPOINT = "v1";
+
+    /** The Constant VERSION_2. */
+    public static final String VERSION_2_ENDPOINT = "v2";
+
     /** The Constant SYMBOLS_PARAMETER. */
     public static final String SYMBOLS_PARAMETER = "symbols";
 
@@ -73,6 +79,9 @@ public class AlpacaConstants {
 
     /** The Constant ACCOUNT_ENDPOINT. */
     public static final String ACCOUNT_ENDPOINT = "account";
+
+    /** The Constant CONFIGURATIONS_ENDPOINT. */
+    public static final String CONFIGURATIONS_ENDPOINT = "configurations";
 
     /** The Constant ORDERS_BY_CLIENT_ORDER_ID_ENDPOINT. */
     public static final String ORDERS_BY_CLIENT_ORDER_ID_ENDPOINT = "orders:by_client_order_id";

@@ -1,5 +1,6 @@
 package io.github.mainstringargs.alpaca.properties;
 
+import io.github.mainstringargs.alpaca.AlpacaConstants;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -37,7 +38,7 @@ public class AlpacaProperties {
     private static final String USER_AGENT_KEY = "user_agent";
 
     /** The Constant DEFAULT_API_VERSION_VALUE. */
-    private static final String DEFAULT_API_VERSION_VALUE = "v1";
+    private static final String DEFAULT_API_VERSION_VALUE = AlpacaConstants.VERSION_2_ENDPOINT;
 
     /** The Constant DEFAULT_USER_AGENT. */
     private static final String DEFAULT_USER_AGENT =

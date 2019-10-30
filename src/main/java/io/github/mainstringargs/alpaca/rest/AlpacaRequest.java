@@ -124,6 +124,29 @@ public class AlpacaRequest {
         return response;
     }
 
+    /**
+     * Invoke patch.
+     *
+     * @param builder the builder
+     * @return the http response
+     */
+    public HttpResponse<JsonNode> invokePatch(AlpacaRequestBuilder builder) {
+        HttpResponse<JsonNode> response = null;
+        try {
+            LOGGER.debug("Patch URL " + builder.getURL());
+
+            response = Unirest.patch(builder.getURL())
+                    .header(USER_AGENT_KEY, AlpacaProperties.USER_AGENT_VALUE)
+                    .header(API_KEY_ID, keyId).header(API_SECRET_KEY, secret).asJson();
+
+            LOGGER.debug("Patch status: " + response.getStatus() + "\n\t\t\t\t\tstatusText: "
+                    + response.getStatusText() + "\n\t\t\t\t\tBody: " + response.getBody());
+        } catch (UnirestException e) {
+            LOGGER.info("UnirestException", e);
+        }
+
+        return response;
+    }
 
     /**
      * Gets the response object.

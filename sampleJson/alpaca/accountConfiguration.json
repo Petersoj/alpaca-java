@@ -1,0 +1,6 @@
+{
+  "dtbp_check": "entry",
+  "no_shorting": false,
+  "suspend_trade": false,
+  "trade_confirm_email": "all"
+}
