@@ -25,9 +25,9 @@ import io.github.mainstringargs.polygon.enums.ChannelType;
 import io.github.mainstringargs.polygon.enums.Locale;
 import io.github.mainstringargs.polygon.enums.Sort;
 import io.github.mainstringargs.polygon.enums.Timespan;
-import io.github.mainstringargs.polygon.nats.PolygonStreamListenerAdapter;
-import io.github.mainstringargs.polygon.nats.message.ChannelMessage;
 import io.github.mainstringargs.polygon.rest.exceptions.PolygonAPIException;
+import io.github.mainstringargs.polygon.websocket.PolygonStreamListenerAdapter;
+import io.github.mainstringargs.polygon.websocket.message.ChannelMessage;
 
 import java.time.LocalDate;
 import java.util.List;

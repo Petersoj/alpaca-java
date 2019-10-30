@@ -1,4 +1,4 @@
-package io.github.mainstringargs.polygon.nats.message;
+package io.github.mainstringargs.polygon.websocket.message;
 
 import com.google.gson.JsonObject;
 import io.github.mainstringargs.polygon.enums.ChannelType;
@@ -11,12 +11,9 @@ public class AggregatePerMinuteMessage extends AggregateMessage {
     /**
      * Instantiates a new aggregate per minute message.
      *
-     * @param cType        the c type
-     * @param tickerString the ticker string
      * @param asJsonObject the as json object
      */
-    public AggregatePerMinuteMessage(ChannelType cType, String tickerString,
-                                     JsonObject asJsonObject) {
-        super(cType, tickerString, asJsonObject);
+    public AggregatePerMinuteMessage(JsonObject asJsonObject) {
+        super(ChannelType.AGGREGATE_PER_MINUTE, asJsonObject);
     }
 }

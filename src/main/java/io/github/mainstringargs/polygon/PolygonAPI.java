@@ -26,12 +26,12 @@ import io.github.mainstringargs.polygon.domain.reference.TypesMapping;
 import io.github.mainstringargs.polygon.enums.Locale;
 import io.github.mainstringargs.polygon.enums.Sort;
 import io.github.mainstringargs.polygon.enums.Timespan;
-import io.github.mainstringargs.polygon.nats.PolygonNatsClient;
-import io.github.mainstringargs.polygon.nats.PolygonStreamListener;
 import io.github.mainstringargs.polygon.properties.PolygonProperties;
 import io.github.mainstringargs.polygon.rest.PolygonRequest;
 import io.github.mainstringargs.polygon.rest.PolygonRequestBuilder;
 import io.github.mainstringargs.polygon.rest.exceptions.PolygonAPIException;
+import io.github.mainstringargs.polygon.websocket.PolygonStreamListener;
+import io.github.mainstringargs.polygon.websocket.PolygonWebsocketClient;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.json.JSONArray;
@@ -51,10 +51,7 @@ public class PolygonAPI {
      */
     private static Logger LOGGER = LogManager.getLogger(PolygonAPI.class);
 
-    /**
-     * The polygon nats client.
-     */
-    private final PolygonNatsClient polygonNatsClient;
+    private final PolygonWebsocketClient polygonWebsocketClient;
 
     /**
      * The polygon request.
@@ -79,18 +76,18 @@ public class PolygonAPI {
      * @param keyId the key id
      */
     public PolygonAPI(String keyId) {
-        this(keyId, PolygonProperties.POLYGON_NATS_SERVERS_VALUE);
+        this(keyId, PolygonProperties.POLYGON_WEB_SOCKET_SERVER_URL_VALUE);
     }
 
     /**
      * Instantiates a new polygon API.
      *
-     * @param keyId              the key id
-     * @param polygonNatsServers the polygon nats servers
+     * @param keyId        the key id
+     * @param websocketURL the websocket url
      */
-    public PolygonAPI(String keyId, String... polygonNatsServers) {
+    public PolygonAPI(String keyId, String websocketURL) {
         polygonRequest = new PolygonRequest(keyId);
-        polygonNatsClient = new PolygonNatsClient(keyId, polygonNatsServers);
+        polygonWebsocketClient = new PolygonWebsocketClient(keyId, websocketURL);
         baseDataUrl = PolygonProperties.BASE_DATA_URL_VALUE;
     }
 
@@ -933,7 +930,7 @@ public class PolygonAPI {
      * @param streamListener the stream listener
      */
     public void addPolygonStreamListener(PolygonStreamListener streamListener) {
-        polygonNatsClient.addListener(streamListener);
+        polygonWebsocketClient.addListener(streamListener);
     }
 
 
@@ -943,7 +940,6 @@ public class PolygonAPI {
      * @param streamListener the stream listener
      */
     public void removePolygonStreamListener(PolygonStreamListener streamListener) {
-        polygonNatsClient.removeListener(streamListener);
+        polygonWebsocketClient.removeListener(streamListener);
     }
-
 }

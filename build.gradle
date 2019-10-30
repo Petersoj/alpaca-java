@@ -60,8 +60,6 @@ dependencies {
     compile "javax.websocket:javax.websocket-api:1.1"
     compile "org.glassfish.tyrus.bundles:tyrus-standalone-client-jdk:1.12"
 
-    compile 'io.nats:jnats:2.2.0'
-
     // Use JUnit test framework
     testCompile 'junit:junit:4.12'
     

@@ -1,7 +1,7 @@
-package io.github.mainstringargs.polygon.nats;
+package io.github.mainstringargs.polygon.websocket;
 
 import io.github.mainstringargs.polygon.enums.ChannelType;
-import io.github.mainstringargs.polygon.nats.message.ChannelMessage;
+import io.github.mainstringargs.polygon.websocket.message.ChannelMessage;
 
 import java.util.Map;
 import java.util.Set;
@@ -18,6 +18,7 @@ public interface PolygonStreamListener {
 
     /**
      * Gets the stock channel types.
+     * Null or empty to listen to all other stream messages.
      *
      * @return the stock channel types
      */
