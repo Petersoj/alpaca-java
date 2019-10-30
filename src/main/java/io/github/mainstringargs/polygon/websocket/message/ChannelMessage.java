@@ -1,4 +1,4 @@
-package io.github.mainstringargs.polygon.nats.message;
+package io.github.mainstringargs.polygon.websocket.message;
 
 import io.github.mainstringargs.polygon.enums.ChannelType;
 

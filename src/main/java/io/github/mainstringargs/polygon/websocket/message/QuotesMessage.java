@@ -1,9 +1,9 @@
-package io.github.mainstringargs.polygon.nats.message;
+package io.github.mainstringargs.polygon.websocket.message;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
-import io.github.mainstringargs.polygon.domain.StockTrade;
+import io.github.mainstringargs.polygon.domain.StockQuote;
 import io.github.mainstringargs.polygon.enums.ChannelType;
 
 import java.time.Instant;
@@ -11,9 +11,9 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 
 /**
- * The Class TradesMessage.
+ * The Class QuotesMessage.
  */
-public class TradesMessage implements ChannelMessage {
+public class QuotesMessage implements ChannelMessage {
 
     /** The gson. */
     private static Gson gson;
@@ -24,42 +24,31 @@ public class TradesMessage implements ChannelMessage {
         gson = gsonBuilder.create();
     }
 
-    /** The ticker. */
-    private String ticker;
-
     /** The channel type. */
     private ChannelType channelType;
 
-    /** The stock trade. */
-    private StockTrade stockTrade;
+    /** The stock quote. */
+    private StockQuote stockQuote;
 
     /** The timestamp. */
     private LocalDateTime timestamp;
 
     /**
-     * Instantiates a new trades message.
+     * Instantiates a new quotes message.
      *
-     * @param cType      the c type
-     * @param ticker     the ticker
      * @param jsonObject the json object
      */
-    public TradesMessage(ChannelType cType, String ticker, JsonObject jsonObject) {
-        this.ticker = ticker;
-        this.channelType = cType;
+    public QuotesMessage(JsonObject jsonObject) {
+        this.channelType = ChannelType.QUOTES;
 
         JsonObject jsonQuote = jsonObject.getAsJsonObject();
 
+        stockQuote = gson.fromJson(jsonQuote, StockQuote.class);
 
-        stockTrade = gson.fromJson(jsonQuote, StockTrade.class);
+        long time = stockQuote.getT();
 
-        long time = stockTrade.getT();
 
-        if (time > 1560447226296000000L) {
-            time = stockTrade.getT() / 1000000L;
-        }
-
-        timestamp =
-                LocalDateTime.ofInstant(Instant.ofEpochMilli(time), ZoneId.systemDefault());
+        timestamp = LocalDateTime.ofInstant(Instant.ofEpochMilli(time), ZoneId.systemDefault());
     }
 
     /*
@@ -69,7 +58,7 @@ public class TradesMessage implements ChannelMessage {
      */
     @Override
     public String getTicker() {
-        return ticker;
+        return stockQuote.getSym();
     }
 
     /*
@@ -83,12 +72,12 @@ public class TradesMessage implements ChannelMessage {
     }
 
     /**
-     * Gets the stock trade.
+     * Gets the stock quote.
      *
-     * @return the stock trade
+     * @return the stock quote
      */
-    public StockTrade getStockTrade() {
-        return stockTrade;
+    public StockQuote getStockQuote() {
+        return stockQuote;
     }
 
     /*
@@ -101,8 +90,7 @@ public class TradesMessage implements ChannelMessage {
         final int prime = 31;
         int result = 1;
         result = prime * result + ((channelType == null) ? 0 : channelType.hashCode());
-        result = prime * result + ((stockTrade == null) ? 0 : stockTrade.hashCode());
-        result = prime * result + ((ticker == null) ? 0 : ticker.hashCode());
+        result = prime * result + ((stockQuote == null) ? 0 : stockQuote.hashCode());
         result = prime * result + ((timestamp == null) ? 0 : timestamp.hashCode());
         return result;
     }
@@ -120,18 +108,13 @@ public class TradesMessage implements ChannelMessage {
             return false;
         if (getClass() != obj.getClass())
             return false;
-        TradesMessage other = (TradesMessage) obj;
+        QuotesMessage other = (QuotesMessage) obj;
         if (channelType != other.channelType)
             return false;
-        if (stockTrade == null) {
-            if (other.stockTrade != null)
+        if (stockQuote == null) {
+            if (other.stockQuote != null)
                 return false;
-        } else if (!stockTrade.equals(other.stockTrade))
-            return false;
-        if (ticker == null) {
-            if (other.ticker != null)
-                return false;
-        } else if (!ticker.equals(other.ticker))
+        } else if (!stockQuote.equals(other.stockQuote))
             return false;
         if (timestamp == null) {
             if (other.timestamp != null)
@@ -148,7 +131,7 @@ public class TradesMessage implements ChannelMessage {
      */
     @Override
     public String toString() {
-        return "TradesMessage [ticker=" + ticker + ", channelType=" + channelType + ", stockTrade="
-                + stockTrade + ", timestamp=" + timestamp + "]";
+        return "QuotesMessage [channelType=" + channelType + ", stockQuote="
+                + stockQuote + ", timestamp=" + timestamp + "]";
     }
 }

@@ -21,7 +21,7 @@ public enum ChannelType {
     String apiName;
 
     /**
-     * Instantiates a new order type.
+     * Instantiates a new channel type.
      *
      * @param apiName the api name
      */
