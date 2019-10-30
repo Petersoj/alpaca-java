@@ -22,7 +22,7 @@ public class PolygonWebsocketTestDriver {
     public static void main(String[] args) {
         //  Configurator.setRootLevel(Level.ALL);
 
-        PolygonWebsocketClient client = new PolygonWebsocketClient("AKKHS7AT2BYZNMLF30ZA",
+        PolygonWebsocketClient client = new PolygonWebsocketClient(PolygonProperties.KEY_ID_VALUE,
                 PolygonProperties.POLYGON_WEB_SOCKET_SERVER_URL_VALUE);
 
         Map<String, Set<ChannelType>> subscribedTypes = new HashMap<>();
