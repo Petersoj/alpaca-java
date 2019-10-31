@@ -3,7 +3,7 @@ package io.github.mainstringargs.alpaca.websocket.message;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
-import io.github.mainstringargs.alpaca.Utilities;
+import io.github.mainstringargs.util.time.TimeUtil;
 import io.github.mainstringargs.alpaca.domain.Order;
 import io.github.mainstringargs.alpaca.enums.MessageType;
 import io.github.mainstringargs.alpaca.enums.OrderEvent;
@@ -56,7 +56,7 @@ public class OrderUpdateMessage implements UpdateMessage {
         timestamp = null;
         if (data.has("timestamp")) {
             String jsonTimeStamp = data.get("timestamp").getAsString();
-            timestamp = Utilities.fromDateTimeString(jsonTimeStamp);
+            timestamp = TimeUtil.fromDateTimeString(jsonTimeStamp);
         }
 
         order = null;
