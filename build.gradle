@@ -165,6 +165,7 @@ def sampleJSONPOJOs = [
 ]
 
 task generatePOJOs() {
+    final def targetDirectory = "${project.buildDir}/generated-sources/samplejson"
     final def jsonSourceDirectory = 'sample_json/'
     def first = true
 
@@ -175,9 +176,10 @@ task generatePOJOs() {
                 path.substring(0, path.lastIndexOf('/')).replace('/', '.')
 
         def jsonToPOJOTask = tasks.create('jsonToPOJOTask-' + targetPackage, GradleBuild) {
-            startParameter.projectProperties = ['source'       : jsonSourceDirectory + path,
-                                                'sourceType'   : sourceType,
-                                                'targetPackage': targetPackage]
+            startParameter.projectProperties = ['source'         : jsonSourceDirectory + path,
+                                                'sourceType'     : sourceType,
+                                                'targetPackage'  : targetPackage,
+                                                'targetDirectory': targetDirectory]
             buildFile = 'sampleJson2Pojo.gradle'
             tasks = ['generateJsonSchema2Pojo']
         }
