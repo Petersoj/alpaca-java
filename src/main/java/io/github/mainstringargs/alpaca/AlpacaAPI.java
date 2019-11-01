@@ -160,7 +160,6 @@ public class AlpacaAPI {
      * @throws AlpacaAPIException the alpaca API exception
      * @see <a href=
      * "https://docs.alpaca.markets/api-documentation/web-api/orders/#get-a-list-of-orders">https://docs.alpaca.markets/api-documentation/web-api/orders/#get-a-list-of-orders</a>
-     * <p>
      * Status: Open Limit: 50 Direction: Descending
      */
     public List<Order> getOrders() throws AlpacaAPIException {
