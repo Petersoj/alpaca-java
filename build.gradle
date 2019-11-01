@@ -137,6 +137,8 @@ sourceSets {
 }
 
 // All paths are relative to 'alpaca-java/sample_json/'
+// The 'path' can either be a file or directory, but keep in mind that
+// if it is a directory, all the subdirectories will have POJOs generated
 // sourceType is either 'json' or 'schema'
 // The generated POJOs will be in a package structure analogous to the path
 // See: https://github.com/joelittlejohn/jsonschema2pojo/wiki/Reference
@@ -148,9 +150,18 @@ def sampleJSONPOJOs = [
         ['path': 'alpaca/calendar/', 'sourceType': 'json'],
         ['path': 'alpaca/clock/', 'sourceType': 'json'],
         ['path': 'alpaca/order/', 'sourceType': 'json'],
-        ['path': 'alpaca/position/', 'sourceType': 'json']
+        ['path': 'alpaca/position/', 'sourceType': 'json'],
 
         // polygon/
+        ['path': 'polygon/aggregate/', 'sourceType': 'json'],
+        ['path': 'polygon/historic/quotes/', 'sourceType': 'json'],
+        ['path': 'polygon/historic/trades/', 'sourceType': 'json'],
+        ['path': 'polygon/last/', 'sourceType': 'json'],
+        ['path': 'polygon/meta/', 'sourceType': 'json'],
+        ['path': 'polygon/open_close/', 'sourceType': 'json'],
+        ['path': 'polygon/reference/', 'sourceType': 'json'],
+        ['path': 'polygon/snapshot/', 'sourceType': 'json'],
+        ['path': 'polygon/websocket/', 'sourceType': 'json']
 ]
 
 task generatePOJOs() {
