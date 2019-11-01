@@ -131,16 +131,16 @@ sourceSets {
     main {
         java {
             srcDir 'src/main/java'
-            srcDir 'build/generated-sources/json2pojos'
+            srcDir 'build/generated-sources/samplejson'
         }
     }
 }
 
-// All paths are relative to 'alpaca-java/samplejson/'
+// All paths are relative to 'alpaca-java/sample_json/'
 // sourceType is either 'json' or 'schema'
 // The generated POJOs will be in a package structure analogous to the path
 // See: https://github.com/joelittlejohn/jsonschema2pojo/wiki/Reference
-def json2POJODirs = [
+def sampleJSONPOJOs = [
         // alpaca/
         ['path': 'alpaca/account/', 'sourceType': 'json'],
         ['path': 'alpaca/asset/', 'sourceType': 'json'],
@@ -154,25 +154,25 @@ def json2POJODirs = [
 ]
 
 task generatePOJOs() {
-    final def jsonSourceDirectory = 'samplejson/'
+    final def jsonSourceDirectory = 'sample_json/'
     def first = true
 
-    json2POJODirs.each { propertyMap ->
+    sampleJSONPOJOs.each { propertyMap ->
         def path = propertyMap.get('path')
         def sourceType = propertyMap.get('sourceType')
         def targetPackage = 'io.github.mainstringargs.domain.' +
                 path.substring(0, path.lastIndexOf('/')).replace('/', '.')
 
-        def generatePOJOTask = tasks.create('generatePOJO-' + targetPackage, GradleBuild) {
+        def jsonToPOJOTask = tasks.create('jsonToPOJOTask-' + targetPackage, GradleBuild) {
             startParameter.projectProperties = ['source'       : jsonSourceDirectory + path,
                                                 'sourceType'   : sourceType,
                                                 'targetPackage': targetPackage]
-            buildFile = 'jsonSchema2Pojo.gradle'
+            buildFile = 'sampleJson2Pojo.gradle'
             tasks = ['generateJsonSchema2Pojo']
         }
 
         first = false
-        dependsOn generatePOJOTask
+        dependsOn jsonToPOJOTask
     }
 }
 

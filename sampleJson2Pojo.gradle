@@ -14,7 +14,7 @@ buildscript {
 
     dependencies {
         // this plugin
-        classpath 'com.bmuschko:gradle-nexus-plugin:2.3.1', 'org.jsonschema2pojo:jsonschema2pojo-gradle-plugin:1.0.0'
+        classpath 'org.jsonschema2pojo:jsonschema2pojo-gradle-plugin:1.0.0'
         // add additional dependencies here if you wish to reference instead of generate them (see example directory)
     }
 }
@@ -61,7 +61,7 @@ jsonSchema2Pojo {
 
     // Target directory for generated Java source files. The plugin will add this directory to the
     // java source set so the compiler will find and compile the newly generated source files.
-    targetDirectory = file("${project.buildDir}/generated-sources/json2pojos")
+    targetDirectory = file("${project.buildDir}/generated-sources/samplejson")
 
     // Package name used for generated Java classes (for types where a fully qualified name has not
     // been supplied in the schema using the 'javaType' property).
