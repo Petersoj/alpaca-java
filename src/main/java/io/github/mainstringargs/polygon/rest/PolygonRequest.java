@@ -43,6 +43,9 @@ public class PolygonRequest {
     /** The Constant API_KEY_ID. */
     private static final String API_KEY_ID = "apiKey";
 
+    /** The constant GSON. */
+    private static final Gson GSON = new GsonBuilder().setLenient().create();
+
     /** The logger. */
     private static Logger LOGGER = LogManager.getLogger(PolygonRequest.class);
 
@@ -149,10 +152,6 @@ public class PolygonRequest {
      * @return the response object
      */
     public <T> T getResponseObject(HttpResponse<JsonNode> httpResponse, Type type) {
-        GsonBuilder gsonBuilder = new GsonBuilder();
-        gsonBuilder.setLenient();
-        Gson gson = gsonBuilder.create();
-
         T responseObjectFromJson = null;
 
         try {
@@ -181,7 +180,7 @@ public class PolygonRequest {
                 rawNodeString = httpResponse.getBody().toString();
             }
 
-            responseObjectFromJson = gson.fromJson(rawNodeString, type);
+            responseObjectFromJson = GSON.fromJson(rawNodeString, type);
         } catch (Exception e) {
             LOGGER.info("Exception", e);
         }

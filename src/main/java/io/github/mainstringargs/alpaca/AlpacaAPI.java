@@ -24,6 +24,7 @@ import io.github.mainstringargs.alpaca.rest.AlpacaRequestBuilder;
 import io.github.mainstringargs.alpaca.rest.exceptions.AlpacaAPIException;
 import io.github.mainstringargs.alpaca.websocket.AlpacaStreamListener;
 import io.github.mainstringargs.alpaca.websocket.AlpacaWebsocketClient;
+import io.github.mainstringargs.util.time.TimeUtil;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -262,12 +263,12 @@ public class AlpacaAPI {
 
         if (after != null) {
             urlBuilder.appendURLParameter(AlpacaConstants.AFTER_PARAMETER,
-                    Utilities.toDateTimeString(after));
+                    TimeUtil.toDateTimeString(after));
         }
 
         if (until != null) {
             urlBuilder.appendURLParameter(AlpacaConstants.UNTIL_PARAMETER,
-                    Utilities.toDateTimeString(until));
+                    TimeUtil.toDateTimeString(until));
         }
 
         if (direction != null) {
@@ -331,12 +332,12 @@ public class AlpacaAPI {
 
         if (limitPrice != null) {
             urlBuilder.appendBodyProperty(AlpacaConstants.LIMIT_PRICE_PARAMETER,
-                    Utilities.toDecimalFormat(limitPrice));
+                    TimeUtil.toDecimalFormat(limitPrice));
         }
 
         if (stopPrice != null) {
             urlBuilder.appendBodyProperty(AlpacaConstants.STOP_PRICE_PARAMETER,
-                    Utilities.toDecimalFormat(stopPrice));
+                    TimeUtil.toDecimalFormat(stopPrice));
         }
 
         if (clientOrderId != null) {
@@ -628,11 +629,11 @@ public class AlpacaAPI {
                 new AlpacaRequestBuilder(apiVersion, baseAccountUrl, AlpacaConstants.CALENDAR_ENDPOINT);
 
         if (start != null) {
-            urlBuilder.appendURLParameter(AlpacaConstants.START_PARAMETER, Utilities.toDateString(start));
+            urlBuilder.appendURLParameter(AlpacaConstants.START_PARAMETER, TimeUtil.toDateString(start));
         }
 
         if (end != null) {
-            urlBuilder.appendURLParameter(AlpacaConstants.END_PARAMETER, Utilities.toDateString(end));
+            urlBuilder.appendURLParameter(AlpacaConstants.END_PARAMETER, TimeUtil.toDateString(end));
         }
 
         HttpResponse<JsonNode> response = alpacaRequest.invokeGet(urlBuilder);
@@ -696,21 +697,21 @@ public class AlpacaAPI {
 
         if (start != null) {
             urlBuilder.appendURLParameter(AlpacaConstants.START_PARAMETER,
-                    Utilities.toDateTimeString(start));
+                    TimeUtil.toDateTimeString(start));
         }
 
         if (end != null) {
-            urlBuilder.appendURLParameter(AlpacaConstants.END_PARAMETER, Utilities.toDateTimeString(end));
+            urlBuilder.appendURLParameter(AlpacaConstants.END_PARAMETER, TimeUtil.toDateTimeString(end));
         }
 
         if (after != null) {
             urlBuilder.appendURLParameter(AlpacaConstants.AFTER_PARAMETER,
-                    Utilities.toDateTimeString(after));
+                    TimeUtil.toDateTimeString(after));
         }
 
         if (until != null) {
             urlBuilder.appendURLParameter(AlpacaConstants.UNTIL_PARAMETER,
-                    Utilities.toDateTimeString(until));
+                    TimeUtil.toDateTimeString(until));
         }
 
         if (limit != null) {
@@ -762,21 +763,21 @@ public class AlpacaAPI {
 
         if (start != null) {
             urlBuilder.appendURLParameter(AlpacaConstants.START_PARAMETER,
-                    Utilities.toDateTimeString(start));
+                    TimeUtil.toDateTimeString(start));
         }
 
         if (end != null) {
-            urlBuilder.appendURLParameter(AlpacaConstants.END_PARAMETER, Utilities.toDateTimeString(end));
+            urlBuilder.appendURLParameter(AlpacaConstants.END_PARAMETER, TimeUtil.toDateTimeString(end));
         }
 
         if (after != null) {
             urlBuilder.appendURLParameter(AlpacaConstants.AFTER_PARAMETER,
-                    Utilities.toDateTimeString(after));
+                    TimeUtil.toDateTimeString(after));
         }
 
         if (until != null) {
             urlBuilder.appendURLParameter(AlpacaConstants.UNTIL_PARAMETER,
-                    Utilities.toDateTimeString(until));
+                    TimeUtil.toDateTimeString(until));
         }
 
         if (limit != null) {

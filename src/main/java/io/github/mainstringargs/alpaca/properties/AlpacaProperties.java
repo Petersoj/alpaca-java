@@ -3,6 +3,7 @@ package io.github.mainstringargs.alpaca.properties;
 import io.github.mainstringargs.alpaca.AlpacaConstants;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
@@ -41,7 +42,7 @@ public class AlpacaProperties {
 
     /** The Constant DEFAULT_USER_AGENT. */
     private static final String DEFAULT_USER_AGENT =
-                    "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/67.0.3396.87 Safari/537.36";
+            "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/67.0.3396.87 Safari/537.36";
 
     /** The Constant DEFAULT_ACCOUNT_URL. */
     private static final String DEFAULT_ACCOUNT_URL = "https://paper-api.alpaca.markets";
@@ -50,14 +51,14 @@ public class AlpacaProperties {
     private static final String DEFAULT_DATA_URL = "https://data.alpaca.markets";
 
     /** The property file. */
-    private static LinkedHashSet<Properties> propertyFiles = new LinkedHashSet<>();
+    private static final LinkedHashSet<Properties> propertyFiles = new LinkedHashSet<>();
 
     /** The logger. */
-    private static Logger LOGGER = LogManager.getLogger(AlpacaProperties.class);
+    private static final Logger LOGGER = LogManager.getLogger(AlpacaProperties.class);
 
     /** The Constant API_VERSION_VALUE. */
     public static final String API_VERSION_VALUE =
-                    getProperty(API_VERSION_KEY, DEFAULT_API_VERSION_VALUE);
+            getProperty(API_VERSION_KEY, DEFAULT_API_VERSION_VALUE);
 
     /** The Constant KEY_ID_VALUE. */
     public static final String KEY_ID_VALUE = getProperty(KEY_ID_KEY, INVALID_VALUE);
@@ -67,11 +68,11 @@ public class AlpacaProperties {
 
     /** The Constant BASE_ACCOUNT_URL_VALUE. */
     public static final String BASE_ACCOUNT_URL_VALUE =
-                    getProperty(BASE_ACCOUNT_URL_KEY, DEFAULT_ACCOUNT_URL);
+            getProperty(BASE_ACCOUNT_URL_KEY, DEFAULT_ACCOUNT_URL);
 
     /** The base data url value. */
     public static final String BASE_DATA_URL_VALUE =
-                    getProperty(BASE_DATA_URL_KEY, DEFAULT_DATA_URL);
+            getProperty(BASE_DATA_URL_KEY, DEFAULT_DATA_URL);
 
     /** The Constant USER_AGENT_VALUE. */
     public static final String USER_AGENT_VALUE = getProperty(USER_AGENT_KEY, DEFAULT_USER_AGENT);
@@ -130,12 +131,10 @@ public class AlpacaProperties {
         }
     }
 
-
-
     /**
      * Gets the property.
      *
-     * @param key the key
+     * @param key          the key
      * @param defaultValue the default value
      * @return the property
      */
