@@ -13,7 +13,7 @@ import io.github.mainstringargs.domain.polygon.meta.SymbolEarning;
 import io.github.mainstringargs.domain.polygon.meta.SymbolEndpoints;
 import io.github.mainstringargs.domain.polygon.meta.TickerDetails;
 import io.github.mainstringargs.domain.polygon.meta.TickerNews;
-import io.github.mainstringargs.domain.polygon.open_close.DailyOpenClose;
+import io.github.mainstringargs.domain.polygon.openclose.DailyOpenClose;
 import io.github.mainstringargs.domain.polygon.reference.Market;
 import io.github.mainstringargs.domain.polygon.reference.StockDividend;
 import io.github.mainstringargs.domain.polygon.reference.StockFinancial;

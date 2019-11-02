@@ -17,6 +17,7 @@ import io.github.mainstringargs.alpaca.rest.exceptions.AlpacaAPIException;
 import io.github.mainstringargs.alpaca.websocket.AlpacaStreamListener;
 import io.github.mainstringargs.alpaca.websocket.AlpacaWebsocketClient;
 import io.github.mainstringargs.domain.alpaca.account.Account;
+import io.github.mainstringargs.domain.alpaca.accountconfiguration.AccountConfiguration;
 import io.github.mainstringargs.domain.alpaca.asset.Asset;
 import io.github.mainstringargs.domain.alpaca.bar.Bar;
 import io.github.mainstringargs.domain.alpaca.clock.Clock;
