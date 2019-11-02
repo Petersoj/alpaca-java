@@ -19,11 +19,11 @@ buildscript {
     }
 }
 
-
 plugins {
     id 'maven-publish'
     id 'io.codearte.nexus-staging' version '0.11.0'
 }
+
 // Apply the java plugin to add support for Java
 apply plugin: 'java'
 
@@ -37,7 +37,6 @@ apply plugin: 'com.bmuschko.nexus'
 archivesBaseName = 'alpaca-java'
 group = 'io.github.mainstringargs'
 version = '4.0.1-SNAPSHOT'
-
 
 // In this section you declare where to find the dependencies of your project
 repositories {
@@ -62,14 +61,11 @@ dependencies {
 
     // Use JUnit test framework
     testCompile 'junit:junit:4.12'
-    
 }
-
 
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
 [compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
-
 
 modifyPom {
     project {
@@ -102,13 +98,13 @@ modifyPom {
 publishing {
     publications {
         maven(MavenPublication) {
- 
             from components.java
             artifact sourcesJar
             artifact javadocJar
         }
     }
 }
+
 extraArchive {
     sources = true
     tests = true
@@ -124,88 +120,73 @@ nexusStaging {
     packageGroup = "io.github.mainstringargs" //optional if packageGroup == project.getGroup()
 }
 
-
 processResources {
     include "**/*.properties.default"
     rename {
         filename -> filename.replace '.properties.default', '.properties'
     }
-    
 }
-
 
 sourceSets {
     main {
         java {
             srcDir 'src/main/java'
-            srcDir 'build/generated-sources/js2p'
+            srcDir 'build/generated-sources/samplejson'
         }
     }
 }
 
+// All paths are relative to 'alpaca-java/sample_json/'
+// The 'path' can either be a file or directory, but keep in mind that
+// if it is a directory, all the subdirectories will have POJOs generated
+// sourceType is either 'json' or 'schema'
+// The generated POJOs will be in a package structure analogous to the path
+// See: https://github.com/joelittlejohn/jsonschema2pojo/wiki/Reference
+def sampleJSONPOJOs = [
+        // alpaca/
+        ['path': 'alpaca/account/', 'sourceType': 'json'],
+        ['path': 'alpaca/asset/', 'sourceType': 'json'],
+        ['path': 'alpaca/bar/', 'sourceType': 'json'],
+        ['path': 'alpaca/calendar/', 'sourceType': 'json'],
+        ['path': 'alpaca/clock/', 'sourceType': 'json'],
+        ['path': 'alpaca/order/', 'sourceType': 'json'],
+        ['path': 'alpaca/position/', 'sourceType': 'json'],
 
+        // polygon/
+        ['path': 'polygon/aggregate/', 'sourceType': 'json'],
+        ['path': 'polygon/historic/quotes/', 'sourceType': 'json'],
+        ['path': 'polygon/historic/trades/', 'sourceType': 'json'],
+        ['path': 'polygon/last/', 'sourceType': 'json'],
+        ['path': 'polygon/meta/', 'sourceType': 'json'],
+        ['path': 'polygon/open_close/', 'sourceType': 'json'],
+        ['path': 'polygon/reference/', 'sourceType': 'json'],
+        ['path': 'polygon/snapshot/', 'sourceType': 'json'],
+        ['path': 'polygon/websocket/', 'sourceType': 'json']
+]
 
+task generatePOJOs() {
+    final def targetDirectory = "${project.buildDir}/generated-sources/samplejson"
+    final def jsonSourceDirectory = 'sample_json/'
+    def first = true
 
-task generateAlpacaPOJOs(type: GradleBuild) {
-    startParameter.projectProperties = ['jsonSchema2Pojo.source': 'sampleJson/alpaca', "jsonSchema2Pojo.targetPackage": 'io.github.mainstringargs.alpaca.domain', "jsonSchema2Pojo.removeOldOutput": 'true']
+    sampleJSONPOJOs.each { propertyMap ->
+        def path = propertyMap.get('path')
+        def sourceType = propertyMap.get('sourceType')
+        def targetPackage = 'io.github.mainstringargs.domain.' +
+                path.substring(0, path.lastIndexOf('/')).replace('/', '.')
 
-    buildFile = 'jsonSchema2Pojo.gradle'
-    tasks = ['generateJsonSchema2Pojo']
+        def jsonToPOJOTask = tasks.create('jsonToPOJOTask-' + targetPackage, GradleBuild) {
+            startParameter.projectProperties = ['source'         : jsonSourceDirectory + path,
+                                                'sourceType'     : sourceType,
+                                                'targetPackage'  : targetPackage,
+                                                'targetDirectory': targetDirectory]
+            buildFile = 'sampleJson2Pojo.gradle'
+            tasks = ['generateJsonSchema2Pojo']
+        }
 
-}
-
-task generatePolygonPOJOs(type: GradleBuild) {
-
-    startParameter.projectProperties = ['jsonSchema2Pojo.source': 'sampleJson/polygon', "jsonSchema2Pojo.targetPackage": 'io.github.mainstringargs.polygon.domain', "jsonSchema2Pojo.removeOldOutput": 'false']
-
-    buildFile = 'jsonSchema2Pojo.gradle'
-    tasks = ['generateJsonSchema2Pojo']
-}
-
-task generatePolygonMetaPOJOs(type: GradleBuild) {
-
-    startParameter.projectProperties = ['jsonSchema2Pojo.source': 'sampleJson/polygon/meta', "jsonSchema2Pojo.targetPackage": 'io.github.mainstringargs.polygon.domain.meta', "jsonSchema2Pojo.removeOldOutput": 'false']
-
-    buildFile = 'jsonSchema2Pojo.gradle'
-    tasks = ['generateJsonSchema2Pojo']
-}
-
-task generatePolygonReferencePOJOs(type: GradleBuild) {
-
-    startParameter.projectProperties = ['jsonSchema2Pojo.source': 'sampleJson/polygon/reference', "jsonSchema2Pojo.targetPackage": 'io.github.mainstringargs.polygon.domain.reference', "jsonSchema2Pojo.removeOldOutput": 'false']
-
-    buildFile = 'jsonSchema2Pojo.gradle'
-    tasks = ['generateJsonSchema2Pojo']
-}
-
-task generatePolygonHistoricQuotesPOJOs(type: GradleBuild) {
-
-    startParameter.projectProperties = ['jsonSchema2Pojo.source': 'sampleJson/polygon/historic/quotes', "jsonSchema2Pojo.targetPackage": 'io.github.mainstringargs.polygon.domain.historic.quotes', "jsonSchema2Pojo.removeOldOutput": 'false']
-
-    buildFile = 'jsonSchema2Pojo.gradle'
-    tasks = ['generateJsonSchema2Pojo']
-}
-
-task generatePolygonHistoricTradesPOJOs(type: GradleBuild) {
-
-    startParameter.projectProperties = ['jsonSchema2Pojo.source': 'sampleJson/polygon/historic/trades', "jsonSchema2Pojo.targetPackage": 'io.github.mainstringargs.polygon.domain.historic.trades', "jsonSchema2Pojo.removeOldOutput": 'false']
-
-    buildFile = 'jsonSchema2Pojo.gradle'
-    tasks = ['generateJsonSchema2Pojo']
-}
-
-task generateAggregatePOJOs(type: GradleBuild) {
-
-    startParameter.projectProperties = ['jsonSchema2Pojo.source': 'sampleJson/polygon/aggregate', "jsonSchema2Pojo.targetPackage": 'io.github.mainstringargs.polygon.domain.aggregate', "jsonSchema2Pojo.removeOldOutput": 'false']
-
-    buildFile = 'jsonSchema2Pojo.gradle'
-    tasks = ['generateJsonSchema2Pojo']
-}
-
-
-
-task generatePOJOs {
-    dependsOn generateAlpacaPOJOs, generatePolygonPOJOs, generatePolygonMetaPOJOs, generatePolygonReferencePOJOs, generateAggregatePOJOs
+        first = false
+        dependsOn jsonToPOJOTask
+    }
 }
 
 compileJava {
@@ -213,9 +194,8 @@ compileJava {
 }
 
 if (hasProperty('buildScan')) {
-	buildScan { licenseAgreementUrl = 'https://gradle.com/terms-of-service'; licenseAgree = 'yes' }
+    buildScan { licenseAgreementUrl = 'https://gradle.com/terms-of-service'; licenseAgree = 'yes' }
 }
-
 
 applicationDistribution.from("src/main/resources") {
     into "lib/resources"
@@ -223,21 +203,12 @@ applicationDistribution.from("src/main/resources") {
     rename {
         filename -> filename.replace '.properties.default', '.properties'
     }
-    
+
 }
 
 startScripts {
-   classpath += files('resources')
+    classpath += files('resources')
 }
-
-
-
-run {
-    
-}
-
 
 //mainClassName = 'io.github.mainstringargs.alpaca.AlpacaExample'
 mainClassName = 'io.github.mainstringargs.polygon.PolygonExample'
-
-

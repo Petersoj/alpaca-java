@@ -3,14 +3,6 @@ package io.github.mainstringargs.alpaca;
 import com.google.gson.reflect.TypeToken;
 import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.JsonNode;
-import io.github.mainstringargs.alpaca.domain.Account;
-import io.github.mainstringargs.alpaca.domain.AccountConfiguration;
-import io.github.mainstringargs.alpaca.domain.Asset;
-import io.github.mainstringargs.alpaca.domain.Bar;
-import io.github.mainstringargs.alpaca.domain.Calendar;
-import io.github.mainstringargs.alpaca.domain.Clock;
-import io.github.mainstringargs.alpaca.domain.Order;
-import io.github.mainstringargs.alpaca.domain.Position;
 import io.github.mainstringargs.alpaca.enums.AssetStatus;
 import io.github.mainstringargs.alpaca.enums.BarsTimeFrame;
 import io.github.mainstringargs.alpaca.enums.Direction;
@@ -24,6 +16,12 @@ import io.github.mainstringargs.alpaca.rest.AlpacaRequestBuilder;
 import io.github.mainstringargs.alpaca.rest.exceptions.AlpacaAPIException;
 import io.github.mainstringargs.alpaca.websocket.AlpacaStreamListener;
 import io.github.mainstringargs.alpaca.websocket.AlpacaWebsocketClient;
+import io.github.mainstringargs.domain.alpaca.account.Account;
+import io.github.mainstringargs.domain.alpaca.asset.Asset;
+import io.github.mainstringargs.domain.alpaca.bar.Bar;
+import io.github.mainstringargs.domain.alpaca.clock.Clock;
+import io.github.mainstringargs.domain.alpaca.order.Order;
+import io.github.mainstringargs.domain.alpaca.position.Position;
 import io.github.mainstringargs.util.time.TimeUtil;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -33,6 +31,7 @@ import java.lang.reflect.Type;
 import java.net.URLEncoder;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Map;
 
@@ -213,7 +212,6 @@ public class AlpacaAPI {
      * @throws AlpacaAPIException the alpaca API exception
      * @see <a href=
      * "https://docs.alpaca.markets/api-documentation/web-api/orders/#get-a-list-of-orders">https://docs.alpaca.markets/api-documentation/web-api/orders/#get-a-list-of-orders</a>
-     * <p>
      * Status: Open Limit: 50 Direction: Descending
      */
     public List<Order> getOrders() throws AlpacaAPIException {

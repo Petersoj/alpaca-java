@@ -8,7 +8,7 @@ import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.exceptions.UnirestException;
 import com.mashape.unirest.request.GetRequest;
 import io.github.mainstringargs.alpaca.properties.AlpacaProperties;
-import io.github.mainstringargs.polygon.domain.aggregate.Aggregates;
+import io.github.mainstringargs.domain.polygon.aggregate.Aggregates;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 

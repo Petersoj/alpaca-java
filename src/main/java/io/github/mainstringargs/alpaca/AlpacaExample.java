@@ -1,9 +1,5 @@
 package io.github.mainstringargs.alpaca;
 
-import io.github.mainstringargs.alpaca.domain.Account;
-import io.github.mainstringargs.alpaca.domain.Bar;
-import io.github.mainstringargs.alpaca.domain.Clock;
-import io.github.mainstringargs.alpaca.domain.Order;
 import io.github.mainstringargs.alpaca.enums.BarsTimeFrame;
 import io.github.mainstringargs.alpaca.enums.MessageType;
 import io.github.mainstringargs.alpaca.enums.OrderSide;
@@ -14,6 +10,10 @@ import io.github.mainstringargs.alpaca.websocket.AlpacaStreamListenerAdapter;
 import io.github.mainstringargs.alpaca.websocket.message.AccountUpdateMessage;
 import io.github.mainstringargs.alpaca.websocket.message.OrderUpdateMessage;
 import io.github.mainstringargs.alpaca.websocket.message.UpdateMessage;
+import io.github.mainstringargs.domain.alpaca.account.Account;
+import io.github.mainstringargs.domain.alpaca.bar.Bar;
+import io.github.mainstringargs.domain.alpaca.clock.Clock;
+import io.github.mainstringargs.domain.alpaca.order.Order;
 import io.github.mainstringargs.util.time.TimeUtil;
 
 import java.time.Instant;
