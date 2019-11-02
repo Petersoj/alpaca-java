@@ -1,0 +1,30 @@
+[
+  {
+    "market": "STOCKS",
+    "desc": "Stocks / Equities / ETFs"
+  },
+  {
+    "market": "INDICES",
+    "desc": "Indices"
+  },
+  {
+    "market": "MF",
+    "desc": "Mutual Funds"
+  },
+  {
+    "market": "MMF",
+    "desc": "Money Market Funds"
+  },
+  {
+    "market": "CRYPTO",
+    "desc": "Crypto"
+  },
+  {
+    "market": "FX",
+    "desc": "Forex / Currencies"
+  },
+  {
+    "market": "BONDS",
+    "desc": "Bonds"
+  }
+]

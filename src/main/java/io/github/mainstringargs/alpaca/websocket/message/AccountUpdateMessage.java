@@ -3,8 +3,8 @@ package io.github.mainstringargs.alpaca.websocket.message;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
-import io.github.mainstringargs.alpaca.domain.Account;
 import io.github.mainstringargs.alpaca.enums.MessageType;
+import io.github.mainstringargs.domain.alpaca.account.Account;
 
 /**
  * The Class AccountUpdateMessage.

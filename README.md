@@ -98,7 +98,7 @@ try {
     Account alpacaAccount = alpacaApi.getAccount();
 
     System.out.println("\n\nAccount Information:");
-    System.out.println("\tCreated At: " + Utilities.fromDateTimeString(alpacaAccount.getCreatedAt()) +
+    System.out.println("\tCreated At: " + TimeUtil.fromDateTimeString(alpacaAccount.getCreatedAt()) +
             "\n\tBuying Power: " + alpacaAccount.getBuyingPower() +
             "\n\tPortfolio Value: " + alpacaAccount.getPortfolioValue());
 } catch (AlpacaAPIException e) {
@@ -111,10 +111,10 @@ try {
 
     System.out.println("\n\nClock:");
     System.out.println("\tCurrent Time: " +
-            Utilities.fromDateTimeString(alpacaClock.getTimestamp()) + "\n\tIs Open: " +
+            TimeUtil.fromDateTimeString(alpacaClock.getTimestamp()) + "\n\tIs Open: " +
             alpacaClock.isIsOpen() + "\n\tMarket Next Open Time: " +
-            Utilities.fromDateTimeString(alpacaClock.getNextOpen()) + "\n\tMark Next Close Time: " +
-            Utilities.fromDateTimeString(alpacaClock.getNextClose()));
+            TimeUtil.fromDateTimeString(alpacaClock.getNextOpen()) + "\n\tMark Next Close Time: " +
+            TimeUtil.fromDateTimeString(alpacaClock.getNextClose()));
 } catch (AlpacaAPIException e) {
     e.printStackTrace();
 }
@@ -134,7 +134,7 @@ try {
             "\n\tQty: " + limitOrder.getQty() +
             "\n\tType: " + limitOrder.getType() +
             "\n\tLimit Price: $" + limitOrder.getLimitPrice() +
-            "\n\tCreated At: " + Utilities.fromDateTimeString(limitOrder.getCreatedAt()));
+            "\n\tCreated At: " + TimeUtil.fromDateTimeString(limitOrder.getCreatedAt()));
 } catch (AlpacaAPIException e) {
     e.printStackTrace();
 }
@@ -149,7 +149,7 @@ try {
             "\n\tQty: " + limitOrderById.getQty() +
             "\n\tType: " + limitOrderById.getType() +
             "\n\tLimit Price: $" + limitOrderById.getLimitPrice() +
-            "\n\tCreated At: " + Utilities.fromDateTimeString(limitOrderById.getCreatedAt()));
+            "\n\tCreated At: " + TimeUtil.fromDateTimeString(limitOrderById.getCreatedAt()));
 } catch (AlpacaAPIException e) {
     e.printStackTrace();
 }
@@ -164,7 +164,7 @@ try {
             "\n\tQty: " + limitOrderByClientId.getQty() +
             "\n\tType: " + limitOrderByClientId.getType() +
             "\n\tLimit Price: $" + limitOrderByClientId.getLimitPrice() +
-            "\n\tCreated At: " + Utilities.fromDateTimeString(limitOrderByClientId.getCreatedAt()));
+            "\n\tCreated At: " + TimeUtil.fromDateTimeString(limitOrderByClientId.getCreatedAt()));
 } catch (AlpacaAPIException e) {
     e.printStackTrace();
 }
@@ -293,7 +293,7 @@ try {
 }
 
 try {
-    SymbolDetails symbolDetails = polygonAPI.getSymbolDetails(ticker);
+    TickerDetails symbolDetails = polygonAPI.getTickerDetails(ticker);
 
     System.out.println("\n\n" + ticker + " Symbol Details:");
     System.out.println("\t" + symbolDetails);
@@ -311,11 +311,11 @@ try {
 }
 
 try {
-    List<SymbolDividend> symbolDividends = polygonAPI.getSymbolDividends(ticker);
+    List<StockDividend> symbolDividends = polygonAPI.getStockDividends(ticker);
 
-    System.out.println("\n\n" + ticker + " Symbol Dividends:");
+    System.out.println("\n\n" + ticker + " Stock Dividends:");
 
-    for (SymbolDividend div : symbolDividends) {
+    for (StockDividend div : symbolDividends) {
         System.out.println("\t" + div);
     }
 } catch (PolygonAPIException e) {
@@ -335,22 +335,22 @@ try {
 }
 
 try {
-    List<SymbolFinancial> symbolFinancials = polygonAPI.getSymbolFinancials(ticker);
+    List<StockFinancial> symbolFinancials = polygonAPI.getStockFinancials(ticker);
 
     System.out.println("\n\n" + ticker + " Symbol Financials:");
-    for (SymbolFinancial financial : symbolFinancials)
+    for (StockFinancial financial : symbolFinancials) {
         System.out.println("\t" + financial);
-
+    }
 
 } catch (PolygonAPIException e) {
     e.printStackTrace();
 }
 
 try {
-    List<SymbolNews> symbolNews = polygonAPI.getSymbolNews(ticker);
+    List<TickerNews> symbolNews = polygonAPI.getTickerNews(ticker);
 
     System.out.println("\n\n" + ticker + " Symbol News:");
-    for (SymbolNews newsItem : symbolNews) {
+    for (TickerNews newsItem : symbolNews) {
         System.out.println("\t" + newsItem);
     }
 } catch (PolygonAPIException e) {
@@ -358,9 +358,8 @@ try {
 }
 
 try {
-    List<Ticker> tickers =
-            polygonAPI.getTickers(Sort.TICKER_ASC, null, null, Locale.US, "Tech", null, null, null)
-                    .getTickers();
+    List<Ticker> tickers = polygonAPI.getTickers(Sort.TICKER_ASC, null,
+            null, Locale.US, "Tech", null, null, null).getTickers();
 
     System.out.println("\n\n" + "Tech" + " Search US Tickers");
     for (Ticker tickerItem : tickers) {
@@ -382,11 +381,11 @@ try {
 }
 
 try {
-    List<io.github.mainstringargs.polygon.domain.reference.Locale> locales =
+    List<io.github.mainstringargs.domain.polygon.reference.Locale> locales =
             polygonAPI.getLocales();
 
     System.out.println("\n\n" + " Locales:");
-    for (io.github.mainstringargs.polygon.domain.reference.Locale locale : locales) {
+    for (io.github.mainstringargs.domain.polygon.reference.Locale locale : locales) {
         System.out.println("\t" + locale);
     }
 } catch (PolygonAPIException e) {
@@ -405,10 +404,10 @@ try {
 }
 
 try {
-    List<Split> splits = polygonAPI.getSplits(ticker);
+    List<StockSplit> splits = polygonAPI.getStockSplits(ticker);
 
     System.out.println("\n\n" + ticker + " Split:");
-    for (Split splitItems : splits) {
+    for (StockSplit splitItems : splits) {
         System.out.println("\t" + splitItems);
     }
 } catch (PolygonAPIException e) {
@@ -445,7 +444,7 @@ try {
     System.out.println("\n\n" + ticker + " Quotes on " + LocalDate.of(2019, 5, 1) + ": ");
     System.out.println("\t" + "map " + quotes.getMap());
     System.out.println("\t" + "ticks");
-    for (io.github.mainstringargs.polygon.domain.historic.quotes.Tick tick : quotes.getTicks()) {
+    for (io.github.mainstringargs.domain.polygon.historic.quotes.Tick tick : quotes.getTicks()) {
         System.out.println("\t" + tick);
     }
 } catch (PolygonAPIException e) {
@@ -453,7 +452,7 @@ try {
 }
 
 try {
-    Trade trade = polygonAPI.getLastTrade(ticker);
+    LastTrade trade = polygonAPI.getLastTrade(ticker);
 
     System.out.println("\n\n" + ticker + " Last Trade: ");
     System.out.println("\t" + trade);
@@ -462,7 +461,7 @@ try {
 }
 
 try {
-    Quote quote = polygonAPI.getLastQuote(ticker);
+    LastQuote quote = polygonAPI.getLastQuote(ticker);
 
     System.out.println("\n\n" + ticker + " Last Quote: ");
     System.out.println("\t" + quote);
@@ -563,6 +562,12 @@ polygonAPI.addPolygonStreamListener(new PolygonStreamListenerAdapter(ticker, Cha
         System.out.println("===> streamUpdate " + ticker + " " + channelType + " " + message);
     }
 });
+
+try {
+    Thread.sleep(10000L);
+} catch (InterruptedException e) {
+    e.printStackTrace();
+}
 ```
 This code will output the following:
 

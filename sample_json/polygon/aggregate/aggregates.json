@@ -1,0 +1,17 @@
+{
+  "resultsCount": 1,
+  "adjusted": true,
+  "queryCount": 1,
+  "results": [
+    {
+      "c": 127.67,
+      "ticker": "MSFT",
+      "t": 1558555200000,
+      "v": 1.725695E7,
+      "h": 128.24,
+      "l": 126.52,
+      "o": 126.62
+    }
+  ],
+  "status": "OK"
+}

@@ -3,7 +3,7 @@ package io.github.mainstringargs.polygon.websocket.message;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
-import io.github.mainstringargs.polygon.domain.ChannelStatus;
+import io.github.mainstringargs.domain.polygon.websocket.ChannelStatus;
 
 import java.util.Objects;
 import java.util.StringJoiner;

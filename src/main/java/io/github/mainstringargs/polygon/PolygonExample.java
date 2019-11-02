@@ -1,26 +1,26 @@
 package io.github.mainstringargs.polygon;
 
-import io.github.mainstringargs.polygon.domain.DailyOpenClose;
-import io.github.mainstringargs.polygon.domain.Quote;
-import io.github.mainstringargs.polygon.domain.Snapshot;
-import io.github.mainstringargs.polygon.domain.Trade;
-import io.github.mainstringargs.polygon.domain.aggregate.Aggregates;
-import io.github.mainstringargs.polygon.domain.aggregate.Result;
-import io.github.mainstringargs.polygon.domain.historic.quotes.Quotes;
-import io.github.mainstringargs.polygon.domain.historic.trades.Tick;
-import io.github.mainstringargs.polygon.domain.historic.trades.Trades;
-import io.github.mainstringargs.polygon.domain.meta.Exchange;
-import io.github.mainstringargs.polygon.domain.meta.SymbolAnalystRatings;
-import io.github.mainstringargs.polygon.domain.meta.SymbolDetails;
-import io.github.mainstringargs.polygon.domain.meta.SymbolDividend;
-import io.github.mainstringargs.polygon.domain.meta.SymbolEarning;
-import io.github.mainstringargs.polygon.domain.meta.SymbolEndpoints;
-import io.github.mainstringargs.polygon.domain.meta.SymbolFinancial;
-import io.github.mainstringargs.polygon.domain.meta.SymbolNews;
-import io.github.mainstringargs.polygon.domain.reference.Market;
-import io.github.mainstringargs.polygon.domain.reference.Split;
-import io.github.mainstringargs.polygon.domain.reference.Ticker;
-import io.github.mainstringargs.polygon.domain.reference.TypesMapping;
+import io.github.mainstringargs.domain.polygon.aggregate.Aggregates;
+import io.github.mainstringargs.domain.polygon.aggregate.Result;
+import io.github.mainstringargs.domain.polygon.historic.quotes.Quotes;
+import io.github.mainstringargs.domain.polygon.historic.trades.Tick;
+import io.github.mainstringargs.domain.polygon.historic.trades.Trades;
+import io.github.mainstringargs.domain.polygon.last.LastQuote;
+import io.github.mainstringargs.domain.polygon.last.LastTrade;
+import io.github.mainstringargs.domain.polygon.meta.Exchange;
+import io.github.mainstringargs.domain.polygon.meta.SymbolAnalystRatings;
+import io.github.mainstringargs.domain.polygon.meta.SymbolEarning;
+import io.github.mainstringargs.domain.polygon.meta.SymbolEndpoints;
+import io.github.mainstringargs.domain.polygon.meta.TickerDetails;
+import io.github.mainstringargs.domain.polygon.meta.TickerNews;
+import io.github.mainstringargs.domain.polygon.open_close.DailyOpenClose;
+import io.github.mainstringargs.domain.polygon.reference.Market;
+import io.github.mainstringargs.domain.polygon.reference.StockDividend;
+import io.github.mainstringargs.domain.polygon.reference.StockFinancial;
+import io.github.mainstringargs.domain.polygon.reference.StockSplit;
+import io.github.mainstringargs.domain.polygon.reference.Ticker;
+import io.github.mainstringargs.domain.polygon.reference.TypesMapping;
+import io.github.mainstringargs.domain.polygon.snapshot.Snapshot;
 import io.github.mainstringargs.polygon.enums.ChannelType;
 import io.github.mainstringargs.polygon.enums.Locale;
 import io.github.mainstringargs.polygon.enums.Sort;
@@ -60,7 +60,7 @@ public class PolygonExample {
         }
 
         try {
-            SymbolDetails symbolDetails = polygonAPI.getSymbolDetails(ticker);
+            TickerDetails symbolDetails = polygonAPI.getTickerDetails(ticker);
 
             System.out.println("\n\n" + ticker + " Symbol Details:");
             System.out.println("\t" + symbolDetails);
@@ -78,11 +78,11 @@ public class PolygonExample {
         }
 
         try {
-            List<SymbolDividend> symbolDividends = polygonAPI.getSymbolDividends(ticker);
+            List<StockDividend> symbolDividends = polygonAPI.getStockDividends(ticker);
 
-            System.out.println("\n\n" + ticker + " Symbol Dividends:");
+            System.out.println("\n\n" + ticker + " Stock Dividends:");
 
-            for (SymbolDividend div : symbolDividends) {
+            for (StockDividend div : symbolDividends) {
                 System.out.println("\t" + div);
             }
         } catch (PolygonAPIException e) {
@@ -102,22 +102,22 @@ public class PolygonExample {
         }
 
         try {
-            List<SymbolFinancial> symbolFinancials = polygonAPI.getSymbolFinancials(ticker);
+            List<StockFinancial> symbolFinancials = polygonAPI.getStockFinancials(ticker);
 
             System.out.println("\n\n" + ticker + " Symbol Financials:");
-            for (SymbolFinancial financial : symbolFinancials)
+            for (StockFinancial financial : symbolFinancials) {
                 System.out.println("\t" + financial);
-
+            }
 
         } catch (PolygonAPIException e) {
             e.printStackTrace();
         }
 
         try {
-            List<SymbolNews> symbolNews = polygonAPI.getSymbolNews(ticker);
+            List<TickerNews> symbolNews = polygonAPI.getTickerNews(ticker);
 
             System.out.println("\n\n" + ticker + " Symbol News:");
-            for (SymbolNews newsItem : symbolNews) {
+            for (TickerNews newsItem : symbolNews) {
                 System.out.println("\t" + newsItem);
             }
         } catch (PolygonAPIException e) {
@@ -125,9 +125,8 @@ public class PolygonExample {
         }
 
         try {
-            List<Ticker> tickers =
-                    polygonAPI.getTickers(Sort.TICKER_ASC, null, null, Locale.US, "Tech", null, null, null)
-                            .getTickers();
+            List<Ticker> tickers = polygonAPI.getTickers(Sort.TICKER_ASC, null,
+                    null, Locale.US, "Tech", null, null, null).getTickers();
 
             System.out.println("\n\n" + "Tech" + " Search US Tickers");
             for (Ticker tickerItem : tickers) {
@@ -149,11 +148,11 @@ public class PolygonExample {
         }
 
         try {
-            List<io.github.mainstringargs.polygon.domain.reference.Locale> locales =
+            List<io.github.mainstringargs.domain.polygon.reference.Locale> locales =
                     polygonAPI.getLocales();
 
             System.out.println("\n\n" + " Locales:");
-            for (io.github.mainstringargs.polygon.domain.reference.Locale locale : locales) {
+            for (io.github.mainstringargs.domain.polygon.reference.Locale locale : locales) {
                 System.out.println("\t" + locale);
             }
         } catch (PolygonAPIException e) {
@@ -172,10 +171,10 @@ public class PolygonExample {
         }
 
         try {
-            List<Split> splits = polygonAPI.getSplits(ticker);
+            List<StockSplit> splits = polygonAPI.getStockSplits(ticker);
 
             System.out.println("\n\n" + ticker + " Split:");
-            for (Split splitItems : splits) {
+            for (StockSplit splitItems : splits) {
                 System.out.println("\t" + splitItems);
             }
         } catch (PolygonAPIException e) {
@@ -212,7 +211,7 @@ public class PolygonExample {
             System.out.println("\n\n" + ticker + " Quotes on " + LocalDate.of(2019, 5, 1) + ": ");
             System.out.println("\t" + "map " + quotes.getMap());
             System.out.println("\t" + "ticks");
-            for (io.github.mainstringargs.polygon.domain.historic.quotes.Tick tick : quotes.getTicks()) {
+            for (io.github.mainstringargs.domain.polygon.historic.quotes.Tick tick : quotes.getTicks()) {
                 System.out.println("\t" + tick);
             }
         } catch (PolygonAPIException e) {
@@ -220,7 +219,7 @@ public class PolygonExample {
         }
 
         try {
-            Trade trade = polygonAPI.getLastTrade(ticker);
+            LastTrade trade = polygonAPI.getLastTrade(ticker);
 
             System.out.println("\n\n" + ticker + " Last Trade: ");
             System.out.println("\t" + trade);
@@ -229,7 +228,7 @@ public class PolygonExample {
         }
 
         try {
-            Quote quote = polygonAPI.getLastQuote(ticker);
+            LastQuote quote = polygonAPI.getLastQuote(ticker);
 
             System.out.println("\n\n" + ticker + " Last Quote: ");
             System.out.println("\t" + quote);
