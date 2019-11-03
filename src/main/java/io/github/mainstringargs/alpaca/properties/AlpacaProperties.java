@@ -16,8 +16,14 @@ import java.util.Properties;
  */
 public class AlpacaProperties {
 
+    /** The logger. */
+    private static final Logger LOGGER = LogManager.getLogger(AlpacaProperties.class);
+
+    /** The property file. */
+    private static final LinkedHashSet<Properties> propertyFiles = new LinkedHashSet<>();
+
     /** The Constant INVALID_VALUE. */
-    public static final String INVALID_VALUE = "<PLACEHOLDER>";
+    private static final String INVALID_VALUE = "<PLACEHOLDER>";
 
     /** The Constant API_VERSION_KEY. */
     private static final String API_VERSION_KEY = "api_version";
@@ -49,12 +55,6 @@ public class AlpacaProperties {
 
     /** The Constant DEFAULT_DATA_URL. */
     private static final String DEFAULT_DATA_URL = "https://data.alpaca.markets";
-
-    /** The property file. */
-    private static final LinkedHashSet<Properties> propertyFiles = new LinkedHashSet<>();
-
-    /** The logger. */
-    private static final Logger LOGGER = LogManager.getLogger(AlpacaProperties.class);
 
     /** The Constant API_VERSION_VALUE. */
     public static final String API_VERSION_VALUE =
@@ -95,7 +95,9 @@ public class AlpacaProperties {
                 urls = ClassLoader.getSystemClassLoader().getResources(propertyFile);
             } catch (IOException e2) {
                 e2.printStackTrace();
+                return;
             }
+
             while (urls.hasMoreElements()) {
                 propertyUrls.add(urls.nextElement());
             }
@@ -127,6 +129,7 @@ public class AlpacaProperties {
                 propertyFiles.add(propFile);
             }
 
+            LOGGER.info("Alpaca Properties loaded.");
             initialized = true;
         }
     }
@@ -139,7 +142,7 @@ public class AlpacaProperties {
      *
      * @return the property
      */
-    public static String getProperty(String key, String defaultValue) {
+    public synchronized static String getProperty(String key, String defaultValue) {
         initProperties();
 
         for (Properties prop : propertyFiles) {

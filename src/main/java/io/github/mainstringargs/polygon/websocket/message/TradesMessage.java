@@ -111,7 +111,7 @@ public class TradesMessage implements ChannelMessage {
         } else if (!stockTrade.equals(other.stockTrade)) { return false; }
         if (timestamp == null) {
             return other.timestamp == null;
-        } else return timestamp.equals(other.timestamp);
+        } else { return timestamp.equals(other.timestamp); }
     }
 
     /*

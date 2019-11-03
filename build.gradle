@@ -140,13 +140,13 @@ sourceSets {
 // The 'path' can either be a file or directory, but keep in mind that
 // if it is a directory, all the subdirectories will have POJOs generated
 // If the 'path' is a directory, it must end in a '/'
-// The sourceType is either 'json' or 'schema'
+// The sourceType is either 'json' or 'jsonschema'
 // The generated POJOs will be in a package structure analogous to the path
 // See: https://github.com/joelittlejohn/jsonschema2pojo/wiki/Reference
 def sampleJSONPOJOs = [
         // alpaca/
         ['path': 'alpaca/account/', 'sourceType': 'json'],
-        ['path': 'alpaca/account_activities/', 'sourceType': 'json'],
+        ['path': 'alpaca/account_activities/', 'sourceType': 'jsonschema'],
         ['path': 'alpaca/account_configuration/', 'sourceType': 'json'],
         ['path': 'alpaca/asset/', 'sourceType': 'json'],
         ['path': 'alpaca/bar/', 'sourceType': 'json'],
@@ -197,6 +197,8 @@ task generatePOJOs() {
 compileJava {
     dependsOn generatePOJOs
 }
+
+build.finalizedBy(publishToMavenLocal)
 
 if (hasProperty('buildScan')) {
     buildScan { licenseAgreementUrl = 'https://gradle.com/terms-of-service'; licenseAgree = 'yes' }

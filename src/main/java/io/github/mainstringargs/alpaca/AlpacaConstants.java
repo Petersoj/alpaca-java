@@ -80,11 +80,20 @@ public class AlpacaConstants {
     /** The Constant ACCOUNT_ENDPOINT. */
     public static final String ACCOUNT_ENDPOINT = "account";
 
+    /** The Constant ACTIVITIES_ENDPOINT. */
+    public static final String ACTIVITIES_ENDPOINT = "activities";
+
     /** The Constant CONFIGURATIONS_ENDPOINT. */
     public static final String CONFIGURATIONS_ENDPOINT = "configurations";
 
     /** The Constant ORDERS_BY_CLIENT_ORDER_ID_ENDPOINT. */
     public static final String ORDERS_BY_CLIENT_ORDER_ID_ENDPOINT = "orders:by_client_order_id";
+
+    /** The constant PAGE_SIZE_PARAMTER. */
+    public static final String PAGE_SIZE_PARAMTER = "page_size";
+
+    /** The constant PAGE_TOKEN_PARAMTER. */
+    public static final String PAGE_TOKEN_PARAMTER = "page_token";
 
     /** The Constant ORDERS_ENDPOINT. */
     public static final String ORDERS_ENDPOINT = "orders";

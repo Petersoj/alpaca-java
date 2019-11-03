@@ -1,12 +1,12 @@
 package io.github.mainstringargs.alpaca.enums;
 
 /**
- * The enum Activity types.
+ * The enum Activity type.
  *
  * @see
  * <a href="https://docs.alpaca.markets/api-documentation/api-v2/account-activities/">https://docs.alpaca.markets/api-documentation/api-v2/account-activities/</a>
  */
-public enum ActivityTypes {
+public enum ActivityType {
 
     /*
      Activity Types:

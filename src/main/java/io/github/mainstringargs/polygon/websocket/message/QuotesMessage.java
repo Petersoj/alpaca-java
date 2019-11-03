@@ -111,7 +111,7 @@ public class QuotesMessage implements ChannelMessage {
         } else if (!stockQuote.equals(other.stockQuote)) { return false; }
         if (timestamp == null) {
             return other.timestamp == null;
-        } else return timestamp.equals(other.timestamp);
+        } else { return timestamp.equals(other.timestamp); }
     }
 
     /*

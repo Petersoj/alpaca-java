@@ -75,13 +75,15 @@ public class PolygonProperties {
             String propertyFile = "polygon.properties";
             URL url = AlpacaProperties.class.getResource("/" + propertyFile);
             propertyUrls.add(url);
-            Enumeration<URL> urls = null;
 
+            Enumeration<URL> urls = null;
             try {
                 urls = ClassLoader.getSystemClassLoader().getResources(propertyFile);
             } catch (IOException e2) {
                 e2.printStackTrace();
+                return;
             }
+
             while (urls.hasMoreElements()) {
                 propertyUrls.add(urls.nextElement());
             }
@@ -113,6 +115,8 @@ public class PolygonProperties {
                 }
                 propertyFiles.add(propFile);
             }
+
+            LOGGER.info("Polygon Properties loaded.");
             initialized = true;
         }
     }
@@ -126,7 +130,6 @@ public class PolygonProperties {
      * @return the property
      */
     public static String getProperty(String key, String defaultValue) {
-
         initProperties();
 
         for (Properties prop : propertyFiles) {

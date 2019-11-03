@@ -1,8 +1,14 @@
 package io.github.mainstringargs.alpaca;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
 import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.JsonNode;
+import io.github.mainstringargs.alpaca.enums.ActivityType;
 import io.github.mainstringargs.alpaca.enums.AssetStatus;
 import io.github.mainstringargs.alpaca.enums.BarsTimeFrame;
 import io.github.mainstringargs.alpaca.enums.Direction;
@@ -17,6 +23,9 @@ import io.github.mainstringargs.alpaca.rest.exceptions.AlpacaAPIException;
 import io.github.mainstringargs.alpaca.websocket.AlpacaStreamListener;
 import io.github.mainstringargs.alpaca.websocket.AlpacaWebsocketClient;
 import io.github.mainstringargs.domain.alpaca.account.Account;
+import io.github.mainstringargs.domain.alpaca.accountactivities.AccountActivity;
+import io.github.mainstringargs.domain.alpaca.accountactivities.NonTradeActivity;
+import io.github.mainstringargs.domain.alpaca.accountactivities.TradeActivity;
 import io.github.mainstringargs.domain.alpaca.accountconfiguration.AccountConfiguration;
 import io.github.mainstringargs.domain.alpaca.asset.Asset;
 import io.github.mainstringargs.domain.alpaca.bar.Bar;
@@ -32,9 +41,12 @@ import java.lang.reflect.Type;
 import java.net.URLEncoder;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * The Class AlpacaAPI.
@@ -43,6 +55,9 @@ public class AlpacaAPI {
 
     /** The logger. */
     private static Logger LOGGER = LogManager.getLogger(AlpacaAPI.class);
+
+    /** The Gson */
+    private static final Gson GSON = new GsonBuilder().setLenient().create();
 
     /** The version. */
     private final String apiVersion;
@@ -150,15 +165,91 @@ public class AlpacaAPI {
     /**
      * Gets account activities.
      *
+     * @param date          the date
+     * @param until         the until
+     * @param after         the after
+     * @param direction     the direction
+     * @param pageSize      the page size
+     * @param pageToken     the page token
+     * @param activityTypes the activity types (null for all activities)
+     *
      * @return the account activities
+     *
      * @throws AlpacaAPIException the alpaca api exception
-     * @see <a href=
-     * "https://docs.alpaca.markets/api-documentation/api-v2/account-activities/">https://docs.alpaca
-     * .markets/api-documentation/api-v2/account-activities/</a>
      */
-    // public AccountActivities getAccountActivities() {
-    //     TODO account activities
-    // }
+    public ArrayList<AccountActivity> getAccountActivities(LocalDateTime date,
+            LocalDateTime until, LocalDateTime after, Direction direction, Integer pageSize, String pageToken,
+            ActivityType... activityTypes)
+            throws AlpacaAPIException {
+        AlpacaRequestBuilder urlBuilder = new AlpacaRequestBuilder(AlpacaConstants.VERSION_2_ENDPOINT, baseAccountUrl,
+                AlpacaConstants.ACCOUNT_ENDPOINT);
+        urlBuilder.appendEndpoint(AlpacaConstants.ACTIVITIES_ENDPOINT);
+
+        if (activityTypes != null) { // Check if we don't want all activity types
+            if (activityTypes.length == 1) { // Get one activity
+                urlBuilder.appendEndpoint(activityTypes[0].getAPIName());
+            } else { // Get list of activities
+                urlBuilder.appendURLParameter("activity_types", Arrays.stream(activityTypes)
+                        .map(ActivityType::getAPIName).collect(Collectors.joining(","))); // Makes comma-separated list
+            }
+        }
+
+        if (date != null) {
+            urlBuilder.appendURLParameter(AlpacaConstants.AFTER_PARAMETER, TimeUtil.toDateTimeString(date));
+        }
+
+        if (until != null) {
+            urlBuilder.appendURLParameter(AlpacaConstants.UNTIL_PARAMETER, TimeUtil.toDateTimeString(until));
+        }
+
+        if (after != null) {
+            urlBuilder.appendURLParameter(AlpacaConstants.AFTER_PARAMETER, TimeUtil.toDateTimeString(after));
+        }
+
+        if (direction != null) {
+            urlBuilder.appendURLParameter(AlpacaConstants.DIRECTION_PARAMETER, direction.getAPIName());
+        }
+
+        if (pageSize != null) {
+            urlBuilder.appendURLParameter(AlpacaConstants.PAGE_SIZE_PARAMTER, pageSize.toString());
+        }
+
+        if (pageToken != null) {
+            urlBuilder.appendURLParameter(AlpacaConstants.PAGE_TOKEN_PARAMTER, pageToken);
+        }
+
+        HttpResponse<JsonNode> response = alpacaRequest.invokeGet(urlBuilder);
+
+        if (response.getStatus() != 200) {
+            throw new AlpacaAPIException(response);
+        }
+
+        JsonElement responseJsonElement = alpacaRequest.getResponseJSON(response);
+        ArrayList<AccountActivity> accountActivities = new ArrayList<>();
+
+        if (responseJsonElement instanceof JsonArray) {
+            JsonArray responseJsonArray = (JsonArray) responseJsonElement;
+
+            for (JsonElement arrayJsonElement : responseJsonArray) { // Loop through response array
+                if (arrayJsonElement instanceof JsonObject) {
+                    JsonObject arrayJsonObject = (JsonObject) arrayJsonElement;
+
+                    if (alpacaRequest.doesGSONPOJOMatch(TradeActivity.class, arrayJsonObject)) {
+                        accountActivities.add(GSON.fromJson(arrayJsonObject, TradeActivity.class));
+                    } else if (alpacaRequest.doesGSONPOJOMatch(NonTradeActivity.class, arrayJsonObject)) {
+                        accountActivities.add(GSON.fromJson(arrayJsonObject, NonTradeActivity.class));
+                    } else {
+                        LOGGER.warn("Received unknown JSON Object in response!");
+                    }
+                } else {
+                    throw new IllegalStateException("All array elements must be objects!");
+                }
+            }
+            return accountActivities;
+        } else {
+            throw new IllegalStateException("The response must be an array!");
+        }
+    }
 
     /**
      * Gets account configurations.
@@ -217,7 +308,6 @@ public class AlpacaAPI {
      * @throws AlpacaAPIException the alpaca API exception
      * @see
      * <a href="https://docs.alpaca.markets/api-documentation/web-api/orders/#get-a-list-of-orders">https://docs.alpaca.markets/api-documentation/web-api/orders/#get-a-list-of-orders</a>
-     * Status: Open Limit: 50 Direction: Descending
      */
     public List<Order> getOrders() throws AlpacaAPIException {
         Type listType = new TypeToken<List<Order>>() {}.getType();

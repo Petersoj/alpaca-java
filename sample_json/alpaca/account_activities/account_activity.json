@@ -1,0 +1,22 @@
+{
+  "type": "object",
+  "description": "See https://docs.alpaca.markets/api-documentation/api-v2/account-activities/",
+  "properties": {
+    "activity_type": {
+      "type": "string",
+      "description": "See https://docs.alpaca.markets/api-documentation/api-v2/account-activities/#activity-types for a list of possible values."
+    },
+    "id": {
+      "type": "string",
+      "description": "An id for the activity. Always in “::” format. Can be sent as page_token in requests to facilitate the paging of results."
+    },
+    "symbol": {
+      "type": "string",
+      "description": "The symbol of the security involved with the activity. Not present for all activity types."
+    },
+    "qty": {
+      "type": "string",
+      "description": "For dividend activities, the number of shares that contributed to the payment. Not present for other activity types."
+    }
+  }
+}

@@ -140,7 +140,7 @@ public abstract class AggregateMessage implements ChannelMessage {
         } else if (!start.equals(other.start)) { return false; }
         if (stockAggregate == null) {
             return other.stockAggregate == null;
-        } else return stockAggregate.equals(other.stockAggregate);
+        } else { return stockAggregate.equals(other.stockAggregate); }
     }
 
     /*

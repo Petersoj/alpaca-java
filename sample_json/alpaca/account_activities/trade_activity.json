@@ -1,0 +1,33 @@
+{
+  "type": "object",
+  "description": "See https://docs.alpaca.markets/api-documentation/api-v2/account-activities/",
+  "extends": {
+    "$ref": "account_activity.json"
+  },
+  "properties": {
+    "cum_qty": {
+      "type": "string",
+      "description": "The cumulative quantity of shares involved in the execution."
+    },
+    "leaves_qty": {
+      "type": "string",
+      "description": "For partially_filled orders, the quantity of shares that are left to be filled."
+    },
+    "price": {
+      "type": "string",
+      "description": "The per-share price that the trade was executed at."
+    },
+    "side": {
+      "type": "string",
+      "description": "buy or sell."
+    },
+    "transaction_time": {
+      "type": "string",
+      "description": "The time at which the execution occurred."
+    },
+    "type": {
+      "type": "string",
+      "description": "fill or partial_fill."
+    }
+  }
+}
