@@ -65,6 +65,7 @@ public class AlpacaWebsocketClientEndpoint {
      * Connect.
      *
      * @param endpointURI the endpoint URI
+     *
      * @throws DeploymentException the deployment exception
      * @throws IOException         Signals that an I/O exception has occurred.
      */
@@ -134,8 +135,7 @@ public class AlpacaWebsocketClientEndpoint {
     @OnMessage
     public void onMessage(String message) {
         executor.execute(() -> {
-            if (LOGGER.isDebugEnabled())
-                LOGGER.debug("onMessage " + message);
+            if (LOGGER.isDebugEnabled()) { LOGGER.debug("onMessage " + message); }
 
             if (messageHandler != null) {
                 JsonElement jelement = new JsonParser().parse(message);
@@ -179,7 +179,7 @@ public class AlpacaWebsocketClientEndpoint {
     /**
      * Message handler.
      */
-    public static interface MessageHandler {
+    public interface MessageHandler {
 
         /**
          * Handle message.

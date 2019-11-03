@@ -11,7 +11,6 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-
 public class PolygonWebsocketTestDriver {
 
     /**
@@ -72,7 +71,6 @@ public class PolygonWebsocketTestDriver {
         }
         System.out.println("remove two");
 
-
         client.removeListener(listener2);
 
         try {
@@ -81,7 +79,6 @@ public class PolygonWebsocketTestDriver {
             e1.printStackTrace();
         }
         System.out.println("remove three");
-
 
         client.removeListener(listener1);
 

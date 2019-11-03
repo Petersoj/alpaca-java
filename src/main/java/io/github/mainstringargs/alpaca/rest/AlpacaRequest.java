@@ -56,6 +56,7 @@ public class AlpacaRequest {
      * Invoke get.
      *
      * @param builder the builder
+     *
      * @return the http response
      */
     public HttpResponse<JsonNode> invokeGet(AlpacaRequestBuilder builder) {
@@ -81,6 +82,7 @@ public class AlpacaRequest {
      * Invoke post.
      *
      * @param builder the builder
+     *
      * @return the http response
      */
     public HttpResponse<JsonNode> invokePost(AlpacaRequestBuilder builder) {
@@ -107,6 +109,7 @@ public class AlpacaRequest {
      * Invoke delete.
      *
      * @param builder the builder
+     *
      * @return the http response
      */
     public HttpResponse<JsonNode> invokeDelete(AlpacaRequestBuilder builder) {
@@ -131,6 +134,7 @@ public class AlpacaRequest {
      * Invoke patch.
      *
      * @param builder the builder
+     *
      * @return the http response
      */
     public HttpResponse<JsonNode> invokePatch(AlpacaRequestBuilder builder) {
@@ -157,6 +161,7 @@ public class AlpacaRequest {
      * @param <T>          the generic type
      * @param httpResponse the http response
      * @param type         the type
+     *
      * @return the response object
      */
     public <T> T getResponseObject(HttpResponse<JsonNode> httpResponse, Type type) {

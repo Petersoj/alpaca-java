@@ -101,31 +101,20 @@ public class OrderUpdateMessage implements UpdateMessage {
      */
     @Override
     public boolean equals(Object obj) {
-        if (this == obj)
-            return true;
-        if (obj == null)
-            return false;
-        if (getClass() != obj.getClass())
-            return false;
+        if (this == obj) { return true; }
+        if (obj == null) { return false; }
+        if (getClass() != obj.getClass()) { return false; }
         OrderUpdateMessage other = (OrderUpdateMessage) obj;
-        if (event != other.event)
-            return false;
+        if (event != other.event) { return false; }
         if (order == null) {
-            if (other.order != null)
-                return false;
-        } else if (!order.equals(other.order))
-            return false;
+            if (other.order != null) { return false; }
+        } else if (!order.equals(other.order)) { return false; }
         if (price == null) {
-            if (other.price != null)
-                return false;
-        } else if (!price.equals(other.price))
-            return false;
+            if (other.price != null) { return false; }
+        } else if (!price.equals(other.price)) { return false; }
         if (timestamp == null) {
-            if (other.timestamp != null)
-                return false;
-        } else if (!timestamp.equals(other.timestamp))
-            return false;
-        return true;
+            return other.timestamp == null;
+        } else { return timestamp.equals(other.timestamp); }
     }
 
     /**

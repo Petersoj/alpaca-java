@@ -1,19 +1,15 @@
 package io.github.mainstringargs.alpaca.enums;
 
-
 /**
  * The Enum ObserverType.
  */
 public enum MessageType {
 
-
     /** The order updates. */
     ORDER_UPDATES("trade_updates"),
 
-
     /** The account updates. */
     ACCOUNT_UPDATES("account_updates");
-
 
     /** The api name. */
     String apiName;

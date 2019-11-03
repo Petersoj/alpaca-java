@@ -6,16 +6,15 @@ import io.github.mainstringargs.alpaca.websocket.message.UpdateMessage;
 import java.util.Set;
 
 /**
- * An asynchronous update interface for receiving notifications about Websocket information as the
- * Websocket is constructed.
+ * An asynchronous update interface for receiving notifications about Websocket information as the Websocket is
+ * constructed.
  *
  * @see UpdateMessage
  */
 public interface AlpacaStreamListener {
 
     /**
-     * Gets the message types.
-     * Null or empty to listen to all other stream messages.
+     * Gets the message types. Null or empty to listen to all other stream messages.
      *
      * @return the message types
      */

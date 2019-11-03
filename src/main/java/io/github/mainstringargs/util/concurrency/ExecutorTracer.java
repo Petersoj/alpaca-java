@@ -30,6 +30,7 @@ public class ExecutorTracer {
      * New fixed thread pool.
      *
      * @param nThreads the n threads
+     *
      * @return the executor service
      */
     public static ExecutorService newFixedThreadPool(int nThreads) {
@@ -42,6 +43,7 @@ public class ExecutorTracer {
      *
      * @param nThreads      the n threads
      * @param threadFactory the thread factory
+     *
      * @return the executor service
      */
     public static ExecutorService newFixedThreadPool(int nThreads, ThreadFactory threadFactory) {
@@ -53,6 +55,7 @@ public class ExecutorTracer {
      * New cached thread pool.
      *
      * @param threadFactory the thread factory
+     *
      * @return the executor service
      */
     public static ExecutorService newCachedThreadPool(ThreadFactory threadFactory) {
@@ -74,6 +77,7 @@ public class ExecutorTracer {
      * New single thread executor.
      *
      * @param threadFactory the thread factory
+     *
      * @return the executor service
      */
     public static ExecutorService newSingleThreadExecutor(ThreadFactory threadFactory) {
@@ -104,6 +108,7 @@ public class ExecutorTracer {
      * New scheduled thread pool.
      *
      * @param corePoolSize the core pool size
+     *
      * @return the scheduled executor service
      */
     public static ScheduledExecutorService newScheduledThreadPool(int corePoolSize) {
@@ -115,10 +120,11 @@ public class ExecutorTracer {
      *
      * @param corePoolSize  the core pool size
      * @param threadFactory the thread factory
+     *
      * @return the scheduled executor service
      */
     public static ScheduledExecutorService newScheduledThreadPool(int corePoolSize,
-                                                                  ThreadFactory threadFactory) {
+            ThreadFactory threadFactory) {
         return new ScheduledThreadPoolExecutorTracer(corePoolSize, threadFactory);
     }
 
@@ -239,7 +245,7 @@ public class ExecutorTracer {
          * java.util.concurrent.TimeUnit)
          */
         public <T> List<Future<T>> invokeAll(Collection<? extends Callable<T>> tasks, long timeout,
-                                             TimeUnit unit) throws InterruptedException {
+                TimeUnit unit) throws InterruptedException {
             return e.invokeAll(tasks, timeout, unit);
         }
 
@@ -335,7 +341,7 @@ public class ExecutorTracer {
          * long, long, java.util.concurrent.TimeUnit)
          */
         public ScheduledFuture<?> scheduleAtFixedRate(Runnable command, long initialDelay, long period,
-                                                      TimeUnit unit) {
+                TimeUnit unit) {
             return e.scheduleAtFixedRate(command, initialDelay, period, unit);
         }
 
@@ -346,7 +352,7 @@ public class ExecutorTracer {
          * long, long, java.util.concurrent.TimeUnit)
          */
         public ScheduledFuture<?> scheduleWithFixedDelay(Runnable command, long initialDelay,
-                                                         long delay, TimeUnit unit) {
+                long delay, TimeUnit unit) {
             return e.scheduleWithFixedDelay(command, initialDelay, delay, unit);
         }
     }

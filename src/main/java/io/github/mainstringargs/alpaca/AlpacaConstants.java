@@ -91,5 +91,5 @@ public class AlpacaConstants {
 
     /** The Constant UTF_ENCODING. */
     public static final String UTF_ENCODING = "UTF-8";
-    
+
 }

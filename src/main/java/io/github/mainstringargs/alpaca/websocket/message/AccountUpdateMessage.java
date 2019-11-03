@@ -72,19 +72,13 @@ public class AccountUpdateMessage implements UpdateMessage {
      */
     @Override
     public boolean equals(Object obj) {
-        if (this == obj)
-            return true;
-        if (obj == null)
-            return false;
-        if (getClass() != obj.getClass())
-            return false;
+        if (this == obj) { return true; }
+        if (obj == null) { return false; }
+        if (getClass() != obj.getClass()) { return false; }
         AccountUpdateMessage other = (AccountUpdateMessage) obj;
         if (account == null) {
-            if (other.account != null)
-                return false;
-        } else if (!account.equals(other.account))
-            return false;
-        return true;
+            return other.account == null;
+        } else { return account.equals(other.account); }
     }
 
     /*

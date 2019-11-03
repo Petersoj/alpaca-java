@@ -27,6 +27,7 @@ public enum Locale {
      * From API name.
      *
      * @param apiName the api name
+     *
      * @return the channel type
      */
     public static Locale fromAPIName(String apiName) {

@@ -127,31 +127,20 @@ public abstract class AggregateMessage implements ChannelMessage {
      */
     @Override
     public boolean equals(Object obj) {
-        if (this == obj)
-            return true;
-        if (obj == null)
-            return false;
-        if (getClass() != obj.getClass())
-            return false;
+        if (this == obj) { return true; }
+        if (obj == null) { return false; }
+        if (getClass() != obj.getClass()) { return false; }
         AggregateMessage other = (AggregateMessage) obj;
-        if (channelType != other.channelType)
-            return false;
+        if (channelType != other.channelType) { return false; }
         if (end == null) {
-            if (other.end != null)
-                return false;
-        } else if (!end.equals(other.end))
-            return false;
+            if (other.end != null) { return false; }
+        } else if (!end.equals(other.end)) { return false; }
         if (start == null) {
-            if (other.start != null)
-                return false;
-        } else if (!start.equals(other.start))
-            return false;
+            if (other.start != null) { return false; }
+        } else if (!start.equals(other.start)) { return false; }
         if (stockAggregate == null) {
-            if (other.stockAggregate != null)
-                return false;
-        } else if (!stockAggregate.equals(other.stockAggregate))
-            return false;
-        return true;
+            return other.stockAggregate == null;
+        } else return stockAggregate.equals(other.stockAggregate);
     }
 
     /*

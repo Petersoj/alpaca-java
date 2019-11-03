@@ -27,6 +27,7 @@ public enum Type {
      * From API name.
      *
      * @param apiName the api name
+     *
      * @return the channel type
      */
     public static Type fromAPIName(String apiName) {

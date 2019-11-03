@@ -7,18 +7,17 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- * The listener interface for receiving polygonStream events. The class that is interested in
- * processing a ChannelMessage event implements this interface, and the object created with that
- * class is registered with a component using the component's <code>addPolygonStreamListener</code>
- * method. When the ChannelMessage event occurs, that object's appropriate method is invoked.
+ * The listener interface for receiving polygonStream events. The class that is interested in processing a
+ * ChannelMessage event implements this interface, and the object created with that class is registered with a component
+ * using the component's <code>addPolygonStreamListener</code> method. When the ChannelMessage event occurs, that
+ * object's appropriate method is invoked.
  *
  * @see ChannelMessage
  */
 public interface PolygonStreamListener {
 
     /**
-     * Gets the stock channel types.
-     * Null or empty to listen to all other stream messages.
+     * Gets the stock channel types. Null or empty to listen to all other stream messages.
      *
      * @return the stock channel types
      */

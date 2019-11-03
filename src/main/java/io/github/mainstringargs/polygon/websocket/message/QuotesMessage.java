@@ -47,7 +47,6 @@ public class QuotesMessage implements ChannelMessage {
 
         long time = stockQuote.getT();
 
-
         timestamp = LocalDateTime.ofInstant(Instant.ofEpochMilli(time), ZoneId.systemDefault());
     }
 
@@ -102,26 +101,17 @@ public class QuotesMessage implements ChannelMessage {
      */
     @Override
     public boolean equals(Object obj) {
-        if (this == obj)
-            return true;
-        if (obj == null)
-            return false;
-        if (getClass() != obj.getClass())
-            return false;
+        if (this == obj) { return true; }
+        if (obj == null) { return false; }
+        if (getClass() != obj.getClass()) { return false; }
         QuotesMessage other = (QuotesMessage) obj;
-        if (channelType != other.channelType)
-            return false;
+        if (channelType != other.channelType) { return false; }
         if (stockQuote == null) {
-            if (other.stockQuote != null)
-                return false;
-        } else if (!stockQuote.equals(other.stockQuote))
-            return false;
+            if (other.stockQuote != null) { return false; }
+        } else if (!stockQuote.equals(other.stockQuote)) { return false; }
         if (timestamp == null) {
-            if (other.timestamp != null)
-                return false;
-        } else if (!timestamp.equals(other.timestamp))
-            return false;
-        return true;
+            return other.timestamp == null;
+        } else return timestamp.equals(other.timestamp);
     }
 
     /*

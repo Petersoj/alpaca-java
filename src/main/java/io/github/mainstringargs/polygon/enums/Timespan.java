@@ -1,6 +1,5 @@
 package io.github.mainstringargs.polygon.enums;
 
-
 /**
  * The Enum Timespan.
  */
@@ -37,6 +36,7 @@ public enum Timespan {
      * From API name.
      *
      * @param apiName the api name
+     *
      * @return the channel type
      */
     public static Timespan fromAPIName(String apiName) {

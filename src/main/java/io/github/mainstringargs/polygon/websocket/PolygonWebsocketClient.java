@@ -174,7 +174,7 @@ public class PolygonWebsocketClient implements PolygonWebsocketClientEndpoint.Me
      * @param message     the message
      */
     private synchronized void sendStreamMessageToListeners(ChannelType channelType,
-                                                           ChannelMessage message) {
+            ChannelMessage message) {
         for (PolygonStreamListener streamListener : listeners) {
             boolean sendToStreamListener = false;
 
@@ -201,7 +201,7 @@ public class PolygonWebsocketClient implements PolygonWebsocketClientEndpoint.Me
      * @param listener     the listener
      */
     private void submitStreamRequest(StreamAction streamAction,
-                                     PolygonStreamListener listener) {
+            PolygonStreamListener listener) {
         if (listener == null) {
             throw new IllegalArgumentException("Listener cannot be null");
         }
@@ -280,6 +280,7 @@ public class PolygonWebsocketClient implements PolygonWebsocketClientEndpoint.Me
      *
      * @param channelType the channel type
      * @param ticker      the ticker
+     *
      * @return the string
      */
     private String formatWebsocketTicker(ChannelType channelType, String ticker) {
@@ -290,6 +291,7 @@ public class PolygonWebsocketClient implements PolygonWebsocketClientEndpoint.Me
      * Gets registered ticker channels.
      *
      * @param exclude listener to exclude from the final map
+     *
      * @return the registered ticker channels
      */
     public synchronized Map<String, Set<ChannelType>> getRegisteredTickerChannels(PolygonStreamListener exclude) {

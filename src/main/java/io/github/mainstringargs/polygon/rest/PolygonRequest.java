@@ -65,6 +65,7 @@ public class PolygonRequest {
      * Invoke get.
      *
      * @param builder the builder
+     *
      * @return the http response
      */
     public HttpResponse<JsonNode> invokeGet(PolygonRequestBuilder builder) {
@@ -93,6 +94,7 @@ public class PolygonRequest {
      * Invoke post.
      *
      * @param builder the builder
+     *
      * @return the http response
      */
     public HttpResponse<JsonNode> invokePost(PolygonRequestBuilder builder) {
@@ -121,6 +123,7 @@ public class PolygonRequest {
      * Invoke delete.
      *
      * @param builder the builder
+     *
      * @return the http response
      */
     public HttpResponse<JsonNode> invokeDelete(PolygonRequestBuilder builder) {
@@ -149,6 +152,7 @@ public class PolygonRequest {
      * @param <T>          the generic type
      * @param httpResponse the http response
      * @param type         the type
+     *
      * @return the response object
      */
     public <T> T getResponseObject(HttpResponse<JsonNode> httpResponse, Type type) {

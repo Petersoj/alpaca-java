@@ -3,7 +3,8 @@ package io.github.mainstringargs.alpaca.enums;
 /**
  * The enum Activity types.
  *
- * @see <a href="https://docs.alpaca.markets/api-documentation/api-v2/account-activities/">https://docs.alpaca.markets/api-documentation/api-v2/account-activities/</a>
+ * @see
+ * <a href="https://docs.alpaca.markets/api-documentation/api-v2/account-activities/">https://docs.alpaca.markets/api-documentation/api-v2/account-activities/</a>
  */
 public enum ActivityTypes {
 
@@ -53,8 +54,7 @@ public enum ActivityTypes {
     /** Cash transactions (both CSD and CSR) */
     TRANS,
     /**
-     * Miscellaneous or rarely used activity types
-     * (All types except those in TRANS, DIV, or FILL)
+     * Miscellaneous or rarely used activity types (All types except those in TRANS, DIV, or FILL)
      */
     MISC,
 

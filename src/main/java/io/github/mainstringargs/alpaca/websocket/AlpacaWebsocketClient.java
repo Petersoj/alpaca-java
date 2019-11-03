@@ -183,7 +183,7 @@ public class AlpacaWebsocketClient implements MessageHandler {
      * @param message     the message
      */
     private synchronized void sendStreamMessageToObservers(MessageType messageType,
-                                                           JsonObject message) {
+            JsonObject message) {
         for (AlpacaStreamListener observer : listeners) {
             UpdateMessage messageObject = getMessageToObject(messageType, message);
 
@@ -199,6 +199,7 @@ public class AlpacaWebsocketClient implements MessageHandler {
      *
      * @param messageType the message type
      * @param message     the message
+     *
      * @return the message to object
      */
     private UpdateMessage getMessageToObject(MessageType messageType, JsonObject message) {

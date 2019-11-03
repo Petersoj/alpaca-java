@@ -136,6 +136,7 @@ public class AlpacaProperties {
      *
      * @param key          the key
      * @param defaultValue the default value
+     *
      * @return the property
      */
     public static String getProperty(String key, String defaultValue) {

@@ -3,6 +3,7 @@ package io.github.mainstringargs.polygon.properties;
 import io.github.mainstringargs.alpaca.properties.AlpacaProperties;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
@@ -29,7 +30,7 @@ public class PolygonProperties {
 
     /** The Constant KEY_ID_VALUE. */
     public static final String KEY_ID_VALUE =
-                    getProperty(KEY_ID_KEY, AlpacaProperties.KEY_ID_VALUE);
+            getProperty(KEY_ID_KEY, AlpacaProperties.KEY_ID_VALUE);
 
     /** The Constant BASE_DATA_URL_KEY. */
     private static final String BASE_DATA_URL_KEY = "base_data_url";
@@ -39,7 +40,7 @@ public class PolygonProperties {
 
     /** The Constant DEFAULT_USER_AGENT. */
     private static final String DEFAULT_USER_AGENT =
-                    "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/67.0.3396.87 Safari/537.36";
+            "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/67.0.3396.87 Safari/537.36";
 
     /** The Constant USER_AGENT_VALUE. */
     public static final String USER_AGENT_VALUE = getProperty(USER_AGENT_KEY, DEFAULT_USER_AGENT);
@@ -49,18 +50,18 @@ public class PolygonProperties {
 
     /** The base data url value. */
     public static final String BASE_DATA_URL_VALUE =
-                    getProperty(BASE_DATA_URL_KEY, DEFAULT_DATA_URL);
+            getProperty(BASE_DATA_URL_KEY, DEFAULT_DATA_URL);
 
     /** The default polygon web socket server. */
     private static final String DEFAULT_POLYGON_WEB_SOCKET_SERVER_URL =
-                    "wss://alpaca.socket.polygon.io/stocks";
+            "wss://alpaca.socket.polygon.io/stocks";
 
     /** The polygon web socket server url key. */
     private static final String POLYGON_WEB_SOCKET_SERVER_URL_KEY = "web_socket_server_url";
 
     /** The polygon web socket server url value. */
     public static final String POLYGON_WEB_SOCKET_SERVER_URL_VALUE = getProperty(
-                    POLYGON_WEB_SOCKET_SERVER_URL_KEY, DEFAULT_POLYGON_WEB_SOCKET_SERVER_URL);
+            POLYGON_WEB_SOCKET_SERVER_URL_KEY, DEFAULT_POLYGON_WEB_SOCKET_SERVER_URL);
 
     /** The initialized. */
     private static boolean initialized = false;
@@ -119,8 +120,9 @@ public class PolygonProperties {
     /**
      * Gets the property.
      *
-     * @param key the key
+     * @param key          the key
      * @param defaultValue the default value
+     *
      * @return the property
      */
     public static String getProperty(String key, String defaultValue) {

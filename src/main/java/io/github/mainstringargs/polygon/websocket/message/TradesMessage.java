@@ -101,26 +101,17 @@ public class TradesMessage implements ChannelMessage {
      */
     @Override
     public boolean equals(Object obj) {
-        if (this == obj)
-            return true;
-        if (obj == null)
-            return false;
-        if (getClass() != obj.getClass())
-            return false;
+        if (this == obj) { return true; }
+        if (obj == null) { return false; }
+        if (getClass() != obj.getClass()) { return false; }
         TradesMessage other = (TradesMessage) obj;
-        if (channelType != other.channelType)
-            return false;
+        if (channelType != other.channelType) { return false; }
         if (stockTrade == null) {
-            if (other.stockTrade != null)
-                return false;
-        } else if (!stockTrade.equals(other.stockTrade))
-            return false;
+            if (other.stockTrade != null) { return false; }
+        } else if (!stockTrade.equals(other.stockTrade)) { return false; }
         if (timestamp == null) {
-            if (other.timestamp != null)
-                return false;
-        } else if (!timestamp.equals(other.timestamp))
-            return false;
-        return true;
+            return other.timestamp == null;
+        } else return timestamp.equals(other.timestamp);
     }
 
     /*

@@ -33,6 +33,7 @@ public enum ChannelType {
      * From API name.
      *
      * @param apiName the api name
+     *
      * @return the channel type
      */
     public static ChannelType fromAPIName(String apiName) {

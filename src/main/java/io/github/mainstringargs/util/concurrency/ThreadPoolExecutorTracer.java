@@ -23,7 +23,7 @@ public class ThreadPoolExecutorTracer extends ThreadPoolExecutor {
      * @param workQueue       the work queue
      */
     public ThreadPoolExecutorTracer(int corePoolSize, int maximumPoolSize, long keepAliveTime,
-                                    TimeUnit unit, BlockingQueue<Runnable> workQueue) {
+            TimeUnit unit, BlockingQueue<Runnable> workQueue) {
         super(corePoolSize, maximumPoolSize, keepAliveTime, unit, workQueue);
     }
 
@@ -38,7 +38,7 @@ public class ThreadPoolExecutorTracer extends ThreadPoolExecutor {
      * @param threadFactory   the thread factory
      */
     public ThreadPoolExecutorTracer(int corePoolSize, int maximumPoolSize, long keepAliveTime,
-                                    TimeUnit unit, BlockingQueue<Runnable> workQueue, ThreadFactory threadFactory) {
+            TimeUnit unit, BlockingQueue<Runnable> workQueue, ThreadFactory threadFactory) {
         super(corePoolSize, maximumPoolSize, keepAliveTime, unit, workQueue, threadFactory);
     }
 
@@ -53,8 +53,7 @@ public class ThreadPoolExecutorTracer extends ThreadPoolExecutor {
         if (t == null && r instanceof Future<?>) {
             try {
                 Future<?> future = (Future<?>) r;
-                if (future.isDone())
-                    future.get();
+                if (future.isDone()) { future.get(); }
             } catch (CancellationException ce) {
                 t = ce;
             } catch (ExecutionException ee) {

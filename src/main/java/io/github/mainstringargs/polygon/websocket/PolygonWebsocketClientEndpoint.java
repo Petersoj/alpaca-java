@@ -65,6 +65,7 @@ public class PolygonWebsocketClientEndpoint {
      * Connect.
      *
      * @param endpointURI the endpoint URI
+     *
      * @throws DeploymentException the deployment exception
      * @throws IOException         Signals that an I/O exception has occurred.
      */

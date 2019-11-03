@@ -64,6 +64,7 @@ public enum OrderEvent {
      * Gets the API name.
      *
      * @param apiNameCheck the api name as a String
+     *
      * @return the API name
      */
     public static OrderEvent fromAPIName(String apiNameCheck) {
