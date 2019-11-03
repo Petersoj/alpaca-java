@@ -7,7 +7,6 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
 import com.mashape.unirest.http.HttpResponse;
-import com.mashape.unirest.http.JsonNode;
 import io.github.mainstringargs.alpaca.enums.ActivityType;
 import io.github.mainstringargs.alpaca.enums.AssetStatus;
 import io.github.mainstringargs.alpaca.enums.BarsTimeFrame;
@@ -36,6 +35,7 @@ import io.github.mainstringargs.util.time.TimeUtil;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Type;
 import java.net.URLEncoder;
@@ -153,7 +153,7 @@ public class AlpacaAPI {
         AlpacaRequestBuilder urlBuilder = new AlpacaRequestBuilder(apiVersion, baseAccountUrl,
                 AlpacaConstants.ACCOUNT_ENDPOINT);
 
-        HttpResponse<JsonNode> response = alpacaRequest.invokeGet(urlBuilder);
+        HttpResponse<InputStream> response = alpacaRequest.invokeGet(urlBuilder);
 
         if (response.getStatus() != 200) {
             throw new AlpacaAPIException(response);
@@ -218,7 +218,7 @@ public class AlpacaAPI {
             urlBuilder.appendURLParameter(AlpacaConstants.PAGE_TOKEN_PARAMTER, pageToken);
         }
 
-        HttpResponse<JsonNode> response = alpacaRequest.invokeGet(urlBuilder);
+        HttpResponse<InputStream> response = alpacaRequest.invokeGet(urlBuilder);
 
         if (response.getStatus() != 200) {
             throw new AlpacaAPIException(response);
@@ -265,7 +265,7 @@ public class AlpacaAPI {
                 AlpacaConstants.ACCOUNT_ENDPOINT);
         urlBuilder.appendEndpoint(AlpacaConstants.CONFIGURATIONS_ENDPOINT);
 
-        HttpResponse<JsonNode> response = alpacaRequest.invokeGet(urlBuilder);
+        HttpResponse<InputStream> response = alpacaRequest.invokeGet(urlBuilder);
 
         if (response.getStatus() != 200) {
             throw new AlpacaAPIException(response);
@@ -291,7 +291,7 @@ public class AlpacaAPI {
                 AlpacaConstants.ACCOUNT_ENDPOINT);
         urlBuilder.appendEndpoint(AlpacaConstants.CONFIGURATIONS_ENDPOINT);
 
-        HttpResponse<JsonNode> response = alpacaRequest.invokePatch(urlBuilder);
+        HttpResponse<InputStream> response = alpacaRequest.invokePatch(urlBuilder);
 
         if (response.getStatus() != 200) {
             throw new AlpacaAPIException(response);
@@ -315,7 +315,7 @@ public class AlpacaAPI {
         AlpacaRequestBuilder urlBuilder = new AlpacaRequestBuilder(apiVersion, baseAccountUrl,
                 AlpacaConstants.ORDERS_ENDPOINT);
 
-        HttpResponse<JsonNode> response = alpacaRequest.invokeGet(urlBuilder);
+        HttpResponse<InputStream> response = alpacaRequest.invokeGet(urlBuilder);
 
         if (response.getStatus() != 200) {
             throw new AlpacaAPIException(response);
@@ -368,7 +368,7 @@ public class AlpacaAPI {
             urlBuilder.appendURLParameter(AlpacaConstants.DIRECTION_PARAMETER, direction.getAPIName());
         }
 
-        HttpResponse<JsonNode> response = alpacaRequest.invokeGet(urlBuilder);
+        HttpResponse<InputStream> response = alpacaRequest.invokeGet(urlBuilder);
 
         if (response.getStatus() != 200) {
             throw new AlpacaAPIException(response);
@@ -439,7 +439,7 @@ public class AlpacaAPI {
             urlBuilder.appendBodyProperty(AlpacaConstants.CLIENT_ORDER_ID_PARAMETER, clientOrderId);
         }
 
-        HttpResponse<JsonNode> response = alpacaRequest.invokePost(urlBuilder);
+        HttpResponse<InputStream> response = alpacaRequest.invokePost(urlBuilder);
 
         if (response.getStatus() != 200) {
             throw new AlpacaAPIException(response);
@@ -469,7 +469,7 @@ public class AlpacaAPI {
             urlBuilder.appendEndpoint(orderId);
         }
 
-        HttpResponse<JsonNode> response = alpacaRequest.invokeGet(urlBuilder);
+        HttpResponse<InputStream> response = alpacaRequest.invokeGet(urlBuilder);
 
         if (response.getStatus() != 200) {
             throw new AlpacaAPIException(response);
@@ -505,7 +505,7 @@ public class AlpacaAPI {
             urlBuilder.appendURLParameter(AlpacaConstants.CLIENT_ORDER_ID_PARAMETER, clientOrderId);
         }
 
-        HttpResponse<JsonNode> response = alpacaRequest.invokeGet(urlBuilder);
+        HttpResponse<InputStream> response = alpacaRequest.invokeGet(urlBuilder);
 
         if (response.getStatus() != 200) {
             throw new AlpacaAPIException(response);
@@ -533,7 +533,7 @@ public class AlpacaAPI {
             urlBuilder.appendEndpoint(orderId);
         }
 
-        HttpResponse<JsonNode> response = alpacaRequest.invokeDelete(urlBuilder);
+        HttpResponse<InputStream> response = alpacaRequest.invokeDelete(urlBuilder);
 
         if ((response.getStatus() != 200 && response.getStatus() != 204)) {
             throw new AlpacaAPIException(response);
@@ -557,7 +557,7 @@ public class AlpacaAPI {
         AlpacaRequestBuilder urlBuilder = new AlpacaRequestBuilder(apiVersion, baseAccountUrl,
                 AlpacaConstants.POSITIONS_ENDPOINT);
 
-        HttpResponse<JsonNode> response = alpacaRequest.invokeGet(urlBuilder);
+        HttpResponse<InputStream> response = alpacaRequest.invokeGet(urlBuilder);
 
         if (response.getStatus() != 200) {
             throw new AlpacaAPIException(response);
@@ -587,7 +587,7 @@ public class AlpacaAPI {
             urlBuilder.appendEndpoint(symbol.trim());
         }
 
-        HttpResponse<JsonNode> response = alpacaRequest.invokeGet(urlBuilder);
+        HttpResponse<InputStream> response = alpacaRequest.invokeGet(urlBuilder);
 
         if (response.getStatus() != 200) {
             throw new AlpacaAPIException(response);
@@ -613,7 +613,7 @@ public class AlpacaAPI {
         AlpacaRequestBuilder urlBuilder = new AlpacaRequestBuilder(apiVersion, baseAccountUrl,
                 AlpacaConstants.ASSETS_ENDPOINT);
 
-        HttpResponse<JsonNode> response = alpacaRequest.invokeGet(urlBuilder);
+        HttpResponse<InputStream> response = alpacaRequest.invokeGet(urlBuilder);
 
         if (response.getStatus() != 200) {
             throw new AlpacaAPIException(response);
@@ -649,7 +649,7 @@ public class AlpacaAPI {
             urlBuilder.appendURLParameter(AlpacaConstants.ASSET_CLASS_PARAMETER, assetClass.trim());
         }
 
-        HttpResponse<JsonNode> response = alpacaRequest.invokeGet(urlBuilder);
+        HttpResponse<InputStream> response = alpacaRequest.invokeGet(urlBuilder);
 
         if (response.getStatus() != 200) {
             throw new AlpacaAPIException(response);
@@ -679,7 +679,7 @@ public class AlpacaAPI {
             urlBuilder.appendEndpoint(symbol.trim());
         }
 
-        HttpResponse<JsonNode> response = alpacaRequest.invokeGet(urlBuilder);
+        HttpResponse<InputStream> response = alpacaRequest.invokeGet(urlBuilder);
 
         if (response.getStatus() != 200) {
             throw new AlpacaAPIException(response);
@@ -703,7 +703,7 @@ public class AlpacaAPI {
         AlpacaRequestBuilder urlBuilder = new AlpacaRequestBuilder(apiVersion, baseAccountUrl,
                 AlpacaConstants.CALENDAR_ENDPOINT);
 
-        HttpResponse<JsonNode> response = alpacaRequest.invokeGet(urlBuilder);
+        HttpResponse<InputStream> response = alpacaRequest.invokeGet(urlBuilder);
 
         if (response.getStatus() != 200) {
             throw new AlpacaAPIException(response);
@@ -738,7 +738,7 @@ public class AlpacaAPI {
             urlBuilder.appendURLParameter(AlpacaConstants.END_PARAMETER, TimeUtil.toDateString(end));
         }
 
-        HttpResponse<JsonNode> response = alpacaRequest.invokeGet(urlBuilder);
+        HttpResponse<InputStream> response = alpacaRequest.invokeGet(urlBuilder);
 
         if (response.getStatus() != 200) {
             throw new AlpacaAPIException(response);
@@ -760,7 +760,7 @@ public class AlpacaAPI {
         AlpacaRequestBuilder urlBuilder = new AlpacaRequestBuilder(apiVersion, baseAccountUrl,
                 AlpacaConstants.CLOCK_ENDPOINT);
 
-        HttpResponse<JsonNode> response = alpacaRequest.invokeGet(urlBuilder);
+        HttpResponse<InputStream> response = alpacaRequest.invokeGet(urlBuilder);
 
         if (response.getStatus() != 200) {
             throw new AlpacaAPIException(response);
@@ -825,7 +825,7 @@ public class AlpacaAPI {
             urlBuilder.appendURLParameter(AlpacaConstants.SYMBOLS_PARAMETER, String.join(",", symbols));
         }
 
-        HttpResponse<JsonNode> response = alpacaRequest.invokeGet(urlBuilder);
+        HttpResponse<InputStream> response = alpacaRequest.invokeGet(urlBuilder);
 
         if (response.getStatus() != 200) {
             throw new AlpacaAPIException(response);
@@ -892,7 +892,7 @@ public class AlpacaAPI {
             urlBuilder.appendURLParameter(AlpacaConstants.SYMBOLS_PARAMETER, String.join(",", symbol));
         }
 
-        HttpResponse<JsonNode> response = alpacaRequest.invokeGet(urlBuilder);
+        HttpResponse<InputStream> response = alpacaRequest.invokeGet(urlBuilder);
 
         if (response.getStatus() != 200) {
             throw new AlpacaAPIException(response);

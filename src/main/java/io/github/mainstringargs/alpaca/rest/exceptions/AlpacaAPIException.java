@@ -1,18 +1,27 @@
 package io.github.mainstringargs.alpaca.rest.exceptions;
 
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+import com.google.gson.stream.JsonReader;
 import com.mashape.unirest.http.HttpResponse;
-import com.mashape.unirest.http.JsonNode;
+
+import java.io.InputStream;
+import java.io.InputStreamReader;
 
 /**
  * The Class AlpacaAPIException.
  */
 public class AlpacaAPIException extends Exception {
 
+    /** The constant JSON_PARSER. */
+    private static final JsonParser JSON_PARSER = new JsonParser();
+
     /** The Constant serialVersionUID. */
     private static final long serialVersionUID = 1L;
 
     /** The http response. */
-    private transient HttpResponse<JsonNode> httpResponse;
+    private transient HttpResponse<InputStream> httpResponse;
 
     /** The http response code. */
     private int httpResponseCode = -1;
@@ -31,22 +40,24 @@ public class AlpacaAPIException extends Exception {
      *
      * @param httpResponse the http response
      */
-    public AlpacaAPIException(HttpResponse<JsonNode> httpResponse) {
+    public AlpacaAPIException(HttpResponse<InputStream> httpResponse) {
+        this.httpResponse = httpResponse;
         httpResponseCode = httpResponse.getStatus();
         httpResponseMessage = httpResponse.getStatusText();
 
-        JsonNode jsonNode = httpResponse.getBody();
+        JsonElement jsonElement = JSON_PARSER.parse(new JsonReader(new InputStreamReader(httpResponse.getRawBody())));
 
-        if (jsonNode != null) {
-            if (jsonNode.getObject().has("code")) {
-                alpacaResponseCode = jsonNode.getObject().getInt("code");
+        if (jsonElement instanceof JsonObject) {
+            JsonObject jsonObject = (JsonObject) jsonElement;
+            if (jsonObject.has("code")) {
+                alpacaResponseCode = jsonObject.get("code").getAsInt();
             }
 
-            if (jsonNode.getObject().has("message")) {
-                alpacaResponseMessage = jsonNode.getObject().getString("message");
+            if (jsonObject.has("message")) {
+                alpacaResponseMessage = jsonObject.get("message").getAsString();
             } else {
                 // if all else fails, just use the json
-                alpacaResponseMessage = jsonNode.getObject().toString();
+                alpacaResponseMessage = jsonObject.toString();
             }
         }
     }
@@ -56,7 +67,7 @@ public class AlpacaAPIException extends Exception {
      *
      * @return the http response
      */
-    public HttpResponse<JsonNode> getHttpResponse() {
+    public HttpResponse<InputStream> getHttpResponse() {
         return httpResponse;
     }
 

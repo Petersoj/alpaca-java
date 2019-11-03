@@ -8,13 +8,13 @@ import com.google.gson.JsonParser;
 import com.google.gson.annotations.SerializedName;
 import com.google.gson.stream.JsonReader;
 import com.mashape.unirest.http.HttpResponse;
-import com.mashape.unirest.http.JsonNode;
 import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.exceptions.UnirestException;
 import io.github.mainstringargs.alpaca.properties.AlpacaProperties;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
@@ -73,15 +73,15 @@ public class AlpacaRequest {
      *
      * @return the http response
      */
-    public HttpResponse<JsonNode> invokeGet(AlpacaRequestBuilder builder) {
-        HttpResponse<JsonNode> response = null;
+    public HttpResponse<InputStream> invokeGet(AlpacaRequestBuilder builder) {
+        HttpResponse<InputStream> response = null;
 
         try {
             LOGGER.debug("Get URL " + builder.getURL());
 
             response = Unirest.get(builder.getURL())
                     .header(USER_AGENT_KEY, AlpacaProperties.USER_AGENT_VALUE)
-                    .header(API_KEY_ID, keyId).header(API_SECRET_KEY, secret).asJson();
+                    .header(API_KEY_ID, keyId).header(API_SECRET_KEY, secret).asBinary();
         } catch (UnirestException e) {
             LOGGER.error("UnirestException", e);
         }
@@ -96,8 +96,8 @@ public class AlpacaRequest {
      *
      * @return the http response
      */
-    public HttpResponse<JsonNode> invokePost(AlpacaRequestBuilder builder) {
-        HttpResponse<JsonNode> response = null;
+    public HttpResponse<InputStream> invokePost(AlpacaRequestBuilder builder) {
+        HttpResponse<InputStream> response = null;
 
         try {
             LOGGER.debug("Post URL " + builder.getURL());
@@ -105,7 +105,7 @@ public class AlpacaRequest {
 
             response = Unirest.post(builder.getURL())
                     .header(USER_AGENT_KEY, AlpacaProperties.USER_AGENT_VALUE).header(API_KEY_ID, keyId)
-                    .header(API_SECRET_KEY, secret).body(builder.getBodyAsJSON()).asJson();
+                    .header(API_SECRET_KEY, secret).body(builder.getBodyAsJSON()).asBinary();
         } catch (UnirestException e) {
             LOGGER.error("UnirestException", e);
         }
@@ -120,14 +120,14 @@ public class AlpacaRequest {
      *
      * @return the http response
      */
-    public HttpResponse<JsonNode> invokeDelete(AlpacaRequestBuilder builder) {
-        HttpResponse<JsonNode> response = null;
+    public HttpResponse<InputStream> invokeDelete(AlpacaRequestBuilder builder) {
+        HttpResponse<InputStream> response = null;
         try {
             LOGGER.debug("Delete URL " + builder.getURL());
 
             response = Unirest.delete(builder.getURL())
                     .header(USER_AGENT_KEY, AlpacaProperties.USER_AGENT_VALUE)
-                    .header(API_KEY_ID, keyId).header(API_SECRET_KEY, secret).asJson();
+                    .header(API_KEY_ID, keyId).header(API_SECRET_KEY, secret).asBinary();
         } catch (UnirestException e) {
             LOGGER.error("UnirestException", e);
         }
@@ -142,14 +142,14 @@ public class AlpacaRequest {
      *
      * @return the http response
      */
-    public HttpResponse<JsonNode> invokePatch(AlpacaRequestBuilder builder) {
-        HttpResponse<JsonNode> response = null;
+    public HttpResponse<InputStream> invokePatch(AlpacaRequestBuilder builder) {
+        HttpResponse<InputStream> response = null;
         try {
             LOGGER.debug("Patch URL " + builder.getURL());
 
             response = Unirest.patch(builder.getURL())
                     .header(USER_AGENT_KEY, AlpacaProperties.USER_AGENT_VALUE)
-                    .header(API_KEY_ID, keyId).header(API_SECRET_KEY, secret).asJson();
+                    .header(API_KEY_ID, keyId).header(API_SECRET_KEY, secret).asBinary();
         } catch (UnirestException e) {
             LOGGER.error("UnirestException", e);
         }
@@ -166,7 +166,7 @@ public class AlpacaRequest {
      *
      * @return the response object
      */
-    public <T> T getResponseObject(HttpResponse<JsonNode> httpResponse, Type type) {
+    public <T> T getResponseObject(HttpResponse<InputStream> httpResponse, Type type) {
         T responseObjectFromJson = null;
 
         try (JsonReader jsonReader = new JsonReader(new InputStreamReader(httpResponse.getRawBody()))) {
@@ -178,7 +178,7 @@ public class AlpacaRequest {
         return responseObjectFromJson;
     }
 
-    public JsonElement getResponseJSON(HttpResponse<JsonNode> httpResponse) {
+    public JsonElement getResponseJSON(HttpResponse<InputStream> httpResponse) {
         JsonElement responseJsonElement = null;
 
         try (JsonReader jsonReader = new JsonReader(new InputStreamReader(httpResponse.getRawBody()))) {
