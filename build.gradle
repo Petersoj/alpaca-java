@@ -95,6 +95,9 @@ modifyPom {
     }
 }
 
+// https://stackoverflow.com/questions/52205209/configure-gradle-build-to-suppress-javadoc-console-warnings
+javadoc.options.addStringOption('Xdoclint:none', '-quiet')
+
 publishing {
     publications {
         maven(MavenPublication) {
