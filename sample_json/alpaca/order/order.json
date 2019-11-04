@@ -1,24 +1,92 @@
 {
-  "id": "904837e3-3b76-47ec-b432-046db621571b",
-  "client_order_id": "904837e3-3b76-47ec-b432-046db621571b",
-  "created_at": "2018-10-05T05:48:59Z",
-  "updated_at": "2018-10-05T05:48:59Z",
-  "submitted_at": "2018-10-05T05:48:59Z",
-  "filled_at": "2018-10-05T05:48:59Z",
-  "expired_at": "2018-10-05T05:48:59Z",
-  "canceled_at": "2018-10-05T05:48:59Z",
-  "failed_at": "2018-10-05T05:48:59Z",
-  "asset_id": "904837e3-3b76-47ec-b432-046db621571b",
-  "symbol": "AAPL",
-  "asset_class": "us_equity",
-  "qty": "15",
-  "filled_qty": "0",
-  "type": "market",
-  "side": "buy",
-  "time_in_force": "day",
-  "limit_price": "107.00",
-  "stop_price": "106.00",
-  "filled_avg_price": "106.00",
-  "status": "accepted",
-  "extended_hours": false
+  "type": "object",
+  "description": "See: https://docs.alpaca.markets/api-documentation/api-v2/orders/",
+  "properties": {
+    "id": {
+      "type": "string",
+      "description": "order id"
+    },
+    "client_order_id": {
+      "type": "string",
+      "description": "client unique order id"
+    },
+    "created_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Time created at"
+    },
+    "updated_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Time updated at"
+    },
+    "submitted_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Time submitted at"
+    },
+    "filled_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Time filled at"
+    },
+    "expired_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Time expired at"
+    },
+    "canceled_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Time canceled at"
+    },
+    "asset_id": {
+      "type": "string",
+      "description": "asset ID"
+    },
+    "symbol": {
+      "type": "string",
+      "description": "Asset symbol"
+    },
+    "asset_class": {
+      "type": "string",
+      "description": "Asset class"
+    },
+    "qty": {
+      "type": "string",
+      "description": "Ordered quantity"
+    },
+    "filled_qty": {
+      "type": "string",
+      "description": "Filled quantity"
+    },
+    "type": {
+      "type": "string",
+      "description": "Valid values: market, limit, stop, stop_limit"
+    },
+    "side": {
+      "type": "string",
+      "description": "Valid values: buy, sell"
+    },
+    "time_in_force": {
+      "type": "string",
+      "description": "See Orders page"
+    },
+    "limit_price": {
+      "type": "string",
+      "description": "Limit price"
+    },
+    "stop_price": {
+      "type": "string",
+      "description": "Stop price"
+    },
+    "status": {
+      "type": "string",
+      "description": "See Orders page"
+    },
+    "extended_hours": {
+      "type": "boolean",
+      "description": "If true, eligible for execution outside regular trading hours."
+    }
+  }
 }

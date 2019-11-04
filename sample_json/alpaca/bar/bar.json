@@ -1,8 +1,31 @@
 {
-  "t": 1544129220,
-  "o": 172.26,
-  "h": 172.3,
-  "l": 172.16,
-  "c": 172.18,
-  "v": 3892
+  "type": "object",
+  "description": "See: https://docs.alpaca.markets/api-documentation/api-v2/market-data/bars/",
+  "properties": {
+    "t": {
+      "type": "integer",
+      "format": "utc-millisec",
+      "description": "the beginning time of this bar as a Unix epoch in seconds"
+    },
+    "o": {
+      "type": "double",
+      "description": "open price"
+    },
+    "h": {
+      "type": "double",
+      "description": "high price"
+    },
+    "l": {
+      "type": "double",
+      "description": "low price"
+    },
+    "c": {
+      "type": "double",
+      "description": "close price"
+    },
+    "v": {
+      "type": "double",
+      "description": "volume"
+    }
+  }
 }

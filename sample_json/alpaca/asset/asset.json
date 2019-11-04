@@ -1,11 +1,42 @@
 {
-  "id": "904837e3-3b76-47ec-b432-046db621571b",
-  "asset_class": "us_equity",
-  "exchange": "NASDAQ",
-  "symbol": "AAPL",
-  "status": "active",
-  "tradable": true,
-  "marginable": true,
-  "shortable": true,
-  "easy_to_borrow": true
+  "type": "object",
+  "description": "See: https://docs.alpaca.markets/api-documentation/api-v2/assets/",
+  "properties": {
+    "id": {
+      "type": "string",
+      "description": "Asset ID."
+    },
+    "class": {
+      "type": "string",
+      "description": "“us_equity”"
+    },
+    "exchange": {
+      "type": "string",
+      "description": "AMEX, ARCA, BATS, NYSE, NASDAQ or NYSEARCA"
+    },
+    "symbol": {
+      "type": "string",
+      "description": "The Symbol"
+    },
+    "status": {
+      "type": "string",
+      "description": "active or inactive"
+    },
+    "tradable": {
+      "type": "boolean",
+      "description": "Asset is tradable on Alpaca or not."
+    },
+    "marginable": {
+      "type": "boolean",
+      "description": "Asset is marginable or not."
+    },
+    "shortable": {
+      "type": "boolean",
+      "description": "Asset is shortable or not."
+    },
+    "easy_to_borrow": {
+      "type": "boolean",
+      "description": "Asset is easy-to-borrow or not (filtering for easy_to_borrow = True is the best way to check whether the name is currently available to short at Alpaca)."
+    }
+  }
 }

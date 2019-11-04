@@ -145,15 +145,15 @@ sourceSets {
 // See: https://github.com/joelittlejohn/jsonschema2pojo/wiki/Reference
 def sampleJSONPOJOs = [
         // alpaca/
-        ['path': 'alpaca/account/', 'sourceType': 'json'],
+        ['path': 'alpaca/account/', 'sourceType': 'jsonschema'],
         ['path': 'alpaca/account_activities/', 'sourceType': 'jsonschema'],
-        ['path': 'alpaca/account_configuration/', 'sourceType': 'json'],
-        ['path': 'alpaca/asset/', 'sourceType': 'json'],
-        ['path': 'alpaca/bar/', 'sourceType': 'json'],
-        ['path': 'alpaca/calendar/', 'sourceType': 'json'],
-        ['path': 'alpaca/clock/', 'sourceType': 'json'],
-        ['path': 'alpaca/order/', 'sourceType': 'json'],
-        ['path': 'alpaca/position/', 'sourceType': 'json'],
+        ['path': 'alpaca/account_configuration/', 'sourceType': 'jsonschema'],
+        ['path': 'alpaca/asset/', 'sourceType': 'jsonschema'],
+        ['path': 'alpaca/bar/', 'sourceType': 'jsonschema'],
+        ['path': 'alpaca/calendar/', 'sourceType': 'jsonschema'],
+        ['path': 'alpaca/clock/', 'sourceType': 'jsonschema'],
+        ['path': 'alpaca/order/', 'sourceType': 'jsonschema'],
+        ['path': 'alpaca/position/', 'sourceType': 'jsonschema'],
 
         // polygon/
         ['path': 'polygon/aggregate/', 'sourceType': 'json'],

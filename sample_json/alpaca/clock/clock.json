@@ -1,6 +1,25 @@
 {
-  "timestamp": "2018-04-01T12:00:00.000Z",
-  "is_open": true,
-  "next_open": "2018-04-01T12:00:00.000Z",
-  "next_close": "2018-04-01T12:00:00.000Z"
+  "type": "object",
+  "description": "See: https://docs.alpaca.markets/api-documentation/api-v2/clock/",
+  "properties": {
+    "timestamp": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Current timestamp"
+    },
+    "is_open": {
+      "type": "boolean",
+      "description": "Whether or not the market is open"
+    },
+    "next_open": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Next market open timestamp"
+    },
+    "next_close": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Next market close timestamp"
+    }
+  }
 }

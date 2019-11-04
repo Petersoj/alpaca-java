@@ -1,6 +1,6 @@
 {
   "type": "object",
-  "description": "See https://docs.alpaca.markets/api-documentation/api-v2/account-activities/",
+  "description": "See: https://docs.alpaca.markets/api-documentation/api-v2/account-activities/",
   "extends": {
     "$ref": "account_activity.json"
   },
@@ -23,6 +23,7 @@
     },
     "transaction_time": {
       "type": "string",
+      "format": "date-time",
       "description": "The time at which the execution occurred."
     },
     "type": {

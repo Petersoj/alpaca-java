@@ -1,18 +1,70 @@
 {
-  "asset_id": "904837e3-3b76-47ec-b432-046db621571b",
-  "symbol": "AAPL",
-  "exchange": "NASDAQ",
-  "asset_class": "us_equity",
-  "avg_entry_price": "100.0",
-  "qty": "5",
-  "side": "long",
-  "market_value": "600.0",
-  "cost_basis": "500.0",
-  "unrealized_pl": "100.0",
-  "unrealized_plpc": "0.20",
-  "unrealized_intraday_pl": "10.0",
-  "unrealized_intraday_plpc": "0.0084",
-  "current_price": "120.0",
-  "lastday_price": "119.0",
-  "change_today": "0.0084"
+  "type": "object",
+  "description": "See: https://docs.alpaca.markets/api-documentation/api-v2/clock/",
+  "properties": {
+    "asset_id": {
+      "type": "string",
+      "description": "Asset ID"
+    },
+    "symbol": {
+      "type": "string",
+      "description": "Symbol name of the asset"
+    },
+    "exchange": {
+      "type": "string",
+      "description": "Exchange name of the asset"
+    },
+    "asset_class": {
+      "type": "string",
+      "description": "Asset class name"
+    },
+    "avg_entry_price": {
+      "type": "string",
+      "description": "Average entry price of the position"
+    },
+    "qty": {
+      "type": "string",
+      "description": "The number of shares"
+    },
+    "side": {
+      "type": "string",
+      "description": "long"
+    },
+    "market_value": {
+      "type": "string",
+      "description": "Total dollar amount of the position"
+    },
+    "cost_basis": {
+      "type": "string",
+      "description": "Total cost basis in dollar"
+    },
+    "unrealized_pl": {
+      "type": "string",
+      "description": "Unrealized profit/loss in dollars"
+    },
+    "unrealized_plpc": {
+      "type": "string",
+      "description": "Unrealized profit/loss percent (by a factor of 1)"
+    },
+    "unrealized_intraday_pl": {
+      "type": "string",
+      "description": "Unrealized profit/loss in dollars for the day"
+    },
+    "unrealized_intraday_plpc": {
+      "type": "string",
+      "description": "Unrealized profit/loss percent (by a factor of 1)"
+    },
+    "current_price": {
+      "type": "string",
+      "description": "Current asset price per share"
+    },
+    "lastday_price": {
+      "type": "string",
+      "description": "Last day’s asset price per share based on the closing value of the last trading day"
+    },
+    "change_today": {
+      "type": "string",
+      "description": "Percent change from last day price (by a factor of 1)"
+    }
+  }
 }
