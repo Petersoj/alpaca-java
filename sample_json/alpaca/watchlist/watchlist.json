@@ -25,8 +25,7 @@
     "assets": {
       "type": "array",
       "items": {
-        "existingJavaType": "io.github.mainstringargs.domain.alpaca.asset.Asset",
-        "type": "object"
+        "existingJavaType": "io.github.mainstringargs.domain.alpaca.asset.Asset"
       },
       "description": "the content of this watchlist, in the order as registered by the client"
     }

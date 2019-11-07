@@ -22,8 +22,7 @@
       "description": "buy or sell."
     },
     "transaction_time": {
-      "type": "string",
-      "format": "date-time",
+      "existingJavaType" : "java.time.LocalDateTime",
       "description": "The time at which the execution occurred."
     },
     "type": {

@@ -11,33 +11,27 @@
       "description": "client unique order id"
     },
     "created_at": {
-      "type": "string",
-      "format": "date-time",
+      "existingJavaType" : "java.time.LocalDateTime",
       "description": "Time created at"
     },
     "updated_at": {
-      "type": "string",
-      "format": "date-time",
+      "existingJavaType" : "java.time.LocalDateTime",
       "description": "Time updated at"
     },
     "submitted_at": {
-      "type": "string",
-      "format": "date-time",
+      "existingJavaType" : "java.time.LocalDateTime",
       "description": "Time submitted at"
     },
     "filled_at": {
-      "type": "string",
-      "format": "date-time",
+      "existingJavaType" : "java.time.LocalDateTime",
       "description": "Time filled at"
     },
     "expired_at": {
-      "type": "string",
-      "format": "date-time",
+      "existingJavaType" : "java.time.LocalDateTime",
       "description": "Time expired at"
     },
     "canceled_at": {
-      "type": "string",
-      "format": "date-time",
+      "existingJavaType" : "java.time.LocalDateTime",
       "description": "Time canceled at"
     },
     "asset_id": {

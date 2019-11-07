@@ -3,8 +3,7 @@
   "description": "See: https://docs.alpaca.markets/api-documentation/api-v2/clock/",
   "properties": {
     "timestamp": {
-      "type": "string",
-      "format": "date-time",
+      "existingJavaType": "java.time.LocalDateTime",
       "description": "Current timestamp"
     },
     "is_open": {
@@ -12,13 +11,11 @@
       "description": "Whether or not the market is open"
     },
     "next_open": {
-      "type": "string",
-      "format": "date-time",
+      "existingJavaType": "java.time.LocalDateTime",
       "description": "Next market open timestamp"
     },
     "next_close": {
-      "type": "string",
-      "format": "date-time",
+      "existingJavaType": "java.time.LocalDateTime",
       "description": "Next market close timestamp"
     }
   }

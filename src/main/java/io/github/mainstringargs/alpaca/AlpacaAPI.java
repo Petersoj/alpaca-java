@@ -3,6 +3,7 @@ package io.github.mainstringargs.alpaca;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
+import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
@@ -42,6 +43,7 @@ import java.lang.reflect.Type;
 import java.net.URLEncoder;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -57,7 +59,12 @@ public class AlpacaAPI {
     private static Logger LOGGER = LogManager.getLogger(AlpacaAPI.class);
 
     /** The Gson */
-    private static final Gson GSON = new GsonBuilder().setLenient().create();
+    private static final Gson GSON = new GsonBuilder()
+            .registerTypeAdapter(LocalDateTime.class,
+                    (JsonDeserializer<LocalDateTime>) (json, type, jsonDeserializationContext) ->
+                            ZonedDateTime.parse(json.getAsJsonPrimitive().getAsString()).toLocalDateTime())
+            .setLenient()
+            .create();
 
     /** The version. */
     private final String apiVersion;
