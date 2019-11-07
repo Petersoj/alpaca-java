@@ -28,6 +28,7 @@ import io.github.mainstringargs.domain.alpaca.accountactivities.TradeActivity;
 import io.github.mainstringargs.domain.alpaca.accountconfiguration.AccountConfiguration;
 import io.github.mainstringargs.domain.alpaca.asset.Asset;
 import io.github.mainstringargs.domain.alpaca.bar.Bar;
+import io.github.mainstringargs.domain.alpaca.calendar.Calendar;
 import io.github.mainstringargs.domain.alpaca.clock.Clock;
 import io.github.mainstringargs.domain.alpaca.order.Order;
 import io.github.mainstringargs.domain.alpaca.position.Position;
@@ -43,7 +44,6 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Calendar;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -146,8 +146,7 @@ public class AlpacaAPI {
      * @return the account
      *
      * @throws AlpacaAPIException the alpaca API exception
-     * @see
-     * <a href="https://docs.alpaca.markets/api-documentation/web-api/account/#get-the-account">https://docs.alpaca.markets/api-documentation/web-api/account/#get-the-account</a>
+     * @see <a href="https://docs.alpaca.markets/api-documentation/web-api/account/#get-the-account">Get the Account</a>
      */
     public Account getAccount() throws AlpacaAPIException {
         AlpacaRequestBuilder urlBuilder = new AlpacaRequestBuilder(apiVersion, baseAccountUrl,
@@ -176,6 +175,8 @@ public class AlpacaAPI {
      * @return the account activities
      *
      * @throws AlpacaAPIException the alpaca api exception
+     * @see <a href="https://docs.alpaca.markets/api-documentation/api-v2/account-activities/">Gets the Account
+     * Activities</a>
      */
     public ArrayList<AccountActivity> getAccountActivities(LocalDateTime date,
             LocalDateTime until, LocalDateTime after, Direction direction, Integer pageSize, String pageToken,
@@ -258,7 +259,8 @@ public class AlpacaAPI {
      *
      * @throws AlpacaAPIException the alpaca api exception
      * @see
-     * <a href="https://docs.alpaca.markets/api-documentation/api-v2/account-configuration/">https://docs.alpaca.markets/api-documentation/api-v2/account-configuration/</a>
+     * <a href="https://docs.alpaca.markets/api-documentation/api-v2/account-configuration/#get-the-account-configurations">Get
+     * the account configuration</a>
      */
     public AccountConfiguration getAccountConfigurations() throws AlpacaAPIException {
         AlpacaRequestBuilder urlBuilder = new AlpacaRequestBuilder(apiVersion, baseAccountUrl,
@@ -283,7 +285,8 @@ public class AlpacaAPI {
      *
      * @throws AlpacaAPIException the alpaca api exception
      * @see
-     * <a href="https://docs.alpaca.markets/api-documentation/api-v2/account-configuration/">https://docs.alpaca.markets/api-documentation/api-v2/account-configuration/</a>
+     * <a href="https://docs.alpaca.markets/api-documentation/api-v2/account-configuration/#update-the-account-configurations">Set
+     * the Account Configuration</a>
      */
     public AccountConfiguration setAccountConfiguration(AccountConfiguration accountConfiguration)
             throws AlpacaAPIException {
@@ -306,8 +309,8 @@ public class AlpacaAPI {
      * @return the orders
      *
      * @throws AlpacaAPIException the alpaca API exception
-     * @see
-     * <a href="https://docs.alpaca.markets/api-documentation/web-api/orders/#get-a-list-of-orders">https://docs.alpaca.markets/api-documentation/web-api/orders/#get-a-list-of-orders</a>
+     * @see <a href="https://docs.alpaca.markets/api-documentation/web-api/orders/#get-a-list-of-orders">Get a list of
+     * Orders</a>
      */
     public List<Order> getOrders() throws AlpacaAPIException {
         Type listType = new TypeToken<List<Order>>() {}.getType();
@@ -336,8 +339,8 @@ public class AlpacaAPI {
      * @return the orders
      *
      * @throws AlpacaAPIException the alpaca API exception
-     * @see
-     * <a href="https://docs.alpaca.markets/api-documentation/web-api/orders/#get-a-list-of-orders">https://docs.alpaca.markets/api-documentation/web-api/orders/#get-a-list-of-orders</a>
+     * @see <a href="https://docs.alpaca.markets/api-documentation/web-api/orders/#get-a-list-of-orders">Get a list of
+     * Orders</a>
      */
     public List<Order> getOrders(OrderStatus status, Integer limit, LocalDateTime after,
             LocalDateTime until, Direction direction) throws AlpacaAPIException {
@@ -392,8 +395,8 @@ public class AlpacaAPI {
      * @return the order
      *
      * @throws AlpacaAPIException the alpaca API exception
-     * @see
-     * <a href="https://docs.alpaca.markets/api-documentation/web-api/orders/#request-a-new-order">https://docs.alpaca.markets/api-documentation/web-api/orders/#request-a-new-order</a>
+     * @see <a href="https://docs.alpaca.markets/api-documentation/web-api/orders/#request-a-new-order">Request a new
+     * Order</a>
      */
     public Order requestNewOrder(String symbol, Integer quantity, OrderSide side, OrderType type,
             OrderTimeInForce timeInForce, Double limitPrice, Double stopPrice,
@@ -456,8 +459,7 @@ public class AlpacaAPI {
      * @return the order
      *
      * @throws AlpacaAPIException the alpaca API exception
-     * @see
-     * <a href="https://docs.alpaca.markets/api-documentation/web-api/orders/#get-an-order">https://docs.alpaca.markets/api-documentation/web-api/orders/#get-an-order</a>
+     * @see <a href="https://docs.alpaca.markets/api-documentation/web-api/orders/#get-an-order">Get an Order</a>
      */
     public Order getOrder(String orderId) throws AlpacaAPIException {
         Type objectType = new TypeToken<Order>() {}.getType();
@@ -486,8 +488,8 @@ public class AlpacaAPI {
      * @return the order by client id
      *
      * @throws AlpacaAPIException the alpaca API exception
-     * @see
-     * <a href="https://docs.alpaca.markets/api-documentation/web-api/orders/#get-an-order-by-client-order-id">https://docs.alpaca.markets/api-documentation/web-api/orders/#get-an-order-by-client-order-id</a>
+     * @see <a href="https://docs.alpaca.markets/api-documentation/web-api/orders/#get-an-order-by-client-order-id">Get
+     * an Order by Client ID</a>
      */
     public Order getOrderByClientId(String clientOrderId) throws AlpacaAPIException {
         Type objectType = new TypeToken<Order>() {}.getType();
@@ -522,8 +524,7 @@ public class AlpacaAPI {
      * @return true, if successful
      *
      * @throws AlpacaAPIException the alpaca API exception
-     * @see
-     * <a href="https://docs.alpaca.markets/api-documentation/web-api/orders/#cancel-an-order">https://docs.alpaca.markets/api-documentation/web-api/orders/#cancel-an-order</a>
+     * @see <a href="https://docs.alpaca.markets/api-documentation/web-api/orders/#cancel-an-order">Cancel an Order</a>
      */
     public boolean cancelOrder(String orderId) throws AlpacaAPIException {
         AlpacaRequestBuilder urlBuilder = new AlpacaRequestBuilder(apiVersion, baseAccountUrl,
@@ -548,8 +549,8 @@ public class AlpacaAPI {
      * @return the open positions
      *
      * @throws AlpacaAPIException the alpaca API exception
-     * @see
-     * <a href="https://docs.alpaca.markets/api-documentation/web-api/positions/#get-open-positions">https://docs.alpaca.markets/api-documentation/web-api/positions/#get-open-positions</a>
+     * @see <a href="https://docs.alpaca.markets/api-documentation/web-api/positions/#get-open-positions">Get open
+     * Positions</a>
      */
     public List<Position> getOpenPositions() throws AlpacaAPIException {
         Type listType = new TypeToken<List<Position>>() {}.getType();
@@ -574,8 +575,8 @@ public class AlpacaAPI {
      * @return the open position by symbol
      *
      * @throws AlpacaAPIException the alpaca API exception
-     * @see
-     * <a href="https://docs.alpaca.markets/api-documentation/web-api/positions/#get-an-open-position">https://docs.alpaca.markets/api-documentation/web-api/positions/#get-an-open-position</a>
+     * @see <a href="https://docs.alpaca.markets/api-documentation/web-api/positions/#get-an-open-position">Get an open
+     * Position</a>
      */
     public Position getOpenPositionBySymbol(String symbol) throws AlpacaAPIException {
         Type listType = new TypeToken<Position>() {}.getType();
@@ -604,8 +605,7 @@ public class AlpacaAPI {
      * @return the assets
      *
      * @throws AlpacaAPIException the alpaca API exception
-     * @see
-     * <a href="https://docs.alpaca.markets/api-documentation/web-api/assets/#get-assets">https://docs.alpaca.markets/api-documentation/web-api/assets/#get-assets</a>
+     * @see <a href="https://docs.alpaca.markets/api-documentation/web-api/assets/#get-assets">Get Assets</a>
      */
     public List<Asset> getAssets() throws AlpacaAPIException {
         Type listType = new TypeToken<List<Asset>>() {}.getType();
@@ -631,8 +631,7 @@ public class AlpacaAPI {
      * @return the assets
      *
      * @throws AlpacaAPIException the alpaca API exception
-     * @see
-     * <a href="https://docs.alpaca.markets/api-documentation/web-api/assets/#get-assets">https://docs.alpaca.markets/api-documentation/web-api/assets/#get-assets</a>
+     * @see <a href="https://docs.alpaca.markets/api-documentation/web-api/assets/#get-assets">Get Assets</a>
      */
     public List<Asset> getAssets(AssetStatus assetStatus, String assetClass)
             throws AlpacaAPIException {
@@ -666,8 +665,7 @@ public class AlpacaAPI {
      * @return the asset by symbol
      *
      * @throws AlpacaAPIException the alpaca API exception
-     * @see
-     * <a href="https://docs.alpaca.markets/api-documentation/web-api/assets/#get-an-asset">https://docs.alpaca.markets/api-documentation/web-api/assets/#get-an-asset</a>
+     * @see <a href="https://docs.alpaca.markets/api-documentation/web-api/assets/#get-an-asset">Get an Asset</a>
      */
     public Asset getAssetBySymbol(String symbol) throws AlpacaAPIException {
         Type listType = new TypeToken<Asset>() {}.getType();
@@ -694,8 +692,8 @@ public class AlpacaAPI {
      * @return the calendar
      *
      * @throws AlpacaAPIException the alpaca API exception
-     * @see
-     * <a href="https://docs.alpaca.markets/api-documentation/web-api/calendar/#get-the-calendar">https://docs.alpaca.markets/api-documentation/web-api/calendar/#get-the-calendar</a>
+     * @see <a href="https://docs.alpaca.markets/api-documentation/web-api/calendar/#get-the-calendar">Get the
+     * Calendar</a>
      */
     public List<Calendar> getCalendar() throws AlpacaAPIException {
         Type listType = new TypeToken<List<Calendar>>() {}.getType();
@@ -721,8 +719,8 @@ public class AlpacaAPI {
      * @return the calendar
      *
      * @throws AlpacaAPIException the alpaca API exception
-     * @see
-     * <a href="https://docs.alpaca.markets/api-documentation/web-api/calendar/#get-the-calendar">https://docs.alpaca.markets/api-documentation/web-api/calendar/#get-the-calendar</a>
+     * @see <a href="https://docs.alpaca.markets/api-documentation/web-api/calendar/#get-the-calendar">Get the
+     * Calendar</a>
      */
     public List<Calendar> getCalendar(LocalDate start, LocalDate end) throws AlpacaAPIException {
         Type listType = new TypeToken<List<Calendar>>() {}.getType();
@@ -753,8 +751,7 @@ public class AlpacaAPI {
      * @return the clock
      *
      * @throws AlpacaAPIException the alpaca API exception
-     * @see
-     * <a href="https://docs.alpaca.markets/api-documentation/web-api/clock/#get-the-clock">https://docs.alpaca.markets/api-documentation/web-api/clock/#get-the-clock</a>
+     * @see <a href="https://docs.alpaca.markets/api-documentation/web-api/clock/#get-the-clock">Get the Clock</a>
      */
     public Clock getClock() throws AlpacaAPIException {
         AlpacaRequestBuilder urlBuilder = new AlpacaRequestBuilder(apiVersion, baseAccountUrl,
@@ -784,8 +781,8 @@ public class AlpacaAPI {
      * @return the bars
      *
      * @throws AlpacaAPIException the alpaca API exception
-     * @see
-     * <a href="https://docs.alpaca.markets/api-documentation/web-api/market-data/bars/#get-a-list-of-bars">https://docs.alpaca.markets/api-documentation/web-api/market-data/bars/#get-a-list-of-bars</a>
+     * @see <a href="https://docs.alpaca.markets/api-documentation/web-api/market-data/bars/#get-a-list-of-bars">Get a
+     * list of Bars</a>
      */
     public Map<String, List<Bar>> getBars(BarsTimeFrame timeframe, String[] symbols, Integer limit,
             LocalDateTime start, LocalDateTime end, LocalDateTime after, LocalDateTime until)
@@ -851,8 +848,8 @@ public class AlpacaAPI {
      * @return the bars
      *
      * @throws AlpacaAPIException the alpaca API exception
-     * @see
-     * <a href="https://docs.alpaca.markets/api-documentation/web-api/market-data/bars/#get-a-list-of-bars">https://docs.alpaca.markets/api-documentation/web-api/market-data/bars/#get-a-list-of-bars</a>
+     * @see <a href="https://docs.alpaca.markets/api-documentation/web-api/market-data/bars/#get-a-list-of-bars">Get a
+     * list of Bars</a>
      */
     public List<Bar> getBars(BarsTimeFrame timeframe, String symbol, Integer limit,
             LocalDateTime start, LocalDateTime end, LocalDateTime after, LocalDateTime until)
