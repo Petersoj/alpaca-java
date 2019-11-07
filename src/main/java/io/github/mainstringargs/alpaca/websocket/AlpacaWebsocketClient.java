@@ -2,6 +2,7 @@ package io.github.mainstringargs.alpaca.websocket;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import com.google.gson.JsonPrimitive;
 import io.github.mainstringargs.alpaca.enums.MessageType;
 import io.github.mainstringargs.alpaca.websocket.AlpacaWebsocketClientEndpoint.MessageHandler;
 import io.github.mainstringargs.alpaca.websocket.message.AccountUpdateMessage;
@@ -220,30 +221,36 @@ public class AlpacaWebsocketClient implements MessageHandler {
      * Submit stream request.
      */
     private void submitStreamRequest() {
+        // Stream request example:
         // {
-        // "action": "listen",
-        // "data": {
-        // "streams": ["account_updates", "trade_updates"]
-        // }
+        //     "action": "listen",
+        //     "data": {
+        //         "streams": ["account_updates", "trade_updates"]
+        //     }
         // }
 
         JsonObject streamRequest = new JsonObject();
 
-        JsonArray array = new JsonArray();
+        JsonArray streamsArray = new JsonArray();
 
         for (MessageType mType : getRegisteredMessageTypes()) {
-            array.add(mType.getAPIName());
+            JsonPrimitive apiNameJson = new JsonPrimitive(mType.getAPIName());
+
+            if (!streamsArray.contains(apiNameJson)) {
+                streamsArray.add(mType.getAPIName());
+            }
         }
 
         streamRequest.addProperty("action", "listen");
+
         JsonObject dataObject = new JsonObject();
-        dataObject.add("streams", array);
+        dataObject.add("streams", streamsArray);
 
         streamRequest.add("data", dataObject);
 
         clientEndPoint.sendMessage(streamRequest.toString());
 
-        LOGGER.info("Updating streams to " + array);
+        LOGGER.info("Updating streams to " + streamsArray);
     }
 
     /**
