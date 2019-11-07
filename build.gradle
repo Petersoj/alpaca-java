@@ -157,6 +157,7 @@ def sampleJSONPOJOs = [
         ['path': 'alpaca/clock/', 'sourceType': 'jsonschema'],
         ['path': 'alpaca/order/', 'sourceType': 'jsonschema'],
         ['path': 'alpaca/position/', 'sourceType': 'jsonschema'],
+        ['path': 'alpaca/watchlist/', 'sourceType': 'jsonschema'],
 
         // polygon/
         ['path': 'polygon/aggregate/', 'sourceType': 'json'],

@@ -1,0 +1,34 @@
+{
+  "type": "object",
+  "description": "See: https://docs.alpaca.markets/api-documentation/api-v2/watchlist/",
+  "properties": {
+    "id": {
+      "type": "string",
+      "description": "watchlist id"
+    },
+    "created_at": {
+      "type": "string",
+      "description": "created at"
+    },
+    "updated_at": {
+      "type": "string",
+      "description": "updated at at"
+    },
+    "name": {
+      "type": "string",
+      "description": "user-defined watchlist name (up to 64 characters)"
+    },
+    "account_id": {
+      "type": "string",
+      "description": "account ID"
+    },
+    "assets": {
+      "type": "array",
+      "items": {
+        "existingJavaType": "io.github.mainstringargs.domain.alpaca.asset.Asset",
+        "type": "object"
+      },
+      "description": "the content of this watchlist, in the order as registered by the client"
+    }
+  }
+}
