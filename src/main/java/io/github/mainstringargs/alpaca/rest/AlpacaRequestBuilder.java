@@ -1,5 +1,6 @@
 package io.github.mainstringargs.alpaca.rest;
 
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
 import java.util.ArrayList;
@@ -14,13 +15,16 @@ import java.util.Map.Entry;
 public class AlpacaRequestBuilder {
 
     /** The Constant URL_SEPARATOR. */
-    public final static String URL_SEPARATOR = "/";
+    private final static String URL_SEPARATOR = "/";
+
+    /** The appended endpoints. */
+    private final List<String> appendedEndpoints = new ArrayList<>();
 
     /** The url parameters. */
-    public final Map<String, String> urlParameters = new LinkedHashMap<String, String>();
+    private final Map<String, String> urlParameters = new LinkedHashMap<>();
 
-    /** The body properties. */
-    public final Map<String, String> bodyProperties = new LinkedHashMap<String, String>();
+    /** The Body json object. */
+    private final JsonObject bodyJsonObject = new JsonObject();
 
     /** The base url. */
     private final String apiVersion;
@@ -28,14 +32,11 @@ public class AlpacaRequestBuilder {
     /** The base url. */
     private final String baseUrl;
 
-    /** The appended endpoints. */
-    private List<String> appendedEndpoints = new ArrayList<String>();
-
-    /** The default endpoint. */
-    private boolean defaultEndpoint = true;
-
     /** The endpoint. */
     private String endpoint;
+
+    /** The Custom body. */
+    private String customBody;
 
     /**
      * Instantiates a new alpaca request builder.
@@ -51,63 +52,6 @@ public class AlpacaRequestBuilder {
     }
 
     /**
-     * Append URL parameter.
-     *
-     * @param parameterKey   the parameter key
-     * @param parameterValue the parameter value
-     */
-    public void appendURLParameter(String parameterKey, String parameterValue) {
-        if (parameterValue != null) {
-            urlParameters.put(parameterKey, parameterValue);
-        }
-    }
-
-    /**
-     * Append body property.
-     *
-     * @param parameterKey   the parameter key
-     * @param parameterValue the parameter value
-     */
-    public void appendBodyProperty(String parameterKey, String parameterValue) {
-        if (parameterValue != null) {
-            bodyProperties.put(parameterKey, parameterValue);
-        }
-    }
-
-    /**
-     * Checks if is default endpoint.
-     *
-     * @return true, if is default endpoint
-     */
-    public boolean isDefaultEndpoint() {
-        return defaultEndpoint;
-    }
-
-    /**
-     * Sets the default endpoint.
-     *
-     * @param defaultEndpoint the new default endpoint
-     */
-    public void setDefaultEndpoint(boolean defaultEndpoint) {
-        this.defaultEndpoint = defaultEndpoint;
-    }
-
-    /**
-     * Gets the body as JSON.
-     *
-     * @return the body as JSON
-     */
-    public String getBodyAsJSON() {
-        JsonObject jsonBody = new JsonObject();
-
-        for (Entry<String, String> entry : bodyProperties.entrySet()) {
-            jsonBody.addProperty(entry.getKey(), entry.getValue());
-        }
-
-        return jsonBody.toString();
-    }
-
-    /**
      * Append endpoint.
      *
      * @param endpoint the endpoint
@@ -116,16 +60,42 @@ public class AlpacaRequestBuilder {
         if (endpoint != null) {
             appendedEndpoints.add(endpoint);
         }
-
     }
 
     /**
-     * Gets the endpoint.
+     * Append URL parameter.
      *
-     * @return the endpoint
+     * @param urlKey   the url key
+     * @param urlValue the url value
      */
-    public String getEndpoint() {
-        return endpoint;
+    public void appendURLParameter(String urlKey, String urlValue) {
+        if (urlValue != null) {
+            urlParameters.put(urlKey, urlValue);
+        }
+    }
+
+    /**
+     * Append json body property.
+     *
+     * @param bodyKey   the body key
+     * @param bodyValue the body value
+     */
+    public void appendJSONBodyProperty(String bodyKey, String bodyValue) {
+        if (bodyValue != null) {
+            bodyJsonObject.addProperty(bodyKey, bodyValue);
+        }
+    }
+
+    /**
+     * Append body json property.
+     *
+     * @param bodyKey   the body key
+     * @param bodyValue the body value
+     */
+    public void appendBodyJSONProperty(String bodyKey, JsonElement bodyValue) {
+        if (bodyValue != null) {
+            bodyJsonObject.add(bodyKey, bodyValue);
+        }
     }
 
     /**
@@ -138,14 +108,12 @@ public class AlpacaRequestBuilder {
         builder.append(URL_SEPARATOR);
         builder.append(apiVersion);
 
-        if (defaultEndpoint) {
-            builder.append(URL_SEPARATOR);
-            builder.append(getEndpoint());
-        }
+        builder.append(URL_SEPARATOR);
+        builder.append(endpoint);
 
-        for (String endpoint : appendedEndpoints) {
+        for (String appendedEndpoint : appendedEndpoints) {
             builder.append(URL_SEPARATOR);
-            builder.append(endpoint);
+            builder.append(appendedEndpoint);
         }
 
         if (!urlParameters.isEmpty()) {
@@ -162,5 +130,27 @@ public class AlpacaRequestBuilder {
         }
 
         return builder.toString();
+    }
+
+    /**
+     * Gets the body.
+     *
+     * @return the body
+     */
+    public String getBody() {
+        if (customBody != null) {
+            return customBody;
+        }
+
+        return bodyJsonObject.toString();
+    }
+
+    /**
+     * Sets custom body.
+     *
+     * @param customBody the custom body
+     */
+    public void setCustomBody(String customBody) {
+        this.customBody = customBody;
     }
 }

@@ -98,6 +98,9 @@ public class AlpacaConstants {
     /** The Constant ORDERS_ENDPOINT. */
     public static final String ORDERS_ENDPOINT = "orders";
 
+    /** The Constant WATCHLISTS_ENDPOINT. */
+    public static final String WATCHLISTS_ENDPOINT = "watchlists";
+
     /** The Constant UTF_ENCODING. */
     public static final String UTF_ENCODING = "UTF-8";
 

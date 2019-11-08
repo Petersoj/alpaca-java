@@ -101,11 +101,13 @@ public class AlpacaRequest {
 
         try {
             LOGGER.debug("Post URL " + builder.getURL());
-            LOGGER.debug("Post Body " + builder.getBodyAsJSON());
+
+            String postBody = builder.getBody();
+            LOGGER.debug("Post Body " + postBody);
 
             response = Unirest.post(builder.getURL())
                     .header(USER_AGENT_KEY, AlpacaProperties.USER_AGENT_VALUE).header(API_KEY_ID, keyId)
-                    .header(API_SECRET_KEY, secret).body(builder.getBodyAsJSON()).asBinary();
+                    .header(API_SECRET_KEY, secret).body(postBody).asBinary();
         } catch (UnirestException e) {
             LOGGER.error("UnirestException", e);
         }
@@ -147,9 +149,37 @@ public class AlpacaRequest {
         try {
             LOGGER.debug("Patch URL " + builder.getURL());
 
+            String patchBody = builder.getBody();
+            LOGGER.debug("Patch Body " + patchBody);
+
             response = Unirest.patch(builder.getURL())
-                    .header(USER_AGENT_KEY, AlpacaProperties.USER_AGENT_VALUE)
-                    .header(API_KEY_ID, keyId).header(API_SECRET_KEY, secret).asBinary();
+                    .header(USER_AGENT_KEY, AlpacaProperties.USER_AGENT_VALUE).header(API_KEY_ID, keyId)
+                    .header(API_SECRET_KEY, secret).body(patchBody).asBinary();
+        } catch (UnirestException e) {
+            LOGGER.error("UnirestException", e);
+        }
+
+        return response;
+    }
+
+    /**
+     * Invoke put http response.
+     *
+     * @param builder the builder
+     *
+     * @return the http response
+     */
+    public HttpResponse<InputStream> invokePut(AlpacaRequestBuilder builder) {
+        HttpResponse<InputStream> response = null;
+        try {
+            LOGGER.debug("Put URL " + builder.getURL());
+
+            String putBody = builder.getBody();
+            LOGGER.debug("Put Body " + putBody);
+
+            response = Unirest.put(builder.getURL())
+                    .header(USER_AGENT_KEY, AlpacaProperties.USER_AGENT_VALUE).header(API_KEY_ID, keyId)
+                    .header(API_SECRET_KEY, secret).body(putBody).asBinary();
         } catch (UnirestException e) {
             LOGGER.error("UnirestException", e);
         }
@@ -178,6 +208,13 @@ public class AlpacaRequest {
         return responseObjectFromJson;
     }
 
+    /**
+     * Gets response json.
+     *
+     * @param httpResponse the http response
+     *
+     * @return the response json
+     */
     public JsonElement getResponseJSON(HttpResponse<InputStream> httpResponse) {
         JsonElement responseJsonElement = null;
 
@@ -239,6 +276,10 @@ public class AlpacaRequest {
         if (classAnnotationCache.containsKey(theClass)) {
             return classAnnotationCache.get(theClass);
         }
+
+        LOGGER.debug("Caching Gson @SerializedName annotations for " + theClass.getName());
+
+        // Below is expensive, but it only has to be done once per class.
 
         ArrayList<SerializedName> serializedNameAnnotations = new ArrayList<>();
 

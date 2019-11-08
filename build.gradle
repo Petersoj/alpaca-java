@@ -172,11 +172,12 @@ def sampleJSONPOJOs = [
 ]
 
 task generatePOJOs() {
-    dependsOn clean
-
     final def targetDirectory = "${project.buildDir}/generated-sources/samplejson"
     final def jsonSourceDirectory = 'sample_json/'
     def first = true
+
+    // Clear all generated sources
+    delete targetDirectory
 
     sampleJSONPOJOs.each { propertyMap ->
         def path = propertyMap.get('path')
