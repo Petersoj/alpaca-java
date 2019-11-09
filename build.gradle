@@ -123,13 +123,6 @@ nexusStaging {
     packageGroup = "io.github.mainstringargs" //optional if packageGroup == project.getGroup()
 }
 
-processResources {
-    include "**/*.properties.default"
-    rename {
-        filename -> filename.replace '.properties.default', '.properties'
-    }
-}
-
 sourceSets {
     main {
         java {
@@ -207,15 +200,6 @@ build.finalizedBy(publishToMavenLocal)
 
 if (hasProperty('buildScan')) {
     buildScan { licenseAgreementUrl = 'https://gradle.com/terms-of-service'; licenseAgree = 'yes' }
-}
-
-applicationDistribution.from("src/main/resources") {
-    into "lib/resources"
-    include "**/*.properties.default"
-    rename {
-        filename -> filename.replace '.properties.default', '.properties'
-    }
-
 }
 
 startScripts {

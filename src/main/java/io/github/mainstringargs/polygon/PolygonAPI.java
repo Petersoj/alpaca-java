@@ -39,6 +39,7 @@ import java.io.InputStream;
 import java.lang.reflect.Type;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.StringJoiner;
 
 /**
  * The Class PolygonAPI.
@@ -56,6 +57,12 @@ public class PolygonAPI {
 
     /** The base api url. */
     private String baseAPIURL;
+
+    /** The Websocket url. */
+    private String websocketURL;
+
+    /** The Key id. */
+    private String keyID;
 
     /**
      * Instantiates a new polygon API.
@@ -78,12 +85,17 @@ public class PolygonAPI {
      *
      * @param baseAPIURL   the base api url
      * @param websocketURL the websocket url
-     * @param keyId        the key id
+     * @param keyID        the key id
      */
-    public PolygonAPI(String baseAPIURL, String websocketURL, String keyId) {
-        polygonRequest = new PolygonRequest(keyId);
-        polygonWebsocketClient = new PolygonWebsocketClient(keyId, websocketURL);
+    public PolygonAPI(String baseAPIURL, String websocketURL, String keyID) {
         this.baseAPIURL = baseAPIURL;
+        this.websocketURL = websocketURL;
+        this.keyID = keyID;
+
+        polygonRequest = new PolygonRequest(keyID);
+        polygonWebsocketClient = new PolygonWebsocketClient(keyID, websocketURL);
+
+        LOGGER.info(this.toString());
     }
 
     /**
@@ -937,5 +949,14 @@ public class PolygonAPI {
      */
     public void removePolygonStreamListener(PolygonStreamListener streamListener) {
         polygonWebsocketClient.removeListener(streamListener);
+    }
+
+    @Override
+    public String toString() {
+        return new StringJoiner(", ", this.getClass().getSimpleName() + "[", "]")
+                .add("baseAPIURL = " + baseAPIURL)
+                .add("keyID = " + keyID)
+                .add("websocketURL = " + websocketURL)
+                .toString();
     }
 }

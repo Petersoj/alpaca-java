@@ -45,6 +45,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.StringJoiner;
 import java.util.stream.Collectors;
 
 /**
@@ -83,15 +84,13 @@ public class AlpacaAPI {
     }
 
     /**
-     * Instantiates a new Alpaca API using the specified apiVersion, keyId, secret, and baseAPIURL.
+     * Instantiates a new Alpaca API using the specified apiVersion
      *
      * @param apiVersion the api version
-     * @param keyId      the key id
-     * @param secret     the secret
-     * @param baseAPIURL the api account url
      */
-    public AlpacaAPI(String apiVersion, String keyId, String secret, String baseAPIURL) {
-        this(apiVersion, keyId, secret, baseAPIURL, AlpacaProperties.BASE_DATA_URL_VALUE);
+    public AlpacaAPI(String apiVersion) {
+        this(apiVersion, AlpacaProperties.KEY_ID_VALUE, AlpacaProperties.SECRET_VALUE,
+                AlpacaProperties.BASE_API_URL_VALUE, AlpacaProperties.BASE_DATA_URL_VALUE);
     }
 
     /**
@@ -106,13 +105,15 @@ public class AlpacaAPI {
     }
 
     /**
-     * Instantiates a new Alpaca API using the specified apiVersion
+     * Instantiates a new Alpaca API using the specified apiVersion, keyId, secret, and baseAPIURL.
      *
      * @param apiVersion the api version
+     * @param keyId      the key id
+     * @param secret     the secret
+     * @param baseAPIURL the api account url
      */
-    public AlpacaAPI(String apiVersion) {
-        this(apiVersion, AlpacaProperties.KEY_ID_VALUE, AlpacaProperties.SECRET_VALUE,
-                AlpacaProperties.BASE_API_URL_VALUE, AlpacaProperties.BASE_DATA_URL_VALUE);
+    public AlpacaAPI(String apiVersion, String keyId, String secret, String baseAPIURL) {
+        this(apiVersion, keyId, secret, baseAPIURL, AlpacaProperties.BASE_DATA_URL_VALUE);
     }
 
     /**
@@ -1110,8 +1111,11 @@ public class AlpacaAPI {
 
     @Override
     public String toString() {
-        return "AlpacaAPI [apiVersion=" + apiVersion + ", keyId=" + keyId
-                + ", baseAccountUrl=" + baseAPIURL
-                + ", baseDataUrl=" + baseDataUrl + "]";
+        return new StringJoiner(", ", this.getClass().getSimpleName() + "[", "]")
+                .add("apiVersion = " + apiVersion)
+                .add("baseAPIURL = " + baseAPIURL)
+                .add("baseDataUrl = " + baseDataUrl)
+                .add("keyId = " + keyId)
+                .toString();
     }
 }

@@ -350,4 +350,5 @@ public class PolygonWebsocketClient implements PolygonWebsocketClientEndpoint.Me
             return apiName;
         }
     }
+
 }

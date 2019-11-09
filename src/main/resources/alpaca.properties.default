@@ -1,11 +1,15 @@
+#Example:
 #api_version = <v1 or v2>
 #key_id = <YOUR KEY>
 #secret = <YOUR SECRET>
-#base_api_url = https://api.alpaca.markets
+#base_api_url = https://paper-api.alpaca.markets
 #base_data_url = https://data.alpaca.markets
+#user_agent=Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/67.0.3396.87 Safari/537.36
 
-api_version = v1
-key_id = <PLACEHOLDER>
-secret = <PLACEHOLDER>
-base_api_url = <PLACEHOLDER>
-base_data_url = <PLACEHOLDER>
+#Defaults:
+api_version = v2
+key_id = <PLACEHOLDER KEY>
+secret = <PLACEHOLDER SECRET>
+base_api_url = https://paper-api.alpaca.markets
+base_data_url = https://data.alpaca.markets
+user_agent=Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/67.0.3396.87 Safari/537.36
