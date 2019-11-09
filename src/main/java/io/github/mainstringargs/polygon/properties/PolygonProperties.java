@@ -29,11 +29,10 @@ public class PolygonProperties {
     private static final String KEY_ID_KEY = "key_id";
 
     /** The Constant KEY_ID_VALUE. */
-    public static final String KEY_ID_VALUE =
-            getProperty(KEY_ID_KEY, AlpacaProperties.KEY_ID_VALUE);
+    public static final String KEY_ID_VALUE = getProperty(KEY_ID_KEY, AlpacaProperties.KEY_ID_VALUE);
 
-    /** The Constant BASE_DATA_URL_KEY. */
-    private static final String BASE_DATA_URL_KEY = "base_data_url";
+    /** The Constant BASE_API_URL_KEY. */
+    private static final String BASE_API_URL_KEY = "base_api_url";
 
     /** The Constant USER_AGENT_KEY. */
     private static final String USER_AGENT_KEY = "user_agent";
@@ -45,16 +44,14 @@ public class PolygonProperties {
     /** The Constant USER_AGENT_VALUE. */
     public static final String USER_AGENT_VALUE = getProperty(USER_AGENT_KEY, DEFAULT_USER_AGENT);
 
-    /** The Constant DEFAULT_DATA_URL. */
-    private static final String DEFAULT_DATA_URL = "https://api.polygon.io";
+    /** The Constant DEFAULT_API_URL. */
+    private static final String DEFAULT_API_URL = "https://api.polygon.io";
 
-    /** The base data url value. */
-    public static final String BASE_DATA_URL_VALUE =
-            getProperty(BASE_DATA_URL_KEY, DEFAULT_DATA_URL);
+    /** The Constant BASE_API_URL_VALUE. */
+    public static final String BASE_API_URL_VALUE = getProperty(BASE_API_URL_KEY, DEFAULT_API_URL);
 
     /** The default polygon web socket server. */
-    private static final String DEFAULT_POLYGON_WEB_SOCKET_SERVER_URL =
-            "wss://alpaca.socket.polygon.io/stocks";
+    private static final String DEFAULT_POLYGON_WEB_SOCKET_SERVER_URL = "wss://alpaca.socket.polygon.io/stocks";
 
     /** The polygon web socket server url key. */
     private static final String POLYGON_WEB_SOCKET_SERVER_URL_KEY = "web_socket_server_url";
