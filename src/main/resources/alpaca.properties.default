@@ -1,9 +1,11 @@
 #api_version = <v1 or v2>
 #key_id = <YOUR KEY>
 #secret = <YOUR SECRET>
-#base_url = https://api.alpaca.markets
+#base_api_url = https://api.alpaca.markets
+#base_data_url = https://data.alpaca.markets
 
 api_version = v1
 key_id = <PLACEHOLDER>
 secret = <PLACEHOLDER>
-base_url = <PLACEHOLDER>
+base_api_url = <PLACEHOLDER>
+base_data_url = <PLACEHOLDER>
