@@ -25,7 +25,7 @@ import io.github.mainstringargs.polygon.enums.ChannelType;
 import io.github.mainstringargs.polygon.enums.Locale;
 import io.github.mainstringargs.polygon.enums.Sort;
 import io.github.mainstringargs.polygon.enums.Timespan;
-import io.github.mainstringargs.polygon.rest.exceptions.PolygonAPIException;
+import io.github.mainstringargs.polygon.rest.exceptions.PolygonAPIRequestException;
 import io.github.mainstringargs.polygon.websocket.PolygonStreamListenerAdapter;
 import io.github.mainstringargs.polygon.websocket.message.ChannelMessage;
 
@@ -55,7 +55,7 @@ public class PolygonExample {
                     + symbolEndPoints.getSymbol().getName() + " " + symbolEndPoints.getSymbol().getType()
                     + symbolEndPoints.getSymbol().getUrl() + " " + symbolEndPoints.getSymbol().getUpdated());
             System.out.println("\t" + symbolEndPoints.getEndpoints());
-        } catch (PolygonAPIException e) {
+        } catch (PolygonAPIRequestException e) {
             e.printStackTrace();
         }
 
@@ -64,7 +64,7 @@ public class PolygonExample {
 
             System.out.println("\n\n" + ticker + " Symbol Details:");
             System.out.println("\t" + symbolDetails);
-        } catch (PolygonAPIException e) {
+        } catch (PolygonAPIRequestException e) {
             e.printStackTrace();
         }
 
@@ -73,7 +73,7 @@ public class PolygonExample {
 
             System.out.println("\n\n" + ticker + " Symbol Analyst Ratings:");
             System.out.println("\t" + symbolAnalystRatings);
-        } catch (PolygonAPIException e) {
+        } catch (PolygonAPIRequestException e) {
             e.printStackTrace();
         }
 
@@ -85,7 +85,7 @@ public class PolygonExample {
             for (StockDividend div : symbolDividends) {
                 System.out.println("\t" + div);
             }
-        } catch (PolygonAPIException e) {
+        } catch (PolygonAPIRequestException e) {
             e.printStackTrace();
         }
 
@@ -97,7 +97,7 @@ public class PolygonExample {
             for (SymbolEarning earning : symbolEarnings) {
                 System.out.println("\t" + earning);
             }
-        } catch (PolygonAPIException e) {
+        } catch (PolygonAPIRequestException e) {
             e.printStackTrace();
         }
 
@@ -109,7 +109,7 @@ public class PolygonExample {
                 System.out.println("\t" + financial);
             }
 
-        } catch (PolygonAPIException e) {
+        } catch (PolygonAPIRequestException e) {
             e.printStackTrace();
         }
 
@@ -120,7 +120,7 @@ public class PolygonExample {
             for (TickerNews newsItem : symbolNews) {
                 System.out.println("\t" + newsItem);
             }
-        } catch (PolygonAPIException e) {
+        } catch (PolygonAPIRequestException e) {
             e.printStackTrace();
         }
 
@@ -132,7 +132,7 @@ public class PolygonExample {
             for (Ticker tickerItem : tickers) {
                 System.out.println("\t" + tickerItem);
             }
-        } catch (PolygonAPIException e) {
+        } catch (PolygonAPIRequestException e) {
             e.printStackTrace();
         }
 
@@ -143,7 +143,7 @@ public class PolygonExample {
             for (Market market : markets) {
                 System.out.println("\t" + market);
             }
-        } catch (PolygonAPIException e) {
+        } catch (PolygonAPIRequestException e) {
             e.printStackTrace();
         }
 
@@ -155,7 +155,7 @@ public class PolygonExample {
             for (io.github.mainstringargs.domain.polygon.reference.Locale locale : locales) {
                 System.out.println("\t" + locale);
             }
-        } catch (PolygonAPIException e) {
+        } catch (PolygonAPIRequestException e) {
             e.printStackTrace();
         }
 
@@ -166,7 +166,7 @@ public class PolygonExample {
             System.out.println("\t" + typesMapping.getTypes());
             System.out.println("\t" + typesMapping.getIndexTypes());
 
-        } catch (PolygonAPIException e) {
+        } catch (PolygonAPIRequestException e) {
             e.printStackTrace();
         }
 
@@ -177,7 +177,7 @@ public class PolygonExample {
             for (StockSplit splitItems : splits) {
                 System.out.println("\t" + splitItems);
             }
-        } catch (PolygonAPIException e) {
+        } catch (PolygonAPIRequestException e) {
             e.printStackTrace();
         }
 
@@ -188,7 +188,7 @@ public class PolygonExample {
             for (Exchange exchange : exchanges) {
                 System.out.println("\t" + exchange);
             }
-        } catch (PolygonAPIException e) {
+        } catch (PolygonAPIRequestException e) {
             e.printStackTrace();
         }
 
@@ -201,7 +201,7 @@ public class PolygonExample {
             for (Tick tick : trades.getTicks()) {
                 System.out.println("\t" + tick);
             }
-        } catch (PolygonAPIException e) {
+        } catch (PolygonAPIRequestException e) {
             e.printStackTrace();
         }
 
@@ -214,7 +214,7 @@ public class PolygonExample {
             for (io.github.mainstringargs.domain.polygon.historic.quotes.Tick tick : quotes.getTicks()) {
                 System.out.println("\t" + tick);
             }
-        } catch (PolygonAPIException e) {
+        } catch (PolygonAPIRequestException e) {
             e.printStackTrace();
         }
 
@@ -223,7 +223,7 @@ public class PolygonExample {
 
             System.out.println("\n\n" + ticker + " Last Trade: ");
             System.out.println("\t" + trade);
-        } catch (PolygonAPIException e) {
+        } catch (PolygonAPIRequestException e) {
             e.printStackTrace();
         }
 
@@ -232,7 +232,7 @@ public class PolygonExample {
 
             System.out.println("\n\n" + ticker + " Last Quote: ");
             System.out.println("\t" + quote);
-        } catch (PolygonAPIException e) {
+        } catch (PolygonAPIRequestException e) {
             e.printStackTrace();
         }
 
@@ -242,7 +242,7 @@ public class PolygonExample {
 
             System.out.println("\n\n" + ticker + " DailyOpenClose on " + LocalDate.of(2019, 5, 1) + ": ");
             System.out.println("\t" + dailyOpenClose);
-        } catch (PolygonAPIException e) {
+        } catch (PolygonAPIRequestException e) {
             e.printStackTrace();
         }
 
@@ -251,7 +251,7 @@ public class PolygonExample {
 
             System.out.println("\n\n" + ticker + " Snapshot: ");
             System.out.println("\t" + snapshot);
-        } catch (PolygonAPIException e) {
+        } catch (PolygonAPIRequestException e) {
             e.printStackTrace();
         }
 
@@ -262,7 +262,7 @@ public class PolygonExample {
             for (Snapshot snapshot : snapshots) {
                 System.out.println("\t" + snapshot);
             }
-        } catch (PolygonAPIException e) {
+        } catch (PolygonAPIRequestException e) {
             e.printStackTrace();
         }
 
@@ -273,7 +273,7 @@ public class PolygonExample {
             for (Snapshot snapshot : snapshots) {
                 System.out.println("\t" + snapshot);
             }
-        } catch (PolygonAPIException e) {
+        } catch (PolygonAPIRequestException e) {
             e.printStackTrace();
         }
 
@@ -284,7 +284,7 @@ public class PolygonExample {
             for (Snapshot snapshot : snapshots) {
                 System.out.println("\t" + snapshot);
             }
-        } catch (PolygonAPIException e) {
+        } catch (PolygonAPIRequestException e) {
             e.printStackTrace();
         }
 
@@ -295,7 +295,7 @@ public class PolygonExample {
             for (Result result : aggs.getResults()) {
                 System.out.println("\t" + result);
             }
-        } catch (PolygonAPIException e) {
+        } catch (PolygonAPIRequestException e) {
             e.printStackTrace();
         }
 
@@ -307,7 +307,7 @@ public class PolygonExample {
             for (Result result : aggs.getResults()) {
                 System.out.println("\t" + result);
             }
-        } catch (PolygonAPIException e) {
+        } catch (PolygonAPIRequestException e) {
             e.printStackTrace();
         }
 
@@ -319,7 +319,7 @@ public class PolygonExample {
             for (Result result : aggs.getResults()) {
                 System.out.println("\t" + result);
             }
-        } catch (PolygonAPIException e) {
+        } catch (PolygonAPIRequestException e) {
             e.printStackTrace();
         }
 

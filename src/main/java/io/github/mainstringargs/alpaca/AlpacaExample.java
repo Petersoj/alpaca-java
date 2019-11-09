@@ -5,7 +5,7 @@ import io.github.mainstringargs.alpaca.enums.MessageType;
 import io.github.mainstringargs.alpaca.enums.OrderSide;
 import io.github.mainstringargs.alpaca.enums.OrderTimeInForce;
 import io.github.mainstringargs.alpaca.enums.OrderType;
-import io.github.mainstringargs.alpaca.rest.exceptions.AlpacaAPIException;
+import io.github.mainstringargs.alpaca.rest.exceptions.AlpacaAPIRequestException;
 import io.github.mainstringargs.alpaca.websocket.AlpacaStreamListenerAdapter;
 import io.github.mainstringargs.alpaca.websocket.message.AccountUpdateMessage;
 import io.github.mainstringargs.alpaca.websocket.message.OrderUpdateMessage;
@@ -64,7 +64,7 @@ public class AlpacaExample {
             System.out.println("\tCreated At: " + TimeUtil.fromDateTimeString(alpacaAccount.getCreatedAt()) +
                     "\n\tBuying Power: " + alpacaAccount.getBuyingPower() +
                     "\n\tPortfolio Value: " + alpacaAccount.getPortfolioValue());
-        } catch (AlpacaAPIException e) {
+        } catch (AlpacaAPIRequestException e) {
             e.printStackTrace();
         }
 
@@ -77,7 +77,7 @@ public class AlpacaExample {
                     "\n\tIs Open: " + alpacaClock.isIsOpen() +
                     "\n\tMarket Next Open Time: " + alpacaClock.getNextOpen() +
                     "\n\tMark Next Close Time: " + alpacaClock.getNextClose());
-        } catch (AlpacaAPIException e) {
+        } catch (AlpacaAPIRequestException e) {
             e.printStackTrace();
         }
 
@@ -97,7 +97,7 @@ public class AlpacaExample {
                     "\n\tType: " + limitOrder.getType() +
                     "\n\tLimit Price: $" + limitOrder.getLimitPrice() +
                     "\n\tCreated At: " + limitOrder.getCreatedAt());
-        } catch (AlpacaAPIException e) {
+        } catch (AlpacaAPIRequestException e) {
             e.printStackTrace();
         }
 
@@ -112,7 +112,7 @@ public class AlpacaExample {
                     "\n\tType: " + limitOrderById.getType() +
                     "\n\tLimit Price: $" + limitOrderById.getLimitPrice() +
                     "\n\tCreated At: " + limitOrderById.getCreatedAt());
-        } catch (AlpacaAPIException e) {
+        } catch (AlpacaAPIRequestException e) {
             e.printStackTrace();
         }
 
@@ -127,7 +127,7 @@ public class AlpacaExample {
                     "\n\tType: " + limitOrderByClientId.getType() +
                     "\n\tLimit Price: $" + limitOrderByClientId.getLimitPrice() +
                     "\n\tCreated At: " + limitOrderByClientId.getCreatedAt());
-        } catch (AlpacaAPIException e) {
+        } catch (AlpacaAPIRequestException e) {
             e.printStackTrace();
         }
 
@@ -137,7 +137,7 @@ public class AlpacaExample {
 
             System.out.println("\n\nCancel order response:");
             System.out.println("\tCancelled: " + orderCanceled);
-        } catch (AlpacaAPIException e) {
+        } catch (AlpacaAPIRequestException e) {
             e.printStackTrace();
         }
 
@@ -158,7 +158,7 @@ public class AlpacaExample {
                 System.out.println("\tClose: $" + bar.getC());
                 System.out.println("\tVolume: " + bar.getV());
             }
-        } catch (AlpacaAPIException e) {
+        } catch (AlpacaAPIRequestException e) {
             e.printStackTrace();
         }
 

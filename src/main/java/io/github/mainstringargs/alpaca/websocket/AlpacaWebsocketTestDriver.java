@@ -19,7 +19,7 @@ public class AlpacaWebsocketTestDriver {
      */
     public static void main(String[] args) {
         AlpacaWebsocketClient client = new AlpacaWebsocketClient(AlpacaProperties.KEY_ID_VALUE,
-                AlpacaProperties.SECRET_VALUE, AlpacaProperties.BASE_ACCOUNT_URL_VALUE);
+                AlpacaProperties.SECRET_VALUE, AlpacaProperties.BASE_API_URL_VALUE);
 
         client.addListener(new AlpacaStreamListener() {
             @Override

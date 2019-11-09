@@ -28,8 +28,8 @@ public class AlpacaWebsocketClient implements MessageHandler {
     /** The logger. */
     private static Logger LOGGER = LogManager.getLogger(AlpacaWebsocketClient.class);
 
-    /** The base account url. */
-    private String baseAccountUrl;
+    /** The base API URL. */
+    private String baseAPIURL;
 
     /** The key id. */
     private String keyId;
@@ -38,7 +38,7 @@ public class AlpacaWebsocketClient implements MessageHandler {
     private String secret;
 
     /** The observers. */
-    private List<AlpacaStreamListener> listeners = new ArrayList<AlpacaStreamListener>();
+    private List<AlpacaStreamListener> listeners = new ArrayList<>();
 
     /** The client end point. */
     private AlpacaWebsocketClientEndpoint clientEndPoint = null;
@@ -57,14 +57,14 @@ public class AlpacaWebsocketClient implements MessageHandler {
     /**
      * Instantiates a new websocket client.
      *
-     * @param keyId          the key id
-     * @param secret         the secret
-     * @param baseAccountUrl the base account url
+     * @param keyId      the key id
+     * @param secret     the secret
+     * @param baseAPIURL the base api url
      */
-    public AlpacaWebsocketClient(String keyId, String secret, String baseAccountUrl) {
+    public AlpacaWebsocketClient(String keyId, String secret, String baseAPIURL) {
         this.keyId = keyId;
         this.secret = secret;
-        this.baseAccountUrl = baseAccountUrl.replace("https", "wss") + "/stream";
+        this.baseAPIURL = baseAPIURL.replace("https", "wss") + "/stream";
     }
 
     /**
@@ -105,7 +105,7 @@ public class AlpacaWebsocketClient implements MessageHandler {
         LOGGER.info("Connecting...");
 
         try {
-            clientEndPoint = new AlpacaWebsocketClientEndpoint(new URI(baseAccountUrl));
+            clientEndPoint = new AlpacaWebsocketClientEndpoint(new URI(baseAPIURL));
             clientEndPoint.addMessageHandler(this);
         } catch (URISyntaxException e) {
             e.printStackTrace();
@@ -259,7 +259,7 @@ public class AlpacaWebsocketClient implements MessageHandler {
      * @return the registered message types
      */
     public synchronized Set<MessageType> getRegisteredMessageTypes() {
-        Set<MessageType> registeredMessageTypes = new HashSet<MessageType>();
+        Set<MessageType> registeredMessageTypes = new HashSet<>();
 
         for (AlpacaStreamListener observer : listeners) {
             // if its empty, assume they want everything
