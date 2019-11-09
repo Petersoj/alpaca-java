@@ -5,8 +5,8 @@ package io.github.mainstringargs.alpaca.enums;
  */
 public enum MessageType {
 
-    /** The order updates. */
-    ORDER_UPDATES("trade_updates"),
+    /** The trade updates. */
+    TRADE_UPDATES("trade_updates"),
 
     /** The account updates. */
     ACCOUNT_UPDATES("account_updates");

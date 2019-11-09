@@ -1,10 +1,9 @@
 package io.github.mainstringargs.polygon.websocket.message;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 import io.github.mainstringargs.domain.polygon.websocket.StockAggregate;
 import io.github.mainstringargs.polygon.enums.ChannelType;
+import io.github.mainstringargs.util.gson.GsonUtil;
 import io.github.mainstringargs.util.time.TimeUtil;
 
 import java.time.Instant;
@@ -15,15 +14,6 @@ import java.time.ZoneId;
  * The Class AggregateMessage.
  */
 public abstract class AggregateMessage implements ChannelMessage {
-
-    /** The gson. */
-    private static Gson gson;
-
-    static {
-        GsonBuilder gsonBuilder = new GsonBuilder();
-        gsonBuilder.setLenient();
-        gson = gsonBuilder.create();
-    }
 
     /** The channel type. */
     private ChannelType channelType;
@@ -48,7 +38,7 @@ public abstract class AggregateMessage implements ChannelMessage {
 
         JsonObject jsonQuote = jsonObject.getAsJsonObject();
 
-        stockAggregate = gson.fromJson(jsonQuote, StockAggregate.class);
+        stockAggregate = GsonUtil.GSON.fromJson(jsonQuote, StockAggregate.class);
 
         start = LocalDateTime.ofInstant(Instant.ofEpochMilli(TimeUtil.convertToMilli(stockAggregate.getS())),
                 ZoneId.systemDefault());

@@ -1,10 +1,9 @@
 package io.github.mainstringargs.polygon.websocket.message;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 import io.github.mainstringargs.domain.polygon.websocket.StockTrade;
 import io.github.mainstringargs.polygon.enums.ChannelType;
+import io.github.mainstringargs.util.gson.GsonUtil;
 import io.github.mainstringargs.util.time.TimeUtil;
 
 import java.time.Instant;
@@ -15,15 +14,6 @@ import java.time.ZoneId;
  * The Class TradesMessage.
  */
 public class TradesMessage implements ChannelMessage {
-
-    /** The gson. */
-    private static Gson gson;
-
-    static {
-        GsonBuilder gsonBuilder = new GsonBuilder();
-        gsonBuilder.setLenient();
-        gson = gsonBuilder.create();
-    }
 
     /** The channel type. */
     private ChannelType channelType;
@@ -44,7 +34,7 @@ public class TradesMessage implements ChannelMessage {
 
         JsonObject jsonQuote = jsonObject.getAsJsonObject();
 
-        stockTrade = gson.fromJson(jsonQuote, StockTrade.class);
+        stockTrade = GsonUtil.GSON.fromJson(jsonQuote, StockTrade.class);
 
         timestamp = LocalDateTime.ofInstant(Instant.ofEpochMilli(
                 TimeUtil.convertToMilli(stockTrade.getT())), ZoneId.systemDefault());

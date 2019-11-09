@@ -166,7 +166,7 @@ public class AlpacaWebsocketClient implements MessageHandler {
                     LOGGER.debug("Listening response " + message);
                     break;
                 case "trade_updates":
-                    sendStreamMessageToObservers(MessageType.ORDER_UPDATES, message);
+                    sendStreamMessageToObservers(MessageType.TRADE_UPDATES, message);
                     break;
                 case "account_updates":
                     sendStreamMessageToObservers(MessageType.ACCOUNT_UPDATES, message);
@@ -210,7 +210,7 @@ public class AlpacaWebsocketClient implements MessageHandler {
             switch (messageType) {
                 case ACCOUNT_UPDATES:
                     return new AccountUpdateMessage(data);
-                case ORDER_UPDATES:
+                case TRADE_UPDATES:
                     return new OrderUpdateMessage(data);
             }
         }

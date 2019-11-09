@@ -1,5 +1,7 @@
 package io.github.mainstringargs.alpaca.properties;
 
+import java.util.StringJoiner;
+
 import static io.github.mainstringargs.util.properties.PropertyUtil.getProperty;
 
 /**
@@ -45,4 +47,26 @@ public class AlpacaProperties {
     /** The Constant USER_AGENT_VALUE. */
     public static final String USER_AGENT_VALUE = getProperty(ALPACA_PROPERTIES_FILE, USER_AGENT_KEY);
 
+    /**
+     * Static to string string.
+     *
+     * @return the string
+     */
+    public static String staticToString() {
+        return new StringJoiner(", ", AlpacaProperties.class.getSimpleName() + "[", "]")
+                .add("ALPACA_PROPERTIES_FILE = " + ALPACA_PROPERTIES_FILE)
+                .add("API_VERSION_KEY = " + API_VERSION_KEY)
+                .add("API_VERSION_VALUE = " + API_VERSION_VALUE)
+                .add("BASE_API_URL_KEY = " + BASE_API_URL_KEY)
+                .add("BASE_API_URL_VALUE = " + BASE_API_URL_VALUE)
+                .add("BASE_DATA_URL_KEY = " + BASE_DATA_URL_KEY)
+                .add("BASE_DATA_URL_VALUE = " + BASE_DATA_URL_VALUE)
+                .add("KEY_ID_KEY = " + KEY_ID_KEY)
+                .add("KEY_ID_VALUE = " + KEY_ID_VALUE)
+                .add("SECRET_KEY = " + SECRET_KEY)
+                .add("SECRET_VALUE = " + SECRET_VALUE)
+                .add("USER_AGENT_KEY = " + USER_AGENT_KEY)
+                .add("USER_AGENT_VALUE = " + USER_AGENT_VALUE)
+                .toString();
+    }
 }

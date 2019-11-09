@@ -31,6 +31,7 @@ import io.github.mainstringargs.domain.alpaca.clock.Clock;
 import io.github.mainstringargs.domain.alpaca.order.Order;
 import io.github.mainstringargs.domain.alpaca.position.Position;
 import io.github.mainstringargs.domain.alpaca.watchlist.Watchlist;
+import io.github.mainstringargs.util.gson.GsonUtil;
 import io.github.mainstringargs.util.time.TimeUtil;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -81,6 +82,8 @@ public class AlpacaAPI {
         this(AlpacaProperties.API_VERSION_VALUE, AlpacaProperties.KEY_ID_VALUE,
                 AlpacaProperties.SECRET_VALUE, AlpacaProperties.BASE_API_URL_VALUE,
                 AlpacaProperties.BASE_DATA_URL_VALUE);
+
+        LOGGER.info(AlpacaProperties.staticToString());
     }
 
     /**
@@ -233,15 +236,9 @@ public class AlpacaAPI {
                     JsonObject arrayJsonObject = (JsonObject) arrayJsonElement;
 
                     if (alpacaRequest.doesGSONPOJOMatch(TradeActivity.class, arrayJsonObject)) {
-                        TradeActivity tradeActivity = alpacaRequest.REQUEST_GSON
-                                .fromJson(arrayJsonObject, TradeActivity.class);
-
-                        accountActivities.add(tradeActivity);
+                        accountActivities.add(GsonUtil.GSON.fromJson(arrayJsonObject, TradeActivity.class));
                     } else if (alpacaRequest.doesGSONPOJOMatch(NonTradeActivity.class, arrayJsonObject)) {
-                        NonTradeActivity nonTradeActivity = alpacaRequest.REQUEST_GSON
-                                .fromJson(arrayJsonObject, NonTradeActivity.class);
-
-                        accountActivities.add(nonTradeActivity);
+                        accountActivities.add(GsonUtil.GSON.fromJson(arrayJsonObject, NonTradeActivity.class));
                     } else {
                         LOGGER.warn("Received unknown JSON Object in response!");
                     }
@@ -296,7 +293,7 @@ public class AlpacaAPI {
         AlpacaRequestBuilder urlBuilder = new AlpacaRequestBuilder(baseAPIURL, apiVersion,
                 AlpacaConstants.ACCOUNT_ENDPOINT,
                 AlpacaConstants.CONFIGURATIONS_ENDPOINT);
-        urlBuilder.setCustomBody(alpacaRequest.REQUEST_GSON.toJson(accountConfiguration));
+        urlBuilder.setCustomBody(GsonUtil.GSON.toJson(accountConfiguration));
 
         HttpResponse<InputStream> response = alpacaRequest.invokePatch(urlBuilder);
 

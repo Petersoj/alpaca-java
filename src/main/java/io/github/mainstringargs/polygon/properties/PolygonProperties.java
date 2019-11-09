@@ -2,6 +2,8 @@ package io.github.mainstringargs.polygon.properties;
 
 import io.github.mainstringargs.alpaca.properties.AlpacaProperties;
 
+import java.util.StringJoiner;
+
 import static io.github.mainstringargs.util.properties.PropertyUtil.getProperty;
 
 /**
@@ -39,4 +41,22 @@ public class PolygonProperties {
     /** The Constant USER_AGENT_VALUE. */
     public static final String USER_AGENT_VALUE = getProperty(POLYGON_PROPERTIES_FILE, USER_AGENT_KEY);
 
+    /**
+     * Static to string.
+     *
+     * @return the string
+     */
+    public static String staticToString() {
+        return new StringJoiner(", ", PolygonProperties.class.getSimpleName() + "[", "]")
+                .add("BASE_API_URL_KEY = " + BASE_API_URL_KEY)
+                .add("BASE_API_URL_VALUE = " + BASE_API_URL_VALUE)
+                .add("KEY_ID_KEY = " + KEY_ID_KEY)
+                .add("KEY_ID_VALUE = " + KEY_ID_VALUE)
+                .add("POLYGON_PROPERTIES_FILE = " + POLYGON_PROPERTIES_FILE)
+                .add("POLYGON_WEB_SOCKET_SERVER_URL_KEY = " + POLYGON_WEB_SOCKET_SERVER_URL_KEY)
+                .add("POLYGON_WEB_SOCKET_SERVER_URL_VALUE = " + POLYGON_WEB_SOCKET_SERVER_URL_VALUE)
+                .add("USER_AGENT_KEY = " + USER_AGENT_KEY)
+                .add("USER_AGENT_VALUE = " + USER_AGENT_VALUE)
+                .toString();
+    }
 }

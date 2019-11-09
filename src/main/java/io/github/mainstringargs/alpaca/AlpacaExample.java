@@ -38,7 +38,7 @@ public class AlpacaExample {
 
         // Register explicitly for ACCOUNT_UPDATES and ORDER_UPDATES Messages via stream listener
         alpacaApi.addAlpacaStreamListener(new AlpacaStreamListenerAdapter(MessageType.ACCOUNT_UPDATES,
-                MessageType.ORDER_UPDATES) {
+                MessageType.TRADE_UPDATES) {
             @Override
             public void streamUpdate(MessageType messageType, UpdateMessage message) {
 
@@ -48,7 +48,7 @@ public class AlpacaExample {
                         System.out
                                 .println("\nReceived Account Update: \n\t" + accounUpdateMessage.toString());
                         break;
-                    case ORDER_UPDATES:
+                    case TRADE_UPDATES:
                         OrderUpdateMessage orderUpdateMessage = (OrderUpdateMessage) message;
                         System.out.println("\nReceived Order Update: \n\t" + orderUpdateMessage.toString());
                         break;

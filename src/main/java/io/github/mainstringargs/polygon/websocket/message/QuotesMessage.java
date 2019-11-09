@@ -1,10 +1,9 @@
 package io.github.mainstringargs.polygon.websocket.message;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 import io.github.mainstringargs.domain.polygon.websocket.StockQuote;
 import io.github.mainstringargs.polygon.enums.ChannelType;
+import io.github.mainstringargs.util.gson.GsonUtil;
 
 import java.time.Instant;
 import java.time.LocalDateTime;
@@ -14,15 +13,6 @@ import java.time.ZoneId;
  * The Class QuotesMessage.
  */
 public class QuotesMessage implements ChannelMessage {
-
-    /** The gson. */
-    private static Gson gson;
-
-    static {
-        GsonBuilder gsonBuilder = new GsonBuilder();
-        gsonBuilder.setLenient();
-        gson = gsonBuilder.create();
-    }
 
     /** The channel type. */
     private ChannelType channelType;
@@ -43,7 +33,7 @@ public class QuotesMessage implements ChannelMessage {
 
         JsonObject jsonQuote = jsonObject.getAsJsonObject();
 
-        stockQuote = gson.fromJson(jsonQuote, StockQuote.class);
+        stockQuote = GsonUtil.GSON.fromJson(jsonQuote, StockQuote.class);
 
         long time = stockQuote.getT();
 

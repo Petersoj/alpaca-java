@@ -1,9 +1,8 @@
 package io.github.mainstringargs.polygon.websocket.message;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 import io.github.mainstringargs.domain.polygon.websocket.ChannelStatus;
+import io.github.mainstringargs.util.gson.GsonUtil;
 
 import java.util.Objects;
 import java.util.StringJoiner;
@@ -12,15 +11,6 @@ import java.util.StringJoiner;
  * The Class StatusMessage.
  */
 public class StatusMessage {
-
-    /** The gson. */
-    private static Gson gson;
-
-    static {
-        GsonBuilder gsonBuilder = new GsonBuilder();
-        gsonBuilder.setLenient();
-        gson = gsonBuilder.create();
-    }
 
     /** The channel status. */
     private ChannelStatus channelStatus;
@@ -31,7 +21,7 @@ public class StatusMessage {
      * @param jsonObject the json object
      */
     public StatusMessage(JsonObject jsonObject) {
-        channelStatus = gson.fromJson(jsonObject, ChannelStatus.class);
+        channelStatus = GsonUtil.GSON.fromJson(jsonObject, ChannelStatus.class);
     }
 
     /**
@@ -55,14 +45,13 @@ public class StatusMessage {
 
     @Override
     public int hashCode() {
-        return Objects.hash(channelStatus, gson);
+        return Objects.hash(channelStatus);
     }
 
     @Override
     public String toString() {
         return new StringJoiner(", ", this.getClass().getSimpleName() + "[", "]")
                 .add("channelStatus = " + channelStatus)
-                .add("gson = " + gson)
                 .toString();
     }
 }

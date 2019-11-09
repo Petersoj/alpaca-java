@@ -1,10 +1,7 @@
 package io.github.mainstringargs.util.rest;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
 import com.google.gson.annotations.SerializedName;
 import com.google.gson.stream.JsonReader;
 import com.mashape.unirest.http.HttpResponse;
@@ -12,7 +9,7 @@ import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.exceptions.UnirestException;
 import com.mashape.unirest.request.GetRequest;
 import com.mashape.unirest.request.HttpRequestWithBody;
-import io.github.mainstringargs.util.gson.LocalDateTimeAdapter;
+import io.github.mainstringargs.util.gson.GsonUtil;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -21,7 +18,6 @@ import java.io.InputStreamReader;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.lang.reflect.Type;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -31,15 +27,6 @@ import java.util.Set;
  * The type Abstract request.
  */
 public abstract class AbstractRequest {
-
-    /** The constant REQUEST_GSON which include ISO date time -> LocalDateTime objects */
-    public final Gson REQUEST_GSON = new GsonBuilder()
-            .registerTypeAdapter(LocalDateTime.class, new LocalDateTimeAdapter())
-            .setLenient()
-            .create();
-
-    /** The constant JSON_PARSER. */
-    public final JsonParser JSON_PARSER = new JsonParser();
 
     /** The logger. */
     private static final Logger LOGGER = LogManager.getLogger(AbstractRequest.class);
@@ -277,7 +264,7 @@ public abstract class AbstractRequest {
         T responseObjectFromJson = null;
 
         try (JsonReader jsonReader = new JsonReader(new InputStreamReader(httpResponse.getRawBody()))) {
-            responseObjectFromJson = REQUEST_GSON.fromJson(jsonReader, type);
+            responseObjectFromJson = GsonUtil.GSON.fromJson(jsonReader, type);
         } catch (Exception e) {
             LOGGER.error("Exception", e);
         }
@@ -296,7 +283,7 @@ public abstract class AbstractRequest {
         JsonElement responseJsonElement = null;
 
         try (JsonReader jsonReader = new JsonReader(new InputStreamReader(httpResponse.getRawBody()))) {
-            responseJsonElement = JSON_PARSER.parse(jsonReader);
+            responseJsonElement = GsonUtil.JSON_PARSER.parse(jsonReader);
         } catch (Exception e) {
             LOGGER.error("Exception", e);
         }

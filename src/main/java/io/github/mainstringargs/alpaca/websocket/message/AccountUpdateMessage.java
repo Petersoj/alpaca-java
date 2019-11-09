@@ -1,23 +1,14 @@
 package io.github.mainstringargs.alpaca.websocket.message;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 import io.github.mainstringargs.alpaca.enums.MessageType;
 import io.github.mainstringargs.domain.alpaca.account.Account;
+import io.github.mainstringargs.util.gson.GsonUtil;
 
 /**
  * The Class AccountUpdateMessage.
  */
 public class AccountUpdateMessage implements UpdateMessage {
-
-    private static Gson gson;
-
-    static {
-        GsonBuilder gsonBuilder = new GsonBuilder();
-        gsonBuilder.setLenient();
-        gson = gsonBuilder.create();
-    }
 
     /** The account. */
     private Account account;
@@ -30,7 +21,7 @@ public class AccountUpdateMessage implements UpdateMessage {
     public AccountUpdateMessage(JsonObject data) {
         JsonObject jsonAccount = data.getAsJsonObject();
 
-        account = gson.fromJson(jsonAccount, Account.class);
+        account = GsonUtil.GSON.fromJson(jsonAccount, Account.class);
     }
 
     /**

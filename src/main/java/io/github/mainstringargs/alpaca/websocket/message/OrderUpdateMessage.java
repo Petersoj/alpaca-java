@@ -1,11 +1,10 @@
 package io.github.mainstringargs.alpaca.websocket.message;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 import io.github.mainstringargs.alpaca.enums.MessageType;
 import io.github.mainstringargs.alpaca.enums.OrderEvent;
 import io.github.mainstringargs.domain.alpaca.order.Order;
+import io.github.mainstringargs.util.gson.GsonUtil;
 import io.github.mainstringargs.util.time.TimeUtil;
 
 import java.time.LocalDateTime;
@@ -14,14 +13,6 @@ import java.time.LocalDateTime;
  * The Class OrderUpdateMessage.
  */
 public class OrderUpdateMessage implements UpdateMessage {
-
-    private static Gson gson;
-
-    static {
-        GsonBuilder gsonBuilder = new GsonBuilder();
-        gsonBuilder.setLenient();
-        gson = gsonBuilder.create();
-    }
 
     /** The event. */
     private OrderEvent event;
@@ -63,7 +54,7 @@ public class OrderUpdateMessage implements UpdateMessage {
         if (data.has("order")) {
             JsonObject jsonOrder = data.get("order").getAsJsonObject();
 
-            order = gson.fromJson(jsonOrder, Order.class);
+            order = GsonUtil.GSON.fromJson(jsonOrder, Order.class);
         }
     }
 
@@ -160,6 +151,6 @@ public class OrderUpdateMessage implements UpdateMessage {
      */
     @Override
     public MessageType getMessageType() {
-        return MessageType.ORDER_UPDATES;
+        return MessageType.TRADE_UPDATES;
     }
 }

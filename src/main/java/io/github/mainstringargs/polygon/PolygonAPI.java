@@ -69,6 +69,8 @@ public class PolygonAPI {
      */
     public PolygonAPI() {
         this(PolygonProperties.KEY_ID_VALUE);
+
+        LOGGER.info(PolygonProperties.staticToString());
     }
 
     /**
