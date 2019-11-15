@@ -118,8 +118,8 @@ public class Documentation2JSONSchema {
             }
 
             schemaJSON += "\"" + propertyName + "\": {\n";
-            schemaJSON += "\"type\": \"" + parseDocTypeToSchemaType(propertyType) + "\",\n";
-            schemaJSON += "\"description\": \"" + propertyDescription + "\"\n";
+            schemaJSON += "\"existingJavaType\": \"" + parseDocTypeToSchemaJavaType(propertyType) + "\",\n";
+            schemaJSON += "\"title\": \"" + propertyDescription + "\"\n";
             schemaJSON += "},\n";
         }
         return schemaJSON;
@@ -128,18 +128,18 @@ public class Documentation2JSONSchema {
     /**
      * @see <a href="https://github.com/joelittlejohn/jsonschema2pojo/wiki/Reference#type">jsonSchema2Pojo Ref</a>
      */
-    private static String parseDocTypeToSchemaType(String polygonDocType) {
-        polygonDocType = polygonDocType.toLowerCase();
+    private static String parseDocTypeToSchemaJavaType(String docType) {
+        docType = docType.toLowerCase();
 
-        if (polygonDocType.contains("string") || polygonDocType.contains("timestamp")) {
-            return "string";
-        } else if (polygonDocType.contains("boolean") || polygonDocType.contains("bool")) {
-            return "boolean";
-        } else if (polygonDocType.contains("int") || polygonDocType.contains("integer")) {
-            return "integer";
-        } else if (polygonDocType.contains("double") || polygonDocType.contains("float") ||
-                polygonDocType.contains("number")) {
-            return "double";
+        if (docType.contains("string") || docType.contains("timestamp")) {
+            return "java.lang.String";
+        } else if (docType.contains("boolean") || docType.contains("bool")) {
+            return "java.lang.Boolean";
+        } else if (docType.contains("int") || docType.contains("integer")) {
+            return "java.lang.Integer";
+        } else if (docType.contains("double") || docType.contains("float") ||
+                docType.contains("number")) {
+            return "java.lang.Double";
         } else {
             return "UNKNOWN DOC DATA TYPE";
         }
