@@ -1,70 +1,70 @@
 {
   "type": "object",
-  "description": "See: https://docs.alpaca.markets/api-documentation/api-v2/clock/",
+  "title": "See: https://docs.alpaca.markets/api-documentation/api-v2/clock/",
   "properties": {
     "asset_id": {
-      "type": "string",
-      "description": "Asset ID"
+      "existingJavaType": "java.lang.String",
+      "title": "Asset ID"
     },
     "symbol": {
-      "type": "string",
-      "description": "Symbol name of the asset"
+      "existingJavaType": "java.lang.String",
+      "title": "Symbol name of the asset"
     },
     "exchange": {
-      "type": "string",
-      "description": "Exchange name of the asset"
+      "existingJavaType": "java.lang.String",
+      "title": "Exchange name of the asset"
     },
     "asset_class": {
-      "type": "string",
-      "description": "Asset class name"
+      "existingJavaType": "java.lang.String",
+      "title": "Asset class name"
     },
     "avg_entry_price": {
-      "type": "string",
-      "description": "Average entry price of the position"
+      "existingJavaType": "java.lang.String",
+      "title": "Average entry price of the position"
     },
     "qty": {
-      "type": "string",
-      "description": "The number of shares"
+      "existingJavaType": "java.lang.String",
+      "title": "The number of shares"
     },
     "side": {
-      "type": "string",
-      "description": "long"
+      "existingJavaType": "java.lang.String",
+      "title": "“long”"
     },
     "market_value": {
-      "type": "string",
-      "description": "Total dollar amount of the position"
+      "existingJavaType": "java.lang.String",
+      "title": "Total dollar amount of the position"
     },
     "cost_basis": {
-      "type": "string",
-      "description": "Total cost basis in dollar"
+      "existingJavaType": "java.lang.String",
+      "title": "Total cost basis in dollar"
     },
     "unrealized_pl": {
-      "type": "string",
-      "description": "Unrealized profit/loss in dollars"
+      "existingJavaType": "java.lang.String",
+      "title": "Unrealized profit/loss in dollars"
     },
     "unrealized_plpc": {
-      "type": "string",
-      "description": "Unrealized profit/loss percent (by a factor of 1)"
+      "existingJavaType": "java.lang.String",
+      "title": "Unrealized profit/loss percent (by a factor of 1)"
     },
     "unrealized_intraday_pl": {
-      "type": "string",
-      "description": "Unrealized profit/loss in dollars for the day"
+      "existingJavaType": "java.lang.String",
+      "title": "Unrealized profit/loss in dollars for the day"
     },
     "unrealized_intraday_plpc": {
-      "type": "string",
-      "description": "Unrealized profit/loss percent (by a factor of 1)"
+      "existingJavaType": "java.lang.String",
+      "title": "Unrealized profit/loss percent (by a factor of 1)"
     },
     "current_price": {
-      "type": "string",
-      "description": "Current asset price per share"
+      "existingJavaType": "java.lang.String",
+      "title": "Current asset price per share"
     },
     "lastday_price": {
-      "type": "string",
-      "description": "Last day’s asset price per share based on the closing value of the last trading day"
+      "existingJavaType": "java.lang.String",
+      "title": "Last day’s asset price per share based on the closing value of the last trading day"
     },
     "change_today": {
-      "type": "string",
-      "description": "Percent change from last day price (by a factor of 1)"
+      "existingJavaType": "java.lang.String",
+      "title": "Percent change from last day price (by a factor of 1)"
     }
   }
 }

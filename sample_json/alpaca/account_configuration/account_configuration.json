@@ -1,22 +1,22 @@
 {
   "type": "object",
-  "description": "See: https://docs.alpaca.markets/api-documentation/api-v2/account-configuration/",
+  "title": "See: https://docs.alpaca.markets/api-documentation/api-v2/account-configuration/",
   "properties": {
     "dtbp_check": {
-      "type": "string",
-      "description": "both, entry, or exit. Controls Day Trading Margin Call (DTMC) checks."
+      "existingJavaType": "java.lang.String",
+      "title": "both, entry, or exit. Controls Day Trading Margin Call (DTMC) checks."
     },
     "trade_confirm_email": {
-      "type": "string",
-      "description": "all or none. If none, emails for order fills are not sent."
+      "existingJavaType": "java.lang.String",
+      "title": "all or none. If none, emails for order fills are not sent."
     },
     "suspend_trade": {
-      "type": "boolean",
-      "description": "If true, new orders are blocked."
+      "existingJavaType": "java.lang.Boolean",
+      "title": "If true, new orders are blocked."
     },
     "no_shorting": {
-      "type": "boolean",
-      "description": "If true, account becomes long-only mode."
+      "existingJavaType": "java.lang.Boolean",
+      "title": "If true, account becomes long-only mode."
     }
   }
 }

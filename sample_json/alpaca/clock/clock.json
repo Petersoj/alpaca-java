@@ -1,13 +1,13 @@
 {
   "type": "object",
-  "description": "See: https://docs.alpaca.markets/api-documentation/api-v2/clock/",
+  "title": "See: https://docs.alpaca.markets/api-documentation/api-v2/clock/",
   "properties": {
     "timestamp": {
       "existingJavaType": "java.time.LocalDateTime",
       "description": "Current timestamp"
     },
     "is_open": {
-      "type": "boolean",
+      "existingJavaType": "java.lang.Boolean",
       "description": "Whether or not the market is open"
     },
     "next_open": {
