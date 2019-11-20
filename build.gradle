@@ -136,23 +136,24 @@ sourceSets {
 // See: https://github.com/joelittlejohn/jsonschema2pojo/wiki/Reference
 task generatePOJOs() {
     final def targetDirectory = "${project.buildDir}/generated-sources/samplejson"
-    final def jsonSourceDirectory = 'sample_json/'
+    final def jsonSourceDirectory = "${project.projectDir}/sample_json/"
     final def jsonPackageNameStart = "io.github.mainstringargs.domain."
 
     // Clear all generated sources
     delete targetDirectory
 
-    // Loop through all directories in sample JSON file tree
-    file(jsonSourceDirectory).eachDirRecurse { directory ->
-        if (!directoryHasSubdirectory(directory)) { // Make sure there are no subdirectories
-            def startPackageIndex = directory.getAbsolutePath().indexOf(jsonSourceDirectory) + jsonSourceDirectory.length()
-            def targetPackage = jsonPackageNameStart + directory.getAbsolutePath()
+    // Loop through all files in sample JSON file tree
+    file(jsonSourceDirectory).eachFileRecurse { file ->
+        if (file.getName().endsWith(".json")) {
+            def startPackageIndex = file.getAbsolutePath().indexOf(jsonSourceDirectory) + jsonSourceDirectory.length()
+            def targetPackage = jsonPackageNameStart + file.getAbsolutePath()
+                    .replace('/' + file.getName(), '')
                     .substring(startPackageIndex)
                     .replace('/', '.').replace('-', '').replace('_', '')
                     .toLowerCase()
 
-            def jsonToPOJOTask = tasks.create('json2POJOTask-' + targetPackage, GradleBuild) {
-                startParameter.projectProperties = ['source'         : directory.getAbsolutePath(),
+            def jsonToPOJOTask = tasks.create('json2POJOTask-' + targetPackage + "." + file.getName(), GradleBuild) {
+                startParameter.projectProperties = ['source'         : file.getAbsolutePath(),
                                                     'targetPackage'  : targetPackage,
                                                     'targetDirectory': targetDirectory]
                 buildFile = 'sampleJson2Pojo.gradle'
@@ -162,15 +163,6 @@ task generatePOJOs() {
             dependsOn jsonToPOJOTask
         }
     }
-}
-
-static boolean directoryHasSubdirectory(File directory) {
-    for (file in directory.listFiles()) {
-        if (file.isDirectory()) {
-            return true
-        }
-    }
-    return false
 }
 
 compileJava {
