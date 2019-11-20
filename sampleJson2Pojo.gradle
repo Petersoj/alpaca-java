@@ -127,7 +127,7 @@ jsonSchema2Pojo {
     //  - yamlschema (JSON schema documents, represented as YAML)
     //  - yaml (documents that represent an example of the kind of YAML (or JSON) data that the generated Java types
     //          will be mapped to)
-    sourceType = project.properties.get("sourceType", "json")
+    sourceType = 'jsonschema'
 
     // Whether to empty the target directory before generation occurs, to clear out all source files
     // that have been generated previously. <strong>Be warned</strong>, when activated this option
