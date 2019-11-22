@@ -1,0 +1,34 @@
+{
+  "type": "object",
+  "title": "See: https://polygon.io/docs/#!/Stocks--Equities/get_v1_last_quote_stocks_symbol",
+  "properties": {
+    "askprice": {
+      "existingJavaType": "java.lang.Double",
+      "title": "Ask Price"
+    },
+    "asksize": {
+      "existingJavaType": "java.lang.Integer",
+      "title": "Ask Size"
+    },
+    "askexchange": {
+      "existingJavaType": "java.lang.Integer",
+      "title": "Exchange the ask happened on"
+    },
+    "bidprice": {
+      "existingJavaType": "java.lang.Double",
+      "title": "Bid Price"
+    },
+    "bidsize": {
+      "existingJavaType": "java.lang.Integer",
+      "title": "Bid Size"
+    },
+    "bidexchange": {
+      "existingJavaType": "java.lang.Integer",
+      "title": "Exchange the bid happened on"
+    },
+    "timestamp": {
+      "existingJavaType": "java.lang.Long",
+      "title": "Timestamp of this trade"
+    }
+  }
+}

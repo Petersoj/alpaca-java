@@ -1,0 +1,30 @@
+{
+  "type": "object",
+  "title": "See: https://polygon.io/docs/#!/Reference/get_v1_marketstatus_upcoming",
+  "properties": {
+    "exchange": {
+      "existingJavaType": "java.lang.String",
+      "title": "Which market this record is for. Can be NYSE, NASDAQ or OTC"
+    },
+    "name": {
+      "existingJavaType": "java.lang.String",
+      "title": "Human readable description of the holiday"
+    },
+    "status": {
+      "existingJavaType": "java.lang.String",
+      "title": "Status of the market on this holiday. Can be closed, early-close, late-close, early-open or late-open"
+    },
+    "date": {
+      "existingJavaType": "java.time.LocalDateTime",
+      "title": "Date of this holiday"
+    },
+    "open": {
+      "existingJavaType": "java.time.LocalDateTime",
+      "title": "Market open time on this holiday ( if it's not closed )"
+    },
+    "close": {
+      "existingJavaType": "java.time.LocalDateTime",
+      "title": "Market close time on this holiday ( if it's not closed )"
+    }
+  }
+}

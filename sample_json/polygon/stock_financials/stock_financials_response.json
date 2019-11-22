@@ -1,0 +1,18 @@
+{
+  "type": "object",
+  "title": "See: https://polygon.io/docs/#!/Reference/get_v2_reference_financials_symbol",
+  "properties": {
+    "status": {
+      "existingJavaType": "java.lang.String",
+      "title": "Status"
+    },
+    "count": {
+      "existingJavaType": "java.lang.Integer",
+      "title": "Count"
+    },
+    "results": {
+      "existingJavaType": "java.util.ArrayList<io.github.mainstringargs.domain.polygon.reference.stockfinancials.StockFinancials>",
+      "title": "Results"
+    }
+  }
+}

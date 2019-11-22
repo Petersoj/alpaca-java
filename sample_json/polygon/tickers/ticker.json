@@ -1,0 +1,42 @@
+{
+  "type": "object",
+  "title": "See: https://polygon.io/docs/#!/Reference/get_v2_reference_tickers",
+  "properties": {
+    "ticker": {
+      "existingJavaType": "java.lang.String",
+      "title": "Ticker"
+    },
+    "name": {
+      "existingJavaType": "java.lang.String",
+      "title": "Name"
+    },
+    "market": {
+      "existingJavaType": "java.lang.String",
+      "title": "Market"
+    },
+    "locale": {
+      "existingJavaType": "java.lang.String",
+      "title": "Locale"
+    },
+    "currency": {
+      "existingJavaType": "java.lang.String",
+      "title": "Currency"
+    },
+    "active": {
+      "existingJavaType": "java.lang.Boolean",
+      "title": "Active"
+    },
+    "primaryExch": {
+      "existingJavaType": "java.lang.String",
+      "title": "Primary Exchange"
+    },
+    "updated": {
+      "existingJavaType": "java.time.LocalDateTime",
+      "title": "Updated"
+    },
+    "url": {
+      "existingJavaType": "java.lang.String",
+      "title": "URL"
+    }
+  }
+}

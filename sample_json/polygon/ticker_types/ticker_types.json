@@ -1,0 +1,14 @@
+{
+  "type": "object",
+  "title": "See: https://polygon.io/docs/#!/Reference/get_v2_reference_types",
+  "properties": {
+    "types": {
+      "existingJavaType": "java.util.HashMap<java.lang.String, java.lang.String>",
+      "title": "Types"
+    },
+    "indexTypes": {
+      "existingJavaType": "java.util.HashMap<java.lang.String, java.lang.String>",
+      "title": "Index Types"
+    }
+  }
+}

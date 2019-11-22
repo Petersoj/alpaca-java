@@ -1,0 +1,22 @@
+{
+  "type": "object",
+  "title": "See: https://polygon.io/docs/#!/Stocks--Equities/get_v1_open_close_symbol_date",
+  "properties": {
+    "symbol": {
+      "existingJavaType": "java.lang.String",
+      "title": "Symbol that was evaluated from the request"
+    },
+    "open": {
+      "existingJavaType": "io.github.mainstringargs.domain.polygon.dailyopenclose.DailyOpenCloseTrade",
+      "title": "open"
+    },
+    "close": {
+      "existingJavaType": "io.github.mainstringargs.domain.polygon.dailyopenclose.DailyOpenCloseTrade",
+      "title": "close"
+    },
+    "afterHours": {
+      "existingJavaType": "io.github.mainstringargs.domain.polygon.dailyopenclose.DailyOpenCloseTrade",
+      "title": "afterHours"
+    }
+  }
+}
