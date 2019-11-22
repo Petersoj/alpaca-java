@@ -1,5 +1,18 @@
 {
-  "ev": "status",
-  "status": "connected",
-  "message": "Connected Successfully"
+  "type": "object",
+  "title": "See: https://polygon.io/sockets",
+  "properties": {
+    "ev": {
+      "existingJavaType": "java.lang.String",
+      "title": "The event type"
+    },
+    "status": {
+      "existingJavaType": "java.lang.String",
+      "title": "The status"
+    },
+    "message": {
+      "existingJavaType": "java.lang.String",
+      "title": "The message"
+    }
+  }
 }
