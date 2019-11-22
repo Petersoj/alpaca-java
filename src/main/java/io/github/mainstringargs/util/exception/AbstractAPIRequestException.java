@@ -2,8 +2,8 @@ package io.github.mainstringargs.util.exception;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
 import com.mashape.unirest.http.HttpResponse;
+import io.github.mainstringargs.util.gson.GsonUtil;
 
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -15,9 +15,6 @@ public abstract class AbstractAPIRequestException extends Exception {
 
     /** The Constant serialVersionUID. */
     private static final long serialVersionUID = 1L;
-
-    /** The constant JSON_PARSER. */
-    protected static final JsonParser JSON_PARSER = new JsonParser();
 
     /** The constant CODE_KEY. */
     protected static final String CODE_KEY = "code";
@@ -84,7 +81,7 @@ public abstract class AbstractAPIRequestException extends Exception {
      * @param httpResponse the http response
      */
     protected void parseStandardAPIExceptionResponse(HttpResponse<InputStream> httpResponse) {
-        JsonElement responseJsonElement = JSON_PARSER.parse(new InputStreamReader(httpResponse.getBody()));
+        JsonElement responseJsonElement = GsonUtil.JSON_PARSER.parse(new InputStreamReader(httpResponse.getBody()));
 
         if (responseJsonElement instanceof JsonObject) {
             JsonObject responseJsonObject = (JsonObject) responseJsonElement;

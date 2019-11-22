@@ -1,8 +1,6 @@
 package io.github.mainstringargs.util.rest;
 
 import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.annotations.SerializedName;
 import com.google.gson.stream.JsonReader;
 import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.Unirest;
@@ -15,13 +13,9 @@ import org.apache.logging.log4j.Logger;
 
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.lang.annotation.Annotation;
-import java.lang.reflect.Field;
 import java.lang.reflect.Type;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Set;
 
 /**
  * The type Abstract request.
@@ -30,9 +24,6 @@ public abstract class AbstractRequest {
 
     /** The logger. */
     private static final Logger LOGGER = LogManager.getLogger(AbstractRequest.class);
-
-    /** The constant annotationClassCache. */
-    private final HashMap<Class, ArrayList<SerializedName>> classAnnotationCache = new HashMap<>();
 
     /** The headers. */
     protected final Map<String, String> headers = new HashMap<>();
@@ -289,79 +280,5 @@ public abstract class AbstractRequest {
         }
 
         return responseJsonElement;
-    }
-
-    /**
-     * Checks if all Gson {@link SerializedName} annotation values (including inherited ones) in the JSON POJO are
-     * present in the <strong>immediate</strong> JSON object.
-     *
-     * @param jsonPOJOClass the json pojo class
-     * @param jsonObject    the json object
-     *
-     * @return the boolean
-     */
-    public boolean doesGSONPOJOMatch(Class jsonPOJOClass, JsonObject jsonObject) {
-        ArrayList<SerializedName> gsonSerializedNameAnnotations = getGSONSerializedNameAnnotations(jsonPOJOClass);
-        Set<String> jsonObjectKeys = jsonObject.keySet();
-
-        for (SerializedName serializedName : gsonSerializedNameAnnotations) {
-            // Check main serialized name
-            if (!jsonObjectKeys.contains(serializedName.value())) {
-                // Check alternate serialized names
-                String[] alternates = serializedName.alternate();
-                boolean match = false;
-
-                for (String alternate : alternates) { // Loop through all alternates
-                    if (jsonObjectKeys.contains(alternate)) {
-                        match = true;
-                        break;
-                    }
-                }
-                if (!match) { // Check if we didn't find the name at all
-                    return false;
-                }
-                // Found main serialized name so continue through loop
-            }
-            // Found main serialized name so continue through loop
-        }
-
-        return true;
-    }
-
-    /**
-     * Gets gson serialized name annotations.
-     *
-     * @param theClass the the class
-     *
-     * @return the gson serialized name annotations
-     */
-    private synchronized ArrayList<SerializedName> getGSONSerializedNameAnnotations(Class theClass) {
-        // Use a caching system because Reflection can be somewhat expensive
-        if (classAnnotationCache.containsKey(theClass)) {
-            return classAnnotationCache.get(theClass);
-        }
-
-        LOGGER.debug("Caching Gson @SerializedName annotations for " + theClass.getName());
-
-        // Below is expensive, but it only has to be done once per class.
-
-        ArrayList<SerializedName> serializedNameAnnotations = new ArrayList<>();
-
-        Class currentClass = theClass;
-        do {
-            for (Field field : currentClass.getDeclaredFields()) { // Loop through all the fields
-                for (Annotation annotation : field.getDeclaredAnnotations()) { // Loop through all the field annotations
-                    if (annotation instanceof SerializedName) {
-                        serializedNameAnnotations.add((SerializedName) annotation);
-                    }
-                }
-            }
-
-            currentClass = currentClass.getSuperclass();
-        } while (currentClass != null); // Loop through all inherited classes
-
-        classAnnotationCache.put(theClass, serializedNameAnnotations);
-
-        return serializedNameAnnotations;
     }
 }

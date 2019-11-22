@@ -1,6 +1,5 @@
 package io.github.mainstringargs.alpaca.websocket;
 
-import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import io.github.mainstringargs.util.concurrency.ExecutorTracer;
@@ -135,13 +134,14 @@ public class AlpacaWebsocketClientEndpoint {
     @OnMessage
     public void onMessage(String message) {
         executor.execute(() -> {
-            if (LOGGER.isDebugEnabled()) { LOGGER.debug("onMessage " + message); }
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug("onMessage " + message);
+            }
 
             if (messageHandler != null) {
-                JsonElement jelement = new JsonParser().parse(message);
-                JsonObject jobject = jelement.getAsJsonObject();
+                JsonObject jsonObject = new JsonParser().parse(message).getAsJsonObject();
 
-                messageHandler.handleMessage(jobject);
+                messageHandler.handleMessage(jsonObject);
             }
         });
     }

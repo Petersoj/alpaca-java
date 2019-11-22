@@ -1,9 +1,8 @@
 package io.github.mainstringargs.polygon.websocket;
 
 import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonParser;
 import io.github.mainstringargs.util.concurrency.ExecutorTracer;
+import io.github.mainstringargs.util.gson.GsonUtil;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -32,7 +31,7 @@ public class PolygonWebsocketClientEndpoint {
             r -> new Thread(r, "PolygonWebsocketThread"));
 
     /** The logger. */
-    private static Logger LOGGER = LogManager.getLogger(PolygonWebsocketClientEndpoint.class);
+    private static final Logger LOGGER = LogManager.getLogger(PolygonWebsocketClientEndpoint.class);
 
     /** The user session. */
     private Session userSession = null;
@@ -141,10 +140,9 @@ public class PolygonWebsocketClientEndpoint {
             }
 
             if (messageHandler != null) {
-                JsonElement jelement = new JsonParser().parse(message);
-                JsonArray jarray = jelement.getAsJsonArray();
+                JsonArray jsonArray = GsonUtil.JSON_PARSER.parse(message).getAsJsonArray();
 
-                messageHandler.handleMessage(jarray);
+                messageHandler.handleMessage(jsonArray);
             }
         });
     }

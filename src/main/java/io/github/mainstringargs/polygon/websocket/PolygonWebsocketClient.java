@@ -29,11 +29,11 @@ import java.util.StringJoiner;
  */
 public class PolygonWebsocketClient implements PolygonWebsocketClientEndpoint.MessageHandler {
 
+    /** The logger. */
+    private static final Logger LOGGER = LogManager.getLogger(PolygonWebsocketClient.class);
+
     /** The all tickers. */
     private static final String ALL_TICKERS = "*";
-
-    /** The logger. */
-    private static Logger LOGGER = LogManager.getLogger(PolygonWebsocketClient.class);
 
     /** The key id. */
     private String keyId;
