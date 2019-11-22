@@ -1,9 +1,7 @@
 package io.github.mainstringargs.polygon;
 
 import io.github.mainstringargs.domain.polygon.aggregate.Aggregates;
-import io.github.mainstringargs.domain.polygon.aggregate.Result;
 import io.github.mainstringargs.domain.polygon.historic.quotes.Quotes;
-import io.github.mainstringargs.domain.polygon.historic.trades.Tick;
 import io.github.mainstringargs.domain.polygon.historic.trades.Trades;
 import io.github.mainstringargs.domain.polygon.last.LastQuote;
 import io.github.mainstringargs.domain.polygon.last.LastTrade;
@@ -22,8 +20,7 @@ import io.github.mainstringargs.domain.polygon.reference.Ticker;
 import io.github.mainstringargs.domain.polygon.reference.TypesMapping;
 import io.github.mainstringargs.domain.polygon.snapshot.Snapshot;
 import io.github.mainstringargs.polygon.enums.ChannelType;
-import io.github.mainstringargs.polygon.enums.Locale;
-import io.github.mainstringargs.polygon.enums.Sort;
+import io.github.mainstringargs.polygon.enums.TickerSort;
 import io.github.mainstringargs.polygon.enums.Timespan;
 import io.github.mainstringargs.polygon.rest.exceptions.PolygonAPIRequestException;
 import io.github.mainstringargs.polygon.websocket.PolygonStreamListenerAdapter;
@@ -102,7 +99,7 @@ public class PolygonExample {
         }
 
         try {
-            List<StockFinancial> symbolFinancials = polygonAPI.getStockFinancials(ticker);
+            List<StockFinancial> symbolFinancials = polygonAPI.getStockFinancial(ticker);
 
             System.out.println("\n\n" + ticker + " Symbol Financials:");
             for (StockFinancial financial : symbolFinancials) {
@@ -125,7 +122,7 @@ public class PolygonExample {
         }
 
         try {
-            List<Ticker> tickers = polygonAPI.getTickers(Sort.TICKER_ASC, null,
+            List<Ticker> tickers = polygonAPI.getTickers(TickerSort.TICKER_ASC, null,
                     null, Locale.US, "Tech", null, null, null).getTickers();
 
             System.out.println("\n\n" + "Tech" + " Search US Tickers");
@@ -196,11 +193,11 @@ public class PolygonExample {
             Trades trades = polygonAPI.getHistoricTrades(ticker, LocalDate.of(2019, 5, 7), null, null);
 
             System.out.println("\n\n" + ticker + " Trades on " + LocalDate.of(2019, 5, 7) + ": ");
-            System.out.println("\t" + "map " + trades.getMap());
+            // System.out.println("\t" + "map " + trades.getMap());
             System.out.println("\t" + "ticks");
-            for (Tick tick : trades.getTicks()) {
-                System.out.println("\t" + tick);
-            }
+            // for (Tick tick : trades.getTicks()) {
+            //     System.out.println("\t" + tick);
+            // }
         } catch (PolygonAPIRequestException e) {
             e.printStackTrace();
         }
@@ -209,11 +206,11 @@ public class PolygonExample {
             Quotes quotes = polygonAPI.getHistoricQuotes(ticker, LocalDate.of(2019, 5, 7), null, null);
 
             System.out.println("\n\n" + ticker + " Quotes on " + LocalDate.of(2019, 5, 1) + ": ");
-            System.out.println("\t" + "map " + quotes.getMap());
+            // System.out.println("\t" + "map " + quotes.getMap());
             System.out.println("\t" + "ticks");
-            for (io.github.mainstringargs.domain.polygon.historic.quotes.Tick tick : quotes.getTicks()) {
-                System.out.println("\t" + tick);
-            }
+            // for (io.github.mainstringargs.domain.polygon.historic.quotes.Tick tick : quotes.getTicks()) {
+            //     System.out.println("\t" + tick);
+            // }
         } catch (PolygonAPIRequestException e) {
             e.printStackTrace();
         }
@@ -247,7 +244,7 @@ public class PolygonExample {
         }
 
         try {
-            Snapshot snapshot = polygonAPI.getSnapshot(ticker);
+            Snapshot snapshot = polygonAPI.getSnapshotSingleTicker(ticker);
 
             System.out.println("\n\n" + ticker + " Snapshot: ");
             System.out.println("\t" + snapshot);
@@ -292,21 +289,21 @@ public class PolygonExample {
             Aggregates aggs = polygonAPI.getPreviousClose(ticker, false);
 
             System.out.println("\n\n" + "previous close aggregates " + aggs.getResultsCount());
-            for (Result result : aggs.getResults()) {
-                System.out.println("\t" + result);
-            }
+            // for (Result result : aggs.getResults()) {
+            //     System.out.println("\t" + result);
+            // }
         } catch (PolygonAPIRequestException e) {
             e.printStackTrace();
         }
 
         try {
-            Aggregates aggs = polygonAPI.getAggregates(ticker, null, Timespan.Hour,
+            Aggregates aggs = polygonAPI.getAggregates(ticker, null, Timespan.HOUR,
                     LocalDate.of(2019, 4, 23), LocalDate.of(2019, 4, 26), false);
 
             System.out.println("\n\n" + "Aggs over time " + aggs.getResultsCount());
-            for (Result result : aggs.getResults()) {
-                System.out.println("\t" + result);
-            }
+            // for (Result result : aggs.getResults()) {
+            //     System.out.println("\t" + result);
+            // }
         } catch (PolygonAPIRequestException e) {
             e.printStackTrace();
         }
@@ -316,9 +313,9 @@ public class PolygonExample {
                     io.github.mainstringargs.polygon.enums.Market.STOCKS, LocalDate.of(2019, 4, 26), false);
 
             System.out.println("\n\n" + "Grouped Daily " + aggs.getResultsCount());
-            for (Result result : aggs.getResults()) {
-                System.out.println("\t" + result);
-            }
+            // for (Result result : aggs.getResults()) {
+            //     System.out.println("\t" + result);
+            // }
         } catch (PolygonAPIRequestException e) {
             e.printStackTrace();
         }

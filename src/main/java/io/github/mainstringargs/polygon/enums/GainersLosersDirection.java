@@ -1,25 +1,20 @@
 package io.github.mainstringargs.polygon.enums;
 
-/**
- * The Enum SymbolsType.
- */
-public enum Type {
+public enum GainersLosersDirection {
 
-    /** The etfs. */
-    ETFS("etp"),
+    GAINERS("gainers"),
 
-    /** The common stocks. */
-    COMMON_STOCKS("cs");
+    LOSERS("losers");
 
     /** The api name. */
     String apiName;
 
     /**
-     * Instantiates a new order type.
+     * Instantiates a new Gainers losers direction.
      *
      * @param apiName the api name
      */
-    Type(String apiName) {
+    GainersLosersDirection(String apiName) {
         this.apiName = apiName;
     }
 
@@ -30,12 +25,12 @@ public enum Type {
      *
      * @return the channel type
      */
-    public static Type fromAPIName(String apiName) {
+    public static StockType fromAPIName(String apiName) {
         String apiNameString = apiName.trim();
 
-        for (Type cType : Type.values()) {
-            if (apiNameString.equals(cType.apiName)) {
-                return cType;
+        for (StockType stockType : StockType.values()) {
+            if (apiNameString.equals(stockType.apiName)) {
+                return stockType;
             }
         }
 

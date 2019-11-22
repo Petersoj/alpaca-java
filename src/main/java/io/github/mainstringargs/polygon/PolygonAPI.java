@@ -2,28 +2,37 @@ package io.github.mainstringargs.polygon;
 
 import com.google.gson.reflect.TypeToken;
 import com.mashape.unirest.http.HttpResponse;
-import io.github.mainstringargs.domain.polygon.aggregate.Aggregates;
-import io.github.mainstringargs.domain.polygon.aggregate.Result;
-import io.github.mainstringargs.domain.polygon.historic.quotes.Quotes;
-import io.github.mainstringargs.domain.polygon.historic.trades.Trades;
-import io.github.mainstringargs.domain.polygon.last.LastQuote;
-import io.github.mainstringargs.domain.polygon.last.LastTrade;
-import io.github.mainstringargs.domain.polygon.meta.Exchange;
-import io.github.mainstringargs.domain.polygon.meta.SymbolAnalystRatings;
-import io.github.mainstringargs.domain.polygon.meta.SymbolEarning;
-import io.github.mainstringargs.domain.polygon.meta.SymbolEndpoints;
-import io.github.mainstringargs.domain.polygon.meta.TickerDetails;
-import io.github.mainstringargs.domain.polygon.meta.TickerNews;
-import io.github.mainstringargs.domain.polygon.openclose.DailyOpenClose;
-import io.github.mainstringargs.domain.polygon.reference.Market;
-import io.github.mainstringargs.domain.polygon.reference.StockDividend;
-import io.github.mainstringargs.domain.polygon.reference.StockFinancial;
-import io.github.mainstringargs.domain.polygon.reference.StockSplit;
-import io.github.mainstringargs.domain.polygon.reference.Tickers;
-import io.github.mainstringargs.domain.polygon.reference.TypesMapping;
-import io.github.mainstringargs.domain.polygon.snapshot.Snapshot;
-import io.github.mainstringargs.polygon.enums.Locale;
-import io.github.mainstringargs.polygon.enums.Sort;
+import io.github.mainstringargs.domain.polygon.aggregates.AggregatesResponse;
+import io.github.mainstringargs.domain.polygon.conditionsmapping.ConditionsMapping;
+import io.github.mainstringargs.domain.polygon.dailyopenclose.DailyOpenCloseResponse;
+import io.github.mainstringargs.domain.polygon.exchanges.Exchange;
+import io.github.mainstringargs.domain.polygon.groupeddaily.GroupedDailyResponse;
+import io.github.mainstringargs.domain.polygon.historicquotes.HistoricQuotesResponse;
+import io.github.mainstringargs.domain.polygon.historictrades.HistoricTradesResponse;
+import io.github.mainstringargs.domain.polygon.lastquote.LastQuoteResponse;
+import io.github.mainstringargs.domain.polygon.lasttrade.LastTradeResponse;
+import io.github.mainstringargs.domain.polygon.locales.LocalesResponse;
+import io.github.mainstringargs.domain.polygon.marketholidays.MarketHoliday;
+import io.github.mainstringargs.domain.polygon.markets.MarketsResponse;
+import io.github.mainstringargs.domain.polygon.marketstatus.MarketStatus;
+import io.github.mainstringargs.domain.polygon.previousclose.PreviousCloseResponse;
+import io.github.mainstringargs.domain.polygon.snapshot.SnapshotAllTickersResponse;
+import io.github.mainstringargs.domain.polygon.snapshot.SnapshotGainersLosersResponse;
+import io.github.mainstringargs.domain.polygon.snapshot.SnapshotSingleTickerResponse;
+import io.github.mainstringargs.domain.polygon.stockdividends.StockDividendsResponse;
+import io.github.mainstringargs.domain.polygon.stockfinancials.StockFinancialsResponse;
+import io.github.mainstringargs.domain.polygon.stocksplits.StockSplitsResponse;
+import io.github.mainstringargs.domain.polygon.tickerdetails.TickerDetails;
+import io.github.mainstringargs.domain.polygon.tickernews.TickerNews;
+import io.github.mainstringargs.domain.polygon.tickers.TickersResponse;
+import io.github.mainstringargs.domain.polygon.tickertypes.TickerTypes;
+import io.github.mainstringargs.polygon.enums.ConditionMappingsType;
+import io.github.mainstringargs.polygon.enums.FinancialReportType;
+import io.github.mainstringargs.polygon.enums.FinancialSort;
+import io.github.mainstringargs.polygon.enums.GainersLosersDirection;
+import io.github.mainstringargs.polygon.enums.Market;
+import io.github.mainstringargs.polygon.enums.StockType;
+import io.github.mainstringargs.polygon.enums.TickerSort;
 import io.github.mainstringargs.polygon.enums.Timespan;
 import io.github.mainstringargs.polygon.properties.PolygonProperties;
 import io.github.mainstringargs.polygon.rest.PolygonRequest;
@@ -38,7 +47,7 @@ import org.apache.logging.log4j.Logger;
 import java.io.InputStream;
 import java.lang.reflect.Type;
 import java.time.LocalDate;
-import java.util.List;
+import java.util.ArrayList;
 import java.util.StringJoiner;
 
 /**
@@ -101,275 +110,34 @@ public class PolygonAPI {
     }
 
     /**
-     * Get gets the endpoints that are supported for a symbol. Note: The endpoints object is key/values of the endpoint
-     * name and url. These will almost always be the same of all symbols.
-     *
-     * @param symbol we want the endpoint list for.
-     *
-     * @return the symbol endpoints
-     *
-     * @throws PolygonAPIRequestException the polygon API exception
-     * @see
-     * <a href="https://polygon.io/docs/#!/Meta-Data/get_v1_meta_symbols_symbol">https://polygon.io/docs/#!/Meta-Data/get_v1_meta_symbols_symbol</a>
-     */
-    public SymbolEndpoints getSymbolEndpoints(String symbol) throws PolygonAPIRequestException {
-        PolygonRequestBuilder builder = new PolygonRequestBuilder(baseAPIURL, PolygonConstants.VERSION_2_ENDPOINT,
-                PolygonConstants.META_ENDPOINT,
-                PolygonConstants.SYMBOLS_ENDPOINT,
-                symbol);
-
-        HttpResponse<InputStream> response = polygonRequest.invokeGet(builder);
-
-        if (response.getStatus() != 200) {
-            throw new PolygonAPIRequestException(response);
-        }
-
-        return polygonRequest.getResponseObject(response, SymbolEndpoints.class);
-    }
-
-    /**
-     * Get the details of the symbol company/entity. These are important details which offer an overview of the entity.
-     * Things like name, sector, description, logo and similar companies.
-     *
-     * @param symbol we want details for
-     *
-     * @return the symbol details
-     *
-     * @throws PolygonAPIRequestException the polygon API exception
-     * @see
-     * <a href="https://polygon.io/docs/#!/Meta-Data/get_v1_meta_symbols_symbol_company">https://polygon.io/docs/#!/Meta-Data/get_v1_meta_symbols_symbol_company</a>
-     */
-    public TickerDetails getTickerDetails(String symbol) throws PolygonAPIRequestException {
-        PolygonRequestBuilder builder = new PolygonRequestBuilder(baseAPIURL, PolygonConstants.VERSION_2_ENDPOINT,
-                PolygonConstants.META_ENDPOINT,
-                PolygonConstants.SYMBOLS_ENDPOINT,
-                symbol,
-                PolygonConstants.COMPANY_ENDPOINT);
-
-        HttpResponse<InputStream> response = polygonRequest.invokeGet(builder);
-
-        if (response.getStatus() != 200) {
-            throw new PolygonAPIRequestException(response);
-        }
-
-        return polygonRequest.getResponseObject(response, TickerDetails.class);
-    }
-
-    /**
-     * Get the analyst ratings of the symbol company/entity. Ratings are from current date, up to 5months into the
-     * future.
-     *
-     * @param symbol we want analyst ratings for
-     *
-     * @return the symbol analyst ratings
-     *
-     * @throws PolygonAPIRequestException the polygon API exception
-     * @see
-     * <a href="https://polygon.io/docs/#!/Meta-Data/get_v1_meta_symbols_symbol_analysts">https://polygon.io/docs/#!/Meta-Data/get_v1_meta_symbols_symbol_analysts</a>
-     */
-    public SymbolAnalystRatings getSymbolAnalystRatings(String symbol) throws PolygonAPIRequestException {
-        PolygonRequestBuilder builder = new PolygonRequestBuilder(baseAPIURL, PolygonConstants.VERSION_2_ENDPOINT,
-                PolygonConstants.META_ENDPOINT,
-                PolygonConstants.SYMBOLS_ENDPOINT,
-                symbol,
-                PolygonConstants.ANALYSTS_ENDPOINT);
-
-        HttpResponse<InputStream> response = polygonRequest.invokeGet(builder);
-
-        if (response.getStatus() != 200) {
-            throw new PolygonAPIRequestException(response);
-        }
-
-        return polygonRequest.getResponseObject(response, SymbolAnalystRatings.class);
-    }
-
-    /**
-     * Get the historical dividends for this symbol.
-     *
-     * @param symbol we want details for
-     *
-     * @return the symbol dividends
-     *
-     * @throws PolygonAPIRequestException the polygon API exception
-     * @see
-     * <a href="https://polygon.io/docs/#!/Meta-Data/get_v1_meta_symbols_symbol_dividends">https://polygon.io/docs/#!/Meta-Data/get_v1_meta_symbols_symbol_dividends</a>
-     */
-    public List<StockDividend> getStockDividends(String symbol) throws PolygonAPIRequestException {
-        PolygonRequestBuilder builder = new PolygonRequestBuilder(baseAPIURL, PolygonConstants.VERSION_2_ENDPOINT,
-                PolygonConstants.META_ENDPOINT,
-                PolygonConstants.SYMBOLS_ENDPOINT,
-                PolygonConstants.DIVIDENDS_ENDPOINT,
-                symbol);
-
-        HttpResponse<InputStream> response = polygonRequest.invokeGet(builder);
-
-        if (response.getStatus() != 200) {
-            throw new PolygonAPIRequestException(response);
-        }
-
-        Type listType = new TypeToken<List<StockDividend>>() {}.getType();
-
-        return polygonRequest.getResponseObject(response, listType);
-    }
-
-    /**
-     * Get the historical earnings for a company
-     *
-     * @param symbol we want details for
-     *
-     * @return the symbol earnings
-     *
-     * @throws PolygonAPIRequestException the polygon API exception
-     * @see
-     * <a href="https://polygon.io/docs/#!/Meta-Data/get_v1_meta_symbols_symbol_earnings">https://polygon.io/docs/#!/Meta-Data/get_v1_meta_symbols_symbol_earnings</a>
-     */
-    public List<SymbolEarning> getSymbolEarnings(String symbol) throws PolygonAPIRequestException {
-        PolygonRequestBuilder builder = new PolygonRequestBuilder(baseAPIURL, PolygonConstants.VERSION_2_ENDPOINT,
-                PolygonConstants.META_ENDPOINT,
-                PolygonConstants.SYMBOLS_ENDPOINT,
-                symbol,
-                PolygonConstants.EARNINGS_ENDPOINT);
-
-        HttpResponse<InputStream> response = polygonRequest.invokeGet(builder);
-
-        if (response.getStatus() != 200) {
-            throw new PolygonAPIRequestException(response);
-        }
-
-        Type listType = new TypeToken<List<SymbolEarning>>() {}.getType();
-
-        return polygonRequest.getResponseObject(response, listType);
-    }
-
-    /**
-     * Get the historical financials for a company
-     *
-     * @param symbol we want details for
-     *
-     * @return the symbol financials
-     *
-     * @throws PolygonAPIRequestException the polygon API exception
-     * @see
-     * <a href="https://polygon.io/docs/#!/Meta-Data/get_v1_meta_symbols_symbol_financials">https://polygon.io/docs/#!/Meta-Data/get_v1_meta_symbols_symbol_financials</a>
-     */
-    public List<StockFinancial> getStockFinancials(String symbol) throws PolygonAPIRequestException {
-        PolygonRequestBuilder builder = new PolygonRequestBuilder(baseAPIURL, PolygonConstants.VERSION_2_ENDPOINT,
-                PolygonConstants.META_ENDPOINT,
-                PolygonConstants.SYMBOLS_ENDPOINT,
-                symbol,
-                PolygonConstants.FINANCIALS_ENDPOINT);
-
-        HttpResponse<InputStream> response = polygonRequest.invokeGet(builder);
-
-        if (response.getStatus() != 200) {
-            throw new PolygonAPIRequestException(response);
-        }
-
-        Type listType = new TypeToken<List<StockFinancial>>() {}.getType();
-
-        return polygonRequest.getResponseObject(response, listType);
-    }
-
-    /**
-     * Get news articles for this symbol.
-     *
-     * @param symbol the symbol we want details for
-     *
-     * @return the symbol news
-     *
-     * @throws PolygonAPIRequestException the polygon API exception
-     * @see
-     * <a href="https://polygon.io/docs/#!/Meta-Data/get_v1_meta_symbols_symbol_news">https://polygon.io/docs/#!/Meta-Data/get_v1_meta_symbols_symbol_news</a>
-     */
-    public List<TickerNews> getTickerNews(String symbol) throws PolygonAPIRequestException {
-        PolygonRequestBuilder builder = new PolygonRequestBuilder(baseAPIURL, PolygonConstants.VERSION_2_ENDPOINT,
-                PolygonConstants.META_ENDPOINT,
-                PolygonConstants.SYMBOLS_ENDPOINT,
-                symbol,
-                PolygonConstants.NEWS_ENDPOINT);
-
-        HttpResponse<InputStream> response = polygonRequest.invokeGet(builder);
-
-        if (response.getStatus() != 200) {
-            throw new PolygonAPIRequestException(response);
-        }
-
-        Type listType = new TypeToken<List<TickerNews>>() {}.getType();
-
-        return polygonRequest.getResponseObject(response, listType);
-    }
-
-    /**
-     * Get news articles for this symbol.
-     *
-     * @param symbol  the symbol we want details for
-     * @param perpage How many items to be on each page during pagination. Max 50
-     * @param page    Which page of results to return
-     *
-     * @return the symbol news
-     *
-     * @throws PolygonAPIRequestException the polygon API exception
-     * @see
-     * <a href="https://polygon.io/docs/#!/Meta-Data/get_v1_meta_symbols_symbol_news">https://polygon.io/docs/#!/Meta-Data/get_v1_meta_symbols_symbol_news</a>
-     */
-    public List<TickerNews> getSymbolNews(String symbol, Integer perpage, Integer page)
-            throws PolygonAPIRequestException {
-        PolygonRequestBuilder builder = new PolygonRequestBuilder(baseAPIURL, PolygonConstants.VERSION_2_ENDPOINT,
-                PolygonConstants.META_ENDPOINT,
-                PolygonConstants.SYMBOLS_ENDPOINT,
-                symbol,
-                PolygonConstants.NEWS_ENDPOINT);
-
-        if (perpage != null) {
-            builder.appendURLParameter(PolygonConstants.PERPAGE_PARAMETER, String.valueOf(perpage));
-        }
-
-        if (page != null) {
-            builder.appendURLParameter(PolygonConstants.PAGE_PARAMETER, String.valueOf(page));
-        }
-
-        HttpResponse<InputStream> response = polygonRequest.invokeGet(builder);
-
-        if (response.getStatus() != 200) {
-            throw new PolygonAPIRequestException(response);
-        }
-
-        Type listType = new TypeToken<List<TickerNews>>() {}.getType();
-
-        return polygonRequest.getResponseObject(response, listType);
-    }
-
-    /**
      * Query all ticker symbols which are supported by Polygon.io.
      *
-     * @param sort    Which field to sort by.
-     * @param type    If you want the results to only container a certain type.
-     * @param market  Get tickers for a specific market
-     * @param locale  Get tickers for a specific region/locale
-     * @param search  Search the name of tickers
-     * @param perpage How many items to be on each page during pagination. Max 50
-     * @param page    Which page of results to return
-     * @param active  Filter for only active or inactive symbols
+     * @param tickerSort Which field to sort by.
+     * @param stockType  If you want the results to only container a certain type.
+     * @param market     Get tickers for a specific market
+     * @param locale     Get tickers for a specific region/locale
+     * @param search     Search the name of tickers
+     * @param perpage    How many items to be on each page during pagination. Max 50
+     * @param page       Which page of results to return
+     * @param active     Filter for only active or inactive symbols
      *
      * @return the tickers
      *
      * @throws PolygonAPIRequestException the polygon API exception
-     * @see
-     * <a href="https://polygon.io/docs/#!/Reference/get_v2_reference_tickers">https://polygon.io/docs/#!/Reference/get_v2_reference_tickers</a>
+     * @see <a href="https://polygon.io/docs/#!/Reference/get_v2_reference_tickers">Tickers</a>
      */
-    public Tickers getTickers(Sort sort, io.github.mainstringargs.polygon.enums.Type type,
-            io.github.mainstringargs.polygon.enums.Market market, Locale locale, String search,
-            Integer perpage, Integer page, Boolean active) throws PolygonAPIRequestException {
+    public TickersResponse getTickers(TickerSort tickerSort, StockType stockType, Market market, String locale,
+            String search, Integer perpage, Integer page, Boolean active) throws PolygonAPIRequestException {
         PolygonRequestBuilder builder = new PolygonRequestBuilder(baseAPIURL, PolygonConstants.VERSION_2_ENDPOINT,
                 PolygonConstants.REFERENCE_ENDPOINT,
                 PolygonConstants.TICKERS_ENDPOINT);
 
-        if (sort != null) {
-            builder.appendURLParameter(PolygonConstants.SORT_PARAMETER, sort.getAPIName());
+        if (tickerSort != null) {
+            builder.appendURLParameter(PolygonConstants.SORT_PARAMETER, tickerSort.getAPIName());
         }
 
-        if (type != null) {
-            builder.appendURLParameter(PolygonConstants.TYPE_PARAMETER, type.getAPIName());
+        if (stockType != null) {
+            builder.appendURLParameter(PolygonConstants.TYPE_PARAMETER, stockType.getAPIName());
         }
 
         if (market != null) {
@@ -377,7 +145,7 @@ public class PolygonAPI {
         }
 
         if (locale != null) {
-            builder.appendURLParameter(PolygonConstants.LOCALE_PARAMETER, locale.getAPIName());
+            builder.appendURLParameter(PolygonConstants.LOCALE_PARAMETER, locale);
         }
 
         if (search != null) {
@@ -402,70 +170,17 @@ public class PolygonAPI {
             throw new PolygonAPIRequestException(response);
         }
 
-        return polygonRequest.getResponseObject(response, Tickers.class);
+        return polygonRequest.getResponseObject(response, TickersResponse.class);
     }
 
     /**
-     * Get the list of currently supported markets
+     * Get the mapping of ticker types to descriptions / long names.
      *
-     * @return the markets
+     * @return the ticker types
      *
-     * @throws PolygonAPIRequestException the polygon API exception
-     * @see
-     * <a href="https://polygon.io/docs/#!/Reference/get_v2_reference_markets">https://polygon.io/docs/#!/Reference/get_v2_reference_markets</a>
+     * @see <a href="https://polygon.io/docs/#!/Reference/get_v2_reference_types">Ticker Types</a>
      */
-    public List<Market> getMarkets() throws PolygonAPIRequestException {
-        PolygonRequestBuilder builder = new PolygonRequestBuilder(baseAPIURL, PolygonConstants.VERSION_2_ENDPOINT,
-                PolygonConstants.REFERENCE_ENDPOINT,
-                PolygonConstants.MARKETS_ENDPOINT);
-
-        HttpResponse<InputStream> response = polygonRequest.invokeGet(builder);
-
-        if (response.getStatus() != 200) {
-            throw new PolygonAPIRequestException(response);
-        }
-
-        Type listType = new TypeToken<List<Market>>() {}.getType();
-
-        return polygonRequest.getResponseObject(response, listType);
-    }
-
-    /**
-     * Get the list of currently supported locales
-     *
-     * @return the locales
-     *
-     * @throws PolygonAPIRequestException the polygon API exception
-     * @see
-     * <a href="https://polygon.io/docs/#!/Reference/get_v2_reference_locales">https://polygon.io/docs/#!/Reference/get_v2_reference_locales</a>
-     */
-    public List<io.github.mainstringargs.domain.polygon.reference.Locale> getLocales()
-            throws PolygonAPIRequestException {
-        PolygonRequestBuilder builder = new PolygonRequestBuilder(baseAPIURL, PolygonConstants.VERSION_2_ENDPOINT,
-                PolygonConstants.REFERENCE_ENDPOINT,
-                PolygonConstants.LOCALES_ENDPOINT);
-
-        HttpResponse<InputStream> response = polygonRequest.invokeGet(builder);
-
-        if (response.getStatus() != 200) {
-            throw new PolygonAPIRequestException(response);
-        }
-
-        Type listType = new TypeToken<List<io.github.mainstringargs.domain.polygon.reference.Locale>>() {}.getType();
-
-        return polygonRequest.getResponseObject(response, listType);
-    }
-
-    /**
-     * Get the mapping of ticker types to descriptions / long names
-     *
-     * @return the types mapping
-     *
-     * @throws PolygonAPIRequestException the polygon API exception
-     * @see
-     * <a href="https://polygon.io/docs/#!/Reference/get_v2_reference_types">https://polygon.io/docs/#!/Reference/get_v2_reference_types</a>
-     */
-    public TypesMapping getTypesMapping() throws PolygonAPIRequestException {
+    public TickerTypes getTickerTypes() throws PolygonAPIRequestException {
         PolygonRequestBuilder builder = new PolygonRequestBuilder(baseAPIURL, PolygonConstants.VERSION_2_ENDPOINT,
                 PolygonConstants.REFERENCE_ENDPOINT,
                 PolygonConstants.TYPES_ENDPOINT);
@@ -476,21 +191,130 @@ public class PolygonAPI {
             throw new PolygonAPIRequestException(response);
         }
 
-        return polygonRequest.getResponseObject(response, TypesMapping.class);
+        return polygonRequest.getResponseObject(response, TickersResponse.class);
+    }
+
+    /**
+     * Get the details of the symbol company/entity. These are important details which offer an overview of the entity.
+     * Things like name, sector, description, logo and similar companies.
+     *
+     * @param symbol symbol we want details for
+     *
+     * @return the ticker details
+     *
+     * @throws PolygonAPIRequestException the polygon API exception
+     * @see <a href="https://polygon.io/docs/#!/Meta-Data/get_v1_meta_symbols_symbol_company">Ticker Details</a>
+     */
+    public TickerDetails getTickerDetails(String symbol) throws PolygonAPIRequestException {
+        PolygonRequestBuilder builder = new PolygonRequestBuilder(baseAPIURL, PolygonConstants.VERSION_1_ENDPOINT,
+                PolygonConstants.META_ENDPOINT,
+                PolygonConstants.SYMBOLS_ENDPOINT,
+                symbol,
+                PolygonConstants.COMPANY_ENDPOINT);
+
+        HttpResponse<InputStream> response = polygonRequest.invokeGet(builder);
+
+        if (response.getStatus() != 200) {
+            throw new PolygonAPIRequestException(response);
+        }
+
+        return polygonRequest.getResponseObject(response, TickerDetails.class);
+    }
+
+    /**
+     * Get news articles for this symbol.
+     *
+     * @param symbol  the symbol we want details for
+     * @param perpage How many items to be on each page during pagination. Max 50
+     * @param page    Which page of results to return
+     *
+     * @return the ticker news
+     *
+     * @throws PolygonAPIRequestException the polygon API exception
+     * @see <a href="https://polygon.io/docs/#!/Meta-Data/get_v1_meta_symbols_symbol_news">Ticker News</a>
+     */
+    public ArrayList<TickerNews> getTickerNews(String symbol, Integer perpage, Integer page)
+            throws PolygonAPIRequestException {
+        PolygonRequestBuilder builder = new PolygonRequestBuilder(baseAPIURL, PolygonConstants.VERSION_1_ENDPOINT,
+                PolygonConstants.META_ENDPOINT,
+                PolygonConstants.SYMBOLS_ENDPOINT,
+                symbol,
+                PolygonConstants.NEWS_ENDPOINT);
+
+        if (perpage != null) {
+            builder.appendURLParameter(PolygonConstants.PERPAGE_PARAMETER, String.valueOf(perpage));
+        }
+
+        if (page != null) {
+            builder.appendURLParameter(PolygonConstants.PAGE_PARAMETER, String.valueOf(page));
+        }
+
+        HttpResponse<InputStream> response = polygonRequest.invokeGet(builder);
+
+        if (response.getStatus() != 200) {
+            throw new PolygonAPIRequestException(response);
+        }
+
+        Type listType = new TypeToken<ArrayList<TickerNews>>() {}.getType();
+
+        return polygonRequest.getResponseObject(response, listType);
+    }
+
+    /**
+     * Get the list of currently supported markets
+     *
+     * @return the markets
+     *
+     * @throws PolygonAPIRequestException the polygon API exception
+     * @see <a href="https://polygon.io/docs/#!/Reference/get_v2_reference_markets">Markets</a>
+     */
+    public MarketsResponse getMarkets() throws PolygonAPIRequestException {
+        PolygonRequestBuilder builder = new PolygonRequestBuilder(baseAPIURL, PolygonConstants.VERSION_2_ENDPOINT,
+                PolygonConstants.REFERENCE_ENDPOINT,
+                PolygonConstants.MARKETS_ENDPOINT);
+
+        HttpResponse<InputStream> response = polygonRequest.invokeGet(builder);
+
+        if (response.getStatus() != 200) {
+            throw new PolygonAPIRequestException(response);
+        }
+
+        return polygonRequest.getResponseObject(response, MarketsResponse.class);
+    }
+
+    /**
+     * Get the list of currently supported locales
+     *
+     * @return the locales
+     *
+     * @throws PolygonAPIRequestException the polygon API exception
+     * @see <a href="https://polygon.io/docs/#!/Reference/get_v2_reference_locales">Locales</a>
+     */
+    public LocalesResponse getLocales() throws PolygonAPIRequestException {
+        PolygonRequestBuilder builder = new PolygonRequestBuilder(baseAPIURL, PolygonConstants.VERSION_2_ENDPOINT,
+                PolygonConstants.REFERENCE_ENDPOINT,
+                PolygonConstants.LOCALES_ENDPOINT);
+
+        HttpResponse<InputStream> response = polygonRequest.invokeGet(builder);
+
+        if (response.getStatus() != 200) {
+            throw new PolygonAPIRequestException(response);
+        }
+
+        return polygonRequest.getResponseObject(response, LocalesResponse.class);
     }
 
     /**
      * Get the historical splits for this symbol
      *
-     * @param symbol we want details for
+     * @param symbol symbol we want details for
      *
-     * @return the splits
+     * @return the stock splits
      *
      * @throws PolygonAPIRequestException the polygon API exception
-     * @see
-     * <a href="https://polygon.io/docs/#!/Reference/get_v2_reference_splits_symbol">https://polygon.io/docs/#!/Reference/get_v2_reference_splits_symbol</a>
+     * @see <a href="https://polygon.io/docs/#!/Reference/get_v2_reference_splits_symbol">Stock Splits</a>
      */
-    public List<StockSplit> getStockSplits(String symbol) throws PolygonAPIRequestException {
+    public StockSplitsResponse getStockSplits(String symbol) throws PolygonAPIRequestException {
         PolygonRequestBuilder builder = new PolygonRequestBuilder(baseAPIURL, PolygonConstants.VERSION_2_ENDPOINT,
                 PolygonConstants.REFERENCE_ENDPOINT,
                 PolygonConstants.SPLITS_ENDPOINT, symbol);
@@ -501,7 +325,117 @@ public class PolygonAPI {
             throw new PolygonAPIRequestException(response);
         }
 
-        Type listType = new TypeToken<List<StockSplit>>() {}.getType();
+        return polygonRequest.getResponseObject(response, StockSplitsResponse.class);
+    }
+
+    /**
+     * Get the historical dividends for this symbol.
+     *
+     * @param symbol symbol we want details for
+     *
+     * @return the stock dividends
+     *
+     * @throws PolygonAPIRequestException the polygon API exception
+     * @see <a href="https://polygon.io/docs/#!/Meta-Data/get_v1_meta_symbols_symbol_dividends">Stock Dividends</a>
+     */
+    public StockDividendsResponse getStockDividends(String symbol) throws PolygonAPIRequestException {
+        PolygonRequestBuilder builder = new PolygonRequestBuilder(baseAPIURL, PolygonConstants.VERSION_2_ENDPOINT,
+                PolygonConstants.REFERENCE_ENDPOINT,
+                PolygonConstants.DIVIDENDS_ENDPOINT,
+                symbol);
+
+        HttpResponse<InputStream> response = polygonRequest.invokeGet(builder);
+
+        if (response.getStatus() != 200) {
+            throw new PolygonAPIRequestException(response);
+        }
+
+        return polygonRequest.getResponseObject(response, StockDividendsResponse.class);
+    }
+
+    /**
+     * Get the historical financials for this ticker.
+     *
+     * @param symbol              symbol we want details for
+     * @param limit               limit the number of results
+     * @param financialReportType type of reports
+     * @param financialSort       sort direction
+     *
+     * @return the symbol financials
+     *
+     * @throws PolygonAPIRequestException the polygon API exception
+     * @see <a href="https://polygon.io/docs/#!/Reference/get_v2_reference_financials_symbol">Stock Financials</a>
+     */
+    public StockFinancialsResponse getStockFinancials(String symbol, Integer limit,
+            FinancialReportType financialReportType, FinancialSort financialSort) throws PolygonAPIRequestException {
+        PolygonRequestBuilder builder = new PolygonRequestBuilder(baseAPIURL, PolygonConstants.VERSION_2_ENDPOINT,
+                PolygonConstants.REFERENCE_ENDPOINT,
+                PolygonConstants.FINANCIALS_ENDPOINT,
+                symbol);
+
+        if (limit != null) {
+            builder.appendURLParameter(PolygonConstants.LIMIT_PARAMETER, String.valueOf(limit));
+        }
+
+        if (financialReportType != null) {
+            builder.appendURLParameter(PolygonConstants.TYPE_PARAMETER, financialReportType.getAPIName());
+        }
+
+        if (financialSort != null) {
+            builder.appendURLParameter(PolygonConstants.SORT_PARAMETER, financialSort.getAPIName());
+        }
+
+        HttpResponse<InputStream> response = polygonRequest.invokeGet(builder);
+
+        if (response.getStatus() != 200) {
+            throw new PolygonAPIRequestException(response);
+        }
+
+        return polygonRequest.getResponseObject(response, StockFinancialsResponse.class);
+    }
+
+    /**
+     * Current status of each market.
+     *
+     * @return the market status
+     *
+     * @throws PolygonAPIRequestException the polygon api request exception
+     * @see <a href="https://polygon.io/docs/#!/Reference/get_v1_marketstatus_now">Market Status</a>
+     */
+    public MarketStatus getMarketStatus() throws PolygonAPIRequestException {
+        PolygonRequestBuilder builder = new PolygonRequestBuilder(baseAPIURL, PolygonConstants.VERSION_1_ENDPOINT,
+                PolygonConstants.MARKET_STATUS_ENDPOINT,
+                PolygonConstants.NOW_ENDPOINT);
+
+        HttpResponse<InputStream> response = polygonRequest.invokeGet(builder);
+
+        if (response.getStatus() != 200) {
+            throw new PolygonAPIRequestException(response);
+        }
+
+        return polygonRequest.getResponseObject(response, MarketStatus.class);
+    }
+
+    /**
+     * Get upcoming market holidays and their open/close times.
+     *
+     * @return the market holidays
+     *
+     * @throws PolygonAPIRequestException the polygon api request exception
+     * @see <a href="https://polygon.io/docs/#!/Reference/get_v1_marketstatus_upcoming">Market Holidays</a>
+     */
+    public ArrayList<MarketHoliday> getMarketHolidays() throws PolygonAPIRequestException {
+        PolygonRequestBuilder builder = new PolygonRequestBuilder(baseAPIURL, PolygonConstants.VERSION_1_ENDPOINT,
+                PolygonConstants.MARKET_STATUS_ENDPOINT,
+                PolygonConstants.UPCOMING_ENDPOINT);
+
+        HttpResponse<InputStream> response = polygonRequest.invokeGet(builder);
+
+        if (response.getStatus() != 200) {
+            throw new PolygonAPIRequestException(response);
+        }
+
+        Type listType = new TypeToken<ArrayList<MarketHoliday>>() {}.getType();
 
         return polygonRequest.getResponseObject(response, listType);
     }
@@ -509,14 +443,13 @@ public class PolygonAPI {
     /**
      * List of stock exchanges which are supported by Polygon.io
      *
-     * @return the exchange
+     * @return the exchanges
      *
      * @throws PolygonAPIRequestException the polygon API exception
-     * @see
-     * <a href="https://polygon.io/docs/#!/Stocks--Equities/get_v1_meta_exchanges">https://polygon.io/docs/#!/Stocks--Equities/get_v1_meta_exchanges</a>
+     * @see <a href="https://polygon.io/docs/#!/Stocks--Equities/get_v1_meta_exchanges">Exchanges</a>
      */
-    public List<Exchange> getExchanges() throws PolygonAPIRequestException {
-        PolygonRequestBuilder builder = new PolygonRequestBuilder(baseAPIURL, PolygonConstants.VERSION_2_ENDPOINT,
+    public ArrayList<Exchange> getExchanges() throws PolygonAPIRequestException {
+        PolygonRequestBuilder builder = new PolygonRequestBuilder(baseAPIURL, PolygonConstants.VERSION_1_ENDPOINT,
                 PolygonConstants.META_ENDPOINT,
                 PolygonConstants.EXCHANGES_ENDPOINT);
 
@@ -526,7 +459,7 @@ public class PolygonAPI {
             throw new PolygonAPIRequestException(response);
         }
 
-        Type listType = new TypeToken<List<Exchange>>() {}.getType();
+        Type listType = new TypeToken<ArrayList<MarketHoliday>>() {}.getType();
 
         return polygonRequest.getResponseObject(response, listType);
     }
@@ -534,28 +467,40 @@ public class PolygonAPI {
     /**
      * Get historic trades for a symbol.
      *
-     * @param symbol the symbol of the company to retrieve
-     * @param date   Date/Day of the historic ticks to retreive
-     * @param offset Timestamp offset, used for pagination. This is the offset at which to start the results. Using the
-     *               timestamp of the last result as the offset will give you the next page of results.
-     * @param limit  Limit the size of response, Max 50000
+     * @param ticker         Ticker symbol we want ticks for
+     * @param date           Date/Day of the historic ticks to retreive
+     * @param timestamp      Timestamp offset, used for pagination. This is the offset at which to start the results.
+     *                       Using the timestamp of the last result as the offset will give you the next page of
+     *                       results.
+     * @param timestampLimit Maximum timestamp allowed in the results.
+     * @param reverse        Reverse the order of the results. This is useful in combination with timestamp param.
+     * @param limit          Limit the size of response, Max 50000
      *
      * @return the historic trades
      *
      * @throws PolygonAPIRequestException the polygon API exception
-     * @see
-     * <a href="https://polygon.io/docs/#!/Stocks--Equities/get_v1_historic_trades_symbol_date">https://polygon.io/docs/#!/Stocks--Equities/get_v1_historic_trades_symbol_date</a>
+     * @see <a href="https://polygon.io/docs/#!/Stocks--Equities/get_v2_ticks_stocks_trades_ticker_date">Historic
+     * Trades</a>
      */
-    public Trades getHistoricTrades(String symbol, LocalDate date, Long offset, Integer limit)
-            throws PolygonAPIRequestException {
+    public HistoricTradesResponse getHistoricTrades(String ticker, LocalDate date, Long timestamp, Long timestampLimit,
+            Boolean reverse, Integer limit) throws PolygonAPIRequestException {
         PolygonRequestBuilder builder = new PolygonRequestBuilder(baseAPIURL, PolygonConstants.VERSION_2_ENDPOINT,
-                PolygonConstants.HISTORIC_ENDPOINT,
+                PolygonConstants.TICKS_ENDPOINT,
+                PolygonConstants.STOCKS_ENDPOINT,
                 PolygonConstants.TRADES_ENDPOINT,
-                symbol,
+                ticker,
                 TimeUtil.toDateString(date));
 
-        if (offset != null) {
-            builder.appendURLParameter(PolygonConstants.OFFSET_PARAMETER, String.valueOf(offset));
+        if (timestamp != null) {
+            builder.appendURLParameter(PolygonConstants.TIMESTAMP_PARAMETER, String.valueOf(timestamp));
+        }
+
+        if (timestampLimit != null) {
+            builder.appendURLParameter(PolygonConstants.TIMESTAMP_LIMIT_PARAMETER, String.valueOf(timestampLimit));
+        }
+
+        if (reverse != null) {
+            builder.appendURLParameter(PolygonConstants.REVERSE_PARAMETER, String.valueOf(reverse));
         }
 
         if (limit != null) {
@@ -568,34 +513,46 @@ public class PolygonAPI {
             throw new PolygonAPIRequestException(response);
         }
 
-        return polygonRequest.getResponseObject(response, Trades.class);
+        return polygonRequest.getResponseObject(response, HistoricTradesResponse.class);
     }
 
     /**
-     * Get historic quotes for a symbol.
+     * Get historic NBBO quotes for a ticker.
      *
-     * @param symbol the symbol of the company to retrieve
-     * @param date   Date/Day of the historic ticks to retreive
-     * @param offset Timestamp offset, used for pagination. This is the offset at which to start the results. Using the
-     *               timestamp of the last result as the offset will give you the next page of results.
-     * @param limit  Limit the size of response, Max 50000
+     * @param ticker         Ticker symbol we want ticks for
+     * @param date           Date/Day of the historic ticks to retreive
+     * @param timestamp      Timestamp offset, used for pagination. This is the offset at which to start the results.
+     *                       Using the timestamp of the last result as the offset will give you the next page of
+     *                       results.
+     * @param timestampLimit Maximum timestamp allowed in the results.
+     * @param reverse        Reverse the order of the results. This is useful in combination with timestamp param.
+     * @param limit          Limit the size of response, Max 50000
      *
      * @return the historic quotes
      *
      * @throws PolygonAPIRequestException the polygon API exception
-     * @see
-     * <a href="https://polygon.io/docs/#!/Stocks--Equities/get_v1_historic_quotes_symbol_date">https://polygon.io/docs/#!/Stocks--Equities/get_v1_historic_quotes_symbol_date</a>
+     * @see <a href="https://polygon.io/docs/#!/Stocks--Equities/get_v2_ticks_stocks_nbbo_ticker_date">Historic
+     * Quotes</a>
      */
-    public Quotes getHistoricQuotes(String symbol, LocalDate date, Long offset, Integer limit)
-            throws PolygonAPIRequestException {
+    public HistoricQuotesResponse getHistoricQuotes(String ticker, LocalDate date, Long timestamp, Long timestampLimit,
+            Boolean reverse, Integer limit) throws PolygonAPIRequestException {
         PolygonRequestBuilder builder = new PolygonRequestBuilder(baseAPIURL, PolygonConstants.VERSION_2_ENDPOINT,
-                PolygonConstants.HISTORIC_ENDPOINT,
-                PolygonConstants.QUOTES_ENDPOINT,
-                symbol,
+                PolygonConstants.TICKS_ENDPOINT,
+                PolygonConstants.STOCKS_ENDPOINT,
+                PolygonConstants.NBBO_ENDPOINT,
+                ticker,
                 TimeUtil.toDateString(date));
 
-        if (offset != null) {
-            builder.appendURLParameter(PolygonConstants.OFFSET_PARAMETER, String.valueOf(offset));
+        if (timestamp != null) {
+            builder.appendURLParameter(PolygonConstants.TIMESTAMP_PARAMETER, String.valueOf(timestamp));
+        }
+
+        if (timestampLimit != null) {
+            builder.appendURLParameter(PolygonConstants.TIMESTAMP_LIMIT_PARAMETER, String.valueOf(timestampLimit));
+        }
+
+        if (reverse != null) {
+            builder.appendURLParameter(PolygonConstants.REVERSE_PARAMETER, String.valueOf(reverse));
         }
 
         if (limit != null) {
@@ -608,7 +565,7 @@ public class PolygonAPI {
             throw new PolygonAPIRequestException(response);
         }
 
-        return polygonRequest.getResponseObject(response, Quotes.class);
+        return polygonRequest.getResponseObject(response, HistoricQuotesResponse.class);
     }
 
     /**
@@ -619,11 +576,10 @@ public class PolygonAPI {
      * @return the last trade
      *
      * @throws PolygonAPIRequestException the polygon API exception
-     * @see
-     * <a href="https://polygon.io/docs/#!/Stocks--Equities/get_v1_last_stocks_symbol">https://polygon.io/docs/#!/Stocks--Equities/get_v1_last_stocks_symbol</a>
+     * @see <a href="https://polygon.io/docs/#!/Stocks--Equities/get_v1_last_stocks_symbol">Last Trade</a>
      */
-    public LastTrade getLastTrade(String symbol) throws PolygonAPIRequestException {
-        PolygonRequestBuilder builder = new PolygonRequestBuilder(baseAPIURL, PolygonConstants.VERSION_2_ENDPOINT,
+    public LastTradeResponse getLastTrade(String symbol) throws PolygonAPIRequestException {
+        PolygonRequestBuilder builder = new PolygonRequestBuilder(baseAPIURL, PolygonConstants.VERSION_1_ENDPOINT,
                 PolygonConstants.LAST_ENDPOINT,
                 PolygonConstants.STOCKS_ENDPOINT,
                 symbol);
@@ -634,22 +590,21 @@ public class PolygonAPI {
             throw new PolygonAPIRequestException(response);
         }
 
-        return polygonRequest.getResponseObject(response, LastTrade.class);
+        return polygonRequest.getResponseObject(response, LastTradeResponse.class);
     }
 
     /**
-     * Get the last quote tick for a given stock.
+     * Get the last quote for a given stock.
      *
-     * @param symbol Symbol of the quote to get
+     * @param symbol Symbol of the stock to get
      *
      * @return the last quote
      *
      * @throws PolygonAPIRequestException the polygon API exception
-     * @see
-     * <a href="https://polygon.io/docs/#!/Stocks--Equities/get_v1_last_quote_stocks_symbol">https://polygon.io/docs/#!/Stocks--Equities/get_v1_last_quote_stocks_symbol</a>
+     * @see <a href="https://polygon.io/docs/#!/Stocks--Equities/get_v1_last_quote_stocks_symbol">Last Quote</a>
      */
-    public LastQuote getLastQuote(String symbol) throws PolygonAPIRequestException {
-        PolygonRequestBuilder builder = new PolygonRequestBuilder(baseAPIURL, PolygonConstants.VERSION_2_ENDPOINT,
+    public LastQuoteResponse getLastQuote(String symbol) throws PolygonAPIRequestException {
+        PolygonRequestBuilder builder = new PolygonRequestBuilder(baseAPIURL, PolygonConstants.VERSION_1_ENDPOINT,
                 PolygonConstants.LAST_QUOTE_ENDPOINT,
                 PolygonConstants.STOCKS_ENDPOINT,
                 symbol);
@@ -660,7 +615,7 @@ public class PolygonAPI {
             throw new PolygonAPIRequestException(response);
         }
 
-        return polygonRequest.getResponseObject(response, LastQuote.class);
+        return polygonRequest.getResponseObject(response, LastQuoteResponse.class);
     }
 
     /**
@@ -672,12 +627,10 @@ public class PolygonAPI {
      * @return the daily open close
      *
      * @throws PolygonAPIRequestException the polygon API exception
-     * @see
-     * <a href="https://polygon.io/docs/#!/Stocks--Equities/get_v1_open_close_symbol_date">https://polygon.io/docs/#!/Stocks--Equities/get_v1_open_close_symbol_date</a>
+     * @see <a href="https://polygon.io/docs/#!/Stocks--Equities/get_v1_open_close_symbol_date">Daily Open/Close</a>
      */
-    public DailyOpenClose getDailyOpenClose(String symbol, LocalDate date)
-            throws PolygonAPIRequestException {
-        PolygonRequestBuilder builder = new PolygonRequestBuilder(baseAPIURL, PolygonConstants.VERSION_2_ENDPOINT,
+    public DailyOpenCloseResponse getDailyOpenClose(String symbol, LocalDate date) throws PolygonAPIRequestException {
+        PolygonRequestBuilder builder = new PolygonRequestBuilder(baseAPIURL, PolygonConstants.VERSION_1_ENDPOINT,
                 PolygonConstants.OPEN_CLOSE_ENDPOINT,
                 symbol,
                 TimeUtil.toDateString(date));
@@ -688,7 +641,33 @@ public class PolygonAPI {
             throw new PolygonAPIRequestException(response);
         }
 
-        return polygonRequest.getResponseObject(response, DailyOpenClose.class);
+        return polygonRequest.getResponseObject(response, DailyOpenCloseResponse.class);
+    }
+
+    /**
+     * The mappings for conditions on trades and quotes.
+     *
+     * @param conditionMappingsType Ticker type we want mappings for
+     *
+     * @return the conditions mapping
+     *
+     * @throws PolygonAPIRequestException the polygon api request exception
+     * @see <a href="https://polygon.io/docs/#!/Stocks--Equities/get_v1_meta_conditions_ticktype">Condition Mappings</a>
+     */
+    public ConditionsMapping getConditionsMapping(ConditionMappingsType conditionMappingsType)
+            throws PolygonAPIRequestException {
+        PolygonRequestBuilder builder = new PolygonRequestBuilder(baseAPIURL, PolygonConstants.VERSION_1_ENDPOINT,
+                PolygonConstants.META_ENDPOINT,
+                PolygonConstants.CONDITIONS_ENDPOINT,
+                conditionMappingsType.getAPIName());
+
+        HttpResponse<InputStream> response = polygonRequest.invokeGet(builder);
+
+        if (response.getStatus() != 200) {
+            throw new PolygonAPIRequestException(response);
+        }
+
+        return polygonRequest.getResponseObject(response, ConditionsMapping.class);
     }
 
     /**
@@ -699,9 +678,10 @@ public class PolygonAPI {
      *
      * @throws PolygonAPIRequestException the polygon API exception
      * @see
-     * <a href="https://polygon.io/docs/#!/Stocks--Equities/get_v2_snapshot_locale_us_markets_stocks_tickers">https://polygon.io/docs/#!/Stocks--Equities/get_v2_snapshot_locale_us_markets_stocks_tickers</a>
+     * <a href="https://polygon.io/docs/#!/Stocks--Equities/get_v2_snapshot_locale_us_markets_stocks_tickers">Snapshot
+     * - All Tickers</a>
      */
-    public List<Snapshot> getSnapshotAllTickers() throws PolygonAPIRequestException {
+    public SnapshotAllTickersResponse getSnapshotAllTickers() throws PolygonAPIRequestException {
         PolygonRequestBuilder builder = new PolygonRequestBuilder(baseAPIURL, PolygonConstants.VERSION_2_ENDPOINT,
                 PolygonConstants.SNAPSHOT_ENDPOINT,
                 PolygonConstants.LOCALE_ENDPOINT,
@@ -716,23 +696,22 @@ public class PolygonAPI {
             throw new PolygonAPIRequestException(response);
         }
 
-        Type listType = new TypeToken<List<Snapshot>>() {}.getType();
-
-        return polygonRequest.getResponseObject(response, listType);
+        return polygonRequest.getResponseObject(response, SnapshotAllTickersResponse.class);
     }
 
     /**
      * See the current snapshot of a single ticker
      *
-     * @param symbol Ticker of the snapshot
+     * @param ticker Ticker of the snapshot
      *
-     * @return the snapshot
+     * @return the snapshot single ticker
      *
      * @throws PolygonAPIRequestException the polygon API exception
      * @see
-     * <a href="https://polygon.io/docs/#!/Stocks--Equities/get_v2_snapshot_locale_us_markets_stocks_tickers_ticker">https://polygon.io/docs/#!/Stocks--Equities/get_v2_snapshot_locale_us_markets_stocks_tickers_ticker</a>
+     * <a href="https://polygon.io/docs/#!/Stocks--Equities/get_v2_snapshot_locale_us_markets_stocks_tickers_ticker">Snapshot
+     * - Single Ticker</a>
      */
-    public Snapshot getSnapshot(String symbol) throws PolygonAPIRequestException {
+    public SnapshotSingleTickerResponse getSnapshotSingleTicker(String ticker) throws PolygonAPIRequestException {
         PolygonRequestBuilder builder = new PolygonRequestBuilder(baseAPIURL, PolygonConstants.VERSION_2_ENDPOINT,
                 PolygonConstants.SNAPSHOT_ENDPOINT,
                 PolygonConstants.LOCALE_ENDPOINT,
@@ -740,7 +719,7 @@ public class PolygonAPI {
                 PolygonConstants.MARKETS_ENDPOINT,
                 PolygonConstants.STOCKS_ENDPOINT,
                 PolygonConstants.TICKERS_ENDPOINT,
-                symbol);
+                ticker);
 
         HttpResponse<InputStream> response = polygonRequest.invokeGet(builder);
 
@@ -748,26 +727,30 @@ public class PolygonAPI {
             throw new PolygonAPIRequestException(response);
         }
 
-        return polygonRequest.getResponseObject(response, Snapshot.class);
+        return polygonRequest.getResponseObject(response, SnapshotSingleTickerResponse.class);
     }
 
     /**
      * See the current snapshot of the top 20 gainers of the day at the moment.
      *
+     * @param gainersLosersDirection the gainers losers direction
+     *
      * @return the snapshots gainers
      *
      * @throws PolygonAPIRequestException the polygon API exception
      * @see
-     * <a href="https://polygon.io/docs/#!/Stocks--Equities/get_v2_snapshot_locale_us_markets_stocks_gainers">https://polygon.io/docs/#!/Stocks--Equities/get_v2_snapshot_locale_us_markets_stocks_gainers</a>
+     * <a href="https://polygon.io/docs/#!/Stocks--Equities/get_v2_snapshot_locale_us_markets_stocks_gainers">Snapshot
+     * - Gainers / Losers</a>
      */
-    public List<Snapshot> getSnapshotsGainers() throws PolygonAPIRequestException {
+    public SnapshotGainersLosersResponse getSnapshotsGainersLosers(GainersLosersDirection gainersLosersDirection)
+            throws PolygonAPIRequestException {
         PolygonRequestBuilder builder = new PolygonRequestBuilder(baseAPIURL, PolygonConstants.VERSION_2_ENDPOINT,
                 PolygonConstants.SNAPSHOT_ENDPOINT,
                 PolygonConstants.LOCALE_ENDPOINT,
                 PolygonConstants.US_ENDPOINT,
                 PolygonConstants.MARKETS_ENDPOINT,
                 PolygonConstants.STOCKS_ENDPOINT,
-                PolygonConstants.GAINERS_ENDPOINT);
+                gainersLosersDirection.getAPIName());
 
         HttpResponse<InputStream> response = polygonRequest.invokeGet(builder);
 
@@ -775,38 +758,7 @@ public class PolygonAPI {
             throw new PolygonAPIRequestException(response);
         }
 
-        Type listType = new TypeToken<List<Snapshot>>() {}.getType();
-
-        return polygonRequest.getResponseObject(response, listType);
-    }
-
-    /**
-     * See the current snapshot of the top 20 losers of the day at the moment.
-     *
-     * @return the snapshots losers
-     *
-     * @throws PolygonAPIRequestException the polygon API exception
-     * @see
-     * <a href="https://polygon.io/docs/#!/Stocks--Equities/get_v2_snapshot_locale_us_markets_stocks_losers">https://polygon.io/docs/#!/Stocks--Equities/get_v2_snapshot_locale_us_markets_stocks_losers</a>
-     */
-    public List<Snapshot> getSnapshotsLosers() throws PolygonAPIRequestException {
-        PolygonRequestBuilder builder = new PolygonRequestBuilder(baseAPIURL, PolygonConstants.VERSION_2_ENDPOINT,
-                PolygonConstants.SNAPSHOT_ENDPOINT,
-                PolygonConstants.LOCALE_ENDPOINT,
-                PolygonConstants.US_ENDPOINT,
-                PolygonConstants.MARKETS_ENDPOINT,
-                PolygonConstants.STOCKS_ENDPOINT,
-                PolygonConstants.LOSERS_ENDPOINT);
-
-        HttpResponse<InputStream> response = polygonRequest.invokeGet(builder);
-
-        if (response.getStatus() != 200) {
-            throw new PolygonAPIRequestException(response);
-        }
-
-        Type listType = new TypeToken<List<Snapshot>>() {}.getType();
-
-        return polygonRequest.getResponseObject(response, listType);
+        return polygonRequest.getResponseObject(response, SnapshotGainersLosersResponse.class);
     }
 
     /**
@@ -818,10 +770,9 @@ public class PolygonAPI {
      * @return the previous close
      *
      * @throws PolygonAPIRequestException the polygon API exception
-     * @see
-     * <a href="https://polygon.io/docs/#!/Stocks--Equities/get_v2_aggs_ticker_ticker_prev">https://polygon.io/docs/#!/Stocks--Equities/get_v2_aggs_ticker_ticker_prev</a>
+     * @see <a href="https://polygon.io/docs/#!/Stocks--Equities/get_v2_aggs_ticker_ticker_prev">Previous Close</a>
      */
-    public Aggregates getPreviousClose(String ticker, Boolean unadjusted) throws PolygonAPIRequestException {
+    public PreviousCloseResponse getPreviousClose(String ticker, Boolean unadjusted) throws PolygonAPIRequestException {
         PolygonRequestBuilder builder = new PolygonRequestBuilder(baseAPIURL, PolygonConstants.VERSION_2_ENDPOINT,
                 PolygonConstants.AGGS_ENDPOINT,
                 PolygonConstants.TICKER_ENDPOINT,
@@ -838,13 +789,7 @@ public class PolygonAPI {
             throw new PolygonAPIRequestException(response);
         }
 
-        Aggregates aggregates = polygonRequest.getResponseObject(response, Aggregates.class);
-
-        if (aggregates.getResultsCount() == 1) {
-            aggregates.getResults().get(0).setTicker(ticker);
-        }
-
-        return aggregates;
+        return polygonRequest.getResponseObject(response, PreviousCloseResponse.class);
     }
 
     /**
@@ -853,24 +798,24 @@ public class PolygonAPI {
      * @param ticker     Ticker symbol of the request
      * @param multiplier Size of the timespan multiplier
      * @param timeSpan   Size of the time window
-     * @param fromDate   the from date
-     * @param toDate     the to date
+     * @param fromDate   From date
+     * @param toDate     To date
      * @param unadjusted Set to true if the results should NOT be adjusted for splits
      *
      * @return the aggregates
      *
      * @throws PolygonAPIRequestException the polygon API exception
      * @see
-     * <a href="https://polygon.io/docs/#!/Stocks--Equities/get_v2_aggs_ticker_ticker_range_multiplier_timespan_from_to">https://polygon.io/docs/#!/Stocks--Equities/get_v2_aggs_ticker_ticker_range_multiplier_timespan_from_to</a>
+     * <a href="https://polygon.io/docs/#!/Stocks--Equities/get_v2_aggs_ticker_ticker_range_multiplier_timespan_from_to">Aggregates</a>
      */
-    public Aggregates getAggregates(String ticker, Integer multiplier, Timespan timeSpan,
-            LocalDate fromDate, LocalDate toDate, Boolean unadjusted) throws PolygonAPIRequestException {
+    public AggregatesResponse getAggregates(String ticker, Integer multiplier, Timespan timeSpan, LocalDate fromDate,
+            LocalDate toDate, Boolean unadjusted) throws PolygonAPIRequestException {
         PolygonRequestBuilder builder = new PolygonRequestBuilder(baseAPIURL, PolygonConstants.VERSION_2_ENDPOINT,
                 PolygonConstants.AGGS_ENDPOINT,
                 PolygonConstants.TICKER_ENDPOINT,
                 ticker,
                 PolygonConstants.RANGE_ENDPOINT,
-                Integer.toString((multiplier != null) ? multiplier : 1),
+                Integer.toString((multiplier == null) ? 1 : multiplier),
                 timeSpan.getAPIName(),
                 TimeUtil.toDateString(fromDate),
                 TimeUtil.toDateString(toDate));
@@ -885,16 +830,7 @@ public class PolygonAPI {
             throw new PolygonAPIRequestException(response);
         }
 
-        Aggregates aggregates = polygonRequest.getResponseObject(response, Aggregates.class);
-
-        if (aggregates.getResultsCount() != 0) {
-            List<Result> results = aggregates.getResults();
-            for (Result result : results) {
-                result.setTicker(ticker);
-            }
-        }
-
-        return aggregates;
+        return polygonRequest.getResponseObject(response, AggregatesResponse.class);
     }
 
     /**
@@ -902,22 +838,23 @@ public class PolygonAPI {
      *
      * @param locale     Locale of the aggregates ( See 'Locales' API )
      * @param market     Market of the aggregates ( See 'Markets' API )
-     * @param date       to date
+     * @param date       To date
      * @param unadjusted Set to true if the results should NOT be adjusted for splits.
      *
      * @return the grouped daily
      *
      * @throws PolygonAPIRequestException the polygon API exception
      * @see
-     * <a href="https://polygon.io/docs/#!/Stocks--Equities/get_v2_aggs_grouped_locale_locale_market_market_date">https://polygon.io/docs/#!/Stocks--Equities/get_v2_aggs_grouped_locale_locale_market_market_date</a>
+     * <a href="https://polygon.io/docs/#!/Stocks--Equities/get_v2_aggs_grouped_locale_locale_market_market_date">Grouped
+     * Daily</a>
      */
-    public Aggregates getGroupedDaily(Locale locale, io.github.mainstringargs.polygon.enums.Market market,
-            LocalDate date, Boolean unadjusted) throws PolygonAPIRequestException {
+    public GroupedDailyResponse getGroupedDaily(String locale, Market market, LocalDate date, Boolean unadjusted)
+            throws PolygonAPIRequestException {
         PolygonRequestBuilder builder = new PolygonRequestBuilder(baseAPIURL, PolygonConstants.VERSION_2_ENDPOINT,
                 PolygonConstants.AGGS_ENDPOINT,
                 PolygonConstants.GROUPED_ENDPOINT,
                 PolygonConstants.LOCALE_ENDPOINT,
-                locale.getAPIName(),
+                locale,
                 PolygonConstants.MARKET_ENDPOINT,
                 market.getAPIName(),
                 TimeUtil.toDateString(date));
@@ -932,7 +869,7 @@ public class PolygonAPI {
             throw new PolygonAPIRequestException(response);
         }
 
-        return polygonRequest.getResponseObject(response, Aggregates.class);
+        return polygonRequest.getResponseObject(response, GroupedDailyResponse.class);
     }
 
     /**

@@ -7,7 +7,7 @@
       "title": "Status"
     },
     "results": {
-      "existingJavaType": "io.github.mainstringargs.domain.polygon.reference.tickertypes.TickerTypes",
+      "existingJavaType": "io.github.mainstringargs.domain.polygon.tickertypes.TickerTypes",
       "title": "Results"
     }
   }

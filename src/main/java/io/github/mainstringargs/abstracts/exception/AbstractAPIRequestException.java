@@ -1,4 +1,4 @@
-package io.github.mainstringargs.util.exception;
+package io.github.mainstringargs.abstracts.exception;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;

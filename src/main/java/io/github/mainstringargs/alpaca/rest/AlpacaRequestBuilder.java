@@ -1,6 +1,6 @@
 package io.github.mainstringargs.alpaca.rest;
 
-import io.github.mainstringargs.util.rest.AbstractRequestBuilder;
+import io.github.mainstringargs.abstracts.rest.AbstractRequestBuilder;
 
 import java.util.Arrays;
 

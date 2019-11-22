@@ -6,19 +6,25 @@ package io.github.mainstringargs.polygon.enums;
 public enum Timespan {
 
     /** The Minute. */
-    Minute("minute"),
+    MINUTE("minute"),
+
     /** The Hour. */
-    Hour("hour"),
+    HOUR("hour"),
+
     /** The Day. */
-    Day("day"),
+    DAY("day"),
+
     /** The Week. */
-    Week("week"),
+    WEEK("week"),
+
     /** The Month. */
-    Month("month"),
+    MONTH("month"),
+
     /** The Quarter. */
-    Quarter("quarter"),
+    QUARTER("quarter"),
+
     /** The Year. */
-    Year("year");
+    YEAR("year");
 
     /** The api name. */
     String apiName;

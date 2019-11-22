@@ -1,25 +1,25 @@
 package io.github.mainstringargs.polygon.enums;
 
 /**
- * The Enum SymbolsLocale.
+ * The Enum StockType.
  */
-public enum Locale {
+public enum StockType {
 
-    /** The us. */
-    US("us"),
+    /** The etfs. */
+    ETFS("etp"),
 
-    /** The global. */
-    GLOBAL("g");
+    /** The common stocks. */
+    COMMON_STOCKS("cs");
 
     /** The api name. */
     String apiName;
 
     /**
-     * Instantiates a new order type.
+     * Instantiates a new stock type.
      *
      * @param apiName the api name
      */
-    Locale(String apiName) {
+    StockType(String apiName) {
         this.apiName = apiName;
     }
 
@@ -30,12 +30,12 @@ public enum Locale {
      *
      * @return the channel type
      */
-    public static Locale fromAPIName(String apiName) {
+    public static StockType fromAPIName(String apiName) {
         String apiNameString = apiName.trim();
 
-        for (Locale cType : Locale.values()) {
-            if (apiNameString.equals(cType.apiName)) {
-                return cType;
+        for (StockType stockType : StockType.values()) {
+            if (apiNameString.equals(stockType.apiName)) {
+                return stockType;
             }
         }
 

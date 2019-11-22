@@ -1,4 +1,4 @@
-package io.github.mainstringargs.util.rest;
+package io.github.mainstringargs.abstracts.rest;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;

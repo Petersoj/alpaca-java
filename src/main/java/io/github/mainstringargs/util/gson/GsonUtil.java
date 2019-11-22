@@ -43,7 +43,7 @@ public class GsonUtil {
      * @return the boolean
      */
     public static boolean doesGsonPOJOMatch(Class jsonPOJOClass, JsonObject jsonObject) {
-        ArrayList<SerializedName> gsonSerializedNameAnnotations = getGSONSerializedNameAnnotations(jsonPOJOClass);
+        ArrayList<SerializedName> gsonSerializedNameAnnotations = getGsonSerializedNameAnnotations(jsonPOJOClass);
         Set<String> jsonObjectKeys = jsonObject.keySet();
 
         for (SerializedName serializedName : gsonSerializedNameAnnotations) {
@@ -77,7 +77,7 @@ public class GsonUtil {
      *
      * @return the gson serialized name annotations
      */
-    private static synchronized ArrayList<SerializedName> getGSONSerializedNameAnnotations(Class theClass) {
+    private static synchronized ArrayList<SerializedName> getGsonSerializedNameAnnotations(Class theClass) {
         // Use a caching system because Reflection can be quite expensive
         if (CLASS_ANNOTATION_CACHE.containsKey(theClass)) {
             return CLASS_ANNOTATION_CACHE.get(theClass);

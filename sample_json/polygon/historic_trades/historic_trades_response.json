@@ -19,7 +19,7 @@
       "title": "Ticker symbol that was evaluated from the request"
     },
     "results": {
-      "existingJavaType": "java.util.ArrayList<io.github.mainstringargs.domain.polygon.historictrades.Trade>",
+      "existingJavaType": "java.util.ArrayList<io.github.mainstringargs.domain.polygon.historictrades.HistoricTrade>",
       "description": "results"
     }
   }

@@ -235,9 +235,9 @@ public class AlpacaAPI {
                 if (arrayJsonElement instanceof JsonObject) {
                     JsonObject arrayJsonObject = (JsonObject) arrayJsonElement;
 
-                    if (alpacaRequest.doesGSONPOJOMatch(TradeActivity.class, arrayJsonObject)) {
+                    if (GsonUtil.doesGsonPOJOMatch(TradeActivity.class, arrayJsonObject)) {
                         accountActivities.add(GsonUtil.GSON.fromJson(arrayJsonObject, TradeActivity.class));
-                    } else if (alpacaRequest.doesGSONPOJOMatch(NonTradeActivity.class, arrayJsonObject)) {
+                    } else if (GsonUtil.doesGsonPOJOMatch(NonTradeActivity.class, arrayJsonObject)) {
                         accountActivities.add(GsonUtil.GSON.fromJson(arrayJsonObject, NonTradeActivity.class));
                     } else {
                         LOGGER.warn("Received unknown JSON Object in response!");
@@ -679,7 +679,7 @@ public class AlpacaAPI {
      * @see <a href="https://docs.alpaca.markets/api-documentation/api-v2/watchlist/#get-a-list-of-watchlists">Get a
      * list of Watchlists</a>
      */
-    public List<Watchlist> getWatchLists() throws AlpacaAPIRequestException {
+    public List<Watchlist> getWatchlists() throws AlpacaAPIRequestException {
         AlpacaRequestBuilder urlBuilder = new AlpacaRequestBuilder(baseAPIURL, apiVersion,
                 AlpacaConstants.WATCHLISTS_ENDPOINT);
 

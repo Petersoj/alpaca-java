@@ -1,7 +1,7 @@
 package io.github.mainstringargs.polygon;
 
 /**
- * The Class PolygonConstants.
+ * The type Polygon constants.
  */
 public class PolygonConstants {
 
@@ -20,14 +20,8 @@ public class PolygonConstants {
     /** The Constant FINANCIALS_ENDPOINT. */
     public static final String FINANCIALS_ENDPOINT = "financials";
 
-    /** The Constant EARNINGS_ENDPOINT. */
-    public static final String EARNINGS_ENDPOINT = "earnings";
-
     /** The Constant DIVIDENDS_ENDPOINT. */
     public static final String DIVIDENDS_ENDPOINT = "dividends";
-
-    /** The Constant ANALYSTS_ENDPOINT. */
-    public static final String ANALYSTS_ENDPOINT = "analysts";
 
     /** The Constant COMPANY_ENDPOINT. */
     public static final String COMPANY_ENDPOINT = "company";
@@ -37,6 +31,9 @@ public class PolygonConstants {
 
     /** The Constant SEARCH_PARAMETER. */
     public static final String SEARCH_PARAMETER = "search";
+
+    /** The constant CONDITIONS_ENDPOINT. */
+    public static final String CONDITIONS_ENDPOINT = "conditions";
 
     /** The Constant TYPE_PARAMETER. */
     public static final String TYPE_PARAMETER = "type";
@@ -68,8 +65,14 @@ public class PolygonConstants {
     /** The Constant TICKER_ENDPOINT. */
     public static final String TICKER_ENDPOINT = "ticker";
 
+    /** The constant TICKS_ENDPOINT. */
+    public static final String TICKS_ENDPOINT = "ticks";
+
     /** The Constant AGGS_ENDPOINT. */
     public static final String AGGS_ENDPOINT = "aggs";
+
+    /** The constant NBBO_ENDPOINT. */
+    public static final String NBBO_ENDPOINT = "nbbo";
 
     /** The Constant OPEN_CLOSE_ENDPOINT. */
     public static final String OPEN_CLOSE_ENDPOINT = "open-close";
@@ -107,11 +110,14 @@ public class PolygonConstants {
     /** The Constant MARKET_ENDPOINT. */
     public static final String MARKET_ENDPOINT = "market";
 
-    /** The Constant LOSERS_ENDPOINT. */
-    public static final String LOSERS_ENDPOINT = "losers";
+    /** The constant MARKET_STATUS_ENDPOINT. */
+    public static final String MARKET_STATUS_ENDPOINT = "marketstatus";
 
-    /** The Constant GAINERS_ENDPOINT. */
-    public static final String GAINERS_ENDPOINT = "gainers";
+    /** The constant NOW_ENDPOINT. */
+    public static final String NOW_ENDPOINT = "now";
+
+    /** The constant UPCOMING_ENDPOINT. */
+    public static final String UPCOMING_ENDPOINT = "upcoming";
 
     /** The Constant TICKERS_ENDPOINT. */
     public static final String TICKERS_ENDPOINT = "tickers";
@@ -131,6 +137,12 @@ public class PolygonConstants {
     /** The Constant LIMIT_PARAMETER. */
     public static final String LIMIT_PARAMETER = "limit";
 
+    /** The constant TIMESTAMP_PARAMETER. */
+    public static final String TIMESTAMP_PARAMETER = "timestamp";
+
+    /** The constant TIMESTAMP_LIMIT_PARAMETER. */
+    public static final String TIMESTAMP_LIMIT_PARAMETER = "timestampLimit";
+
     /** The Constant OFFSET_PARAMETER. */
     public static final String OFFSET_PARAMETER = "offset";
 
@@ -142,5 +154,8 @@ public class PolygonConstants {
 
     /** The Constant PREV_ENDPOINT. */
     public static final String PREV_ENDPOINT = "prev";
+
+    /** The constant REVERSE_PARAMETER. */
+    public static final String REVERSE_PARAMETER = "reverse";
 
 }

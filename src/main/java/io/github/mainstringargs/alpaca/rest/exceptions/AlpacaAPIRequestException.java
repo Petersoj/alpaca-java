@@ -1,7 +1,7 @@
 package io.github.mainstringargs.alpaca.rest.exceptions;
 
 import com.mashape.unirest.http.HttpResponse;
-import io.github.mainstringargs.util.exception.AbstractAPIRequestException;
+import io.github.mainstringargs.abstracts.exception.AbstractAPIRequestException;
 
 import java.io.InputStream;
 

@@ -1,21 +1,21 @@
 package io.github.mainstringargs.polygon.enums;
 
 /**
- * The Enum SymbolsSort.
+ * The enum Ticker sort.
  */
-public enum Sort {
+public enum TickerSort {
 
-    /** The ticker asc. */
-    TICKER_ASC("ticker"),
+    /** The ticker ascending. */
+    TICKER_ASCENDING("ticker"),
 
-    /** The type asc. */
-    TYPE_ASC("type"),
+    /** The ticker descending. */
+    TICKER_DESCENDING("-ticker"),
 
-    /** The ticker desc. */
-    TICKER_DESC("-ticker"),
+    /** The type ascending. */
+    TYPE_ASCENDING("type"),
 
-    /** The type desc. */
-    TYPE_DESC("-type");
+    /** The type descending. */
+    TYPE_DESCENDING("-type");
 
     /** The api name. */
     String apiName;
@@ -25,7 +25,7 @@ public enum Sort {
      *
      * @param apiName the api name
      */
-    Sort(String apiName) {
+    TickerSort(String apiName) {
         this.apiName = apiName;
     }
 
@@ -36,10 +36,10 @@ public enum Sort {
      *
      * @return the channel type
      */
-    public static Sort fromAPIName(String apiName) {
+    public static TickerSort fromAPIName(String apiName) {
         String apiNameString = apiName.trim();
 
-        for (Sort cType : Sort.values()) {
+        for (TickerSort cType : TickerSort.values()) {
             if (apiNameString.equals(cType.apiName)) {
                 return cType;
             }
