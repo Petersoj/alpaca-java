@@ -1,5 +1,6 @@
 package io.github.mainstringargs.polygon;
 
+import com.google.common.base.Preconditions;
 import com.google.gson.reflect.TypeToken;
 import com.mashape.unirest.http.HttpResponse;
 import io.github.mainstringargs.domain.polygon.aggregates.AggregatesResponse;
@@ -206,6 +207,8 @@ public class PolygonAPI {
      * @see <a href="https://polygon.io/docs/#!/Meta-Data/get_v1_meta_symbols_symbol_company">Ticker Details</a>
      */
     public TickerDetails getTickerDetails(String symbol) throws PolygonAPIRequestException {
+        Preconditions.checkNotNull(symbol);
+
         PolygonRequestBuilder builder = new PolygonRequestBuilder(baseAPIURL, PolygonConstants.VERSION_1_ENDPOINT,
                 PolygonConstants.META_ENDPOINT,
                 PolygonConstants.SYMBOLS_ENDPOINT,
@@ -235,6 +238,8 @@ public class PolygonAPI {
      */
     public ArrayList<TickerNews> getTickerNews(String symbol, Integer perpage, Integer page)
             throws PolygonAPIRequestException {
+        Preconditions.checkNotNull(symbol);
+
         PolygonRequestBuilder builder = new PolygonRequestBuilder(baseAPIURL, PolygonConstants.VERSION_1_ENDPOINT,
                 PolygonConstants.META_ENDPOINT,
                 PolygonConstants.SYMBOLS_ENDPOINT,
@@ -315,6 +320,8 @@ public class PolygonAPI {
      * @see <a href="https://polygon.io/docs/#!/Reference/get_v2_reference_splits_symbol">Stock Splits</a>
      */
     public StockSplitsResponse getStockSplits(String symbol) throws PolygonAPIRequestException {
+        Preconditions.checkNotNull(symbol);
+
         PolygonRequestBuilder builder = new PolygonRequestBuilder(baseAPIURL, PolygonConstants.VERSION_2_ENDPOINT,
                 PolygonConstants.REFERENCE_ENDPOINT,
                 PolygonConstants.SPLITS_ENDPOINT, symbol);
@@ -339,6 +346,8 @@ public class PolygonAPI {
      * @see <a href="https://polygon.io/docs/#!/Meta-Data/get_v1_meta_symbols_symbol_dividends">Stock Dividends</a>
      */
     public StockDividendsResponse getStockDividends(String symbol) throws PolygonAPIRequestException {
+        Preconditions.checkNotNull(symbol);
+
         PolygonRequestBuilder builder = new PolygonRequestBuilder(baseAPIURL, PolygonConstants.VERSION_2_ENDPOINT,
                 PolygonConstants.REFERENCE_ENDPOINT,
                 PolygonConstants.DIVIDENDS_ENDPOINT,
@@ -368,6 +377,8 @@ public class PolygonAPI {
      */
     public StockFinancialsResponse getStockFinancials(String symbol, Integer limit,
             FinancialReportType financialReportType, FinancialSort financialSort) throws PolygonAPIRequestException {
+        Preconditions.checkNotNull(symbol);
+
         PolygonRequestBuilder builder = new PolygonRequestBuilder(baseAPIURL, PolygonConstants.VERSION_2_ENDPOINT,
                 PolygonConstants.REFERENCE_ENDPOINT,
                 PolygonConstants.FINANCIALS_ENDPOINT,
@@ -468,7 +479,7 @@ public class PolygonAPI {
      * Get historic trades for a symbol.
      *
      * @param ticker         Ticker symbol we want ticks for
-     * @param date           Date/Day of the historic ticks to retreive
+     * @param date           Date/Day of the historic ticks to retrieve
      * @param timestamp      Timestamp offset, used for pagination. This is the offset at which to start the results.
      *                       Using the timestamp of the last result as the offset will give you the next page of
      *                       results.
@@ -484,6 +495,9 @@ public class PolygonAPI {
      */
     public HistoricTradesResponse getHistoricTrades(String ticker, LocalDate date, Long timestamp, Long timestampLimit,
             Boolean reverse, Integer limit) throws PolygonAPIRequestException {
+        Preconditions.checkNotNull(ticker);
+        Preconditions.checkNotNull(date);
+
         PolygonRequestBuilder builder = new PolygonRequestBuilder(baseAPIURL, PolygonConstants.VERSION_2_ENDPOINT,
                 PolygonConstants.TICKS_ENDPOINT,
                 PolygonConstants.STOCKS_ENDPOINT,
@@ -520,7 +534,7 @@ public class PolygonAPI {
      * Get historic NBBO quotes for a ticker.
      *
      * @param ticker         Ticker symbol we want ticks for
-     * @param date           Date/Day of the historic ticks to retreive
+     * @param date           Date/Day of the historic ticks to retrieve
      * @param timestamp      Timestamp offset, used for pagination. This is the offset at which to start the results.
      *                       Using the timestamp of the last result as the offset will give you the next page of
      *                       results.
@@ -536,6 +550,9 @@ public class PolygonAPI {
      */
     public HistoricQuotesResponse getHistoricQuotes(String ticker, LocalDate date, Long timestamp, Long timestampLimit,
             Boolean reverse, Integer limit) throws PolygonAPIRequestException {
+        Preconditions.checkNotNull(ticker);
+        Preconditions.checkNotNull(date);
+
         PolygonRequestBuilder builder = new PolygonRequestBuilder(baseAPIURL, PolygonConstants.VERSION_2_ENDPOINT,
                 PolygonConstants.TICKS_ENDPOINT,
                 PolygonConstants.STOCKS_ENDPOINT,
@@ -579,6 +596,8 @@ public class PolygonAPI {
      * @see <a href="https://polygon.io/docs/#!/Stocks--Equities/get_v1_last_stocks_symbol">Last Trade</a>
      */
     public LastTradeResponse getLastTrade(String symbol) throws PolygonAPIRequestException {
+        Preconditions.checkNotNull(symbol);
+
         PolygonRequestBuilder builder = new PolygonRequestBuilder(baseAPIURL, PolygonConstants.VERSION_1_ENDPOINT,
                 PolygonConstants.LAST_ENDPOINT,
                 PolygonConstants.STOCKS_ENDPOINT,
@@ -604,6 +623,8 @@ public class PolygonAPI {
      * @see <a href="https://polygon.io/docs/#!/Stocks--Equities/get_v1_last_quote_stocks_symbol">Last Quote</a>
      */
     public LastQuoteResponse getLastQuote(String symbol) throws PolygonAPIRequestException {
+        Preconditions.checkNotNull(symbol);
+
         PolygonRequestBuilder builder = new PolygonRequestBuilder(baseAPIURL, PolygonConstants.VERSION_1_ENDPOINT,
                 PolygonConstants.LAST_QUOTE_ENDPOINT,
                 PolygonConstants.STOCKS_ENDPOINT,
@@ -630,6 +651,9 @@ public class PolygonAPI {
      * @see <a href="https://polygon.io/docs/#!/Stocks--Equities/get_v1_open_close_symbol_date">Daily Open/Close</a>
      */
     public DailyOpenCloseResponse getDailyOpenClose(String symbol, LocalDate date) throws PolygonAPIRequestException {
+        Preconditions.checkNotNull(symbol);
+        Preconditions.checkNotNull(date);
+
         PolygonRequestBuilder builder = new PolygonRequestBuilder(baseAPIURL, PolygonConstants.VERSION_1_ENDPOINT,
                 PolygonConstants.OPEN_CLOSE_ENDPOINT,
                 symbol,
@@ -656,6 +680,8 @@ public class PolygonAPI {
      */
     public ConditionsMapping getConditionsMapping(ConditionMappingsType conditionMappingsType)
             throws PolygonAPIRequestException {
+        Preconditions.checkNotNull(conditionMappingsType);
+
         PolygonRequestBuilder builder = new PolygonRequestBuilder(baseAPIURL, PolygonConstants.VERSION_1_ENDPOINT,
                 PolygonConstants.META_ENDPOINT,
                 PolygonConstants.CONDITIONS_ENDPOINT,
@@ -712,6 +738,8 @@ public class PolygonAPI {
      * - Single Ticker</a>
      */
     public SnapshotSingleTickerResponse getSnapshotSingleTicker(String ticker) throws PolygonAPIRequestException {
+        Preconditions.checkNotNull(ticker);
+
         PolygonRequestBuilder builder = new PolygonRequestBuilder(baseAPIURL, PolygonConstants.VERSION_2_ENDPOINT,
                 PolygonConstants.SNAPSHOT_ENDPOINT,
                 PolygonConstants.LOCALE_ENDPOINT,
@@ -744,6 +772,8 @@ public class PolygonAPI {
      */
     public SnapshotGainersLosersResponse getSnapshotsGainersLosers(GainersLosersDirection gainersLosersDirection)
             throws PolygonAPIRequestException {
+        Preconditions.checkNotNull(gainersLosersDirection);
+
         PolygonRequestBuilder builder = new PolygonRequestBuilder(baseAPIURL, PolygonConstants.VERSION_2_ENDPOINT,
                 PolygonConstants.SNAPSHOT_ENDPOINT,
                 PolygonConstants.LOCALE_ENDPOINT,
@@ -773,6 +803,8 @@ public class PolygonAPI {
      * @see <a href="https://polygon.io/docs/#!/Stocks--Equities/get_v2_aggs_ticker_ticker_prev">Previous Close</a>
      */
     public PreviousCloseResponse getPreviousClose(String ticker, Boolean unadjusted) throws PolygonAPIRequestException {
+        Preconditions.checkNotNull(ticker);
+
         PolygonRequestBuilder builder = new PolygonRequestBuilder(baseAPIURL, PolygonConstants.VERSION_2_ENDPOINT,
                 PolygonConstants.AGGS_ENDPOINT,
                 PolygonConstants.TICKER_ENDPOINT,
@@ -810,6 +842,11 @@ public class PolygonAPI {
      */
     public AggregatesResponse getAggregates(String ticker, Integer multiplier, Timespan timeSpan, LocalDate fromDate,
             LocalDate toDate, Boolean unadjusted) throws PolygonAPIRequestException {
+        Preconditions.checkNotNull(ticker);
+        Preconditions.checkNotNull(timeSpan);
+        Preconditions.checkNotNull(fromDate);
+        Preconditions.checkNotNull(toDate);
+
         PolygonRequestBuilder builder = new PolygonRequestBuilder(baseAPIURL, PolygonConstants.VERSION_2_ENDPOINT,
                 PolygonConstants.AGGS_ENDPOINT,
                 PolygonConstants.TICKER_ENDPOINT,
@@ -850,6 +887,10 @@ public class PolygonAPI {
      */
     public GroupedDailyResponse getGroupedDaily(String locale, Market market, LocalDate date, Boolean unadjusted)
             throws PolygonAPIRequestException {
+        Preconditions.checkNotNull(locale);
+        Preconditions.checkNotNull(market);
+        Preconditions.checkNotNull(date);
+
         PolygonRequestBuilder builder = new PolygonRequestBuilder(baseAPIURL, PolygonConstants.VERSION_2_ENDPOINT,
                 PolygonConstants.AGGS_ENDPOINT,
                 PolygonConstants.GROUPED_ENDPOINT,
