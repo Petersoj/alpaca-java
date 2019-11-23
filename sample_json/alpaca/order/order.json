@@ -11,28 +11,32 @@
       "title": "client unique order id"
     },
     "created_at": {
-      "existingJavaType": "java.lang.String",
+      "existingJavaType": "java.time.LocalDateTime",
       "title": "Created at"
     },
     "updated_at": {
-      "existingJavaType": "java.lang.String",
+      "existingJavaType": "java.time.LocalDateTime",
       "title": "Updated at"
     },
     "submitted_at": {
-      "existingJavaType": "java.lang.String",
+      "existingJavaType": "java.time.LocalDateTime",
       "title": "Submitted at"
     },
     "filled_at": {
-      "existingJavaType": "java.lang.String",
+      "existingJavaType": "java.time.LocalDateTime",
       "title": "Filled at"
     },
     "expired_at": {
-      "existingJavaType": "java.lang.String",
+      "existingJavaType": "java.time.LocalDateTime",
       "title": "Expired at"
     },
     "canceled_at": {
-      "existingJavaType": "java.lang.String",
+      "existingJavaType": "java.time.LocalDateTime",
       "title": "Canceled at"
+    },
+    "failed_at": {
+      "existingJavaType": "java.time.LocalDateTime",
+      "title": "Failed at"
     },
     "asset_id": {
       "existingJavaType": "java.lang.String",
@@ -71,6 +75,10 @@
       "title": "Limit price"
     },
     "stop_price": {
+      "existingJavaType": "java.lang.String",
+      "title": "Stop price"
+    },
+    "filled_avg_price": {
       "existingJavaType": "java.lang.String",
       "title": "Stop price"
     },
