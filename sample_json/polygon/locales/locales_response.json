@@ -7,7 +7,7 @@
       "title": "Status"
     },
     "results": {
-      "existingJavaType": "java.util.ArrayList<io.github.mainstringargs.domain.polygon.reference.locales.Locale>",
+      "existingJavaType": "java.util.ArrayList<io.github.mainstringargs.domain.polygon.locales.Locale>",
       "title": "Results"
     }
   }

@@ -3,11 +3,11 @@ package io.github.mainstringargs.alpaca.websocket;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
-import io.github.mainstringargs.alpaca.enums.MessageType;
-import io.github.mainstringargs.alpaca.websocket.AlpacaWebsocketClientEndpoint.MessageHandler;
-import io.github.mainstringargs.alpaca.websocket.message.AccountUpdateMessage;
-import io.github.mainstringargs.alpaca.websocket.message.OrderUpdateMessage;
-import io.github.mainstringargs.alpaca.websocket.message.UpdateMessage;
+import io.github.mainstringargs.abstracts.websocket.MessageHandler;
+import io.github.mainstringargs.alpaca.enums.StreamUpdateType;
+import io.github.mainstringargs.alpaca.websocket.message.account.AccountUpdateMessage;
+import io.github.mainstringargs.alpaca.websocket.message.ChannelMessage;
+import io.github.mainstringargs.alpaca.websocket.message.trade.TradeUpdateMessage;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -23,7 +23,7 @@ import java.util.Set;
 /**
  * The Class WebsocketClient.
  */
-public class AlpacaWebsocketClient implements MessageHandler {
+public class AlpacaWebsocketClient implements MessageHandler<JsonObject> {
 
     /** The logger. */
     private static Logger LOGGER = LogManager.getLogger(AlpacaWebsocketClient.class);
@@ -106,9 +106,9 @@ public class AlpacaWebsocketClient implements MessageHandler {
 
         try {
             clientEndPoint = new AlpacaWebsocketClientEndpoint(new URI(baseAPIURL));
-            clientEndPoint.addMessageHandler(this);
+            clientEndPoint.setMessageHandler(this);
         } catch (URISyntaxException e) {
-            e.printStackTrace();
+            LOGGER.throwing(e);
         }
 
         LOGGER.info("Connected.");
@@ -140,7 +140,7 @@ public class AlpacaWebsocketClient implements MessageHandler {
             clientEndPoint.getUserSession().close();
             LOGGER.info("Disconnected.");
         } catch (IOException e) {
-            e.printStackTrace();
+            LOGGER.throwing(e);
         }
     }
 
@@ -166,10 +166,10 @@ public class AlpacaWebsocketClient implements MessageHandler {
                     LOGGER.debug("Listening response " + message);
                     break;
                 case "trade_updates":
-                    sendStreamMessageToObservers(MessageType.TRADE_UPDATES, message);
+                    sendStreamMessageToObservers(StreamUpdateType.TRADE_UPDATES, message);
                     break;
                 case "account_updates":
-                    sendStreamMessageToObservers(MessageType.ACCOUNT_UPDATES, message);
+                    sendStreamMessageToObservers(StreamUpdateType.ACCOUNT_UPDATES, message);
                     break;
             }
         } else {
@@ -180,17 +180,16 @@ public class AlpacaWebsocketClient implements MessageHandler {
     /**
      * Send stream message to observers.
      *
-     * @param messageType the message type
+     * @param streamUpdateType the message type
      * @param message     the message
      */
-    private synchronized void sendStreamMessageToObservers(MessageType messageType,
-            JsonObject message) {
+    private synchronized void sendStreamMessageToObservers(StreamUpdateType streamUpdateType, JsonObject message) {
         for (AlpacaStreamListener observer : listeners) {
-            UpdateMessage messageObject = getMessageToObject(messageType, message);
+            ChannelMessage messageObject = getMessageToObject(streamUpdateType, message);
 
-            if (observer.getMessageTypes() == null || observer.getMessageTypes().isEmpty()
-                    || observer.getMessageTypes().contains(messageType)) {
-                observer.streamUpdate(messageType, messageObject);
+            if (observer.getStreamUpdateTypes() == null || observer.getStreamUpdateTypes().isEmpty()
+                    || observer.getStreamUpdateTypes().contains(streamUpdateType)) {
+                observer.streamUpdate(streamUpdateType, messageObject);
             }
         }
     }
@@ -198,20 +197,20 @@ public class AlpacaWebsocketClient implements MessageHandler {
     /**
      * Gets the message to object.
      *
-     * @param messageType the message type
+     * @param streamUpdateType the message type
      * @param message     the message
      *
      * @return the message to object
      */
-    private UpdateMessage getMessageToObject(MessageType messageType, JsonObject message) {
+    private ChannelMessage getMessageToObject(StreamUpdateType streamUpdateType, JsonObject message) {
         if (message.has("data")) {
             JsonObject data = message.getAsJsonObject("data");
 
-            switch (messageType) {
+            switch (streamUpdateType) {
                 case ACCOUNT_UPDATES:
                     return new AccountUpdateMessage(data);
                 case TRADE_UPDATES:
-                    return new OrderUpdateMessage(data);
+                    return new TradeUpdateMessage(data);
             }
         }
         return null;
@@ -233,7 +232,7 @@ public class AlpacaWebsocketClient implements MessageHandler {
 
         JsonArray streamsArray = new JsonArray();
 
-        for (MessageType mType : getRegisteredMessageTypes()) {
+        for (StreamUpdateType mType : getRegisteredMessageTypes()) {
             JsonPrimitive apiNameJson = new JsonPrimitive(mType.getAPIName());
 
             if (!streamsArray.contains(apiNameJson)) {
@@ -258,18 +257,18 @@ public class AlpacaWebsocketClient implements MessageHandler {
      *
      * @return the registered message types
      */
-    public synchronized Set<MessageType> getRegisteredMessageTypes() {
-        Set<MessageType> registeredMessageTypes = new HashSet<>();
+    public synchronized Set<StreamUpdateType> getRegisteredMessageTypes() {
+        Set<StreamUpdateType> registeredStreamUpdateTypes = new HashSet<>();
 
         for (AlpacaStreamListener observer : listeners) {
             // if its empty, assume they want everything
-            if (observer.getMessageTypes() == null || observer.getMessageTypes().isEmpty()) {
-                registeredMessageTypes.addAll(Arrays.asList(MessageType.values()));
+            if (observer.getStreamUpdateTypes() == null || observer.getStreamUpdateTypes().isEmpty()) {
+                registeredStreamUpdateTypes.addAll(Arrays.asList(StreamUpdateType.values()));
                 break;
             }
-            registeredMessageTypes.addAll(observer.getMessageTypes());
+            registeredStreamUpdateTypes.addAll(observer.getStreamUpdateTypes());
         }
 
-        return registeredMessageTypes;
+        return registeredStreamUpdateTypes;
     }
 }

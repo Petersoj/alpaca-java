@@ -1,24 +1,5 @@
 package io.github.mainstringargs.polygon;
 
-import io.github.mainstringargs.domain.polygon.aggregate.Aggregates;
-import io.github.mainstringargs.domain.polygon.historic.quotes.Quotes;
-import io.github.mainstringargs.domain.polygon.historic.trades.Trades;
-import io.github.mainstringargs.domain.polygon.last.LastQuote;
-import io.github.mainstringargs.domain.polygon.last.LastTrade;
-import io.github.mainstringargs.domain.polygon.meta.Exchange;
-import io.github.mainstringargs.domain.polygon.meta.SymbolAnalystRatings;
-import io.github.mainstringargs.domain.polygon.meta.SymbolEarning;
-import io.github.mainstringargs.domain.polygon.meta.SymbolEndpoints;
-import io.github.mainstringargs.domain.polygon.meta.TickerDetails;
-import io.github.mainstringargs.domain.polygon.meta.TickerNews;
-import io.github.mainstringargs.domain.polygon.openclose.DailyOpenClose;
-import io.github.mainstringargs.domain.polygon.reference.Market;
-import io.github.mainstringargs.domain.polygon.reference.StockDividend;
-import io.github.mainstringargs.domain.polygon.reference.StockFinancial;
-import io.github.mainstringargs.domain.polygon.reference.StockSplit;
-import io.github.mainstringargs.domain.polygon.reference.Ticker;
-import io.github.mainstringargs.domain.polygon.reference.TypesMapping;
-import io.github.mainstringargs.domain.polygon.snapshot.Snapshot;
 import io.github.mainstringargs.polygon.enums.ChannelType;
 import io.github.mainstringargs.polygon.enums.TickerSort;
 import io.github.mainstringargs.polygon.enums.Timespan;
@@ -40,6 +21,7 @@ public class PolygonExample {
      * @param args the arguments
      */
     public static void main(String[] args) {
+        /*
         PolygonAPI polygonAPI = new PolygonAPI();
 
         String ticker = "MSFT";
@@ -333,6 +315,6 @@ public class PolygonExample {
             e.printStackTrace();
         }
 
-        System.exit(0);
+        System.exit(0); */
     }
 }

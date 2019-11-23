@@ -1,7 +1,7 @@
 package io.github.mainstringargs.alpaca.websocket;
 
-import io.github.mainstringargs.alpaca.enums.MessageType;
-import io.github.mainstringargs.alpaca.websocket.message.UpdateMessage;
+import io.github.mainstringargs.alpaca.enums.StreamUpdateType;
+import io.github.mainstringargs.alpaca.websocket.message.ChannelMessage;
 
 import java.util.Arrays;
 import java.util.HashSet;
@@ -13,16 +13,16 @@ import java.util.Set;
 public class AlpacaStreamListenerAdapter implements AlpacaStreamListener {
 
     /** The message types. */
-    private HashSet<MessageType> messageTypes = new HashSet<>();
+    private HashSet<StreamUpdateType> streamUpdateTypes = new HashSet<>();
 
     /**
      * Instantiates a new alpaca stream listener adapter.
      *
-     * @param messageTypes the message types
+     * @param streamUpdateTypes the message types
      */
-    public AlpacaStreamListenerAdapter(MessageType... messageTypes) {
-        if (messageTypes != null && messageTypes.length > 0) {
-            this.messageTypes.addAll(Arrays.asList(messageTypes));
+    public AlpacaStreamListenerAdapter(StreamUpdateType... streamUpdateTypes) {
+        if (streamUpdateTypes != null && streamUpdateTypes.length > 0) {
+            this.streamUpdateTypes.addAll(Arrays.asList(streamUpdateTypes));
         }
     }
 
@@ -32,8 +32,8 @@ public class AlpacaStreamListenerAdapter implements AlpacaStreamListener {
      * @see io.github.mainstringargs.alpaca.websocket.AlpacaStreamListener#getMessageTypes()
      */
     @Override
-    public Set<MessageType> getMessageTypes() {
-        return messageTypes;
+    public Set<StreamUpdateType> getStreamUpdateTypes() {
+        return streamUpdateTypes;
     }
 
     /*
@@ -43,6 +43,6 @@ public class AlpacaStreamListenerAdapter implements AlpacaStreamListener {
      * mainstringargs.alpaca.enums.MessageType, java.lang.Object)
      */
     @Override
-    public void streamUpdate(MessageType messageType, UpdateMessage message) {
+    public void streamUpdate(StreamUpdateType streamUpdateType, ChannelMessage message) {
     }
 }

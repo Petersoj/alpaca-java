@@ -2,6 +2,7 @@ package io.github.mainstringargs.alpaca.websocket;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import io.github.mainstringargs.abstracts.websocket.MessageHandler;
 import io.github.mainstringargs.util.concurrency.ExecutorTracer;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -37,7 +38,7 @@ public class AlpacaWebsocketClientEndpoint {
     private Session userSession = null;
 
     /** The message handler. */
-    private MessageHandler messageHandler;
+    private MessageHandler<JsonObject> messageHandler;
 
     /** The endpoint URI. */
     private URI endpointURI;
@@ -134,10 +135,6 @@ public class AlpacaWebsocketClientEndpoint {
     @OnMessage
     public void onMessage(String message) {
         executor.execute(() -> {
-            if (LOGGER.isDebugEnabled()) {
-                LOGGER.debug("onMessage " + message);
-            }
-
             if (messageHandler != null) {
                 JsonObject jsonObject = new JsonParser().parse(message).getAsJsonObject();
 
@@ -147,12 +144,12 @@ public class AlpacaWebsocketClientEndpoint {
     }
 
     /**
-     * register message handler.
+     * Sets message handler.
      *
-     * @param msgHandler the msg handler
+     * @param messageHandler the message handler
      */
-    public void addMessageHandler(MessageHandler msgHandler) {
-        this.messageHandler = msgHandler;
+    public void setMessageHandler(MessageHandler<JsonObject> messageHandler) {
+        this.messageHandler = messageHandler;
     }
 
     /**
@@ -164,6 +161,7 @@ public class AlpacaWebsocketClientEndpoint {
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("sendMessage " + (message));
         }
+
         this.userSession.getAsyncRemote().sendText(message);
     }
 
@@ -174,18 +172,5 @@ public class AlpacaWebsocketClientEndpoint {
      */
     public Session getUserSession() {
         return this.userSession;
-    }
-
-    /**
-     * Message handler.
-     */
-    public interface MessageHandler {
-
-        /**
-         * Handle message.
-         *
-         * @param message the message
-         */
-        void handleMessage(JsonObject message);
     }
 }

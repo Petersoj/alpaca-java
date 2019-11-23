@@ -11,7 +11,7 @@
       "title": "Count"
     },
     "results": {
-      "existingJavaType": "java.util.ArrayList<io.github.mainstringargs.domain.polygon.reference.stocksplits.StockSplit>",
+      "existingJavaType": "java.util.ArrayList<io.github.mainstringargs.domain.polygon.stocksplits.StockSplit>",
       "title": "Results"
     }
   }

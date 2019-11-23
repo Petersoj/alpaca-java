@@ -1,8 +1,8 @@
 package io.github.mainstringargs.alpaca.websocket;
 
-import io.github.mainstringargs.alpaca.enums.MessageType;
+import io.github.mainstringargs.alpaca.enums.StreamUpdateType;
 import io.github.mainstringargs.alpaca.properties.AlpacaProperties;
-import io.github.mainstringargs.alpaca.websocket.message.UpdateMessage;
+import io.github.mainstringargs.alpaca.websocket.message.ChannelMessage;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -23,13 +23,13 @@ public class AlpacaWebsocketTestDriver {
 
         client.addListener(new AlpacaStreamListener() {
             @Override
-            public Set<MessageType> getMessageTypes() {
-                return new HashSet<MessageType>();
+            public Set<StreamUpdateType> getStreamUpdateTypes() {
+                return new HashSet<StreamUpdateType>();
             }
 
             @Override
-            public void streamUpdate(MessageType messageType, UpdateMessage message) {
-                System.out.println(messageType + " " + message);
+            public void streamUpdate(StreamUpdateType streamUpdateType, ChannelMessage message) {
+                System.out.println(streamUpdateType + " " + message);
             }
         });
 

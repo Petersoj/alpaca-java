@@ -1,7 +1,7 @@
 package io.github.mainstringargs.alpaca.websocket;
 
-import io.github.mainstringargs.alpaca.enums.MessageType;
-import io.github.mainstringargs.alpaca.websocket.message.UpdateMessage;
+import io.github.mainstringargs.alpaca.enums.StreamUpdateType;
+import io.github.mainstringargs.alpaca.websocket.message.ChannelMessage;
 
 import java.util.Set;
 
@@ -9,7 +9,7 @@ import java.util.Set;
  * An asynchronous update interface for receiving notifications about Websocket information as the Websocket is
  * constructed.
  *
- * @see UpdateMessage
+ * @see ChannelMessage
  */
 public interface AlpacaStreamListener {
 
@@ -18,13 +18,13 @@ public interface AlpacaStreamListener {
      *
      * @return the message types
      */
-    Set<MessageType> getMessageTypes();
+    Set<StreamUpdateType> getStreamUpdateTypes();
 
     /**
      * Stream update.
      *
-     * @param messageType the message type
+     * @param streamUpdateType the message type
      * @param message     the message
      */
-    void streamUpdate(MessageType messageType, UpdateMessage message);
+    void streamUpdate(StreamUpdateType streamUpdateType, ChannelMessage message);
 }

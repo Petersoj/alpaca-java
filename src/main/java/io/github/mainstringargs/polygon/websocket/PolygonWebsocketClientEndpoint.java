@@ -1,6 +1,7 @@
 package io.github.mainstringargs.polygon.websocket;
 
 import com.google.gson.JsonArray;
+import io.github.mainstringargs.abstracts.websocket.MessageHandler;
 import io.github.mainstringargs.util.concurrency.ExecutorTracer;
 import io.github.mainstringargs.util.gson.GsonUtil;
 import org.apache.logging.log4j.LogManager;
@@ -37,7 +38,7 @@ public class PolygonWebsocketClientEndpoint {
     private Session userSession = null;
 
     /** The message handler. */
-    private MessageHandler messageHandler;
+    private MessageHandler<JsonArray> messageHandler;
 
     /** The endpoint URI. */
     private URI endpointURI;
@@ -56,7 +57,7 @@ public class PolygonWebsocketClientEndpoint {
         try {
             connect(endpointURI);
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            LOGGER.throwing(e);
         }
     }
 
@@ -114,8 +115,7 @@ public class PolygonWebsocketClientEndpoint {
                 e1.printStackTrace();
             }
 
-            LOGGER.info("Reconnecting due to closure " +
-                    CloseCodes.getCloseCode(reason.getCloseCode().getCode()));
+            LOGGER.info("Reconnecting due to closure " + CloseCodes.getCloseCode(reason.getCloseCode().getCode()));
 
             try {
                 connect(endpointURI);
@@ -135,10 +135,6 @@ public class PolygonWebsocketClientEndpoint {
     @OnMessage
     public void onMessage(String message) {
         executor.execute(() -> {
-            if (LOGGER.isDebugEnabled()) {
-                LOGGER.debug("onMessage " + message);
-            }
-
             if (messageHandler != null) {
                 JsonArray jsonArray = GsonUtil.JSON_PARSER.parse(message).getAsJsonArray();
 
@@ -148,12 +144,12 @@ public class PolygonWebsocketClientEndpoint {
     }
 
     /**
-     * Set message handler.
+     * Sets message handler.
      *
-     * @param msgHandler the msg handler
+     * @param messageHandler the message handler
      */
-    public void setMessageHandler(MessageHandler msgHandler) {
-        this.messageHandler = msgHandler;
+    public void setMessageHandler(MessageHandler<JsonArray> messageHandler) {
+        this.messageHandler = messageHandler;
     }
 
     /**
@@ -165,6 +161,7 @@ public class PolygonWebsocketClientEndpoint {
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("sendMessage " + (message));
         }
+
         this.userSession.getAsyncRemote().sendText(message);
     }
 
@@ -175,18 +172,5 @@ public class PolygonWebsocketClientEndpoint {
      */
     public Session getUserSession() {
         return this.userSession;
-    }
-
-    /**
-     * Message handler.
-     */
-    public interface MessageHandler {
-
-        /**
-         * Handle message.
-         *
-         * @param array the array
-         */
-        void handleMessage(JsonArray array);
     }
 }

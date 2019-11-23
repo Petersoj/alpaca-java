@@ -1,9 +1,6 @@
 package io.github.mainstringargs.alpaca.enums;
 
-/**
- * The Enum ObserverType.
- */
-public enum MessageType {
+public enum StreamUpdateType {
 
     /** The trade updates. */
     TRADE_UPDATES("trade_updates"),
@@ -15,11 +12,11 @@ public enum MessageType {
     String apiName;
 
     /**
-     * Instantiates a new observer type.
+     * Instantiates a new Stream update type.
      *
      * @param apiName the api name
      */
-    MessageType(String apiName) {
+    StreamUpdateType(String apiName) {
         this.apiName = apiName;
     }
 

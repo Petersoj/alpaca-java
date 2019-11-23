@@ -3,13 +3,14 @@ package io.github.mainstringargs.polygon.websocket;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import io.github.mainstringargs.abstracts.websocket.MessageHandler;
 import io.github.mainstringargs.polygon.enums.ChannelType;
-import io.github.mainstringargs.polygon.websocket.message.AggregatePerMinuteMessage;
-import io.github.mainstringargs.polygon.websocket.message.AggregatePerSecondMessage;
+import io.github.mainstringargs.polygon.websocket.message.aggregate.AggregatePerMinuteMessage;
+import io.github.mainstringargs.polygon.websocket.message.aggregate.AggregatePerSecondMessage;
 import io.github.mainstringargs.polygon.websocket.message.ChannelMessage;
-import io.github.mainstringargs.polygon.websocket.message.QuotesMessage;
-import io.github.mainstringargs.polygon.websocket.message.StatusMessage;
-import io.github.mainstringargs.polygon.websocket.message.TradesMessage;
+import io.github.mainstringargs.polygon.websocket.message.status.ChannelStatusMessage;
+import io.github.mainstringargs.polygon.websocket.message.quote.QuotesMessage;
+import io.github.mainstringargs.polygon.websocket.message.trade.TradesMessage;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -27,7 +28,7 @@ import java.util.StringJoiner;
 /**
  * The Class WebsocketClient.
  */
-public class PolygonWebsocketClient implements PolygonWebsocketClientEndpoint.MessageHandler {
+public class PolygonWebsocketClient implements MessageHandler<JsonArray> {
 
     /** The logger. */
     private static final Logger LOGGER = LogManager.getLogger(PolygonWebsocketClient.class);
@@ -99,7 +100,7 @@ public class PolygonWebsocketClient implements PolygonWebsocketClientEndpoint.Me
             clientEndPoint = new PolygonWebsocketClientEndpoint(new URI(websocketURL));
             clientEndPoint.setMessageHandler(this);
         } catch (URISyntaxException e) {
-            e.printStackTrace();
+            LOGGER.throwing(e);
         }
 
         LOGGER.info("Connected.");
@@ -123,7 +124,7 @@ public class PolygonWebsocketClient implements PolygonWebsocketClientEndpoint.Me
             clientEndPoint.getUserSession().close();
             LOGGER.info("Disconnected.");
         } catch (IOException e) {
-            e.printStackTrace();
+            LOGGER.throwing(e);
         }
     }
 
@@ -139,16 +140,14 @@ public class PolygonWebsocketClient implements PolygonWebsocketClientEndpoint.Me
 
                 switch (eventType) {
                     case "status":
-                        StatusMessage statusMessage = new StatusMessage(messageJsonObject);
-                        LOGGER.debug("Channel status: " + statusMessage.getChannelStatus());
+                        ChannelStatusMessage channelStatusMessage = new ChannelStatusMessage(messageJsonObject);
+                        LOGGER.debug("Channel status: " + channelStatusMessage.getChannelStatus());
                         break;
                     case "T":
-                        sendStreamMessageToListeners(ChannelType.TRADES,
-                                new TradesMessage(messageJsonObject));
+                        sendStreamMessageToListeners(ChannelType.TRADES, new TradesMessage(messageJsonObject));
                         break;
                     case "Q":
-                        sendStreamMessageToListeners(ChannelType.QUOTES,
-                                new QuotesMessage(messageJsonObject));
+                        sendStreamMessageToListeners(ChannelType.QUOTES, new QuotesMessage(messageJsonObject));
                         break;
                     case "A":
                         sendStreamMessageToListeners(ChannelType.AGGREGATE_PER_SECOND,
@@ -173,8 +172,7 @@ public class PolygonWebsocketClient implements PolygonWebsocketClientEndpoint.Me
      * @param channelType the channel type
      * @param message     the message
      */
-    private synchronized void sendStreamMessageToListeners(ChannelType channelType,
-            ChannelMessage message) {
+    private synchronized void sendStreamMessageToListeners(ChannelType channelType, ChannelMessage message) {
         for (PolygonStreamListener streamListener : listeners) {
             boolean sendToStreamListener = false;
 
@@ -200,8 +198,7 @@ public class PolygonWebsocketClient implements PolygonWebsocketClientEndpoint.Me
      * @param streamAction the stream request action
      * @param listener     the listener
      */
-    private void submitStreamRequest(StreamAction streamAction,
-            PolygonStreamListener listener) {
+    private void submitStreamRequest(StreamAction streamAction, PolygonStreamListener listener) {
         if (listener == null) {
             throw new IllegalArgumentException("Listener cannot be null");
         }
@@ -350,5 +347,4 @@ public class PolygonWebsocketClient implements PolygonWebsocketClientEndpoint.Me
             return apiName;
         }
     }
-
 }
