@@ -35,6 +35,9 @@ public class AlpacaConstants {
     /** The Constant TIME_IN_FORCE_PARAMETER. */
     public static final String TIME_IN_FORCE_PARAMETER = "time_in_force";
 
+    /** The constant EXTENDED_HOURS_PARAMETER. */
+    public static final String EXTENDED_HOURS_PARAMETER = "extended_hours";
+
     /** The Constant TYPE_PARAMETER. */
     public static final String TYPE_PARAMETER = "type";
 

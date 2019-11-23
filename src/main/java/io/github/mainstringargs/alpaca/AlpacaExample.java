@@ -118,7 +118,7 @@ public class AlpacaExample {
 
         // Get an existing Order by Client Id
         try {
-            Order limitOrderByClientId = alpacaApi.getOrderByClientId(limitOrder.getClientOrderId());
+            Order limitOrderByClientId = alpacaApi.getOrderByClientID(limitOrder.getClientOrderId());
 
             System.out.println("\n\nLimit Order By Id Response:");
             System.out.println("\tSymbol: " + limitOrderByClientId.getSymbol() +
