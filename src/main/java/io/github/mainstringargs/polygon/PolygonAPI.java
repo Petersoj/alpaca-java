@@ -38,7 +38,7 @@ import io.github.mainstringargs.polygon.enums.Timespan;
 import io.github.mainstringargs.polygon.properties.PolygonProperties;
 import io.github.mainstringargs.polygon.rest.PolygonRequest;
 import io.github.mainstringargs.polygon.rest.PolygonRequestBuilder;
-import io.github.mainstringargs.polygon.rest.exceptions.PolygonAPIRequestException;
+import io.github.mainstringargs.polygon.rest.exception.PolygonAPIRequestException;
 import io.github.mainstringargs.polygon.websocket.PolygonStreamListener;
 import io.github.mainstringargs.polygon.websocket.PolygonWebsocketClient;
 import io.github.mainstringargs.util.time.TimeUtil;

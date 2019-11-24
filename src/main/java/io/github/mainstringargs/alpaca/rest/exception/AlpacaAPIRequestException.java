@@ -1,4 +1,4 @@
-package io.github.mainstringargs.alpaca.rest.exceptions;
+package io.github.mainstringargs.alpaca.rest.exception;
 
 import com.mashape.unirest.http.HttpResponse;
 import io.github.mainstringargs.abstracts.exception.AbstractAPIRequestException;
@@ -20,7 +20,7 @@ public class AlpacaAPIRequestException extends AbstractAPIRequestException {
     }
 
     @Override
-    protected void parseAPIExceptionMessage(HttpResponse<InputStream> httpResponse) {
-        super.parseStandardAPIExceptionResponse(httpResponse);
+    protected void parseAPIExceptionMessage() {
+        super.parseStandardAPIExceptionResponse();
     }
 }

@@ -17,7 +17,7 @@ import io.github.mainstringargs.alpaca.enums.OrderType;
 import io.github.mainstringargs.alpaca.properties.AlpacaProperties;
 import io.github.mainstringargs.alpaca.rest.AlpacaRequest;
 import io.github.mainstringargs.alpaca.rest.AlpacaRequestBuilder;
-import io.github.mainstringargs.alpaca.rest.exceptions.AlpacaAPIRequestException;
+import io.github.mainstringargs.alpaca.rest.exception.AlpacaAPIRequestException;
 import io.github.mainstringargs.alpaca.websocket.AlpacaStreamListener;
 import io.github.mainstringargs.alpaca.websocket.AlpacaWebsocketClient;
 import io.github.mainstringargs.domain.alpaca.account.Account;
@@ -261,7 +261,7 @@ public class AlpacaAPI {
      * @see <a href="https://docs.alpaca.markets/api-documentation/api-v2/account-configuration/">Account
      * Configuration</a>
      */
-    public AccountConfiguration getAccountConfigurations() throws AlpacaAPIRequestException {
+    public AccountConfiguration getAccountConfiguration() throws AlpacaAPIRequestException {
         AlpacaRequestBuilder urlBuilder = new AlpacaRequestBuilder(baseAPIURL, apiVersion,
                 AlpacaConstants.ACCOUNT_ENDPOINT,
                 AlpacaConstants.CONFIGURATIONS_ENDPOINT);
@@ -723,6 +723,7 @@ public class AlpacaAPI {
      */
     public Watchlist createWatchlist(String name, String... symbols) throws AlpacaAPIRequestException {
         Preconditions.checkNotNull(name);
+        Preconditions.checkState(name.length() <= 64);
 
         AlpacaRequestBuilder urlBuilder = new AlpacaRequestBuilder(baseAPIURL, apiVersion,
                 AlpacaConstants.WATCHLISTS_ENDPOINT);
@@ -742,8 +743,7 @@ public class AlpacaAPI {
             throw new AlpacaAPIRequestException(response);
         }
 
-        Type arrayListType = new TypeToken<ArrayList<Watchlist>>() {}.getType();
-        return alpacaRequest.getResponseObject(response, arrayListType);
+        return alpacaRequest.getResponseObject(response, Watchlist.class);
     }
 
     /**
@@ -850,10 +850,12 @@ public class AlpacaAPI {
      *
      * @param watchlistID Watchlist ID
      *
+     * @return if the watchlist was deleted
+     *
      * @throws AlpacaAPIRequestException the alpaca api exception
      * @see <a href="https://docs.alpaca.markets/api-documentation/api-v2/watchlist/">Watchlists</a>
      */
-    public void deleteWatchlist(String watchlistID) throws AlpacaAPIRequestException {
+    public boolean deleteWatchlist(String watchlistID) throws AlpacaAPIRequestException {
         Preconditions.checkNotNull(watchlistID);
 
         AlpacaRequestBuilder urlBuilder = new AlpacaRequestBuilder(baseAPIURL, apiVersion,
@@ -862,9 +864,11 @@ public class AlpacaAPI {
 
         HttpResponse<InputStream> response = alpacaRequest.invokeDelete(urlBuilder);
 
-        if (response.getStatus() != 200) {
+        if ((response.getStatus() != 200 && response.getStatus() != 204)) {
             throw new AlpacaAPIRequestException(response);
         }
+
+        return response.getStatus() == 200 || response.getStatus() == 204;
     }
 
     /**
@@ -873,11 +877,14 @@ public class AlpacaAPI {
      * @param watchlistID Watchlist ID
      * @param symbol      symbol name to remove from the watchlist content
      *
+     * @return the updated watchlist
+     *
      * @throws AlpacaAPIRequestException the alpaca api exception
      * @see <a href="https://docs.alpaca.markets/api-documentation/api-v2/watchlist/">Watchlists</a>
      */
-    public void removeSymbolFromWatchlist(String watchlistID, String symbol) throws AlpacaAPIRequestException {
-        Preconditions.checkNotNull(watchlistID, symbol);
+    public Watchlist removeSymbolFromWatchlist(String watchlistID, String symbol) throws AlpacaAPIRequestException {
+        Preconditions.checkNotNull(watchlistID);
+        Preconditions.checkNotNull(symbol);
 
         AlpacaRequestBuilder urlBuilder = new AlpacaRequestBuilder(baseAPIURL, apiVersion,
                 AlpacaConstants.WATCHLISTS_ENDPOINT,
@@ -889,6 +896,8 @@ public class AlpacaAPI {
         if (response.getStatus() != 200) {
             throw new AlpacaAPIRequestException(response);
         }
+
+        return alpacaRequest.getResponseObject(response, Watchlist.class);
     }
 
     /**
@@ -993,8 +1002,8 @@ public class AlpacaAPI {
     public Map<String, ArrayList<Bar>> getBars(BarsTimeFrame timeframe, String[] symbols, Integer limit,
             LocalDateTime start, LocalDateTime end, LocalDateTime after, LocalDateTime until)
             throws AlpacaAPIRequestException {
-        AlpacaRequestBuilder urlBuilder = new AlpacaRequestBuilder(AlpacaConstants.VERSION_1_ENDPOINT,
-                baseDataUrl, AlpacaConstants.BARS_ENDPOINT);
+        AlpacaRequestBuilder urlBuilder = new AlpacaRequestBuilder(baseDataUrl, AlpacaConstants.VERSION_1_ENDPOINT,
+                AlpacaConstants.BARS_ENDPOINT);
 
         if (timeframe != null) {
             urlBuilder.appendEndpoint(timeframe.getAPIName());
@@ -1062,9 +1071,8 @@ public class AlpacaAPI {
     public ArrayList<Bar> getBars(BarsTimeFrame timeframe, String symbol, Integer limit,
             LocalDateTime start, LocalDateTime end, LocalDateTime after, LocalDateTime until)
             throws AlpacaAPIRequestException {
-        //data urls still use v1 (https://docs.alpaca.markets/api-documentation/api-v2/market-data/#endpoint)
-        AlpacaRequestBuilder urlBuilder = new AlpacaRequestBuilder(AlpacaConstants.VERSION_1_ENDPOINT,
-                baseDataUrl, AlpacaConstants.BARS_ENDPOINT);
+        AlpacaRequestBuilder urlBuilder = new AlpacaRequestBuilder(baseDataUrl, AlpacaConstants.VERSION_1_ENDPOINT,
+                AlpacaConstants.BARS_ENDPOINT);
 
         if (timeframe != null) {
             urlBuilder.appendEndpoint(timeframe.getAPIName());

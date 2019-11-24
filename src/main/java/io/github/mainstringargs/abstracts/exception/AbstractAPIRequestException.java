@@ -47,6 +47,8 @@ public abstract class AbstractAPIRequestException extends Exception {
      * @param httpResponse the http response
      */
     public AbstractAPIRequestException(String apiName, HttpResponse<InputStream> httpResponse) {
+        super();
+
         this.apiName = apiName;
         this.httpResponse = httpResponse;
 
@@ -59,28 +61,21 @@ public abstract class AbstractAPIRequestException extends Exception {
      * <p>
      * {@link AbstractAPIRequestException#requestStatusCode}, {@link AbstractAPIRequestException#requestStatusText},
      * {@link AbstractAPIRequestException#apiResponseCode}, {@link AbstractAPIRequestException#apiResponseMessage}
-     *
-     * @param httpResponse the http response
      */
-    protected abstract void parseAPIExceptionMessage(HttpResponse<InputStream> httpResponse);
+    protected abstract void parseAPIExceptionMessage();
 
     /**
      * Parse a standard API exception response.
      * <p>
-     * e.g.
-     * <p>
-     * {
-     * <p>
-     * "code": 1001,
-     * <p>
-     * "message": "An error message"
-     * <p>
-     * }
-     * <p>
-     *
-     * @param httpResponse the http response
+     * The following format is parsed:
+     * <pre>
+     *  {
+     *     "code": 40010001,
+     *     "message": "Error message"
+     *  }
+     * </pre>
      */
-    protected void parseStandardAPIExceptionResponse(HttpResponse<InputStream> httpResponse) {
+    protected void parseStandardAPIExceptionResponse() {
         JsonElement responseJsonElement = GsonUtil.JSON_PARSER.parse(new InputStreamReader(httpResponse.getBody()));
 
         if (responseJsonElement instanceof JsonObject) {
@@ -103,6 +98,8 @@ public abstract class AbstractAPIRequestException extends Exception {
 
     @Override
     public String getMessage() {
+        this.parseAPIExceptionMessage();
+
         StringBuilder messageBuilder = new StringBuilder(apiName).append(" API Request Exception! : ");
         messageBuilder.append("Status Code = ").append(requestStatusCode);
         messageBuilder.append(", Status Text = \"").append(requestStatusText).append("\"");

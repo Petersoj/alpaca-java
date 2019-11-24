@@ -1,15 +1,5 @@
 package io.github.mainstringargs.polygon;
 
-import io.github.mainstringargs.polygon.enums.ChannelType;
-import io.github.mainstringargs.polygon.enums.TickerSort;
-import io.github.mainstringargs.polygon.enums.Timespan;
-import io.github.mainstringargs.polygon.rest.exceptions.PolygonAPIRequestException;
-import io.github.mainstringargs.polygon.websocket.PolygonStreamListenerAdapter;
-import io.github.mainstringargs.polygon.websocket.message.ChannelMessage;
-
-import java.time.LocalDate;
-import java.util.List;
-
 /**
  * The Class Example.
  */

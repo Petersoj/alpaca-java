@@ -47,7 +47,7 @@
       "title": "If true, the account activity by user is prohibited."
     },
     "created_at": {
-      "existingJavaType": "java.lang.String",
+      "existingJavaType": "java.time.LocalDateTime",
       "title": "Timestamp this account was created at"
     },
     "shorting_enabled": {
