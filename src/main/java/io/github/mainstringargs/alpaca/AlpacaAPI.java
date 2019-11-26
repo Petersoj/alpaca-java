@@ -4,6 +4,7 @@ import com.google.common.base.Preconditions;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.google.gson.JsonPrimitive;
 import com.google.gson.reflect.TypeToken;
 import com.mashape.unirest.http.HttpResponse;
 import io.github.mainstringargs.alpaca.enums.ActivityType;
@@ -411,7 +412,8 @@ public class AlpacaAPI {
         }
 
         if (extendedHours != null) {
-            urlBuilder.appendJSONBodyProperty(AlpacaConstants.EXTENDED_HOURS_PARAMETER, String.valueOf(extendedHours));
+            urlBuilder.appendJSONBodyJSONProperty(AlpacaConstants.EXTENDED_HOURS_PARAMETER,
+                    new JsonPrimitive(extendedHours));
         }
 
         if (clientOrderId != null) {
