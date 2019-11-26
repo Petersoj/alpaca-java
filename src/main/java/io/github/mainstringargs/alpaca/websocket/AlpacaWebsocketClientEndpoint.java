@@ -28,8 +28,8 @@ import java.util.concurrent.ExecutorService;
 public class AlpacaWebsocketClientEndpoint {
 
     /** The executor. */
-    private static final ExecutorService executor =
-            ExecutorTracer.newSingleThreadExecutor(r -> new Thread(r, "AlpacaWebsocketThread"));
+    private static final ExecutorService executor = ExecutorTracer.newSingleThreadExecutor(
+            r -> new Thread(r, "AlpacaWebsocketThread"));
 
     /** The logger. */
     private static Logger LOGGER = LogManager.getLogger(AlpacaWebsocketClientEndpoint.class);

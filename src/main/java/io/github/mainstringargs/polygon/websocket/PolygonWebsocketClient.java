@@ -5,11 +5,11 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import io.github.mainstringargs.abstracts.websocket.MessageHandler;
 import io.github.mainstringargs.polygon.enums.ChannelType;
+import io.github.mainstringargs.polygon.websocket.message.ChannelMessage;
 import io.github.mainstringargs.polygon.websocket.message.aggregate.AggregatePerMinuteMessage;
 import io.github.mainstringargs.polygon.websocket.message.aggregate.AggregatePerSecondMessage;
-import io.github.mainstringargs.polygon.websocket.message.ChannelMessage;
-import io.github.mainstringargs.polygon.websocket.message.status.ChannelStatusMessage;
 import io.github.mainstringargs.polygon.websocket.message.quote.QuotesMessage;
+import io.github.mainstringargs.polygon.websocket.message.status.ChannelStatusMessage;
 import io.github.mainstringargs.polygon.websocket.message.trade.TradesMessage;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -141,7 +141,7 @@ public class PolygonWebsocketClient implements MessageHandler<JsonArray> {
                 switch (eventType) {
                     case "status":
                         ChannelStatusMessage channelStatusMessage = new ChannelStatusMessage(messageJsonObject);
-                        LOGGER.debug("Channel status: " + channelStatusMessage.getChannelStatus());
+                        LOGGER.info("Channel status: " + channelStatusMessage.getChannelStatus());
                         break;
                     case "T":
                         sendStreamMessageToListeners(ChannelType.TRADES, new TradesMessage(messageJsonObject));
