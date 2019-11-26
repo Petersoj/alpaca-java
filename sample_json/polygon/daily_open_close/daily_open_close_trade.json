@@ -31,7 +31,7 @@
       "title": "Size of the trade"
     },
     "timestamp": {
-      "existingJavaType": "java.time.LocalDateTime",
+      "existingJavaType": "java.time.ZonedDateTime",
       "title": "Timestamp of this trade"
     }
   }

@@ -11,31 +11,31 @@
       "title": "client unique order id"
     },
     "created_at": {
-      "existingJavaType": "java.time.LocalDateTime",
+      "existingJavaType": "java.time.ZonedDateTime",
       "title": "Created at"
     },
     "updated_at": {
-      "existingJavaType": "java.time.LocalDateTime",
+      "existingJavaType": "java.time.ZonedDateTime",
       "title": "Updated at"
     },
     "submitted_at": {
-      "existingJavaType": "java.time.LocalDateTime",
+      "existingJavaType": "java.time.ZonedDateTime",
       "title": "Submitted at"
     },
     "filled_at": {
-      "existingJavaType": "java.time.LocalDateTime",
+      "existingJavaType": "java.time.ZonedDateTime",
       "title": "Filled at"
     },
     "expired_at": {
-      "existingJavaType": "java.time.LocalDateTime",
+      "existingJavaType": "java.time.ZonedDateTime",
       "title": "Expired at"
     },
     "canceled_at": {
-      "existingJavaType": "java.time.LocalDateTime",
+      "existingJavaType": "java.time.ZonedDateTime",
       "title": "Canceled at"
     },
     "failed_at": {
-      "existingJavaType": "java.time.LocalDateTime",
+      "existingJavaType": "java.time.ZonedDateTime",
       "title": "Failed at"
     },
     "asset_id": {

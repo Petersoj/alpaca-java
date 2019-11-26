@@ -41,7 +41,8 @@ import org.apache.logging.log4j.Logger;
 import java.io.InputStream;
 import java.lang.reflect.Type;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Map;
@@ -179,7 +180,7 @@ public class AlpacaAPI {
      * @see <a href="https://docs.alpaca.markets/api-documentation/api-v2/account-activities/">Gets the Account
      * Activities</a>
      */
-    public ArrayList<AccountActivity> getAccountActivities(LocalDateTime date, LocalDateTime until, LocalDateTime after,
+    public ArrayList<AccountActivity> getAccountActivities(ZonedDateTime date, ZonedDateTime until, ZonedDateTime after,
             Direction direction, Integer pageSize, String pageToken, ActivityType... activityTypes)
             throws AlpacaAPIRequestException {
         AlpacaRequestBuilder urlBuilder = new AlpacaRequestBuilder(baseAPIURL, AlpacaConstants.VERSION_2_ENDPOINT,
@@ -196,15 +197,18 @@ public class AlpacaAPI {
         }
 
         if (date != null) {
-            urlBuilder.appendURLParameter(AlpacaConstants.AFTER_PARAMETER, TimeUtil.toDateTimeString(date));
+            urlBuilder.appendURLParameter(AlpacaConstants.DATE_PARAMETER,
+                    date.format(DateTimeFormatter.ISO_OFFSET_DATE_TIME));
         }
 
         if (until != null) {
-            urlBuilder.appendURLParameter(AlpacaConstants.UNTIL_PARAMETER, TimeUtil.toDateTimeString(until));
+            urlBuilder.appendURLParameter(AlpacaConstants.UNTIL_PARAMETER,
+                    until.format(DateTimeFormatter.ISO_OFFSET_DATE_TIME));
         }
 
         if (after != null) {
-            urlBuilder.appendURLParameter(AlpacaConstants.AFTER_PARAMETER, TimeUtil.toDateTimeString(after));
+            urlBuilder.appendURLParameter(AlpacaConstants.AFTER_PARAMETER,
+                    after.format(DateTimeFormatter.ISO_OFFSET_DATE_TIME));
         }
 
         if (direction != null) {
@@ -319,7 +323,7 @@ public class AlpacaAPI {
      * @throws AlpacaAPIRequestException the alpaca API exception
      * @see <a href="https://docs.alpaca.markets/api-documentation/api-v2/orders/">Orders</a>
      */
-    public ArrayList<Order> getOrders(OrderStatus status, Integer limit, LocalDateTime after, LocalDateTime until,
+    public ArrayList<Order> getOrders(OrderStatus status, Integer limit, ZonedDateTime after, ZonedDateTime until,
             Direction direction) throws AlpacaAPIRequestException {
         AlpacaRequestBuilder urlBuilder = new AlpacaRequestBuilder(baseAPIURL, apiVersion,
                 AlpacaConstants.ORDERS_ENDPOINT);
@@ -333,11 +337,13 @@ public class AlpacaAPI {
         }
 
         if (after != null) {
-            urlBuilder.appendURLParameter(AlpacaConstants.AFTER_PARAMETER, TimeUtil.toDateTimeString(after));
+            urlBuilder.appendURLParameter(AlpacaConstants.AFTER_PARAMETER,
+                    after.format(DateTimeFormatter.ISO_OFFSET_DATE_TIME));
         }
 
         if (until != null) {
-            urlBuilder.appendURLParameter(AlpacaConstants.UNTIL_PARAMETER, TimeUtil.toDateTimeString(until));
+            urlBuilder.appendURLParameter(AlpacaConstants.UNTIL_PARAMETER,
+                    until.format(DateTimeFormatter.ISO_OFFSET_DATE_TIME));
         }
 
         if (direction != null) {
@@ -986,6 +992,33 @@ public class AlpacaAPI {
      *
      * @param timeframe One of minute, 1Min, 5Min, 15Min, day or 1D. minute is an alias of 1Min. Similarly, day is of
      *                  1D.
+     * @param symbol    One symbol name.
+     * @param limit     The maximum number of bars to be returned for each symbol. It can be between 1 and 1000. Default
+     *                  is 100 if parameter is unspecified or 0.
+     * @param start     Filter bars equal to or after this time. Cannot be used with after.
+     * @param end       Filter bars equal to or before this time. Cannot be used with until.
+     * @param after     Filter bars after this time. Cannot be used with start.
+     * @param until     Filter bars before this time. Cannot be used with end.
+     *
+     * @return the bars
+     *
+     * @throws AlpacaAPIRequestException the alpaca API exception
+     * @see <a href="https://docs.alpaca.markets/api-documentation/api-v2/market-data/bars/">Bars</a>
+     */
+    public Map<String, ArrayList<Bar>> getBars(BarsTimeFrame timeframe, String symbol, Integer limit,
+            ZonedDateTime start, ZonedDateTime end, ZonedDateTime after, ZonedDateTime until)
+            throws AlpacaAPIRequestException {
+        return this.getBars(timeframe, new String[]{symbol}, limit, start, end, after, until);
+    }
+
+    /**
+     * Retrieves a list of bars for each requested symbol. It is guaranteed all bars are in ascending order by time.
+     * <p>
+     * Currently, no “incomplete” bars are returned. For example, a 1 minute bar for 09:30 will not be returned until
+     * 09:31.
+     *
+     * @param timeframe One of minute, 1Min, 5Min, 15Min, day or 1D. minute is an alias of 1Min. Similarly, day is of
+     *                  1D.
      * @param symbols   One or more (max 200) symbol names split by commas (“,”).
      * @param limit     The maximum number of bars to be returned for each symbol. It can be between 1 and 1000. Default
      *                  is 100 if parameter is unspecified or 0.
@@ -1000,7 +1033,7 @@ public class AlpacaAPI {
      * @see <a href="https://docs.alpaca.markets/api-documentation/api-v2/market-data/bars/">Bars</a>
      */
     public Map<String, ArrayList<Bar>> getBars(BarsTimeFrame timeframe, String[] symbols, Integer limit,
-            LocalDateTime start, LocalDateTime end, LocalDateTime after, LocalDateTime until)
+            ZonedDateTime start, ZonedDateTime end, ZonedDateTime after, ZonedDateTime until)
             throws AlpacaAPIRequestException {
         AlpacaRequestBuilder urlBuilder = new AlpacaRequestBuilder(baseDataUrl, AlpacaConstants.VERSION_1_ENDPOINT,
                 AlpacaConstants.BARS_ENDPOINT);
@@ -1009,31 +1042,32 @@ public class AlpacaAPI {
             urlBuilder.appendEndpoint(timeframe.getAPIName());
         }
 
-        if (start != null) {
-            urlBuilder.appendURLParameter(AlpacaConstants.START_PARAMETER,
-                    TimeUtil.toDateTimeString(start));
-        }
-
-        if (end != null) {
-            urlBuilder.appendURLParameter(AlpacaConstants.END_PARAMETER, TimeUtil.toDateTimeString(end));
-        }
-
-        if (after != null) {
-            urlBuilder.appendURLParameter(AlpacaConstants.AFTER_PARAMETER,
-                    TimeUtil.toDateTimeString(after));
-        }
-
-        if (until != null) {
-            urlBuilder.appendURLParameter(AlpacaConstants.UNTIL_PARAMETER,
-                    TimeUtil.toDateTimeString(until));
+        if (symbols != null) {
+            urlBuilder.appendURLParameter(AlpacaConstants.SYMBOLS_PARAMETER, String.join(",", symbols));
         }
 
         if (limit != null) {
             urlBuilder.appendURLParameter(AlpacaConstants.LIMIT_PARAMETER, limit.toString());
         }
 
-        if (symbols != null) {
-            urlBuilder.appendURLParameter(AlpacaConstants.SYMBOLS_PARAMETER, String.join(",", symbols));
+        if (start != null) {
+            urlBuilder.appendURLParameter(AlpacaConstants.START_PARAMETER,
+                    start.format(DateTimeFormatter.ISO_OFFSET_DATE_TIME));
+        }
+
+        if (end != null) {
+            urlBuilder.appendURLParameter(AlpacaConstants.END_PARAMETER,
+                    end.format(DateTimeFormatter.ISO_OFFSET_DATE_TIME));
+        }
+
+        if (after != null) {
+            urlBuilder.appendURLParameter(AlpacaConstants.AFTER_PARAMETER,
+                    after.format(DateTimeFormatter.ISO_OFFSET_DATE_TIME));
+        }
+
+        if (until != null) {
+            urlBuilder.appendURLParameter(AlpacaConstants.UNTIL_PARAMETER,
+                    until.format(DateTimeFormatter.ISO_OFFSET_DATE_TIME));
         }
 
         HttpResponse<InputStream> response = alpacaRequest.invokeGet(urlBuilder);
@@ -1045,77 +1079,6 @@ public class AlpacaAPI {
         Type mapType = new TypeToken<Map<String, ArrayList<Bar>>>() {}.getType();
 
         return alpacaRequest.getResponseObject(response, mapType);
-    }
-
-    /**
-     * Retrieves a list of bars for each requested symbol. It is guaranteed all bars are in ascending order by time.
-     * <p>
-     * Currently, no “incomplete” bars are returned. For example, a 1 minute bar for 09:30 will not be returned until
-     * 09:31.
-     *
-     * @param timeframe One of minute, 1Min, 5Min, 15Min, day or 1D. minute is an alias of 1Min. Similarly, day is of
-     *                  1D.
-     * @param symbol    One symbol name.
-     * @param limit     The maximum number of bars to be returned for each symbol. It can be between 1 and 1000. Default
-     *                  is 100 if parameter is unspecified or 0.
-     * @param start     Filter bars equal to or after this time. Cannot be used with after.
-     * @param end       Filter bars equal to or before this time. Cannot be used with until.
-     * @param after     Filter bars after this time. Cannot be used with start.
-     * @param until     Filter bars before this time. Cannot be used with end.
-     *
-     * @return the bars
-     *
-     * @throws AlpacaAPIRequestException the alpaca API exception
-     * @see <a href="https://docs.alpaca.markets/api-documentation/api-v2/market-data/bars/">Bars</a>
-     */
-    public ArrayList<Bar> getBars(BarsTimeFrame timeframe, String symbol, Integer limit,
-            LocalDateTime start, LocalDateTime end, LocalDateTime after, LocalDateTime until)
-            throws AlpacaAPIRequestException {
-        AlpacaRequestBuilder urlBuilder = new AlpacaRequestBuilder(baseDataUrl, AlpacaConstants.VERSION_1_ENDPOINT,
-                AlpacaConstants.BARS_ENDPOINT);
-
-        if (timeframe != null) {
-            urlBuilder.appendEndpoint(timeframe.getAPIName());
-        }
-
-        if (start != null) {
-            urlBuilder.appendURLParameter(AlpacaConstants.START_PARAMETER,
-                    TimeUtil.toDateTimeString(start));
-        }
-
-        if (end != null) {
-            urlBuilder.appendURLParameter(AlpacaConstants.END_PARAMETER, TimeUtil.toDateTimeString(end));
-        }
-
-        if (after != null) {
-            urlBuilder.appendURLParameter(AlpacaConstants.AFTER_PARAMETER,
-                    TimeUtil.toDateTimeString(after));
-        }
-
-        if (until != null) {
-            urlBuilder.appendURLParameter(AlpacaConstants.UNTIL_PARAMETER,
-                    TimeUtil.toDateTimeString(until));
-        }
-
-        if (limit != null) {
-            urlBuilder.appendURLParameter(AlpacaConstants.LIMIT_PARAMETER, limit.toString());
-        }
-
-        if (symbol != null) {
-            urlBuilder.appendURLParameter(AlpacaConstants.SYMBOLS_PARAMETER, String.join(",", symbol));
-        }
-
-        HttpResponse<InputStream> response = alpacaRequest.invokeGet(urlBuilder);
-
-        if (response.getStatus() != 200) {
-            throw new AlpacaAPIRequestException(response);
-        }
-
-        Type mapType = new TypeToken<Map<String, ArrayList<Bar>>>() {}.getType();
-
-        Map<String, ArrayList<Bar>> bars = alpacaRequest.getResponseObject(response, mapType);
-
-        return bars.get(symbol);
     }
 
     /**

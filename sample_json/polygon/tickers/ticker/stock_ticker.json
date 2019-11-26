@@ -5,6 +5,10 @@
     "existingJavaType": "io.github.mainstringargs.domain.polygon.tickers.ticker.Ticker"
   },
   "properties": {
+    "type": {
+      "existingJavaType": "java.lang.String",
+      "title": "Type of symbol this is. See symbol types."
+    },
     "codes": {
       "existingJavaType": "java.util.HashMap<java.lang.String, java.lang.String>",
       "title": "Codes"

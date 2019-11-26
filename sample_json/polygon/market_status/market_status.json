@@ -7,7 +7,7 @@
       "title": "Status of the market as a whole. Can be open, closed or extended-hours"
     },
     "serverTime": {
-      "existingJavaType": "java.time.LocalDateTime",
+      "existingJavaType": "java.time.ZonedDateTime",
       "title": "Current time of the server"
     },
     "exchanges": {

@@ -11,7 +11,7 @@
       "title": "The Price"
     },
     "timestamp": {
-      "existingJavaType": "java.time.LocalDateTime",
+      "existingJavaType": "java.time.ZonedDateTime",
       "title": "updated_at"
     },
     "position_qty": {

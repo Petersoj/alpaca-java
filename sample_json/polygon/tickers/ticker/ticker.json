@@ -8,7 +8,7 @@
     },
     "name": {
       "existingJavaType": "java.lang.String",
-      "title": "Name"
+      "title": "Name of the item."
     },
     "market": {
       "existingJavaType": "java.lang.String",
@@ -31,12 +31,12 @@
       "title": "Primary Exchange"
     },
     "updated": {
-      "existingJavaType": "java.time.LocalDateTime",
-      "title": "Updated"
+      "existingJavaType": "java.time.ZonedDateTime",
+      "title": "Last time this company record was updated."
     },
     "url": {
       "existingJavaType": "java.lang.String",
-      "title": "URL"
+      "title": "URL of this symbol. Use this to get this symbols endpoints."
     }
   }
 }

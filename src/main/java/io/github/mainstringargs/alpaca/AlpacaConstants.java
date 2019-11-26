@@ -20,6 +20,9 @@ public class AlpacaConstants {
     /** The Constant START_PARAMETER. */
     public static final String START_PARAMETER = "start";
 
+    /** The constant DATE_PARAMETER. */
+    public static final String DATE_PARAMETER = "date";
+
     /** The Constant ASSET_CLASS_PARAMETER. */
     public static final String ASSET_CLASS_PARAMETER = "asset_class";
 

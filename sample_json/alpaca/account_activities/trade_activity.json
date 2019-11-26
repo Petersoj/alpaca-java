@@ -38,7 +38,7 @@
       "title": "The symbol of the security being traded."
     },
     "transaction_time": {
-      "existingJavaType": "java.lang.String",
+      "existingJavaType": "java.time.ZonedDateTime",
       "title": "The time at which the execution occurred."
     },
     "type": {

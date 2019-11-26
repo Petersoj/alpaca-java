@@ -27,8 +27,10 @@ import io.github.mainstringargs.domain.alpaca.position.Position;
 import io.github.mainstringargs.domain.alpaca.watchlist.Watchlist;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
+import java.util.Map;
 
 /**
  * The type Alpaca example.
@@ -336,8 +338,11 @@ public class AlpacaExample {
 
         // Get bars
         try {
-            ArrayList<Bar> bars = alpacaApi.getBars(BarsTimeFrame.DAY, "AAPL", null,
-                    LocalDateTime.of(2019, 11, 18, 0, 0), LocalDateTime.of(2019, 11, 22, 23, 59), null, null);
+            ZonedDateTime start = ZonedDateTime.of(2019, 11, 18, 0, 0, 0, 0, ZoneId.of("America/New_York"));
+            ZonedDateTime end = ZonedDateTime.of(2019, 11, 22, 23, 59, 0, 0, ZoneId.of("America/New_York"));
+
+            Map<String, ArrayList<Bar>> bars = alpacaApi.getBars(BarsTimeFrame.DAY, "AAPL", null, start, end,
+                    null, null);
 
             System.out.println("\n\nBars response:");
             System.out.println("\t" + bars.toString().replace(",", ",\n\t"));

@@ -15,15 +15,15 @@
       "title": "Status of the market on this holiday. Can be closed, early-close, late-close, early-open or late-open"
     },
     "date": {
-      "existingJavaType": "java.time.LocalDateTime",
+      "existingJavaType": "java.time.ZonedDateTime",
       "title": "Date of this holiday"
     },
     "open": {
-      "existingJavaType": "java.time.LocalDateTime",
+      "existingJavaType": "java.time.ZonedDateTime",
       "title": "Market open time on this holiday ( if it's not closed )"
     },
     "close": {
-      "existingJavaType": "java.time.LocalDateTime",
+      "existingJavaType": "java.time.ZonedDateTime",
       "title": "Market close time on this holiday ( if it's not closed )"
     }
   }

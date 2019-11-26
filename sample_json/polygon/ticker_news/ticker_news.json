@@ -27,7 +27,7 @@
       "title": "URL of the image for this article, if found"
     },
     "timestamp": {
-      "existingJavaType": "java.time.LocalDateTime",
+      "existingJavaType": "java.time.ZonedDateTime",
       "title": "Timestamp of the article"
     },
     "keywords": {

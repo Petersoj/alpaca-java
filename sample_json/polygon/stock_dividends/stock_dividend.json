@@ -15,15 +15,15 @@
       "title": "Execution date of the trade"
     },
     "paymentDate": {
-      "existingJavaType": "java.time.LocalDateTime",
+      "existingJavaType": "java.time.ZonedDateTime",
       "title": "Payment date of the trade"
     },
     "recordDate": {
-      "existingJavaType": "java.time.LocalDateTime",
+      "existingJavaType": "java.time.ZonedDateTime",
       "title": "Record date of the trade"
     },
     "declaredDate": {
-      "existingJavaType": "java.time.LocalDateTime",
+      "existingJavaType": "java.time.ZonedDateTime",
       "title": "Declared date of the trade"
     },
     "amount": {
