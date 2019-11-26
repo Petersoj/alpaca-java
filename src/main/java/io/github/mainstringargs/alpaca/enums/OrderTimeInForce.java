@@ -12,7 +12,16 @@ public enum OrderTimeInForce {
     GTC("gtc"),
 
     /** The opg. */
-    OPG("opg");
+    OPG("opg"),
+
+    /** Cls order time in force. */
+    CLS("cls"),
+
+    /** Ioc order time in force. */
+    IOC("ioc"),
+
+    /** Fok order time in force. */
+    FOK("fok");
 
     /** The api name. */
     String apiName;
