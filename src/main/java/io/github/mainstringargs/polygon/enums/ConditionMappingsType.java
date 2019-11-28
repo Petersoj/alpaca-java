@@ -1,9 +1,11 @@
 package io.github.mainstringargs.polygon.enums;
 
+import io.github.mainstringargs.abstracts.enums.APIName;
+
 /**
  * The enum Condition mappings type.
  */
-public enum ConditionMappingsType {
+public enum ConditionMappingsType implements APIName {
 
     /** Trades condition mapping type. */
     TRADES("trades"),
@@ -23,30 +25,7 @@ public enum ConditionMappingsType {
         this.apiName = apiName;
     }
 
-    /**
-     * From API name.
-     *
-     * @param apiName the api name
-     *
-     * @return the channel type
-     */
-    public static StockType fromAPIName(String apiName) {
-        String apiNameString = apiName.trim();
-
-        for (StockType stockType : StockType.values()) {
-            if (apiNameString.equals(stockType.apiName)) {
-                return stockType;
-            }
-        }
-
-        return null;
-    }
-
-    /**
-     * Gets the API name.
-     *
-     * @return the API name
-     */
+    @Override
     public String getAPIName() {
         return apiName;
     }

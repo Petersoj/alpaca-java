@@ -33,6 +33,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.StringJoiner;
+import java.util.stream.Collectors;
 
 /**
  * The Class WebsocketClient.
@@ -111,9 +112,6 @@ public class PolygonWebsocketClient implements WebsocketClient {
             polygonWebsocketClientEndpoint.connect();
 
             LOGGER.info("Connected.");
-
-            LOGGER.info("Authenticating...");
-            sendAuthenticationMessage();
         } catch (URISyntaxException | DeploymentException | IOException e) {
             LOGGER.throwing(e);
         }
@@ -267,6 +265,10 @@ public class PolygonWebsocketClient implements WebsocketClient {
 
             if (registeredTickerChannels.containsKey(ticker)) {
                 for (PolygonStreamMessageType listenerChannelType : newListenerChannelTypes) {
+                    if (!listenerChannelType.isAPISubscribable()) {
+                        continue;
+                    }
+
                     boolean isTickerChannelRegistered = registeredChannels.contains(listenerChannelType);
                     String formattedWebsocketTicker = formatWebsocketTicker(listenerChannelType, ticker);
 
@@ -291,6 +293,10 @@ public class PolygonWebsocketClient implements WebsocketClient {
                 }
             } else { // Not a registered ticker by other stream listeners
                 for (PolygonStreamMessageType listenerChannelType : newListenerChannelTypes) {
+                    if (!listenerChannelType.isAPISubscribable()) {
+                        continue;
+                    }
+
                     String formattedWebsocketTicker = formatWebsocketTicker(listenerChannelType, ticker);
 
                     actionTickerList.add(formattedWebsocketTicker);
@@ -331,7 +337,7 @@ public class PolygonWebsocketClient implements WebsocketClient {
      * @return the string
      */
     private String formatWebsocketTicker(PolygonStreamMessageType polygonStreamMessageType, String ticker) {
-        return GsonUtil.GSON.toJson(polygonStreamMessageType) + "." + ticker;
+        return polygonStreamMessageType.getAPIName() + "." + ticker;
     }
 
     /**
@@ -352,13 +358,16 @@ public class PolygonWebsocketClient implements WebsocketClient {
             Map<String, Set<PolygonStreamMessageType>> stockChannelTypes = streamListener.getStockChannels();
 
             for (String ticker : stockChannelTypes.keySet()) {
-                Set<PolygonStreamMessageType> streamListenerChannelTypes = stockChannelTypes.get(ticker);
+                Set<PolygonStreamMessageType> streamMessageTypes = stockChannelTypes.get(ticker);
+                Set<PolygonStreamMessageType> subscribableStreamMessageTypes = streamMessageTypes == null ?
+                        new HashSet<>() : streamMessageTypes.stream()
+                        .filter(PolygonStreamMessageType::isAPISubscribable)
+                        .collect(Collectors.toSet());
 
                 if (!registeredTickerChannels.containsKey(ticker)) {
-                    registeredTickerChannels.put(ticker, streamListenerChannelTypes == null ?
-                            new HashSet<>() : streamListenerChannelTypes);
+                    registeredTickerChannels.put(ticker, subscribableStreamMessageTypes);
                 } else {
-                    registeredTickerChannels.get(ticker).addAll(streamListenerChannelTypes);
+                    registeredTickerChannels.get(ticker).addAll(subscribableStreamMessageTypes);
                 }
             }
         }

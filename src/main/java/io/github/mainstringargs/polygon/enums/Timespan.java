@@ -1,9 +1,11 @@
 package io.github.mainstringargs.polygon.enums;
 
+import io.github.mainstringargs.abstracts.enums.APIName;
+
 /**
  * The Enum Timespan.
  */
-public enum Timespan {
+public enum Timespan implements APIName {
 
     /** The Minute. */
     MINUTE("minute"),
@@ -38,30 +40,7 @@ public enum Timespan {
         this.apiName = apiName;
     }
 
-    /**
-     * From API name.
-     *
-     * @param apiName the api name
-     *
-     * @return the channel type
-     */
-    public static Timespan fromAPIName(String apiName) {
-        String apiNameString = apiName.trim();
-
-        for (Timespan cType : Timespan.values()) {
-            if (apiNameString.equals(cType.apiName)) {
-                return cType;
-            }
-        }
-
-        return null;
-    }
-
-    /**
-     * Gets the API name.
-     *
-     * @return the API name
-     */
+    @Override
     public String getAPIName() {
         return apiName;
     }

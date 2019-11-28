@@ -26,10 +26,10 @@ import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * The type Alpaca websocket client.
@@ -48,8 +48,8 @@ public class AlpacaWebsocketClient implements WebsocketClient {
     /** The secret. */
     private String secret;
 
-    /** The Websocket url. */
-    private String websocketURL;
+    /** The Base api url. */
+    private String baseAPIURL;
 
     /** The observers. */
     private List<AlpacaStreamListener> listeners;
@@ -63,14 +63,14 @@ public class AlpacaWebsocketClient implements WebsocketClient {
     /**
      * Instantiates a new Alpaca websocket client.
      *
-     * @param keyId        the key id
-     * @param secret       the secret
-     * @param websocketURL the websocket url
+     * @param keyId      the key id
+     * @param secret     the secret
+     * @param baseAPIURL the base apiurl
      */
-    public AlpacaWebsocketClient(String keyId, String secret, String websocketURL) {
+    public AlpacaWebsocketClient(String keyId, String secret, String baseAPIURL) {
         this.keyId = keyId;
         this.secret = secret;
-        this.websocketURL = websocketURL;
+        this.baseAPIURL = baseAPIURL.replace("https", "wss") + "/stream";
 
         this.listeners = new ArrayList<>();
     }
@@ -106,13 +106,10 @@ public class AlpacaWebsocketClient implements WebsocketClient {
         LOGGER.info("Connecting...");
 
         try {
-            alpacaWebsocketClientEndpoint = new AlpacaWebsocketClientEndpoint(this, new URI(websocketURL));
+            alpacaWebsocketClientEndpoint = new AlpacaWebsocketClientEndpoint(this, new URI(baseAPIURL));
             alpacaWebsocketClientEndpoint.connect();
 
             LOGGER.info("Connected.");
-
-            LOGGER.info("Authenticating...");
-            sendAuthenticationMessage();
         } catch (URISyntaxException | DeploymentException | IOException e) {
             LOGGER.throwing(e);
         }
@@ -166,7 +163,7 @@ public class AlpacaWebsocketClient implements WebsocketClient {
 
         if (streamJsonElement instanceof JsonPrimitive) {
             try {
-                AlpacaStreamMessageType alpacaStreamMessageType = GsonUtil.GSON.fromJson(messageJsonObject,
+                AlpacaStreamMessageType alpacaStreamMessageType = GsonUtil.GSON.fromJson(streamJsonElement,
                         AlpacaStreamMessageType.class);
 
                 switch (alpacaStreamMessageType) {
@@ -261,7 +258,7 @@ public class AlpacaWebsocketClient implements WebsocketClient {
 
         JsonArray streamsJsonArray = new JsonArray();
         getRegisteredMessageTypes().forEach(alpacaStreamMessageType ->
-                streamsJsonArray.add(GsonUtil.GSON.toJson(alpacaStreamMessageType)));
+                streamsJsonArray.add(alpacaStreamMessageType.getAPIName()));
 
         JsonObject dataJsonObject = new JsonObject();
         dataJsonObject.add("streams", streamsJsonArray);
@@ -282,13 +279,14 @@ public class AlpacaWebsocketClient implements WebsocketClient {
         Set<AlpacaStreamMessageType> registeredStreamMessageTypes = new HashSet<>();
 
         for (AlpacaStreamListener alpacaStreamListener : listeners) {
+            Set<AlpacaStreamMessageType> alpacaStreamMessageTypes = alpacaStreamListener.getStreamMessageTypes();
+
             // if its empty, assume they want everything
-            if (alpacaStreamListener.getStreamMessageTypes() == null ||
-                    alpacaStreamListener.getStreamMessageTypes().isEmpty()) {
-                registeredStreamMessageTypes.addAll(Arrays.asList(AlpacaStreamMessageType.values()));
-            } else {
-                registeredStreamMessageTypes.addAll(alpacaStreamListener.getStreamMessageTypes());
-            }
+            Set<AlpacaStreamMessageType> streamMessageTypesToAdd = alpacaStreamMessageTypes == null ? new HashSet<>() :
+                    alpacaStreamMessageTypes.stream().filter(AlpacaStreamMessageType::isAPISubscribable)
+                            .collect(Collectors.toSet());
+
+            registeredStreamMessageTypes.addAll(streamMessageTypesToAdd);
         }
 
         return registeredStreamMessageTypes;

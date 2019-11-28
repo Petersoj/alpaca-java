@@ -4,25 +4,22 @@ import io.github.mainstringargs.util.concurrency.ExecutorTracer;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import javax.websocket.ClientEndpoint;
 import javax.websocket.CloseReason;
 import javax.websocket.ContainerProvider;
 import javax.websocket.DeploymentException;
-import javax.websocket.OnClose;
-import javax.websocket.OnMessage;
-import javax.websocket.OnOpen;
 import javax.websocket.Session;
 import javax.websocket.WebSocketContainer;
 import java.io.IOException;
 import java.net.URI;
-import java.nio.charset.StandardCharsets;
 import java.util.concurrent.ExecutorService;
 
 /**
- * The type Abstract websocket client endpoint.
+ * The type Abstract websocket client endpoint. You must annotate subclasses with {@link javax.websocket.ClientEndpoint}
+ * because websocket annotations don't work with inheritance.
+ *
+ * @param <T> the message type parameter
  */
-@ClientEndpoint
-public abstract class AbstractWebsocketClientEndpoint {
+public abstract class AbstractWebsocketClientEndpoint<T> {
 
     /** The constant LOGGER. */
     private static final Logger LOGGER = LogManager.getLogger(AbstractWebsocketClientEndpoint.class);
@@ -57,6 +54,32 @@ public abstract class AbstractWebsocketClientEndpoint {
     }
 
     /**
+     * On open annotated. You must annotate this with {@link javax.websocket.OnOpen} and call {@link
+     * AbstractWebsocketClientEndpoint#onOpen(Session)} because websocket annotations don't work with inheritance.
+     *
+     * @param userSession the user session
+     */
+    public abstract void onOpenAnnotated(Session userSession);
+
+    /**
+     * On close annotated. You must annotate this with {@link javax.websocket.OnClose} and call {@link
+     * AbstractWebsocketClientEndpoint#onClose(Session, CloseReason)}} because websocket annotations don't work with
+     * inheritance.
+     *
+     * @param userSession the user session
+     * @param reason      the reason
+     */
+    public abstract void onCloseAnnotated(Session userSession, CloseReason reason);
+
+    /**
+     * On message annotated. You must annotate this with {@link javax.websocket.OnMessage} and call {@link
+     * AbstractWebsocketClientEndpoint#onMessage(String)}} because websocket annotations don't work with inheritance.
+     *
+     * @param message the message
+     */
+    public abstract void onMessageAnnotated(T message);
+
+    /**
      * Connect.
      *
      * @throws DeploymentException the deployment exception
@@ -86,12 +109,14 @@ public abstract class AbstractWebsocketClientEndpoint {
      *
      * @param userSession the user session
      */
-    @OnOpen
     public void onOpen(Session userSession) {
         this.userSession = userSession;
 
         LOGGER.debug("onOpen " + userSession);
         LOGGER.info("Websocket opened");
+
+        LOGGER.info("Authenticating...");
+        websocketClient.sendAuthenticationMessage();
     }
 
     /**
@@ -100,7 +125,6 @@ public abstract class AbstractWebsocketClientEndpoint {
      * @param userSession the user session
      * @param reason      the reason
      */
-    @OnClose
     public void onClose(Session userSession, CloseReason reason) {
         this.userSession = null;
 
@@ -139,10 +163,8 @@ public abstract class AbstractWebsocketClientEndpoint {
      *
      * @param message the message
      */
-    @OnMessage
-    public void onMessage(byte[] message) {
-        executorService.execute(() -> websocketClient.handleWebsocketMessage(new String(message,
-                StandardCharsets.UTF_8)));
+    public void onMessage(String message) {
+        executorService.execute(() -> websocketClient.handleWebsocketMessage(message));
     }
 
     /**
@@ -153,7 +175,7 @@ public abstract class AbstractWebsocketClientEndpoint {
     public void sendMessage(String message) {
         LOGGER.debug("sendMessage " + message);
 
-        this.userSession.getAsyncRemote().sendText(message);
+        userSession.getAsyncRemote().sendText(message);
     }
 
     /**

@@ -1,15 +1,17 @@
 package io.github.mainstringargs.alpaca.enums;
 
+import io.github.mainstringargs.abstracts.enums.APIName;
+
 /**
  * The Enum Direction.
  */
-public enum Direction {
+public enum Direction implements APIName {
 
     /** The asc. */
-    ASC("asc"),
+    ASCENDING("asc"),
 
     /** The desc. */
-    DESC("desc");
+    DESCENDING("desc");
 
     /** The api name. */
     String apiName;
@@ -23,11 +25,7 @@ public enum Direction {
         this.apiName = apiName;
     }
 
-    /**
-     * Gets the API name.
-     *
-     * @return the API name
-     */
+    @Override
     public String getAPIName() {
         return apiName;
     }

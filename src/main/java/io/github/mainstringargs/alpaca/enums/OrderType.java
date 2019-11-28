@@ -1,9 +1,11 @@
 package io.github.mainstringargs.alpaca.enums;
 
+import io.github.mainstringargs.abstracts.enums.APIName;
+
 /**
  * The Enum OrderType.
  */
-public enum OrderType {
+public enum OrderType implements APIName {
 
     /** The market. */
     MARKET("market"),
@@ -29,11 +31,7 @@ public enum OrderType {
         this.apiName = apiName;
     }
 
-    /**
-     * Gets the API name.
-     *
-     * @return the API name
-     */
+    @Override
     public String getAPIName() {
         return apiName;
     }

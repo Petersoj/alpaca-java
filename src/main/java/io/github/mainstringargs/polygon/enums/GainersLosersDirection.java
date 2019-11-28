@@ -1,6 +1,8 @@
 package io.github.mainstringargs.polygon.enums;
 
-public enum GainersLosersDirection {
+import io.github.mainstringargs.abstracts.enums.APIName;
+
+public enum GainersLosersDirection implements APIName {
 
     GAINERS("gainers"),
 
@@ -18,30 +20,7 @@ public enum GainersLosersDirection {
         this.apiName = apiName;
     }
 
-    /**
-     * From API name.
-     *
-     * @param apiName the api name
-     *
-     * @return the channel type
-     */
-    public static StockType fromAPIName(String apiName) {
-        String apiNameString = apiName.trim();
-
-        for (StockType stockType : StockType.values()) {
-            if (apiNameString.equals(stockType.apiName)) {
-                return stockType;
-            }
-        }
-
-        return null;
-    }
-
-    /**
-     * Gets the API name.
-     *
-     * @return the API name
-     */
+    @Override
     public String getAPIName() {
         return apiName;
     }

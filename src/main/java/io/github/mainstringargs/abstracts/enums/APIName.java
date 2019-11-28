@@ -1,6 +1,6 @@
 package io.github.mainstringargs.abstracts.enums;
 
-public interface APIEnum {
+public interface APIName {
 
     /**
      * Gets the API name.

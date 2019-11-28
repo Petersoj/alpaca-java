@@ -1,9 +1,11 @@
 package io.github.mainstringargs.polygon.enums;
 
+import io.github.mainstringargs.abstracts.enums.APIName;
+
 /**
  * The Enum SymbolsMarket.
  */
-public enum Market {
+public enum Market implements APIName {
 
     /** Stocks market. */
     STOCKS("stocks"),
@@ -38,30 +40,7 @@ public enum Market {
         this.apiName = apiName;
     }
 
-    /**
-     * From API name.
-     *
-     * @param apiName the api name
-     *
-     * @return the channel type
-     */
-    public static Market fromAPIName(String apiName) {
-        String apiNameString = apiName.trim();
-
-        for (Market cType : Market.values()) {
-            if (apiNameString.equals(cType.apiName)) {
-                return cType;
-            }
-        }
-
-        return null;
-    }
-
-    /**
-     * Gets the API name.
-     *
-     * @return the API name
-     */
+    @Override
     public String getAPIName() {
         return apiName;
     }

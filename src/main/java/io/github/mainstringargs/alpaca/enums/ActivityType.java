@@ -1,6 +1,6 @@
 package io.github.mainstringargs.alpaca.enums;
 
-import io.github.mainstringargs.abstracts.enums.APIEnum;
+import io.github.mainstringargs.abstracts.enums.APIName;
 
 /**
  * The enum Activity type.
@@ -8,7 +8,7 @@ import io.github.mainstringargs.abstracts.enums.APIEnum;
  * @see
  * <a href="https://docs.alpaca.markets/api-documentation/api-v2/account-activities/">https://docs.alpaca.markets/api-documentation/api-v2/account-activities/</a>
  */
-public enum ActivityType implements APIEnum {
+public enum ActivityType implements APIName {
 
     /*
      Activity Types:

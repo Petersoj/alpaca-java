@@ -1,9 +1,11 @@
 package io.github.mainstringargs.alpaca.enums;
 
+import io.github.mainstringargs.abstracts.enums.APIName;
+
 /**
  * The Enum BarsTimeFrame.
  */
-public enum BarsTimeFrame {
+public enum BarsTimeFrame implements APIName {
 
     /** The minute. */
     MINUTE("minute"),
@@ -35,11 +37,7 @@ public enum BarsTimeFrame {
         this.apiName = apiName;
     }
 
-    /**
-     * Gets the API name.
-     *
-     * @return the API name
-     */
+    @Override
     public String getAPIName() {
         return apiName;
     }

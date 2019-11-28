@@ -1,9 +1,11 @@
 package io.github.mainstringargs.alpaca.enums;
 
+import io.github.mainstringargs.abstracts.enums.APIName;
+
 /**
  * The Enum OrderStatus.
  */
-public enum OrderStatus {
+public enum OrderStatus implements APIName {
 
     /** The open. */
     OPEN("open"),
@@ -26,11 +28,7 @@ public enum OrderStatus {
         this.apiName = apiName;
     }
 
-    /**
-     * Gets the API name.
-     *
-     * @return the API name
-     */
+    @Override
     public String getAPIName() {
         return apiName;
     }
