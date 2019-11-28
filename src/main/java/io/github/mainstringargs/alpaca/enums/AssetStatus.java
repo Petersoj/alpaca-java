@@ -1,9 +1,11 @@
 package io.github.mainstringargs.alpaca.enums;
 
+import io.github.mainstringargs.abstracts.enums.APIEnum;
+
 /**
  * The Enum AssetStatus.
  */
-public enum AssetStatus {
+public enum AssetStatus implements APIEnum {
 
     /** The active. */
     ACTIVE("active"),
@@ -23,11 +25,7 @@ public enum AssetStatus {
         this.apiName = apiName;
     }
 
-    /**
-     * Gets the API name.
-     *
-     * @return the API name
-     */
+    @Override
     public String getAPIName() {
         return apiName;
     }

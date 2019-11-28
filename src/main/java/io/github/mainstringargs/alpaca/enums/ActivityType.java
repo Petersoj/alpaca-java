@@ -1,12 +1,14 @@
 package io.github.mainstringargs.alpaca.enums;
 
+import io.github.mainstringargs.abstracts.enums.APIEnum;
+
 /**
  * The enum Activity type.
  *
  * @see
  * <a href="https://docs.alpaca.markets/api-documentation/api-v2/account-activities/">https://docs.alpaca.markets/api-documentation/api-v2/account-activities/</a>
  */
-public enum ActivityType {
+public enum ActivityType implements APIEnum {
 
     /*
      Activity Types:
@@ -53,9 +55,8 @@ public enum ActivityType {
 
     /** Cash transactions (both CSD and CSR) */
     TRANS,
-    /**
-     * Miscellaneous or rarely used activity types (All types except those in TRANS, DIV, or FILL)
-     */
+
+    /** Miscellaneous or rarely used activity types (All types except those in TRANS, DIV, or FILL) */
     MISC,
 
     /** ACATS IN/OUT (Cash) */
@@ -148,11 +149,7 @@ public enum ActivityType {
     /** Stock split */
     SSP;
 
-    /**
-     * Gets the API name.
-     *
-     * @return the API name
-     */
+    @Override
     public String getAPIName() {
         return this.name();
     }

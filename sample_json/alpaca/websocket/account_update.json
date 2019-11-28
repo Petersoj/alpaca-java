@@ -1,7 +1,0 @@
-{
-  "type": "object",
-  "extends": {
-    "existingJavaType": "io.github.mainstringargs.domain.alpaca.account.Account"
-  },
-  "description": "See: https://docs.alpaca.markets/api-documentation/api-v2/streaming/"
-}

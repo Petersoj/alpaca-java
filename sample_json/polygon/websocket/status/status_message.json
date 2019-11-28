@@ -1,0 +1,17 @@
+{
+  "type": "object",
+  "extends": {
+    "existingJavaType": "io.github.mainstringargs.domain.polygon.websocket.PolygonStreamMessage"
+  },
+  "title": "See: https://polygon.io/sockets",
+  "properties": {
+    "status": {
+      "existingJavaType": "java.lang.String",
+      "title": "The status"
+    },
+    "message": {
+      "existingJavaType": "java.lang.String",
+      "title": "The message"
+    }
+  }
+}

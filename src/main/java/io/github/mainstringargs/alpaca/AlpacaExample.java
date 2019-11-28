@@ -4,16 +4,16 @@ import io.github.mainstringargs.alpaca.enums.BarsTimeFrame;
 import io.github.mainstringargs.alpaca.enums.OrderSide;
 import io.github.mainstringargs.alpaca.enums.OrderTimeInForce;
 import io.github.mainstringargs.alpaca.enums.OrderType;
-import io.github.mainstringargs.alpaca.enums.StreamUpdateType;
 import io.github.mainstringargs.alpaca.rest.exception.AlpacaAPIRequestException;
-import io.github.mainstringargs.alpaca.websocket.AlpacaStreamListenerAdapter;
-import io.github.mainstringargs.alpaca.websocket.message.ChannelMessage;
-import io.github.mainstringargs.alpaca.websocket.message.account.AccountUpdateMessage;
-import io.github.mainstringargs.alpaca.websocket.message.trade.TradeUpdateMessage;
+import io.github.mainstringargs.alpaca.websocket.listener.AlpacaStreamListenerAdapter;
+import io.github.mainstringargs.alpaca.websocket.message.AlpacaStreamMessageType;
 import io.github.mainstringargs.domain.alpaca.account.Account;
 import io.github.mainstringargs.domain.alpaca.bar.Bar;
 import io.github.mainstringargs.domain.alpaca.order.Order;
 import io.github.mainstringargs.domain.alpaca.watchlist.Watchlist;
+import io.github.mainstringargs.domain.alpaca.websocket.AlpacaStreamMessage;
+import io.github.mainstringargs.domain.alpaca.websocket.account.AccountUpdateMessage;
+import io.github.mainstringargs.domain.alpaca.websocket.trade.TradeUpdateMessage;
 
 import java.time.Instant;
 import java.time.ZoneId;
@@ -38,17 +38,17 @@ public class AlpacaExample {
 
         // Register explicitly for ACCOUNT_UPDATES and ORDER_UPDATES Messages via stream listener
         alpacaApi.addAlpacaStreamListener(new AlpacaStreamListenerAdapter(
-                StreamUpdateType.ACCOUNT_UPDATES,
-                StreamUpdateType.TRADE_UPDATES) {
+                AlpacaStreamMessageType.ACCOUNT_UPDATES,
+                AlpacaStreamMessageType.TRADE_UPDATES) {
             @Override
-            public void streamUpdate(StreamUpdateType streamUpdateType, ChannelMessage message) {
-                switch (streamUpdateType) {
+            public void onStreamUpdate(AlpacaStreamMessageType streamMessageType, AlpacaStreamMessage streamMessage) {
+                switch (streamMessageType) {
                     case ACCOUNT_UPDATES:
-                        AccountUpdateMessage accountUpdateMessage = (AccountUpdateMessage) message;
+                        AccountUpdateMessage accountUpdateMessage = (AccountUpdateMessage) streamMessage;
                         System.out.println("\nReceived Account Update: \n\t" + accountUpdateMessage.toString());
                         break;
                     case TRADE_UPDATES:
-                        TradeUpdateMessage tradeUpdateMessage = (TradeUpdateMessage) message;
+                        TradeUpdateMessage tradeUpdateMessage = (TradeUpdateMessage) streamMessage;
                         System.out.println("\nReceived Order Update: \n\t" + tradeUpdateMessage.toString());
                         break;
                 }
@@ -106,6 +106,12 @@ public class AlpacaExample {
                 System.out.println("\tVolume: " + bar.getV());
             }
         } catch (AlpacaAPIRequestException e) {
+            e.printStackTrace();
+        }
+
+        try {
+            Thread.sleep(5000);
+        } catch (InterruptedException e) {
             e.printStackTrace();
         }
     }

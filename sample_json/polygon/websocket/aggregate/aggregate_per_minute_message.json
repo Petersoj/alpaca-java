@@ -1,0 +1,7 @@
+{
+  "type": "object",
+  "extends": {
+    "existingJavaType": "io.github.mainstringargs.domain.polygon.websocket.aggregate.AggregateMessage"
+  },
+  "title": "See: https://polygon.io/sockets"
+}

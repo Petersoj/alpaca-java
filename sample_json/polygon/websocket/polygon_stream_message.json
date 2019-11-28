@@ -1,0 +1,17 @@
+{
+  "type": "object",
+  "javaInterfaces": [
+    "io.github.mainstringargs.abstracts.websocket.message.StreamMessage"
+  ],
+  "title": "See: https://polygon.io/sockets",
+  "properties": {
+    "ev": {
+      "existingJavaType": "io.github.mainstringargs.polygon.websocket.message.PolygonStreamMessageType",
+      "title": "The event type"
+    },
+    "sym": {
+      "existingJavaType": "java.lang.String",
+      "title": "Symbol Ticker"
+    }
+  }
+}

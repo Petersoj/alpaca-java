@@ -20,7 +20,7 @@
     },
     "results": {
       "existingJavaType": "java.util.ArrayList<io.github.mainstringargs.domain.polygon.historicquotes.HistoricQuote>",
-      "description": "results"
+      "title": "results"
     }
   }
 }

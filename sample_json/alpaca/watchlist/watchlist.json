@@ -1,6 +1,6 @@
 {
   "type": "object",
-  "description": "See: https://docs.alpaca.markets/api-documentation/api-v2/watchlist/",
+  "title": "See: https://docs.alpaca.markets/api-documentation/api-v2/watchlist/",
   "properties": {
     "id": {
       "existingJavaType": "java.lang.String",

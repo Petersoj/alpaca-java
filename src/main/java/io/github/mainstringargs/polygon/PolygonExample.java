@@ -4,11 +4,11 @@ import io.github.mainstringargs.domain.polygon.aggregates.Aggregate;
 import io.github.mainstringargs.domain.polygon.aggregates.AggregatesResponse;
 import io.github.mainstringargs.domain.polygon.stocksplits.StockSplit;
 import io.github.mainstringargs.domain.polygon.stocksplits.StockSplitsResponse;
-import io.github.mainstringargs.polygon.enums.ChannelType;
+import io.github.mainstringargs.domain.polygon.websocket.PolygonStreamMessage;
 import io.github.mainstringargs.polygon.enums.Timespan;
 import io.github.mainstringargs.polygon.rest.exception.PolygonAPIRequestException;
-import io.github.mainstringargs.polygon.websocket.PolygonStreamListenerAdapter;
-import io.github.mainstringargs.polygon.websocket.message.ChannelMessage;
+import io.github.mainstringargs.polygon.websocket.listener.PolygonStreamListenerAdapter;
+import io.github.mainstringargs.polygon.websocket.message.PolygonStreamMessageType;
 
 import java.time.LocalDate;
 
@@ -28,11 +28,12 @@ public class PolygonExample {
 
         String aaplTicker = "AAPL";
 
-        // Add a Polygon stream listener to listen to "AAPL.T", "AAPL.Q", "AAPL.A", "AAPL.AM"
-        polygonAPI.addPolygonStreamListener(new PolygonStreamListenerAdapter(aaplTicker, ChannelType.values()) {
+        // Add a Polygon stream listener to listen to "T.AAPL", "Q.AAPL", "A.AAPL", "AM.AAPL", and status messages
+        polygonAPI.addPolygonStreamListener(new PolygonStreamListenerAdapter(aaplTicker,
+                PolygonStreamMessageType.values()) {
             @Override
-            public void streamUpdate(String ticker, ChannelType channelType, ChannelMessage message) {
-                System.out.println("===> streamUpdate " + ticker + " " + channelType + " " + message);
+            public void onStreamUpdate(PolygonStreamMessageType streamMessageType, PolygonStreamMessage streamMessage) {
+                System.out.println("===> streamUpdate " + streamMessageType + " " + streamMessage);
             }
         });
 

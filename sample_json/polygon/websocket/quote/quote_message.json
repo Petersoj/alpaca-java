@@ -1,0 +1,41 @@
+{
+  "type": "object",
+  "extends": {
+    "existingJavaType": "io.github.mainstringargs.domain.polygon.websocket.PolygonStreamMessage"
+  },
+  "title": "See: https://polygon.io/sockets",
+  "properties": {
+    "bx": {
+      "existingJavaType": "java.lang.String",
+      "title": "Bix Exchange ID"
+    },
+    "bp": {
+      "existingJavaType": "java.lang.Double",
+      "title": "Bid Price"
+    },
+    "bs": {
+      "existingJavaType": "java.lang.Integer",
+      "title": "Bid Size"
+    },
+    "ax": {
+      "existingJavaType": "java.lang.String",
+      "title": "Ask Exchange ID"
+    },
+    "ap": {
+      "existingJavaType": "java.lang.Double",
+      "title": "Ask Price"
+    },
+    "as": {
+      "existingJavaType": "java.lang.Integer",
+      "title": "Ask Size"
+    },
+    "c": {
+      "existingJavaType": "java.lang.Integer",
+      "title": "Quote Condition"
+    },
+    "t": {
+      "existingJavaType": "java.lang.Long",
+      "title": "Quote Timestamp ( Unix MS )"
+    }
+  }
+}

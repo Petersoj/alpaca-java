@@ -4,19 +4,19 @@
   "properties": {
     "timestamp": {
       "existingJavaType": "java.time.ZonedDateTime",
-      "description": "Current timestamp"
+      "title": "Current timestamp"
     },
     "is_open": {
       "existingJavaType": "java.lang.Boolean",
-      "description": "Whether or not the market is open"
+      "title": "Whether or not the market is open"
     },
     "next_open": {
       "existingJavaType": "java.time.ZonedDateTime",
-      "description": "Next market open timestamp"
+      "title": "Next market open timestamp"
     },
     "next_close": {
       "existingJavaType": "java.time.ZonedDateTime",
-      "description": "Next market close timestamp"
+      "title": "Next market close timestamp"
     }
   }
 }

@@ -1,0 +1,12 @@
+{
+  "type": "object",
+  "extends": {
+    "existingJavaType": "io.github.mainstringargs.domain.alpaca.websocket.AlpacaStreamMessage"
+  },
+  "properties": {
+    "data": {
+      "existingJavaType": "io.github.mainstringargs.domain.alpaca.websocket.authorization.AuthorizationData",
+      "title": "The data"
+    }
+  }
+}
