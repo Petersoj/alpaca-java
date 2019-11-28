@@ -45,11 +45,13 @@ public class AlpacaExample {
                 switch (streamMessageType) {
                     case ACCOUNT_UPDATES:
                         AccountUpdateMessage accountUpdateMessage = (AccountUpdateMessage) streamMessage;
-                        System.out.println("\nReceived Account Update: \n\t" + accountUpdateMessage.toString());
+                        System.out.println("\nReceived Account Update: \n\t" +
+                                accountUpdateMessage.toString().replace(",", ",\n\t"));
                         break;
                     case TRADE_UPDATES:
                         TradeUpdateMessage tradeUpdateMessage = (TradeUpdateMessage) streamMessage;
-                        System.out.println("\nReceived Order Update: \n\t" + tradeUpdateMessage.toString());
+                        System.out.println("\nReceived Order Update: \n\t" +
+                                tradeUpdateMessage.toString().replace(",", ",\n\t"));
                         break;
                 }
             }

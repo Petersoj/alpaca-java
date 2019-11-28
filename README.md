@@ -80,18 +80,20 @@ AlpacaAPI alpacaApi = new AlpacaAPI();
 
 // Register explicitly for ACCOUNT_UPDATES and ORDER_UPDATES Messages via stream listener
 alpacaApi.addAlpacaStreamListener(new AlpacaStreamListenerAdapter(
-        StreamUpdateType.ACCOUNT_UPDATES,
-        StreamUpdateType.TRADE_UPDATES) {
+        AlpacaStreamMessageType.ACCOUNT_UPDATES,
+        AlpacaStreamMessageType.TRADE_UPDATES) {
     @Override
-    public void streamUpdate(StreamUpdateType streamUpdateType, ChannelMessage message) {
-        switch (streamUpdateType) {
+    public void onStreamUpdate(AlpacaStreamMessageType streamMessageType, AlpacaStreamMessage streamMessage) {
+        switch (streamMessageType) {
             case ACCOUNT_UPDATES:
-                AccountUpdateMessage accountUpdateMessage = (AccountUpdateMessage) message;
-                System.out.println("\nReceived Account Update: \n\t" + accountUpdateMessage.toString());
+                AccountUpdateMessage accountUpdateMessage = (AccountUpdateMessage) streamMessage;
+                System.out.println("\nReceived Account Update: \n\t" +
+                        accountUpdateMessage.toString().replace(",", ",\n\t"));
                 break;
             case TRADE_UPDATES:
-                TradeUpdateMessage tradeUpdateMessage = (TradeUpdateMessage) message;
-                System.out.println("\nReceived Order Update: \n\t" + tradeUpdateMessage.toString());
+                TradeUpdateMessage tradeUpdateMessage = (TradeUpdateMessage) streamMessage;
+                System.out.println("\nReceived Order Update: \n\t" +
+                        tradeUpdateMessage.toString().replace(",", ",\n\t"));
                 break;
         }
     }
@@ -109,7 +111,7 @@ try {
 
 // Request an Order
 try {
-    Order aaplOrder = alpacaApi.requestNewOrder("AAPL", 1, OrderSide.BUY, OrderType.LIMIT, OrderTimeInForce.GTC,
+    Order aaplOrder = alpacaApi.requestNewOrder("AAPL", 1, OrderSide.BUY, OrderType.LIMIT, OrderTimeInForce.DAY,
             201.30, null, true, null);
 
     System.out.println("\n\nNew AAPL Order:");
@@ -148,6 +150,12 @@ try {
         System.out.println("\tVolume: " + bar.getV());
     }
 } catch (AlpacaAPIRequestException e) {
+    e.printStackTrace();
+}
+
+try {
+    Thread.sleep(5000);
+} catch (InterruptedException e) {
     e.printStackTrace();
 }
 ```
@@ -208,7 +216,32 @@ New AAPL Order:
         extendedHours=true]
 
 Received Order Update: 
-	OrderUpdateMessage [event=NEW, price=null, timestamp=null, order=io.github.mainstringargs.alpaca.domain.Order@5c728415[id=<order id>,clientOrderId=e23ca503-ebec-4754-b65a-ee42806fc67d,createdAt=2019-11-23T14:41:05.503352Z,updatedAt=2019-11-23T14:41:05.599835871Z,submittedAt=2019-11-23T14:41:05.445148Z,filledAt=<null>,expiredAt=<null>,canceledAt=<null>,failedAt=<null>,assetId=b0b6dd9d-8b9b-48a9-ba46-b9d54906e415,symbol=AAPL,exchange=<null>,assetClass=us_equity,qty=1,filledQty=0,type=limit,side=buy,timeInForce=day,limitPrice=100,stopPrice=<null>,filledAvgPrice=<null>,status=new]]
+	 OrderUpdateMessage [event=NEW,
+            price=null,
+            timestamp=null,
+            order=io.github.mainstringargs.alpaca.domain.Order@5c728415[id=<order id>,
+            clientOrderId=e23ca503-ebec-4754-b65a-ee42806fc67d,
+            createdAt=2019-11-23T14:41:05.503352Z,
+            updatedAt=2019-11-23T14:41:05.599835871Z,
+            submittedAt=2019-11-23T14:41:05.445148Z,
+            filledAt=<null>,
+            expiredAt=<null>,
+            canceledAt=<null>,
+            failedAt=<null>,
+            assetId=b0b6dd9d-8b9b-48a9-ba46-b9d54906e415,
+            symbol=AAPL,
+            exchange=<null>,
+            assetClass=us_equity,
+            qty=1,
+            filledQty=0,
+            type=limit,
+            side=buy,
+            timeInForce=day,
+            limitPrice=100,
+            stopPrice=<null>,
+            filledAvgPrice=<null>,
+            status=new]]
+
 
 Day Trade Watchlist:
         io.github.mainstringargs.domain.alpaca.watchlist.Watchlist@34bde49d[id=7c414350-79d8-4527-8892-f1667faa712a,
@@ -274,11 +307,12 @@ PolygonAPI polygonAPI = new PolygonAPI();
 
 String aaplTicker = "AAPL";
 
-// Add a Polygon stream listener to listen to "AAPL.T", "AAPL.Q", "AAPL.A", "AAPL.AM"
-polygonAPI.addPolygonStreamListener(new PolygonStreamListenerAdapter(aaplTicker, ChannelType.values()) {
+// Add a Polygon stream listener to listen to "T.AAPL", "Q.AAPL", "A.AAPL", "AM.AAPL", and status messages
+polygonAPI.addPolygonStreamListener(new PolygonStreamListenerAdapter(aaplTicker,
+        PolygonStreamMessageType.values()) {
     @Override
-    public void streamUpdate(String ticker, ChannelType channelType, ChannelMessage message) {
-        System.out.println("===> streamUpdate " + ticker + " " + channelType + " " + message);
+    public void onStreamUpdate(PolygonStreamMessageType streamMessageType, PolygonStreamMessage streamMessage) {
+        System.out.println("===> streamUpdate " + streamMessageType + " " + streamMessage);
     }
 });
 
@@ -332,10 +366,10 @@ This code will output the following:
 [INFO] 2019-11-25 21:33:20.737 [PolygonWebsocketThread] PolygonWebsocketClient - Channel status: io.github.mainstringargs.domain.polygon.websocket.ChannelStatus@2aa9728c[ev=status,status=success,message=subscribed to: T.AAPL]
 [INFO] 2019-11-25 21:33:20.738 [PolygonWebsocketThread] PolygonWebsocketClient - Channel status: io.github.mainstringargs.domain.polygon.websocket.ChannelStatus@4659b8c1[ev=status,status=success,message=subscribed to: AM.AAPL]
 [INFO] 2019-11-25 21:33:20.738 [PolygonWebsocketThread] PolygonWebsocketClient - Channel status: io.github.mainstringargs.domain.polygon.websocket.ChannelStatus@4a61d9e6[ev=status,status=success,message=subscribed to: Q.AAPL]
-===> streamUpdate AAPL QUOTES QuotesMessage [ticker=AAPL, channelType=QUOTES, stockQuote=io.github.mainstringargs.polygon.domain.StockQuote@4d5b710e[ev=<null>,sym=AAPL,bx=12,bp=124.86,bs=6,ax=12,ap=124.87,as=5,c=1,t=1559143439610], timestamp=2019-05-29T10:23:59.610]
-===> streamUpdate AAPL QUOTES QuotesMessage [ticker=AAPL, channelType=QUOTES, stockQuote=io.github.mainstringargs.polygon.domain.StockQuote@16b79976[ev=<null>,sym=AAPL,bx=12,bp=124.86,bs=4,ax=12,ap=124.87,as=5,c=1,t=1559143439712], timestamp=2019-05-29T10:23:59.712]
-===> streamUpdate AAPL TRADES TradesMessage [ticker=AAPL, channelType=TRADES, stockTrade=io.github.mainstringargs.polygon.domain.StockTrade@32b4aa49[ev=<null>,sym=AAPL,x=4,p=124.86,s=100,c=[],t=1559143439772], timestamp=2019-05-29T10:23:59.772]
-===> streamUpdate AAPL AGGREGATE_PER_SECOND AggregateMessage [ticker=AAPL, channelType=AGGREGATE_PER_SECOND, stockAggregate=io.github.mainstringargs.polygon.domain.StockAggregate@5ace47f7[ev=<null>,sym=AAPL,v=1131,av=6602041,op=125.5,vw=124.9778,o=124.8665,c=124.86,h=124.8665,l=124.86,a=124.8636,s=1559143439000,e=1559143440000], start=2019-05-29T10:23:59, end=2019-05-29T10:24]
+===> streamUpdate QUOTES QuotesMessage [ticker=AAPL, channelType=QUOTES, stockQuote=io.github.mainstringargs.polygon.domain.StockQuote@4d5b710e[ev=<null>,sym=AAPL,bx=12,bp=124.86,bs=6,ax=12,ap=124.87,as=5,c=1,t=1559143439610], timestamp=2019-05-29T10:23:59.610]
+===> streamUpdate QUOTES QuotesMessage [ticker=AAPL, channelType=QUOTES, stockQuote=io.github.mainstringargs.polygon.domain.StockQuote@16b79976[ev=<null>,sym=AAPL,bx=12,bp=124.86,bs=4,ax=12,ap=124.87,as=5,c=1,t=1559143439712], timestamp=2019-05-29T10:23:59.712]
+===> streamUpdate TRADES TradesMessage [ticker=AAPL, channelType=TRADES, stockTrade=io.github.mainstringargs.polygon.domain.StockTrade@32b4aa49[ev=<null>,sym=AAPL,x=4,p=124.86,s=100,c=[],t=1559143439772], timestamp=2019-05-29T10:23:59.772]
+===> streamUpdate AGGREGATE_PER_SECOND AggregateMessage [ticker=AAPL, channelType=AGGREGATE_PER_SECOND, stockAggregate=io.github.mainstringargs.polygon.domain.StockAggregate@5ace47f7[ev=<null>,sym=AAPL,v=1131,av=6602041,op=125.5,vw=124.9778,o=124.8665,c=124.86,h=124.8665,l=124.86,a=124.8636,s=1559143439000,e=1559143440000], start=2019-05-29T10:23:59, end=2019-05-29T10:24]
 
 AAPL Stock Split Response:
         Status: OK
