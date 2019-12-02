@@ -61,7 +61,7 @@ jsonSchema2Pojo {
 
     // Target directory for generated Java source files. The plugin will add this directory to the
     // java source set so the compiler will find and compile the newly generated source files.
-    targetDirectory = file(project.properties.get("targetDirectory", "${project.buildDir}/generated-sources/samplejson"))
+    targetDirectory = file(project.properties.get("targetDirectory"))
 
     // Package name used for generated Java classes (for types where a fully qualified name has not
     // been supplied in the schema using the 'javaType' property).

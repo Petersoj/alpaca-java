@@ -127,36 +127,36 @@ sourceSets {
     main {
         java {
             srcDir 'src/main/java'
-            srcDir 'build/generated-sources/samplejson'
+            srcDir 'build/generated-sources/schemajson'
         }
     }
 }
 
-// The generated POJOs will be in a package structure analogous to the path in the 'sample_json/' directory
+// The generated POJOs will be in a package structure analogous to the path in the 'schema_json/' directory
 // See: https://github.com/joelittlejohn/jsonschema2pojo/wiki/Reference
 task generatePOJOs() {
-    final def targetDirectory = "${project.buildDir}/generated-sources/samplejson"
-    final def jsonSourceDirectory = "${project.projectDir}/sample_json/"
+    final def targetDirectory = "${project.buildDir}/generated-sources/schemajson"
+    final def jsonSourceDirectory = "${project.projectDir}/schema_json/"
     final def jsonPackageNameStart = "io.github.mainstringargs.domain."
 
     // Clear all generated sources
     delete targetDirectory
 
-    // Loop through all files in sample JSON file tree
+    // Loop through all files in schema JSON file tree
     file(jsonSourceDirectory).eachFileRecurse { file ->
         if (file.getName().endsWith(".json")) {
             def startPackageIndex = file.getAbsolutePath().indexOf(jsonSourceDirectory) + jsonSourceDirectory.length()
             def targetPackage = jsonPackageNameStart + file.getAbsolutePath()
-                    .replace('/' + file.getName(), '')
+                    .replace(File.separator + file.getName(), '')
                     .substring(startPackageIndex)
-                    .replace('/', '.').replace('-', '').replace('_', '')
+                    .replace(File.separator, '.').replace('-', '').replace('_', '')
                     .toLowerCase()
 
             def jsonToPOJOTask = tasks.create('json2POJOTask-' + targetPackage + "." + file.getName(), GradleBuild) {
                 startParameter.projectProperties = ['source'         : file.getAbsolutePath(),
                                                     'targetPackage'  : targetPackage,
                                                     'targetDirectory': targetDirectory]
-                buildFile = 'sampleJson2Pojo.gradle'
+                buildFile = 'schemaJson2Pojo.gradle'
                 tasks = ['generateJsonSchema2Pojo']
             }
 
