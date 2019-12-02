@@ -135,8 +135,8 @@ sourceSets {
 // The generated POJOs will be in a package structure analogous to the path in the 'schema_json/' directory
 // See: https://github.com/joelittlejohn/jsonschema2pojo/wiki/Reference
 task generatePOJOs() {
-    final def targetDirectory = "${project.buildDir}/generated-sources/schemajson"
-    final def jsonSourceDirectory = "${project.projectDir}/schema_json/"
+    final def targetDirectory = "${project.buildDir}" + File.separator + "generated-sources" + File.separator + "schemajson"
+    final def jsonSourceDirectory = "${project.projectDir}" + File.separator + "schema_json" + File.separator
     final def jsonPackageNameStart = "io.github.mainstringargs.domain."
 
     // Clear all generated sources
@@ -146,8 +146,7 @@ task generatePOJOs() {
     file(jsonSourceDirectory).eachFileRecurse { file ->
         if (file.getName().endsWith(".json")) {
             def startPackageIndex = file.getAbsolutePath().indexOf(jsonSourceDirectory) + jsonSourceDirectory.length()
-            def targetPackage = jsonPackageNameStart + file.getAbsolutePath()
-                    .replace(File.separator + file.getName(), '')
+            def targetPackage = jsonPackageNameStart + file.getParentFile().getAbsolutePath()
                     .substring(startPackageIndex)
                     .replace(File.separator, '.').replace('-', '').replace('_', '')
                     .toLowerCase()
