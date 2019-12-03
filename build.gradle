@@ -36,7 +36,7 @@ apply plugin: 'com.bmuschko.nexus'
 
 archivesBaseName = 'alpaca-java'
 group = 'io.github.mainstringargs'
-version = '4.0.1-SNAPSHOT'
+version = '5.0.0'
 
 // In this section you declare where to find the dependencies of your project
 repositories {
@@ -97,6 +97,8 @@ modifyPom {
 
 // https://stackoverflow.com/questions/52205209/configure-gradle-build-to-suppress-javadoc-console-warnings
 javadoc.options.addStringOption('Xdoclint:none', '-quiet')
+javadoc.options.addStringOption("charset", "UTF-8")
+
 
 publishing {
     publications {
@@ -121,6 +123,13 @@ nexus {
 
 nexusStaging {
     packageGroup = "io.github.mainstringargs" //optional if packageGroup == project.getGroup()
+}
+
+processResources {
+    include "**/*.properties.default"
+    rename {
+        filename -> filename.replace '.properties.default', '.properties'
+    }
 }
 
 sourceSets {

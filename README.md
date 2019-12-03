@@ -12,8 +12,8 @@ This is a Java implementation for <a href="https://alpaca.markets/">Alpaca</a>. 
 2. [Alpaca Java Gradle Integration](#alpaca-java-gradle-integration)
 3. [Alpaca Java Maven Integration](#alpaca-java-maven-integration)
 4. [Configuration](#configuration)
-5. [Simple Alpaca Example](#simple-alpaca-example)
-7. [Simple Polygon Example](#simple-polygon-example)
+5. [AlpacaAPI Example](#alpacaapi-example)
+7. [PolygonAPI Example](#polygonapi-example)
 
 ## Alpaca Java Building
 
@@ -31,7 +31,7 @@ Add the following dependency to your build.gradle file:
 
 ```
 dependencies {
-	compile "io.github.mainstringargs:alpaca-java:4.0.1"
+	compile "io.github.mainstringargs:alpaca-java:5.0.0"
 }
 ```
 
@@ -43,7 +43,7 @@ Add the following dependency to your pom.xml file:
 <dependency>
     <groupId>io.github.mainstringargs</groupId>
     <artifactId>alpaca-java</artifactId>
-    <version>4.0.1</version>
+    <version>5.0.0</version>
     <scope>compile</scope>
 </dependency>
 ```
@@ -72,7 +72,7 @@ The default values for `polygon.properties` can be found [here](https://github.c
 
 ## AlpacaAPI Example
 
-This example uses the `AlpacaAPI` class to subscribe to the Account and Trade Updates stream, print out the account information, submit a limit order, create a watchlist, and print out bars data. Click [here](https://docs.alpaca.markets/api-documentation/api-v2/) for the general Alpaca API documentation and click [here](https://javadoc.io/doc/io.github.mainstringargs/alpaca-java/4.0.1/io/github/mainstringargs/alpaca/AlpacaAPI.html) for the `AlpacaAPI` javadoc.
+This example uses the `AlpacaAPI` class to subscribe to the Account and Trade Updates stream, print out the account information, submit a limit order, create a watchlist, and print out bars data. Click [here](https://docs.alpaca.markets/api-documentation/api-v2/) for the general Alpaca API documentation and click [here](https://javadoc.io/doc/io.github.mainstringargs/alpaca-java/5.0.0/io/github/mainstringargs/alpaca/AlpacaAPI.html) for the `AlpacaAPI` javadoc.
 
 ```java
 // This logs into Alpaca using the alpaca.properties file on the classpath.
@@ -300,7 +300,7 @@ Bars response:
 
 # PolygonAPI Example
 
-This example uses the `PolygonAPI` class to subscribe to the Polygon websocket stream, get stocks splits, and get aggregates. Click [here](https://polygon.io/docs/) for the general Polygon API documentation and click [here](https://javadoc.io/doc/io.github.mainstringargs/alpaca-java/4.0.1/io/github/mainstringargs/polygon/PolygonAPI.html) for the `PolygonAPI` javadoc.
+This example uses the `PolygonAPI` class to subscribe to the Polygon websocket stream, get stocks splits, and get aggregates. Click [here](https://polygon.io/docs/) for the general Polygon API documentation and click [here](https://javadoc.io/doc/io.github.mainstringargs/alpaca-java/5.0.0/io/github/mainstringargs/polygon/PolygonAPI.html) for the `PolygonAPI` javadoc.
 
 ```java
 // This will use the key_id in the alpaca.properties file by default
