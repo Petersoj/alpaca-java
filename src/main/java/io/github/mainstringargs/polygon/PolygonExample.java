@@ -37,6 +37,7 @@ public class PolygonExample {
             }
         });
 
+        // Sleep the current thread for 2 seconds so we can see some trade/quote/aggregates updates on the stream!
         try {
             Thread.sleep(2000);
         } catch (InterruptedException e) {

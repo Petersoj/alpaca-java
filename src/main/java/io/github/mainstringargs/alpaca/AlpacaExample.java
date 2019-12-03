@@ -3,7 +3,6 @@ package io.github.mainstringargs.alpaca;
 import io.github.mainstringargs.alpaca.enums.BarsTimeFrame;
 import io.github.mainstringargs.alpaca.enums.OrderSide;
 import io.github.mainstringargs.alpaca.enums.OrderTimeInForce;
-import io.github.mainstringargs.alpaca.enums.OrderType;
 import io.github.mainstringargs.alpaca.rest.exception.AlpacaAPIRequestException;
 import io.github.mainstringargs.alpaca.websocket.listener.AlpacaStreamListenerAdapter;
 import io.github.mainstringargs.alpaca.websocket.message.AlpacaStreamMessageType;
@@ -34,10 +33,10 @@ public class AlpacaExample {
      */
     public static void main(String[] args) {
         // This logs into Alpaca using the alpaca.properties file on the classpath.
-        AlpacaAPI alpacaApi = new AlpacaAPI();
+        AlpacaAPI alpacaAPI = new AlpacaAPI();
 
         // Register explicitly for ACCOUNT_UPDATES and ORDER_UPDATES Messages via stream listener
-        alpacaApi.addAlpacaStreamListener(new AlpacaStreamListenerAdapter(
+        alpacaAPI.addAlpacaStreamListener(new AlpacaStreamListenerAdapter(
                 AlpacaStreamMessageType.ACCOUNT_UPDATES,
                 AlpacaStreamMessageType.TRADE_UPDATES) {
             @Override
@@ -59,7 +58,7 @@ public class AlpacaExample {
 
         // Get Account Information
         try {
-            Account alpacaAccount = alpacaApi.getAccount();
+            Account alpacaAccount = alpacaAPI.getAccount();
 
             System.out.println("\n\nAccount Information:");
             System.out.println("\t" + alpacaAccount.toString().replace(",", ",\n\t"));
@@ -69,18 +68,18 @@ public class AlpacaExample {
 
         // Request an Order
         try {
-            Order aaplOrder = alpacaApi.requestNewOrder("AAPL", 1, OrderSide.BUY, OrderType.LIMIT, OrderTimeInForce.GTC,
-                    201.30, null, true, null);
+            Order aaplLimitOrder = alpacaAPI.requestNewLimitOrder("AAPL", 1, OrderSide.BUY, OrderTimeInForce.DAY,
+                    201.30, true, null);
 
             System.out.println("\n\nNew AAPL Order:");
-            System.out.println("\t" + aaplOrder.toString().replace(",", ",\n\t"));
+            System.out.println("\t" + aaplLimitOrder.toString().replace(",", ",\n\t"));
         } catch (AlpacaAPIRequestException e) {
             e.printStackTrace();
         }
 
         // Create watchlist
         try {
-            Watchlist dayTradeWatchlist = alpacaApi.createWatchlist("Day Trade", "AAPL");
+            Watchlist dayTradeWatchlist = alpacaAPI.createWatchlist("Day Trade", "AAPL");
 
             System.out.println("\n\nDay Trade Watchlist:");
             System.out.println("\t" + dayTradeWatchlist.toString().replace(",", ",\n\t"));
@@ -93,7 +92,7 @@ public class AlpacaExample {
             ZonedDateTime start = ZonedDateTime.of(2019, 11, 18, 0, 0, 0, 0, ZoneId.of("America/New_York"));
             ZonedDateTime end = ZonedDateTime.of(2019, 11, 22, 23, 59, 0, 0, ZoneId.of("America/New_York"));
 
-            Map<String, ArrayList<Bar>> bars = alpacaApi.getBars(BarsTimeFrame.DAY, "AAPL", null, start, end,
+            Map<String, ArrayList<Bar>> bars = alpacaAPI.getBars(BarsTimeFrame.DAY, "AAPL", null, start, end,
                     null, null);
 
             System.out.println("\n\nBars response:");

@@ -76,10 +76,10 @@ This example uses the `AlpacaAPI` class to subscribe to the Account and Trade Up
 
 ```java
 // This logs into Alpaca using the alpaca.properties file on the classpath.
-AlpacaAPI alpacaApi = new AlpacaAPI();
+AlpacaAPI alpacaAPI = new AlpacaAPI();
 
 // Register explicitly for ACCOUNT_UPDATES and ORDER_UPDATES Messages via stream listener
-alpacaApi.addAlpacaStreamListener(new AlpacaStreamListenerAdapter(
+alpacaAPI.addAlpacaStreamListener(new AlpacaStreamListenerAdapter(
         AlpacaStreamMessageType.ACCOUNT_UPDATES,
         AlpacaStreamMessageType.TRADE_UPDATES) {
     @Override
@@ -101,7 +101,7 @@ alpacaApi.addAlpacaStreamListener(new AlpacaStreamListenerAdapter(
 
 // Get Account Information
 try {
-    Account alpacaAccount = alpacaApi.getAccount();
+    Account alpacaAccount = alpacaAPI.getAccount();
 
     System.out.println("\n\nAccount Information:");
     System.out.println("\t" + alpacaAccount.toString().replace(",", ",\n\t"));
@@ -111,18 +111,18 @@ try {
 
 // Request an Order
 try {
-    Order aaplOrder = alpacaApi.requestNewOrder("AAPL", 1, OrderSide.BUY, OrderType.LIMIT, OrderTimeInForce.DAY,
-            201.30, null, true, null);
+    Order aaplLimitOrder = alpacaAPI.requestNewLimitOrder("AAPL", 1, OrderSide.BUY, OrderTimeInForce.DAY,
+            201.30, true, null);
 
     System.out.println("\n\nNew AAPL Order:");
-    System.out.println("\t" + aaplOrder.toString().replace(",", ",\n\t"));
+    System.out.println("\t" + aaplLimitOrder.toString().replace(",", ",\n\t"));
 } catch (AlpacaAPIRequestException e) {
     e.printStackTrace();
 }
 
 // Create watchlist
 try {
-    Watchlist dayTradeWatchlist = alpacaApi.createWatchlist("Day Trade", "AAPL");
+    Watchlist dayTradeWatchlist = alpacaAPI.createWatchlist("Day Trade", "AAPL");
 
     System.out.println("\n\nDay Trade Watchlist:");
     System.out.println("\t" + dayTradeWatchlist.toString().replace(",", ",\n\t"));
@@ -135,7 +135,7 @@ try {
     ZonedDateTime start = ZonedDateTime.of(2019, 11, 18, 0, 0, 0, 0, ZoneId.of("America/New_York"));
     ZonedDateTime end = ZonedDateTime.of(2019, 11, 22, 23, 59, 0, 0, ZoneId.of("America/New_York"));
 
-    Map<String, ArrayList<Bar>> bars = alpacaApi.getBars(BarsTimeFrame.DAY, "AAPL", null, start, end,
+    Map<String, ArrayList<Bar>> bars = alpacaAPI.getBars(BarsTimeFrame.DAY, "AAPL", null, start, end,
             null, null);
 
     System.out.println("\n\nBars response:");
@@ -153,6 +153,7 @@ try {
     e.printStackTrace();
 }
 
+// Keep the Alpaca websocket stream open for 5 seconds
 try {
     Thread.sleep(5000);
 } catch (InterruptedException e) {
@@ -316,6 +317,7 @@ polygonAPI.addPolygonStreamListener(new PolygonStreamListenerAdapter(aaplTicker,
     }
 });
 
+// Sleep the current thread for 2 seconds so we can see some trade/quote/aggregates updates on the stream!
 try {
     Thread.sleep(2000);
 } catch (InterruptedException e) {
