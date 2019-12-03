@@ -125,6 +125,10 @@ nexusStaging {
     packageGroup = "io.github.mainstringargs" //optional if packageGroup == project.getGroup()
 }
 
+processResources {
+    exclude('alpaca.properties', 'polygon.properties')
+}
+
 sourceSets {
     main {
         java {
