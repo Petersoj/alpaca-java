@@ -1,9 +1,11 @@
 package io.github.mainstringargs.alpaca.enums;
 
+import io.github.mainstringargs.abstracts.enums.APIName;
+
 /**
  * The Enum OrderTimeInForce.
  */
-public enum OrderTimeInForce {
+public enum OrderTimeInForce implements APIName {
 
     /** The day. */
     DAY("day"),
@@ -12,7 +14,16 @@ public enum OrderTimeInForce {
     GTC("gtc"),
 
     /** The opg. */
-    OPG("opg");
+    OPG("opg"),
+
+    /** Cls order time in force. */
+    CLS("cls"),
+
+    /** Ioc order time in force. */
+    IOC("ioc"),
+
+    /** Fok order time in force. */
+    FOK("fok");
 
     /** The api name. */
     String apiName;
@@ -26,11 +37,7 @@ public enum OrderTimeInForce {
         this.apiName = apiName;
     }
 
-    /**
-     * Gets the API name.
-     *
-     * @return the API name
-     */
+    @Override
     public String getAPIName() {
         return apiName;
     }

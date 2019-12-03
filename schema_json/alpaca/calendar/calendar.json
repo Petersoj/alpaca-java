@@ -1,0 +1,18 @@
+{
+  "type": "object",
+  "title": "See: https://docs.alpaca.markets/api-documentation/api-v2/calendar/",
+  "properties": {
+    "date": {
+      "existingJavaType": "java.lang.String",
+      "title": "Date string in “%Y-%m-%d” format"
+    },
+    "open": {
+      "existingJavaType": "java.lang.String",
+      "title": "The time the market opens at on this date in “%H:%M” format"
+    },
+    "close": {
+      "existingJavaType": "java.lang.String",
+      "title": "The time the market closes at on this date in “%H:%M” format"
+    }
+  }
+}

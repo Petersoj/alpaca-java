@@ -1,0 +1,13 @@
+{
+  "type": "object",
+  "javaInterfaces": [
+    "io.github.mainstringargs.abstracts.websocket.message.StreamMessage"
+  ],
+  "title": "See: https://docs.alpaca.markets/api-documentation/api-v2/streaming/",
+  "properties": {
+    "stream": {
+      "existingJavaType": "io.github.mainstringargs.alpaca.websocket.message.AlpacaStreamMessageType",
+      "title": "The stream type"
+    }
+  }
+}

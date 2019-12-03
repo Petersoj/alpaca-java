@@ -1,0 +1,94 @@
+{
+  "type": "object",
+  "title": "See: https://docs.alpaca.markets/api-documentation/api-v2/orders/",
+  "properties": {
+    "id": {
+      "existingJavaType": "java.lang.String",
+      "title": "order id"
+    },
+    "client_order_id": {
+      "existingJavaType": "java.lang.String",
+      "title": "client unique order id"
+    },
+    "created_at": {
+      "existingJavaType": "java.time.ZonedDateTime",
+      "title": "Created at"
+    },
+    "updated_at": {
+      "existingJavaType": "java.time.ZonedDateTime",
+      "title": "Updated at"
+    },
+    "submitted_at": {
+      "existingJavaType": "java.time.ZonedDateTime",
+      "title": "Submitted at"
+    },
+    "filled_at": {
+      "existingJavaType": "java.time.ZonedDateTime",
+      "title": "Filled at"
+    },
+    "expired_at": {
+      "existingJavaType": "java.time.ZonedDateTime",
+      "title": "Expired at"
+    },
+    "canceled_at": {
+      "existingJavaType": "java.time.ZonedDateTime",
+      "title": "Canceled at"
+    },
+    "failed_at": {
+      "existingJavaType": "java.time.ZonedDateTime",
+      "title": "Failed at"
+    },
+    "asset_id": {
+      "existingJavaType": "java.lang.String",
+      "title": "asset ID"
+    },
+    "symbol": {
+      "existingJavaType": "java.lang.String",
+      "title": "Asset symbol"
+    },
+    "asset_class": {
+      "existingJavaType": "java.lang.String",
+      "title": "Asset class"
+    },
+    "qty": {
+      "existingJavaType": "java.lang.String",
+      "title": "Ordered quantity"
+    },
+    "filled_qty": {
+      "existingJavaType": "java.lang.String",
+      "title": "Filled quantity"
+    },
+    "type": {
+      "existingJavaType": "java.lang.String",
+      "title": "Valid values: market, limit, stop, stop_limit"
+    },
+    "side": {
+      "existingJavaType": "java.lang.String",
+      "title": "Valid values: buy, sell"
+    },
+    "time_in_force": {
+      "existingJavaType": "java.lang.String",
+      "title": "See Orders page"
+    },
+    "limit_price": {
+      "existingJavaType": "java.lang.String",
+      "title": "Limit price"
+    },
+    "stop_price": {
+      "existingJavaType": "java.lang.String",
+      "title": "Stop price"
+    },
+    "filled_avg_price": {
+      "existingJavaType": "java.lang.String",
+      "title": "Stop price"
+    },
+    "status": {
+      "existingJavaType": "java.lang.String",
+      "title": "See Orders page"
+    },
+    "extended_hours": {
+      "existingJavaType": "java.lang.Boolean",
+      "title": "If true, eligible for execution outside regular trading hours."
+    }
+  }
+}

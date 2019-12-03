@@ -1,0 +1,30 @@
+{
+  "type": "object",
+  "title": "See: https://docs.alpaca.markets/api-documentation/api-v2/market-data/bars/",
+  "properties": {
+    "t": {
+      "existingJavaType": "java.lang.Long",
+      "title": "the beginning time of this bar as a Unix epoch in seconds"
+    },
+    "o": {
+      "existingJavaType": "java.lang.Double",
+      "title": "open price"
+    },
+    "h": {
+      "existingJavaType": "java.lang.Double",
+      "title": "high price"
+    },
+    "l": {
+      "existingJavaType": "java.lang.Double",
+      "title": "low price"
+    },
+    "c": {
+      "existingJavaType": "java.lang.Double",
+      "title": "close price"
+    },
+    "v": {
+      "existingJavaType": "java.lang.Double",
+      "title": "volume"
+    }
+  }
+}

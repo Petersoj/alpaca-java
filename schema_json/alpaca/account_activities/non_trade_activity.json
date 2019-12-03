@@ -1,0 +1,37 @@
+{
+  "type": "object",
+  "title": "See https://docs.alpaca.markets/api-documentation/api-v2/account-activities/",
+  "extends": {
+    "existingJavaType": "io.github.mainstringargs.domain.alpaca.accountactivities.AccountActivity"
+  },
+  "properties": {
+    "activity_type": {
+      "existingJavaType": "java.lang.String",
+      "title": "See https://docs.alpaca.markets/api-documentation/api-v2/account-activities/#activity-types for a list of possible values."
+    },
+    "id": {
+      "existingJavaType": "java.lang.String",
+      "title": "An ID for the activity, always in “::” format. Can be sent as page_token in requests to facilitate the paging of results."
+    },
+    "date": {
+      "existingJavaType": "java.lang.String",
+      "title": "The date on which the activity occurred or on which the transaction associated with the activity settled."
+    },
+    "net_amount": {
+      "existingJavaType": "java.lang.String",
+      "title": "The net amount of money (positive or negative) associated with the activity."
+    },
+    "symbol": {
+      "existingJavaType": "java.lang.String",
+      "title": "The symbol of the security involved with the activity. Not present for all activity types."
+    },
+    "qty": {
+      "existingJavaType": "java.lang.String",
+      "title": "For dividend activities, the number of shares that contributed to the payment. Not present for other activity types."
+    },
+    "per_share_amount": {
+      "existingJavaType": "java.lang.String",
+      "title": "For dividend activities, the average amount paid per share. Not present for other activity types."
+    }
+  }
+}

@@ -5,6 +5,12 @@ package io.github.mainstringargs.alpaca;
  */
 public class AlpacaConstants {
 
+    /** The Constant VERSION_1. */
+    public static final String VERSION_1_ENDPOINT = "v1";
+
+    /** The Constant VERSION_2. */
+    public static final String VERSION_2_ENDPOINT = "v2";
+
     /** The Constant SYMBOLS_PARAMETER. */
     public static final String SYMBOLS_PARAMETER = "symbols";
 
@@ -13,6 +19,9 @@ public class AlpacaConstants {
 
     /** The Constant START_PARAMETER. */
     public static final String START_PARAMETER = "start";
+
+    /** The constant DATE_PARAMETER. */
+    public static final String DATE_PARAMETER = "date";
 
     /** The Constant ASSET_CLASS_PARAMETER. */
     public static final String ASSET_CLASS_PARAMETER = "asset_class";
@@ -28,6 +37,9 @@ public class AlpacaConstants {
 
     /** The Constant TIME_IN_FORCE_PARAMETER. */
     public static final String TIME_IN_FORCE_PARAMETER = "time_in_force";
+
+    /** The constant EXTENDED_HOURS_PARAMETER. */
+    public static final String EXTENDED_HOURS_PARAMETER = "extended_hours";
 
     /** The Constant TYPE_PARAMETER. */
     public static final String TYPE_PARAMETER = "type";
@@ -74,11 +86,26 @@ public class AlpacaConstants {
     /** The Constant ACCOUNT_ENDPOINT. */
     public static final String ACCOUNT_ENDPOINT = "account";
 
+    /** The Constant ACTIVITIES_ENDPOINT. */
+    public static final String ACTIVITIES_ENDPOINT = "activities";
+
+    /** The Constant CONFIGURATIONS_ENDPOINT. */
+    public static final String CONFIGURATIONS_ENDPOINT = "configurations";
+
     /** The Constant ORDERS_BY_CLIENT_ORDER_ID_ENDPOINT. */
     public static final String ORDERS_BY_CLIENT_ORDER_ID_ENDPOINT = "orders:by_client_order_id";
 
+    /** The constant PAGE_SIZE_PARAMTER. */
+    public static final String PAGE_SIZE_PARAMTER = "page_size";
+
+    /** The constant PAGE_TOKEN_PARAMTER. */
+    public static final String PAGE_TOKEN_PARAMTER = "page_token";
+
     /** The Constant ORDERS_ENDPOINT. */
     public static final String ORDERS_ENDPOINT = "orders";
+
+    /** The Constant WATCHLISTS_ENDPOINT. */
+    public static final String WATCHLISTS_ENDPOINT = "watchlists";
 
     /** The Constant UTF_ENCODING. */
     public static final String UTF_ENCODING = "UTF-8";

@@ -65,7 +65,7 @@ dependencies {
 
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
-[compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
+[compileJava, compileTestJava, javadoc]*.options*.encoding = 'UTF-8'
 
 modifyPom {
     project {
@@ -95,6 +95,9 @@ modifyPom {
     }
 }
 
+// https://stackoverflow.com/questions/52205209/configure-gradle-build-to-suppress-javadoc-console-warnings
+javadoc.options.addStringOption('Xdoclint:none', '-quiet')
+
 publishing {
     publications {
         maven(MavenPublication) {
@@ -120,72 +123,44 @@ nexusStaging {
     packageGroup = "io.github.mainstringargs" //optional if packageGroup == project.getGroup()
 }
 
-processResources {
-    include "**/*.properties.default"
-    rename {
-        filename -> filename.replace '.properties.default', '.properties'
-    }
-}
-
 sourceSets {
     main {
         java {
             srcDir 'src/main/java'
-            srcDir 'build/generated-sources/samplejson'
+            srcDir 'build/generated-sources/schemajson'
         }
     }
 }
 
-// All paths are relative to 'alpaca-java/sample_json/'
-// The 'path' can either be a file or directory, but keep in mind that
-// if it is a directory, all the subdirectories will have POJOs generated
-// sourceType is either 'json' or 'schema'
-// The generated POJOs will be in a package structure analogous to the path
+// The generated POJOs will be in a package structure analogous to the path in the 'schema_json/' directory
 // See: https://github.com/joelittlejohn/jsonschema2pojo/wiki/Reference
-def sampleJSONPOJOs = [
-        // alpaca/
-        ['path': 'alpaca/account/', 'sourceType': 'json'],
-        ['path': 'alpaca/asset/', 'sourceType': 'json'],
-        ['path': 'alpaca/bar/', 'sourceType': 'json'],
-        ['path': 'alpaca/calendar/', 'sourceType': 'json'],
-        ['path': 'alpaca/clock/', 'sourceType': 'json'],
-        ['path': 'alpaca/order/', 'sourceType': 'json'],
-        ['path': 'alpaca/position/', 'sourceType': 'json'],
-
-        // polygon/
-        ['path': 'polygon/aggregate/', 'sourceType': 'json'],
-        ['path': 'polygon/historic/quotes/', 'sourceType': 'json'],
-        ['path': 'polygon/historic/trades/', 'sourceType': 'json'],
-        ['path': 'polygon/last/', 'sourceType': 'json'],
-        ['path': 'polygon/meta/', 'sourceType': 'json'],
-        ['path': 'polygon/open_close/', 'sourceType': 'json'],
-        ['path': 'polygon/reference/', 'sourceType': 'json'],
-        ['path': 'polygon/snapshot/', 'sourceType': 'json'],
-        ['path': 'polygon/websocket/', 'sourceType': 'json']
-]
-
 task generatePOJOs() {
-    final def targetDirectory = "${project.buildDir}/generated-sources/samplejson"
-    final def jsonSourceDirectory = 'sample_json/'
-    def first = true
+    final def targetDirectory = "${project.buildDir}" + File.separator + "generated-sources" + File.separator + "schemajson"
+    final def jsonSourceDirectory = "${project.projectDir}" + File.separator + "schema_json" + File.separator
+    final def jsonPackageNameStart = "io.github.mainstringargs.domain."
 
-    sampleJSONPOJOs.each { propertyMap ->
-        def path = propertyMap.get('path')
-        def sourceType = propertyMap.get('sourceType')
-        def targetPackage = 'io.github.mainstringargs.domain.' +
-                path.substring(0, path.lastIndexOf('/')).replace('/', '.')
+    // Clear all generated sources
+    delete targetDirectory
 
-        def jsonToPOJOTask = tasks.create('jsonToPOJOTask-' + targetPackage, GradleBuild) {
-            startParameter.projectProperties = ['source'         : jsonSourceDirectory + path,
-                                                'sourceType'     : sourceType,
-                                                'targetPackage'  : targetPackage,
-                                                'targetDirectory': targetDirectory]
-            buildFile = 'sampleJson2Pojo.gradle'
-            tasks = ['generateJsonSchema2Pojo']
+    // Loop through all files in schema JSON file tree
+    file(jsonSourceDirectory).eachFileRecurse { file ->
+        if (file.getName().endsWith(".json")) {
+            def startPackageIndex = file.getAbsolutePath().indexOf(jsonSourceDirectory) + jsonSourceDirectory.length()
+            def targetPackage = jsonPackageNameStart + file.getParentFile().getAbsolutePath()
+                    .substring(startPackageIndex)
+                    .replace(File.separator, '.').replace('-', '').replace('_', '')
+                    .toLowerCase()
+
+            def jsonToPOJOTask = tasks.create('json2POJOTask-' + targetPackage + "." + file.getName(), GradleBuild) {
+                startParameter.projectProperties = ['source'         : file.getAbsolutePath(),
+                                                    'targetPackage'  : targetPackage,
+                                                    'targetDirectory': targetDirectory]
+                buildFile = 'schemaJson2Pojo.gradle'
+                tasks = ['generateJsonSchema2Pojo']
+            }
+
+            dependsOn jsonToPOJOTask
         }
-
-        first = false
-        dependsOn jsonToPOJOTask
     }
 }
 
@@ -193,17 +168,10 @@ compileJava {
     dependsOn generatePOJOs
 }
 
+build.finalizedBy(publishToMavenLocal)
+
 if (hasProperty('buildScan')) {
     buildScan { licenseAgreementUrl = 'https://gradle.com/terms-of-service'; licenseAgree = 'yes' }
-}
-
-applicationDistribution.from("src/main/resources") {
-    into "lib/resources"
-    include "**/*.properties.default"
-    rename {
-        filename -> filename.replace '.properties.default', '.properties'
-    }
-
 }
 
 startScripts {

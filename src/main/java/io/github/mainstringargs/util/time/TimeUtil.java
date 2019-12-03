@@ -19,7 +19,8 @@ public class TimeUtil {
     private static final long PREV_UNIX_EPOCH_MICRO_TIME = PREV_UNIX_EPOCH_NANO_TIME / 1000L;
     /** The date time formatter. */
     private static DateTimeFormatter inputDateTimeFormatter = DateTimeFormatter.ofPattern(
-            "[yyyyMMdd][yyyy-MM-dd][yyyy-DDD]['T'[HHmmss][HHmm][HH:mm:ss][HH:mm][.SSSSSSSSS][.SSSSSSSS][.SSSSSSS][.SSSSSS][.SSSSS][.SSS][.SS][.S]][OOOO][O][z][XXXXX][XXXX]['['VV']']");
+            "[yyyyMMdd][yyyy-MM-dd][yyyy-DDD]['T'[HHmmss][HHmm][HH:mm:ss][HH:mm][.SSSSSSSSS][.SSSSSSSS][.SSSSSSS][" +
+                    ".SSSSSS][.SSSSS][.SSS][.SS][.S]][OOOO][O][z][XXXXX][XXXX]['['VV']']");
     /** The output date time formatter. */
     private static DateTimeFormatter outputDateTimeFormatter =
             DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss'Z'").withZone(ZoneId.of("UTC"));
@@ -30,6 +31,7 @@ public class TimeUtil {
      * To date time string.
      *
      * @param ldt the ldt
+     *
      * @return the string
      */
     public static String toDateTimeString(LocalDateTime ldt) {
@@ -44,6 +46,7 @@ public class TimeUtil {
      * To decimal format.
      *
      * @param numberToFormat the number to format
+     *
      * @return the string
      */
     public static String toDecimalFormat(Number numberToFormat) {
@@ -54,6 +57,7 @@ public class TimeUtil {
      * To date string.
      *
      * @param ld the ld
+     *
      * @return the string
      */
     public static String toDateString(LocalDate ld) {
@@ -64,6 +68,7 @@ public class TimeUtil {
      * From date time string.
      *
      * @param dateTimeString the date time string
+     *
      * @return the local date time using the system time zone
      */
     public static LocalDateTime fromDateTimeString(String dateTimeString) {
@@ -86,6 +91,7 @@ public class TimeUtil {
      * From date string.
      *
      * @param dateString the date string
+     *
      * @return the local date
      */
     public static LocalDate fromDateString(String dateString) {
@@ -96,6 +102,7 @@ public class TimeUtil {
      * Converts a given unix epoch time in nanoseconds or microseconds to milliseconds if necessary.
      *
      * @param time the time
+     *
      * @return the long
      */
     public static long convertToMilli(long time) {

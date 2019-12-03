@@ -1,0 +1,49 @@
+{
+  "type": "object",
+  "title": "See: https://docs.alpaca.markets/api-documentation/api-v2/account-activities/",
+  "extends": {
+    "existingJavaType": "io.github.mainstringargs.domain.alpaca.accountactivities.AccountActivity"
+  },
+  "properties": {
+    "activity_type": {
+      "existingJavaType": "java.lang.String",
+      "title": "FILL"
+    },
+    "id": {
+      "existingJavaType": "java.lang.String",
+      "title": "An id for the activity. Always in “::” format. Can be sent as page_token in requests to facilitate the paging of results."
+    },
+    "cum_qty": {
+      "existingJavaType": "java.lang.String",
+      "title": "The cumulative quantity of shares involved in the execution."
+    },
+    "leaves_qty": {
+      "existingJavaType": "java.lang.String",
+      "title": "For partially_filled orders, the quantity of shares that are left to be filled."
+    },
+    "price": {
+      "existingJavaType": "java.lang.String",
+      "title": "The per-share price that the trade was executed at."
+    },
+    "qty": {
+      "existingJavaType": "java.lang.String",
+      "title": "The number of shares involved in the trade execution."
+    },
+    "side": {
+      "existingJavaType": "java.lang.String",
+      "title": "buy or sell"
+    },
+    "symbol": {
+      "existingJavaType": "java.lang.String",
+      "title": "The symbol of the security being traded."
+    },
+    "transaction_time": {
+      "existingJavaType": "java.time.ZonedDateTime",
+      "title": "The time at which the execution occurred."
+    },
+    "type": {
+      "existingJavaType": "java.lang.String",
+      "title": "fill or partial_fill"
+    }
+  }
+}

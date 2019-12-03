@@ -1,0 +1,110 @@
+{
+  "type": "object",
+  "title": "See: https://docs.alpaca.markets/api-documentation/api-v2/account/",
+  "properties": {
+    "id": {
+      "existingJavaType": "java.lang.String",
+      "title": "Account ID."
+    },
+    "account_number": {
+      "existingJavaType": "java.lang.String",
+      "title": "Account number."
+    },
+    "status": {
+      "existingJavaType": "java.lang.String",
+      "title": "See Account Status"
+    },
+    "currency": {
+      "existingJavaType": "java.lang.String",
+      "title": "“USD”"
+    },
+    "cash": {
+      "existingJavaType": "java.lang.String",
+      "title": "Cash balance"
+    },
+    "portfolio_value": {
+      "existingJavaType": "java.lang.String",
+      "title": "Total value of cash + holding positions (This field is deprecated. It is equivalent to the equity field.)"
+    },
+    "pattern_day_trader": {
+      "existingJavaType": "java.lang.Boolean",
+      "title": "Whether or not the account has been flagged as a pattern day trader"
+    },
+    "trade_suspended_by_user": {
+      "existingJavaType": "java.lang.Boolean",
+      "title": "User setting. If true, the account is not allowed to place orders."
+    },
+    "trading_blocked": {
+      "existingJavaType": "java.lang.Boolean",
+      "title": "If true, the account is not allowed to place orders."
+    },
+    "transfers_blocked": {
+      "existingJavaType": "java.lang.Boolean",
+      "title": "If true, the account is not allowed to request money transfers."
+    },
+    "account_blocked": {
+      "existingJavaType": "java.lang.Boolean",
+      "title": "If true, the account activity by user is prohibited."
+    },
+    "created_at": {
+      "existingJavaType": "java.time.ZonedDateTime",
+      "title": "Timestamp this account was created at"
+    },
+    "shorting_enabled": {
+      "existingJavaType": "java.lang.Boolean",
+      "title": "Flag to denote whether or not the account is permitted to short"
+    },
+    "long_market_value": {
+      "existingJavaType": "java.lang.String",
+      "title": "Real-time MtM value of all long positions held in the account"
+    },
+    "short_market_value": {
+      "existingJavaType": "java.lang.String",
+      "title": "Real-time MtM value of all short positions held in the account"
+    },
+    "equity": {
+      "existingJavaType": "java.lang.String",
+      "title": "Cash + long_market_value + short_market_value"
+    },
+    "last_equity": {
+      "existingJavaType": "java.lang.String",
+      "title": "Equity as of previous trading day at 16:00:00 ET"
+    },
+    "multiplier": {
+      "existingJavaType": "java.lang.String",
+      "title": "Buying power multiplier that represents account margin classification; valid values 1 (standard limited margin account with 1x buying power), 2 (reg T margin account with 2x intraday and overnight buying power; this is the default for all non-PDT accounts with $2,000 or more equity), 4 (PDT account with 4x intraday buying power and 2x reg T overnight buying power)"
+    },
+    "buying_power": {
+      "existingJavaType": "java.lang.String",
+      "title": "Current available $ buying power; If multiplier = 4, this is your daytrade buying power which is calculated as (last_equity - (last) maintenance_margin) * 4; If multiplier = 2,  buying_power = max(equity – initial_margin,0) * 2; If multiplier = 1, buying_power = cash"
+    },
+    "initial_margin": {
+      "existingJavaType": "java.lang.String",
+      "title": "Reg T initial margin requirement (continuously updated value)"
+    },
+    "maintenance_margin": {
+      "existingJavaType": "java.lang.String",
+      "title": "Maintenance margin requirement (continuously updated value)"
+    },
+    "sma": {
+      "existingJavaType": "java.lang.String",
+      "title": "Value of special memorandum account (will be used at a later date to provide additional buying_power)"
+    },
+    "daytrade_count": {
+      "existingJavaType": "java.lang.Integer",
+      "title": "The current number of daytrades that have been made in the last 5 trading days (inclusive of today)"
+    },
+    "last_maintenance_margin": {
+      "existingJavaType": "java.lang.String",
+      "title": "Your maintenance margin requirement on the previous trading day"
+    },
+    "daytrading_buying_power": {
+      "existingJavaType": "java.lang.String",
+      "title": "Your buying power for day trades (continuously updated value)"
+    },
+    "regt_buying_power": {
+      "existingJavaType": "java.lang.String",
+      "title": "Your buying power under Regulation T (your excess equity - equity minus margin value - times your margin multiplier)"
+    }
+  }
+}

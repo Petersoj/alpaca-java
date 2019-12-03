@@ -1,0 +1,18 @@
+{
+  "type": "object",
+  "title": "See: https://docs.alpaca.markets/api-documentation/api-v2/orders/",
+  "properties": {
+    "id": {
+      "existingJavaType": "java.lang.String",
+      "title": "order id"
+    },
+    "status": {
+      "existingJavaType": "java.lang.Integer",
+      "title": "Cancel status"
+    },
+    "body": {
+      "existingJavaType": "io.github.mainstringargs.domain.alpaca.order.Order",
+      "title": "The cancelled order"
+    }
+  }
+}

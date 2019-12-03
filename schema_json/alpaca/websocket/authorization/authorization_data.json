@@ -1,0 +1,13 @@
+{
+  "type": "object",
+  "properties": {
+    "status": {
+      "existingJavaType": "java.lang.String",
+      "title": "The status."
+    },
+    "action": {
+      "existingJavaType": "java.lang.String",
+      "title": "The desired action."
+    }
+  }
+}

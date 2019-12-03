@@ -1,0 +1,22 @@
+{
+  "type": "object",
+  "title": "See: https://docs.alpaca.markets/api-documentation/api-v2/clock/",
+  "properties": {
+    "timestamp": {
+      "existingJavaType": "java.time.ZonedDateTime",
+      "title": "Current timestamp"
+    },
+    "is_open": {
+      "existingJavaType": "java.lang.Boolean",
+      "title": "Whether or not the market is open"
+    },
+    "next_open": {
+      "existingJavaType": "java.time.ZonedDateTime",
+      "title": "Next market open timestamp"
+    },
+    "next_close": {
+      "existingJavaType": "java.time.ZonedDateTime",
+      "title": "Next market close timestamp"
+    }
+  }
+}

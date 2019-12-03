@@ -1,143 +1,161 @@
 package io.github.mainstringargs.polygon;
 
 /**
- * The Class PolygonConstants.
+ * The type Polygon constants.
  */
 public class PolygonConstants {
 
     /** The Constant META_ENDPOINT. */
-    static final String META_ENDPOINT = "meta";
+    public static final String META_ENDPOINT = "meta";
 
     /** The Constant SYMBOLS_ENDPOINT. */
-    static final String SYMBOLS_ENDPOINT = "symbols";
+    public static final String SYMBOLS_ENDPOINT = "symbols";
 
     /** The Constant LOCALE_PARAMETER. */
-    static final String LOCALE_PARAMETER = "locale";
+    public static final String LOCALE_PARAMETER = "locale";
 
     /** The Constant ACTIVE_PARAMETER. */
-    static final String ACTIVE_PARAMETER = "active";
+    public static final String ACTIVE_PARAMETER = "active";
 
     /** The Constant FINANCIALS_ENDPOINT. */
-    static final String FINANCIALS_ENDPOINT = "financials";
-
-    /** The Constant EARNINGS_ENDPOINT. */
-    static final String EARNINGS_ENDPOINT = "earnings";
+    public static final String FINANCIALS_ENDPOINT = "financials";
 
     /** The Constant DIVIDENDS_ENDPOINT. */
-    static final String DIVIDENDS_ENDPOINT = "dividends";
-
-    /** The Constant ANALYSTS_ENDPOINT. */
-    static final String ANALYSTS_ENDPOINT = "analysts";
+    public static final String DIVIDENDS_ENDPOINT = "dividends";
 
     /** The Constant COMPANY_ENDPOINT. */
-    static final String COMPANY_ENDPOINT = "company";
+    public static final String COMPANY_ENDPOINT = "company";
 
     /** The Constant MARKET_PARAMETER. */
-    static final String MARKET_PARAMETER = "market";
+    public static final String MARKET_PARAMETER = "market";
 
     /** The Constant SEARCH_PARAMETER. */
-    static final String SEARCH_PARAMETER = "search";
+    public static final String SEARCH_PARAMETER = "search";
+
+    /** The constant CONDITIONS_ENDPOINT. */
+    public static final String CONDITIONS_ENDPOINT = "conditions";
 
     /** The Constant TYPE_PARAMETER. */
-    static final String TYPE_PARAMETER = "type";
+    public static final String TYPE_PARAMETER = "type";
 
     /** The Constant SORT_PARAMETER. */
-    static final String SORT_PARAMETER = "sort";
+    public static final String SORT_PARAMETER = "sort";
 
     /** The Constant REFERENCE_ENDPOINT. */
-    static final String REFERENCE_ENDPOINT = "reference";
+    public static final String REFERENCE_ENDPOINT = "reference";
+
+    /** The Constant VERSION_1_ENDPOINT. */
+    public static final String VERSION_1_ENDPOINT = "v1";
 
     /** The Constant VERSION_2_ENDPOINT. */
-    static final String VERSION_2_ENDPOINT = "v2";
+    public static final String VERSION_2_ENDPOINT = "v2";
 
     /** The Constant PAGE_PARAMETER. */
-    static final String PAGE_PARAMETER = "page";
+    public static final String PAGE_PARAMETER = "page";
 
     /** The Constant PERPAGE_PARAMETER. */
-    static final String PERPAGE_PARAMETER = "perpage";
+    public static final String PERPAGE_PARAMETER = "perpage";
 
     /** The Constant NEWS_ENDPOINT. */
-    static final String NEWS_ENDPOINT = "news";
+    public static final String NEWS_ENDPOINT = "news";
 
     /** The Constant GROUPED_ENDPOINT. */
-    static final String GROUPED_ENDPOINT = "grouped";
+    public static final String GROUPED_ENDPOINT = "grouped";
 
     /** The Constant TICKER_ENDPOINT. */
-    static final String TICKER_ENDPOINT = "ticker";
+    public static final String TICKER_ENDPOINT = "ticker";
+
+    /** The constant TICKS_ENDPOINT. */
+    public static final String TICKS_ENDPOINT = "ticks";
 
     /** The Constant AGGS_ENDPOINT. */
-    static final String AGGS_ENDPOINT = "aggs";
+    public static final String AGGS_ENDPOINT = "aggs";
+
+    /** The constant NBBO_ENDPOINT. */
+    public static final String NBBO_ENDPOINT = "nbbo";
 
     /** The Constant OPEN_CLOSE_ENDPOINT. */
-    static final String OPEN_CLOSE_ENDPOINT = "open-close";
+    public static final String OPEN_CLOSE_ENDPOINT = "open-close";
 
     /** The Constant LAST_QUOTE_ENDPOINT. */
-    static final String LAST_QUOTE_ENDPOINT = "last_quote";
+    public static final String LAST_QUOTE_ENDPOINT = "last_quote";
 
     /** The Constant LAST_ENDPOINT. */
-    static final String LAST_ENDPOINT = "last";
+    public static final String LAST_ENDPOINT = "last";
 
     /** The Constant QUOTES_ENDPOINT. */
-    static final String QUOTES_ENDPOINT = "quotes";
+    public static final String QUOTES_ENDPOINT = "quotes";
 
     /** The Constant TRADES_ENDPOINT. */
-    static final String TRADES_ENDPOINT = "trades";
+    public static final String TRADES_ENDPOINT = "trades";
 
     /** The Constant HISTORIC_ENDPOINT. */
-    static final String HISTORIC_ENDPOINT = "historic";
+    public static final String HISTORIC_ENDPOINT = "historic";
 
     /** The Constant EXCHANGES_ENDPOINT. */
-    static final String EXCHANGES_ENDPOINT = "exchanges";
+    public static final String EXCHANGES_ENDPOINT = "exchanges";
 
     /** The Constant SPLITS_ENDPOINT. */
-    static final String SPLITS_ENDPOINT = "splits";
+    public static final String SPLITS_ENDPOINT = "splits";
 
     /** The Constant TYPES_ENDPOINT. */
-    static final String TYPES_ENDPOINT = "types";
+    public static final String TYPES_ENDPOINT = "types";
 
     /** The Constant LOCALES_ENDPOINT. */
-    static final String LOCALES_ENDPOINT = "locales";
+    public static final String LOCALES_ENDPOINT = "locales";
 
     /** The Constant MARKETS_ENDPOINT. */
-    static final String MARKETS_ENDPOINT = "markets";
+    public static final String MARKETS_ENDPOINT = "markets";
 
     /** The Constant MARKET_ENDPOINT. */
-    static final String MARKET_ENDPOINT = "market";
+    public static final String MARKET_ENDPOINT = "market";
 
-    /** The Constant LOSERS_ENDPOINT. */
-    static final String LOSERS_ENDPOINT = "losers";
+    /** The constant MARKET_STATUS_ENDPOINT. */
+    public static final String MARKET_STATUS_ENDPOINT = "marketstatus";
 
-    /** The Constant GAINERS_ENDPOINT. */
-    static final String GAINERS_ENDPOINT = "gainers";
+    /** The constant NOW_ENDPOINT. */
+    public static final String NOW_ENDPOINT = "now";
+
+    /** The constant UPCOMING_ENDPOINT. */
+    public static final String UPCOMING_ENDPOINT = "upcoming";
 
     /** The Constant TICKERS_ENDPOINT. */
-    static final String TICKERS_ENDPOINT = "tickers";
+    public static final String TICKERS_ENDPOINT = "tickers";
 
     /** The Constant STOCKS_ENDPOINT. */
-    static final String STOCKS_ENDPOINT = "stocks";
+    public static final String STOCKS_ENDPOINT = "stocks";
 
     /** The Constant US_ENDPOINT. */
-    static final String US_ENDPOINT = "us";
+    public static final String US_ENDPOINT = "us";
 
     /** The Constant LOCALE_ENDPOINT. */
-    static final String LOCALE_ENDPOINT = "locale";
+    public static final String LOCALE_ENDPOINT = "locale";
 
     /** The Constant SNAPSHOT_ENDPOINT. */
-    static final String SNAPSHOT_ENDPOINT = "snapshot";
+    public static final String SNAPSHOT_ENDPOINT = "snapshot";
 
     /** The Constant LIMIT_PARAMETER. */
-    static final String LIMIT_PARAMETER = "limit";
+    public static final String LIMIT_PARAMETER = "limit";
+
+    /** The constant TIMESTAMP_PARAMETER. */
+    public static final String TIMESTAMP_PARAMETER = "timestamp";
+
+    /** The constant TIMESTAMP_LIMIT_PARAMETER. */
+    public static final String TIMESTAMP_LIMIT_PARAMETER = "timestampLimit";
 
     /** The Constant OFFSET_PARAMETER. */
-    static final String OFFSET_PARAMETER = "offset";
+    public static final String OFFSET_PARAMETER = "offset";
 
     /** The Constant RANGE_ENDPOINT. */
-    static final String RANGE_ENDPOINT = "range";
+    public static final String RANGE_ENDPOINT = "range";
 
     /** The Constant UNADJUSTED_PARAMETER. */
-    static final String UNADJUSTED_PARAMETER = "unadjusted";
+    public static final String UNADJUSTED_PARAMETER = "unadjusted";
 
     /** The Constant PREV_ENDPOINT. */
-    static final String PREV_ENDPOINT = "prev";
+    public static final String PREV_ENDPOINT = "prev";
+
+    /** The constant REVERSE_PARAMETER. */
+    public static final String REVERSE_PARAMETER = "reverse";
 
 }

@@ -1,56 +1,56 @@
 package io.github.mainstringargs.alpaca;
 
 import io.github.mainstringargs.alpaca.enums.BarsTimeFrame;
-import io.github.mainstringargs.alpaca.enums.MessageType;
 import io.github.mainstringargs.alpaca.enums.OrderSide;
 import io.github.mainstringargs.alpaca.enums.OrderTimeInForce;
-import io.github.mainstringargs.alpaca.enums.OrderType;
-import io.github.mainstringargs.alpaca.rest.exceptions.AlpacaAPIException;
-import io.github.mainstringargs.alpaca.websocket.AlpacaStreamListenerAdapter;
-import io.github.mainstringargs.alpaca.websocket.message.AccountUpdateMessage;
-import io.github.mainstringargs.alpaca.websocket.message.OrderUpdateMessage;
-import io.github.mainstringargs.alpaca.websocket.message.UpdateMessage;
+import io.github.mainstringargs.alpaca.rest.exception.AlpacaAPIRequestException;
+import io.github.mainstringargs.alpaca.websocket.listener.AlpacaStreamListenerAdapter;
+import io.github.mainstringargs.alpaca.websocket.message.AlpacaStreamMessageType;
 import io.github.mainstringargs.domain.alpaca.account.Account;
 import io.github.mainstringargs.domain.alpaca.bar.Bar;
-import io.github.mainstringargs.domain.alpaca.clock.Clock;
 import io.github.mainstringargs.domain.alpaca.order.Order;
-import io.github.mainstringargs.util.time.TimeUtil;
+import io.github.mainstringargs.domain.alpaca.watchlist.Watchlist;
+import io.github.mainstringargs.domain.alpaca.websocket.AlpacaStreamMessage;
+import io.github.mainstringargs.domain.alpaca.websocket.account.AccountUpdateMessage;
+import io.github.mainstringargs.domain.alpaca.websocket.trade.TradeUpdateMessage;
 
 import java.time.Instant;
-import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.util.List;
-import java.util.UUID;
+import java.time.ZoneOffset;
+import java.time.ZonedDateTime;
+import java.util.ArrayList;
+import java.util.Map;
 
 /**
- * The Class Example.
+ * The type Alpaca example.
  */
 public class AlpacaExample {
 
     /**
-     * The main method.
+     * The entry point of application.
      *
-     * @param args the arguments
+     * @param args the input arguments
      */
     public static void main(String[] args) {
         // This logs into Alpaca using the alpaca.properties file on the classpath.
-        AlpacaAPI alpacaApi = new AlpacaAPI();
+        AlpacaAPI alpacaAPI = new AlpacaAPI();
 
         // Register explicitly for ACCOUNT_UPDATES and ORDER_UPDATES Messages via stream listener
-        alpacaApi.addAlpacaStreamListener(new AlpacaStreamListenerAdapter(MessageType.ACCOUNT_UPDATES,
-                MessageType.ORDER_UPDATES) {
+        alpacaAPI.addAlpacaStreamListener(new AlpacaStreamListenerAdapter(
+                AlpacaStreamMessageType.ACCOUNT_UPDATES,
+                AlpacaStreamMessageType.TRADE_UPDATES) {
             @Override
-            public void streamUpdate(MessageType messageType, UpdateMessage message) {
-
-                switch (messageType) {
+            public void onStreamUpdate(AlpacaStreamMessageType streamMessageType, AlpacaStreamMessage streamMessage) {
+                switch (streamMessageType) {
                     case ACCOUNT_UPDATES:
-                        AccountUpdateMessage accounUpdateMessage = (AccountUpdateMessage) message;
-                        System.out
-                                .println("\nReceived Account Update: \n\t" + accounUpdateMessage.toString());
+                        AccountUpdateMessage accountUpdateMessage = (AccountUpdateMessage) streamMessage;
+                        System.out.println("\nReceived Account Update: \n\t" +
+                                accountUpdateMessage.toString().replace(",", ",\n\t"));
                         break;
-                    case ORDER_UPDATES:
-                        OrderUpdateMessage orderUpdateMessage = (OrderUpdateMessage) message;
-                        System.out.println("\nReceived Order Update: \n\t" + orderUpdateMessage.toString());
+                    case TRADE_UPDATES:
+                        TradeUpdateMessage tradeUpdateMessage = (TradeUpdateMessage) streamMessage;
+                        System.out.println("\nReceived Order Update: \n\t" +
+                                tradeUpdateMessage.toString().replace(",", ",\n\t"));
                         break;
                 }
             }
@@ -58,111 +58,62 @@ public class AlpacaExample {
 
         // Get Account Information
         try {
-            Account alpacaAccount = alpacaApi.getAccount();
+            Account alpacaAccount = alpacaAPI.getAccount();
 
             System.out.println("\n\nAccount Information:");
-            System.out.println("\tCreated At: " + TimeUtil.fromDateTimeString(alpacaAccount.getCreatedAt()) +
-                    "\n\tBuying Power: " + alpacaAccount.getBuyingPower() +
-                    "\n\tPortfolio Value: " + alpacaAccount.getPortfolioValue());
-        } catch (AlpacaAPIException e) {
+            System.out.println("\t" + alpacaAccount.toString().replace(",", ",\n\t"));
+        } catch (AlpacaAPIRequestException e) {
             e.printStackTrace();
         }
-
-        // Get Stock Market Hours
-        try {
-            Clock alpacaClock = alpacaApi.getClock();
-
-            System.out.println("\n\nClock:");
-            System.out.println("\tCurrent Time: " +
-                    TimeUtil.fromDateTimeString(alpacaClock.getTimestamp()) + "\n\tIs Open: " +
-                    alpacaClock.isIsOpen() + "\n\tMarket Next Open Time: " +
-                    TimeUtil.fromDateTimeString(alpacaClock.getNextOpen()) + "\n\tMark Next Close Time: " +
-                    TimeUtil.fromDateTimeString(alpacaClock.getNextClose()));
-        } catch (AlpacaAPIException e) {
-            e.printStackTrace();
-        }
-
-        Order limitOrder = null;
-        String orderClientId = UUID.randomUUID().toString();
 
         // Request an Order
         try {
-            // Lets submit a limit order for when AMZN gets down to $10.0!
-            limitOrder = alpacaApi.requestNewOrder("AMZN", 1, OrderSide.BUY, OrderType.LIMIT,
-                    OrderTimeInForce.DAY, 10.0, null, orderClientId);
+            Order aaplLimitOrder = alpacaAPI.requestNewLimitOrder("AAPL", 1, OrderSide.BUY, OrderTimeInForce.DAY,
+                    201.30, true, null);
 
-            System.out.println("\n\nLimit Order Response:");
-            System.out.println("\tSymbol: " + limitOrder.getSymbol() +
-                    "\n\tClient Order Id: " + limitOrder.getClientOrderId() +
-                    "\n\tQty: " + limitOrder.getQty() +
-                    "\n\tType: " + limitOrder.getType() +
-                    "\n\tLimit Price: $" + limitOrder.getLimitPrice() +
-                    "\n\tCreated At: " + TimeUtil.fromDateTimeString(limitOrder.getCreatedAt()));
-        } catch (AlpacaAPIException e) {
+            System.out.println("\n\nNew AAPL Order:");
+            System.out.println("\t" + aaplLimitOrder.toString().replace(",", ",\n\t"));
+        } catch (AlpacaAPIRequestException e) {
             e.printStackTrace();
         }
 
-        // Get an existing Order by Id
+        // Create watchlist
         try {
-            Order limitOrderById = alpacaApi.getOrder(limitOrder.getId());
+            Watchlist dayTradeWatchlist = alpacaAPI.createWatchlist("Day Trade", "AAPL");
 
-            System.out.println("\n\nLimit Order By Id Response:");
-            System.out.println("\tSymbol: " + limitOrderById.getSymbol() +
-                    "\n\tClient Order Id: " + limitOrderById.getClientOrderId() +
-                    "\n\tQty: " + limitOrderById.getQty() +
-                    "\n\tType: " + limitOrderById.getType() +
-                    "\n\tLimit Price: $" + limitOrderById.getLimitPrice() +
-                    "\n\tCreated At: " + TimeUtil.fromDateTimeString(limitOrderById.getCreatedAt()));
-        } catch (AlpacaAPIException e) {
-            e.printStackTrace();
-        }
-
-        // Get an existing Order by Client Id
-        try {
-            Order limitOrderByClientId = alpacaApi.getOrderByClientId(limitOrder.getClientOrderId());
-
-            System.out.println("\n\nLimit Order By Id Response:");
-            System.out.println("\tSymbol: " + limitOrderByClientId.getSymbol() +
-                    "\n\tClient Order Id: " + limitOrderByClientId.getClientOrderId() +
-                    "\n\tQty: " + limitOrderByClientId.getQty() +
-                    "\n\tType: " + limitOrderByClientId.getType() +
-                    "\n\tLimit Price: $" + limitOrderByClientId.getLimitPrice() +
-                    "\n\tCreated At: " + TimeUtil.fromDateTimeString(limitOrderByClientId.getCreatedAt()));
-        } catch (AlpacaAPIException e) {
-            e.printStackTrace();
-        }
-
-        // Cancel the existing order
-        try {
-            boolean orderCanceled = alpacaApi.cancelOrder(limitOrder.getId());
-
-            System.out.println("\n\nCancel order response:");
-            System.out.println("\tCancelled: " + orderCanceled);
-        } catch (AlpacaAPIException e) {
+            System.out.println("\n\nDay Trade Watchlist:");
+            System.out.println("\t" + dayTradeWatchlist.toString().replace(",", ",\n\t"));
+        } catch (AlpacaAPIRequestException e) {
             e.printStackTrace();
         }
 
         // Get bars
         try {
-            List<Bar> bars = alpacaApi.getBars(BarsTimeFrame.ONE_DAY, "AMZN", 10,
-                    LocalDateTime.of(2019, 2, 13, 10, 30), LocalDateTime.of(2019, 2, 14, 10, 30), null, null);
+            ZonedDateTime start = ZonedDateTime.of(2019, 11, 18, 0, 0, 0, 0, ZoneId.of("America/New_York"));
+            ZonedDateTime end = ZonedDateTime.of(2019, 11, 22, 23, 59, 0, 0, ZoneId.of("America/New_York"));
+
+            Map<String, ArrayList<Bar>> bars = alpacaAPI.getBars(BarsTimeFrame.DAY, "AAPL", null, start, end,
+                    null, null);
 
             System.out.println("\n\nBars response:");
-
-            for (Bar bar : bars) {
+            for (Bar bar : bars.get("AAPL")) {
                 System.out.println("\t==========");
-                System.out.println("\tUnix Time "
-                        + LocalDateTime.ofInstant(Instant.ofEpochMilli(bar.getT() * 1000), ZoneId.of("UTC")));
+                System.out.println("\tUnix Time " + ZonedDateTime.ofInstant(Instant.ofEpochSecond(bar.getT()),
+                        ZoneOffset.UTC));
                 System.out.println("\tOpen: $" + bar.getO());
                 System.out.println("\tHigh: $" + bar.getH());
                 System.out.println("\tLow: $" + bar.getL());
                 System.out.println("\tClose: $" + bar.getC());
                 System.out.println("\tVolume: " + bar.getV());
             }
-        } catch (AlpacaAPIException e) {
+        } catch (AlpacaAPIRequestException e) {
             e.printStackTrace();
         }
 
-        System.exit(0);
+        try {
+            Thread.sleep(5000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 }

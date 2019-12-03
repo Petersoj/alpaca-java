@@ -1,0 +1,8 @@
+{
+  "type": "object",
+  "properties": {
+    "streams": {
+      "existingJavaType": "java.util.ArrayList<java.lang.String>"
+    }
+  }
+}

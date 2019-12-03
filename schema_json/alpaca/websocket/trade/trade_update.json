@@ -1,0 +1,26 @@
+{
+  "type": "object",
+  "title": "See: https://docs.alpaca.markets/api-documentation/api-v2/streaming/",
+  "properties": {
+    "event": {
+      "existingJavaType": "java.lang.String",
+      "title": "The event type"
+    },
+    "price": {
+      "existingJavaType": "java.lang.String",
+      "title": "The Price"
+    },
+    "timestamp": {
+      "existingJavaType": "java.time.ZonedDateTime",
+      "title": "updated_at"
+    },
+    "position_qty": {
+      "existingJavaType": "java.lang.String",
+      "title": "The position quantity"
+    },
+    "order": {
+      "existingJavaType": "io.github.mainstringargs.domain.alpaca.order.Order",
+      "title": "The Order"
+    }
+  }
+}
