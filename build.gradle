@@ -125,13 +125,6 @@ nexusStaging {
     packageGroup = "io.github.mainstringargs" //optional if packageGroup == project.getGroup()
 }
 
-processResources {
-    include "**/*.properties.default"
-    rename {
-        filename -> filename.replace '.properties.default', '.properties'
-    }
-}
-
 sourceSets {
     main {
         java {
