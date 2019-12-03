@@ -1,4 +1,4 @@
-<p align="center"><img src="https://i.imgur.com/bikpBmA.png"></p>
+<p align="center"><a href="https://mainstringargs.github.io/alpaca-java/"><img src="https://i.imgur.com/bikpBmA.png"></a></p>
 <p align="center">
 <a href="https://travis-ci.org/mainstringargs/alpaca-java"><img src="https://travis-ci.org/mainstringargs/alpaca-java.svg?branch=master" alt="Build Status"></a>
 <a href="https://javadoc.io/doc/io.github.mainstringargs/alpaca-java"><img src="https://javadoc.io/badge/io.github.mainstringargs/alpaca-java.svg" alt="Javadocs"></a>
