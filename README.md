@@ -1,11 +1,11 @@
-<p align="center"><a href="https://mainstringargs.github.io/alpaca-java/"><img src="https://i.imgur.com/bikpBmA.png"></a></p>
+<p align="center"><a href="https://mainstringargs.github.io/alpaca-java/"><img src="https://i.imgur.com/mQcuK61.jpg"></a></p>
 <p align="center">
 <a href="https://travis-ci.org/mainstringargs/alpaca-java"><img src="https://travis-ci.org/mainstringargs/alpaca-java.svg?branch=master" alt="Build Status"></a>
 <a href="https://javadoc.io/doc/io.github.mainstringargs/alpaca-java"><img src="https://javadoc.io/badge/io.github.mainstringargs/alpaca-java.svg" alt="Javadocs"></a>
 </p>
 
 # Overview
-This is a Java implementation for <a href="https://alpaca.markets/">Alpaca</a>. Alpaca API lets you build and trade with real-time market data for free. 
+This is a Java implementation for <a href="https://alpaca.markets/">Alpaca</a>. Alpaca API lets you build and trade with real-time market data for free. This library is community developed.
 
 ## Table of Contents
 1. [Alpaca Java Building](#alpaca-java-building)
