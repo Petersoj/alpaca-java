@@ -3,7 +3,9 @@
 <a href="https://travis-ci.org/mainstringargs/alpaca-java" target="_blank"><img src="https://travis-ci.org/mainstringargs/alpaca-java.svg?branch=master" alt="Build Status"></a>
 <a href="https://search.maven.org/artifact/io.github.mainstringargs/alpaca-java" target="_blank"><img alt="Maven Central" src="https://img.shields.io/maven-central/v/io.github.mainstringargs/alpaca-java"></a>
 <a href="https://javadoc.io/doc/io.github.mainstringargs/alpaca-java" target="_blank"><img src="https://javadoc.io/badge/io.github.mainstringargs/alpaca-java.svg" alt="Javadocs"></a>
-<a href="https://codecov.io/gh/mainstringargs/alpaca-java" target="_blank"><img alt="Codecov" src="https://img.shields.io/codecov/c/github/mainstringargs/alpaca-java"></a>
+<a href="https://codecov.io/gh/mainstringargs/alpaca-java" target="_blank">
+  <img src="https://codecov.io/gh/mainstringargs/alpaca-java/branch/unittesting/graph/badge.svg" />
+</a>
 <a href="https://opensource.org/licenses/MIT" target="_blank"><img alt="GitHub" src="https://img.shields.io/github/license/mainstringargs/alpaca-java"></a>    
 </p>
 
