@@ -11,7 +11,7 @@
       "title": "Symbol that was evaluated from the request"
     },
     "last": {
-      "existingJavaType": "java.util.ArrayList<io.github.mainstringargs.domain.polygon.lasttrade.LastTrade>",
+      "existingJavaType": "io.github.mainstringargs.domain.polygon.lasttrade.LastTrade",
       "title": "last"
     }
   }
