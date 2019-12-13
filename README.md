@@ -2,6 +2,7 @@
 <p align="center">
 <a href="https://travis-ci.org/mainstringargs/alpaca-java"><img src="https://travis-ci.org/mainstringargs/alpaca-java.svg?branch=master" alt="Build Status"></a>
 <a href="https://javadoc.io/doc/io.github.mainstringargs/alpaca-java"><img src="https://javadoc.io/badge/io.github.mainstringargs/alpaca-java.svg" alt="Javadocs"></a>
+<a href="https://opensource.org/licenses/MIT"><img alt="GitHub" src="https://img.shields.io/github/license/mainstringargs/alpaca-java"></a>    
 </p>
 
 # Overview
