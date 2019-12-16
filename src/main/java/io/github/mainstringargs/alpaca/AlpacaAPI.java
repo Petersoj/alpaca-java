@@ -913,28 +913,25 @@ public class AlpacaAPI {
     }
 
     /**
-     * Append asset(s) for the symbol to the end of watchlist asset list.
+     * Append an asset for the symbol to the end of watchlist asset list
      *
      * @param watchlistID Watchlist ID
-     * @param symbols     the new list of symbol names to replace the watchlist content
+     * @param symbol      the symbol name to add to the watchlist
      *
      * @return the watchlist
      *
      * @throws AlpacaAPIRequestException the alpaca api exception
      * @see <a href="https://docs.alpaca.markets/api-documentation/api-v2/watchlist/">Watchlists</a>
      */
-    public Watchlist addWatchlistAssets(String watchlistID, String... symbols) throws AlpacaAPIRequestException {
+    public Watchlist addWatchlistAsset(String watchlistID, String symbol) throws AlpacaAPIRequestException {
         Preconditions.checkNotNull(watchlistID);
-        Preconditions.checkNotNull(symbols);
+        Preconditions.checkNotNull(symbol);
 
         AlpacaRequestBuilder urlBuilder = new AlpacaRequestBuilder(baseAPIURL, apiVersion,
                 AlpacaConstants.WATCHLISTS_ENDPOINT,
                 watchlistID);
 
-        JsonArray symbolsArray = new JsonArray();
-        Arrays.stream(symbols).forEach(symbolsArray::add);
-
-        urlBuilder.appendJSONBodyJSONProperty("symbols", symbolsArray);
+        urlBuilder.appendJSONBodyProperty("symbol", symbol);
 
         HttpResponse<InputStream> response = alpacaRequest.invokePost(urlBuilder);
 
