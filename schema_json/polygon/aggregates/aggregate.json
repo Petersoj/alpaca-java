@@ -8,7 +8,7 @@
       "title": "Ticker symbol"
     },
     "v": {
-      "existingJavaType": "java.lang.Integer",
+      "existingJavaType": "java.lang.Long",
       "title": "Volume"
     },
     "o": {
