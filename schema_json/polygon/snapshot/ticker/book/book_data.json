@@ -1,0 +1,34 @@
+{
+  "type": "object",
+  "title": "See: <documentation not yet public>",
+  "properties": {
+    "ticker": {
+      "existingJavaType": "java.lang.String",
+      "title": "The ticker"
+    },
+    "bids": {
+      "existingJavaType": "java.util.ArrayList<io.github.mainstringargs.domain.polygon.snapshot.ticker.book.BookOrder>",
+      "title": "The bids on the book"
+    },
+    "asks": {
+      "existingJavaType": "java.util.ArrayList<io.github.mainstringargs.domain.polygon.snapshot.ticker.book.BookOrder>",
+      "title": "The asks on the book"
+    },
+    "bidCount": {
+      "existingJavaType": "java.lang.Integer",
+      "title": "The volume of bids on the book"
+    },
+    "askCount": {
+      "existingJavaType": "java.lang.Integer",
+      "title": "The volume of asks on the book"
+    },
+    "spread": {
+      "existingJavaType": "java.lang.Double",
+      "title": "The spread"
+    },
+    "updated": {
+      "existingJavaType": "java.lang.Long",
+      "title": "Updated timestamp"
+    }
+  }
+}

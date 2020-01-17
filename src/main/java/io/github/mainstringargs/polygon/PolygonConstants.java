@@ -134,6 +134,9 @@ public class PolygonConstants {
     /** The Constant SNAPSHOT_ENDPOINT. */
     public static final String SNAPSHOT_ENDPOINT = "snapshot";
 
+    /** The constant BOOK_ENDPOINT. */
+    public static final String BOOK_ENDPOINT = "book";
+
     /** The Constant LIMIT_PARAMETER. */
     public static final String LIMIT_PARAMETER = "limit";
 

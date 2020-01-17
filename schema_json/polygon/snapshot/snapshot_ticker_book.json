@@ -1,0 +1,14 @@
+{
+  "type": "object",
+  "title": "See: <documentation not yet public>",
+  "properties": {
+    "status": {
+      "existingJavaType": "java.lang.String",
+      "title": "Status of this requests response"
+    },
+    "data": {
+      "existingJavaType": "io.github.mainstringargs.domain.polygon.snapshot.ticker.book.BookData",
+      "title": "The book data"
+    }
+  }
+}
