@@ -1,0 +1,14 @@
+{
+  "type": "object",
+  "title": "See: <documentation not yet public>",
+  "properties": {
+    "p": {
+      "existingJavaType": "java.lang.Double",
+      "title": "The price"
+    },
+    "x": {
+      "existingJavaType": "java.util.HashMap<java.lang.Integer, java.lang.Long>",
+      "title": "The map of an exchange ID to its order volume"
+    }
+  }
+}

@@ -20,6 +20,7 @@ import io.github.mainstringargs.domain.polygon.previousclose.PreviousCloseRespon
 import io.github.mainstringargs.domain.polygon.snapshot.SnapshotAllTickersResponse;
 import io.github.mainstringargs.domain.polygon.snapshot.SnapshotGainersLosersResponse;
 import io.github.mainstringargs.domain.polygon.snapshot.SnapshotSingleTickerResponse;
+import io.github.mainstringargs.domain.polygon.snapshot.SnapshotTickerBook;
 import io.github.mainstringargs.domain.polygon.stockdividends.StockDividendsResponse;
 import io.github.mainstringargs.domain.polygon.stockfinancials.StockFinancialsResponse;
 import io.github.mainstringargs.domain.polygon.stocksplits.StockSplitsResponse;
@@ -39,8 +40,8 @@ import io.github.mainstringargs.polygon.properties.PolygonProperties;
 import io.github.mainstringargs.polygon.rest.PolygonRequest;
 import io.github.mainstringargs.polygon.rest.PolygonRequestBuilder;
 import io.github.mainstringargs.polygon.rest.exception.PolygonAPIRequestException;
-import io.github.mainstringargs.polygon.websocket.listener.PolygonStreamListener;
 import io.github.mainstringargs.polygon.websocket.client.PolygonWebsocketClient;
+import io.github.mainstringargs.polygon.websocket.listener.PolygonStreamListener;
 import io.github.mainstringargs.util.time.TimeUtil;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -789,6 +790,43 @@ public class PolygonAPI {
         }
 
         return polygonRequest.getResponseObject(response, SnapshotGainersLosersResponse.class);
+    }
+
+    /**
+     * See the current snapshot of Level II data on IEX for the given ticker.
+     *
+     * @param locale the locale
+     * @param market the market
+     * @param ticker the ticker
+     *
+     * @return the snapshot ticker book
+     *
+     * @throws PolygonAPIRequestException the polygon API exception
+     * @see <a href="">Docs not public yet</a>
+     */
+    public SnapshotTickerBook getSnapshotTickerBook(String locale, Market market, String ticker)
+            throws PolygonAPIRequestException {
+        Preconditions.checkNotNull(locale);
+        Preconditions.checkNotNull(market);
+        Preconditions.checkNotNull(ticker);
+
+        PolygonRequestBuilder builder = new PolygonRequestBuilder(baseAPIURL, PolygonConstants.VERSION_2_ENDPOINT,
+                PolygonConstants.SNAPSHOT_ENDPOINT,
+                PolygonConstants.LOCALE_ENDPOINT,
+                locale,
+                PolygonConstants.MARKETS_ENDPOINT,
+                market.getAPIName(),
+                PolygonConstants.TICKERS_ENDPOINT,
+                ticker,
+                PolygonConstants.BOOK_ENDPOINT);
+
+        HttpResponse<InputStream> response = polygonRequest.invokeGet(builder);
+
+        if (response.getStatus() != 200) {
+            throw new PolygonAPIRequestException(response);
+        }
+
+        return polygonRequest.getResponseObject(response, SnapshotTickerBook.class);
     }
 
     /**

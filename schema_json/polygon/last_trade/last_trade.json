@@ -7,7 +7,7 @@
       "title": "Price of the trade"
     },
     "size": {
-      "existingJavaType": "java.lang.Integer",
+      "existingJavaType": "java.lang.Long",
       "title": "Size of this trade"
     },
     "exchange": {

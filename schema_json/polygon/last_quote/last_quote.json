@@ -7,7 +7,7 @@
       "title": "Ask Price"
     },
     "asksize": {
-      "existingJavaType": "java.lang.Integer",
+      "existingJavaType": "java.lang.Long",
       "title": "Ask Size"
     },
     "askexchange": {
@@ -19,7 +19,7 @@
       "title": "Bid Price"
     },
     "bidsize": {
-      "existingJavaType": "java.lang.Integer",
+      "existingJavaType": "java.lang.Long",
       "title": "Bid Size"
     },
     "bidexchange": {
