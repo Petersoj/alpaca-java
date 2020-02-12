@@ -682,18 +682,23 @@ public class AlpacaAPI {
      * Retrieves a single order for the given order_id.
      *
      * @param orderID Order ID
+     * @param nested  If true, the result will roll up multi-leg orders under the legs field of primary order.
      *
      * @return the order
      *
      * @throws AlpacaAPIRequestException the alpaca API exception
      * @see <a href="https://docs.alpaca.markets/api-documentation/api-v2/orders/">Orders</a>
      */
-    public Order getOrder(String orderID) throws AlpacaAPIRequestException {
+    public Order getOrder(String orderID, Boolean nested) throws AlpacaAPIRequestException {
         Preconditions.checkNotNull(orderID);
 
         AlpacaRequestBuilder urlBuilder = new AlpacaRequestBuilder(baseAPIURL, apiVersion,
                 AlpacaConstants.ORDERS_ENDPOINT,
                 orderID);
+
+        if (nested != null) {
+            urlBuilder.appendURLParameter(AlpacaConstants.NESTED_PARAMETER, nested.toString());
+        }
 
         HttpResponse<InputStream> response = alpacaRequest.invokeGet(urlBuilder);
 

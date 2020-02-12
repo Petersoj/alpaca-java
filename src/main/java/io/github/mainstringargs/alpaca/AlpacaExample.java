@@ -69,7 +69,7 @@ public class AlpacaExample {
         // Request an Order
         try {
             Order aaplLimitOrder = alpacaAPI.requestNewLimitOrder("AAPL", 1, OrderSide.BUY, OrderTimeInForce.DAY,
-                    201.30, true, null);
+                    201.30, true);
 
             System.out.println("\n\nNew AAPL Order:");
             System.out.println("\t" + aaplLimitOrder.toString().replace(",", ",\n\t"));
