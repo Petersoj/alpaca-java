@@ -4,11 +4,11 @@
   "properties": {
     "id": {
       "existingJavaType": "java.lang.String",
-      "title": "order id"
+      "title": "Order ID"
     },
     "client_order_id": {
       "existingJavaType": "java.lang.String",
-      "title": "client unique order id"
+      "title": "Client unique order ID"
     },
     "created_at": {
       "existingJavaType": "java.time.ZonedDateTime",
@@ -40,7 +40,7 @@
     },
     "asset_id": {
       "existingJavaType": "java.lang.String",
-      "title": "asset ID"
+      "title": "Asset ID"
     },
     "symbol": {
       "existingJavaType": "java.lang.String",

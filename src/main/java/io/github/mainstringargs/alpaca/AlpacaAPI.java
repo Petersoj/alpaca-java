@@ -11,6 +11,7 @@ import io.github.mainstringargs.alpaca.enums.ActivityType;
 import io.github.mainstringargs.alpaca.enums.AssetStatus;
 import io.github.mainstringargs.alpaca.enums.BarsTimeFrame;
 import io.github.mainstringargs.alpaca.enums.Direction;
+import io.github.mainstringargs.alpaca.enums.OrderClass;
 import io.github.mainstringargs.alpaca.enums.OrderSide;
 import io.github.mainstringargs.alpaca.enums.OrderStatus;
 import io.github.mainstringargs.alpaca.enums.OrderTimeInForce;
@@ -318,6 +319,7 @@ public class AlpacaAPI {
      * @param until     The response will include only ones submitted until this timestamp (exclusive.)
      * @param direction The chronological order of response based on the submission time. asc or desc. Defaults to
      *                  desc.
+     * @param nested    If true, the result will roll up multi-leg orders under the legs field of primary order.
      *
      * @return the orders
      *
@@ -325,7 +327,7 @@ public class AlpacaAPI {
      * @see <a href="https://docs.alpaca.markets/api-documentation/api-v2/orders/">Orders</a>
      */
     public ArrayList<Order> getOrders(OrderStatus status, Integer limit, ZonedDateTime after, ZonedDateTime until,
-            Direction direction) throws AlpacaAPIRequestException {
+            Direction direction, Boolean nested) throws AlpacaAPIRequestException {
         AlpacaRequestBuilder urlBuilder = new AlpacaRequestBuilder(baseAPIURL, apiVersion,
                 AlpacaConstants.ORDERS_ENDPOINT);
 
@@ -351,6 +353,10 @@ public class AlpacaAPI {
             urlBuilder.appendURLParameter(AlpacaConstants.DIRECTION_PARAMETER, direction.getAPIName());
         }
 
+        if (nested != null) {
+            urlBuilder.appendURLParameter(AlpacaConstants.NESTED_PARAMETER, nested.toString());
+        }
+
         HttpResponse<InputStream> response = alpacaRequest.invokeGet(urlBuilder);
 
         if (response.getStatus() != 200) {
@@ -364,18 +370,27 @@ public class AlpacaAPI {
 
     /**
      * Places a new order for the given account. An order request may be rejected if the account is not authorized for
-     * trading, or if the tradable balance is insufficient to fill the order.
+     * trading, or if the tradable balance is insufficient to fill the order. Note: many of the parameters for this
+     * method can be set to null if they aren't required for your order type.
      *
-     * @param symbol        symbol or asset ID to identify the asset to trade
-     * @param quantity      number of shares to trade
-     * @param side          buy or sell
-     * @param type          market, limit, stop, or stop_limit
-     * @param timeInForce   day, gtc, opg, cls, ioc, fok. Please see Understand Orders for more info.
-     * @param limitPrice    required if type is limit or stop_limit
-     * @param stopPrice     required if type is stop or stop_limit
-     * @param extendedHours (default) false. If true, order will be eligible to execute in premarket/afterhours. Only
-     *                      works with type limit and time_in_force day.
-     * @param clientOrderId A unique identifier for the order. Automatically generated if not sent.
+     * @param symbol               symbol or asset ID to identify the asset to trade
+     * @param quantity             number of shares to trade
+     * @param side                 buy or sell
+     * @param type                 market, limit, stop, or stop_limit
+     * @param timeInForce          day, gtc, opg, cls, ioc, fok. Please see Understand Orders for more info.
+     * @param limitPrice           required if type is limit or stop_limit
+     * @param stopPrice            required if type is stop or stop_limit
+     * @param extendedHours        (default) false. If true, order will be eligible to execute in premarket/afterhours.
+     *                             Only works with type limit and time_in_force day.
+     * @param clientOrderId        A unique identifier for the order. Automatically generated if not sent.
+     * @param orderClass           Simple or bracket. For details of non-simple order classes, please see Bracket Order
+     *                             Overview.
+     * @param takeProfitLimitPrice Additional parameter for take-profit leg of advanced orders. Required for bracket
+     *                             orders.
+     * @param stopLossStopPrice    Additional parameters for stop-loss leg of advanced orders. Required for bracket
+     *                             orders.
+     * @param stopLossLimitPrice   Additional parameters for stop-loss leg of advanced orders. The stop-loss order
+     *                             becomes a stop-limit order if specified.
      *
      * @return the order
      *
@@ -384,7 +399,9 @@ public class AlpacaAPI {
      */
     public Order requestNewOrder(String symbol, Integer quantity, OrderSide side, OrderType type,
             OrderTimeInForce timeInForce, Double limitPrice, Double stopPrice, Boolean extendedHours,
-            String clientOrderId) throws AlpacaAPIRequestException {
+            String clientOrderId, OrderClass orderClass, Double takeProfitLimitPrice, Double stopLossStopPrice,
+            Double stopLossLimitPrice)
+            throws AlpacaAPIRequestException {
         Preconditions.checkNotNull(symbol);
         Preconditions.checkNotNull(quantity);
         Preconditions.checkNotNull(side);
@@ -419,6 +436,30 @@ public class AlpacaAPI {
             urlBuilder.appendJSONBodyProperty(AlpacaConstants.CLIENT_ORDER_ID_PARAMETER, clientOrderId);
         }
 
+        if (orderClass != null) {
+            urlBuilder.appendJSONBodyProperty(AlpacaConstants.ORDER_CLASS_PARAMETER, orderClass.getAPIName());
+        }
+
+        if (takeProfitLimitPrice != null) {
+            JsonObject takeProfit = new JsonObject();
+            takeProfit.addProperty(AlpacaConstants.LIMIT_PRICE_PARAMETER, takeProfitLimitPrice);
+
+            urlBuilder.appendJSONBodyJSONProperty(AlpacaConstants.TAKE_PROFIT_PARAMETER, takeProfit);
+        }
+
+        if (stopLossStopPrice != null || stopLossLimitPrice != null) {
+            JsonObject stopLoss = new JsonObject();
+
+            if (stopLossStopPrice != null) {
+                stopLoss.addProperty(AlpacaConstants.STOP_PRICE_PARAMETER, stopLossStopPrice);
+            }
+            if (stopLossLimitPrice != null) {
+                stopLoss.addProperty(AlpacaConstants.LIMIT_PRICE_PARAMETER, stopLossLimitPrice);
+            }
+
+            urlBuilder.appendJSONBodyJSONProperty(AlpacaConstants.STOP_LOSS_PARAMETER, stopLoss);
+        }
+
         HttpResponse<InputStream> response = alpacaRequest.invokePost(urlBuilder);
 
         if (response.getStatus() != 200) {
@@ -430,7 +471,7 @@ public class AlpacaAPI {
 
     /**
      * Calls {@link #requestNewOrder(String, Integer, OrderSide, OrderType, OrderTimeInForce, Double, Double, Boolean,
-     * String)} with {@link OrderType#MARKET}.
+     * String, OrderClass, Double, Double, Double)} with {@link OrderType#MARKET}.
      *
      * @param symbol        symbol or asset ID to identify the asset to trade
      * @param quantity      number of shares to trade
@@ -438,21 +479,20 @@ public class AlpacaAPI {
      * @param timeInForce   day, gtc, opg, cls, ioc, fok. Please see Understand Orders for more info.
      * @param extendedHours (default) false. If true, order will be eligible to execute in premarket/afterhours. Only
      *                      works with type limit and time_in_force day.
-     * @param clientOrderId A unique identifier for the order. Automatically generated if not sent.
      *
      * @return the order
      *
      * @throws AlpacaAPIRequestException the alpaca api request exception
      */
     public Order requestNewMarketOrder(String symbol, Integer quantity, OrderSide side, OrderTimeInForce timeInForce,
-            Boolean extendedHours, String clientOrderId) throws AlpacaAPIRequestException {
+            Boolean extendedHours) throws AlpacaAPIRequestException {
         return requestNewOrder(symbol, quantity, side, OrderType.MARKET, timeInForce, null, null, extendedHours,
-                clientOrderId);
+                null, OrderClass.SIMPLE, null, null, null);
     }
 
     /**
      * Calls {@link #requestNewOrder(String, Integer, OrderSide, OrderType, OrderTimeInForce, Double, Double, Boolean,
-     * String)}* with {@link OrderType#LIMIT}.
+     * String, OrderClass, Double, Double, Double)} with {@link OrderType#LIMIT}.
      *
      * @param symbol        symbol or asset ID to identify the asset to trade
      * @param quantity      number of shares to trade
@@ -461,21 +501,20 @@ public class AlpacaAPI {
      * @param limitPrice    required if type is limit or stop_limit
      * @param extendedHours (default) false. If true, order will be eligible to execute in premarket/afterhours. Only
      *                      works with type limit and time_in_force day.
-     * @param clientOrderId A unique identifier for the order. Automatically generated if not sent.
      *
      * @return the order
      *
      * @throws AlpacaAPIRequestException the alpaca api request exception
      */
     public Order requestNewLimitOrder(String symbol, Integer quantity, OrderSide side, OrderTimeInForce timeInForce,
-            Double limitPrice, Boolean extendedHours, String clientOrderId) throws AlpacaAPIRequestException {
+            Double limitPrice, Boolean extendedHours) throws AlpacaAPIRequestException {
         return requestNewOrder(symbol, quantity, side, OrderType.LIMIT, timeInForce, limitPrice, null, extendedHours,
-                clientOrderId);
+                null, OrderClass.SIMPLE, null, null, null);
     }
 
     /**
      * Calls {@link #requestNewOrder(String, Integer, OrderSide, OrderType, OrderTimeInForce, Double, Double, Boolean,
-     * String)} with {@link OrderType#STOP}.
+     * String, OrderClass, Double, Double, Double)} with {@link OrderType#STOP}.
      *
      * @param symbol        symbol or asset ID to identify the asset to trade
      * @param quantity      number of shares to trade
@@ -484,21 +523,20 @@ public class AlpacaAPI {
      * @param stopPrice     required if type is limit or stop_limit
      * @param extendedHours (default) false. If true, order will be eligible to execute in premarket/afterhours. Only
      *                      works with type limit and time_in_force day.
-     * @param clientOrderId A unique identifier for the order. Automatically generated if not sent.
      *
      * @return the order
      *
      * @throws AlpacaAPIRequestException the alpaca api request exception
      */
     public Order requestNewStopOrder(String symbol, Integer quantity, OrderSide side, OrderTimeInForce timeInForce,
-            Double stopPrice, Boolean extendedHours, String clientOrderId) throws AlpacaAPIRequestException {
+            Double stopPrice, Boolean extendedHours) throws AlpacaAPIRequestException {
         return requestNewOrder(symbol, quantity, side, OrderType.STOP, timeInForce, null, stopPrice, extendedHours,
-                clientOrderId);
+                null, OrderClass.SIMPLE, null, null, null);
     }
 
     /**
      * Calls {@link #requestNewOrder(String, Integer, OrderSide, OrderType, OrderTimeInForce, Double, Double, Boolean,
-     * String)} with {@link OrderType#STOP_LIMIT}.
+     * String, OrderClass, Double, Double, Double)} with {@link OrderType#STOP_LIMIT}.
      *
      * @param symbol        symbol or asset ID to identify the asset to trade
      * @param quantity      number of shares to trade
@@ -508,17 +546,136 @@ public class AlpacaAPI {
      * @param stopPrice     required if type is stop or stop_limit
      * @param extendedHours (default) false. If true, order will be eligible to execute in premarket/afterhours. Only
      *                      works with type limit and time_in_force day.
-     * @param clientOrderId A unique identifier for the order. Automatically generated if not sent.
      *
      * @return the order
      *
      * @throws AlpacaAPIRequestException the alpaca api request exception
      */
     public Order requestNewStopLimitOrder(String symbol, Integer quantity, OrderSide side, OrderTimeInForce timeInForce,
-            Double limitPrice, Double stopPrice, Boolean extendedHours, String clientOrderId)
+            Double limitPrice, Double stopPrice, Boolean extendedHours) throws AlpacaAPIRequestException {
+        return requestNewOrder(symbol, quantity, side, OrderType.STOP_LIMIT, timeInForce, limitPrice, stopPrice,
+                extendedHours, null, OrderClass.SIMPLE, null, null, null);
+    }
+
+    /**
+     * Calls {@link #requestNewOrder(String, Integer, OrderSide, OrderType, OrderTimeInForce, Double, Double, Boolean,
+     * String, OrderClass, Double, Double, Double)} with {@link OrderType#MARKET} and with parameters for a bracket
+     * order.
+     *
+     * @param symbol               symbol or asset ID to identify the asset to trade
+     * @param quantity             number of shares to trade
+     * @param side                 buy or sell
+     * @param timeInForce          day, gtc, opg, cls, ioc, fok. Please see Understand Orders for more info.
+     * @param extendedHours        (default) false. If true, order will be eligible to execute in premarket/afterhours.
+     *                             Only works with type limit and time_in_force day.
+     * @param takeProfitLimitPrice Additional parameter for take-profit leg of advanced orders. Required for bracket
+     *                             orders.
+     * @param stopLossStopPrice    Additional parameters for stop-loss leg of advanced orders. Required for bracket
+     *                             orders.
+     * @param stopLossLimitPrice   Additional parameters for stop-loss leg of advanced orders. The stop-loss order
+     *                             becomes a stop-limit order if specified.
+     *
+     * @return the order
+     *
+     * @throws AlpacaAPIRequestException the alpaca api request exception
+     */
+    public Order requestNewMarketBracketOrder(String symbol, Integer quantity, OrderSide side,
+            OrderTimeInForce timeInForce, Boolean extendedHours, Double takeProfitLimitPrice, Double stopLossStopPrice,
+            Double stopLossLimitPrice) throws AlpacaAPIRequestException {
+        return requestNewOrder(symbol, quantity, side, OrderType.MARKET, timeInForce, null, null,
+                extendedHours, null, OrderClass.BRACKET, takeProfitLimitPrice, stopLossStopPrice, stopLossLimitPrice);
+    }
+
+    /**
+     * Calls {@link #requestNewOrder(String, Integer, OrderSide, OrderType, OrderTimeInForce, Double, Double, Boolean,
+     * String, OrderClass, Double, Double, Double)} with {@link OrderType#LIMIT} and with parameters for a bracket
+     * order.
+     *
+     * @param symbol               symbol or asset ID to identify the asset to trade
+     * @param quantity             number of shares to trade
+     * @param side                 buy or sell
+     * @param timeInForce          day, gtc, opg, cls, ioc, fok. Please see Understand Orders for more info.
+     * @param limitPrice           required if type is limit or stop_limit
+     * @param extendedHours        (default) false. If true, order will be eligible to execute in premarket/afterhours.
+     *                             Only works with type limit and time_in_force day.
+     * @param takeProfitLimitPrice Additional parameter for take-profit leg of advanced orders. Required for bracket
+     *                             orders.
+     * @param stopLossStopPrice    Additional parameters for stop-loss leg of advanced orders. Required for bracket
+     *                             orders.
+     * @param stopLossLimitPrice   Additional parameters for stop-loss leg of advanced orders. The stop-loss order
+     *                             becomes a stop-limit order if specified.
+     *
+     * @return the order
+     *
+     * @throws AlpacaAPIRequestException the alpaca api request exception
+     */
+    public Order requestNewLimitBracketOrder(String symbol, Integer quantity, OrderSide side,
+            OrderTimeInForce timeInForce, Double limitPrice, Boolean extendedHours, Double takeProfitLimitPrice,
+            Double stopLossStopPrice, Double stopLossLimitPrice) throws AlpacaAPIRequestException {
+        return requestNewOrder(symbol, quantity, side, OrderType.LIMIT, timeInForce, limitPrice, null,
+                extendedHours, null, OrderClass.BRACKET, takeProfitLimitPrice, stopLossStopPrice, stopLossLimitPrice);
+    }
+
+    /**
+     * Calls {@link #requestNewOrder(String, Integer, OrderSide, OrderType, OrderTimeInForce, Double, Double, Boolean,
+     * String, OrderClass, Double, Double, Double)} with {@link OrderType#STOP} and with parameters for a bracket
+     * order.
+     *
+     * @param symbol               symbol or asset ID to identify the asset to trade
+     * @param quantity             number of shares to trade
+     * @param side                 buy or sell
+     * @param timeInForce          day, gtc, opg, cls, ioc, fok. Please see Understand Orders for more info.
+     * @param stopPrice            required if type is stop or stop_limit
+     * @param extendedHours        (default) false. If true, order will be eligible to execute in premarket/afterhours.
+     *                             Only works with type limit and time_in_force day.
+     * @param takeProfitLimitPrice Additional parameter for take-profit leg of advanced orders. Required for bracket
+     *                             orders.
+     * @param stopLossStopPrice    Additional parameters for stop-loss leg of advanced orders. Required for bracket
+     *                             orders.
+     * @param stopLossLimitPrice   Additional parameters for stop-loss leg of advanced orders. The stop-loss order
+     *                             becomes a stop-limit order if specified.
+     *
+     * @return the order
+     *
+     * @throws AlpacaAPIRequestException the alpaca api request exception
+     */
+    public Order requestNewStopBracketOrder(String symbol, Integer quantity, OrderSide side,
+            OrderTimeInForce timeInForce, Double stopPrice, Boolean extendedHours, Double takeProfitLimitPrice,
+            Double stopLossStopPrice, Double stopLossLimitPrice) throws AlpacaAPIRequestException {
+        return requestNewOrder(symbol, quantity, side, OrderType.STOP, timeInForce, null, stopPrice,
+                extendedHours, null, OrderClass.BRACKET, takeProfitLimitPrice, stopLossStopPrice, stopLossLimitPrice);
+    }
+
+    /**
+     * Calls {@link #requestNewOrder(String, Integer, OrderSide, OrderType, OrderTimeInForce, Double, Double, Boolean,
+     * String, OrderClass, Double, Double, Double)} with {@link OrderType#STOP_LIMIT} and with parameters for a bracket
+     * order.
+     *
+     * @param symbol               symbol or asset ID to identify the asset to trade
+     * @param quantity             number of shares to trade
+     * @param side                 buy or sell
+     * @param timeInForce          day, gtc, opg, cls, ioc, fok. Please see Understand Orders for more info.
+     * @param limitPrice           required if type is limit or stop_limit
+     * @param stopPrice            required if type is stop or stop_limit
+     * @param extendedHours        (default) false. If true, order will be eligible to execute in premarket/afterhours.
+     *                             Only works with type limit and time_in_force day.
+     * @param takeProfitLimitPrice Additional parameter for take-profit leg of advanced orders. Required for bracket
+     *                             orders.
+     * @param stopLossStopPrice    Additional parameters for stop-loss leg of advanced orders. Required for bracket
+     *                             orders.
+     * @param stopLossLimitPrice   Additional parameters for stop-loss leg of advanced orders. The stop-loss order
+     *                             becomes a stop-limit order if specified.
+     *
+     * @return the order
+     *
+     * @throws AlpacaAPIRequestException the alpaca api request exception
+     */
+    public Order requestNewStopLimitBracketOrder(String symbol, Integer quantity, OrderSide side,
+            OrderTimeInForce timeInForce, Double limitPrice, Double stopPrice, Boolean extendedHours,
+            Double takeProfitLimitPrice, Double stopLossStopPrice, Double stopLossLimitPrice)
             throws AlpacaAPIRequestException {
         return requestNewOrder(symbol, quantity, side, OrderType.STOP_LIMIT, timeInForce, limitPrice, stopPrice,
-                extendedHours, clientOrderId);
+                extendedHours, null, OrderClass.BRACKET, takeProfitLimitPrice, stopLossStopPrice, stopLossLimitPrice);
     }
 
     /**

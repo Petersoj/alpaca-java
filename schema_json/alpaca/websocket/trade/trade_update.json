@@ -12,7 +12,7 @@
     },
     "timestamp": {
       "existingJavaType": "java.time.ZonedDateTime",
-      "title": "updated_at"
+      "title": "The timestamp"
     },
     "position_qty": {
       "existingJavaType": "java.lang.String",

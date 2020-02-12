@@ -10,46 +10,6 @@ import io.github.mainstringargs.abstracts.enums.APIName;
  */
 public enum ActivityType implements APIName {
 
-    /*
-     Activity Types:
-     FILL: Order fills (both partial and full fills)
-     TRANS: Cash transactions (both CSD and CSR)
-     MISC: Miscellaneous or rarely used activity types (All types except those in TRANS, DIV, or FILL)
-     ACATC: ACATS IN/OUT (Cash)
-     ACATS: ACATS IN/OUT (Securities)
-     CSD: Cash disbursement(+)
-     CSR: Cash receipt(-)
-     DIV: Dividends
-     DIVCGL: Dividend (capital gain long term)
-     DIVCGS: Dividend (capital gain short term)
-     DIVFEE: Dividend fee
-     DIVFT: Dividend adjusted (Foreign Tax Withheld)
-     DIVNRA: Dividend adjusted (NRA Withheld)
-     DIVROC: Dividend return of capital
-     DIVTW: Dividend adjusted (Tefra Withheld)
-     DIVTXEX: Dividend (tax exempt)
-     INT: Interest (credit/margin)
-     INTNRA Interest adjusted (NRA Withheld)
-     INTTW: Interest adjusted (Tefra Withheld)
-     JNL: Journal entry
-     JNLC: Journal entry (cash)
-     JNLS: Journal entry (stock)
-     MA: Merger/Acquisition
-     NC: Name change
-     OPASN: Option assignment
-     OPEXP: Option expiration
-     OPXRC: Option exercise
-     PTC: Pass Thru Charge
-     PTR: Pass Thru Rebate
-     REORG: Reorg CA
-     SC: Symbol change
-     SSO: Stock spinoff
-     SSP: Stock split
-     */
-
-    // The names of these enums must be the API name exactly
-    // @see ActivityTypes#getAPIName()
-
     /** Order fills (both partial and full fills) */
     FILL,
 
