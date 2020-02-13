@@ -85,7 +85,7 @@ public class AlpacaAPI {
                 AlpacaProperties.SECRET_VALUE, AlpacaProperties.BASE_API_URL_VALUE,
                 AlpacaProperties.BASE_DATA_URL_VALUE);
 
-        LOGGER.info(AlpacaProperties.staticToString());
+        LOGGER.debug(AlpacaProperties.staticToString());
     }
 
     /**
@@ -139,7 +139,7 @@ public class AlpacaAPI {
         alpacaRequest = new AlpacaRequest(keyId, secret);
         alpacaWebSocketClient = new AlpacaWebsocketClient(keyId, secret, baseAPIURL);
 
-        LOGGER.info(this.toString());
+        LOGGER.debug(this.toString());
     }
 
     /**
