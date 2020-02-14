@@ -81,7 +81,7 @@ public class PolygonAPI {
     public PolygonAPI() {
         this(PolygonProperties.KEY_ID_VALUE);
 
-        LOGGER.info(PolygonProperties.staticToString());
+        LOGGER.debug(PolygonProperties.staticToString());
     }
 
     /**
@@ -108,7 +108,7 @@ public class PolygonAPI {
         polygonRequest = new PolygonRequest(keyID);
         polygonWebsocketClient = new PolygonWebsocketClient(keyID, websocketURL);
 
-        LOGGER.info(this.toString());
+        LOGGER.debug(this.toString());
     }
 
     /**

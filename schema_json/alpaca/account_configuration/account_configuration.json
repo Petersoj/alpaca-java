@@ -4,7 +4,7 @@
   "properties": {
     "dtbp_check": {
       "existingJavaType": "java.lang.String",
-      "title": "both, entry, or exit. Controls Day Trading Margin Call (DTMC) checks."
+      "title": "Both, entry, or exit. Controls Day Trading Margin Call (DTMC) checks."
     },
     "trade_confirm_email": {
       "existingJavaType": "java.lang.String",

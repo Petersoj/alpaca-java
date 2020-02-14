@@ -29,6 +29,15 @@ public class AlpacaConstants {
     /** The Constant CLIENT_ORDER_ID_PARAMETER. */
     public static final String CLIENT_ORDER_ID_PARAMETER = "client_order_id";
 
+    /** The constant ORDER_CLASS_PARAMETER. */
+    public static final String ORDER_CLASS_PARAMETER = "order_class";
+
+    /** The constant TAKE_PROFIT_PARAMETER. */
+    public static final String TAKE_PROFIT_PARAMETER = "take_profit";
+
+    /** The constant STOP_LOSS_PARAMETER. */
+    public static final String STOP_LOSS_PARAMETER = "stop_loss";
+
     /** The Constant STOP_PRICE_PARAMETER. */
     public static final String STOP_PRICE_PARAMETER = "stop_price";
 
@@ -55,6 +64,9 @@ public class AlpacaConstants {
 
     /** The Constant DIRECTION_PARAMETER. */
     public static final String DIRECTION_PARAMETER = "direction";
+
+    /** The constant NESTED_PARAMETER. */
+    public static final String NESTED_PARAMETER = "nested";
 
     /** The Constant UNTIL_PARAMETER. */
     public static final String UNTIL_PARAMETER = "until";

@@ -4,27 +4,27 @@
   "properties": {
     "t": {
       "existingJavaType": "java.lang.Long",
-      "title": "the beginning time of this bar as a Unix epoch in seconds"
+      "title": "The beginning time of this bar as a Unix epoch in seconds"
     },
     "o": {
       "existingJavaType": "java.lang.Double",
-      "title": "open price"
+      "title": "Open price"
     },
     "h": {
       "existingJavaType": "java.lang.Double",
-      "title": "high price"
+      "title": "High price"
     },
     "l": {
       "existingJavaType": "java.lang.Double",
-      "title": "low price"
+      "title": "Low price"
     },
     "c": {
       "existingJavaType": "java.lang.Double",
-      "title": "close price"
+      "title": "Close price"
     },
     "v": {
       "existingJavaType": "java.lang.Double",
-      "title": "volume"
+      "title": "Volume"
     }
   }
 }

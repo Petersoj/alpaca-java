@@ -4,11 +4,11 @@
   "properties": {
     "id": {
       "existingJavaType": "java.lang.String",
-      "title": "order id"
+      "title": "Order ID"
     },
     "client_order_id": {
       "existingJavaType": "java.lang.String",
-      "title": "client unique order id"
+      "title": "Client unique order ID"
     },
     "created_at": {
       "existingJavaType": "java.time.ZonedDateTime",
@@ -40,7 +40,7 @@
     },
     "asset_id": {
       "existingJavaType": "java.lang.String",
-      "title": "asset ID"
+      "title": "Asset ID"
     },
     "symbol": {
       "existingJavaType": "java.lang.String",
@@ -89,6 +89,10 @@
     "extended_hours": {
       "existingJavaType": "java.lang.Boolean",
       "title": "If true, eligible for execution outside regular trading hours."
+    },
+    "legs": {
+      "existingJavaType": "java.util.ArrayList<io.github.mainstringargs.domain.alpaca.order.Order>",
+      "title": "When querying non-simple order_class orders in a nested style, an array of Order entities associated with this order is returned. Otherwise, null."
     }
   }
 }
