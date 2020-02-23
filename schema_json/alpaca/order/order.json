@@ -38,6 +38,18 @@
       "existingJavaType": "java.time.ZonedDateTime",
       "title": "Failed at"
     },
+    "replaced_at": {
+      "existingJavaType": "java.time.ZonedDateTime",
+      "title": "Replaced at"
+    },
+    "replaced_by": {
+      "existingJavaType": "java.lang.String",
+      "title": "The order ID that this order was replaced by"
+    },
+    "replaces": {
+      "existingJavaType": "java.lang.String",
+      "title": "The order ID that this order replaces"
+    },
     "asset_id": {
       "existingJavaType": "java.lang.String",
       "title": "Asset ID"
