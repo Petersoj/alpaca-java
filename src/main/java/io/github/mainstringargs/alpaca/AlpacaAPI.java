@@ -617,68 +617,6 @@ public class AlpacaAPI {
     }
 
     /**
-     * Calls {@link #requestNewOrder(String, Integer, OrderSide, OrderType, OrderTimeInForce, Double, Double, Boolean,
-     * String, OrderClass, Double, Double, Double)} with {@link OrderType#STOP} and with parameters for a bracket
-     * order.
-     *
-     * @param symbol               symbol or asset ID to identify the asset to trade
-     * @param quantity             number of shares to trade
-     * @param side                 buy or sell
-     * @param timeInForce          day, gtc, opg, cls, ioc, fok. Please see Understand Orders for more info.
-     * @param stopPrice            required if type is stop or stop_limit
-     * @param extendedHours        (default) false. If true, order will be eligible to execute in premarket/afterhours.
-     *                             Only works with type limit and time_in_force day.
-     * @param takeProfitLimitPrice Additional parameter for take-profit leg of advanced orders. Required for bracket
-     *                             orders.
-     * @param stopLossStopPrice    Additional parameters for stop-loss leg of advanced orders. Required for bracket
-     *                             orders.
-     * @param stopLossLimitPrice   Additional parameters for stop-loss leg of advanced orders. The stop-loss order
-     *                             becomes a stop-limit order if specified.
-     *
-     * @return the order
-     *
-     * @throws AlpacaAPIRequestException the alpaca api request exception
-     */
-    public Order requestNewStopBracketOrder(String symbol, Integer quantity, OrderSide side,
-            OrderTimeInForce timeInForce, Double stopPrice, Boolean extendedHours, Double takeProfitLimitPrice,
-            Double stopLossStopPrice, Double stopLossLimitPrice) throws AlpacaAPIRequestException {
-        return requestNewOrder(symbol, quantity, side, OrderType.STOP, timeInForce, null, stopPrice,
-                extendedHours, null, OrderClass.BRACKET, takeProfitLimitPrice, stopLossStopPrice, stopLossLimitPrice);
-    }
-
-    /**
-     * Calls {@link #requestNewOrder(String, Integer, OrderSide, OrderType, OrderTimeInForce, Double, Double, Boolean,
-     * String, OrderClass, Double, Double, Double)} with {@link OrderType#STOP_LIMIT} and with parameters for a bracket
-     * order.
-     *
-     * @param symbol               symbol or asset ID to identify the asset to trade
-     * @param quantity             number of shares to trade
-     * @param side                 buy or sell
-     * @param timeInForce          day, gtc, opg, cls, ioc, fok. Please see Understand Orders for more info.
-     * @param limitPrice           required if type is limit or stop_limit
-     * @param stopPrice            required if type is stop or stop_limit
-     * @param extendedHours        (default) false. If true, order will be eligible to execute in premarket/afterhours.
-     *                             Only works with type limit and time_in_force day.
-     * @param takeProfitLimitPrice Additional parameter for take-profit leg of advanced orders. Required for bracket
-     *                             orders.
-     * @param stopLossStopPrice    Additional parameters for stop-loss leg of advanced orders. Required for bracket
-     *                             orders.
-     * @param stopLossLimitPrice   Additional parameters for stop-loss leg of advanced orders. The stop-loss order
-     *                             becomes a stop-limit order if specified.
-     *
-     * @return the order
-     *
-     * @throws AlpacaAPIRequestException the alpaca api request exception
-     */
-    public Order requestNewStopLimitBracketOrder(String symbol, Integer quantity, OrderSide side,
-            OrderTimeInForce timeInForce, Double limitPrice, Double stopPrice, Boolean extendedHours,
-            Double takeProfitLimitPrice, Double stopLossStopPrice, Double stopLossLimitPrice)
-            throws AlpacaAPIRequestException {
-        return requestNewOrder(symbol, quantity, side, OrderType.STOP_LIMIT, timeInForce, limitPrice, stopPrice,
-                extendedHours, null, OrderClass.BRACKET, takeProfitLimitPrice, stopLossStopPrice, stopLossLimitPrice);
-    }
-
-    /**
      * Retrieves a single order for the given order_id.
      *
      * @param orderID Order ID
