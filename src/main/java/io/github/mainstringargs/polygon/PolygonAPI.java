@@ -471,7 +471,7 @@ public class PolygonAPI {
             throw new PolygonAPIRequestException(response);
         }
 
-        Type listType = new TypeToken<ArrayList<MarketHoliday>>() {}.getType();
+        Type listType = new TypeToken<ArrayList<Exchange>>() {}.getType();
 
         return polygonRequest.getResponseObject(response, listType);
     }
