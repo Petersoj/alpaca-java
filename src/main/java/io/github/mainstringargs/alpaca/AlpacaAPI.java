@@ -383,8 +383,8 @@ public class AlpacaAPI {
      * @param extendedHours        (default) false. If true, order will be eligible to execute in premarket/afterhours.
      *                             Only works with type limit and time_in_force day.
      * @param clientOrderId        A unique identifier for the order. Automatically generated if not sent.
-     * @param orderClass           Simple or bracket. For details of non-simple order classes, please see Bracket Order
-     *                             Overview.
+     * @param orderClass           Simple, bracket, oco, or oto. For details of non-simple order classes, please see
+     *                             Bracket Order Overview on the Alpaca Docs.
      * @param takeProfitLimitPrice Additional parameter for take-profit leg of advanced orders. Required for bracket
      *                             orders.
      * @param stopLossStopPrice    Additional parameters for stop-loss leg of advanced orders. Required for bracket
@@ -470,8 +470,10 @@ public class AlpacaAPI {
     }
 
     /**
-     * Calls {@link #requestNewOrder(String, Integer, OrderSide, OrderType, OrderTimeInForce, Double, Double, Boolean,
-     * String, OrderClass, Double, Double, Double)} with {@link OrderType#MARKET}.
+     * A market order is a request to buy or sell a security at the currently available market price. It provides the
+     * most likely method of filling an order. Market orders fill nearly instantaneously. This method calls {@link
+     * #requestNewOrder(String, Integer, OrderSide, OrderType, OrderTimeInForce, Double, Double, Boolean, String,
+     * OrderClass, Double, Double, Double)} with {@link OrderType#MARKET}.
      *
      * @param symbol        symbol or asset ID to identify the asset to trade
      * @param quantity      number of shares to trade
@@ -483,6 +485,7 @@ public class AlpacaAPI {
      * @return the order
      *
      * @throws AlpacaAPIRequestException the alpaca api request exception
+     * @see <a href="https://docs.alpaca.markets/trading-on-alpaca/orders/#order-types">Order Types</a>
      */
     public Order requestNewMarketOrder(String symbol, Integer quantity, OrderSide side, OrderTimeInForce timeInForce,
             Boolean extendedHours) throws AlpacaAPIRequestException {
@@ -491,8 +494,12 @@ public class AlpacaAPI {
     }
 
     /**
-     * Calls {@link #requestNewOrder(String, Integer, OrderSide, OrderType, OrderTimeInForce, Double, Double, Boolean,
-     * String, OrderClass, Double, Double, Double)} with {@link OrderType#LIMIT}.
+     * A limit order is an order to buy or sell at a specified price or better. A buy limit order (a limit order to buy)
+     * is executed at the specified limit price or lower (i.e., better). Conversely, a sell limit order (a limit order
+     * to sell) is executed at the specified limit price or higher (better). Unlike a market order, you have to specify
+     * the limit price parameter when submitting your order. This method calls {@link #requestNewOrder(String, Integer,
+     * OrderSide, OrderType, OrderTimeInForce, Double, Double, Boolean, String, OrderClass, Double, Double, Double)}
+     * with {@link OrderType#LIMIT}.
      *
      * @param symbol        symbol or asset ID to identify the asset to trade
      * @param quantity      number of shares to trade
@@ -505,6 +512,7 @@ public class AlpacaAPI {
      * @return the order
      *
      * @throws AlpacaAPIRequestException the alpaca api request exception
+     * @see <a href="https://docs.alpaca.markets/trading-on-alpaca/orders/#order-types">Order Types</a>
      */
     public Order requestNewLimitOrder(String symbol, Integer quantity, OrderSide side, OrderTimeInForce timeInForce,
             Double limitPrice, Boolean extendedHours) throws AlpacaAPIRequestException {
@@ -513,20 +521,26 @@ public class AlpacaAPI {
     }
 
     /**
-     * Calls {@link #requestNewOrder(String, Integer, OrderSide, OrderType, OrderTimeInForce, Double, Double, Boolean,
-     * String, OrderClass, Double, Double, Double)} with {@link OrderType#STOP}.
+     * A stop (market) order is an order to buy or sell a security when its price moves past a particular point,
+     * ensuring a higher probability of achieving a predetermined entry or exit price. Once the market price crosses the
+     * specified stop price, the stop order becomes a market order. Alpaca converts buy stop orders into stop limit
+     * orders with a limit price that is 4% higher than a stop price < $50 (or 2.5% higher than a stop price >= $50).
+     * Sell stop orders are not converted into stop limit orders. This method calls {@link #requestNewOrder(String,
+     * Integer, OrderSide, OrderType, OrderTimeInForce, Double, Double, Boolean, String, OrderClass, Double, Double,
+     * Double)} with {@link OrderType#STOP}.
      *
      * @param symbol        symbol or asset ID to identify the asset to trade
      * @param quantity      number of shares to trade
      * @param side          buy or sell
      * @param timeInForce   day, gtc, opg, cls, ioc, fok. Please see Understand Orders for more info.
-     * @param stopPrice     required if type is limit or stop_limit
+     * @param stopPrice     required if type is stop or stop_limit
      * @param extendedHours (default) false. If true, order will be eligible to execute in premarket/afterhours. Only
      *                      works with type limit and time_in_force day.
      *
      * @return the order
      *
      * @throws AlpacaAPIRequestException the alpaca api request exception
+     * @see <a href="https://docs.alpaca.markets/trading-on-alpaca/orders/#order-types">Order Types</a>
      */
     public Order requestNewStopOrder(String symbol, Integer quantity, OrderSide side, OrderTimeInForce timeInForce,
             Double stopPrice, Boolean extendedHours) throws AlpacaAPIRequestException {
@@ -535,8 +549,12 @@ public class AlpacaAPI {
     }
 
     /**
-     * Calls {@link #requestNewOrder(String, Integer, OrderSide, OrderType, OrderTimeInForce, Double, Double, Boolean,
-     * String, OrderClass, Double, Double, Double)} with {@link OrderType#STOP_LIMIT}.
+     * A stop-limit order is a conditional trade over a set time frame that combines the features of a stop order with
+     * those of a limit order and is used to mitigate risk. The stop-limit order will be executed at a specified limit
+     * price, or better, after a given stop price has been reached. Once the stop price is reached, the stop-limit order
+     * becomes a limit order to buy or sell at the limit price or better. This method calls {@link
+     * #requestNewOrder(String, Integer, OrderSide, OrderType, OrderTimeInForce, Double, Double, Boolean, String,
+     * OrderClass, Double, Double, Double)} with {@link OrderType#STOP_LIMIT}.
      *
      * @param symbol        symbol or asset ID to identify the asset to trade
      * @param quantity      number of shares to trade
@@ -550,6 +568,7 @@ public class AlpacaAPI {
      * @return the order
      *
      * @throws AlpacaAPIRequestException the alpaca api request exception
+     * @see <a href="https://docs.alpaca.markets/trading-on-alpaca/orders/#order-types">Order Types</a>
      */
     public Order requestNewStopLimitOrder(String symbol, Integer quantity, OrderSide side, OrderTimeInForce timeInForce,
             Double limitPrice, Double stopPrice, Boolean extendedHours) throws AlpacaAPIRequestException {
@@ -558,9 +577,10 @@ public class AlpacaAPI {
     }
 
     /**
-     * Calls {@link #requestNewOrder(String, Integer, OrderSide, OrderType, OrderTimeInForce, Double, Double, Boolean,
-     * String, OrderClass, Double, Double, Double)} with {@link OrderType#MARKET} and with parameters for a bracket
-     * order.
+     * A bracket order is a chain of three orders that can be used to manage your position entry and exit. It is a
+     * common use case of an OTOCO (One Triggers OCO {One Cancels Other}) order. This method calls {@link
+     * #requestNewOrder(String, Integer, OrderSide, OrderType, OrderTimeInForce, Double, Double, Boolean, String,
+     * OrderClass, Double, Double, Double)} with {@link OrderType#MARKET} and with parameters for a bracket order.
      *
      * @param symbol               symbol or asset ID to identify the asset to trade
      * @param quantity             number of shares to trade
@@ -578,6 +598,7 @@ public class AlpacaAPI {
      * @return the order
      *
      * @throws AlpacaAPIRequestException the alpaca api request exception
+     * @see <a href="https://docs.alpaca.markets/trading-on-alpaca/orders/#order-types">Order Types</a>
      */
     public Order requestNewMarketBracketOrder(String symbol, Integer quantity, OrderSide side,
             OrderTimeInForce timeInForce, Boolean extendedHours, Double takeProfitLimitPrice, Double stopLossStopPrice,
@@ -587,9 +608,10 @@ public class AlpacaAPI {
     }
 
     /**
-     * Calls {@link #requestNewOrder(String, Integer, OrderSide, OrderType, OrderTimeInForce, Double, Double, Boolean,
-     * String, OrderClass, Double, Double, Double)} with {@link OrderType#LIMIT} and with parameters for a bracket
-     * order.
+     * A bracket order is a chain of three orders that can be used to manage your position entry and exit. It is a
+     * common use case of an OTOCO (One Triggers OCO {One Cancels Other}) order. This method calls {@link
+     * #requestNewOrder(String, Integer, OrderSide, OrderType, OrderTimeInForce, Double, Double, Boolean, String,
+     * OrderClass, Double, Double, Double)} with {@link OrderType#LIMIT} and with parameters for a bracket order.
      *
      * @param symbol               symbol or asset ID to identify the asset to trade
      * @param quantity             number of shares to trade
@@ -608,12 +630,165 @@ public class AlpacaAPI {
      * @return the order
      *
      * @throws AlpacaAPIRequestException the alpaca api request exception
+     * @see <a href="https://docs.alpaca.markets/trading-on-alpaca/orders/#order-types">Order Types</a>
      */
     public Order requestNewLimitBracketOrder(String symbol, Integer quantity, OrderSide side,
             OrderTimeInForce timeInForce, Double limitPrice, Boolean extendedHours, Double takeProfitLimitPrice,
             Double stopLossStopPrice, Double stopLossLimitPrice) throws AlpacaAPIRequestException {
         return requestNewOrder(symbol, quantity, side, OrderType.LIMIT, timeInForce, limitPrice, null,
                 extendedHours, null, OrderClass.BRACKET, takeProfitLimitPrice, stopLossStopPrice, stopLossLimitPrice);
+    }
+
+    /**
+     * OCO (One-Cancels-Other) is another type of advanced order type. This is a set of two orders with the same side
+     * (buy/buy or sell/sell) and currently only exit order is supported. In other words, this is the second part of the
+     * bracket orders where the entry order is already filled, and you can submit the take-profit and stop-loss in one
+     * order submission. This method calls {@link #requestNewOrder(String, Integer, OrderSide, OrderType,
+     * OrderTimeInForce, Double, Double, Boolean, String, OrderClass, Double, Double, Double)} with parameters for an
+     * OCO order type.
+     *
+     * @param symbol               symbol or asset ID to identify the asset to trade
+     * @param quantity             number of shares to trade
+     * @param side                 buy or sell
+     * @param timeInForce          day, gtc, opg, cls, ioc, fok. Please see Understand Orders for more info.
+     * @param extendedHours        (default) false. If true, order will be eligible to execute in premarket/afterhours.
+     *                             Only works with type limit and time_in_force day.
+     * @param takeProfitLimitPrice Additional parameter for take-profit leg of advanced orders.
+     * @param stopLossStopPrice    Additional parameters for stop-loss leg of advanced orders.
+     * @param stopLossLimitPrice   Additional parameters for stop-loss leg of advanced orders. The stop-loss order
+     *                             becomes a stop-limit order if specified.
+     *
+     * @return the order
+     *
+     * @throws AlpacaAPIRequestException the alpaca api request exception
+     * @see <a href="https://docs.alpaca.markets/trading-on-alpaca/orders/#order-types">Order Types</a>
+     */
+    public Order requestNewOCOOrder(String symbol, Integer quantity, OrderSide side,
+            OrderTimeInForce timeInForce, Boolean extendedHours, Double takeProfitLimitPrice,
+            Double stopLossStopPrice, Double stopLossLimitPrice) throws AlpacaAPIRequestException {
+        return requestNewOrder(symbol, quantity, side, OrderType.LIMIT, timeInForce, null, null, extendedHours, null,
+                OrderClass.OCO, takeProfitLimitPrice, stopLossStopPrice, stopLossLimitPrice);
+    }
+
+    /**
+     * OTO (One-Triggers-Other) is a variant of bracket order. It takes one of the take-profit or stop-loss order in
+     * addition to the entry order. This method calls {@link #requestNewOrder(String, Integer, OrderSide, OrderType,
+     * OrderTimeInForce, Double, Double, Boolean, String, OrderClass, Double, Double, Double)} with {@link
+     * OrderType#LIMIT} and with parameters for an OTO order type.
+     *
+     * @param symbol               symbol or asset ID to identify the asset to trade
+     * @param quantity             number of shares to trade
+     * @param side                 buy or sell
+     * @param timeInForce          day, gtc, opg, cls, ioc, fok. Please see Understand Orders for more info.
+     * @param extendedHours        (default) false. If true, order will be eligible to execute in premarket/afterhours.
+     *                             Only works with type limit and time_in_force day.
+     * @param takeProfitLimitPrice Additional parameter for take-profit leg of advanced orders.
+     * @param stopLossStopPrice    Additional parameters for stop-loss leg of advanced orders.
+     * @param stopLossLimitPrice   Additional parameters for stop-loss leg of advanced orders. The stop-loss order
+     *                             becomes a stop-limit order if specified.
+     *
+     * @return the order
+     *
+     * @throws AlpacaAPIRequestException the alpaca api request exception
+     * @see <a href="https://docs.alpaca.markets/trading-on-alpaca/orders/#order-types">Order Types</a>
+     */
+    public Order requestNewOTOMarketOrder(String symbol, Integer quantity, OrderSide side,
+            OrderTimeInForce timeInForce, Boolean extendedHours, Double takeProfitLimitPrice,
+            Double stopLossStopPrice, Double stopLossLimitPrice) throws AlpacaAPIRequestException {
+        return requestNewOrder(symbol, quantity, side, OrderType.MARKET, timeInForce, null, null, extendedHours, null,
+                OrderClass.OTO, takeProfitLimitPrice, stopLossStopPrice, stopLossLimitPrice);
+    }
+
+    /**
+     * OTO (One-Triggers-Other) is a variant of bracket order. It takes one of the take-profit or stop-loss order in
+     * addition to the entry order. This method calls {@link #requestNewOrder(String, Integer, OrderSide, OrderType,
+     * OrderTimeInForce, Double, Double, Boolean, String, OrderClass, Double, Double, Double)} with {@link
+     * OrderType#LIMIT} and with parameters for an OTO order type.
+     *
+     * @param symbol               symbol or asset ID to identify the asset to trade
+     * @param quantity             number of shares to trade
+     * @param side                 buy or sell
+     * @param timeInForce          day, gtc, opg, cls, ioc, fok. Please see Understand Orders for more info.
+     * @param limitPrice           required if type is limit or stop_limit
+     * @param extendedHours        (default) false. If true, order will be eligible to execute in premarket/afterhours.
+     *                             Only works with type limit and time_in_force day.
+     * @param takeProfitLimitPrice Additional parameter for take-profit leg of advanced orders.
+     * @param stopLossStopPrice    Additional parameters for stop-loss leg of advanced orders.
+     * @param stopLossLimitPrice   Additional parameters for stop-loss leg of advanced orders. The stop-loss order
+     *                             becomes a stop-limit order if specified.
+     *
+     * @return the order
+     *
+     * @throws AlpacaAPIRequestException the alpaca api request exception
+     * @see <a href="https://docs.alpaca.markets/trading-on-alpaca/orders/#order-types">Order Types</a>
+     */
+    public Order requestNewOTOLimitOrder(String symbol, Integer quantity, OrderSide side,
+            OrderTimeInForce timeInForce, Double limitPrice, Boolean extendedHours, Double takeProfitLimitPrice,
+            Double stopLossStopPrice, Double stopLossLimitPrice) throws AlpacaAPIRequestException {
+        return requestNewOrder(symbol, quantity, side, OrderType.LIMIT, timeInForce, limitPrice, null, extendedHours,
+                null, OrderClass.OTO, takeProfitLimitPrice, stopLossStopPrice, stopLossLimitPrice);
+    }
+
+    /**
+     * OTO (One-Triggers-Other) is a variant of bracket order. It takes one of the take-profit or stop-loss order in
+     * addition to the entry order. This method calls {@link #requestNewOrder(String, Integer, OrderSide, OrderType,
+     * OrderTimeInForce, Double, Double, Boolean, String, OrderClass, Double, Double, Double)} with {@link
+     * OrderType#STOP} and with parameters for an OTO order type.
+     *
+     * @param symbol               symbol or asset ID to identify the asset to trade
+     * @param quantity             number of shares to trade
+     * @param side                 buy or sell
+     * @param timeInForce          day, gtc, opg, cls, ioc, fok. Please see Understand Orders for more info.
+     * @param stopPrice            required if type is stop or stop_limit
+     * @param extendedHours        (default) false. If true, order will be eligible to execute in premarket/afterhours.
+     *                             Only works with type limit and time_in_force day.
+     * @param takeProfitLimitPrice Additional parameter for take-profit leg of advanced orders.
+     * @param stopLossStopPrice    Additional parameters for stop-loss leg of advanced orders.
+     * @param stopLossLimitPrice   Additional parameters for stop-loss leg of advanced orders. The stop-loss order
+     *                             becomes a stop-limit order if specified.
+     *
+     * @return the order
+     *
+     * @throws AlpacaAPIRequestException the alpaca api request exception
+     * @see <a href="https://docs.alpaca.markets/trading-on-alpaca/orders/#order-types">Order Types</a>
+     */
+    public Order requestNewOTOStopOrder(String symbol, Integer quantity, OrderSide side,
+            OrderTimeInForce timeInForce, Double stopPrice, Boolean extendedHours, Double takeProfitLimitPrice,
+            Double stopLossStopPrice, Double stopLossLimitPrice) throws AlpacaAPIRequestException {
+        return requestNewOrder(symbol, quantity, side, OrderType.STOP, timeInForce, null, stopPrice, extendedHours,
+                null, OrderClass.OTO, takeProfitLimitPrice, stopLossStopPrice, stopLossLimitPrice);
+    }
+
+    /**
+     * OTO (One-Triggers-Other) is a variant of bracket order. It takes one of the take-profit or stop-loss order in
+     * addition to the entry order. This method calls {@link #requestNewOrder(String, Integer, OrderSide, OrderType,
+     * OrderTimeInForce, Double, Double, Boolean, String, OrderClass, Double, Double, Double)} with {@link
+     * OrderType#STOP_LIMIT} and with parameters for an OTO order type.
+     *
+     * @param symbol               symbol or asset ID to identify the asset to trade
+     * @param quantity             number of shares to trade
+     * @param side                 buy or sell
+     * @param timeInForce          day, gtc, opg, cls, ioc, fok. Please see Understand Orders for more info.
+     * @param limitPrice           required if type is limit or stop_limit
+     * @param stopPrice            required if type is stop or stop_limit
+     * @param extendedHours        (default) false. If true, order will be eligible to execute in premarket/afterhours.
+     *                             Only works with type limit and time_in_force day.
+     * @param takeProfitLimitPrice Additional parameter for take-profit leg of advanced orders.
+     * @param stopLossStopPrice    Additional parameters for stop-loss leg of advanced orders.
+     * @param stopLossLimitPrice   Additional parameters for stop-loss leg of advanced orders. The stop-loss order
+     *                             becomes a stop-limit order if specified.
+     *
+     * @return the order
+     *
+     * @throws AlpacaAPIRequestException the alpaca api request exception
+     * @see <a href="https://docs.alpaca.markets/trading-on-alpaca/orders/#order-types">Order Types</a>
+     */
+    public Order requestNewOTOStopLimitOrder(String symbol, Integer quantity, OrderSide side,
+            OrderTimeInForce timeInForce, Double limitPrice, Double stopPrice, Boolean extendedHours,
+            Double takeProfitLimitPrice, Double stopLossStopPrice, Double stopLossLimitPrice)
+            throws AlpacaAPIRequestException {
+        return requestNewOrder(symbol, quantity, side, OrderType.STOP_LIMIT, timeInForce, limitPrice, stopPrice,
+                extendedHours, null, OrderClass.OTO, takeProfitLimitPrice, stopLossStopPrice, stopLossLimitPrice);
     }
 
     /**
