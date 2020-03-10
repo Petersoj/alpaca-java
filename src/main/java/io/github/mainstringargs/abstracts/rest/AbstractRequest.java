@@ -45,6 +45,8 @@ public abstract class AbstractRequest {
 
             if (!headers.isEmpty()) {
                 request.headers(headers);
+
+                LOGGER.debug("GET Headers: " + headers);
             }
 
             return request.asBinary();
@@ -72,6 +74,8 @@ public abstract class AbstractRequest {
 
             if (!headers.isEmpty()) {
                 request.headers(headers);
+
+                LOGGER.debug("HEAD Headers: " + headers);
             }
 
             return request.asBinary();
@@ -93,17 +97,21 @@ public abstract class AbstractRequest {
         try {
             String url = abstractRequestBuilder.getURL();
 
-            LOGGER.debug("POST URL " + url);
+            LOGGER.debug("POST URL: " + url);
 
             HttpRequestWithBody request = Unirest.post(url);
 
             if (!headers.isEmpty()) {
                 request.headers(headers);
+
+                LOGGER.debug("POST Headers: " + headers);
             }
 
             String body = abstractRequestBuilder.getBody();
             if (body != null) {
                 request.body(body);
+
+                LOGGER.debug("POST Body: " + body);
             }
 
             return request.asBinary();
@@ -131,11 +139,15 @@ public abstract class AbstractRequest {
 
             if (!headers.isEmpty()) {
                 request.headers(headers);
+
+                LOGGER.debug("PATCH Headers: " + headers);
             }
 
             String body = abstractRequestBuilder.getBody();
             if (body != null) {
                 request.body(body);
+
+                LOGGER.debug("PATCH Body: " + body);
             }
 
             return request.asBinary();
@@ -163,11 +175,15 @@ public abstract class AbstractRequest {
 
             if (!headers.isEmpty()) {
                 request.headers(headers);
+
+                LOGGER.debug("PUT Headers: " + headers);
             }
 
             String body = abstractRequestBuilder.getBody();
             if (body != null) {
                 request.body(body);
+
+                LOGGER.debug("PUT Body: " + body);
             }
 
             return request.asBinary();
@@ -195,11 +211,15 @@ public abstract class AbstractRequest {
 
             if (!headers.isEmpty()) {
                 request.headers(headers);
+
+                LOGGER.debug("DELETE Headers: " + headers);
             }
 
             String body = abstractRequestBuilder.getBody();
             if (body != null) {
                 request.body(body);
+
+                LOGGER.debug("DELETE Body: " + body);
             }
 
             return request.asBinary();
@@ -227,11 +247,15 @@ public abstract class AbstractRequest {
 
             if (!headers.isEmpty()) {
                 request.headers(headers);
+
+                LOGGER.debug("OPTIONS Headers: " + headers);
             }
 
             String body = abstractRequestBuilder.getBody();
             if (body != null) {
                 request.body(body);
+
+                LOGGER.debug("OPTIONS Body: " + body);
             }
 
             return request.asBinary();

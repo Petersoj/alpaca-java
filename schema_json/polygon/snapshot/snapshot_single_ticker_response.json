@@ -6,7 +6,7 @@
       "existingJavaType": "java.lang.String",
       "title": "Status of this requests response"
     },
-    "tickers": {
+    "ticker": {
       "existingJavaType": "io.github.mainstringargs.domain.polygon.snapshot.ticker.SnapshotTicker",
       "title": "tickers"
     }
