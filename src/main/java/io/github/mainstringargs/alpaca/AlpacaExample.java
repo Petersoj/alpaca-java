@@ -92,7 +92,7 @@ public class AlpacaExample {
             ZonedDateTime start = ZonedDateTime.of(2019, 11, 18, 0, 0, 0, 0, ZoneId.of("America/New_York"));
             ZonedDateTime end = ZonedDateTime.of(2019, 11, 22, 23, 59, 0, 0, ZoneId.of("America/New_York"));
 
-            Map<String, ArrayList<Bar>> bars = alpacaAPI.getBars(BarsTimeFrame.DAY, "AAPL", null, start, end,
+            Map<String, ArrayList<Bar>> bars = alpacaAPI.getBars(BarsTimeFrame.ONE_DAY, "AAPL", null, start, end,
                     null, null);
 
             System.out.println("\n\nBars response:");
