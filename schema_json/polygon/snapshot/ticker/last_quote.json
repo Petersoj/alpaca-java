@@ -4,7 +4,7 @@
   "properties": {
     "p": {
       "javaName": "bp",
-      "existingJavaType": "java.lang.Integer",
+      "existingJavaType": "java.lang.Double",
       "title": "Bid Price"
     },
     "s": {
@@ -14,7 +14,7 @@
     },
     "P": {
       "javaName": "ap",
-      "existingJavaType": "java.lang.Integer",
+      "existingJavaType": "java.lang.Double",
       "title": "Ask Price"
     },
     "S": {

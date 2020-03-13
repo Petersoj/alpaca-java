@@ -9,11 +9,17 @@ import io.github.mainstringargs.abstracts.enums.APIName;
  */
 public enum OrderClass implements APIName {
 
-    /** The buy. */
+    /** Simple order class. */
     SIMPLE("simple"),
 
-    /** The sell. */
-    BRACKET("bracket");
+    /** Bracket order class. */
+    BRACKET("bracket"),
+
+    /** One-Cancels-Other order class. */
+    OCO("oco"),
+
+    /** One-Triggers-Other order class. */
+    OTO("oto");
 
     /** The api name. */
     String apiName;
