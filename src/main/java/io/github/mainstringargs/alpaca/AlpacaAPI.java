@@ -16,6 +16,8 @@ import io.github.mainstringargs.alpaca.enums.OrderSide;
 import io.github.mainstringargs.alpaca.enums.OrderStatus;
 import io.github.mainstringargs.alpaca.enums.OrderTimeInForce;
 import io.github.mainstringargs.alpaca.enums.OrderType;
+import io.github.mainstringargs.alpaca.enums.PortfolioPeriodUnit;
+import io.github.mainstringargs.alpaca.enums.PortfolioTimeFrame;
 import io.github.mainstringargs.alpaca.properties.AlpacaProperties;
 import io.github.mainstringargs.alpaca.rest.AlpacaRequest;
 import io.github.mainstringargs.alpaca.rest.AlpacaRequestBuilder;
@@ -33,6 +35,7 @@ import io.github.mainstringargs.domain.alpaca.calendar.Calendar;
 import io.github.mainstringargs.domain.alpaca.clock.Clock;
 import io.github.mainstringargs.domain.alpaca.order.CancelledOrder;
 import io.github.mainstringargs.domain.alpaca.order.Order;
+import io.github.mainstringargs.domain.alpaca.portfoliohistory.PortfolioHistory;
 import io.github.mainstringargs.domain.alpaca.position.Position;
 import io.github.mainstringargs.domain.alpaca.watchlist.Watchlist;
 import io.github.mainstringargs.util.gson.GsonUtil;
@@ -218,11 +221,11 @@ public class AlpacaAPI {
         }
 
         if (pageSize != null) {
-            urlBuilder.appendURLParameter(AlpacaConstants.PAGE_SIZE_PARAMTER, pageSize.toString());
+            urlBuilder.appendURLParameter(AlpacaConstants.PAGE_SIZE_PARAMETER, pageSize.toString());
         }
 
         if (pageToken != null) {
-            urlBuilder.appendURLParameter(AlpacaConstants.PAGE_TOKEN_PARAMTER, pageToken);
+            urlBuilder.appendURLParameter(AlpacaConstants.PAGE_TOKEN_PARAMETER, pageToken);
         }
 
         HttpResponse<InputStream> response = alpacaRequest.invokeGet(urlBuilder);
@@ -1270,6 +1273,56 @@ public class AlpacaAPI {
         }
 
         return alpacaRequest.getResponseObject(response, Watchlist.class);
+    }
+
+    /**
+     * Returns timeseries data about equity and profit/loss (P/L) of the account in requested timespan.
+     *
+     * @param periodLength  The duration of the data in "number + unit", such as 1D, where unit can be D for day, W for
+     *                      week, M for month and A for year. Defaults to 1M. This parameter is the number.
+     * @param periodUnit    The duration of the data in "number + unit", such as 1D, where unit can be D for day, W for
+     *                      week, M for month and A for year. Defaults to 1M. This parameter is the unit.
+     * @param timeFrame     The resolution of time window. 1Min, 5Min, 15Min, 1H, or 1D. If omitted, 1Min for less than
+     *                      7 days period, 15Min for less than 30 days, or otherwise 1D.
+     * @param dateEnd       The date the data is returned up to, in "YYYY-MM-DD" format. Defaults to the current market
+     *                      date (rolls over at the market open if extended_hours is false, otherwise at 7am ET)
+     * @param extendedHours If true, include extended hours in the result. This is effective only for timeframe less
+     *                      than 1D.
+     *
+     * @return the portfolio history
+     *
+     * @throws AlpacaAPIRequestException the alpaca api request exception
+     */
+    public PortfolioHistory getPortfolioHistory(Integer periodLength, PortfolioPeriodUnit periodUnit,
+            PortfolioTimeFrame timeFrame, LocalDate dateEnd, Boolean extendedHours) throws AlpacaAPIRequestException {
+        AlpacaRequestBuilder urlBuilder = new AlpacaRequestBuilder(baseAPIURL, apiVersion,
+                AlpacaConstants.ACCOUNT_ENDPOINT,
+                AlpacaConstants.PORTFOLIO_ENDPOINT,
+                AlpacaConstants.HISTORY_ENDPOINT);
+
+        if (periodLength != null && periodUnit != null) {
+            urlBuilder.appendURLParameter(AlpacaConstants.PERIOD_PARAMETER, periodLength + periodUnit.getAPIName());
+        }
+
+        if (timeFrame != null) {
+            urlBuilder.appendURLParameter(AlpacaConstants.TIMEFRAME_PARAMETER, timeFrame.getAPIName());
+        }
+
+        if (dateEnd != null) {
+            urlBuilder.appendURLParameter(AlpacaConstants.DATE_END_PARAMETER, TimeUtil.toDateString(dateEnd));
+        }
+
+        if (extendedHours != null) {
+            urlBuilder.appendURLParameter(AlpacaConstants.EXTENDED_HOURS_PARAMETER, extendedHours.toString());
+        }
+
+        HttpResponse<InputStream> response = alpacaRequest.invokeGet(urlBuilder);
+
+        if (response.getStatus() != 200) {
+            throw new AlpacaAPIRequestException(response);
+        }
+
+        return alpacaRequest.getResponseObject(response, PortfolioHistory.class);
     }
 
     /**

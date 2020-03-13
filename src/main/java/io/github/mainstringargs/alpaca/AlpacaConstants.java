@@ -80,6 +80,15 @@ public class AlpacaConstants {
     /** The Constant STATUS_PARAMETER. */
     public static final String STATUS_PARAMETER = "status";
 
+    /** The constant PERIOD_PARAMETER. */
+    public static final String PERIOD_PARAMETER = "period";
+
+    /** The constant TIMEFRAME_PARAMETER. */
+    public static final String TIMEFRAME_PARAMETER = "timeframe";
+
+    /** The constant DATE_END_PARAMETER. */
+    public static final String DATE_END_PARAMETER = "date_end";
+
     /** The Constant BARS_ENDPOINT. */
     public static final String BARS_ENDPOINT = "bars";
 
@@ -107,17 +116,23 @@ public class AlpacaConstants {
     /** The Constant ORDERS_BY_CLIENT_ORDER_ID_ENDPOINT. */
     public static final String ORDERS_BY_CLIENT_ORDER_ID_ENDPOINT = "orders:by_client_order_id";
 
-    /** The constant PAGE_SIZE_PARAMTER. */
-    public static final String PAGE_SIZE_PARAMTER = "page_size";
+    /** The constant PAGE_SIZE_PARAMETER. */
+    public static final String PAGE_SIZE_PARAMETER = "page_size";
 
-    /** The constant PAGE_TOKEN_PARAMTER. */
-    public static final String PAGE_TOKEN_PARAMTER = "page_token";
+    /** The constant PAGE_TOKEN_PARAMETER. */
+    public static final String PAGE_TOKEN_PARAMETER = "page_token";
 
     /** The Constant ORDERS_ENDPOINT. */
     public static final String ORDERS_ENDPOINT = "orders";
 
     /** The Constant WATCHLISTS_ENDPOINT. */
     public static final String WATCHLISTS_ENDPOINT = "watchlists";
+
+    /** The constant PORTFOLIO_ENDPOINT. */
+    public static final String PORTFOLIO_ENDPOINT = "portfolio";
+
+    /** The constant HISTORY_ENDPOINT. */
+    public static final String HISTORY_ENDPOINT = "history";
 
     /** The Constant UTF_ENCODING. */
     public static final String UTF_ENCODING = "UTF-8";

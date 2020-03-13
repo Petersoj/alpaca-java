@@ -1,0 +1,30 @@
+{
+  "type": "object",
+  "title": "See: https://docs.alpaca.markets/api-documentation/api-v2/portfolio-history/",
+  "properties": {
+    "timestamp": {
+      "existingJavaType": "java.util.ArrayList<java.lang.Long>",
+      "title": "Time of each data element, left-labeled (the beginning of time window)"
+    },
+    "equity": {
+      "existingJavaType": "java.util.ArrayList<java.lang.Double>",
+      "title": "Equity value of the account in dollar amount as of the end of each time window"
+    },
+    "profit_loss": {
+      "existingJavaType": "java.util.ArrayList<java.lang.Double>",
+      "title": "Profit/loss in dollar from the base value"
+    },
+    "profit_loss_pct": {
+      "existingJavaType": "java.util.ArrayList<java.lang.Double>",
+      "title": "Profit/loss in percentage from the base value"
+    },
+    "base_value": {
+      "existingJavaType": "java.lang.Double",
+      "title": "Basis in dollar of the profit loss calculation"
+    },
+    "timeframe": {
+      "existingJavaType": "io.github.mainstringargs.alpaca.enums.PortfolioTimeFrame",
+      "title": "Time window size of each data element"
+    }
+  }
+}

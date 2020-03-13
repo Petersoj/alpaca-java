@@ -7,22 +7,16 @@ import io.github.mainstringargs.abstracts.enums.APIName;
  */
 public enum BarsTimeFrame implements APIName {
 
-    /** The minute. */
-    MINUTE("minute"),
-
-    /** The one min. */
+    /** One min bars time frame. */
     ONE_MIN("1Min"),
 
-    /** The five min. */
-    FIVE_MIN("5Min"),
+    /** Five minute bars time frame. */
+    FIVE_MINUTE("5Min"),
 
-    /** The fifteen min. */
-    FIFTEEN_MIN("15Min"),
+    /** Fifteen minute bars time frame. */
+    FIFTEEN_MINUTE("15Min"),
 
-    /** The day. */
-    DAY("day"),
-
-    /** The one day. */
+    /** One day bars time frame. */
     ONE_DAY("1D");
 
     /** The api name. */
