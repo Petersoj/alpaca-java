@@ -12,7 +12,9 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Set;
 
 public class GsonUtil {
@@ -46,27 +48,14 @@ public class GsonUtil {
         ArrayList<SerializedName> gsonSerializedNameAnnotations = getGsonSerializedNameAnnotations(jsonPOJOClass);
         Set<String> jsonObjectKeys = jsonObject.keySet();
 
-        for (SerializedName serializedName : gsonSerializedNameAnnotations) {
-            // Check main serialized name
-            if (!jsonObjectKeys.contains(serializedName.value())) {
-                // Check alternate serialized names
-                String[] alternates = serializedName.alternate();
-                boolean match = false;
+        List<String> classKeys = new ArrayList<>();
+        gsonSerializedNameAnnotations.forEach((c) -> classKeys.add(c.value()));
 
-                for (String alternate : alternates) { // Loop through all alternates
-                    if (jsonObjectKeys.contains(alternate)) {
-                        match = true;
-                        break;
-                    }
-                }
-                if (!match) { // Check if we didn't find the name at all
-                    return false;
-                }
-                continue; // Found main serialized name so continue through loop
+        for (String key : jsonObjectKeys){
+            if (!classKeys.contains(key)){
+                return false;
             }
-            continue; // Found main serialized name so continue through loop
         }
-
         return true;
     }
 

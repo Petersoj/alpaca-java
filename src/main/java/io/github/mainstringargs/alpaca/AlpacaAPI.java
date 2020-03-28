@@ -27,7 +27,6 @@ import io.github.mainstringargs.alpaca.websocket.listener.AlpacaStreamListener;
 import io.github.mainstringargs.domain.alpaca.account.Account;
 import io.github.mainstringargs.domain.alpaca.accountactivities.AccountActivity;
 import io.github.mainstringargs.domain.alpaca.accountactivities.NonTradeActivity;
-import io.github.mainstringargs.domain.alpaca.accountactivities.PaymentActivity;
 import io.github.mainstringargs.domain.alpaca.accountactivities.TradeActivity;
 import io.github.mainstringargs.domain.alpaca.accountconfiguration.AccountConfiguration;
 import io.github.mainstringargs.domain.alpaca.asset.Asset;
@@ -248,8 +247,6 @@ public class AlpacaAPI {
                         accountActivities.add(GsonUtil.GSON.fromJson(arrayJsonObject, TradeActivity.class));
                     } else if (GsonUtil.doesGsonPOJOMatch(NonTradeActivity.class, arrayJsonObject)) {
                         accountActivities.add(GsonUtil.GSON.fromJson(arrayJsonObject, NonTradeActivity.class));
-                    } else if (GsonUtil.doesGsonPOJOMatch(PaymentActivity.class, arrayJsonObject)) {
-                        accountActivities.add(GsonUtil.GSON.fromJson(arrayJsonObject, PaymentActivity.class));
                     } else {
                         LOGGER.warn("Received unknown JSON Object in response!");
                     }
