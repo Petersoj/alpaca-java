@@ -27,6 +27,7 @@ import io.github.mainstringargs.alpaca.websocket.listener.AlpacaStreamListener;
 import io.github.mainstringargs.domain.alpaca.account.Account;
 import io.github.mainstringargs.domain.alpaca.accountactivities.AccountActivity;
 import io.github.mainstringargs.domain.alpaca.accountactivities.NonTradeActivity;
+import io.github.mainstringargs.domain.alpaca.accountactivities.PaymentActivity;
 import io.github.mainstringargs.domain.alpaca.accountactivities.TradeActivity;
 import io.github.mainstringargs.domain.alpaca.accountconfiguration.AccountConfiguration;
 import io.github.mainstringargs.domain.alpaca.asset.Asset;
@@ -233,7 +234,6 @@ public class AlpacaAPI {
         if (response.getStatus() != 200) {
             throw new AlpacaAPIRequestException(response);
         }
-
         JsonElement responseJsonElement = alpacaRequest.getResponseJSON(response);
         ArrayList<AccountActivity> accountActivities = new ArrayList<>();
 
@@ -248,6 +248,8 @@ public class AlpacaAPI {
                         accountActivities.add(GsonUtil.GSON.fromJson(arrayJsonObject, TradeActivity.class));
                     } else if (GsonUtil.doesGsonPOJOMatch(NonTradeActivity.class, arrayJsonObject)) {
                         accountActivities.add(GsonUtil.GSON.fromJson(arrayJsonObject, NonTradeActivity.class));
+                    } else if (GsonUtil.doesGsonPOJOMatch(PaymentActivity.class, arrayJsonObject)) {
+                        accountActivities.add(GsonUtil.GSON.fromJson(arrayJsonObject, PaymentActivity.class));
                     } else {
                         LOGGER.warn("Received unknown JSON Object in response!");
                     }
@@ -527,7 +529,7 @@ public class AlpacaAPI {
      * A stop (market) order is an order to buy or sell a security when its price moves past a particular point,
      * ensuring a higher probability of achieving a predetermined entry or exit price. Once the market price crosses the
      * specified stop price, the stop order becomes a market order. Alpaca converts buy stop orders into stop limit
-     * orders with a limit price that is 4% higher than a stop price < $50 (or 2.5% higher than a stop price >= $50).
+     * orders with a limit price that is 4% higher than a stop price &lt; $50 (or 2.5% higher than a stop price &gt;= $50).
      * Sell stop orders are not converted into stop limit orders. This method calls {@link #requestNewOrder(String,
      * Integer, OrderSide, OrderType, OrderTimeInForce, Double, Double, Boolean, String, OrderClass, Double, Double,
      * Double)} with {@link OrderType#STOP}.

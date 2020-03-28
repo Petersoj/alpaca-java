@@ -23,7 +23,7 @@ public class GsonUtil {
     /** The constant CLASS_ANNOTATION_CACHE. */
     private static final HashMap<Class, ArrayList<SerializedName>> CLASS_ANNOTATION_CACHE = new HashMap<>();
 
-    /** The constant GSON which include ISO date time -> ZonedDateTime objects */
+    /** The constant GSON which include ISO date time to ZonedDateTime objects */
     public static final Gson GSON = new GsonBuilder()
             .registerTypeAdapter(ZonedDateTime.class, new ZonedDateTimeAdapter())
             .enableComplexMapKeySerialization()
