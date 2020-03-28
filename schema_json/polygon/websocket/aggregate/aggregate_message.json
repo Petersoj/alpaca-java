@@ -10,7 +10,7 @@
       "title": "Tick Volume"
     },
     "av": {
-      "existingJavaType": "java.lang.Integer",
+      "existingJavaType": "java.lang.Long",
       "title": "Accumulated Volume ( Today )"
     },
     "op": {
