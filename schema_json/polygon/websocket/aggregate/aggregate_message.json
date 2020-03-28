@@ -6,7 +6,7 @@
   "title": "See: https://polygon.io/sockets",
   "properties": {
     "v": {
-      "existingJavaType": "java.lang.Integer",
+      "existingJavaType": "java.lang.Long",
       "title": "Tick Volume"
     },
     "av": {
