@@ -32,6 +32,10 @@
     "per_share_amount": {
       "existingJavaType": "java.lang.String",
       "title": "For dividend activities, the average amount paid per share. Not present for other activity types."
+    },
+    "description": {
+      "existingJavaType": "java.lang.String",
+      "title": "For Transaction records (TRANS,CSR,CSD) a description field is present (even if the docs don't mention it!"
     }
   }
 }
