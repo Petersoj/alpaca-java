@@ -1,6 +1,6 @@
 {
   "type": "object",
-  "title": "See: https://polygon.io/docs/#!/Reference/get_v1_marketstatus_now",
+  "title": "See <a href=\"https://polygon.io/docs/#!/Reference/get_v1_marketstatus_now\">https://polygon.io/docs/#!/Reference/get_v1_marketstatus_now</a>",
   "properties": {
     "market": {
       "existingJavaType": "java.lang.String",

@@ -1,6 +1,6 @@
 {
   "type": "object",
-  "title": "See https://docs.alpaca.markets/api-documentation/api-v2/account-activities/",
+  "title": "See <a href=\"https://docs.alpaca.markets/api-documentation/api-v2/account-activities/\">https://docs.alpaca.markets/api-documentation/api-v2/account-activities/</a>",
   "extends": {
     "existingJavaType": "io.github.mainstringargs.domain.alpaca.accountactivities.AccountActivity"
   },

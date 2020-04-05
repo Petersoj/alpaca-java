@@ -1,6 +1,6 @@
 {
   "type": "object",
-  "title": "See: https://docs.alpaca.markets/api-documentation/api-v2/market-data/bars/",
+  "title": "See <a href=\"https://docs.alpaca.markets/api-documentation/api-v2/market-data/bars/\">https://docs.alpaca.markets/api-documentation/api-v2/market-data/bars/</a>",
   "properties": {
     "t": {
       "existingJavaType": "java.lang.Long",

@@ -1,6 +1,6 @@
 {
   "type": "object",
-  "title": "See: https://docs.alpaca.markets/api-documentation/api-v2/clock/",
+  "title": "See <a href=\"https://docs.alpaca.markets/api-documentation/api-v2/clock/\">https://docs.alpaca.markets/api-documentation/api-v2/clock/</a>",
   "properties": {
     "timestamp": {
       "existingJavaType": "java.time.ZonedDateTime",

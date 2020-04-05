@@ -1,6 +1,6 @@
 {
   "type": "object",
-  "title": "See: https://docs.alpaca.markets/api-documentation/api-v2/account-configuration/",
+  "title": "See <a href=\"https://docs.alpaca.markets/api-documentation/api-v2/account-configuration/\">https://docs.alpaca.markets/api-documentation/api-v2/account-configuration/</a>",
   "properties": {
     "dtbp_check": {
       "existingJavaType": "java.lang.String",
