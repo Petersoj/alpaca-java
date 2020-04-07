@@ -13,10 +13,6 @@
       "existingJavaType": "java.lang.String",
       "title": "An id for the activity. Always in “::” format. Can be sent as page_token in requests to facilitate the paging of results."
     },
-    "order_id": {
-      "existingJavaType": "java.lang.String",
-      "title": "An order_id for the activity. Always in GUID format."
-    },
     "cum_qty": {
       "existingJavaType": "java.lang.String",
       "title": "The cumulative quantity of shares involved in the execution."
@@ -44,6 +40,10 @@
     "transaction_time": {
       "existingJavaType": "java.time.ZonedDateTime",
       "title": "The time at which the execution occurred."
+    },
+    "order_id": {
+      "existingJavaType": "java.lang.String",
+      "title": "The id for the order that filled. Always in GUID format."
     },
     "type": {
       "existingJavaType": "java.lang.String",
