@@ -3,7 +3,7 @@
   "extends": {
     "existingJavaType": "io.github.mainstringargs.domain.polygon.websocket.PolygonStreamMessage"
   },
-  "title": "See: https://polygon.io/sockets",
+  "title": "See <a href=\"https://polygon.io/sockets\">https://polygon.io/sockets</a>",
   "properties": {
     "v": {
       "existingJavaType": "java.lang.Long",

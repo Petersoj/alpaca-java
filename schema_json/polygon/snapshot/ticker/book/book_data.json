@@ -1,6 +1,6 @@
 {
   "type": "object",
-  "title": "See: <documentation not yet public>",
+  "title": "See <a href=\"#\">(documentation not yet public)</a>",
   "properties": {
     "ticker": {
       "existingJavaType": "java.lang.String",

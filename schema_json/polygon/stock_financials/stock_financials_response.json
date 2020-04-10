@@ -1,6 +1,6 @@
 {
   "type": "object",
-  "title": "See: https://polygon.io/docs/#!/Reference/get_v2_reference_financials_symbol",
+  "title": "See <a href=\"https://polygon.io/docs/#!/Reference/get_v2_reference_financials_symbol\">https://polygon.io/docs/#!/Reference/get_v2_reference_financials_symbol</a>",
   "properties": {
     "status": {
       "existingJavaType": "java.lang.String",

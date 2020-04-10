@@ -1,6 +1,6 @@
 {
   "type": "object",
-  "title": "See: https://polygon.io/docs/#!/Reference/get_v1_marketstatus_upcoming",
+  "title": "See <a href=\"https://polygon.io/docs/#!/Reference/get_v1_marketstatus_upcoming\">https://polygon.io/docs/#!/Reference/get_v1_marketstatus_upcoming</a>",
   "properties": {
     "exchange": {
       "existingJavaType": "java.lang.String",

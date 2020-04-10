@@ -1,6 +1,6 @@
 {
   "type": "object",
-  "title": "See: https://polygon.io/docs/#!/Reference/get_v1_meta_symbols_symbol_news",
+  "title": "See <a href=\"https://polygon.io/docs/#!/Reference/get_v1_meta_symbols_symbol_news\">https://polygon.io/docs/#!/Reference/get_v1_meta_symbols_symbol_news</a>",
   "properties": {
     "symbols": {
       "existingJavaType": "java.util.ArrayList<java.lang.String>",

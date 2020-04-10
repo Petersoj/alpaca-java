@@ -3,7 +3,7 @@
   "javaInterfaces": [
     "io.github.mainstringargs.abstracts.websocket.message.StreamMessage"
   ],
-  "title": "See: https://docs.alpaca.markets/api-documentation/api-v2/streaming/",
+  "title": "See <a href=\"https://docs.alpaca.markets/api-documentation/api-v2/streaming/\">https://docs.alpaca.markets/api-documentation/api-v2/streaming/</a>",
   "properties": {
     "stream": {
       "existingJavaType": "io.github.mainstringargs.alpaca.websocket.message.AlpacaStreamMessageType",

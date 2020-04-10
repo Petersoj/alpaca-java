@@ -1,6 +1,6 @@
 {
   "type": "object",
-  "title": "See: https://docs.alpaca.markets/api-documentation/api-v2/assets/",
+  "title": "See <a href=\"https://docs.alpaca.markets/api-documentation/api-v2/assets/\">https://docs.alpaca.markets/api-documentation/api-v2/assets/</a>",
   "properties": {
     "id": {
       "existingJavaType": "java.lang.String",

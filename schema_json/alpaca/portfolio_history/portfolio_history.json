@@ -1,6 +1,6 @@
 {
   "type": "object",
-  "title": "See: https://docs.alpaca.markets/api-documentation/api-v2/portfolio-history/",
+  "title": "See <a href=\"https://docs.alpaca.markets/api-documentation/api-v2/portfolio-history/\">https://docs.alpaca.markets/api-documentation/api-v2/portfolio-history/</a>",
   "properties": {
     "timestamp": {
       "existingJavaType": "java.util.ArrayList<java.lang.Long>",

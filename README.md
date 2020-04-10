@@ -5,7 +5,7 @@
 </p>
 
 # Overview
-This is a Java implementation for <a href="https://alpaca.markets/">Alpaca</a>. Alpaca API lets you build and trade with real-time market data for free. This library is community developed.
+This is a Java implementation for <a href="https://alpaca.markets/">Alpaca</a>. Alpaca  lets you build and trade with real-time market data for free. This library is community developed and if you have any questions, please ask them on the [Alpaca Slack #dev-alpaca-java channel](https://alpaca.markets/slack) or on the [Alpaca Forums](https://forum.alpaca.markets/).
 
 ## Table of Contents
 1. [Alpaca Java Building](#alpaca-java-building)
