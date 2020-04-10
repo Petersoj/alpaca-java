@@ -41,6 +41,10 @@
       "existingJavaType": "java.time.ZonedDateTime",
       "title": "The time at which the execution occurred."
     },
+    "order_id": {
+      "existingJavaType": "java.lang.String",
+      "title": "The id for the order that filled. Always in GUID format."
+    },
     "type": {
       "existingJavaType": "java.lang.String",
       "title": "fill or partial_fill"
