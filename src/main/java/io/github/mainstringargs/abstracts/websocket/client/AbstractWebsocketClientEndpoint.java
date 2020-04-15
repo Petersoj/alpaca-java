@@ -14,12 +14,12 @@ import java.net.URI;
 import java.util.concurrent.ExecutorService;
 
 /**
- * The type Abstract websocket client endpoint. You must annotate subclasses with {@link javax.websocket.ClientEndpoint}
- * because websocket annotations don't work with inheritance.
- *
- * @param <T> the message type parameter
+ * The type Abstract websocket client endpoint. You must annotate a subclass with {@link javax.websocket.ClientEndpoint}
+ * and the appropriate websocket subprotocols because websocket annotations don't work with inheritance. The subclass
+ * must also contain separate methods with the following annotations: {@link javax.websocket.OnOpen}, {@link
+ * javax.websocket.OnClose}, and {@link javax.websocket.OnMessage}.
  */
-public abstract class AbstractWebsocketClientEndpoint<T> {
+public abstract class AbstractWebsocketClientEndpoint {
 
     /** The constant LOGGER. */
     private static final Logger LOGGER = LogManager.getLogger(AbstractWebsocketClientEndpoint.class);
@@ -54,32 +54,6 @@ public abstract class AbstractWebsocketClientEndpoint<T> {
     }
 
     /**
-     * On open annotated. You must annotate this with {@link javax.websocket.OnOpen} and call {@link
-     * AbstractWebsocketClientEndpoint#onOpen(Session)} because websocket annotations don't work with inheritance.
-     *
-     * @param userSession the user session
-     */
-    public abstract void onOpenAnnotated(Session userSession);
-
-    /**
-     * On close annotated. You must annotate this with {@link javax.websocket.OnClose} and call {@link
-     * AbstractWebsocketClientEndpoint#onClose(Session, CloseReason)}} because websocket annotations don't work with
-     * inheritance.
-     *
-     * @param userSession the user session
-     * @param reason      the reason
-     */
-    public abstract void onCloseAnnotated(Session userSession, CloseReason reason);
-
-    /**
-     * On message annotated. You must annotate this with {@link javax.websocket.OnMessage} and call {@link
-     * AbstractWebsocketClientEndpoint#onMessage(String)}} because websocket annotations don't work with inheritance.
-     *
-     * @param message the message
-     */
-    public abstract void onMessageAnnotated(T message);
-
-    /**
      * Connect.
      *
      * @throws DeploymentException the deployment exception
@@ -109,7 +83,7 @@ public abstract class AbstractWebsocketClientEndpoint<T> {
      *
      * @param userSession the user session
      */
-    public void onOpen(Session userSession) {
+    protected void onOpen(Session userSession) {
         this.userSession = userSession;
 
         LOGGER.debug("onOpen " + userSession);
@@ -125,7 +99,7 @@ public abstract class AbstractWebsocketClientEndpoint<T> {
      * @param userSession the user session
      * @param reason      the reason
      */
-    public void onClose(Session userSession, CloseReason reason) {
+    protected void onClose(Session userSession, CloseReason reason) {
         this.userSession = null;
 
         LOGGER.debug("onClose " + userSession);
@@ -163,7 +137,7 @@ public abstract class AbstractWebsocketClientEndpoint<T> {
      *
      * @param message the message
      */
-    public void onMessage(String message) {
+    protected void onMessage(String message) {
         executorService.execute(() -> websocketClient.handleWebsocketMessage(message));
     }
 

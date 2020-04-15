@@ -1,9 +1,9 @@
 package io.github.mainstringargs.polygon.rest;
 
 import com.mashape.unirest.http.HttpResponse;
-import io.github.mainstringargs.polygon.properties.PolygonProperties;
 import io.github.mainstringargs.abstracts.rest.AbstractRequest;
 import io.github.mainstringargs.abstracts.rest.AbstractRequestBuilder;
+import io.github.mainstringargs.polygon.properties.PolygonProperties;
 
 import java.io.InputStream;
 

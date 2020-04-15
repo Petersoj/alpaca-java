@@ -14,8 +14,8 @@ import java.net.URI;
 /**
  * The type Polygon websocket client endpoint.
  */
-@ClientEndpoint
-public class PolygonWebsocketClientEndpoint extends AbstractWebsocketClientEndpoint<String> {
+@ClientEndpoint(subprotocols = "TEXT")
+public class PolygonWebsocketClientEndpoint extends AbstractWebsocketClientEndpoint {
 
     /**
      * Instantiates a new Polygon websocket client endpoint.
@@ -28,19 +28,16 @@ public class PolygonWebsocketClientEndpoint extends AbstractWebsocketClientEndpo
     }
 
     @OnOpen
-    @Override
     public void onOpenAnnotated(Session userSession) {
         super.onOpen(userSession);
     }
 
     @OnClose
-    @Override
     public void onCloseAnnotated(Session userSession, CloseReason reason) {
         super.onClose(userSession, reason);
     }
 
     @OnMessage
-    @Override
     public void onMessageAnnotated(String message) {
         super.onMessage(message);
     }

@@ -12,7 +12,6 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
@@ -51,8 +50,8 @@ public class GsonUtil {
         List<String> classKeys = new ArrayList<>();
         gsonSerializedNameAnnotations.forEach((c) -> classKeys.add(c.value()));
 
-        for (String key : jsonObjectKeys){
-            if (!classKeys.contains(key)){
+        for (String key : jsonObjectKeys) {
+            if (!classKeys.contains(key)) {
                 return false;
             }
         }
