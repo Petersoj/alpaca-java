@@ -58,7 +58,7 @@ dependencies {
     compile 'org.apache.logging.log4j:log4j-core:2.11.1'
 
     compile "javax.websocket:javax.websocket-api:1.1"
-    compile "org.glassfish.tyrus.bundles:tyrus-standalone-client-jdk:1.12"
+    compile "org.glassfish.tyrus.bundles:tyrus-standalone-client-jdk:1.16"
 
     // Use JUnit test framework
     testCompile 'junit:junit:4.12'
