@@ -526,10 +526,10 @@ public class AlpacaAPI {
      * A stop (market) order is an order to buy or sell a security when its price moves past a particular point,
      * ensuring a higher probability of achieving a predetermined entry or exit price. Once the market price crosses the
      * specified stop price, the stop order becomes a market order. Alpaca converts buy stop orders into stop limit
-     * orders with a limit price that is 4% higher than a stop price &lt; $50 (or 2.5% higher than a stop price &gt;= $50).
-     * Sell stop orders are not converted into stop limit orders. This method calls {@link #requestNewOrder(String,
-     * Integer, OrderSide, OrderType, OrderTimeInForce, Double, Double, Boolean, String, OrderClass, Double, Double,
-     * Double)} with {@link OrderType#STOP}.
+     * orders with a limit price that is 4% higher than a stop price &lt; $50 (or 2.5% higher than a stop price &gt;=
+     * $50). Sell stop orders are not converted into stop limit orders. This method calls {@link
+     * #requestNewOrder(String, Integer, OrderSide, OrderType, OrderTimeInForce, Double, Double, Boolean, String,
+     * OrderClass, Double, Double, Double)} with {@link OrderType#STOP}.
      *
      * @param symbol        symbol or asset ID to identify the asset to trade
      * @param quantity      number of shares to trade

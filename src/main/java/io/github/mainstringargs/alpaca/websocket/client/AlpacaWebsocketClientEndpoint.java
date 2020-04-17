@@ -15,8 +15,8 @@ import java.nio.charset.StandardCharsets;
 /**
  * The type Alpaca websocket client endpoint.
  */
-@ClientEndpoint
-public class AlpacaWebsocketClientEndpoint extends AbstractWebsocketClientEndpoint<byte[]> {
+@ClientEndpoint(subprotocols = "BINARY")
+public class AlpacaWebsocketClientEndpoint extends AbstractWebsocketClientEndpoint {
 
     /**
      * Instantiates a new Alpaca websocket client endpoint.
@@ -29,19 +29,16 @@ public class AlpacaWebsocketClientEndpoint extends AbstractWebsocketClientEndpoi
     }
 
     @OnOpen
-    @Override
     public void onOpenAnnotated(Session userSession) {
         super.onOpen(userSession);
     }
 
     @OnClose
-    @Override
     public void onCloseAnnotated(Session userSession, CloseReason reason) {
         super.onClose(userSession, reason);
     }
 
     @OnMessage
-    @Override
     public void onMessageAnnotated(byte[] message) {
         super.onMessage(new String(message, StandardCharsets.UTF_8));
     }

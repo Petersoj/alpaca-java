@@ -1,7 +1,7 @@
 package io.github.mainstringargs.alpaca.rest;
 
-import io.github.mainstringargs.alpaca.properties.AlpacaProperties;
 import io.github.mainstringargs.abstracts.rest.AbstractRequest;
+import io.github.mainstringargs.alpaca.properties.AlpacaProperties;
 
 /**
  * The Class AlpacaRequest.
