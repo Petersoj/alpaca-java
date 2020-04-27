@@ -1,0 +1,38 @@
+{
+  "type": "object",
+  "title": "See <a href=\"https://alpaca.markets/docs/api-documentation/api-v2/market-data/last-trade/\">https://alpaca.markets/docs/api-documentation/api-v2/market-data/last-trade/</a>",
+  "properties": {
+    "price": {
+      "existingJavaType": "java.lang.Double",
+      "title": "Price of the trade"
+    },
+    "size": {
+      "existingJavaType": "java.lang.Long",
+      "title": "Last trade volume size"
+    },
+    "exchange": {
+      "existingJavaType": "java.lang.Integer",
+      "title": "Exchange code where the last trade was made"
+    },
+    "cond1": {
+      "existingJavaType": "java.lang.Integer",
+      "title": "Condition 1 of the trade"
+    },
+    "cond2": {
+      "existingJavaType": "java.lang.Integer",
+      "title": "Condition 2 of the trade"
+    },
+    "cond3": {
+      "existingJavaType": "java.lang.Integer",
+      "title": "Condition 3 of the trade"
+    },
+    "cond4": {
+      "existingJavaType": "java.lang.Integer",
+      "title": "Condition 4 of the trade"
+    },
+    "timestamp": {
+      "existingJavaType": "java.lang.Long",
+      "title": "Epoch timestamp in milliseconds"
+    }
+  }
+}

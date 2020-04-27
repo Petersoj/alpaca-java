@@ -30,9 +30,11 @@ import io.github.mainstringargs.domain.alpaca.accountactivities.NonTradeActivity
 import io.github.mainstringargs.domain.alpaca.accountactivities.TradeActivity;
 import io.github.mainstringargs.domain.alpaca.accountconfiguration.AccountConfiguration;
 import io.github.mainstringargs.domain.alpaca.asset.Asset;
-import io.github.mainstringargs.domain.alpaca.bar.Bar;
 import io.github.mainstringargs.domain.alpaca.calendar.Calendar;
 import io.github.mainstringargs.domain.alpaca.clock.Clock;
+import io.github.mainstringargs.domain.alpaca.marketdata.Bar;
+import io.github.mainstringargs.domain.alpaca.marketdata.LastQuoteResponse;
+import io.github.mainstringargs.domain.alpaca.marketdata.LastTradeResponse;
 import io.github.mainstringargs.domain.alpaca.order.CancelledOrder;
 import io.github.mainstringargs.domain.alpaca.order.Order;
 import io.github.mainstringargs.domain.alpaca.portfoliohistory.PortfolioHistory;
@@ -1418,7 +1420,8 @@ public class AlpacaAPI {
      * @param after     Filter bars after this time. Cannot be used with start.
      * @param until     Filter bars before this time. Cannot be used with end.
      *
-     * @return the bars
+     * @return An object with a key for each symbol and the Bars object as the values. Note that it returns status 200
+     * with an empty object if no requested symbol is found.
      *
      * @throws AlpacaAPIRequestException the alpaca API exception
      * @see <a href="https://docs.alpaca.markets/api-documentation/api-v2/market-data/bars/">Bars</a>
@@ -1445,7 +1448,8 @@ public class AlpacaAPI {
      * @param after     Filter bars after this time. Cannot be used with start.
      * @param until     Filter bars before this time. Cannot be used with end.
      *
-     * @return the bars
+     * @return @return An object with a key for each symbol and the Bars object as the values. Note that it returns
+     * status 200 with an empty object if no requested symbol is found.
      *
      * @throws AlpacaAPIRequestException the alpaca API exception
      * @see <a href="https://docs.alpaca.markets/api-documentation/api-v2/market-data/bars/">Bars</a>
@@ -1497,6 +1501,60 @@ public class AlpacaAPI {
         Type mapType = new TypeToken<Map<String, ArrayList<Bar>>>() {}.getType();
 
         return alpacaRequest.getResponseObject(response, mapType);
+    }
+
+    /**
+     * Retrieves the last trade for the requested symbol.
+     *
+     * @param symbol A stock ticker symbol to retrieve the last trade of
+     *
+     * @return the last trade response object
+     *
+     * @throws AlpacaAPIRequestException the alpaca api request exception
+     * @see <a href="https://alpaca.markets/docs/api-documentation/api-v2/market-data/last-trade/">Last Trade</a>
+     */
+    public LastTradeResponse getLastTrade(String symbol) throws AlpacaAPIRequestException {
+        Preconditions.checkNotNull(symbol);
+
+        AlpacaRequestBuilder urlBuilder = new AlpacaRequestBuilder(baseDataUrl, AlpacaConstants.VERSION_1_ENDPOINT,
+                AlpacaConstants.LAST_ENDPOINT,
+                AlpacaConstants.STOCKS_ENDPOINT,
+                symbol);
+
+        HttpResponse<InputStream> response = alpacaRequest.invokeGet(urlBuilder);
+
+        if (response.getStatus() != 200) {
+            throw new AlpacaAPIRequestException(response);
+        }
+
+        return alpacaRequest.getResponseObject(response, LastTradeResponse.class);
+    }
+
+    /**
+     * Retrieves the last quote for the requested symbol.
+     *
+     * @param symbol A stock ticker symbol to retrieve the last trade of
+     *
+     * @return the last quote response object
+     *
+     * @throws AlpacaAPIRequestException the alpaca api request exception
+     * @see <a href="https://alpaca.markets/docs/api-documentation/api-v2/market-data/last-quote/>Last Quote</a>
+     */
+    public LastQuoteResponse getLastQuote(String symbol) throws AlpacaAPIRequestException {
+        Preconditions.checkNotNull(symbol);
+
+        AlpacaRequestBuilder urlBuilder = new AlpacaRequestBuilder(baseDataUrl, AlpacaConstants.VERSION_1_ENDPOINT,
+                AlpacaConstants.LAST_QUOTE_ENDPOINT,
+                AlpacaConstants.STOCKS_ENDPOINT,
+                symbol);
+
+        HttpResponse<InputStream> response = alpacaRequest.invokeGet(urlBuilder);
+
+        if (response.getStatus() != 200) {
+            throw new AlpacaAPIRequestException(response);
+        }
+
+        return alpacaRequest.getResponseObject(response, LastQuoteResponse.class);
     }
 
     /**
