@@ -1,0 +1,18 @@
+{
+  "type": "object",
+  "title": "See <a href=\"https://alpaca.markets/docs/api-documentation/api-v2/positions/\">https://alpaca.markets/docs/api-documentation/api-v2/positions/</a>",
+  "properties": {
+    "symbol": {
+      "existingJavaType": "java.lang.String",
+      "title": "The symbol"
+    },
+    "status": {
+      "existingJavaType": "java.lang.Integer",
+      "title": "The HTTP status code of the position-closing order status"
+    },
+    "body": {
+      "existingJavaType": "io.github.mainstringargs.domain.alpaca.order.Order",
+      "title": "The position-closing order"
+    }
+  }
+}
