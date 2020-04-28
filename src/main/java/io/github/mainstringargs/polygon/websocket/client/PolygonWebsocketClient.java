@@ -50,13 +50,13 @@ public class PolygonWebsocketClient implements WebsocketClient {
     private static final String EVENT_TYPE_KEY = "ev";
 
     /** The key id. */
-    private String keyId;
+    private final String keyId;
 
     /** The Websocket url. */
-    private String websocketURL;
+    private final String websocketURL;
 
     /** The listeners. */
-    private List<PolygonStreamListener> listeners;
+    private final List<PolygonStreamListener> listeners;
 
     /** The client end point. */
     private PolygonWebsocketClientEndpoint polygonWebsocketClientEndpoint;

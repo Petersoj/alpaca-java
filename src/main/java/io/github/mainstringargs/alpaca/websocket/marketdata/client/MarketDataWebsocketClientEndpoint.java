@@ -1,4 +1,4 @@
-package io.github.mainstringargs.alpaca.websocket.client;
+package io.github.mainstringargs.alpaca.websocket.marketdata.client;
 
 import io.github.mainstringargs.abstracts.websocket.client.AbstractWebsocketClientEndpoint;
 import io.github.mainstringargs.abstracts.websocket.client.WebsocketClient;
@@ -13,19 +13,19 @@ import java.net.URI;
 import java.nio.charset.StandardCharsets;
 
 /**
- * The type Alpaca websocket client endpoint.
+ * The type Market data websocket client endpoint.
  */
 @ClientEndpoint(subprotocols = "BINARY")
-public class AlpacaWebsocketClientEndpoint extends AbstractWebsocketClientEndpoint {
+public class MarketDataWebsocketClientEndpoint extends AbstractWebsocketClientEndpoint {
 
     /**
-     * Instantiates a new Alpaca websocket client endpoint.
+     * Instantiates a new Market data websocket client endpoint.
      *
      * @param websocketClient the websocket client
      * @param endpointURI     the endpoint uri
      */
-    public AlpacaWebsocketClientEndpoint(WebsocketClient websocketClient, URI endpointURI) {
-        super(websocketClient, endpointURI, "AlpacaWebsocketThread");
+    public MarketDataWebsocketClientEndpoint(WebsocketClient websocketClient, URI endpointURI) {
+        super(websocketClient, endpointURI, "MarketDataWebsocketThread");
     }
 
     @OnOpen

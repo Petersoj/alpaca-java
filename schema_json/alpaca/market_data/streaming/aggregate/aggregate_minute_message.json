@@ -1,0 +1,53 @@
+{
+  "type": "object",
+  "extends": {
+    "existingJavaType": "io.github.mainstringargs.domain.alpaca.marketdata.streaming.MarketDataStreamDataMessage"
+  },
+  "title": "See <a href=\"https://alpaca.markets/docs/api-documentation/api-v2/market-data/streaming/\">https://alpaca.markets/docs/api-documentation/api-v2/market-data/streaming/</a>",
+  "properties": {
+    "v": {
+      "existingJavaType": "java.lang.Long",
+      "title": "Tick volume (shares)"
+    },
+    "av": {
+      "existingJavaType": "java.lang.Long",
+      "title": "Accumulated volume (Today)"
+    },
+    "op": {
+      "existingJavaType": "java.lang.Double",
+      "title": "Official open price of the bar"
+    },
+    "vw": {
+      "existingJavaType": "java.lang.Double",
+      "title": "VWAP (Volume Weighted Average Price)"
+    },
+    "o": {
+      "existingJavaType": "java.lang.Double",
+      "title": "Bar open price"
+    },
+    "h": {
+      "existingJavaType": "java.lang.Double",
+      "title": "Bar high price"
+    },
+    "l": {
+      "existingJavaType": "java.lang.Double",
+      "title": "Bar low price"
+    },
+    "c": {
+      "existingJavaType": "java.lang.Double",
+      "title": "Bar close price"
+    },
+    "a": {
+      "existingJavaType": "java.lang.Double",
+      "title": "Average price of the bar (Tick Average / VWAP Price)"
+    },
+    "s": {
+      "existingJavaType": "java.lang.Long",
+      "title": "Epoch time at the beginning of the window in milliseconds"
+    },
+    "e": {
+      "existingJavaType": "java.lang.Long",
+      "title": "Epoch time at the ending of the window in milliseconds"
+    }
+  }
+}

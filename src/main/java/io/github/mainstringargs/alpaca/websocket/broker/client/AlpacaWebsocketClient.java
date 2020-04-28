@@ -1,4 +1,4 @@
-package io.github.mainstringargs.alpaca.websocket.client;
+package io.github.mainstringargs.alpaca.websocket.broker.client;
 
 import com.google.common.base.Preconditions;
 import com.google.gson.JsonArray;
@@ -10,13 +10,13 @@ import io.github.mainstringargs.abstracts.websocket.client.WebsocketClient;
 import io.github.mainstringargs.abstracts.websocket.listener.StreamListener;
 import io.github.mainstringargs.abstracts.websocket.message.StreamMessage;
 import io.github.mainstringargs.abstracts.websocket.message.StreamMessageType;
-import io.github.mainstringargs.alpaca.websocket.listener.AlpacaStreamListener;
-import io.github.mainstringargs.alpaca.websocket.message.AlpacaStreamMessageType;
-import io.github.mainstringargs.domain.alpaca.websocket.AlpacaStreamMessage;
-import io.github.mainstringargs.domain.alpaca.websocket.account.AccountUpdateMessage;
-import io.github.mainstringargs.domain.alpaca.websocket.authorization.AuthorizationMessage;
-import io.github.mainstringargs.domain.alpaca.websocket.listening.ListeningMessage;
-import io.github.mainstringargs.domain.alpaca.websocket.trade.TradeUpdateMessage;
+import io.github.mainstringargs.alpaca.websocket.broker.listener.AlpacaStreamListener;
+import io.github.mainstringargs.alpaca.websocket.broker.message.AlpacaStreamMessageType;
+import io.github.mainstringargs.domain.alpaca.streaming.AlpacaStreamMessage;
+import io.github.mainstringargs.domain.alpaca.streaming.account.AccountUpdateMessage;
+import io.github.mainstringargs.domain.alpaca.streaming.authorization.AuthorizationMessage;
+import io.github.mainstringargs.domain.alpaca.streaming.listening.ListeningMessage;
+import io.github.mainstringargs.domain.alpaca.streaming.trade.TradeUpdateMessage;
 import io.github.mainstringargs.util.gson.GsonUtil;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -43,16 +43,16 @@ public class AlpacaWebsocketClient implements WebsocketClient {
     private static final String STREAM_KEY = "stream";
 
     /** The key id. */
-    private String keyId;
+    private final String keyId;
 
     /** The secret. */
-    private String secret;
+    private final String secret;
 
     /** The Base api url. */
-    private String baseAPIURL;
+    private final String streamAPIURL;
 
     /** The observers. */
-    private List<AlpacaStreamListener> listeners;
+    private final List<AlpacaStreamListener> listeners;
 
     /** The client end point. */
     private AlpacaWebsocketClientEndpoint alpacaWebsocketClientEndpoint;
@@ -65,12 +65,12 @@ public class AlpacaWebsocketClient implements WebsocketClient {
      *
      * @param keyId      the key id
      * @param secret     the secret
-     * @param baseAPIURL the base apiurl
+     * @param baseAPIURL the base API URL
      */
     public AlpacaWebsocketClient(String keyId, String secret, String baseAPIURL) {
         this.keyId = keyId;
         this.secret = secret;
-        this.baseAPIURL = baseAPIURL.replace("https", "wss") + "/stream";
+        this.streamAPIURL = baseAPIURL.replace("https", "wss") + "/stream";
 
         this.listeners = new ArrayList<>();
     }
@@ -106,7 +106,7 @@ public class AlpacaWebsocketClient implements WebsocketClient {
         LOGGER.info("Connecting...");
 
         try {
-            alpacaWebsocketClientEndpoint = new AlpacaWebsocketClientEndpoint(this, new URI(baseAPIURL));
+            alpacaWebsocketClientEndpoint = new AlpacaWebsocketClientEndpoint(this, new URI(streamAPIURL));
             alpacaWebsocketClientEndpoint.connect();
 
             LOGGER.info("Connected.");
@@ -167,13 +167,6 @@ public class AlpacaWebsocketClient implements WebsocketClient {
                         AlpacaStreamMessageType.class);
 
                 switch (alpacaStreamMessageType) {
-                    case LISTENING:
-                        ListeningMessage listeningMessage = GsonUtil.GSON.fromJson(messageJsonObject,
-                                ListeningMessage.class);
-                        sendStreamMessageToListeners(alpacaStreamMessageType, listeningMessage);
-
-                        LOGGER.debug(listeningMessage);
-                        break;
                     case AUTHORIZATION:
                         AuthorizationMessage authorizationMessage = GsonUtil.GSON.fromJson(messageJsonObject,
                                 AuthorizationMessage.class);
@@ -182,6 +175,13 @@ public class AlpacaWebsocketClient implements WebsocketClient {
                         authenticated = isAuthorizationMessageSuccess(authorizationMessage);
 
                         LOGGER.debug(authorizationMessage);
+                        break;
+                    case LISTENING:
+                        ListeningMessage listeningMessage = GsonUtil.GSON.fromJson(messageJsonObject,
+                                ListeningMessage.class);
+                        sendStreamMessageToListeners(alpacaStreamMessageType, listeningMessage);
+
+                        LOGGER.debug(listeningMessage);
                         break;
                     case TRADE_UPDATES:
                         sendStreamMessageToListeners(alpacaStreamMessageType, GsonUtil.GSON.fromJson(messageJsonObject,
@@ -194,8 +194,8 @@ public class AlpacaWebsocketClient implements WebsocketClient {
                     default:
                         LOGGER.error("Unhandled stream type: " + alpacaStreamMessageType);
                 }
-            } catch (JsonSyntaxException e) {
-                LOGGER.throwing(e);
+            } catch (JsonSyntaxException exception) {
+                LOGGER.error("Could not parse message: " + messageJsonObject, exception);
             }
         } else {
             LOGGER.error("Unknown stream message: " + messageJsonObject);

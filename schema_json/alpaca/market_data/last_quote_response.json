@@ -11,7 +11,7 @@
       "title": "Symbol that was evaluated from the request"
     },
     "last": {
-      "existingJavaType": "io.github.mainstringargs.domain.alpaca.market_data.LastQuote",
+      "existingJavaType": "io.github.mainstringargs.domain.alpaca.marketdata.LastQuote",
       "title": "The Last Quote object"
     }
   }

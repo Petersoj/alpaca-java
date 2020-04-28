@@ -11,7 +11,7 @@
       "title": "Symbol that was evaluated from the request"
     },
     "last": {
-      "existingJavaType": "io.github.mainstringargs.domain.alpaca.market_data.LastTrade",
+      "existingJavaType": "io.github.mainstringargs.domain.alpaca.marketdata.LastTrade",
       "title": "The Last Trade object"
     }
   }

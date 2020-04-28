@@ -1,4 +1,4 @@
-package io.github.mainstringargs.alpaca.websocket.message;
+package io.github.mainstringargs.alpaca.websocket.broker.message;
 
 import com.google.gson.annotations.SerializedName;
 import io.github.mainstringargs.abstracts.enums.APIName;
@@ -27,7 +27,7 @@ public enum AlpacaStreamMessageType implements StreamMessageType, APIName {
     ACCOUNT_UPDATES(true);
 
     /** The is api subscribable. */
-    private boolean isAPISubscribable;
+    private final boolean isAPISubscribable;
 
     /**
      * Instantiates a new Alpaca stream message type.
@@ -44,7 +44,7 @@ public enum AlpacaStreamMessageType implements StreamMessageType, APIName {
     }
 
     /**
-     * Is api subscribable boolean.
+     * Is the API subscribable.
      *
      * @return the boolean
      */

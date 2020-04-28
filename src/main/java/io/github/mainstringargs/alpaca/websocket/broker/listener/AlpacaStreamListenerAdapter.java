@@ -1,7 +1,7 @@
-package io.github.mainstringargs.alpaca.websocket.listener;
+package io.github.mainstringargs.alpaca.websocket.broker.listener;
 
-import io.github.mainstringargs.alpaca.websocket.message.AlpacaStreamMessageType;
-import io.github.mainstringargs.domain.alpaca.websocket.AlpacaStreamMessage;
+import io.github.mainstringargs.alpaca.websocket.broker.message.AlpacaStreamMessageType;
+import io.github.mainstringargs.domain.alpaca.streaming.AlpacaStreamMessage;
 
 import java.util.Arrays;
 import java.util.HashSet;
@@ -13,7 +13,7 @@ import java.util.Set;
 public class AlpacaStreamListenerAdapter implements AlpacaStreamListener {
 
     /** The message types. */
-    private HashSet<AlpacaStreamMessageType> streamUpdateTypes = new HashSet<>();
+    private final HashSet<AlpacaStreamMessageType> streamUpdateTypes = new HashSet<>();
 
     /**
      * Instantiates a new Alpaca stream listener adapter.

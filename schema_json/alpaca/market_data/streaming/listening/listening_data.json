@@ -1,0 +1,14 @@
+{
+  "type": "object",
+  "title": "See <a href=\"https://alpaca.markets/docs/api-documentation/api-v2/market-data/streaming/\">https://alpaca.markets/docs/api-documentation/api-v2/market-data/streaming/</a>",
+  "properties": {
+    "streams": {
+      "existingJavaType": "java.util.ArrayList<java.lang.String>",
+      "title": "The streams listened to"
+    },
+    "error": {
+      "existingJavaType": "java.util.ArrayList<java.lang.String>",
+      "title": "The error, if one exists"
+    }
+  }
+}

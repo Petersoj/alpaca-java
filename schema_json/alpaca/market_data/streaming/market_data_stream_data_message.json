@@ -1,0 +1,17 @@
+{
+  "type": "object",
+  "extends": {
+    "existingJavaType": "io.github.mainstringargs.domain.alpaca.marketdata.streaming.MarketDataStreamMessage"
+  },
+  "title": "See <a href=\"https://alpaca.markets/docs/api-documentation/api-v2/market-data/streaming/\">https://alpaca.markets/docs/api-documentation/api-v2/market-data/streaming/</a>",
+  "properties": {
+    "ev": {
+      "existingJavaType": "io.github.mainstringargs.alpaca.websocket.marketdata.message.MarketDataStreamMessageType",
+      "title": "The event type"
+    },
+    "sym": {
+      "existingJavaType": "java.lang.String",
+      "title": "The symbol"
+    }
+  }
+}

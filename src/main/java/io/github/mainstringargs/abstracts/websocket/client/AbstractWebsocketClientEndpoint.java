@@ -25,7 +25,7 @@ public abstract class AbstractWebsocketClientEndpoint {
     private static final Logger LOGGER = LogManager.getLogger(AbstractWebsocketClientEndpoint.class);
 
     /** The Websocket client. */
-    private WebsocketClient websocketClient;
+    private final WebsocketClient websocketClient;
 
     /** The Endpoint uri. */
     private final URI endpointURI;

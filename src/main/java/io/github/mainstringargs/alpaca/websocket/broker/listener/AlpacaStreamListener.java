@@ -1,8 +1,8 @@
-package io.github.mainstringargs.alpaca.websocket.listener;
+package io.github.mainstringargs.alpaca.websocket.broker.listener;
 
 import io.github.mainstringargs.abstracts.websocket.listener.StreamListener;
-import io.github.mainstringargs.alpaca.websocket.message.AlpacaStreamMessageType;
-import io.github.mainstringargs.domain.alpaca.websocket.AlpacaStreamMessage;
+import io.github.mainstringargs.alpaca.websocket.broker.message.AlpacaStreamMessageType;
+import io.github.mainstringargs.domain.alpaca.streaming.AlpacaStreamMessage;
 
 import java.util.Set;
 
