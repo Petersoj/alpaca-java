@@ -8,7 +8,7 @@
     },
     "status": {
       "existingJavaType": "java.lang.Integer",
-      "title": "Cancel status"
+      "title": "The HTTP status code of the cancel status"
     },
     "body": {
       "existingJavaType": "io.github.mainstringargs.domain.alpaca.order.Order",
