@@ -31,7 +31,7 @@ Add the following dependency to your build.gradle file:
 
 ```
 dependencies {
-	compile "io.github.mainstringargs:alpaca-java:5.0.12"
+	compile "io.github.mainstringargs:alpaca-java:5.0.13"
 }
 ```
 
@@ -43,7 +43,7 @@ Add the following dependency to your pom.xml file:
 <dependency>
     <groupId>io.github.mainstringargs</groupId>
     <artifactId>alpaca-java</artifactId>
-    <version>5.0.12</version>
+    <version>5.0.13</version>
     <scope>compile</scope>
 </dependency>
 ```
