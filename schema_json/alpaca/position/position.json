@@ -65,6 +65,18 @@
     "change_today": {
       "existingJavaType": "java.lang.String",
       "title": "Percent change from last day price (by a factor of 1)"
+    },
+    "trail_percent": {
+      "existingJavaType": "java.lang.String",
+      "title": "Stop trail percent"
+    },
+    "trail_price": {
+      "existingJavaType": "java.lang.String",
+      "title": "Stop trail price"
+    },
+    "hwm": {
+      "existingJavaType": "java.lang.String",
+      "title": "the actual high water mark value tracked in Alpaca"
     }
   }
 }

@@ -90,6 +90,20 @@
       "existingJavaType": "java.lang.String",
       "title": "Stop price"
     },
+    "trail_percent": {
+      "existingJavaType": "java.lang.String",
+      "title": "Stop trail percent"
+    },
+
+    "trail_price": {
+      "existingJavaType": "java.lang.String",
+      "title": "Stop trailing price"
+    },
+
+    "hwm": {
+      "existingJavaType": "java.lang.String",
+      "title": "hwm"
+    },
     "filled_avg_price": {
       "existingJavaType": "java.lang.String",
       "title": "Stop price"
