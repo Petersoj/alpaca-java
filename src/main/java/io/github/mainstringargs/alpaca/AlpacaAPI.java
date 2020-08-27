@@ -399,8 +399,6 @@ public class AlpacaAPI {
      *
      * @param trailPrice           required if type is trailing_limit
      *
-     * @param hwm                  optional if type is trailing_limit
-     *
      * @return the order
      *
      * @throws AlpacaAPIRequestException the alpaca API exception
@@ -409,7 +407,7 @@ public class AlpacaAPI {
     public Order requestNewOrder(String symbol, Integer quantity, OrderSide side, OrderType type,
             OrderTimeInForce timeInForce, Double limitPrice, Double stopPrice, Boolean extendedHours,
             String clientOrderId, OrderClass orderClass, Double takeProfitLimitPrice, Double stopLossStopPrice,
-            Double stopLossLimitPrice, Double trailPrice, Double trailPercent, Double hwm)
+            Double stopLossLimitPrice, Double trailPrice, Double trailPercent)
             throws AlpacaAPIRequestException {
         Preconditions.checkNotNull(symbol);
         Preconditions.checkNotNull(quantity);
@@ -479,11 +477,6 @@ public class AlpacaAPI {
                     TimeUtil.toDecimalFormat(trailPercent));
         }
 
-        if(hwm != null) {
-            urlBuilder.appendJSONBodyProperty(AlpacaConstants.HWM_PARAMETER,
-                    TimeUtil.toDecimalFormat(hwm));
-        }
-
         HttpResponse<InputStream> response = alpacaRequest.invokePost(urlBuilder);
 
         if (response.getStatus() != 200) {
@@ -497,7 +490,7 @@ public class AlpacaAPI {
      * A market order is a request to buy or sell a security at the currently available market price. It provides the
      * most likely method of filling an order. Market orders fill nearly instantaneously. This method calls {@link
      * #requestNewOrder(String, Integer, OrderSide, OrderType, OrderTimeInForce, Double, Double, Boolean, String,
-     * OrderClass, Double, Double, Double, Double, Double, Double)} with {@link OrderType#MARKET}.
+     * OrderClass, Double, Double, Double, Double, Double)} with {@link OrderType#MARKET}.
      *
      * @param symbol        symbol or asset ID to identify the asset to trade
      * @param quantity      number of shares to trade
@@ -514,7 +507,7 @@ public class AlpacaAPI {
     public Order requestNewMarketOrder(String symbol, Integer quantity, OrderSide side, OrderTimeInForce timeInForce,
             Boolean extendedHours) throws AlpacaAPIRequestException {
         return requestNewOrder(symbol, quantity, side, OrderType.MARKET, timeInForce, null, null, extendedHours,
-                null, OrderClass.SIMPLE, null, null, null, null, null, null);
+                null, OrderClass.SIMPLE, null, null, null, null, null);
     }
 
     /**
@@ -522,7 +515,7 @@ public class AlpacaAPI {
      * is executed at the specified limit price or lower (i.e., better). Conversely, a sell limit order (a limit order
      * to sell) is executed at the specified limit price or higher (better). Unlike a market order, you have to specify
      * the limit price parameter when submitting your order. This method calls {@link #requestNewOrder(String, Integer,
-     * OrderSide, OrderType, OrderTimeInForce, Double, Double, Boolean, String, OrderClass, Double, Double, Double,
+     * OrderSide, OrderType, OrderTimeInForce, Double, Double, Boolean, String, OrderClass, Double, Double,
      * Double, Double, Double)}
      * with {@link OrderType#LIMIT}.
      *
@@ -542,7 +535,7 @@ public class AlpacaAPI {
     public Order requestNewLimitOrder(String symbol, Integer quantity, OrderSide side, OrderTimeInForce timeInForce,
             Double limitPrice, Boolean extendedHours) throws AlpacaAPIRequestException {
         return requestNewOrder(symbol, quantity, side, OrderType.LIMIT, timeInForce, limitPrice, null, extendedHours,
-                null, OrderClass.SIMPLE, null, null, null, null, null, null);
+                null, OrderClass.SIMPLE, null, null, null, null, null);
     }
 
     /**
@@ -552,7 +545,7 @@ public class AlpacaAPI {
      * orders with a limit price that is 4% higher than a stop price &lt; $50 (or 2.5% higher than a stop price &gt;=
      * $50). Sell stop orders are not converted into stop limit orders. This method calls {@link
      * #requestNewOrder(String, Integer, OrderSide, OrderType, OrderTimeInForce, Double, Double, Boolean, String,
-     * OrderClass, Double, Double, Double, Double, Double, Double)} with {@link OrderType#STOP}.
+     * OrderClass, Double, Double, Double, Double, Double)} with {@link OrderType#STOP}.
      *
      * @param symbol        symbol or asset ID to identify the asset to trade
      * @param quantity      number of shares to trade
@@ -570,7 +563,7 @@ public class AlpacaAPI {
     public Order requestNewStopOrder(String symbol, Integer quantity, OrderSide side, OrderTimeInForce timeInForce,
             Double stopPrice, Boolean extendedHours) throws AlpacaAPIRequestException {
         return requestNewOrder(symbol, quantity, side, OrderType.STOP, timeInForce, null, stopPrice, extendedHours,
-                null, OrderClass.SIMPLE, null, null, null, null, null, null);
+                null, OrderClass.SIMPLE, null, null, null, null, null);
     }
 
     /**
@@ -579,7 +572,7 @@ public class AlpacaAPI {
      * price, or better, after a given stop price has been reached. Once the stop price is reached, the stop-limit order
      * becomes a limit order to buy or sell at the limit price or better. This method calls {@link
      * #requestNewOrder(String, Integer, OrderSide, OrderType, OrderTimeInForce, Double, Double, Boolean, String,
-     * OrderClass, Double, Double, Double, Double, Double, Double)} with {@link OrderType#STOP_LIMIT}.
+     * OrderClass, Double, Double, Double, Double, Double)} with {@link OrderType#STOP_LIMIT}.
      *
      * @param symbol        symbol or asset ID to identify the asset to trade
      * @param quantity      number of shares to trade
@@ -598,14 +591,14 @@ public class AlpacaAPI {
     public Order requestNewStopLimitOrder(String symbol, Integer quantity, OrderSide side, OrderTimeInForce timeInForce,
             Double limitPrice, Double stopPrice, Boolean extendedHours) throws AlpacaAPIRequestException {
         return requestNewOrder(symbol, quantity, side, OrderType.STOP_LIMIT, timeInForce, limitPrice, stopPrice,
-                extendedHours, null, OrderClass.SIMPLE, null, null, null, null, null, null);
+                extendedHours, null, OrderClass.SIMPLE, null, null, null, null, null);
     }
 
     /**
      * A bracket order is a chain of three orders that can be used to manage your position entry and exit. It is a
      * common use case of an OTOCO (One Triggers OCO {One Cancels Other}) order. This method calls {@link
      * #requestNewOrder(String, Integer, OrderSide, OrderType, OrderTimeInForce, Double, Double, Boolean, String,
-     * OrderClass, Double, Double, Double, Double, Double, Double)} with {@link OrderType#MARKET} and with
+     * OrderClass, Double, Double, Double, Double, Double)} with {@link OrderType#MARKET} and with
      * parameters for a bracket order.
      *
      * @param symbol               symbol or asset ID to identify the asset to trade
@@ -631,14 +624,14 @@ public class AlpacaAPI {
             Double stopLossLimitPrice) throws AlpacaAPIRequestException {
         return requestNewOrder(symbol, quantity, side, OrderType.MARKET, timeInForce, null, null,
                 extendedHours, null, OrderClass.BRACKET, takeProfitLimitPrice, stopLossStopPrice,
-                stopLossLimitPrice, null, null, null);
+                stopLossLimitPrice, null, null);
     }
 
     /**
      * A bracket order is a chain of three orders that can be used to manage your position entry and exit. It is a
      * common use case of an OTOCO (One Triggers OCO {One Cancels Other}) order. This method calls {@link
      * #requestNewOrder(String, Integer, OrderSide, OrderType, OrderTimeInForce, Double, Double, Boolean, String,
-     * OrderClass, Double, Double, Double, Double, Double, Double)} with {@link OrderType#LIMIT} and with parameters for a bracket order.
+     * OrderClass, Double, Double, Double, Double, Double)} with {@link OrderType#LIMIT} and with parameters for a bracket order.
      *
      * @param symbol               symbol or asset ID to identify the asset to trade
      * @param quantity             number of shares to trade
@@ -663,7 +656,7 @@ public class AlpacaAPI {
             OrderTimeInForce timeInForce, Double limitPrice, Boolean extendedHours, Double takeProfitLimitPrice,
             Double stopLossStopPrice, Double stopLossLimitPrice) throws AlpacaAPIRequestException {
         return requestNewOrder(symbol, quantity, side, OrderType.LIMIT, timeInForce, limitPrice, null,
-                extendedHours, null, OrderClass.BRACKET, takeProfitLimitPrice, stopLossStopPrice, stopLossLimitPrice, null, null, null);
+                extendedHours, null, OrderClass.BRACKET, takeProfitLimitPrice, stopLossStopPrice, stopLossLimitPrice, null, null);
     }
 
     /**
@@ -671,7 +664,7 @@ public class AlpacaAPI {
      * (buy/buy or sell/sell) and currently only exit order is supported. In other words, this is the second part of the
      * bracket orders where the entry order is already filled, and you can submit the take-profit and stop-loss in one
      * order submission. This method calls {@link #requestNewOrder(String, Integer, OrderSide, OrderType,
-     * OrderTimeInForce, Double, Double, Boolean, String, OrderClass, Double, Double, Double, Double, Double, Double)}
+     * OrderTimeInForce, Double, Double, Boolean, String, OrderClass, Double, Double, Double, Double, Double)}
      * with parameters for an
      * OCO order type.
      *
@@ -695,13 +688,13 @@ public class AlpacaAPI {
             OrderTimeInForce timeInForce, Boolean extendedHours, Double takeProfitLimitPrice,
             Double stopLossStopPrice, Double stopLossLimitPrice) throws AlpacaAPIRequestException {
         return requestNewOrder(symbol, quantity, side, OrderType.LIMIT, timeInForce, null, null, extendedHours, null,
-                OrderClass.OCO, takeProfitLimitPrice, stopLossStopPrice, stopLossLimitPrice, null, null, null);
+                OrderClass.OCO, takeProfitLimitPrice, stopLossStopPrice, stopLossLimitPrice, null, null);
     }
 
     /**
      * OTO (One-Triggers-Other) is a variant of bracket order. It takes one of the take-profit or stop-loss order in
      * addition to the entry order. This method calls {@link #requestNewOrder(String, Integer, OrderSide, OrderType,
-     * OrderTimeInForce, Double, Double, Boolean, String, OrderClass, Double, Double, Double, Double, Double, Double)}
+     * OrderTimeInForce, Double, Double, Boolean, String, OrderClass, Double, Double, Double, Double, Double)}
      * with {@link
      * OrderType#LIMIT} and with parameters for an OTO order type.
      *
@@ -725,13 +718,13 @@ public class AlpacaAPI {
             OrderTimeInForce timeInForce, Boolean extendedHours, Double takeProfitLimitPrice,
             Double stopLossStopPrice, Double stopLossLimitPrice) throws AlpacaAPIRequestException {
         return requestNewOrder(symbol, quantity, side, OrderType.MARKET, timeInForce, null, null, extendedHours, null,
-                OrderClass.OTO, takeProfitLimitPrice, stopLossStopPrice, stopLossLimitPrice, null, null, null);
+                OrderClass.OTO, takeProfitLimitPrice, stopLossStopPrice, stopLossLimitPrice, null, null);
     }
 
     /**
      * OTO (One-Triggers-Other) is a variant of bracket order. It takes one of the take-profit or stop-loss order in
      * addition to the entry order. This method calls {@link #requestNewOrder(String, Integer, OrderSide, OrderType,
-     * OrderTimeInForce, Double, Double, Boolean, String, OrderClass, Double, Double, Double, Double, Double, Double)}
+     * OrderTimeInForce, Double, Double, Boolean, String, OrderClass, Double, Double, Double, Double, Double)}
      * with {@link
      * OrderType#LIMIT} and with parameters for an OTO order type.
      *
@@ -756,13 +749,13 @@ public class AlpacaAPI {
             OrderTimeInForce timeInForce, Double limitPrice, Boolean extendedHours, Double takeProfitLimitPrice,
             Double stopLossStopPrice, Double stopLossLimitPrice) throws AlpacaAPIRequestException {
         return requestNewOrder(symbol, quantity, side, OrderType.LIMIT, timeInForce, limitPrice, null, extendedHours,
-                null, OrderClass.OTO, takeProfitLimitPrice, stopLossStopPrice, stopLossLimitPrice, null, null, null);
+                null, OrderClass.OTO, takeProfitLimitPrice, stopLossStopPrice, stopLossLimitPrice, null, null);
     }
 
     /**
      * OTO (One-Triggers-Other) is a variant of bracket order. It takes one of the take-profit or stop-loss order in
      * addition to the entry order. This method calls {@link #requestNewOrder(String, Integer, OrderSide, OrderType,
-     * OrderTimeInForce, Double, Double, Boolean, String, OrderClass, Double, Double, Double, Double, Double, Double)}
+     * OrderTimeInForce, Double, Double, Boolean, String, OrderClass, Double, Double, Double, Double, Double)}
      * with {@link
      * OrderType#STOP} and with parameters for an OTO order type.
      *
@@ -787,13 +780,13 @@ public class AlpacaAPI {
             OrderTimeInForce timeInForce, Double stopPrice, Boolean extendedHours, Double takeProfitLimitPrice,
             Double stopLossStopPrice, Double stopLossLimitPrice) throws AlpacaAPIRequestException {
         return requestNewOrder(symbol, quantity, side, OrderType.STOP, timeInForce, null, stopPrice, extendedHours,
-                null, OrderClass.OTO, takeProfitLimitPrice, stopLossStopPrice, stopLossLimitPrice, null, null, null);
+                null, OrderClass.OTO, takeProfitLimitPrice, stopLossStopPrice, stopLossLimitPrice, null, null);
     }
 
     /**
      * OTO (One-Triggers-Other) is a variant of bracket order. It takes one of the take-profit or stop-loss order in
      * addition to the entry order. This method calls {@link #requestNewOrder(String, Integer, OrderSide, OrderType,
-     * OrderTimeInForce, Double, Double, Boolean, String, OrderClass, Double, Double, Double, Double, Double, Double)}
+     * OrderTimeInForce, Double, Double, Boolean, String, OrderClass, Double, Double, Double, Double, Double)}
      * with {@link
      * OrderType#STOP_LIMIT} and with parameters for an OTO order type.
      *
@@ -820,7 +813,7 @@ public class AlpacaAPI {
             Double takeProfitLimitPrice, Double stopLossStopPrice, Double stopLossLimitPrice)
             throws AlpacaAPIRequestException {
         return requestNewOrder(symbol, quantity, side, OrderType.STOP_LIMIT, timeInForce, limitPrice, stopPrice,
-                extendedHours, null, OrderClass.OTO, takeProfitLimitPrice, stopLossStopPrice, stopLossLimitPrice, null, null, null);
+                extendedHours, null, OrderClass.OTO, takeProfitLimitPrice, stopLossStopPrice, stopLossLimitPrice, null, null);
     }
 
     /**
