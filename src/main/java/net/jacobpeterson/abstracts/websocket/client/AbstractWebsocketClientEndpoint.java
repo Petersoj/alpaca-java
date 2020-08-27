@@ -25,7 +25,7 @@ public abstract class AbstractWebsocketClientEndpoint {
     private static final Logger LOGGER = LogManager.getLogger(AbstractWebsocketClientEndpoint.class);
 
     /** The Websocket client. */
-    private WebsocketClient websocketClient;
+    private final WebsocketClient websocketClient;
 
     /** The Endpoint uri. */
     private final URI endpointURI;
@@ -38,6 +38,8 @@ public abstract class AbstractWebsocketClientEndpoint {
 
     /** The Retry attempts. */
     private int retryAttempts = 0;
+
+    private String subscription;
 
     /**
      * Instantiates a new Abstract websocket client endpoint.
@@ -62,7 +64,7 @@ public abstract class AbstractWebsocketClientEndpoint {
     public void connect() throws DeploymentException, IOException {
         WebSocketContainer container = ContainerProvider.getWebSocketContainer();
 
-        LOGGER.info("Connecting to " + endpointURI);
+        LOGGER.info("Connecting to {}", endpointURI);
 
         container.connectToServer(this, endpointURI);
     }
@@ -86,10 +88,8 @@ public abstract class AbstractWebsocketClientEndpoint {
     protected void onOpen(Session userSession) {
         this.userSession = userSession;
 
-        LOGGER.debug("onOpen " + userSession);
-        LOGGER.info("Websocket opened");
-
-        LOGGER.info("Authenticating...");
+        LOGGER.debug("onOpen {}", userSession);
+        LOGGER.info("Websocket opened... Authenticating...");
         websocketClient.sendAuthenticationMessage();
     }
 
@@ -100,13 +100,12 @@ public abstract class AbstractWebsocketClientEndpoint {
      * @param reason      the reason
      */
     protected void onClose(Session userSession, CloseReason reason) {
-        this.userSession = null;
 
-        LOGGER.debug("onClose " + userSession);
+        LOGGER.debug("onClose {}", userSession);
 
         if (!reason.getCloseCode().equals(CloseReason.CloseCodes.NORMAL_CLOSURE)) {
             if (retryAttempts > 5) {
-                LOGGER.error("More than 5 attempts to reconnect were made.");
+                LOGGER.error("More than 5 attempts to reconnect were made.  Bailing out.");
                 return;
             }
 
@@ -119,17 +118,26 @@ public abstract class AbstractWebsocketClientEndpoint {
                 e1.printStackTrace();
             }
 
-            LOGGER.info("Reconnecting due to closure " +
+            LOGGER.info("Reconnecting due to closure: {}",
                     CloseReason.CloseCodes.getCloseCode(reason.getCloseCode().getCode()));
 
             try {
-                connect();
+                reconnectAndResubscribe();
+                retryAttempts = 0; // hopefully we are connected by this time, so reset the retry counter
             } catch (Exception e) {
                 LOGGER.catching(e);
             }
         } else {
+            this.userSession = null;
             LOGGER.info("Websocket closed");
         }
+    }
+
+    private void reconnectAndResubscribe() throws IOException, DeploymentException {
+        LOGGER.info("Attempting to re-connect");
+        connect();
+        LOGGER.info("Resending subscriptions: {}", subscription);
+        sendSubscription(subscription);
     }
 
     /**
@@ -146,10 +154,18 @@ public abstract class AbstractWebsocketClientEndpoint {
      *
      * @param message the message
      */
-    public void sendMessage(String message) {
-        LOGGER.debug("sendMessage " + message);
-
+    private void sendMessage(String message) {
+        LOGGER.debug("sendMessage {}", message);
         userSession.getAsyncRemote().sendText(message);
+    }
+
+    public void sendAuthentication(String message) {
+        sendMessage(message);
+    }
+
+    public void sendSubscription(String message) {
+        this.subscription = message;
+        sendMessage(message);
     }
 
     /**
