@@ -39,6 +39,11 @@ public interface WebsocketClient {
     void sendAuthenticationMessage();
 
     /**
+     * Handle resubscribing.
+     */
+    void handleResubscribing();
+
+    /**
      * Handle websocket message.
      *
      * @param message the message

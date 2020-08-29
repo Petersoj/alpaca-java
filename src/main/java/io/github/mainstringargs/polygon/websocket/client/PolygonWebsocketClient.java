@@ -137,7 +137,13 @@ public class PolygonWebsocketClient implements WebsocketClient {
         authRequest.addProperty("action", "auth");
         authRequest.addProperty("params", keyId);
 
-        polygonWebsocketClientEndpoint.sendAuthentication(authRequest.toString());
+        polygonWebsocketClientEndpoint.sendMessage(authRequest.toString());
+    }
+
+    @Override
+    public void handleResubscribing() {
+        listeners.forEach(polygonStreamListener ->
+                submitStreamRequest(PolygonStreamAction.SUBSCRIBE, polygonStreamListener));
     }
 
     @Override
@@ -273,9 +279,8 @@ public class PolygonWebsocketClient implements WebsocketClient {
 
                     if (isTickerChannelRegistered) {
                         if (polygonStreamAction == PolygonStreamAction.UNSUBSCRIBE) {
-                            LOGGER.warn(
-                                    "Cannot unsubscribe from {} for channel {} because it is being used by another stream listener!",
-                                    ticker, listenerChannelType.name());
+                            LOGGER.warn("Cannot unsubscribe from {} for channel {} because it is being used by " +
+                                    "another stream listener!", ticker, listenerChannelType.name());
                         } else if (polygonStreamAction == PolygonStreamAction.SUBSCRIBE) {
                             LOGGER.warn("Already subscribed to {} for channel {}", ticker, listenerChannelType.name());
                         }
@@ -320,7 +325,7 @@ public class PolygonWebsocketClient implements WebsocketClient {
             actionJsonObject.addProperty("action", polygonStreamAction.getAPIName());
             actionJsonObject.addProperty("params", commaActionTickers.toString());
 
-            polygonWebsocketClientEndpoint.sendSubscription(actionJsonObject.toString());
+            polygonWebsocketClientEndpoint.sendMessage(actionJsonObject.toString());
 
             LOGGER.info("Requested subscriptions to update for: {}", getRegisteredTickerChannels(null));
         }
