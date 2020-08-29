@@ -28,7 +28,7 @@
     },
     "timestamp": {
       "existingJavaType": "java.lang.Long",
-      "title": "Epoch timestamp in milliseconds"
+      "title": "Epoch timestamp in nanoseconds"
     }
   }
 }
