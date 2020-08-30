@@ -38,6 +38,7 @@ import io.github.mainstringargs.domain.alpaca.marketdata.LastTradeResponse;
 import io.github.mainstringargs.domain.alpaca.order.CancelledOrder;
 import io.github.mainstringargs.domain.alpaca.order.Order;
 import io.github.mainstringargs.domain.alpaca.portfoliohistory.PortfolioHistory;
+import io.github.mainstringargs.domain.alpaca.position.ClosePositionOrder;
 import io.github.mainstringargs.domain.alpaca.position.Position;
 import io.github.mainstringargs.domain.alpaca.watchlist.Watchlist;
 import io.github.mainstringargs.util.gson.GsonUtil;
@@ -1005,6 +1006,57 @@ public class AlpacaAPI {
         }
 
         return alpacaRequest.getResponseObject(response, Position.class);
+    }
+
+    /**
+     * Closes (liquidates) all of the account’s open long and short positions. A response will be provided for each
+     * order that is attempted to be cancelled. If an order is no longer cancelable, the server will respond with status
+     * 500 and reject the request.
+     *
+     * @return a list of closing position orders
+     *
+     * @throws AlpacaAPIRequestException the alpaca API exception
+     * @see <a href="https://docs.alpaca.markets/api-documentation/api-v2/positions/">Positions</a>
+     */
+    public ArrayList<ClosePositionOrder> closeAllPositions() throws AlpacaAPIRequestException {
+        AlpacaRequestBuilder urlBuilder = new AlpacaRequestBuilder(baseAPIURL, apiVersion,
+                AlpacaConstants.POSITIONS_ENDPOINT);
+
+        HttpResponse<InputStream> response = alpacaRequest.invokeDelete(urlBuilder);
+
+        if (response.getStatus() != 207) { // This returns a 207 multi-status message
+            throw new AlpacaAPIRequestException(response);
+        }
+
+        Type arrayListType = new TypeToken<ArrayList<ClosePositionOrder>>() {}.getType();
+
+        return alpacaRequest.getResponseObject(response, arrayListType);
+    }
+
+    /**
+     * Closes (liquidates) the account’s open position for the given symbol. Works for both long and short positions.
+     *
+     * @param symbol symbol or asset_id
+     *
+     * @return a closing position order
+     *
+     * @throws AlpacaAPIRequestException the alpaca API exception
+     * @see <a href="https://docs.alpaca.markets/api-documentation/api-v2/positions/">Positions</a>
+     */
+    public Order closePosition(String symbol) throws AlpacaAPIRequestException {
+        Preconditions.checkNotNull(symbol);
+
+        AlpacaRequestBuilder urlBuilder = new AlpacaRequestBuilder(baseAPIURL, apiVersion,
+                AlpacaConstants.POSITIONS_ENDPOINT,
+                symbol);
+
+        HttpResponse<InputStream> response = alpacaRequest.invokeDelete(urlBuilder);
+
+        if (response.getStatus() != 200) {
+            throw new AlpacaAPIRequestException(response);
+        }
+
+        return alpacaRequest.getResponseObject(response, Order.class);
     }
 
     /**

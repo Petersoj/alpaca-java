@@ -10,7 +10,7 @@
       "title": "Exchange ID"
     },
     "i": {
-      "existingJavaType": "java.lang.Integer",
+      "existingJavaType": "java.lang.String",
       "title": "Trade ID"
     },
     "z": {
