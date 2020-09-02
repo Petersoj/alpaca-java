@@ -33,7 +33,7 @@ Add the following dependency to your build.gradle file:
 
 ```
 dependencies {
-	compile "net.jacobpeterson:alpaca-java:5.1"
+	compile "net.jacobpeterson:alpaca-java:5.1-SNAPSHOT"
 }
 ```
 
@@ -45,7 +45,7 @@ Add the following dependency to your pom.xml file:
 <dependency>
     <groupId>net.jacobpeterson</groupId>
     <artifactId>alpaca-java</artifactId>
-    <version>5.1</version>
+    <version>5.1-SNAPSHOT</version>
     <scope>compile</scope>
 </dependency>
 ```
