@@ -19,7 +19,7 @@
       "title": "Count"
     },
     "results": {
-      "existingJavaType": "java.util.ArrayList<io.github.mainstringargs.domain.polygon.tickers.ticker.Ticker>",
+      "existingJavaType": "java.util.ArrayList<net.jacobpeterson.domain.polygon.tickers.ticker.Ticker>",
       "title": "Results"
     }
   }

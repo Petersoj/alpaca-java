@@ -2,11 +2,11 @@
   "type": "object",
   "title": "See <a href=\"https://docs.alpaca.markets/api-documentation/api-v2/streaming/\">https://docs.alpaca.markets/api-documentation/api-v2/streaming/</a>",
   "extends": {
-    "existingJavaType": "io.github.mainstringargs.domain.alpaca.websocket.AlpacaStreamMessage"
+    "existingJavaType": "net.jacobpeterson.domain.alpaca.websocket.AlpacaStreamMessage"
   },
   "properties": {
     "data": {
-      "existingJavaType": "io.github.mainstringargs.domain.alpaca.websocket.authorization.AuthorizationData",
+      "existingJavaType": "net.jacobpeterson.domain.alpaca.websocket.authorization.AuthorizationData",
       "title": "The data"
     }
   }

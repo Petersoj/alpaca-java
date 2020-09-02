@@ -1,12 +1,12 @@
 {
   "type": "object",
   "javaInterfaces": [
-    "io.github.mainstringargs.abstracts.websocket.message.StreamMessage"
+    "net.jacobpeterson.abstracts.websocket.message.StreamMessage"
   ],
   "title": "See <a href=\"https://polygon.io/sockets\">https://polygon.io/sockets</a>",
   "properties": {
     "ev": {
-      "existingJavaType": "io.github.mainstringargs.polygon.websocket.message.PolygonStreamMessageType",
+      "existingJavaType": "net.jacobpeterson.polygon.websocket.message.PolygonStreamMessageType",
       "title": "The event type"
     },
     "sym": {

@@ -26,8 +26,8 @@ apply plugin: 'jsonschema2pojo'
 tasks.getByName("generateJsonSchema2Pojo").enabled(false) // Disable default jsonSchema2Pojo task
 
 archivesBaseName = 'alpaca-java'
-group = 'io.github.mainstringargs'
-version = '5.0.13-SNAPSHOT'
+group = 'net.jacobpeterson'
+version = '5.1'
 
 repositories {
     mavenLocal()
@@ -58,8 +58,8 @@ targetCompatibility = 1.8
 javadoc.options.addStringOption('Xdoclint:none', '-quiet')
 javadoc.options.addStringOption("charset", "UTF-8")
 
-//mainClassName = 'io.github.mainstringargs.polygon.PolygonExample'
-mainClassName = 'io.github.mainstringargs.alpaca.AlpacaExample'
+//mainClassName = 'net.jacobpeterson.polygon.PolygonExample'
+mainClassName = 'net.jacobpeterson.alpaca.AlpacaExample'
 //
 // END Build options
 //
@@ -67,42 +67,37 @@ mainClassName = 'io.github.mainstringargs.alpaca.AlpacaExample'
 //
 // START publishing
 //
-publishing {
-    publications {
-        mainPublication(MavenPublication) {
-            from components.java
 
-            pom {
-                name = 'alpaca-java'
-                description = 'Java API for Alpaca and Polygon'
-                url = 'https://github.com/Petersoj/alpaca-java'
-                inceptionYear = '2018'
+modifyPom {
+    project {
+        name = 'alpaca-java'
+        description = 'Java API for Alpaca and Polygon'
+        url = 'https://github.com/Petersoj/alpaca-java'
+        inceptionYear = '2018'
 
-                licenses {
-                    license {
-                        name = 'MIT License'
-                        url = 'https://opensource.org/licenses/MIT'
-                    }
-                }
-
-                developers {
-                    developer {
-                        id = 'Petersoj'
-                        name = 'Jacob Peterson'
-                    }
-
-                    developer {
-                        id = 'mainstringargs'
-                        name = 'main(String[] args)'
-                    }
-                }
-
-                scm {
-                    url = "https://github.com/Petersoj/alpaca-java.git"
-                    connection = "scm:git:https://github.com/Petersoj/alpaca-java.git"
-                    developerConnection = "scm:git:git@github.com/Petersoj/alpaca-java.git"
-                }
+        licenses {
+            license {
+                name = 'MIT License'
+                url = 'https://opensource.org/licenses/MIT'
             }
+        }
+
+        developers {
+            developer {
+                id = 'Petersoj'
+                name = 'Jacob Peterson'
+            }
+
+            developer {
+                id = 'mainstringargs'
+                name = 'main(String[] args)'
+            }
+        }
+
+        scm {
+            url = "https://github.com/Petersoj/alpaca-java.git"
+            connection = "scm:git:https://github.com/Petersoj/alpaca-java.git"
+            developerConnection = "scm:git:git@github.com/Petersoj/alpaca-java.git"
         }
     }
 }
@@ -120,7 +115,7 @@ nexus {
 }
 
 nexusStaging {
-    packageGroup = "io.github.mainstringargs"
+    packageGroup = "net.jacobpeterson"
 }
 
 // Used to prevent accidental publication of Alpaca keys
@@ -139,7 +134,7 @@ processResources {
 task generatePOJOs() {
     final def targetDirectory = "${project.buildDir}" + File.separator + "generated-sources" + File.separator + "schemajson"
     final def jsonSourceDirectory = "${project.projectDir}" + File.separator + "schema_json" + File.separator
-    final def jsonPackageNameStart = "io.github.mainstringargs.domain."
+    final def jsonPackageNameStart = "net.jacobpeterson.domain."
 
     // Loop through all files in schema JSON file tree
     file(jsonSourceDirectory).eachFileRecurse { jsonFile ->

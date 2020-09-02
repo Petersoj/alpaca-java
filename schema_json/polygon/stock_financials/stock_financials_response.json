@@ -11,7 +11,7 @@
       "title": "Count"
     },
     "results": {
-      "existingJavaType": "java.util.ArrayList<io.github.mainstringargs.domain.polygon.stockfinancials.StockFinancials>",
+      "existingJavaType": "java.util.ArrayList<net.jacobpeterson.domain.polygon.stockfinancials.StockFinancials>",
       "title": "Results"
     }
   }

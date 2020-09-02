@@ -2,7 +2,7 @@
   "type": "object",
   "title": "See <a href=\"https://polygon.io/docs/#!/Reference/get_v2_reference_tickers\">https://polygon.io/docs/#!/Reference/get_v2_reference_tickers</a>",
   "extends": {
-    "existingJavaType": "io.github.mainstringargs.domain.polygon.tickers.ticker.Ticker"
+    "existingJavaType": "net.jacobpeterson.domain.polygon.tickers.ticker.Ticker"
   },
   "properties": {
     "type": {

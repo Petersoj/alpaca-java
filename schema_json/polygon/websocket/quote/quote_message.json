@@ -1,7 +1,7 @@
 {
   "type": "object",
   "extends": {
-    "existingJavaType": "io.github.mainstringargs.domain.polygon.websocket.PolygonStreamMessage"
+    "existingJavaType": "net.jacobpeterson.domain.polygon.websocket.PolygonStreamMessage"
   },
   "title": "See <a href=\"https://polygon.io/sockets\">https://polygon.io/sockets</a>",
   "properties": {
