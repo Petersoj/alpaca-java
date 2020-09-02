@@ -7,7 +7,7 @@
       "title": "Status of this requests response"
     },
     "ticker": {
-      "existingJavaType": "io.github.mainstringargs.domain.polygon.snapshot.ticker.SnapshotTicker",
+      "existingJavaType": "net.jacobpeterson.domain.polygon.snapshot.ticker.SnapshotTicker",
       "title": "tickers"
     }
   }

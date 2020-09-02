@@ -23,7 +23,7 @@
       "title": "Total number of results generated"
     },
     "results": {
-      "existingJavaType": "java.util.ArrayList<io.github.mainstringargs.domain.polygon.aggregates.Aggregate>",
+      "existingJavaType": "java.util.ArrayList<net.jacobpeterson.domain.polygon.aggregates.Aggregate>",
       "title": "Results"
     }
   }

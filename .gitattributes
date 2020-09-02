@@ -27,6 +27,10 @@
 *.xml           text
 *.yml           text
 
+# Declare files that will always have CRLF line endings on checkout.
+*.sln           text eol=crlf
+*.bat           text eol=crlf
+
 # These files are binary and should be left untouched
 # (binary is a macro for -text -diff)
 *.class         binary

@@ -19,7 +19,7 @@
       "title": "The position quantity"
     },
     "order": {
-      "existingJavaType": "io.github.mainstringargs.domain.alpaca.order.Order",
+      "existingJavaType": "net.jacobpeterson.domain.alpaca.order.Order",
       "title": "The Order"
     }
   }
