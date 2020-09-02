@@ -117,7 +117,7 @@
       "title": "If true, eligible for execution outside regular trading hours."
     },
     "legs": {
-      "existingJavaType": "java.util.ArrayList<io.github.mainstringargs.domain.alpaca.order.Order>",
+      "existingJavaType": "java.util.ArrayList<net.jacobpeterson.domain.alpaca.order.Order>",
       "title": "When querying non-simple order_class orders in a nested style, an array of Order entities associated with this order is returned. Otherwise, null."
     }
   }

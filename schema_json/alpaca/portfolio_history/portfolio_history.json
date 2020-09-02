@@ -23,7 +23,7 @@
       "title": "Basis in dollar of the profit loss calculation"
     },
     "timeframe": {
-      "existingJavaType": "io.github.mainstringargs.alpaca.enums.PortfolioTimeFrame",
+      "existingJavaType": "net.jacobpeterson.alpaca.enums.PortfolioTimeFrame",
       "title": "Time window size of each data element"
     }
   }

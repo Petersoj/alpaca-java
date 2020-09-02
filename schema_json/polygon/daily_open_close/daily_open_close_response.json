@@ -7,15 +7,15 @@
       "title": "Symbol that was evaluated from the request"
     },
     "open": {
-      "existingJavaType": "io.github.mainstringargs.domain.polygon.dailyopenclose.DailyOpenCloseTrade",
+      "existingJavaType": "net.jacobpeterson.domain.polygon.dailyopenclose.DailyOpenCloseTrade",
       "title": "open"
     },
     "close": {
-      "existingJavaType": "io.github.mainstringargs.domain.polygon.dailyopenclose.DailyOpenCloseTrade",
+      "existingJavaType": "net.jacobpeterson.domain.polygon.dailyopenclose.DailyOpenCloseTrade",
       "title": "close"
     },
     "afterHours": {
-      "existingJavaType": "io.github.mainstringargs.domain.polygon.dailyopenclose.DailyOpenCloseTrade",
+      "existingJavaType": "net.jacobpeterson.domain.polygon.dailyopenclose.DailyOpenCloseTrade",
       "title": "afterHours"
     }
   }

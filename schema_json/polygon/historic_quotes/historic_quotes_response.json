@@ -19,7 +19,7 @@
       "title": "Ticker symbol that was evaluated from the request"
     },
     "results": {
-      "existingJavaType": "java.util.ArrayList<io.github.mainstringargs.domain.polygon.historicquotes.HistoricQuote>",
+      "existingJavaType": "java.util.ArrayList<net.jacobpeterson.domain.polygon.historicquotes.HistoricQuote>",
       "title": "results"
     }
   }

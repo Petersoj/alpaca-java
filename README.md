@@ -1,7 +1,9 @@
-<p align="center"><a href="https://mainstringargs.github.io/alpaca-java/" target="_blank"><img src="https://i.imgur.com/mQcuK61.jpg"></a></p>
+# UPDATING FROM 5.0.13 TO 5.1
+This repository has been transferred and as a result, lots of refactoring has occurred. This is because artifacts cannot be transferred in Maven Central. So, the new groupID for the project is `net.jacobpeterson` and all packages have been renamed from `io.github.mainstringargs` to `net.jacobpeterson`. Please refactor accordingly when you update from 5.0.13 to 5.1. Thanks!
+<p align="center"><a href="https://petersoj.github.io/alpaca-java/" target="_blank"><img src="https://i.imgur.com/mQcuK61.jpg"></a></p>
 <p align="center">
-<a href="https://search.maven.org/artifact/io.github.mainstringargs/alpaca-java" target="_blank"><img alt="Maven Central" src="https://img.shields.io/maven-central/v/io.github.mainstringargs/alpaca-java"></a> <a href="https://javadoc.io/doc/io.github.mainstringargs/alpaca-java" target="_blank"><img src="https://javadoc.io/badge/io.github.mainstringargs/alpaca-java.svg" alt="Javadocs"></a> <a href="https://travis-ci.org/mainstringargs/alpaca-java" target="_blank"><img src="https://travis-ci.org/mainstringargs/alpaca-java.svg?branch=master" alt="Build Status"></a> <a href="https://codecov.io/gh/mainstringargs/alpaca-java" target="_blank"><img src="https://codecov.io/gh/mainstringargs/alpaca-java/branch/unittesting/graph/badge.svg" />
-</a> <a href="https://opensource.org/licenses/MIT" target="_blank"><img alt="GitHub" src="https://img.shields.io/github/license/mainstringargs/alpaca-java"></a>    
+<a href="https://search.maven.org/artifact/net.jacobpeterson/alpaca-java" target="_blank"><img alt="Maven Central" src="https://img.shields.io/maven-central/v/net.jacobpeterson/alpaca-java"></a> <a href="https://javadoc.io/doc/net.jacobpeterson/alpaca-java" target="_blank"><img src="https://javadoc.io/badge/net.jacobpeterson/alpaca-java.svg" alt="Javadocs"></a> <a href="https://travis-ci.org/petersoj/alpaca-java" target="_blank"><img src="https://travis-ci.org/petersoj/alpaca-java.svg?branch=master" alt="Build Status"></a> <a href="https://codecov.io/gh/petersoj/alpaca-java" target="_blank"><img src="https://codecov.io/gh/petersoj/alpaca-java/branch/unittesting/graph/badge.svg" />
+</a> <a href="https://opensource.org/licenses/MIT" target="_blank"><img alt="GitHub" src="https://img.shields.io/github/license/petersoj/alpaca-java"></a>    
 </p>
 
 # Overview
@@ -31,7 +33,7 @@ Add the following dependency to your build.gradle file:
 
 ```
 dependencies {
-	compile "io.github.mainstringargs:alpaca-java:5.0.13"
+	compile "net.jacobpeterson:alpaca-java:5.1"
 }
 ```
 
@@ -41,9 +43,9 @@ Add the following dependency to your pom.xml file:
 
 ```
 <dependency>
-    <groupId>io.github.mainstringargs</groupId>
+    <groupId>net.jacobpeterson</groupId>
     <artifactId>alpaca-java</artifactId>
-    <version>5.0.13</version>
+    <version>5.1</version>
     <scope>compile</scope>
 </dependency>
 ```
@@ -58,7 +60,7 @@ base_api_url = https://paper-api.alpaca.markets
 base_data_url = https://data.alpaca.markets
 user_agent=a_user_agent
 ```
-The default values for `alpaca.properties` can be found [here](https://github.com/mainstringargs/alpaca-java/tree/master/src/main/resources).
+The default values for `alpaca.properties` can be found [here](https://github.com/Petersoj/alpaca-java/tree/master/src/main/resources).
 
 Similarly, set the following properties in a polygon.properties file on the classpath for using the PolygonAPI:
 ```
@@ -68,11 +70,11 @@ base_api_url = https://api.polygon.io
 web_socket_server_url = wss://alpaca.socket.polygon.io/stocks
 user_agent=a_user_agent
 ```
-The default values for `polygon.properties` can be found [here](https://github.com/mainstringargs/alpaca-java/tree/master/src/main/resources).
+The default values for `polygon.properties` can be found [here](https://github.com/Petersoj/alpaca-java/tree/master/src/main/resources).
 
 ## AlpacaAPI Example
 
-This example uses the `AlpacaAPI` class to subscribe to the Account and Trade Updates stream, print out the account information, submit a limit order, create a watchlist, and print out bars data. Click [here](https://docs.alpaca.markets/api-documentation/api-v2/) for the general Alpaca API documentation and click [here](https://javadoc.io/doc/io.github.mainstringargs/alpaca-java/latest/io/github/mainstringargs/alpaca/AlpacaAPI.html) for the `AlpacaAPI` javadoc.
+This example uses the `AlpacaAPI` class to subscribe to the Account and Trade Updates stream, print out the account information, submit a limit order, create a watchlist, and print out bars data. Click [here](https://docs.alpaca.markets/api-documentation/api-v2/) for the general Alpaca API documentation and click [here](https://javadoc.io/doc/net.jacobpeterson/alpaca-java/latest/net/jacobpeterson/alpaca/AlpacaAPI.html) for the `AlpacaAPI` javadoc.
 
 ```java
 // This logs into Alpaca using the alpaca.properties file on the classpath.
@@ -300,7 +302,7 @@ Bars response:
 
 # PolygonAPI Example
 
-This example uses the `PolygonAPI` class to subscribe to the Polygon websocket stream, get stocks splits, and get aggregates. Click [here](https://polygon.io/docs/) for the general Polygon API documentation and click [here](https://javadoc.io/doc/io.github.mainstringargs/alpaca-java/latest/io/github/mainstringargs/polygon/PolygonAPI.html) for the `PolygonAPI` javadoc.
+This example uses the `PolygonAPI` class to subscribe to the Polygon websocket stream, get stocks splits, and get aggregates. Click [here](https://polygon.io/docs/) for the general Polygon API documentation and click [here](https://javadoc.io/doc/net.jacobpeterson/alpaca-java/latest/net/jacobpeterson/polygon/PolygonAPI.html) for the `PolygonAPI` javadoc.
 
 ```java
 // This will use the key_id in the alpaca.properties file by default

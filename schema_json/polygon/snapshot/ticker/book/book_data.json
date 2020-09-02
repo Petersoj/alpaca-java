@@ -7,11 +7,11 @@
       "title": "The ticker"
     },
     "bids": {
-      "existingJavaType": "java.util.ArrayList<io.github.mainstringargs.domain.polygon.snapshot.ticker.book.BookOrder>",
+      "existingJavaType": "java.util.ArrayList<net.jacobpeterson.domain.polygon.snapshot.ticker.book.BookOrder>",
       "title": "The bids on the book"
     },
     "asks": {
-      "existingJavaType": "java.util.ArrayList<io.github.mainstringargs.domain.polygon.snapshot.ticker.book.BookOrder>",
+      "existingJavaType": "java.util.ArrayList<net.jacobpeterson.domain.polygon.snapshot.ticker.book.BookOrder>",
       "title": "The asks on the book"
     },
     "bidCount": {

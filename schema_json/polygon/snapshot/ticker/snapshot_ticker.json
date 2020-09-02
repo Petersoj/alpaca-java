@@ -7,23 +7,23 @@
       "title": "Ticker of the object"
     },
     "day": {
-      "existingJavaType": "io.github.mainstringargs.domain.polygon.snapshot.ticker.TickerCandle",
+      "existingJavaType": "net.jacobpeterson.domain.polygon.snapshot.ticker.TickerCandle",
       "title": "day"
     },
     "lastTrade": {
-      "existingJavaType": "io.github.mainstringargs.domain.polygon.snapshot.ticker.LastTrade",
+      "existingJavaType": "net.jacobpeterson.domain.polygon.snapshot.ticker.LastTrade",
       "title": "lastTrade"
     },
     "lastQuote": {
-      "existingJavaType": "io.github.mainstringargs.domain.polygon.snapshot.ticker.LastQuote",
+      "existingJavaType": "net.jacobpeterson.domain.polygon.snapshot.ticker.LastQuote",
       "title": "lastQuote"
     },
     "min": {
-      "existingJavaType": "io.github.mainstringargs.domain.polygon.snapshot.ticker.TickerCandle",
+      "existingJavaType": "net.jacobpeterson.domain.polygon.snapshot.ticker.TickerCandle",
       "title": "min"
     },
     "prevDay": {
-      "existingJavaType": "io.github.mainstringargs.domain.polygon.snapshot.ticker.TickerCandle",
+      "existingJavaType": "net.jacobpeterson.domain.polygon.snapshot.ticker.TickerCandle",
       "title": "prevDay"
     },
     "todaysChange": {
