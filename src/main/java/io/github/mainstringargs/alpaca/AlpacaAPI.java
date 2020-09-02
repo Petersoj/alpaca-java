@@ -890,7 +890,7 @@ public class AlpacaAPI {
      * @see <a href="https://docs.alpaca.markets/api-documentation/api-v2/orders/">Orders</a>
      */
     public Order replaceOrder(String orderID, Integer quantity, OrderTimeInForce timeInForce, Double limitPrice,
-            Double stopPrice, String clientOrderId) throws AlpacaAPIRequestException {
+            Double stopPrice, Double trailingPercent, Double trailingPrice, String clientOrderId) throws AlpacaAPIRequestException {
         Preconditions.checkNotNull(orderID);
 
         AlpacaRequestBuilder urlBuilder = new AlpacaRequestBuilder(baseAPIURL, apiVersion,
@@ -913,6 +913,16 @@ public class AlpacaAPI {
         if (stopPrice != null) {
             urlBuilder.appendJSONBodyProperty(AlpacaConstants.STOP_PRICE_PARAMETER,
                     TimeUtil.toDecimalFormat(stopPrice));
+        }
+
+        if(trailingPercent != null) {
+            urlBuilder.appendJSONBodyProperty(AlpacaConstants.TRAIL_PERCENT_PARAMETER,
+                    TimeUtil.toDecimalFormat(trailingPercent));
+        }
+
+        if(trailingPrice != null) {
+            urlBuilder.appendJSONBodyProperty(AlpacaConstants.TRAIL_PRICE_PARAMETER,
+                    TimeUtil.toDecimalFormat(trailingPrice));
         }
 
         if (clientOrderId != null) {
