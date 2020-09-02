@@ -47,6 +47,9 @@ dependencies {
     testCompile 'junit:junit:4.12'
 }
 
+//
+// START Build options
+//
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
 [compileJava, compileTestJava, javadoc]*.options*.encoding = 'UTF-8'
@@ -55,13 +58,11 @@ targetCompatibility = 1.8
 javadoc.options.addStringOption('Xdoclint:none', '-quiet')
 javadoc.options.addStringOption("charset", "UTF-8")
 
-// Publish to local maven repo for local testing
-build {
-    finalizedBy publishToMavenLocal
-}
-
 //mainClassName = 'io.github.mainstringargs.polygon.PolygonExample'
 mainClassName = 'io.github.mainstringargs.alpaca.AlpacaExample'
+//
+// END Build options
+//
 
 //
 // START publishing
@@ -86,14 +87,13 @@ publishing {
 
                 developers {
                     developer {
-                        id = 'mainstringargs'
-                        name = 'main(String[] args)'
-                        email = 'mainstringargs@github.io'
+                        id = 'Petersoj'
+                        name = 'Jacob Peterson'
                     }
 
                     developer {
-                        id = 'Petersoj'
-                        name = 'Jacob Peterson'
+                        id = 'mainstringargs'
+                        name = 'main(String[] args)'
                     }
                 }
 
@@ -112,6 +112,7 @@ extraArchive {
     tests = true
     javadoc = true
 }
+
 nexus {
     sign = true
     repositoryUrl = 'https://oss.sonatype.org/service/local/staging/deploy/maven2/'
@@ -119,7 +120,7 @@ nexus {
 }
 
 nexusStaging {
-    packageGroup = "io.github.mainstringargs" //optional if packageGroup == project.getGroup()
+    packageGroup = "io.github.mainstringargs"
 }
 
 // Used to prevent accidental publication of Alpaca keys
