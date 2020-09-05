@@ -877,6 +877,7 @@ public class AlpacaAPI {
      * @param timeInForce   day, gtc, opg, cls, ioc, fok. Please see Understand Orders for more info.
      * @param limitPrice    required if type is limit or stop_limit
      * @param stopPrice     required if type is stop or stop_limit
+     * @param trail         required if type is trail_stop
      * @param clientOrderId A unique identifier for the order. Automatically generated if not sent.
      *
      * @return the order
@@ -885,8 +886,7 @@ public class AlpacaAPI {
      * @see <a href="https://docs.alpaca.markets/api-documentation/api-v2/orders/">Orders</a>
      */
     public Order replaceOrder(String orderID, Integer quantity, OrderTimeInForce timeInForce, Double limitPrice,
-            Double stopPrice, Double trailingPercent, Double trailingPrice, String clientOrderId)
-            throws AlpacaAPIRequestException {
+            Double stopPrice, Double trail, String clientOrderId) throws AlpacaAPIRequestException {
         Preconditions.checkNotNull(orderID);
 
         AlpacaRequestBuilder urlBuilder = new AlpacaRequestBuilder(baseAPIURL, apiVersion,
@@ -911,14 +911,9 @@ public class AlpacaAPI {
                     TimeUtil.toDecimalFormat(stopPrice));
         }
 
-        if (trailingPercent != null) {
-            urlBuilder.appendJSONBodyProperty(AlpacaConstants.TRAIL_PERCENT_PARAMETER,
-                    TimeUtil.toDecimalFormat(trailingPercent));
-        }
-
-        if (trailingPrice != null) {
-            urlBuilder.appendJSONBodyProperty(AlpacaConstants.TRAIL_PRICE_PARAMETER,
-                    TimeUtil.toDecimalFormat(trailingPrice));
+        if(trail != null) {
+            urlBuilder.appendJSONBodyProperty(AlpacaConstants.TRAIL_PARAMETER,
+                    TimeUtil.toDecimalFormat(trail));
         }
 
         if (clientOrderId != null) {
