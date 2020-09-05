@@ -102,7 +102,7 @@
 
     "hwm": {
       "existingJavaType": "java.lang.String",
-      "title": "hwm"
+      "title": "High water mark - the highest (or lowest, if shorting) price seen.  Set by Alpaca"
     },
     "filled_avg_price": {
       "existingJavaType": "java.lang.String",
