@@ -42,7 +42,7 @@ import net.jacobpeterson.polygon.rest.PolygonRequestBuilder;
 import net.jacobpeterson.polygon.rest.exception.PolygonAPIRequestException;
 import net.jacobpeterson.polygon.websocket.client.PolygonWebsocketClient;
 import net.jacobpeterson.polygon.websocket.listener.PolygonStreamListener;
-import net.jacobpeterson.util.time.TimeUtil;
+import net.jacobpeterson.util.format.FormatUtil;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -504,7 +504,7 @@ public class PolygonAPI {
                 PolygonConstants.STOCKS_ENDPOINT,
                 PolygonConstants.TRADES_ENDPOINT,
                 ticker,
-                TimeUtil.toDateString(date));
+                FormatUtil.toDateString(date));
 
         if (timestamp != null) {
             builder.appendURLParameter(PolygonConstants.TIMESTAMP_PARAMETER, String.valueOf(timestamp));
@@ -559,7 +559,7 @@ public class PolygonAPI {
                 PolygonConstants.STOCKS_ENDPOINT,
                 PolygonConstants.NBBO_ENDPOINT,
                 ticker,
-                TimeUtil.toDateString(date));
+                FormatUtil.toDateString(date));
 
         if (timestamp != null) {
             builder.appendURLParameter(PolygonConstants.TIMESTAMP_PARAMETER, String.valueOf(timestamp));
@@ -658,7 +658,7 @@ public class PolygonAPI {
         PolygonRequestBuilder builder = new PolygonRequestBuilder(baseAPIURL, PolygonConstants.VERSION_1_ENDPOINT,
                 PolygonConstants.OPEN_CLOSE_ENDPOINT,
                 symbol,
-                TimeUtil.toDateString(date));
+                FormatUtil.toDateString(date));
 
         HttpResponse<InputStream> response = polygonRequest.invokeGet(builder);
 
@@ -892,8 +892,8 @@ public class PolygonAPI {
                 PolygonConstants.RANGE_ENDPOINT,
                 Integer.toString((multiplier == null) ? 1 : multiplier),
                 timeSpan.getAPIName(),
-                TimeUtil.toDateString(fromDate),
-                TimeUtil.toDateString(toDate));
+                FormatUtil.toDateString(fromDate),
+                FormatUtil.toDateString(toDate));
 
         if (unadjusted != null) {
             builder.appendURLParameter(PolygonConstants.UNADJUSTED_PARAMETER, unadjusted.toString());
@@ -936,7 +936,7 @@ public class PolygonAPI {
                 locale,
                 PolygonConstants.MARKET_ENDPOINT,
                 market.getAPIName(),
-                TimeUtil.toDateString(date));
+                FormatUtil.toDateString(date));
 
         if (unadjusted != null) {
             builder.appendURLParameter(PolygonConstants.UNADJUSTED_PARAMETER, unadjusted.toString());

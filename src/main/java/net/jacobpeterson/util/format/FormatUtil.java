@@ -1,4 +1,4 @@
-package net.jacobpeterson.util.time;
+package net.jacobpeterson.util.format;
 
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
@@ -9,23 +9,23 @@ import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 
 /**
- * The Class Utilities.
+ * The Class FormatUtil.
  */
-public class TimeUtil {
+public class FormatUtil {
 
     /** The constant PREV_UNIX_EPOCH_NANO_TIME. */
     private static final long PREV_UNIX_EPOCH_NANO_TIME = System.currentTimeMillis() * 1000000L;
     /** The constant PREV_UNIX_EPOCH_NANO_TIME. */
     private static final long PREV_UNIX_EPOCH_MICRO_TIME = PREV_UNIX_EPOCH_NANO_TIME / 1000L;
     /** The date time formatter. */
-    private static DateTimeFormatter inputDateTimeFormatter = DateTimeFormatter.ofPattern(
+    private static final DateTimeFormatter INPUT_DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern(
             "[yyyyMMdd][yyyy-MM-dd][yyyy-DDD]['T'[HHmmss][HHmm][HH:mm:ss][HH:mm][.SSSSSSSSS][.SSSSSSSS][.SSSSSSS][" +
                     ".SSSSSS][.SSSSS][.SSS][.SS][.S]][OOOO][O][z][XXXXX][XXXX]['['VV']']");
     /** The output date time formatter. */
-    private static DateTimeFormatter outputDateTimeFormatter =
+    private static final DateTimeFormatter OUTPUT_DATE_TIME_FORMATTER =
             DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss'Z'").withZone(ZoneId.of("UTC"));
     /** The number formatter. */
-    private static NumberFormat numberFormatter = new DecimalFormat("#0.00");
+    private static final NumberFormat NUMBER_FORMATTER = new DecimalFormat("#0.00");
 
     /**
      * To date time string.
@@ -39,7 +39,7 @@ public class TimeUtil {
 
         ZonedDateTime localTimeZoned = ldtZoned.withZoneSameInstant(ZoneId.of("UTC"));
 
-        return outputDateTimeFormatter.format(localTimeZoned);
+        return OUTPUT_DATE_TIME_FORMATTER.format(localTimeZoned);
     }
 
     /**
@@ -50,7 +50,7 @@ public class TimeUtil {
      * @return the string
      */
     public static String toDecimalFormat(Number numberToFormat) {
-        return numberFormatter.format(numberToFormat);
+        return NUMBER_FORMATTER.format(numberToFormat);
     }
 
     /**
@@ -72,7 +72,7 @@ public class TimeUtil {
      * @return the local date time using the system time zone
      */
     public static LocalDateTime fromDateTimeString(String dateTimeString) {
-        LocalDateTime ldt = LocalDateTime.parse(dateTimeString, inputDateTimeFormatter);
+        LocalDateTime ldt = LocalDateTime.parse(dateTimeString, INPUT_DATE_TIME_FORMATTER);
 
         ZonedDateTime ldtZoned;
 
