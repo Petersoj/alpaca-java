@@ -90,20 +90,6 @@
       "existingJavaType": "java.lang.String",
       "title": "Stop price"
     },
-    "trail_percent": {
-      "existingJavaType": "java.lang.String",
-      "title": "Stop trail percent"
-    },
-
-    "trail_price": {
-      "existingJavaType": "java.lang.String",
-      "title": "Stop trailing price"
-    },
-
-    "hwm": {
-      "existingJavaType": "java.lang.String",
-      "title": "High water mark - the highest (or lowest, if shorting) price seen.  Set by Alpaca"
-    },
     "filled_avg_price": {
       "existingJavaType": "java.lang.String",
       "title": "Stop price"
@@ -119,6 +105,18 @@
     "legs": {
       "existingJavaType": "java.util.ArrayList<net.jacobpeterson.domain.alpaca.order.Order>",
       "title": "When querying non-simple order_class orders in a nested style, an array of Order entities associated with this order is returned. Otherwise, null."
+    },
+    "trail_price": {
+      "existingJavaType": "java.lang.String",
+      "title": "The dollar value away from the high water mark for trailing stop orders."
+    },
+    "trail_percent": {
+      "existingJavaType": "java.lang.String",
+      "title": "The percent value away from the high water mark for trailing stop orders."
+    },
+    "hwm": {
+      "existingJavaType": "java.lang.String",
+      "title": "High Water Mark - The highest (lowest) market price seen since the trailing stop order was submitted."
     }
   }
 }
