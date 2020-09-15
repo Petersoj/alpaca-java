@@ -1,5 +1,5 @@
-# UPDATING FROM 5.0.13 TO 5.1
-This repository has been transferred and as a result, lots of refactoring has occurred. This is because artifacts cannot be transferred in Maven Central. So, the new groupID for the project is `net.jacobpeterson` and all packages have been renamed from `io.github.mainstringargs` to `net.jacobpeterson`. Please refactor accordingly when you update from 5.0.13 to 5.1. Thanks!
+# UPDATING FROM 5.0.13 TO 5.2
+This repository has been transferred and as a result, lots of refactoring has occurred. This is because artifacts cannot be transferred in Maven Central. So, the new groupID for the project is `net.jacobpeterson` and all packages have been renamed from `io.github.mainstringargs` to `net.jacobpeterson`. Please refactor accordingly when you update from 5.0.13 to 5.2. Thanks!
 <p align="center"><a href="https://petersoj.github.io/alpaca-java/" target="_blank"><img src="https://i.imgur.com/mQcuK61.jpg"></a></p>
 <p align="center">
 <a href="https://search.maven.org/artifact/net.jacobpeterson/alpaca-java" target="_blank"><img alt="Maven Central" src="https://img.shields.io/maven-central/v/net.jacobpeterson/alpaca-java"></a> <a href="https://javadoc.io/doc/net.jacobpeterson/alpaca-java" target="_blank"><img src="https://javadoc.io/badge/net.jacobpeterson/alpaca-java.svg" alt="Javadocs"></a> <a href="https://travis-ci.org/petersoj/alpaca-java" target="_blank"><img src="https://travis-ci.org/petersoj/alpaca-java.svg?branch=master" alt="Build Status"></a> <a href="https://codecov.io/gh/petersoj/alpaca-java" target="_blank"><img src="https://codecov.io/gh/petersoj/alpaca-java/branch/unittesting/graph/badge.svg" />
@@ -33,7 +33,7 @@ Add the following dependency to your build.gradle file:
 
 ```
 dependencies {
-	compile "net.jacobpeterson:alpaca-java:5.1-SNAPSHOT"
+	compile "net.jacobpeterson:alpaca-java:5.2"
 }
 ```
 
@@ -45,7 +45,7 @@ Add the following dependency to your pom.xml file:
 <dependency>
     <groupId>net.jacobpeterson</groupId>
     <artifactId>alpaca-java</artifactId>
-    <version>5.1-SNAPSHOT</version>
+    <version>5.2</version>
     <scope>compile</scope>
 </dependency>
 ```
