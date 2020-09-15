@@ -39,8 +39,8 @@ import net.jacobpeterson.domain.alpaca.portfoliohistory.PortfolioHistory;
 import net.jacobpeterson.domain.alpaca.position.ClosePositionOrder;
 import net.jacobpeterson.domain.alpaca.position.Position;
 import net.jacobpeterson.domain.alpaca.watchlist.Watchlist;
-import net.jacobpeterson.util.gson.GsonUtil;
 import net.jacobpeterson.util.format.FormatUtil;
+import net.jacobpeterson.util.gson.GsonUtil;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -808,6 +808,56 @@ public class AlpacaAPI {
         return requestNewOrder(symbol, quantity, side, OrderType.STOP_LIMIT, timeInForce, limitPrice, stopPrice,
                 null, null, extendedHours, null, OrderClass.OTO, takeProfitLimitPrice,
                 stopLossStopPrice, stopLossLimitPrice);
+    }
+
+    /**
+     * Trailing stop orders allow you to continuously and automatically keep updating the stop price threshold based on
+     * the stock price movement. This method calls {@link #requestNewOrder(String, Integer, OrderSide, OrderType,
+     * OrderTimeInForce, Double, Double, Double, Double, Boolean, String, OrderClass, Double, Double, Double)} with
+     * {@link OrderType#TRAILING_STOP} and with parameters for a Trailing Stop Price order type.
+     *
+     * @param symbol        symbol or asset ID to identify the asset to trade
+     * @param quantity      number of shares to trade
+     * @param side          buy or sell
+     * @param timeInForce   day, gtc, opg, cls, ioc, fok. Please see Understand Orders for more info.
+     * @param trailPrice    this or trail_percent is required if type is trailing_stop
+     * @param extendedHours (default) false. If true, order will be eligible to execute in premarket/afterhours. Only
+     *                      works with type limit and time_in_force day.
+     *
+     * @return the order
+     *
+     * @throws AlpacaAPIRequestException the alpaca api request exception
+     * @see <a href="https://docs.alpaca.markets/trading-on-alpaca/orders/#order-types">Order Types</a>
+     */
+    public Order requestNewTrailingStopPriceOrder(String symbol, Integer quantity, OrderSide side,
+            OrderTimeInForce timeInForce, Double trailPrice, Boolean extendedHours) throws AlpacaAPIRequestException {
+        return requestNewOrder(symbol, quantity, side, OrderType.TRAILING_STOP, timeInForce, null, null,
+                trailPrice, null, extendedHours, null, OrderClass.OTO, null, null, null);
+    }
+
+    /**
+     * Trailing stop orders allow you to continuously and automatically keep updating the stop price threshold based on
+     * the stock price movement. This method calls {@link #requestNewOrder(String, Integer, OrderSide, OrderType,
+     * OrderTimeInForce, Double, Double, Double, Double, Boolean, String, OrderClass, Double, Double, Double)} with
+     * {@link OrderType#TRAILING_STOP} and with parameters for a Trailing Stop Percent order type.
+     *
+     * @param symbol        symbol or asset ID to identify the asset to trade
+     * @param quantity      number of shares to trade
+     * @param side          buy or sell
+     * @param timeInForce   day, gtc, opg, cls, ioc, fok. Please see Understand Orders for more info.
+     * @param trailPercent  this or trail_price is required if type is trailing_stop
+     * @param extendedHours (default) false. If true, order will be eligible to execute in premarket/afterhours. Only
+     *                      works with type limit and time_in_force day.
+     *
+     * @return the order
+     *
+     * @throws AlpacaAPIRequestException the alpaca api request exception
+     * @see <a href="https://docs.alpaca.markets/trading-on-alpaca/orders/#order-types">Order Types</a>
+     */
+    public Order requestNewTrailingStopPercentOrder(String symbol, Integer quantity, OrderSide side,
+            OrderTimeInForce timeInForce, Double trailPercent, Boolean extendedHours) throws AlpacaAPIRequestException {
+        return requestNewOrder(symbol, quantity, side, OrderType.TRAILING_STOP, timeInForce, null, null,
+                null, trailPercent, extendedHours, null, OrderClass.OTO, null, null, null);
     }
 
     /**
