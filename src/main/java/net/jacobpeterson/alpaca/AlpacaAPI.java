@@ -40,7 +40,7 @@ import net.jacobpeterson.domain.alpaca.position.ClosePositionOrder;
 import net.jacobpeterson.domain.alpaca.position.Position;
 import net.jacobpeterson.domain.alpaca.watchlist.Watchlist;
 import net.jacobpeterson.util.gson.GsonUtil;
-import net.jacobpeterson.util.time.TimeUtil;
+import net.jacobpeterson.util.format.FormatUtil;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -424,22 +424,22 @@ public class AlpacaAPI {
 
         if (limitPrice != null) {
             urlBuilder.appendJSONBodyProperty(AlpacaConstants.LIMIT_PRICE_PARAMETER,
-                    TimeUtil.toDecimalFormat(limitPrice));
+                    FormatUtil.toDecimalFormat(limitPrice));
         }
 
         if (stopPrice != null) {
             urlBuilder.appendJSONBodyProperty(AlpacaConstants.STOP_PRICE_PARAMETER,
-                    TimeUtil.toDecimalFormat(stopPrice));
+                    FormatUtil.toDecimalFormat(stopPrice));
         }
 
         if (trailPrice != null) {
             urlBuilder.appendJSONBodyProperty(AlpacaConstants.TRAIL_PRICE_PARAMETER,
-                    TimeUtil.toDecimalFormat(trailPrice));
+                    FormatUtil.toDecimalFormat(trailPrice));
         }
 
         if (trailPercent != null) {
             urlBuilder.appendJSONBodyProperty(AlpacaConstants.TRAIL_PERCENT_PARAMETER,
-                    TimeUtil.toDecimalFormat(trailPercent));
+                    FormatUtil.toDecimalFormat(trailPercent));
         }
 
         if (extendedHours != null) {
@@ -902,17 +902,17 @@ public class AlpacaAPI {
 
         if (limitPrice != null) {
             urlBuilder.appendJSONBodyProperty(AlpacaConstants.LIMIT_PRICE_PARAMETER,
-                    TimeUtil.toDecimalFormat(limitPrice));
+                    FormatUtil.toDecimalFormat(limitPrice));
         }
 
         if (stopPrice != null) {
             urlBuilder.appendJSONBodyProperty(AlpacaConstants.STOP_PRICE_PARAMETER,
-                    TimeUtil.toDecimalFormat(stopPrice));
+                    FormatUtil.toDecimalFormat(stopPrice));
         }
 
         if (trail != null) {
             urlBuilder.appendJSONBodyProperty(AlpacaConstants.TRAIL_PARAMETER,
-                    TimeUtil.toDecimalFormat(trail));
+                    FormatUtil.toDecimalFormat(trail));
         }
 
         if (clientOrderId != null) {
@@ -1382,7 +1382,7 @@ public class AlpacaAPI {
         }
 
         if (dateEnd != null) {
-            urlBuilder.appendURLParameter(AlpacaConstants.DATE_END_PARAMETER, TimeUtil.toDateString(dateEnd));
+            urlBuilder.appendURLParameter(AlpacaConstants.DATE_END_PARAMETER, FormatUtil.toDateString(dateEnd));
         }
 
         if (extendedHours != null) {
@@ -1437,11 +1437,11 @@ public class AlpacaAPI {
                 AlpacaConstants.CALENDAR_ENDPOINT);
 
         if (start != null) {
-            urlBuilder.appendURLParameter(AlpacaConstants.START_PARAMETER, TimeUtil.toDateString(start));
+            urlBuilder.appendURLParameter(AlpacaConstants.START_PARAMETER, FormatUtil.toDateString(start));
         }
 
         if (end != null) {
-            urlBuilder.appendURLParameter(AlpacaConstants.END_PARAMETER, TimeUtil.toDateString(end));
+            urlBuilder.appendURLParameter(AlpacaConstants.END_PARAMETER, FormatUtil.toDateString(end));
         }
 
         HttpResponse<InputStream> response = alpacaRequest.invokeGet(urlBuilder);

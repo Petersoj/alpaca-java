@@ -1,4 +1,4 @@
-package net.jacobpeterson.util.time;
+package net.jacobpeterson.util.format;
 
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
@@ -9,9 +9,9 @@ import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 
 /**
- * The Class Utilities.
+ * The Class FormatUtil.
  */
-public class TimeUtil {
+public class FormatUtil {
 
     /** The constant PREV_UNIX_EPOCH_NANO_TIME. */
     private static final long PREV_UNIX_EPOCH_NANO_TIME = System.currentTimeMillis() * 1000000L;
