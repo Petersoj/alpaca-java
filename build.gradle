@@ -19,6 +19,7 @@ plugins {
     id 'maven-publish'
     id 'com.bmuschko.nexus' version '2.3.1'
     id 'io.codearte.nexus-staging' version '0.11.0'
+    id 'com.github.johnrengelman.shadow' version '6.0.0'
 }
 
 // Calling 'apply' here because jsonschema2pojo doesn't exist in Gradle Central Plugin Repository
@@ -27,7 +28,7 @@ tasks.getByName("generateJsonSchema2Pojo").enabled(false) // Disable default jso
 
 archivesBaseName = 'alpaca-java'
 group = 'net.jacobpeterson'
-version = '5.0.13-SNAPSHOT'
+version = '5.2'
 
 repositories {
     mavenLocal()
@@ -47,6 +48,9 @@ dependencies {
     testCompile 'junit:junit:4.12'
 }
 
+//
+// START Build options
+//
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
 [compileJava, compileTestJava, javadoc]*.options*.encoding = 'UTF-8'
@@ -62,47 +66,44 @@ build {
 
 //mainClassName = 'net.jacobpeterson.polygon.PolygonExample'
 mainClassName = 'net.jacobpeterson.alpaca.AlpacaExample'
+//
+// END Build options
+//
 
 //
 // START publishing
 //
-publishing {
-    publications {
-        mainPublication(MavenPublication) {
-            from components.java
 
-            pom {
-                name = 'alpaca-java'
-                description = 'Java API for Alpaca and Polygon'
-                url = 'https://github.com/Petersoj/alpaca-java'
-                inceptionYear = '2018'
+modifyPom {
+    project {
+        name = 'alpaca-java'
+        description = 'Java API for Alpaca and Polygon'
+        url = 'https://github.com/Petersoj/alpaca-java'
+        inceptionYear = '2018'
 
-                licenses {
-                    license {
-                        name = 'MIT License'
-                        url = 'https://opensource.org/licenses/MIT'
-                    }
-                }
-
-                developers {
-                    developer {
-                        id = 'mainstringargs'
-                        name = 'main(String[] args)'
-                        email = 'mainstringargs@github.io'
-                    }
-
-                    developer {
-                        id = 'Petersoj'
-                        name = 'Jacob Peterson'
-                    }
-                }
-
-                scm {
-                    url = "https://github.com/Petersoj/alpaca-java.git"
-                    connection = "scm:git:https://github.com/Petersoj/alpaca-java.git"
-                    developerConnection = "scm:git:git@github.com/Petersoj/alpaca-java.git"
-                }
+        licenses {
+            license {
+                name = 'MIT License'
+                url = 'https://opensource.org/licenses/MIT'
             }
+        }
+
+        developers {
+            developer {
+                id = 'Petersoj'
+                name = 'Jacob Peterson'
+            }
+
+            developer {
+                id = 'mainstringargs'
+                name = 'main(String[] args)'
+            }
+        }
+
+        scm {
+            url = "https://github.com/Petersoj/alpaca-java.git"
+            connection = "scm:git:https://github.com/Petersoj/alpaca-java.git"
+            developerConnection = "scm:git:git@github.com/Petersoj/alpaca-java.git"
         }
     }
 }
@@ -112,6 +113,7 @@ extraArchive {
     tests = true
     javadoc = true
 }
+
 nexus {
     sign = true
     repositoryUrl = 'https://oss.sonatype.org/service/local/staging/deploy/maven2/'
@@ -119,7 +121,7 @@ nexus {
 }
 
 nexusStaging {
-    packageGroup = "net.jacobpeterson" //optional if packageGroup == project.getGroup()
+    packageGroup = "net.jacobpeterson"
 }
 
 // Used to prevent accidental publication of Alpaca keys

@@ -41,6 +41,15 @@ public class AlpacaConstants {
     /** The Constant STOP_PRICE_PARAMETER. */
     public static final String STOP_PRICE_PARAMETER = "stop_price";
 
+    /** The Constant TRAIL_PRICE_PARAMETER. */
+    public static final String TRAIL_PRICE_PARAMETER = "trail_price";
+
+    /** The Constant TRAIL_PERCENT_PARAMETER. */
+    public static final String TRAIL_PERCENT_PARAMETER = "trail_percent";
+
+    /** The Constant TRAIL_PARAMETER. */
+    public static final String TRAIL_PARAMETER = "trail";
+
     /** The Constant LIMIT_PRICE_PARAMETER. */
     public static final String LIMIT_PRICE_PARAMETER = "limit_price";
 

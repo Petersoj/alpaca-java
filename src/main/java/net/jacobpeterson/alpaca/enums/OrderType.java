@@ -17,7 +17,10 @@ public enum OrderType implements APIName {
     STOP("stop"),
 
     /** The stop limit. */
-    STOP_LIMIT("stop_limit");
+    STOP_LIMIT("stop_limit"),
+
+    /** The trailing stop. */
+    TRAILING_STOP("trailing_stop");
 
     /** The api name. */
     String apiName;
