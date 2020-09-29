@@ -7,7 +7,7 @@
       "title": "Status of this requests response"
     },
     "data": {
-      "existingJavaType": "io.github.mainstringargs.domain.polygon.snapshot.ticker.book.BookData",
+      "existingJavaType": "net.jacobpeterson.domain.polygon.snapshot.ticker.book.BookData",
       "title": "The book data"
     }
   }

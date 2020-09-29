@@ -1,7 +1,7 @@
 {
   "type": "object",
   "extends": {
-    "existingJavaType": "io.github.mainstringargs.domain.alpaca.marketdata.streaming.abstracts.MarketDataStreamDataMessage"
+    "existingJavaType": "net.jacobpeterson.domain.alpaca.marketdata.streaming.abstracts.MarketDataStreamDataMessage"
   },
   "title": "See <a href=\"https://alpaca.markets/docs/api-documentation/api-v2/market-data/streaming/\">https://alpaca.markets/docs/api-documentation/api-v2/market-data/streaming/</a>",
   "properties": {

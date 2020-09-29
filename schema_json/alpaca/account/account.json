@@ -11,7 +11,7 @@
       "title": "Account number."
     },
     "status": {
-      "existingJavaType": "io.github.mainstringargs.alpaca.enums.AccountStatus",
+      "existingJavaType": "net.jacobpeterson.alpaca.enums.AccountStatus",
       "title": "See Account Status"
     },
     "currency": {

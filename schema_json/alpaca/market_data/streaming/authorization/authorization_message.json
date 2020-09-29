@@ -2,11 +2,11 @@
   "type": "object",
   "title": "See <a href=\"https://alpaca.markets/docs/api-documentation/api-v2/market-data/streaming/\">https://alpaca.markets/docs/api-documentation/api-v2/market-data/streaming/</a>",
   "extends": {
-    "existingJavaType": "io.github.mainstringargs.domain.alpaca.marketdata.streaming.abstracts.MarketDataStreamStatusMessage"
+    "existingJavaType": "net.jacobpeterson.domain.alpaca.marketdata.streaming.abstracts.MarketDataStreamStatusMessage"
   },
   "properties": {
     "data": {
-      "existingJavaType": "io.github.mainstringargs.domain.alpaca.marketdata.streaming.authorization.AuthorizationData",
+      "existingJavaType": "net.jacobpeterson.domain.alpaca.marketdata.streaming.authorization.AuthorizationData",
       "title": "The data"
     }
   }
