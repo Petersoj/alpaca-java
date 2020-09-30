@@ -29,8 +29,10 @@ import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -302,8 +304,7 @@ public class MarketDataWebsocketClient implements WebsocketClient {
         streamRequestJsonObject.addProperty("action", "listen");
 
         JsonArray streamsJsonArray = new JsonArray();
-        getRegisteredMessageTypes().forEach(alpacaStreamMessageType ->
-                streamsJsonArray.add(alpacaStreamMessageType.getAPIName()));
+        getRegisteredMessageTypes().forEach((s, m) -> m.forEach(i -> streamsJsonArray.add(i.getAPIName() + "." + s)));
 
         JsonObject dataJsonObject = new JsonObject();
         dataJsonObject.add("streams", streamsJsonArray);
@@ -320,21 +321,20 @@ public class MarketDataWebsocketClient implements WebsocketClient {
      *
      * @return the registered message types
      */
-    public Set<MarketDataStreamMessageType> getRegisteredMessageTypes() {
-        Set<MarketDataStreamMessageType> registeredStreamMessageTypes = new HashSet<>();
+    public Map<String, Set<MarketDataStreamMessageType>> getRegisteredMessageTypes() {
+        Map<String, Set<MarketDataStreamMessageType>> marketDataStreamMessageTypes = new HashMap<>();
 
         for (MarketDataStreamListener marketDataStreamListener : listeners) {
-            Set<MarketDataStreamMessageType> marketDataStreamMessageTypes = new HashSet<>();
-            marketDataStreamListener.getDataStreams().forEach((s, m) -> marketDataStreamMessageTypes.addAll(m));
+            // Set<MarketDataStreamMessageType> marketDataStreamMessageTypes = new HashSet<>();
 
-            // if its empty, assume they want everything
-            Set<MarketDataStreamMessageType> streamMessageTypesToAdd = marketDataStreamMessageTypes.isEmpty() ? new HashSet<>() :
-                    marketDataStreamMessageTypes.stream().filter(MarketDataStreamMessageType::isAPISubscribable)
-                            .collect(Collectors.toSet());
+            marketDataStreamListener.getDataStreams().forEach((s, m) -> {
+                Set<MarketDataStreamMessageType> marketDataStreamMessageTypeSet =
+                        m.stream().filter(MarketDataStreamMessageType::isAPISubscribable).collect(Collectors.toSet());
+                marketDataStreamMessageTypes.put(s, m.stream().filter(MarketDataStreamMessageType::isAPISubscribable).collect(Collectors.toSet()));
+            });
 
-            registeredStreamMessageTypes.addAll(streamMessageTypesToAdd);
         }
 
-        return registeredStreamMessageTypes;
+        return marketDataStreamMessageTypes;
     }
 }

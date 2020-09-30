@@ -6,8 +6,13 @@ import net.jacobpeterson.alpaca.enums.OrderTimeInForce;
 import net.jacobpeterson.alpaca.rest.exception.AlpacaAPIRequestException;
 import net.jacobpeterson.alpaca.websocket.broker.listener.AlpacaStreamListenerAdapter;
 import net.jacobpeterson.alpaca.websocket.broker.message.AlpacaStreamMessageType;
+import net.jacobpeterson.alpaca.websocket.marketdata.listener.MarketDataStreamListenerAdapter;
+import net.jacobpeterson.alpaca.websocket.marketdata.message.MarketDataStreamMessageType;
 import net.jacobpeterson.domain.alpaca.account.Account;
 import net.jacobpeterson.domain.alpaca.marketdata.Bar;
+import net.jacobpeterson.domain.alpaca.marketdata.streaming.MarketDataStreamMessage;
+import net.jacobpeterson.domain.alpaca.marketdata.streaming.quote.QuoteMessage;
+import net.jacobpeterson.domain.alpaca.marketdata.streaming.trade.TradeMessage;
 import net.jacobpeterson.domain.alpaca.order.Order;
 import net.jacobpeterson.domain.alpaca.watchlist.Watchlist;
 import net.jacobpeterson.domain.alpaca.streaming.AlpacaStreamMessage;
@@ -20,6 +25,8 @@ import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Map;
+
+import static net.jacobpeterson.alpaca.websocket.marketdata.message.MarketDataStreamMessageType.QUOTES;
 
 /**
  * The type Alpaca example.
@@ -51,6 +58,24 @@ public class AlpacaExample {
                         TradeUpdateMessage tradeUpdateMessage = (TradeUpdateMessage) streamMessage;
                         System.out.println("\nReceived Order Update: \n\t" +
                                 tradeUpdateMessage.toString().replace(",", ",\n\t"));
+                        break;
+                }
+            }
+        });
+
+        alpacaAPI.addMarketDataStreamListener(new MarketDataStreamListenerAdapter("AAPL", QUOTES) {
+            @Override
+            public void onStreamUpdate(MarketDataStreamMessageType streamMessageType, MarketDataStreamMessage streamMessage) {
+                switch (streamMessageType) {
+                    case QUOTES:
+                        QuoteMessage quoteMessage = (QuoteMessage) streamMessage;
+                        System.out.println("\nQuote Update: \n\t" +
+                                quoteMessage.toString().replace(",", ",\n\t"));
+                        break;
+                    case TRADES:
+                        TradeMessage tradeMessage = (TradeMessage) streamMessage;
+                        System.out.println("\nTrade Update: \n\t" +
+                                tradeMessage.toString().replace(",", ",\n\t"));
                         break;
                 }
             }

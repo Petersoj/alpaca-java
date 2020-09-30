@@ -24,6 +24,8 @@ import net.jacobpeterson.alpaca.rest.AlpacaRequestBuilder;
 import net.jacobpeterson.alpaca.rest.exception.AlpacaAPIRequestException;
 import net.jacobpeterson.alpaca.websocket.broker.client.AlpacaWebsocketClient;
 import net.jacobpeterson.alpaca.websocket.broker.listener.AlpacaStreamListener;
+import net.jacobpeterson.alpaca.websocket.marketdata.client.MarketDataWebsocketClient;
+import net.jacobpeterson.alpaca.websocket.marketdata.listener.MarketDataStreamListener;
 import net.jacobpeterson.domain.alpaca.account.Account;
 import net.jacobpeterson.domain.alpaca.accountactivities.AccountActivity;
 import net.jacobpeterson.domain.alpaca.accountactivities.NonTradeActivity;
@@ -82,6 +84,9 @@ public class AlpacaAPI {
 
     /** The alpaca web socket client. */
     private final AlpacaWebsocketClient alpacaWebSocketClient;
+
+    /** The alpaca web socket client. */
+    private final MarketDataWebsocketClient marketDataWebSocketClient;
 
     /**
      * Instantiates a new Alpaca API using properties specified in alpaca.properties file (or relevant defaults)
@@ -144,6 +149,7 @@ public class AlpacaAPI {
 
         alpacaRequest = new AlpacaRequest(keyId, secret);
         alpacaWebSocketClient = new AlpacaWebsocketClient(keyId, secret, baseAPIURL);
+        marketDataWebSocketClient = new MarketDataWebsocketClient(keyId, secret, baseDataUrl);
 
         LOGGER.debug(this.toString());
     }
@@ -1697,6 +1703,24 @@ public class AlpacaAPI {
      */
     public void removeAlpacaStreamListener(AlpacaStreamListener streamListener) {
         alpacaWebSocketClient.removeListener(streamListener);
+    }
+
+    /**
+     * Adds the alpaca stream listener.
+     *
+     * @param streamListener the stream listener
+     */
+    public void addMarketDataStreamListener(MarketDataStreamListener streamListener) {
+        marketDataWebSocketClient.addListener(streamListener);
+    }
+
+    /**
+     * Removes the alpaca stream listener.
+     *
+     * @param streamListener the stream listener
+     */
+    public void removeMarketDataStreamListener(MarketDataStreamListener streamListener) {
+        marketDataWebSocketClient.removeListener(streamListener);
     }
 
     @Override
