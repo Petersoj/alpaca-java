@@ -325,11 +325,8 @@ public class MarketDataWebsocketClient implements WebsocketClient {
         Map<String, Set<MarketDataStreamMessageType>> marketDataStreamMessageTypes = new HashMap<>();
 
         for (MarketDataStreamListener marketDataStreamListener : listeners) {
-            // Set<MarketDataStreamMessageType> marketDataStreamMessageTypes = new HashSet<>();
 
             marketDataStreamListener.getDataStreams().forEach((s, m) -> {
-                Set<MarketDataStreamMessageType> marketDataStreamMessageTypeSet =
-                        m.stream().filter(MarketDataStreamMessageType::isAPISubscribable).collect(Collectors.toSet());
                 marketDataStreamMessageTypes.put(s, m.stream().filter(MarketDataStreamMessageType::isAPISubscribable).collect(Collectors.toSet()));
             });
 
