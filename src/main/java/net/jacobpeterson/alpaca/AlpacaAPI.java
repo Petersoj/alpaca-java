@@ -85,7 +85,7 @@ public class AlpacaAPI {
     /** The alpaca web socket client. */
     private final AlpacaWebsocketClient alpacaWebSocketClient;
 
-    /** The alpaca web socket client. */
+    /** The data web socket client. */
     private final MarketDataWebsocketClient marketDataWebSocketClient;
 
     /**
