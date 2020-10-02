@@ -6,6 +6,7 @@ import net.jacobpeterson.abstracts.websocket.client.WebsocketClient;
 import javax.websocket.ClientEndpoint;
 import javax.websocket.CloseReason;
 import javax.websocket.OnClose;
+import javax.websocket.OnError;
 import javax.websocket.OnMessage;
 import javax.websocket.OnOpen;
 import javax.websocket.Session;
@@ -15,7 +16,7 @@ import java.nio.charset.StandardCharsets;
 /**
  * The type Market data websocket client endpoint.
  */
-@ClientEndpoint(subprotocols = "BINARY")
+@ClientEndpoint(subprotocols = "STRING")
 public class MarketDataWebsocketClientEndpoint extends AbstractWebsocketClientEndpoint {
 
     /**
@@ -39,7 +40,12 @@ public class MarketDataWebsocketClientEndpoint extends AbstractWebsocketClientEn
     }
 
     @OnMessage
-    public void onMessageAnnotated(byte[] message) {
-        super.onMessage(new String(message, StandardCharsets.UTF_8));
+    public void onMessageAnnotated(String message) {
+        super.onMessage(message);
+    }
+
+    @OnError
+    public void onError(Throwable throwable) {
+        System.out.println(throwable.getLocalizedMessage());
     }
 }
