@@ -3,6 +3,7 @@ package net.jacobpeterson.alpaca.websocket.marketdata.client;
 import com.google.common.base.Preconditions;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
+import com.google.gson.JsonNull;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import com.google.gson.JsonPrimitive;
@@ -21,6 +22,7 @@ import net.jacobpeterson.domain.alpaca.marketdata.streaming.listening.ListeningM
 import net.jacobpeterson.domain.alpaca.marketdata.streaming.quote.QuoteMessage;
 import net.jacobpeterson.domain.alpaca.marketdata.streaming.trade.TradeMessage;
 import net.jacobpeterson.util.gson.GsonUtil;
+import org.apache.commons.lang.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -36,6 +38,9 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import static net.jacobpeterson.alpaca.websocket.marketdata.message.MarketDataStreamMessageType.AUTHORIZATION;
+import static net.jacobpeterson.alpaca.websocket.marketdata.message.MarketDataStreamMessageType.LISTENING;
+
 /**
  * The type Alpaca websocket client.
  */
@@ -49,6 +54,9 @@ public class MarketDataWebsocketClient implements WebsocketClient {
 
     /** The constant EVENT_TYPE_KEY. */
     private static final String EVENT_TYPE_KEY = "ev";
+
+    /** The constant EVENT_TYPE_KEY. */
+    private static final String DATA_KEY = "data";
 
     /** The key id. */
     private final String keyId;
@@ -162,6 +170,9 @@ public class MarketDataWebsocketClient implements WebsocketClient {
 
     @Override
     public void handleWebsocketMessage(String message) {
+        //RECEIVED: {"stream":"authorization","data":{"action":"authenticate","status":"authorized"}}
+        //RECEIVED: {"stream":"listening","data":{"streams":["Q.AAPL"]}}
+        //RECEIVED: {"stream":"Q.AAPL","data":{"ev":"Q","T":"AAPL","x":17,"p":112.12,"s":1,"X":3,"P":112.98,"S":1,"c":[0],"t":1601645053026000000}}
         JsonElement messageJsonElement = GsonUtil.JSON_PARSER.parse(message);
 
         Preconditions.checkState(messageJsonElement instanceof JsonObject);
@@ -172,8 +183,16 @@ public class MarketDataWebsocketClient implements WebsocketClient {
 
             if (streamJsonElement instanceof JsonPrimitive) {
                 try {
-                    MarketDataStreamMessageType marketDataStreamMessageType = GsonUtil.GSON.fromJson(streamJsonElement,
-                            MarketDataStreamMessageType.class);
+                    MarketDataStreamMessageType marketDataStreamMessageType;
+                    JsonElement eventMessageJsonElement = JsonNull.INSTANCE;
+
+                    if(streamJsonElement.getAsString().contains(".")) {
+                        eventMessageJsonElement = messageJsonObject.get(DATA_KEY);
+                        JsonElement eventTypeJsonElement = eventMessageJsonElement.getAsJsonObject().get(EVENT_TYPE_KEY);
+                        marketDataStreamMessageType = GsonUtil.GSON.fromJson(eventTypeJsonElement, MarketDataStreamMessageType.class);
+                    } else {
+                        marketDataStreamMessageType = GsonUtil.GSON.fromJson(streamJsonElement, MarketDataStreamMessageType.class);
+                    }
 
                     switch (marketDataStreamMessageType) {
                         case AUTHORIZATION:
@@ -192,37 +211,25 @@ public class MarketDataWebsocketClient implements WebsocketClient {
 
                             LOGGER.debug(listeningMessage);
                             break;
-                        default:
-                            LOGGER.error("Unhandled stream type: " + marketDataStreamMessageType);
-                    }
-                } catch (JsonParseException exception) {
-                    LOGGER.error("Could not parse message: " + messageJsonObject, exception);
-                }
-            } else {
-                LOGGER.error("Unknown stream message: " + messageJsonObject);
-            }
-        } else { // Must be a data object with "ev" key
-            JsonElement eventTypeJsonElement = messageJsonObject.get(EVENT_TYPE_KEY);
-
-            if (eventTypeJsonElement instanceof JsonPrimitive) {
-                try {
-                    MarketDataStreamMessageType marketDataStreamMessageType =
-                            GsonUtil.GSON.fromJson(eventTypeJsonElement, MarketDataStreamMessageType.class);
-
-                    switch (marketDataStreamMessageType) {
                         case TRADES:
-                            TradeMessage tradeMessage = GsonUtil.GSON.fromJson(messageJsonObject, TradeMessage.class);
+                            TradeMessage tradeMessage = GsonUtil.GSON.fromJson(eventMessageJsonElement, TradeMessage.class);
                             sendStreamMessageToListeners(marketDataStreamMessageType, tradeMessage);
+
+                            LOGGER.debug(tradeMessage);
                             break;
                         case QUOTES:
-                            QuoteMessage quoteMessage = GsonUtil.GSON.fromJson(messageJsonObject, QuoteMessage.class);
+                            QuoteMessage quoteMessage = GsonUtil.GSON.fromJson(eventMessageJsonElement, QuoteMessage.class);
                             quoteMessage.setSym(quoteMessage.getTicker());
                             sendStreamMessageToListeners(marketDataStreamMessageType, quoteMessage);
+
+                            LOGGER.debug(quoteMessage);
                             break;
                         case AGGREGATE_MINUTE:
-                            AggregateMinuteMessage aggregateMinuteMessage = GsonUtil.GSON.fromJson(messageJsonObject,
+                            AggregateMinuteMessage aggregateMinuteMessage = GsonUtil.GSON.fromJson(eventMessageJsonElement,
                                     AggregateMinuteMessage.class);
                             sendStreamMessageToListeners(marketDataStreamMessageType, aggregateMinuteMessage);
+
+                            LOGGER.debug(aggregateMinuteMessage);
                             break;
                         default:
                             LOGGER.error("Unhandled stream type: " + marketDataStreamMessageType);
@@ -246,8 +253,8 @@ public class MarketDataWebsocketClient implements WebsocketClient {
                 if (marketDataStreamListener.getDataStreams() == null ||
                         marketDataStreamListener.getDataStreams().isEmpty() ||
                         marketDataStreamListener.getDataStreams().values().stream()
-                                .anyMatch(types -> types.contains(MarketDataStreamMessageType.LISTENING) ||
-                                        types.contains(MarketDataStreamMessageType.AUTHORIZATION))) {
+                                .anyMatch(types -> types.contains(LISTENING) ||
+                                        types.contains(AUTHORIZATION))) {
                     marketDataStreamListener.onStreamUpdate(marketDataStreamMessageType,
                             (MarketDataStreamMessage) streamMessage);
                 }
@@ -327,7 +334,8 @@ public class MarketDataWebsocketClient implements WebsocketClient {
         for (MarketDataStreamListener marketDataStreamListener : listeners) {
 
             marketDataStreamListener.getDataStreams().forEach((s, m) -> {
-                marketDataStreamMessageTypes.put(s, m.stream().filter(MarketDataStreamMessageType::isAPISubscribable).collect(Collectors.toSet()));
+                marketDataStreamMessageTypes.put(s,
+                        m.stream().filter(MarketDataStreamMessageType::isAPISubscribable).collect(Collectors.toSet()));
             });
 
         }
