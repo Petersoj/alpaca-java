@@ -19,7 +19,7 @@ public class PolygonRequest extends AbstractRequest {
     private static final String API_KEY_PARAMETER = "apiKey";
 
     /** The key id. */
-    private String keyId;
+    private final String keyId;
 
     /**
      * Instantiates a new polygon request.

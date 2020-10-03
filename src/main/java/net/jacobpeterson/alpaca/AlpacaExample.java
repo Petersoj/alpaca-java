@@ -14,10 +14,10 @@ import net.jacobpeterson.domain.alpaca.marketdata.streaming.MarketDataStreamMess
 import net.jacobpeterson.domain.alpaca.marketdata.streaming.quote.QuoteMessage;
 import net.jacobpeterson.domain.alpaca.marketdata.streaming.trade.TradeMessage;
 import net.jacobpeterson.domain.alpaca.order.Order;
-import net.jacobpeterson.domain.alpaca.watchlist.Watchlist;
 import net.jacobpeterson.domain.alpaca.streaming.AlpacaStreamMessage;
 import net.jacobpeterson.domain.alpaca.streaming.account.AccountUpdateMessage;
 import net.jacobpeterson.domain.alpaca.streaming.trade.TradeUpdateMessage;
+import net.jacobpeterson.domain.alpaca.watchlist.Watchlist;
 
 import java.time.Instant;
 import java.time.ZoneId;
@@ -65,7 +65,8 @@ public class AlpacaExample {
 
         alpacaAPI.addMarketDataStreamListener(new MarketDataStreamListenerAdapter("AAPL", QUOTES) {
             @Override
-            public void onStreamUpdate(MarketDataStreamMessageType streamMessageType, MarketDataStreamMessage streamMessage) {
+            public void onStreamUpdate(MarketDataStreamMessageType streamMessageType,
+                    MarketDataStreamMessage streamMessage) {
                 switch (streamMessageType) {
                     case QUOTES:
                         QuoteMessage quoteMessage = (QuoteMessage) streamMessage;
