@@ -13,8 +13,8 @@ import net.jacobpeterson.abstracts.websocket.message.StreamMessage;
 import net.jacobpeterson.abstracts.websocket.message.StreamMessageType;
 import net.jacobpeterson.alpaca.websocket.marketdata.listener.MarketDataStreamListener;
 import net.jacobpeterson.alpaca.websocket.marketdata.message.MarketDataStreamMessageType;
-import net.jacobpeterson.domain.alpaca.marketdata.streaming.abstracts.MarketDataStreamDataMessage;
 import net.jacobpeterson.domain.alpaca.marketdata.streaming.MarketDataStreamMessage;
+import net.jacobpeterson.domain.alpaca.marketdata.streaming.abstracts.MarketDataStreamDataMessage;
 import net.jacobpeterson.domain.alpaca.marketdata.streaming.abstracts.MarketDataStreamStatusMessage;
 import net.jacobpeterson.domain.alpaca.marketdata.streaming.aggregate.AggregateMinuteMessage;
 import net.jacobpeterson.domain.alpaca.marketdata.streaming.authorization.AuthorizationMessage;
@@ -22,7 +22,6 @@ import net.jacobpeterson.domain.alpaca.marketdata.streaming.listening.ListeningM
 import net.jacobpeterson.domain.alpaca.marketdata.streaming.quote.QuoteMessage;
 import net.jacobpeterson.domain.alpaca.marketdata.streaming.trade.TradeMessage;
 import net.jacobpeterson.util.gson.GsonUtil;
-import org.apache.commons.lang.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -32,7 +31,6 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -172,7 +170,8 @@ public class MarketDataWebsocketClient implements WebsocketClient {
     public void handleWebsocketMessage(String message) {
         //RECEIVED: {"stream":"authorization","data":{"action":"authenticate","status":"authorized"}}
         //RECEIVED: {"stream":"listening","data":{"streams":["Q.AAPL"]}}
-        //RECEIVED: {"stream":"Q.AAPL","data":{"ev":"Q","T":"AAPL","x":17,"p":112.12,"s":1,"X":3,"P":112.98,"S":1,"c":[0],"t":1601645053026000000}}
+        //RECEIVED: {"stream":"Q.AAPL","data":{"ev":"Q","T":"AAPL","x":17,"p":112.12,"s":1,"X":3,"P":112.98,"S":1,
+        // "c":[0],"t":1601645053026000000}}
         JsonElement messageJsonElement = GsonUtil.JSON_PARSER.parse(message);
 
         Preconditions.checkState(messageJsonElement instanceof JsonObject);
@@ -186,12 +185,15 @@ public class MarketDataWebsocketClient implements WebsocketClient {
                     MarketDataStreamMessageType marketDataStreamMessageType;
                     JsonElement eventMessageJsonElement = JsonNull.INSTANCE;
 
-                    if(streamJsonElement.getAsString().contains(".")) {
+                    if (streamJsonElement.getAsString().contains(".")) {
                         eventMessageJsonElement = messageJsonObject.get(DATA_KEY);
-                        JsonElement eventTypeJsonElement = eventMessageJsonElement.getAsJsonObject().get(EVENT_TYPE_KEY);
-                        marketDataStreamMessageType = GsonUtil.GSON.fromJson(eventTypeJsonElement, MarketDataStreamMessageType.class);
+                        JsonElement eventTypeJsonElement = eventMessageJsonElement.getAsJsonObject()
+                                .get(EVENT_TYPE_KEY);
+                        marketDataStreamMessageType = GsonUtil.GSON.fromJson(eventTypeJsonElement,
+                                MarketDataStreamMessageType.class);
                     } else {
-                        marketDataStreamMessageType = GsonUtil.GSON.fromJson(streamJsonElement, MarketDataStreamMessageType.class);
+                        marketDataStreamMessageType = GsonUtil.GSON.fromJson(streamJsonElement,
+                                MarketDataStreamMessageType.class);
                     }
 
                     switch (marketDataStreamMessageType) {
@@ -212,22 +214,24 @@ public class MarketDataWebsocketClient implements WebsocketClient {
                             LOGGER.debug(listeningMessage);
                             break;
                         case TRADES:
-                            TradeMessage tradeMessage = GsonUtil.GSON.fromJson(eventMessageJsonElement, TradeMessage.class);
+                            TradeMessage tradeMessage = GsonUtil.GSON.fromJson(eventMessageJsonElement,
+                                    TradeMessage.class);
                             tradeMessage.setSym(tradeMessage.getTicker());
                             sendStreamMessageToListeners(marketDataStreamMessageType, tradeMessage);
 
                             LOGGER.debug(tradeMessage);
                             break;
                         case QUOTES:
-                            QuoteMessage quoteMessage = GsonUtil.GSON.fromJson(eventMessageJsonElement, QuoteMessage.class);
+                            QuoteMessage quoteMessage = GsonUtil.GSON.fromJson(eventMessageJsonElement,
+                                    QuoteMessage.class);
                             quoteMessage.setSym(quoteMessage.getTicker());
                             sendStreamMessageToListeners(marketDataStreamMessageType, quoteMessage);
 
                             LOGGER.debug(quoteMessage);
                             break;
                         case AGGREGATE_MINUTE:
-                            AggregateMinuteMessage aggregateMinuteMessage = GsonUtil.GSON.fromJson(eventMessageJsonElement,
-                                    AggregateMinuteMessage.class);
+                            AggregateMinuteMessage aggregateMinuteMessage = GsonUtil.GSON.fromJson(
+                                    eventMessageJsonElement, AggregateMinuteMessage.class);
                             aggregateMinuteMessage.setSym(aggregateMinuteMessage.getTicker());
                             sendStreamMessageToListeners(marketDataStreamMessageType, aggregateMinuteMessage);
 

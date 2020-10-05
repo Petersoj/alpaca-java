@@ -11,7 +11,6 @@ import javax.websocket.OnMessage;
 import javax.websocket.OnOpen;
 import javax.websocket.Session;
 import java.net.URI;
-import java.nio.charset.StandardCharsets;
 
 /**
  * The type Market data websocket client endpoint.

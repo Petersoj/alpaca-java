@@ -43,8 +43,8 @@ import net.jacobpeterson.domain.alpaca.portfoliohistory.PortfolioHistory;
 import net.jacobpeterson.domain.alpaca.position.ClosePositionOrder;
 import net.jacobpeterson.domain.alpaca.position.Position;
 import net.jacobpeterson.domain.alpaca.watchlist.Watchlist;
-import net.jacobpeterson.util.gson.GsonUtil;
 import net.jacobpeterson.util.format.FormatUtil;
+import net.jacobpeterson.util.gson.GsonUtil;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -65,7 +65,7 @@ import java.util.stream.Collectors;
 public class AlpacaAPI {
 
     /** The logger. */
-    private static Logger LOGGER = LogManager.getLogger(AlpacaAPI.class);
+    private static final Logger LOGGER = LogManager.getLogger(AlpacaAPI.class);
 
     /** The version. */
     private final String apiVersion;
@@ -195,7 +195,7 @@ public class AlpacaAPI {
      * Activities</a>
      */
     public ArrayList<AccountActivity> getAccountActivities(ZonedDateTime date, ZonedDateTime until, ZonedDateTime after,
-                                                           Direction direction, Integer pageSize, String pageToken, ActivityType... activityTypes)
+            Direction direction, Integer pageSize, String pageToken, ActivityType... activityTypes)
             throws AlpacaAPIRequestException {
         AlpacaRequestBuilder urlBuilder = new AlpacaRequestBuilder(baseAPIURL, AlpacaConstants.VERSION_2_ENDPOINT,
                 AlpacaConstants.ACCOUNT_ENDPOINT,
@@ -338,7 +338,7 @@ public class AlpacaAPI {
      * @see <a href="https://docs.alpaca.markets/api-documentation/api-v2/orders/">Orders</a>
      */
     public ArrayList<Order> getOrders(OrderStatus status, Integer limit, ZonedDateTime after, ZonedDateTime until,
-                                      Direction direction, Boolean nested) throws AlpacaAPIRequestException {
+            Direction direction, Boolean nested) throws AlpacaAPIRequestException {
         AlpacaRequestBuilder urlBuilder = new AlpacaRequestBuilder(baseAPIURL, apiVersion,
                 AlpacaConstants.ORDERS_ENDPOINT);
 
@@ -1425,7 +1425,7 @@ public class AlpacaAPI {
      * @throws AlpacaAPIRequestException the alpaca api request exception
      */
     public PortfolioHistory getPortfolioHistory(Integer periodLength, PortfolioPeriodUnit periodUnit,
-                                                PortfolioTimeFrame timeFrame, LocalDate dateEnd, Boolean extendedHours) throws AlpacaAPIRequestException {
+            PortfolioTimeFrame timeFrame, LocalDate dateEnd, Boolean extendedHours) throws AlpacaAPIRequestException {
         AlpacaRequestBuilder urlBuilder = new AlpacaRequestBuilder(baseAPIURL, apiVersion,
                 AlpacaConstants.ACCOUNT_ENDPOINT,
                 AlpacaConstants.PORTFOLIO_ENDPOINT,
@@ -1557,7 +1557,7 @@ public class AlpacaAPI {
      * @see <a href="https://docs.alpaca.markets/api-documentation/api-v2/market-data/bars/">Bars</a>
      */
     public Map<String, ArrayList<Bar>> getBars(BarsTimeFrame timeframe, String symbol, Integer limit,
-                                               ZonedDateTime start, ZonedDateTime end, ZonedDateTime after, ZonedDateTime until)
+            ZonedDateTime start, ZonedDateTime end, ZonedDateTime after, ZonedDateTime until)
             throws AlpacaAPIRequestException {
         return this.getBars(timeframe, new String[]{symbol}, limit, start, end, after, until);
     }
