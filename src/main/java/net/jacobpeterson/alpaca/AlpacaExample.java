@@ -11,6 +11,7 @@ import net.jacobpeterson.alpaca.websocket.marketdata.message.MarketDataStreamMes
 import net.jacobpeterson.domain.alpaca.account.Account;
 import net.jacobpeterson.domain.alpaca.marketdata.Bar;
 import net.jacobpeterson.domain.alpaca.marketdata.streaming.MarketDataStreamMessage;
+import net.jacobpeterson.domain.alpaca.marketdata.streaming.aggregate.AggregateMinuteMessage;
 import net.jacobpeterson.domain.alpaca.marketdata.streaming.quote.QuoteMessage;
 import net.jacobpeterson.domain.alpaca.marketdata.streaming.trade.TradeMessage;
 import net.jacobpeterson.domain.alpaca.order.Order;
@@ -26,7 +27,7 @@ import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Map;
 
-import static net.jacobpeterson.alpaca.websocket.marketdata.message.MarketDataStreamMessageType.QUOTES;
+import static net.jacobpeterson.alpaca.websocket.marketdata.message.MarketDataStreamMessageType.*;
 
 /**
  * The type Alpaca example.
@@ -63,7 +64,7 @@ public class AlpacaExample {
             }
         });
 
-        alpacaAPI.addMarketDataStreamListener(new MarketDataStreamListenerAdapter("AAPL", QUOTES) {
+        alpacaAPI.addMarketDataStreamListener(new MarketDataStreamListenerAdapter("AAPL", QUOTES, TRADES, AGGREGATE_MINUTE) {
             @Override
             public void onStreamUpdate(MarketDataStreamMessageType streamMessageType, MarketDataStreamMessage streamMessage) {
                 switch (streamMessageType) {
@@ -76,6 +77,11 @@ public class AlpacaExample {
                         TradeMessage tradeMessage = (TradeMessage) streamMessage;
                         System.out.println("\nTrade Update: \n\t" +
                                 tradeMessage.toString().replace(",", ",\n\t"));
+                        break;
+                    case AGGREGATE_MINUTE:
+                        AggregateMinuteMessage aggregateMinuteMessage = (AggregateMinuteMessage) streamMessage;
+                        System.out.println("\nAggregate Minute Update: \n\t" +
+                                aggregateMinuteMessage.toString().replace(",", ",\n\t"));
                         break;
                 }
             }

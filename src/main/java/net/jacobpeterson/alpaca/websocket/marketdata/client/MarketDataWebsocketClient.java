@@ -213,6 +213,7 @@ public class MarketDataWebsocketClient implements WebsocketClient {
                             break;
                         case TRADES:
                             TradeMessage tradeMessage = GsonUtil.GSON.fromJson(eventMessageJsonElement, TradeMessage.class);
+                            tradeMessage.setSym(tradeMessage.getTicker());
                             sendStreamMessageToListeners(marketDataStreamMessageType, tradeMessage);
 
                             LOGGER.debug(tradeMessage);
@@ -227,6 +228,7 @@ public class MarketDataWebsocketClient implements WebsocketClient {
                         case AGGREGATE_MINUTE:
                             AggregateMinuteMessage aggregateMinuteMessage = GsonUtil.GSON.fromJson(eventMessageJsonElement,
                                     AggregateMinuteMessage.class);
+                            aggregateMinuteMessage.setSym(aggregateMinuteMessage.getTicker());
                             sendStreamMessageToListeners(marketDataStreamMessageType, aggregateMinuteMessage);
 
                             LOGGER.debug(aggregateMinuteMessage);
