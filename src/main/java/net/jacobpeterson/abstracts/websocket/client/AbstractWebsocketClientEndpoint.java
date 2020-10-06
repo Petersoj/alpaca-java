@@ -30,7 +30,10 @@ public abstract class AbstractWebsocketClientEndpoint {
     /** The Endpoint uri. */
     private final URI endpointURI;
 
-    /** The Executor service. */
+    /**
+     * The Executor service, which passes message handlers to a different thread, will prevent overflow of server
+     * buffers (causing a disconnect) from not consuming data fast enough on the client end.
+     */
     private final ExecutorService executorService;
 
     /** The User session. */
@@ -100,17 +103,10 @@ public abstract class AbstractWebsocketClientEndpoint {
      * @param reason      the reason
      */
     protected void onClose(Session userSession, CloseReason reason) {
-
         LOGGER.debug("onClose {}", userSession);
 
         if (!reason.getCloseCode().equals(CloseReason.CloseCodes.NORMAL_CLOSURE)) {
-            if (retryAttempts > 5) {
-                LOGGER.error("More than 5 attempts to reconnect were made.  Bailing out.");
-                return;
-            }
-
-            LOGGER.info("Attempting a reconnect in 3 seconds.");
-            retryAttempts++;
+            LOGGER.info("Websocket closed abnormally. Attempting a reconnect in 3 seconds.");
 
             try {
                 Thread.sleep(3000);
@@ -122,8 +118,8 @@ public abstract class AbstractWebsocketClientEndpoint {
                     CloseReason.CloseCodes.getCloseCode(reason.getCloseCode().getCode()));
 
             try {
-                reconnectAndResubscribe();
-                retryAttempts = 0; // hopefully we are connected by this time, so reset the retry counter
+                connect();
+                websocketClient.handleResubscribing();
             } catch (Exception e) {
                 LOGGER.catching(e);
             }
@@ -131,13 +127,6 @@ public abstract class AbstractWebsocketClientEndpoint {
             this.userSession = null;
             LOGGER.info("Websocket closed");
         }
-    }
-
-    private void reconnectAndResubscribe() throws IOException, DeploymentException {
-        LOGGER.info("Attempting to re-connect");
-        connect();
-        LOGGER.info("Resending subscriptions: {}", subscription);
-        sendSubscription(subscription);
     }
 
     /**
@@ -154,18 +143,9 @@ public abstract class AbstractWebsocketClientEndpoint {
      *
      * @param message the message
      */
-    private void sendMessage(String message) {
+    public void sendMessage(String message) {
         LOGGER.debug("sendMessage {}", message);
         userSession.getAsyncRemote().sendText(message);
-    }
-
-    public void sendAuthentication(String message) {
-        sendMessage(message);
-    }
-
-    public void sendSubscription(String message) {
-        this.subscription = message;
-        sendMessage(message);
     }
 
     /**

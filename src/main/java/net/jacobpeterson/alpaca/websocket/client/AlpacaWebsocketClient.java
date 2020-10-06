@@ -153,6 +153,11 @@ public class AlpacaWebsocketClient implements WebsocketClient {
     }
 
     @Override
+    public void handleResubscribing() {
+        submitStreamRequestUpdate();
+    }
+
+    @Override
     public void handleWebsocketMessage(String message) {
         JsonElement messageJsonElement = GsonUtil.JSON_PARSER.parse(message);
 
