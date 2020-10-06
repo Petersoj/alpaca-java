@@ -149,7 +149,7 @@ public class AlpacaWebsocketClient implements WebsocketClient {
 
         authRequest.add("data", payload);
 
-        alpacaWebsocketClientEndpoint.sendAuthentication(authRequest.toString());
+        alpacaWebsocketClientEndpoint.sendMessage(authRequest.toString());
     }
 
     @Override
@@ -270,7 +270,7 @@ public class AlpacaWebsocketClient implements WebsocketClient {
 
         streamRequestJsonObject.add("data", dataJsonObject);
 
-        alpacaWebsocketClientEndpoint.sendSubscription(streamRequestJsonObject.toString());
+        alpacaWebsocketClientEndpoint.sendMessage(streamRequestJsonObject.toString());
 
         LOGGER.info("Requested subscriptions to update to " + streamsJsonArray);
     }

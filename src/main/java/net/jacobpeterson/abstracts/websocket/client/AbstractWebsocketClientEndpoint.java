@@ -106,13 +106,6 @@ public abstract class AbstractWebsocketClientEndpoint {
         LOGGER.debug("onClose {}", userSession);
 
         if (!reason.getCloseCode().equals(CloseReason.CloseCodes.NORMAL_CLOSURE)) {
-            LOGGER.info("Websocket closed abnormally. Attempting a reconnect in 3 seconds.");
-
-            try {
-                Thread.sleep(3000);
-            } catch (InterruptedException e1) {
-                e1.printStackTrace();
-            }
 
             LOGGER.info("Reconnecting due to closure: {}",
                     CloseReason.CloseCodes.getCloseCode(reason.getCloseCode().getCode()));
