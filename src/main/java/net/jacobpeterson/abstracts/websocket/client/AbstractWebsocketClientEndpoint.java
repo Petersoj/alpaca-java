@@ -39,11 +39,6 @@ public abstract class AbstractWebsocketClientEndpoint {
     /** The User session. */
     private Session userSession;
 
-    /** The Retry attempts. */
-    private int retryAttempts = 0;
-
-    private String subscription;
-
     /**
      * Instantiates a new Abstract websocket client endpoint.
      *
