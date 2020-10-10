@@ -167,6 +167,11 @@ public class MarketDataWebsocketClient implements WebsocketClient {
     }
 
     @Override
+    public void handleResubscribing() {
+        submitStreamRequest();
+    }
+
+    @Override
     public void handleWebsocketMessage(String message) {
         //RECEIVED: {"stream":"authorization","data":{"action":"authenticate","status":"authorized"}}
         //RECEIVED: {"stream":"listening","data":{"streams":["Q.AAPL"]}}
