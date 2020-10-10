@@ -43,16 +43,16 @@ public class AlpacaWebsocketClient implements WebsocketClient {
     private static final String STREAM_KEY = "stream";
 
     /** The key id. */
-    private String keyId;
+    private final String keyId;
 
     /** The secret. */
-    private String secret;
+    private final String secret;
 
     /** The Base api url. */
-    private String baseAPIURL;
+    private final String baseAPIURL;
 
     /** The observers. */
-    private List<AlpacaStreamListener> listeners;
+    private final List<AlpacaStreamListener> listeners;
 
     /** The client end point. */
     private AlpacaWebsocketClientEndpoint alpacaWebsocketClientEndpoint;
@@ -150,6 +150,11 @@ public class AlpacaWebsocketClient implements WebsocketClient {
         authRequest.add("data", payload);
 
         alpacaWebsocketClientEndpoint.sendMessage(authRequest.toString());
+    }
+
+    @Override
+    public void handleResubscribing() {
+        submitStreamRequestUpdate();
     }
 
     @Override

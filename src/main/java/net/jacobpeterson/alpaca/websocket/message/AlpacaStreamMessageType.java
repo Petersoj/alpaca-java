@@ -27,7 +27,7 @@ public enum AlpacaStreamMessageType implements StreamMessageType, APIName {
     ACCOUNT_UPDATES(true);
 
     /** The is api subscribable. */
-    private boolean isAPISubscribable;
+    private final boolean isAPISubscribable;
 
     /**
      * Instantiates a new Alpaca stream message type.

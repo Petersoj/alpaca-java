@@ -58,7 +58,7 @@ import java.util.StringJoiner;
 public class PolygonAPI {
 
     /** The logger. */
-    private static Logger LOGGER = LogManager.getLogger(PolygonAPI.class);
+    private static final Logger LOGGER = LogManager.getLogger(PolygonAPI.class);
 
     /** The Polygon websocket client. */
     private final PolygonWebsocketClient polygonWebsocketClient;
@@ -67,13 +67,13 @@ public class PolygonAPI {
     private final PolygonRequest polygonRequest;
 
     /** The base api url. */
-    private String baseAPIURL;
+    private final String baseAPIURL;
 
     /** The Websocket url. */
-    private String websocketURL;
+    private final String websocketURL;
 
     /** The Key id. */
-    private String keyID;
+    private final String keyID;
 
     /**
      * Instantiates a new polygon API.
@@ -129,7 +129,7 @@ public class PolygonAPI {
      * @see <a href="https://polygon.io/docs/#!/Reference/get_v2_reference_tickers">Tickers</a>
      */
     public TickersResponse getTickers(TickerSort tickerSort, StockType stockType, Market market, String locale,
-                                      String search, Integer perpage, Integer page, Boolean active) throws PolygonAPIRequestException {
+            String search, Integer perpage, Integer page, Boolean active) throws PolygonAPIRequestException {
         PolygonRequestBuilder builder = new PolygonRequestBuilder(baseAPIURL, PolygonConstants.VERSION_2_ENDPOINT,
                 PolygonConstants.REFERENCE_ENDPOINT,
                 PolygonConstants.TICKERS_ENDPOINT);
@@ -377,7 +377,7 @@ public class PolygonAPI {
      * @see <a href="https://polygon.io/docs/#!/Reference/get_v2_reference_financials_symbol">Stock Financials</a>
      */
     public StockFinancialsResponse getStockFinancials(String symbol, Integer limit,
-                                                      FinancialReportType financialReportType, FinancialSort financialSort) throws PolygonAPIRequestException {
+            FinancialReportType financialReportType, FinancialSort financialSort) throws PolygonAPIRequestException {
         Preconditions.checkNotNull(symbol);
 
         PolygonRequestBuilder builder = new PolygonRequestBuilder(baseAPIURL, PolygonConstants.VERSION_2_ENDPOINT,
@@ -879,7 +879,7 @@ public class PolygonAPI {
      * <a href="https://polygon.io/docs/#!/Stocks--Equities/get_v2_aggs_ticker_ticker_range_multiplier_timespan_from_to">Aggregates</a>
      */
     public AggregatesResponse getAggregates(String ticker, Integer multiplier, Timespan timeSpan, LocalDate fromDate,
-                                            LocalDate toDate, Boolean unadjusted) throws PolygonAPIRequestException {
+            LocalDate toDate, Boolean unadjusted) throws PolygonAPIRequestException {
         Preconditions.checkNotNull(ticker);
         Preconditions.checkNotNull(timeSpan);
         Preconditions.checkNotNull(fromDate);

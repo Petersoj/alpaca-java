@@ -25,19 +25,19 @@ public abstract class AbstractWebsocketClientEndpoint {
     private static final Logger LOGGER = LogManager.getLogger(AbstractWebsocketClientEndpoint.class);
 
     /** The Websocket client. */
-    private WebsocketClient websocketClient;
+    private final WebsocketClient websocketClient;
 
     /** The Endpoint uri. */
     private final URI endpointURI;
 
-    /** The Executor service. */
+    /**
+     * The Executor service, which passes message handlers to a different thread, will prevent overflow of server
+     * buffers (causing a disconnect) from not consuming data fast enough on the client end.
+     */
     private final ExecutorService executorService;
 
     /** The User session. */
     private Session userSession;
-
-    /** The Retry attempts. */
-    private int retryAttempts = 0;
 
     /**
      * Instantiates a new Abstract websocket client endpoint.
@@ -62,7 +62,7 @@ public abstract class AbstractWebsocketClientEndpoint {
     public void connect() throws DeploymentException, IOException {
         WebSocketContainer container = ContainerProvider.getWebSocketContainer();
 
-        LOGGER.info("Connecting to " + endpointURI);
+        LOGGER.info("Connecting to {}", endpointURI);
 
         container.connectToServer(this, endpointURI);
     }
@@ -86,10 +86,8 @@ public abstract class AbstractWebsocketClientEndpoint {
     protected void onOpen(Session userSession) {
         this.userSession = userSession;
 
-        LOGGER.debug("onOpen " + userSession);
-        LOGGER.info("Websocket opened");
-
-        LOGGER.info("Authenticating...");
+        LOGGER.debug("onOpen {}", userSession);
+        LOGGER.info("Websocket opened... Authenticating...");
         websocketClient.sendAuthenticationMessage();
     }
 
@@ -100,34 +98,21 @@ public abstract class AbstractWebsocketClientEndpoint {
      * @param reason      the reason
      */
     protected void onClose(Session userSession, CloseReason reason) {
-        this.userSession = null;
-
-        LOGGER.debug("onClose " + userSession);
+        LOGGER.debug("onClose {}", userSession);
 
         if (!reason.getCloseCode().equals(CloseReason.CloseCodes.NORMAL_CLOSURE)) {
-            if (retryAttempts > 5) {
-                LOGGER.error("More than 5 attempts to reconnect were made.");
-                return;
-            }
 
-            LOGGER.info("Attempting a reconnect in 3 seconds.");
-            retryAttempts++;
-
-            try {
-                Thread.sleep(3000);
-            } catch (InterruptedException e1) {
-                e1.printStackTrace();
-            }
-
-            LOGGER.info("Reconnecting due to closure " +
+            LOGGER.info("Reconnecting due to closure: {}",
                     CloseReason.CloseCodes.getCloseCode(reason.getCloseCode().getCode()));
 
             try {
                 connect();
+                websocketClient.handleResubscribing();
             } catch (Exception e) {
                 LOGGER.catching(e);
             }
         } else {
+            this.userSession = null;
             LOGGER.info("Websocket closed");
         }
     }
@@ -147,8 +132,7 @@ public abstract class AbstractWebsocketClientEndpoint {
      * @param message the message
      */
     public void sendMessage(String message) {
-        LOGGER.debug("sendMessage " + message);
-
+        LOGGER.debug("sendMessage {}", message);
         userSession.getAsyncRemote().sendText(message);
     }
 

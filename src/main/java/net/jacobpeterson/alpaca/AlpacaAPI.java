@@ -61,7 +61,7 @@ import java.util.stream.Collectors;
 public class AlpacaAPI {
 
     /** The logger. */
-    private static Logger LOGGER = LogManager.getLogger(AlpacaAPI.class);
+    private static final Logger LOGGER = LogManager.getLogger(AlpacaAPI.class);
 
     /** The version. */
     private final String apiVersion;
