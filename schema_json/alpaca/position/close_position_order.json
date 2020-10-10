@@ -11,7 +11,7 @@
       "title": "The HTTP status code of the position-closing order status"
     },
     "body": {
-      "existingJavaType": "io.github.mainstringargs.domain.alpaca.order.Order",
+      "existingJavaType": "net.jacobpeterson.domain.alpaca.order.Order",
       "title": "The position-closing order"
     }
   }

@@ -11,7 +11,7 @@
       "title": "Symbol that was evaluated from the request"
     },
     "last": {
-      "existingJavaType": "io.github.mainstringargs.domain.polygon.lasttrade.LastTrade",
+      "existingJavaType": "net.jacobpeterson.domain.polygon.lasttrade.LastTrade",
       "title": "last"
     }
   }
