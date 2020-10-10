@@ -64,29 +64,30 @@ public class AlpacaExample {
             }
         });
 
-        alpacaAPI.addMarketDataStreamListener(new MarketDataStreamListenerAdapter("AAPL", QUOTES, TRADES, AGGREGATE_MINUTE) {
-            @Override
-            public void onStreamUpdate(MarketDataStreamMessageType streamMessageType,
-                    MarketDataStreamMessage streamMessage) {
-                switch (streamMessageType) {
-                    case QUOTES:
-                        QuoteMessage quoteMessage = (QuoteMessage) streamMessage;
-                        System.out.println("\nQuote Update: \n\t" +
-                                quoteMessage.toString().replace(",", ",\n\t"));
-                        break;
-                    case TRADES:
-                        TradeMessage tradeMessage = (TradeMessage) streamMessage;
-                        System.out.println("\nTrade Update: \n\t" +
-                                tradeMessage.toString().replace(",", ",\n\t"));
-                        break;
-                    case AGGREGATE_MINUTE:
-                        AggregateMinuteMessage aggregateMinuteMessage = (AggregateMinuteMessage) streamMessage;
-                        System.out.println("\nAggregate Minute Update: \n\t" +
-                                aggregateMinuteMessage.toString().replace(",", ",\n\t"));
-                        break;
-                }
-            }
-        });
+        alpacaAPI.addMarketDataStreamListener(
+                new MarketDataStreamListenerAdapter("AAPL", QUOTES, TRADES, AGGREGATE_MINUTE) {
+                    @Override
+                    public void onStreamUpdate(MarketDataStreamMessageType streamMessageType,
+                            MarketDataStreamMessage streamMessage) {
+                        switch (streamMessageType) {
+                            case QUOTES:
+                                QuoteMessage quoteMessage = (QuoteMessage) streamMessage;
+                                System.out.println("\nQuote Update: \n\t" +
+                                        quoteMessage.toString().replace(",", ",\n\t"));
+                                break;
+                            case TRADES:
+                                TradeMessage tradeMessage = (TradeMessage) streamMessage;
+                                System.out.println("\nTrade Update: \n\t" +
+                                        tradeMessage.toString().replace(",", ",\n\t"));
+                                break;
+                            case AGGREGATE_MINUTE:
+                                AggregateMinuteMessage aggregateMinuteMessage = (AggregateMinuteMessage) streamMessage;
+                                System.out.println("\nAggregate Minute Update: \n\t" +
+                                        aggregateMinuteMessage.toString().replace(",", ",\n\t"));
+                                break;
+                        }
+                    }
+                });
 
         // Get Account Information
         try {
