@@ -58,11 +58,6 @@ targetCompatibility = 1.8
 javadoc.options.addStringOption('Xdoclint:none', '-quiet')
 javadoc.options.addStringOption("charset", "UTF-8")
 
-// Publish to local maven repo for local testing
-build {
-    finalizedBy publishToMavenLocal
-}
-
 //mainClassName = 'net.jacobpeterson.polygon.PolygonExample'
 mainClassName = 'net.jacobpeterson.alpaca.AlpacaExample'
 //
