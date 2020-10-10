@@ -13,7 +13,7 @@ import java.util.Set;
 public class AlpacaStreamListenerAdapter implements AlpacaStreamListener {
 
     /** The message types. */
-    private HashSet<AlpacaStreamMessageType> streamUpdateTypes = new HashSet<>();
+    private final HashSet<AlpacaStreamMessageType> streamUpdateTypes = new HashSet<>();
 
     /**
      * Instantiates a new Alpaca stream listener adapter.

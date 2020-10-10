@@ -31,7 +31,7 @@ public enum PolygonStreamMessageType implements StreamMessageType, APIName {
     AGGREGATE_PER_MINUTE(true);
 
     /** The is api subscribable. */
-    private boolean isAPISubscribable;
+    private final boolean isAPISubscribable;
 
     /**
      * Instantiates a new Polygon stream message type.

@@ -16,7 +16,7 @@ import java.util.Set;
 public class PolygonStreamListenerAdapter implements PolygonStreamListener {
 
     /** The stock channel types. */
-    private Map<String, Set<PolygonStreamMessageType>> stockChannels = new HashMap<>();
+    private final Map<String, Set<PolygonStreamMessageType>> stockChannels = new HashMap<>();
 
     /**
      * Instantiates a new polygon stream listener adapter.
