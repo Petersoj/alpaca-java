@@ -27,7 +27,7 @@ tasks.getByName("generateJsonSchema2Pojo").enabled(false) // Disable default jso
 
 archivesBaseName = 'alpaca-java'
 group = 'net.jacobpeterson'
-version = '5.2'
+version = '5.3'
 
 repositories {
     mavenLocal()
