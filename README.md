@@ -4,15 +4,16 @@
 </a> <a href="https://opensource.org/licenses/MIT" target="_blank"><img alt="GitHub" src="https://img.shields.io/github/license/petersoj/alpaca-java"></a>    
 </p>
 
-# Overview
+## Overview
 This is a Java implementation for <a href="https://alpaca.markets/">Alpaca</a>. Alpaca  lets you build and trade with real-time market data for free. This library is community developed and if you have any questions, please ask them on the [Alpaca Slack #dev-alpaca-java channel](https://alpaca.markets/slack) or on the [Alpaca Forums](https://forum.alpaca.markets/).
 
 ## Table of Contents
-1. [Alpaca Java Building](#alpaca-java-building)
-2. [Alpaca Java Gradle Integration](#alpaca-java-gradle-integration)
-3. [Alpaca Java Maven Integration](#alpaca-java-maven-integration)
-4. [Configuration](#configuration)
-5. [AlpacaAPI Example](#alpacaapi-example)
+1. [Building](#building)
+2. [Gradle Integration](#gradle-integration)
+3. [Maven Integration](#maven-integration)
+4. [Maven Central Integrity](#maven-central-integrity)
+5. [Configuration](#configuration)
+6. [AlpacaAPI Example](#alpacaapi-example)
 7. [PolygonAPI Example](#polygonapi-example)
 
 ## Building
@@ -323,7 +324,7 @@ Bars response:
         Volume: 1.4021695E7
 ```
 
-# PolygonAPI Example
+## PolygonAPI Example
 
 This example uses the `PolygonAPI` class to subscribe to the Polygon websocket stream, get stocks splits, and get aggregates. Click [here](https://polygon.io/docs/) for the general Polygon API documentation and click [here](https://javadoc.io/doc/net.jacobpeterson/alpaca-java/latest/net/jacobpeterson/polygon/PolygonAPI.html) for the `PolygonAPI` javadoc.
 
