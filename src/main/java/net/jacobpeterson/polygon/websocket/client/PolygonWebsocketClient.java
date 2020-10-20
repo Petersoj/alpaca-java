@@ -27,6 +27,7 @@ import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -74,7 +75,7 @@ public class PolygonWebsocketClient implements WebsocketClient {
         this.keyId = keyId;
         this.websocketURL = websocketURL;
 
-        this.listeners = new ArrayList<>();
+        this.listeners = Collections.synchronizedList(new ArrayList<>());
     }
 
     @Override
@@ -207,7 +208,7 @@ public class PolygonWebsocketClient implements WebsocketClient {
         PolygonStreamMessageType polygonStreamMessageType = (PolygonStreamMessageType) streamMessageType;
         PolygonStreamMessage polygonStreamMessage = (PolygonStreamMessage) streamMessage;
 
-        for (PolygonStreamListener streamListener : listeners) {
+        for (PolygonStreamListener streamListener : new ArrayList<>(listeners)) {
             boolean sendToStreamListener = false;
 
             if (streamListener.getStockChannels().containsKey(polygonStreamMessage.getSym())) {
@@ -353,7 +354,7 @@ public class PolygonWebsocketClient implements WebsocketClient {
     private Map<String, Set<PolygonStreamMessageType>> getRegisteredTickerChannels(PolygonStreamListener exclude) {
         HashMap<String, Set<PolygonStreamMessageType>> registeredTickerChannels = new HashMap<>();
 
-        for (PolygonStreamListener streamListener : listeners) {
+        for (PolygonStreamListener streamListener : new ArrayList<>(listeners)) {
             if (streamListener.equals(exclude)) {
                 continue;
             }
