@@ -27,7 +27,6 @@ import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -75,7 +74,7 @@ public class PolygonWebsocketClient implements WebsocketClient {
         this.keyId = keyId;
         this.websocketURL = websocketURL;
 
-        this.listeners = Collections.synchronizedList(new ArrayList<>());
+        this.listeners = new ArrayList<>();
     }
 
     @Override

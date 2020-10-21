@@ -26,7 +26,6 @@ import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -73,7 +72,7 @@ public class AlpacaWebsocketClient implements WebsocketClient {
         this.secret = secret;
         this.baseAPIURL = baseAPIURL.replace("https", "wss") + "/stream";
 
-        this.listeners = Collections.synchronizedList(new ArrayList<>());
+        this.listeners = new ArrayList<>();
     }
 
     @Override
