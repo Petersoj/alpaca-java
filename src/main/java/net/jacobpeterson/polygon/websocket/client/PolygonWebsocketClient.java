@@ -207,7 +207,7 @@ public class PolygonWebsocketClient implements WebsocketClient {
         PolygonStreamMessageType polygonStreamMessageType = (PolygonStreamMessageType) streamMessageType;
         PolygonStreamMessage polygonStreamMessage = (PolygonStreamMessage) streamMessage;
 
-        for (PolygonStreamListener streamListener : listeners) {
+        for (PolygonStreamListener streamListener : new ArrayList<>(listeners)) {
             boolean sendToStreamListener = false;
 
             if (streamListener.getStockChannels().containsKey(polygonStreamMessage.getSym())) {
@@ -353,7 +353,7 @@ public class PolygonWebsocketClient implements WebsocketClient {
     private Map<String, Set<PolygonStreamMessageType>> getRegisteredTickerChannels(PolygonStreamListener exclude) {
         HashMap<String, Set<PolygonStreamMessageType>> registeredTickerChannels = new HashMap<>();
 
-        for (PolygonStreamListener streamListener : listeners) {
+        for (PolygonStreamListener streamListener : new ArrayList<>(listeners)) {
             if (streamListener.equals(exclude)) {
                 continue;
             }
