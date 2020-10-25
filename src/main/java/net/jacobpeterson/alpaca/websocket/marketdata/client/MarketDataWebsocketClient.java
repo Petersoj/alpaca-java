@@ -260,7 +260,7 @@ public class MarketDataWebsocketClient implements WebsocketClient {
         MarketDataStreamMessageType marketDataStreamMessageType = (MarketDataStreamMessageType) streamMessageType;
 
         if (streamMessage instanceof MarketDataStreamStatusMessage) {
-            for (MarketDataStreamListener marketDataStreamListener : listeners) {
+            for (MarketDataStreamListener marketDataStreamListener : new ArrayList<>(listeners)) {
                 if (marketDataStreamListener.getDataStreams() == null ||
                         marketDataStreamListener.getDataStreams().isEmpty() ||
                         marketDataStreamListener.getDataStreams().values().stream()
@@ -272,7 +272,7 @@ public class MarketDataWebsocketClient implements WebsocketClient {
             }
         } else if (streamMessage instanceof MarketDataStreamDataMessage) {
             MarketDataStreamDataMessage marketDataStreamDataMessage = (MarketDataStreamDataMessage) streamMessage;
-            for (MarketDataStreamListener marketDataStreamListener : listeners) {
+            for (MarketDataStreamListener marketDataStreamListener : new ArrayList<>(listeners)) {
                 if (marketDataStreamListener.getDataStreams().containsKey(marketDataStreamDataMessage.getSym())) {
                     if (marketDataStreamListener.getDataStreams().get(marketDataStreamDataMessage.getSym())
                             .contains(marketDataStreamMessageType)) {
@@ -342,12 +342,9 @@ public class MarketDataWebsocketClient implements WebsocketClient {
     public Map<String, Set<MarketDataStreamMessageType>> getRegisteredMessageTypes() {
         Map<String, Set<MarketDataStreamMessageType>> marketDataStreamMessageTypes = new HashMap<>();
 
-        for (MarketDataStreamListener marketDataStreamListener : listeners) {
-
-            marketDataStreamListener.getDataStreams().forEach((s, m) -> {
-                marketDataStreamMessageTypes.put(s,
-                        m.stream().filter(MarketDataStreamMessageType::isAPISubscribable).collect(Collectors.toSet()));
-            });
+        for (MarketDataStreamListener marketDataStreamListener : new ArrayList<>(listeners)) {
+            marketDataStreamListener.getDataStreams().forEach((s, m) -> marketDataStreamMessageTypes.put(s,
+                    m.stream().filter(MarketDataStreamMessageType::isAPISubscribable).collect(Collectors.toSet())));
 
         }
 

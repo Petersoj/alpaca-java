@@ -287,10 +287,9 @@ public class AlpacaWebsocketClient implements WebsocketClient {
             Set<AlpacaStreamMessageType> alpacaStreamMessageTypes = alpacaStreamListener.getStreamMessageTypes();
 
             // if its empty, assume they want everything
-            Set<AlpacaStreamMessageType> streamMessageTypesToAdd =
-                    alpacaStreamMessageTypes == null ? new HashSet<>() :
-                            alpacaStreamMessageTypes.stream().filter(AlpacaStreamMessageType::isAPISubscribable)
-                                    .collect(Collectors.toSet());
+            Set<AlpacaStreamMessageType> streamMessageTypesToAdd = alpacaStreamMessageTypes == null ? new HashSet<>() :
+                    alpacaStreamMessageTypes.stream().filter(AlpacaStreamMessageType::isAPISubscribable)
+                            .collect(Collectors.toSet());
 
             registeredStreamMessageTypes.addAll(streamMessageTypesToAdd);
         }
