@@ -8,13 +8,13 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- * An asynchronous update interface for receiving notifications about Websocket information as the Websocket is
- * constructed.
+ * An asynchronous update interface for receiving websocket messages for
+ * {@link net.jacobpeterson.alpaca.websocket.marketdata.client.MarketDataWebsocketClient}
  */
 public interface MarketDataStreamListener extends StreamListener<MarketDataStreamMessageType, MarketDataStreamMessage> {
 
     /**
-     * Gets data streams. Null or empty to listen to all stream messages.
+     * Gets the data streams for this listener. Null or empty to listen to all stream messages.
      *
      * @return the stream message types
      */

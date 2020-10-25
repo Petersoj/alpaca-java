@@ -10,36 +10,36 @@ import net.jacobpeterson.abstracts.websocket.message.StreamMessageType;
 public interface WebsocketClient {
 
     /**
-     * Add listener.
+     * Adds a listener. Note that this method is blocking.
      *
      * @param streamListener the stream listener
      */
     void addListener(StreamListener<?, ?> streamListener);
 
     /**
-     * Remove listener.
+     * Remove listener. Note that this method is blocking.
      *
      * @param streamListener the stream listener
      */
     void removeListener(StreamListener<?, ?> streamListener);
 
     /**
-     * Connect.
+     * Connects. Note that this method is blocking.
      */
     void connect();
 
     /**
-     * Disconnect.
+     * Disconnects. Note that this method is blocking.
      */
     void disconnect();
 
     /**
-     * Send authentication message.
+     * Send authentication message. Note that this method is blocking.
      */
     void sendAuthenticationMessage();
 
     /**
-     * Handle resubscribing.
+     * Handle resubscribing. Note that this method is blocking.
      */
     void handleResubscribing();
 
@@ -59,17 +59,16 @@ public interface WebsocketClient {
     void sendStreamMessageToListeners(StreamMessageType streamMessageType, StreamMessage streamMessage);
 
     /**
-     * Is connected boolean.
+     * Returns true if the websocket is connected.
      *
      * @return the boolean
      */
     boolean isConnected();
 
     /**
-     * Is authenticated boolean.
+     * Returns true if the websocket is authenticated.
      *
      * @return the boolean
      */
     boolean isAuthenticated();
-
 }

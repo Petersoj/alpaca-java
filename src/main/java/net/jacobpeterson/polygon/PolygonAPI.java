@@ -53,7 +53,7 @@ import java.util.ArrayList;
 import java.util.StringJoiner;
 
 /**
- * The Class PolygonAPI.
+ * The class PolygonAPI. Note that most of these methods are blocking methods and this class in NOT thread-safe.
  */
 public class PolygonAPI {
 

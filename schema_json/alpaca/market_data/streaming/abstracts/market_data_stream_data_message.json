@@ -9,9 +9,10 @@
       "existingJavaType": "net.jacobpeterson.alpaca.websocket.marketdata.message.MarketDataStreamMessageType",
       "title": "The event type"
     },
-    "sym": {
+    "T": {
       "existingJavaType": "java.lang.String",
-      "title": "The symbol"
+      "javaName": "ticker",
+      "title": "The ticker"
     }
   }
 }

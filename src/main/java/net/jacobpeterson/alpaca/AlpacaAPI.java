@@ -60,7 +60,7 @@ import java.util.StringJoiner;
 import java.util.stream.Collectors;
 
 /**
- * The Class AlpacaAPI.
+ * The class AlpacaAPI. Note that most of these methods are blocking methods and this class in NOT thread-safe.
  */
 public class AlpacaAPI {
 
@@ -82,10 +82,10 @@ public class AlpacaAPI {
     /** The base data url. */
     private final String baseDataUrl;
 
-    /** The alpaca web socket client. */
+    /** The alpaca websocket client. */
     private final AlpacaWebsocketClient alpacaWebSocketClient;
 
-    /** The data web socket client. */
+    /** The market data websocket client. */
     private final MarketDataWebsocketClient marketDataWebSocketClient;
 
     /**
