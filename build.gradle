@@ -27,7 +27,7 @@ tasks.getByName("generateJsonSchema2Pojo").enabled(false) // Disable default jso
 
 archivesBaseName = 'alpaca-java'
 group = 'net.jacobpeterson'
-version = '5.2'
+version = '5.4'
 
 repositories {
     mavenLocal()
@@ -60,8 +60,28 @@ javadoc.options.addStringOption("charset", "UTF-8")
 
 //mainClassName = 'net.jacobpeterson.polygon.PolygonExample'
 mainClassName = 'net.jacobpeterson.alpaca.AlpacaExample'
+
 //
 // END Build options
+//
+
+//
+// START reproducible builds
+//
+// Reference: https://dzone.com/articles/reproducible-builds-in-java
+// Prevent manifest from changing every build
+project.tasks.withType(Jar) {
+    manifest.attributes Date: ''
+    preserveFileTimestamps = false
+}
+
+// Prevent timestamps from appearing in JAR and use reproducible file order
+tasks.withType(AbstractArchiveTask) {
+    preserveFileTimestamps = false
+    reproducibleFileOrder = true
+}
+//
+// END reproducible builds
 //
 
 //
