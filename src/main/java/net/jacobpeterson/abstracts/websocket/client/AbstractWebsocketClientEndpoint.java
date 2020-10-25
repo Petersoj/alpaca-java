@@ -14,10 +14,12 @@ import java.net.URI;
 import java.util.concurrent.ExecutorService;
 
 /**
- * The type Abstract websocket client endpoint. You must annotate a subclass with {@link javax.websocket.ClientEndpoint}
- * and the appropriate websocket subprotocols because websocket annotations don't work with inheritance. The subclass
- * must also contain separate methods with the following annotations: {@link javax.websocket.OnOpen}, {@link
- * javax.websocket.OnClose}, and {@link javax.websocket.OnMessage}.
+ * The type Abstract websocket client endpoint.
+ * <br>
+ * NOTES: You MUST annotate a subclass with {@link javax.websocket.ClientEndpoint} and the appropriate websocket
+ * subprotocols because websocket annotations don't work with inheritance. The subclass must also contain separate
+ * methods with the following annotations: {@link javax.websocket.OnOpen}, {@link javax.websocket.OnClose}, {@link
+ * javax.websocket.OnMessage}, and {@link javax.websocket.OnError}.
  */
 public abstract class AbstractWebsocketClientEndpoint {
 
@@ -124,6 +126,15 @@ public abstract class AbstractWebsocketClientEndpoint {
      */
     protected void onMessage(String message) {
         executorService.execute(() -> websocketClient.handleWebsocketMessage(message));
+    }
+
+    /**
+     * On error.
+     *
+     * @param throwable the throwable
+     */
+    protected void onError(Throwable throwable) {
+        LOGGER.error(throwable);
     }
 
     /**

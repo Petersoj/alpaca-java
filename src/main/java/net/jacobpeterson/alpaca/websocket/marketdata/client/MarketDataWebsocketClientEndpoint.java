@@ -45,6 +45,6 @@ public class MarketDataWebsocketClientEndpoint extends AbstractWebsocketClientEn
 
     @OnError
     public void onError(Throwable throwable) {
-        System.out.println(throwable.getLocalizedMessage());
+        super.onError(throwable);
     }
 }
