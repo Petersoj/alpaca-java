@@ -215,7 +215,7 @@ public class AlpacaWebsocketClient implements WebsocketClient {
         AlpacaStreamMessageType alpacaStreamMessageType = (AlpacaStreamMessageType) streamMessageType;
         AlpacaStreamMessage alpacaStreamMessage = (AlpacaStreamMessage) streamMessage;
 
-        for (AlpacaStreamListener alpacaStreamListener : listeners) {
+        for (AlpacaStreamListener alpacaStreamListener : new ArrayList<>(listeners)) {
             if (alpacaStreamListener.getStreamMessageTypes() == null ||
                     alpacaStreamListener.getStreamMessageTypes().isEmpty() ||
                     alpacaStreamListener.getStreamMessageTypes().contains(alpacaStreamMessageType)) {
@@ -283,13 +283,14 @@ public class AlpacaWebsocketClient implements WebsocketClient {
     public Set<AlpacaStreamMessageType> getRegisteredMessageTypes() {
         Set<AlpacaStreamMessageType> registeredStreamMessageTypes = new HashSet<>();
 
-        for (AlpacaStreamListener alpacaStreamListener : listeners) {
+        for (AlpacaStreamListener alpacaStreamListener : new ArrayList<>(listeners)) {
             Set<AlpacaStreamMessageType> alpacaStreamMessageTypes = alpacaStreamListener.getStreamMessageTypes();
 
             // if its empty, assume they want everything
-            Set<AlpacaStreamMessageType> streamMessageTypesToAdd = alpacaStreamMessageTypes == null ? new HashSet<>() :
-                    alpacaStreamMessageTypes.stream().filter(AlpacaStreamMessageType::isAPISubscribable)
-                            .collect(Collectors.toSet());
+            Set<AlpacaStreamMessageType> streamMessageTypesToAdd =
+                    alpacaStreamMessageTypes == null ? new HashSet<>() :
+                            alpacaStreamMessageTypes.stream().filter(AlpacaStreamMessageType::isAPISubscribable)
+                                    .collect(Collectors.toSet());
 
             registeredStreamMessageTypes.addAll(streamMessageTypesToAdd);
         }
