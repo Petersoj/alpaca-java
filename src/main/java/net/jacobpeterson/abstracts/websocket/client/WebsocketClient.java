@@ -14,14 +14,14 @@ public interface WebsocketClient {
      *
      * @param streamListener the stream listener
      */
-    void addListener(StreamListener streamListener);
+    void addListener(StreamListener<?, ?> streamListener);
 
     /**
      * Remove listener.
      *
      * @param streamListener the stream listener
      */
-    void removeListener(StreamListener streamListener);
+    void removeListener(StreamListener<?, ?> streamListener);
 
     /**
      * Connect.

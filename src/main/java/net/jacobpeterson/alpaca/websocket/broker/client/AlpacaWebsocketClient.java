@@ -76,7 +76,7 @@ public class AlpacaWebsocketClient implements WebsocketClient {
     }
 
     @Override
-    public void addListener(StreamListener streamListener) {
+    public void addListener(StreamListener<?, ?> streamListener) {
         Preconditions.checkState(streamListener instanceof AlpacaStreamListener);
 
         if (listeners.isEmpty()) {
@@ -89,7 +89,7 @@ public class AlpacaWebsocketClient implements WebsocketClient {
     }
 
     @Override
-    public void removeListener(StreamListener streamListener) {
+    public void removeListener(StreamListener<?, ?> streamListener) {
         Preconditions.checkState(streamListener instanceof AlpacaStreamListener);
 
         listeners.remove(streamListener);

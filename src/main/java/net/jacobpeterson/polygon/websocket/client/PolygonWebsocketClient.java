@@ -78,7 +78,7 @@ public class PolygonWebsocketClient implements WebsocketClient {
     }
 
     @Override
-    public void addListener(StreamListener listener) {
+    public void addListener(StreamListener<?, ?> listener) {
         Preconditions.checkState(listener instanceof PolygonStreamListener);
 
         if (listeners.isEmpty()) {
@@ -91,7 +91,7 @@ public class PolygonWebsocketClient implements WebsocketClient {
     }
 
     @Override
-    public void removeListener(StreamListener listener) {
+    public void removeListener(StreamListener<?, ?> listener) {
         Preconditions.checkState(listener instanceof PolygonStreamListener);
 
         listeners.remove(listener);

@@ -90,7 +90,7 @@ public class MarketDataWebsocketClient implements WebsocketClient {
     }
 
     @Override
-    public void addListener(StreamListener streamListener) {
+    public void addListener(StreamListener<?, ?> streamListener) {
         Preconditions.checkState(streamListener instanceof MarketDataStreamListener);
 
         if (listeners.isEmpty()) {
@@ -103,7 +103,7 @@ public class MarketDataWebsocketClient implements WebsocketClient {
     }
 
     @Override
-    public void removeListener(StreamListener streamListener) {
+    public void removeListener(StreamListener<?, ?> streamListener) {
         Preconditions.checkState(streamListener instanceof MarketDataStreamListener);
 
         listeners.remove(streamListener);
