@@ -7,6 +7,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
 import com.google.gson.reflect.TypeToken;
 import com.mashape.unirest.http.HttpResponse;
+import net.jacobpeterson.abstracts.websocket.exception.WebsocketException;
 import net.jacobpeterson.alpaca.enums.ActivityType;
 import net.jacobpeterson.alpaca.enums.AssetStatus;
 import net.jacobpeterson.alpaca.enums.BarsTimeFrame;
@@ -22,17 +23,21 @@ import net.jacobpeterson.alpaca.properties.AlpacaProperties;
 import net.jacobpeterson.alpaca.rest.AlpacaRequest;
 import net.jacobpeterson.alpaca.rest.AlpacaRequestBuilder;
 import net.jacobpeterson.alpaca.rest.exception.AlpacaAPIRequestException;
-import net.jacobpeterson.alpaca.websocket.client.AlpacaWebsocketClient;
-import net.jacobpeterson.alpaca.websocket.listener.AlpacaStreamListener;
+import net.jacobpeterson.alpaca.websocket.broker.client.AlpacaWebsocketClient;
+import net.jacobpeterson.alpaca.websocket.broker.listener.AlpacaStreamListener;
+import net.jacobpeterson.alpaca.websocket.marketdata.client.MarketDataWebsocketClient;
+import net.jacobpeterson.alpaca.websocket.marketdata.listener.MarketDataStreamListener;
 import net.jacobpeterson.domain.alpaca.account.Account;
 import net.jacobpeterson.domain.alpaca.accountactivities.AccountActivity;
 import net.jacobpeterson.domain.alpaca.accountactivities.NonTradeActivity;
 import net.jacobpeterson.domain.alpaca.accountactivities.TradeActivity;
 import net.jacobpeterson.domain.alpaca.accountconfiguration.AccountConfiguration;
 import net.jacobpeterson.domain.alpaca.asset.Asset;
-import net.jacobpeterson.domain.alpaca.bar.Bar;
 import net.jacobpeterson.domain.alpaca.calendar.Calendar;
 import net.jacobpeterson.domain.alpaca.clock.Clock;
+import net.jacobpeterson.domain.alpaca.marketdata.Bar;
+import net.jacobpeterson.domain.alpaca.marketdata.LastQuoteResponse;
+import net.jacobpeterson.domain.alpaca.marketdata.LastTradeResponse;
 import net.jacobpeterson.domain.alpaca.order.CancelledOrder;
 import net.jacobpeterson.domain.alpaca.order.Order;
 import net.jacobpeterson.domain.alpaca.portfoliohistory.PortfolioHistory;
@@ -56,7 +61,7 @@ import java.util.StringJoiner;
 import java.util.stream.Collectors;
 
 /**
- * The Class AlpacaAPI.
+ * The class AlpacaAPI. Note that most of these methods are blocking methods and this class in NOT thread-safe.
  */
 public class AlpacaAPI {
 
@@ -78,8 +83,11 @@ public class AlpacaAPI {
     /** The base data url. */
     private final String baseDataUrl;
 
-    /** The alpaca web socket client. */
+    /** The alpaca websocket client. */
     private final AlpacaWebsocketClient alpacaWebSocketClient;
+
+    /** The market data websocket client. */
+    private final MarketDataWebsocketClient marketDataWebSocketClient;
 
     /**
      * Instantiates a new Alpaca API using properties specified in alpaca.properties file (or relevant defaults)
@@ -142,6 +150,7 @@ public class AlpacaAPI {
 
         alpacaRequest = new AlpacaRequest(keyId, secret);
         alpacaWebSocketClient = new AlpacaWebsocketClient(keyId, secret, baseAPIURL);
+        marketDataWebSocketClient = new MarketDataWebsocketClient(keyId, secret, baseDataUrl);
 
         LOGGER.debug(this.toString());
     }
@@ -1542,7 +1551,8 @@ public class AlpacaAPI {
      * @param after     Filter bars after this time. Cannot be used with start.
      * @param until     Filter bars before this time. Cannot be used with end.
      *
-     * @return the bars
+     * @return An object with a key for each symbol and the Bars object as the values. Note that it returns status 200
+     * with an empty object if no requested symbol is found.
      *
      * @throws AlpacaAPIRequestException the alpaca API exception
      * @see <a href="https://docs.alpaca.markets/api-documentation/api-v2/market-data/bars/">Bars</a>
@@ -1569,7 +1579,8 @@ public class AlpacaAPI {
      * @param after     Filter bars after this time. Cannot be used with start.
      * @param until     Filter bars before this time. Cannot be used with end.
      *
-     * @return the bars
+     * @return @return An object with a key for each symbol and the Bars object as the values. Note that it returns
+     * status 200 with an empty object if no requested symbol is found.
      *
      * @throws AlpacaAPIRequestException the alpaca API exception
      * @see <a href="https://docs.alpaca.markets/api-documentation/api-v2/market-data/bars/">Bars</a>
@@ -1624,11 +1635,67 @@ public class AlpacaAPI {
     }
 
     /**
+     * Retrieves the last trade for the requested symbol.
+     *
+     * @param symbol A stock ticker symbol to retrieve the last trade of
+     *
+     * @return the last trade response object
+     *
+     * @throws AlpacaAPIRequestException the alpaca api request exception
+     * @see <a href="https://alpaca.markets/docs/api-documentation/api-v2/market-data/last-trade/">Last Trade</a>
+     */
+    public LastTradeResponse getLastTrade(String symbol) throws AlpacaAPIRequestException {
+        Preconditions.checkNotNull(symbol);
+
+        AlpacaRequestBuilder urlBuilder = new AlpacaRequestBuilder(baseDataUrl, AlpacaConstants.VERSION_1_ENDPOINT,
+                AlpacaConstants.LAST_ENDPOINT,
+                AlpacaConstants.STOCKS_ENDPOINT,
+                symbol);
+
+        HttpResponse<InputStream> response = alpacaRequest.invokeGet(urlBuilder);
+
+        if (response.getStatus() != 200) {
+            throw new AlpacaAPIRequestException(response);
+        }
+
+        return alpacaRequest.getResponseObject(response, LastTradeResponse.class);
+    }
+
+    /**
+     * Retrieves the last quote for the requested symbol.
+     *
+     * @param symbol A stock ticker symbol to retrieve the last trade of
+     *
+     * @return the last quote response object
+     *
+     * @throws AlpacaAPIRequestException the alpaca api request exception
+     * @see <a href="https://alpaca.markets/docs/api-documentation/api-v2/market-data/last-quote/>Last Quote</a>
+     */
+    public LastQuoteResponse getLastQuote(String symbol) throws AlpacaAPIRequestException {
+        Preconditions.checkNotNull(symbol);
+
+        AlpacaRequestBuilder urlBuilder = new AlpacaRequestBuilder(baseDataUrl, AlpacaConstants.VERSION_1_ENDPOINT,
+                AlpacaConstants.LAST_QUOTE_ENDPOINT,
+                AlpacaConstants.STOCKS_ENDPOINT,
+                symbol);
+
+        HttpResponse<InputStream> response = alpacaRequest.invokeGet(urlBuilder);
+
+        if (response.getStatus() != 200) {
+            throw new AlpacaAPIRequestException(response);
+        }
+
+        return alpacaRequest.getResponseObject(response, LastQuoteResponse.class);
+    }
+
+    /**
      * Adds the alpaca stream listener.
      *
      * @param streamListener the stream listener
+     *
+     * @throws WebsocketException the WebsocketException
      */
-    public void addAlpacaStreamListener(AlpacaStreamListener streamListener) {
+    public void addAlpacaStreamListener(AlpacaStreamListener streamListener) throws WebsocketException {
         alpacaWebSocketClient.addListener(streamListener);
     }
 
@@ -1636,9 +1703,33 @@ public class AlpacaAPI {
      * Removes the alpaca stream listener.
      *
      * @param streamListener the stream listener
+     *
+     * @throws WebsocketException the WebsocketException
      */
-    public void removeAlpacaStreamListener(AlpacaStreamListener streamListener) {
+    public void removeAlpacaStreamListener(AlpacaStreamListener streamListener) throws WebsocketException {
         alpacaWebSocketClient.removeListener(streamListener);
+    }
+
+    /**
+     * Adds the alpaca stream listener.
+     *
+     * @param streamListener the stream listener
+     *
+     * @throws WebsocketException the WebsocketException
+     */
+    public void addMarketDataStreamListener(MarketDataStreamListener streamListener) throws WebsocketException {
+        marketDataWebSocketClient.addListener(streamListener);
+    }
+
+    /**
+     * Removes the alpaca stream listener.
+     *
+     * @param streamListener the stream listener
+     *
+     * @throws WebsocketException the WebsocketException
+     */
+    public void removeMarketDataStreamListener(MarketDataStreamListener streamListener) throws WebsocketException {
+        marketDataWebSocketClient.removeListener(streamListener);
     }
 
     @Override

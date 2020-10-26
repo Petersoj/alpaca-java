@@ -34,10 +34,10 @@ public abstract class AbstractAPIRequestException extends Exception {
     /** The Request status text. */
     protected String requestStatusText;
 
-    /** The Api response code. */
-    protected int apiResponseCode = -1;
+    /** The API response code. */
+    protected Integer apiResponseCode;
 
-    /** The Api response message. */
+    /** The API response message. */
     protected String apiResponseMessage;
 
     /**
@@ -104,7 +104,7 @@ public abstract class AbstractAPIRequestException extends Exception {
         messageBuilder.append("Status Code = ").append(requestStatusCode);
         messageBuilder.append(", Status Text = \"").append(requestStatusText).append("\"");
 
-        if (apiResponseCode != -1) {
+        if (apiResponseCode != null) {
             messageBuilder.append(", API Response Code = ").append(apiResponseCode);
         }
 

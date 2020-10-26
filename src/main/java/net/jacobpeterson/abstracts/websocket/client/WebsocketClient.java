@@ -1,5 +1,6 @@
 package net.jacobpeterson.abstracts.websocket.client;
 
+import net.jacobpeterson.abstracts.websocket.exception.WebsocketException;
 import net.jacobpeterson.abstracts.websocket.listener.StreamListener;
 import net.jacobpeterson.abstracts.websocket.message.StreamMessage;
 import net.jacobpeterson.abstracts.websocket.message.StreamMessageType;
@@ -10,36 +11,44 @@ import net.jacobpeterson.abstracts.websocket.message.StreamMessageType;
 public interface WebsocketClient {
 
     /**
-     * Add listener.
+     * Adds a listener. Note that this method is blocking.
      *
      * @param streamListener the stream listener
+     *
+     * @throws WebsocketException the WebsocketException
      */
-    void addListener(StreamListener streamListener);
+    void addListener(StreamListener<?, ?> streamListener) throws WebsocketException;
 
     /**
-     * Remove listener.
+     * Remove listener. Note that this method is blocking.
      *
      * @param streamListener the stream listener
+     *
+     * @throws WebsocketException the WebsocketException
      */
-    void removeListener(StreamListener streamListener);
+    void removeListener(StreamListener<?, ?> streamListener) throws WebsocketException;
 
     /**
-     * Connect.
+     * Connects. Note that this method is blocking.
+     *
+     * @throws Exception the Exception
      */
-    void connect();
+    void connect() throws Exception;
 
     /**
-     * Disconnect.
+     * Disconnects. Note that this method is blocking.
+     *
+     * @throws Exception the Exception
      */
-    void disconnect();
+    void disconnect() throws Exception;
 
     /**
-     * Send authentication message.
+     * Send authentication message. Note that this method is blocking.
      */
     void sendAuthenticationMessage();
 
     /**
-     * Handle resubscribing.
+     * Handle resubscribing. Note that this method is blocking.
      */
     void handleResubscribing();
 
@@ -59,17 +68,16 @@ public interface WebsocketClient {
     void sendStreamMessageToListeners(StreamMessageType streamMessageType, StreamMessage streamMessage);
 
     /**
-     * Is connected boolean.
+     * Returns true if the websocket is connected.
      *
      * @return the boolean
      */
     boolean isConnected();
 
     /**
-     * Is authenticated boolean.
+     * Returns true if the websocket is authenticated.
      *
      * @return the boolean
      */
     boolean isAuthenticated();
-
 }

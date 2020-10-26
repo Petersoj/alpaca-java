@@ -16,7 +16,7 @@ import java.util.Set;
 public interface PolygonStreamListener extends StreamListener<PolygonStreamMessageType, PolygonStreamMessage> {
 
     /**
-     * Gets the stock channels. Null or empty to listen to all other stream messages.
+     * Gets the stock channels for this listener. Null or empty to listen to all other stream messages.
      *
      * @return the stock channels
      */

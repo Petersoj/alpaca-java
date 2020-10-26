@@ -1,4 +1,4 @@
-package net.jacobpeterson.polygon.websocket.client;
+package net.jacobpeterson.alpaca.websocket.marketdata.client;
 
 import net.jacobpeterson.abstracts.websocket.client.AbstractWebsocketClientEndpoint;
 import net.jacobpeterson.abstracts.websocket.client.WebsocketClient;
@@ -13,19 +13,19 @@ import javax.websocket.Session;
 import java.net.URI;
 
 /**
- * The type Polygon websocket client endpoint.
+ * The type Market data websocket client endpoint.
  */
-@ClientEndpoint(subprotocols = "TEXT")
-public class PolygonWebsocketClientEndpoint extends AbstractWebsocketClientEndpoint {
+@ClientEndpoint(subprotocols = "STRING")
+public class MarketDataWebsocketClientEndpoint extends AbstractWebsocketClientEndpoint {
 
     /**
-     * Instantiates a new Polygon websocket client endpoint.
+     * Instantiates a new Market data websocket client endpoint.
      *
      * @param websocketClient the websocket client
      * @param endpointURI     the endpoint uri
      */
-    public PolygonWebsocketClientEndpoint(WebsocketClient websocketClient, URI endpointURI) {
-        super(websocketClient, endpointURI, "PolygonWebsocketThread");
+    public MarketDataWebsocketClientEndpoint(WebsocketClient websocketClient, URI endpointURI) {
+        super(websocketClient, endpointURI, "MarketDataWebsocketThread");
     }
 
     @OnOpen

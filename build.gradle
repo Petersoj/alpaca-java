@@ -14,7 +14,6 @@ buildscript {
 
 plugins {
     id 'java'
-    id 'application'
     id 'eclipse'
     id 'maven-publish'
     id 'com.bmuschko.nexus' version '2.3.1'
@@ -57,10 +56,6 @@ targetCompatibility = 1.8
 // Used to suppress java doc warnings
 javadoc.options.addStringOption('Xdoclint:none', '-quiet')
 javadoc.options.addStringOption("charset", "UTF-8")
-
-//mainClassName = 'net.jacobpeterson.polygon.PolygonExample'
-mainClassName = 'net.jacobpeterson.alpaca.AlpacaExample'
-
 //
 // END Build options
 //
@@ -144,6 +139,24 @@ processResources {
 }
 //
 // END publishing
+//
+
+//
+// START allJar task
+//
+// Used for creating a far jar (a jar packaged with dependencies)
+task allJar(type: Jar) {
+    from {
+        configurations.compile.collect { it.isDirectory() ? it : zipTree(it) }
+        configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
+    }
+
+    archiveClassifier.set "all"
+
+    with jar
+}
+//
+// END allJar task
 //
 
 //

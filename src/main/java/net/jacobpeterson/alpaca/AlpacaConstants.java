@@ -101,6 +101,15 @@ public class AlpacaConstants {
     /** The Constant BARS_ENDPOINT. */
     public static final String BARS_ENDPOINT = "bars";
 
+    /** The constant LAST_ENDPOINT. */
+    public static final String LAST_ENDPOINT = "last";
+
+    /** The constant LAST_QUOTE_ENDPOINT. */
+    public static final String LAST_QUOTE_ENDPOINT = "last_quote";
+
+    /** The constant STOCKS_ENDPOINT. */
+    public static final String STOCKS_ENDPOINT = "stocks";
+
     /** The Constant CLOCK_ENDPOINT. */
     public static final String CLOCK_ENDPOINT = "clock";
 

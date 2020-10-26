@@ -1,4 +1,4 @@
-package net.jacobpeterson.polygon.websocket.client;
+package net.jacobpeterson.alpaca.websocket.broker.client;
 
 import net.jacobpeterson.abstracts.websocket.client.AbstractWebsocketClientEndpoint;
 import net.jacobpeterson.abstracts.websocket.client.WebsocketClient;
@@ -11,21 +11,22 @@ import javax.websocket.OnMessage;
 import javax.websocket.OnOpen;
 import javax.websocket.Session;
 import java.net.URI;
+import java.nio.charset.StandardCharsets;
 
 /**
- * The type Polygon websocket client endpoint.
+ * The type Alpaca websocket client endpoint.
  */
-@ClientEndpoint(subprotocols = "TEXT")
-public class PolygonWebsocketClientEndpoint extends AbstractWebsocketClientEndpoint {
+@ClientEndpoint(subprotocols = "BINARY")
+public class AlpacaWebsocketClientEndpoint extends AbstractWebsocketClientEndpoint {
 
     /**
-     * Instantiates a new Polygon websocket client endpoint.
+     * Instantiates a new Alpaca websocket client endpoint.
      *
      * @param websocketClient the websocket client
      * @param endpointURI     the endpoint uri
      */
-    public PolygonWebsocketClientEndpoint(WebsocketClient websocketClient, URI endpointURI) {
-        super(websocketClient, endpointURI, "PolygonWebsocketThread");
+    public AlpacaWebsocketClientEndpoint(WebsocketClient websocketClient, URI endpointURI) {
+        super(websocketClient, endpointURI, "AlpacaWebsocketThread");
     }
 
     @OnOpen
@@ -39,12 +40,12 @@ public class PolygonWebsocketClientEndpoint extends AbstractWebsocketClientEndpo
     }
 
     @OnMessage
-    public void onMessageAnnotated(String message) {
-        super.onMessage(message);
+    public void onMessageAnnotated(byte[] message) {
+        super.onMessage(new String(message, StandardCharsets.UTF_8));
     }
 
     @OnError
-    public void onError(Throwable throwable) {
+    public void onErrorAnnotated(Throwable throwable) {
         super.onError(throwable);
     }
 }

@@ -1,0 +1,34 @@
+{
+  "type": "object",
+  "title": "See <a href=\"https://alpaca.markets/docs/api-documentation/api-v2/market-data/last-quote/\">https://alpaca.markets/docs/api-documentation/api-v2/market-data/last-quote/</a>",
+  "properties": {
+    "askprice": {
+      "existingJavaType": "java.lang.Double",
+      "title": "The current ask price"
+    },
+    "asksize": {
+      "existingJavaType": "java.lang.Long",
+      "title": "The current ask size"
+    },
+    "askexchange": {
+      "existingJavaType": "java.lang.Integer",
+      "title": "The exchange code of the ask quote"
+    },
+    "bidprice": {
+      "existingJavaType": "java.lang.Double",
+      "title": "The current bid price"
+    },
+    "bidsize": {
+      "existingJavaType": "java.lang.Long",
+      "title": "The current bid size"
+    },
+    "bidexchange": {
+      "existingJavaType": "java.lang.Integer",
+      "title": "The exchange code of the bid quote"
+    },
+    "timestamp": {
+      "existingJavaType": "java.lang.Long",
+      "title": "Epoch timestamp in nanoseconds"
+    }
+  }
+}

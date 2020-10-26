@@ -1,0 +1,37 @@
+{
+  "type": "object",
+  "extends": {
+    "existingJavaType": "net.jacobpeterson.domain.alpaca.marketdata.streaming.abstracts.MarketDataStreamDataMessage"
+  },
+  "title": "See <a href=\"https://alpaca.markets/docs/api-documentation/api-v2/market-data/streaming/\">https://alpaca.markets/docs/api-documentation/api-v2/market-data/streaming/</a>",
+  "properties": {
+    "i": {
+      "existingJavaType": "java.lang.Integer",
+      "title": "Trade ID"
+    },
+    "x": {
+      "existingJavaType": "java.lang.String",
+      "title": "Exchange code where the trade occurred"
+    },
+    "p": {
+      "existingJavaType": "java.lang.Double",
+      "title": "Trade price"
+    },
+    "s": {
+      "existingJavaType": "java.lang.Integer",
+      "title": "Trade size (shares)"
+    },
+    "t": {
+      "existingJavaType": "java.lang.Long",
+      "title": "Epoch timestamp in milliseconds"
+    },
+    "c": {
+      "existingJavaType": "java.util.ArrayList<java.lang.Integer>",
+      "title": "Trade condition flags"
+    },
+    "z": {
+      "existingJavaType": "java.lang.Integer",
+      "title": "Tape ID ( 1=A 2=B 3=C)"
+    }
+  }
+}

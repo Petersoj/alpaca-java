@@ -1,0 +1,47 @@
+{
+  "type": "object",
+  "extends": {
+    "existingJavaType": "net.jacobpeterson.domain.alpaca.marketdata.streaming.abstracts.MarketDataStreamDataMessage"
+  },
+  "title": "See <a href=\"https://alpaca.markets/docs/api-documentation/api-v2/market-data/streaming/\">https://alpaca.markets/docs/api-documentation/api-v2/market-data/streaming/</a>",
+  "properties": {
+    "x": {
+      "existingJavaType": "java.lang.String",
+      "javaName": "bx",
+      "title": "Bix Exchange ID"
+    },
+    "p": {
+      "existingJavaType": "java.lang.Double",
+      "javaName": "bp",
+      "title": "Bid Price"
+    },
+    "s": {
+      "existingJavaType": "java.lang.Integer",
+      "javaName": "bs",
+      "title": "Bid Size"
+    },
+    "X": {
+      "existingJavaType": "java.lang.String",
+      "javaName": "ax",
+      "title": "Ask Exchange ID"
+    },
+    "P": {
+      "existingJavaType": "java.lang.Double",
+      "javaName": "ap",
+      "title": "Ask Price"
+    },
+    "S": {
+      "existingJavaType": "java.lang.Integer",
+      "javaName": "as",
+      "title": "Ask Size"
+    },
+    "c": {
+      "existingJavaType": "java.util.ArrayList<java.lang.Integer>",
+      "title": "Quote condition flags"
+    },
+    "t": {
+      "existingJavaType": "java.lang.Long",
+      "title": "Quote Timestamp ( Unix MS )"
+    }
+  }
+}
