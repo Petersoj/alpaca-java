@@ -3,6 +3,7 @@ package net.jacobpeterson.polygon;
 import com.google.common.base.Preconditions;
 import com.google.gson.reflect.TypeToken;
 import com.mashape.unirest.http.HttpResponse;
+import net.jacobpeterson.abstracts.websocket.exception.WebsocketException;
 import net.jacobpeterson.domain.polygon.aggregates.AggregatesResponse;
 import net.jacobpeterson.domain.polygon.conditionsmapping.ConditionsMapping;
 import net.jacobpeterson.domain.polygon.dailyopenclose.DailyOpenCloseResponse;
@@ -955,8 +956,10 @@ public class PolygonAPI {
      * Adds the polygon stream listener.
      *
      * @param streamListener the stream listener
+     *
+     * @throws WebsocketException the WebsocketException
      */
-    public void addPolygonStreamListener(PolygonStreamListener streamListener) {
+    public void addPolygonStreamListener(PolygonStreamListener streamListener) throws WebsocketException {
         polygonWebsocketClient.addListener(streamListener);
     }
 
@@ -964,8 +967,10 @@ public class PolygonAPI {
      * Removes the polygon stream listener.
      *
      * @param streamListener the stream listener
+     *
+     * @throws WebsocketException the WebsocketException
      */
-    public void removePolygonStreamListener(PolygonStreamListener streamListener) {
+    public void removePolygonStreamListener(PolygonStreamListener streamListener) throws WebsocketException {
         polygonWebsocketClient.removeListener(streamListener);
     }
 

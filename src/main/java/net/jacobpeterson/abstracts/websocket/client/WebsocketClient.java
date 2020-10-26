@@ -1,5 +1,6 @@
 package net.jacobpeterson.abstracts.websocket.client;
 
+import net.jacobpeterson.abstracts.websocket.exception.WebsocketException;
 import net.jacobpeterson.abstracts.websocket.listener.StreamListener;
 import net.jacobpeterson.abstracts.websocket.message.StreamMessage;
 import net.jacobpeterson.abstracts.websocket.message.StreamMessageType;
@@ -13,25 +14,33 @@ public interface WebsocketClient {
      * Adds a listener. Note that this method is blocking.
      *
      * @param streamListener the stream listener
+     *
+     * @throws WebsocketException the WebsocketException
      */
-    void addListener(StreamListener<?, ?> streamListener);
+    void addListener(StreamListener<?, ?> streamListener) throws WebsocketException;
 
     /**
      * Remove listener. Note that this method is blocking.
      *
      * @param streamListener the stream listener
+     *
+     * @throws WebsocketException the WebsocketException
      */
-    void removeListener(StreamListener<?, ?> streamListener);
+    void removeListener(StreamListener<?, ?> streamListener) throws WebsocketException;
 
     /**
      * Connects. Note that this method is blocking.
+     *
+     * @throws Exception the Exception
      */
-    void connect();
+    void connect() throws Exception;
 
     /**
      * Disconnects. Note that this method is blocking.
+     *
+     * @throws Exception the Exception
      */
-    void disconnect();
+    void disconnect() throws Exception;
 
     /**
      * Send authentication message. Note that this method is blocking.

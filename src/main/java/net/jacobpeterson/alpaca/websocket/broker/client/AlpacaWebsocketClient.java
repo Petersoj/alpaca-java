@@ -7,6 +7,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
 import com.google.gson.JsonSyntaxException;
 import net.jacobpeterson.abstracts.websocket.client.WebsocketClient;
+import net.jacobpeterson.abstracts.websocket.exception.WebsocketException;
 import net.jacobpeterson.abstracts.websocket.listener.StreamListener;
 import net.jacobpeterson.abstracts.websocket.message.StreamMessage;
 import net.jacobpeterson.abstracts.websocket.message.StreamMessageType;
@@ -76,11 +77,15 @@ public class AlpacaWebsocketClient implements WebsocketClient {
     }
 
     @Override
-    public void addListener(StreamListener<?, ?> streamListener) {
+    public void addListener(StreamListener<?, ?> streamListener) throws WebsocketException {
         Preconditions.checkState(streamListener instanceof AlpacaStreamListener);
 
         if (listeners.isEmpty()) {
-            connect();
+            try {
+                connect();
+            } catch (IOException | URISyntaxException | DeploymentException exception) {
+                throw new WebsocketException(exception);
+            }
         }
 
         listeners.add((AlpacaStreamListener) streamListener);
@@ -89,43 +94,40 @@ public class AlpacaWebsocketClient implements WebsocketClient {
     }
 
     @Override
-    public void removeListener(StreamListener<?, ?> streamListener) {
+    public void removeListener(StreamListener<?, ?> streamListener) throws WebsocketException {
         Preconditions.checkState(streamListener instanceof AlpacaStreamListener);
 
         listeners.remove(streamListener);
 
-        submitStreamRequestUpdate();
-
         if (listeners.isEmpty()) {
-            disconnect();
+            try {
+                disconnect();
+            } catch (Exception exception) {
+                throw new WebsocketException(exception);
+            }
+        } else {
+            submitStreamRequestUpdate();
         }
     }
 
     @Override
-    public void connect() {
+    public void connect() throws URISyntaxException, IOException, DeploymentException {
         LOGGER.info("Connecting...");
 
-        try {
-            alpacaWebsocketClientEndpoint = new AlpacaWebsocketClientEndpoint(this, new URI(streamAPIURL));
-            alpacaWebsocketClientEndpoint.connect();
+        alpacaWebsocketClientEndpoint = new AlpacaWebsocketClientEndpoint(this, new URI(streamAPIURL));
+        alpacaWebsocketClientEndpoint.setAutomaticallyReconnect(true);
+        alpacaWebsocketClientEndpoint.connect();
 
-            LOGGER.info("Connected.");
-        } catch (URISyntaxException | DeploymentException | IOException e) {
-            LOGGER.throwing(e);
-        }
+        LOGGER.info("Connected.");
     }
 
     @Override
-    public void disconnect() {
+    public void disconnect() throws Exception {
         LOGGER.info("Disconnecting...");
 
-        try {
-            alpacaWebsocketClientEndpoint.getUserSession().close();
+        alpacaWebsocketClientEndpoint.disconnect();
 
-            LOGGER.info("Disconnected.");
-        } catch (IOException e) {
-            LOGGER.throwing(e);
-        }
+        LOGGER.info("Disconnected.");
     }
 
     @Override

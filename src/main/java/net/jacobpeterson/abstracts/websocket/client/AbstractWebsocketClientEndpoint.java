@@ -3,6 +3,7 @@ package net.jacobpeterson.abstracts.websocket.client;
 import net.jacobpeterson.util.concurrency.ExecutorTracer;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.eclipse.jetty.util.component.LifeCycle;
 
 import javax.websocket.CloseReason;
 import javax.websocket.ContainerProvider;
@@ -32,11 +33,17 @@ public abstract class AbstractWebsocketClientEndpoint {
     /** The Endpoint uri. */
     private final URI endpointURI;
 
+    /** The Message thread name. */
+    private final String messageThreadName;
+
     /**
      * The Executor service, which passes message handlers to a different thread, will prevent overflow of server
      * buffers (causing a disconnect) from not consuming data fast enough on the client end.
      */
-    private final ExecutorService executorService;
+    private ExecutorService executorService;
+
+    /** The automatically reconnect boolean. */
+    private boolean automaticallyReconnect;
 
     /** The User session. */
     private Session userSession;
@@ -52,7 +59,8 @@ public abstract class AbstractWebsocketClientEndpoint {
             String messageThreadName) {
         this.websocketClient = websocketClient;
         this.endpointURI = endpointURI;
-        this.executorService = ExecutorTracer.newSingleThreadExecutor(r -> new Thread(r, messageThreadName));
+        this.messageThreadName = messageThreadName;
+        this.automaticallyReconnect = true;
     }
 
     /**
@@ -62,10 +70,11 @@ public abstract class AbstractWebsocketClientEndpoint {
      * @throws IOException         Signals that an I/O exception has occurred.
      */
     public void connect() throws DeploymentException, IOException {
+        executorService = ExecutorTracer.newSingleThreadExecutor(r -> new Thread(r, messageThreadName));
+
         WebSocketContainer container = ContainerProvider.getWebSocketContainer();
 
         LOGGER.info("Connecting to {}", endpointURI);
-
         container.connectToServer(this, endpointURI);
     }
 
@@ -74,9 +83,20 @@ public abstract class AbstractWebsocketClientEndpoint {
      *
      * @throws IOException the io exception
      */
-    public void disconnect() throws IOException {
+    public void disconnect() throws Exception {
+        automaticallyReconnect = false;
+
         if (userSession != null) {
             userSession.close();
+
+            WebSocketContainer webSocketContainer = userSession.getContainer();
+            if (webSocketContainer instanceof LifeCycle) {
+                ((LifeCycle) webSocketContainer).stop(); // Closes all websocket-related threads
+            }
+        }
+
+        if (executorService != null) {
+            executorService.shutdown();
         }
     }
 
@@ -102,7 +122,7 @@ public abstract class AbstractWebsocketClientEndpoint {
     protected void onClose(Session userSession, CloseReason reason) {
         LOGGER.debug("onClose {}", userSession);
 
-        if (!reason.getCloseCode().equals(CloseReason.CloseCodes.NORMAL_CLOSURE)) {
+        if (!reason.getCloseCode().equals(CloseReason.CloseCodes.NORMAL_CLOSURE) && automaticallyReconnect) {
 
             LOGGER.info("Reconnecting due to closure: {}",
                     CloseReason.CloseCodes.getCloseCode(reason.getCloseCode().getCode()));
@@ -154,5 +174,23 @@ public abstract class AbstractWebsocketClientEndpoint {
      */
     public Session getUserSession() {
         return userSession;
+    }
+
+    /**
+     * Does automatically reconnect boolean.
+     *
+     * @return the boolean
+     */
+    public boolean doesAutomaticallyReconnect() {
+        return automaticallyReconnect;
+    }
+
+    /**
+     * Sets automatically reconnect.
+     *
+     * @param automaticallyReconnect the automatically reconnect
+     */
+    public void setAutomaticallyReconnect(boolean automaticallyReconnect) {
+        this.automaticallyReconnect = automaticallyReconnect;
     }
 }

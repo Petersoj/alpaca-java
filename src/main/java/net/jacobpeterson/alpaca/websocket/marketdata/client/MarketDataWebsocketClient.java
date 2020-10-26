@@ -7,6 +7,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import com.google.gson.JsonPrimitive;
 import net.jacobpeterson.abstracts.websocket.client.WebsocketClient;
+import net.jacobpeterson.abstracts.websocket.exception.WebsocketException;
 import net.jacobpeterson.abstracts.websocket.listener.StreamListener;
 import net.jacobpeterson.abstracts.websocket.message.StreamMessage;
 import net.jacobpeterson.abstracts.websocket.message.StreamMessageType;
@@ -101,11 +102,15 @@ public class MarketDataWebsocketClient implements WebsocketClient {
     }
 
     @Override
-    public void addListener(StreamListener<?, ?> streamListener) {
+    public void addListener(StreamListener<?, ?> streamListener) throws WebsocketException {
         Preconditions.checkState(streamListener instanceof MarketDataStreamListener);
 
         if (listeners.isEmpty()) {
-            connect();
+            try {
+                connect();
+            } catch (IOException | URISyntaxException | DeploymentException exception) {
+                throw new WebsocketException(exception);
+            }
         }
 
         listeners.add((MarketDataStreamListener) streamListener);
@@ -114,43 +119,40 @@ public class MarketDataWebsocketClient implements WebsocketClient {
     }
 
     @Override
-    public void removeListener(StreamListener<?, ?> streamListener) {
+    public void removeListener(StreamListener<?, ?> streamListener) throws WebsocketException {
         Preconditions.checkState(streamListener instanceof MarketDataStreamListener);
 
         listeners.remove(streamListener);
 
-        submitStreamRequest();
-
         if (listeners.isEmpty()) {
-            disconnect();
+            try {
+                disconnect();
+            } catch (Exception exception) {
+                throw new WebsocketException(exception);
+            }
+        } else {
+            submitStreamRequest();
         }
     }
 
     @Override
-    public void connect() {
+    public void connect() throws URISyntaxException, IOException, DeploymentException {
         LOGGER.info("Connecting...");
 
-        try {
-            marketDataWebsocketClientEndpoint = new MarketDataWebsocketClientEndpoint(this, new URI(streamAPIURL));
-            marketDataWebsocketClientEndpoint.connect();
+        marketDataWebsocketClientEndpoint = new MarketDataWebsocketClientEndpoint(this, new URI(streamAPIURL));
+        marketDataWebsocketClientEndpoint.setAutomaticallyReconnect(true);
+        marketDataWebsocketClientEndpoint.connect();
 
-            LOGGER.info("Connected.");
-        } catch (URISyntaxException | DeploymentException | IOException e) {
-            LOGGER.throwing(e);
-        }
+        LOGGER.info("Connected.");
     }
 
     @Override
-    public void disconnect() {
+    public void disconnect() throws Exception {
         LOGGER.info("Disconnecting...");
 
-        try {
-            marketDataWebsocketClientEndpoint.getUserSession().close();
+        marketDataWebsocketClientEndpoint.disconnect();
 
-            LOGGER.info("Disconnected.");
-        } catch (IOException e) {
-            LOGGER.throwing(e);
-        }
+        LOGGER.info("Disconnected.");
     }
 
     @Override

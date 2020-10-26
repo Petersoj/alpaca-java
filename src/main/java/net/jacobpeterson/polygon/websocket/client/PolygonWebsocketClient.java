@@ -7,6 +7,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
 import com.google.gson.JsonSyntaxException;
 import net.jacobpeterson.abstracts.websocket.client.WebsocketClient;
+import net.jacobpeterson.abstracts.websocket.exception.WebsocketException;
 import net.jacobpeterson.abstracts.websocket.listener.StreamListener;
 import net.jacobpeterson.abstracts.websocket.message.StreamMessage;
 import net.jacobpeterson.abstracts.websocket.message.StreamMessageType;
@@ -78,11 +79,15 @@ public class PolygonWebsocketClient implements WebsocketClient {
     }
 
     @Override
-    public void addListener(StreamListener<?, ?> listener) {
+    public void addListener(StreamListener<?, ?> listener) throws WebsocketException {
         Preconditions.checkState(listener instanceof PolygonStreamListener);
 
         if (listeners.isEmpty()) {
-            connect();
+            try {
+                connect();
+            } catch (IOException | URISyntaxException | DeploymentException exception) {
+                throw new WebsocketException(exception);
+            }
         }
 
         listeners.add((PolygonStreamListener) listener);
@@ -91,42 +96,40 @@ public class PolygonWebsocketClient implements WebsocketClient {
     }
 
     @Override
-    public void removeListener(StreamListener<?, ?> listener) {
+    public void removeListener(StreamListener<?, ?> listener) throws WebsocketException {
         Preconditions.checkState(listener instanceof PolygonStreamListener);
 
         listeners.remove(listener);
 
-        submitStreamRequest(PolygonStreamAction.UNSUBSCRIBE, (PolygonStreamListener) listener);
-
         if (listeners.isEmpty()) {
-            disconnect();
+            try {
+                disconnect();
+            } catch (Exception exception) {
+                throw new WebsocketException(exception);
+            }
+        } else {
+            submitStreamRequest(PolygonStreamAction.UNSUBSCRIBE, (PolygonStreamListener) listener);
         }
     }
 
     @Override
-    public void connect() {
+    public void connect() throws URISyntaxException, IOException, DeploymentException {
         LOGGER.info("Connecting...");
 
-        try {
-            polygonWebsocketClientEndpoint = new PolygonWebsocketClientEndpoint(this, new URI(websocketURL));
-            polygonWebsocketClientEndpoint.connect();
+        polygonWebsocketClientEndpoint = new PolygonWebsocketClientEndpoint(this, new URI(websocketURL));
+        polygonWebsocketClientEndpoint.setAutomaticallyReconnect(true);
+        polygonWebsocketClientEndpoint.connect();
 
-            LOGGER.info("Connected.");
-        } catch (URISyntaxException | DeploymentException | IOException e) {
-            LOGGER.throwing(e);
-        }
+        LOGGER.info("Connected.");
     }
 
     @Override
-    public void disconnect() {
+    public void disconnect() throws Exception {
         LOGGER.info("Disconnecting...");
 
-        try {
-            polygonWebsocketClientEndpoint.disconnect();
-            LOGGER.info("Disconnected.");
-        } catch (IOException e) {
-            LOGGER.throwing(e);
-        }
+        polygonWebsocketClientEndpoint.disconnect();
+
+        LOGGER.info("Disconnected.");
     }
 
     @Override

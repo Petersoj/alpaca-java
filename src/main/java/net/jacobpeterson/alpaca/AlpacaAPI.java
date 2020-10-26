@@ -7,6 +7,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
 import com.google.gson.reflect.TypeToken;
 import com.mashape.unirest.http.HttpResponse;
+import net.jacobpeterson.abstracts.websocket.exception.WebsocketException;
 import net.jacobpeterson.alpaca.enums.ActivityType;
 import net.jacobpeterson.alpaca.enums.AssetStatus;
 import net.jacobpeterson.alpaca.enums.BarsTimeFrame;
@@ -1691,8 +1692,10 @@ public class AlpacaAPI {
      * Adds the alpaca stream listener.
      *
      * @param streamListener the stream listener
+     *
+     * @throws WebsocketException the WebsocketException
      */
-    public void addAlpacaStreamListener(AlpacaStreamListener streamListener) {
+    public void addAlpacaStreamListener(AlpacaStreamListener streamListener) throws WebsocketException {
         alpacaWebSocketClient.addListener(streamListener);
     }
 
@@ -1700,8 +1703,10 @@ public class AlpacaAPI {
      * Removes the alpaca stream listener.
      *
      * @param streamListener the stream listener
+     *
+     * @throws WebsocketException the WebsocketException
      */
-    public void removeAlpacaStreamListener(AlpacaStreamListener streamListener) {
+    public void removeAlpacaStreamListener(AlpacaStreamListener streamListener) throws WebsocketException {
         alpacaWebSocketClient.removeListener(streamListener);
     }
 
@@ -1709,8 +1714,10 @@ public class AlpacaAPI {
      * Adds the alpaca stream listener.
      *
      * @param streamListener the stream listener
+     *
+     * @throws WebsocketException the WebsocketException
      */
-    public void addMarketDataStreamListener(MarketDataStreamListener streamListener) {
+    public void addMarketDataStreamListener(MarketDataStreamListener streamListener) throws WebsocketException {
         marketDataWebSocketClient.addListener(streamListener);
     }
 
@@ -1718,8 +1725,10 @@ public class AlpacaAPI {
      * Removes the alpaca stream listener.
      *
      * @param streamListener the stream listener
+     *
+     * @throws WebsocketException the WebsocketException
      */
-    public void removeMarketDataStreamListener(MarketDataStreamListener streamListener) {
+    public void removeMarketDataStreamListener(MarketDataStreamListener streamListener) throws WebsocketException {
         marketDataWebSocketClient.removeListener(streamListener);
     }
 
