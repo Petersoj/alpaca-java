@@ -499,22 +499,20 @@ public class AlpacaAPI {
      * #requestNewOrder(String, Integer, OrderSide, OrderType, OrderTimeInForce, Double, Double, Double, Double,
      * Boolean, String, OrderClass, Double, Double, Double)} with {@link OrderType#MARKET}.
      *
-     * @param symbol        symbol or asset ID to identify the asset to trade
-     * @param quantity      number of shares to trade
-     * @param side          buy or sell
-     * @param timeInForce   day, gtc, opg, cls, ioc, fok. Please see Understand Orders for more info.
-     * @param extendedHours (default) false. If true, order will be eligible to execute in premarket/afterhours. Only
-     *                      works with type limit and time_in_force day.
+     * @param symbol      symbol or asset ID to identify the asset to trade
+     * @param quantity    number of shares to trade
+     * @param side        buy or sell
+     * @param timeInForce day, gtc, opg, cls, ioc, fok. Please see Understand Orders for more info.
      *
      * @return the order
      *
      * @throws AlpacaAPIRequestException the alpaca api request exception
      * @see <a href="https://docs.alpaca.markets/trading-on-alpaca/orders/#order-types">Order Types</a>
      */
-    public Order requestNewMarketOrder(String symbol, Integer quantity, OrderSide side, OrderTimeInForce timeInForce,
-            Boolean extendedHours) throws AlpacaAPIRequestException {
-        return requestNewOrder(symbol, quantity, side, OrderType.MARKET, timeInForce, null, null, null, null,
-                extendedHours, null, OrderClass.SIMPLE, null, null, null);
+    public Order requestNewMarketOrder(String symbol, Integer quantity, OrderSide side, OrderTimeInForce timeInForce)
+            throws AlpacaAPIRequestException {
+        return requestNewOrder(symbol, quantity, side, OrderType.MARKET, timeInForce, null, null, null, null, null,
+                null, OrderClass.SIMPLE, null, null, null);
     }
 
     /**
