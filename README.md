@@ -105,50 +105,59 @@ This example uses the `AlpacaAPI` class to subscribe to the Account and Trade Up
 AlpacaAPI alpacaAPI = new AlpacaAPI();
 
 // Register explicitly for ACCOUNT_UPDATES and ORDER_UPDATES Messages via stream listener
-alpacaAPI.addAlpacaStreamListener(new AlpacaStreamListenerAdapter(
-        AlpacaStreamMessageType.ACCOUNT_UPDATES,
-        AlpacaStreamMessageType.TRADE_UPDATES) {
-    @Override
-    public void onStreamUpdate(AlpacaStreamMessageType streamMessageType, AlpacaStreamMessage streamMessage) {
-        switch (streamMessageType) {
-            case ACCOUNT_UPDATES:
-                AccountUpdateMessage accountUpdateMessage = (AccountUpdateMessage) streamMessage;
-                System.out.println("\nReceived Account Update: \n\t" +
-                        accountUpdateMessage.toString().replace(",", ",\n\t"));
-                break;
-            case TRADE_UPDATES:
-                TradeUpdateMessage tradeUpdateMessage = (TradeUpdateMessage) streamMessage;
-                System.out.println("\nReceived Order Update: \n\t" +
-                        tradeUpdateMessage.toString().replace(",", ",\n\t"));
-                break;
-        }
-    }
-});
-
-alpacaAPI.addMarketDataStreamListener(
-    new MarketDataStreamListenerAdapter("AAPL", MarketDataStreamMessageType.values()) {
+try {
+    alpacaAPI.addAlpacaStreamListener(new AlpacaStreamListenerAdapter(
+            AlpacaStreamMessageType.ACCOUNT_UPDATES,
+            AlpacaStreamMessageType.TRADE_UPDATES) {
         @Override
-        public void onStreamUpdate(MarketDataStreamMessageType streamMessageType,
-                MarketDataStreamMessage streamMessage) {
+        public void onStreamUpdate(AlpacaStreamMessageType streamMessageType, AlpacaStreamMessage streamMessage) {
             switch (streamMessageType) {
-                case QUOTES:
-                    QuoteMessage quoteMessage = (QuoteMessage) streamMessage;
-                    System.out.println("\nQuote Update: \n\t" +
-                            quoteMessage.toString().replace(",", ",\n\t"));
+                case ACCOUNT_UPDATES:
+                    AccountUpdateMessage accountUpdateMessage = (AccountUpdateMessage) streamMessage;
+                    System.out.println("\nReceived Account Update: \n\t" +
+                            accountUpdateMessage.toString().replace(",", ",\n\t"));
                     break;
-                case TRADES:
-                    TradeMessage tradeMessage = (TradeMessage) streamMessage;
-                    System.out.println("\nTrade Update: \n\t" +
-                            tradeMessage.toString().replace(",", ",\n\t"));
-                    break;
-                case AGGREGATE_MINUTE:
-                    AggregateMinuteMessage aggregateMinuteMessage = (AggregateMinuteMessage) streamMessage;
-                    System.out.println("\nAggregate Minute Update: \n\t" +
-                            aggregateMinuteMessage.toString().replace(",", ",\n\t"));
+                case TRADE_UPDATES:
+                    TradeUpdateMessage tradeUpdateMessage = (TradeUpdateMessage) streamMessage;
+                    System.out.println("\nReceived Order Update: \n\t" +
+                            tradeUpdateMessage.toString().replace(",", ",\n\t"));
                     break;
             }
         }
     });
+} catch (WebsocketException e) {
+    e.printStackTrace();
+}
+
+// Add an Alpaca Market data stream listener to listen to "T.AAPL", "Q.AAPL", and "AM.AAPL" messages
+try {
+    alpacaAPI.addMarketDataStreamListener(
+        new MarketDataStreamListenerAdapter("AAPL", MarketDataStreamMessageType.values()) {
+            @Override
+            public void onStreamUpdate(MarketDataStreamMessageType streamMessageType,
+                    MarketDataStreamMessage streamMessage) {
+                switch (streamMessageType) {
+                    case QUOTES:
+                        QuoteMessage quoteMessage = (QuoteMessage) streamMessage;
+                        System.out.println("\nQuote Update: \n\t" +
+                                quoteMessage.toString().replace(",", ",\n\t"));
+                        break;
+                    case TRADES:
+                        TradeMessage tradeMessage = (TradeMessage) streamMessage;
+                        System.out.println("\nTrade Update: \n\t" +
+                                tradeMessage.toString().replace(",", ",\n\t"));
+                        break;
+                    case AGGREGATE_MINUTE:
+                        AggregateMinuteMessage aggregateMinuteMessage = (AggregateMinuteMessage) streamMessage;
+                        System.out.println("\nAggregate Minute Update: \n\t" +
+                                aggregateMinuteMessage.toString().replace(",", ",\n\t"));
+                        break;
+                }
+            }
+        });
+} catch (WebsocketException e) {
+    e.printStackTrace();
+}
 
 // Get Account Information
 try {
@@ -201,13 +210,6 @@ try {
         System.out.println("\tVolume: " + bar.getV());
     }
 } catch (AlpacaAPIRequestException e) {
-    e.printStackTrace();
-}
-
-// Keep the Alpaca websocket stream open for 5 seconds
-try {
-    Thread.sleep(5000);
-} catch (InterruptedException e) {
     e.printStackTrace();
 }
 ```
@@ -360,18 +362,15 @@ PolygonAPI polygonAPI = new PolygonAPI();
 String aaplTicker = "AAPL";
 
 // Add a Polygon stream listener to listen to "T.AAPL", "Q.AAPL", "A.AAPL", "AM.AAPL", and status messages
-polygonAPI.addPolygonStreamListener(new PolygonStreamListenerAdapter(aaplTicker,
-        PolygonStreamMessageType.values()) {
-    @Override
-    public void onStreamUpdate(PolygonStreamMessageType streamMessageType, PolygonStreamMessage streamMessage) {
-        System.out.println("===> streamUpdate " + streamMessageType + " " + streamMessage);
-    }
-});
-
-// Sleep the current thread for 2 seconds so we can see some trade/quote/aggregates updates on the stream!
 try {
-    Thread.sleep(2000);
-} catch (InterruptedException e) {
+    polygonAPI.addPolygonStreamListener(new PolygonStreamListenerAdapter(aaplTicker,
+            PolygonStreamMessageType.values()) {
+        @Override
+        public void onStreamUpdate(PolygonStreamMessageType streamMessageType, PolygonStreamMessage streamMessage) {
+            System.out.println("===> streamUpdate " + streamMessageType + " " + streamMessage);
+        }
+    });
+} catch (WebsocketException e) {
     e.printStackTrace();
 }
 
