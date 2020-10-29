@@ -17,6 +17,9 @@ public class AlpacaRequest extends AbstractRequest {
     /** The Constant API_SECRET_KEY. */
     private static final String API_SECRET_KEY = "APCA-API-SECRET-KEY";
 
+    /** The Constant AUTH_TOKEN. */
+    private static final String AUTH_TOKEN = "Authorization";
+
     /**
      * Instantiates a new alpaca request.
      *
@@ -29,5 +32,17 @@ public class AlpacaRequest extends AbstractRequest {
         headers.put(USER_AGENT_KEY, AlpacaProperties.USER_AGENT_VALUE);
         headers.put(API_KEY_ID, keyID);
         headers.put(API_SECRET_KEY, secretKey);
+    }
+
+    /**
+     * Instantiates a new alpaca request.
+     *
+     * @param token     the auth token
+     */
+    public AlpacaRequest(String token) {
+        super();
+
+        headers.put(USER_AGENT_KEY, AlpacaProperties.USER_AGENT_VALUE);
+        headers.put(AUTH_TOKEN, "Bearer " + AlpacaProperties.AUTH_TOKEN_VALUE);
     }
 }

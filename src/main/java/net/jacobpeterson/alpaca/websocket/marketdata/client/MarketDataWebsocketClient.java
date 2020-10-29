@@ -74,6 +74,9 @@ public class MarketDataWebsocketClient implements WebsocketClient {
     /** The secret. */
     private final String secret;
 
+    /** The auth token. */
+    private final String auth_token;
+
     /** The Stream API URL. */
     private final String streamAPIURL;
 
@@ -96,6 +99,22 @@ public class MarketDataWebsocketClient implements WebsocketClient {
     public MarketDataWebsocketClient(String keyId, String secret, String baseDataUrl) {
         this.keyId = keyId;
         this.secret = secret;
+        this.auth_token = null;
+        this.streamAPIURL = baseDataUrl.replace("https", "wss") + "/stream";
+
+        this.listeners = new ArrayList<>();
+    }
+
+    /**
+     * Instantiates a new Market data websocket client.
+     *
+     * @param token       the auth token
+     * @param baseDataUrl the base data url
+     */
+    public MarketDataWebsocketClient(String token, String baseDataUrl) {
+        this.auth_token = token;
+        this.keyId = null;
+        this.secret = null;
         this.streamAPIURL = baseDataUrl.replace("https", "wss") + "/stream";
 
         this.listeners = new ArrayList<>();
@@ -171,8 +190,13 @@ public class MarketDataWebsocketClient implements WebsocketClient {
         authRequest.addProperty("action", "authenticate");
 
         JsonObject dataJson = new JsonObject();
-        dataJson.addProperty("key_id", keyId);
-        dataJson.addProperty("secret_key", secret);
+        if (keyId == null && secret == null && auth_token != null) {
+            dataJson.addProperty("oauth_token", auth_token);
+
+        } else {
+            dataJson.addProperty("key_id", keyId);
+            dataJson.addProperty("secret_key", secret);
+        }
 
         authRequest.add("data", dataJson);
 

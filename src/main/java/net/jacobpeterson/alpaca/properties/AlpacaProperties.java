@@ -47,6 +47,12 @@ public class AlpacaProperties {
     /** The Constant USER_AGENT_VALUE. */
     public static final String USER_AGENT_VALUE = getProperty(ALPACA_PROPERTIES_FILE, USER_AGENT_KEY);
 
+    /** The Constant USER_AGENT_KEY. */
+    private static final String AUTH_TOKEN = "auth_token";
+
+    /** The Constant USER_AGENT_VALUE. */
+    public static final String AUTH_TOKEN_VALUE = getProperty(ALPACA_PROPERTIES_FILE, AUTH_TOKEN);
+
     /**
      * Static to string string.
      *
@@ -67,6 +73,7 @@ public class AlpacaProperties {
                 .add("SECRET_VALUE = " + SECRET_VALUE)
                 .add("USER_AGENT_KEY = " + USER_AGENT_KEY)
                 .add("USER_AGENT_VALUE = " + USER_AGENT_VALUE)
+                .add("AUTH_TOKEN = " + AUTH_TOKEN_VALUE)
                 .toString();
     }
 }
