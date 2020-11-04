@@ -1,5 +1,6 @@
 package net.jacobpeterson.alpaca.rest;
 
+import com.google.common.base.Preconditions;
 import net.jacobpeterson.abstracts.rest.AbstractRequest;
 import net.jacobpeterson.alpaca.properties.AlpacaProperties;
 
@@ -21,13 +22,15 @@ public class AlpacaRequest extends AbstractRequest {
     private static final String AUTH_TOKEN = "Authorization";
 
     /**
-     * Instantiates a new alpaca request.
+     * Instantiates a new AlpacaRequest.
      *
-     * @param keyID     the key id
+     * @param keyID     the key ID
      * @param secretKey the secret key
      */
     public AlpacaRequest(String keyID, String secretKey) {
         super();
+        Preconditions.checkNotNull(keyID);
+        Preconditions.checkNotNull(secretKey);
 
         headers.put(USER_AGENT_KEY, AlpacaProperties.USER_AGENT_VALUE);
         headers.put(API_KEY_ID, keyID);
@@ -35,14 +38,15 @@ public class AlpacaRequest extends AbstractRequest {
     }
 
     /**
-     * Instantiates a new alpaca request.
+     * Instantiates a new AlpacaRequest.
      *
-     * @param token     the auth token
+     * @param oAuthToken the OAuth token
      */
-    public AlpacaRequest(String token) {
+    public AlpacaRequest(String oAuthToken) {
         super();
+        Preconditions.checkNotNull(oAuthToken);
 
         headers.put(USER_AGENT_KEY, AlpacaProperties.USER_AGENT_VALUE);
-        headers.put(AUTH_TOKEN, "Bearer " + AlpacaProperties.AUTH_TOKEN_VALUE);
+        headers.put(AUTH_TOKEN, "Bearer " + oAuthToken);
     }
 }
