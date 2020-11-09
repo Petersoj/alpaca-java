@@ -74,6 +74,9 @@ public class MarketDataWebsocketClient implements WebsocketClient {
     /** The secret. */
     private final String secret;
 
+    /** The OAuth token. */
+    private final String oAuthToken;
+
     /** The Stream API URL. */
     private final String streamAPIURL;
 
@@ -87,7 +90,7 @@ public class MarketDataWebsocketClient implements WebsocketClient {
     private boolean authenticated;
 
     /**
-     * Instantiates a new Market data websocket client.
+     * Instantiates a new MarketDataWebsocketClient.
      *
      * @param keyId       the key id
      * @param secret      the secret
@@ -96,6 +99,22 @@ public class MarketDataWebsocketClient implements WebsocketClient {
     public MarketDataWebsocketClient(String keyId, String secret, String baseDataUrl) {
         this.keyId = keyId;
         this.secret = secret;
+        this.oAuthToken = null;
+        this.streamAPIURL = baseDataUrl.replace("https", "wss") + "/stream";
+
+        this.listeners = new ArrayList<>();
+    }
+
+    /**
+     * Instantiates a new MarketDataWebsocketClient.
+     *
+     * @param oAuthToken  the OAuth token
+     * @param baseDataUrl the base data url
+     */
+    public MarketDataWebsocketClient(String oAuthToken, String baseDataUrl) {
+        this.keyId = null;
+        this.secret = null;
+        this.oAuthToken = oAuthToken;
         this.streamAPIURL = baseDataUrl.replace("https", "wss") + "/stream";
 
         this.listeners = new ArrayList<>();
@@ -171,8 +190,12 @@ public class MarketDataWebsocketClient implements WebsocketClient {
         authRequest.addProperty("action", "authenticate");
 
         JsonObject dataJson = new JsonObject();
-        dataJson.addProperty("key_id", keyId);
-        dataJson.addProperty("secret_key", secret);
+        if (oAuthToken != null) {
+            dataJson.addProperty("oauth_token", oAuthToken);
+        } else {
+            dataJson.addProperty("key_id", keyId);
+            dataJson.addProperty("secret_key", secret);
+        }
 
         authRequest.add("data", dataJson);
 

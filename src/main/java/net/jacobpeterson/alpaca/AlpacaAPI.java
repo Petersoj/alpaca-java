@@ -71,8 +71,8 @@ public class AlpacaAPI {
     /** The version. */
     private final String apiVersion;
 
-    /** The key id. */
-    private final String keyId;
+    /** The key ID. */
+    private final String keyID;
 
     /** The base API url. */
     private final String baseAPIURL;
@@ -90,67 +90,77 @@ public class AlpacaAPI {
     private final MarketDataWebsocketClient marketDataWebSocketClient;
 
     /**
-     * Instantiates a new Alpaca API using properties specified in alpaca.properties file (or relevant defaults)
+     * Instantiates a new Alpaca API using properties specified in alpaca.properties file (or their associated
+     * defaults)
      */
     public AlpacaAPI() {
         this(AlpacaProperties.API_VERSION_VALUE, AlpacaProperties.KEY_ID_VALUE,
-                AlpacaProperties.SECRET_VALUE, AlpacaProperties.BASE_API_URL_VALUE,
+                AlpacaProperties.SECRET_VALUE, null, AlpacaProperties.BASE_API_URL_VALUE,
                 AlpacaProperties.BASE_DATA_URL_VALUE);
 
         LOGGER.debug(AlpacaProperties.staticToString());
     }
 
     /**
-     * Instantiates a new Alpaca API using the specified apiVersion
+     * Instantiates a new AlpacaAPI using the specified keyID and secret.
      *
-     * @param apiVersion the api version
-     */
-    public AlpacaAPI(String apiVersion) {
-        this(apiVersion, AlpacaProperties.KEY_ID_VALUE, AlpacaProperties.SECRET_VALUE,
-                AlpacaProperties.BASE_API_URL_VALUE, AlpacaProperties.BASE_DATA_URL_VALUE);
-    }
-
-    /**
-     * Instantiates a new Alpaca API using the specified apiVersion, keyId, and secret.
-     *
-     * @param keyId  the key id
+     * @param keyID  the key ID
      * @param secret the secret
      */
-    public AlpacaAPI(String apiVersion, String keyId, String secret) {
-        this(apiVersion, keyId, secret, AlpacaProperties.BASE_API_URL_VALUE,
+    public AlpacaAPI(String keyID, String secret) {
+        this(AlpacaProperties.API_VERSION_VALUE, keyID, secret, null, AlpacaProperties.BASE_API_URL_VALUE,
                 AlpacaProperties.BASE_DATA_URL_VALUE);
     }
 
     /**
-     * Instantiates a new Alpaca API using the specified apiVersion, keyId, secret, and baseAPIURL.
+     * Instantiates a new AlpacaAPI using the specified keyID, secret, and baseAPIURL.
      *
-     * @param apiVersion the api version
-     * @param keyId      the key id
+     * @param keyID      the key ID
      * @param secret     the secret
      * @param baseAPIURL the api account url
      */
-    public AlpacaAPI(String apiVersion, String keyId, String secret, String baseAPIURL) {
-        this(apiVersion, keyId, secret, baseAPIURL, AlpacaProperties.BASE_DATA_URL_VALUE);
+    public AlpacaAPI(String keyID, String secret, String baseAPIURL) {
+        this(AlpacaProperties.API_VERSION_VALUE, keyID, secret, null, baseAPIURL, AlpacaProperties.BASE_DATA_URL_VALUE);
     }
 
     /**
-     * Instantiates a new Alpaca API using the specified keyId, secret, baseAPIURL, and baseDataUrl.
+     * Instantiates a new AlpacaAPI using the specified OAuth token.
+     *
+     * @param oAuthToken the OAuth token
+     */
+    public AlpacaAPI(String oAuthToken) {
+        this(AlpacaProperties.API_VERSION_VALUE, null, null, oAuthToken, AlpacaProperties.BASE_API_URL_VALUE,
+                AlpacaProperties.BASE_DATA_URL_VALUE);
+    }
+
+    /**
+     * Instantiates a new AlpacaAPI using the specified apiVersion, keyId, secret, OAuth token (if there is one),
+     * baseAPIURL, and baseDataURL.
      *
      * @param apiVersion  the api version
-     * @param keyId       the key id
+     * @param keyID       the key ID
      * @param secret      the secret
-     * @param baseAPIURL  the base api url
-     * @param baseDataUrl the base data url
+     * @param oAuthToken  the OAuth token
+     * @param baseAPIURL  the base API URL
+     * @param baseDataURL the base data URL
      */
-    public AlpacaAPI(String apiVersion, String keyId, String secret, String baseAPIURL, String baseDataUrl) {
-        this.apiVersion = apiVersion;
-        this.keyId = keyId;
-        this.baseAPIURL = baseAPIURL;
-        this.baseDataUrl = baseDataUrl;
+    public AlpacaAPI(String apiVersion, String keyID, String secret, String oAuthToken, String baseAPIURL,
+            String baseDataURL) {
+        Preconditions.checkState((keyID != null && secret != null) || oAuthToken != null);
 
-        alpacaRequest = new AlpacaRequest(keyId, secret);
-        alpacaWebSocketClient = new AlpacaWebsocketClient(keyId, secret, baseAPIURL);
-        marketDataWebSocketClient = new MarketDataWebsocketClient(keyId, secret, baseDataUrl);
+        this.apiVersion = apiVersion;
+        this.keyID = keyID;
+        this.baseAPIURL = baseAPIURL;
+        this.baseDataUrl = baseDataURL;
+
+        boolean isOAuth = oAuthToken != null;
+
+        alpacaRequest = isOAuth ? new AlpacaRequest(oAuthToken) :
+                new AlpacaRequest(keyID, secret);
+        alpacaWebSocketClient = isOAuth ? new AlpacaWebsocketClient(oAuthToken, baseAPIURL) :
+                new AlpacaWebsocketClient(keyID, secret, baseAPIURL);
+        marketDataWebSocketClient = isOAuth ? new MarketDataWebsocketClient(oAuthToken, baseDataURL) :
+                new MarketDataWebsocketClient(keyID, secret, baseDataURL);
 
         LOGGER.debug(this.toString());
     }
@@ -1736,7 +1746,7 @@ public class AlpacaAPI {
                 .add("apiVersion = " + apiVersion)
                 .add("baseAPIURL = " + baseAPIURL)
                 .add("baseDataUrl = " + baseDataUrl)
-                .add("keyId = " + keyId)
+                .add("keyID = " + keyID)
                 .toString();
     }
 }

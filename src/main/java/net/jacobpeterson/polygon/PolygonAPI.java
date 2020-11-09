@@ -61,23 +61,23 @@ public class PolygonAPI {
     /** The logger. */
     private static final Logger LOGGER = LogManager.getLogger(PolygonAPI.class);
 
-    /** The Polygon websocket client. */
+    /** The PolygonWebsocketClient. */
     private final PolygonWebsocketClient polygonWebsocketClient;
 
     /** The polygon request. */
     private final PolygonRequest polygonRequest;
 
-    /** The base api url. */
+    /** The base API URL. */
     private final String baseAPIURL;
 
-    /** The Websocket url. */
+    /** The Websocket URL. */
     private final String websocketURL;
 
-    /** The Key id. */
+    /** The Key ID. */
     private final String keyID;
 
     /**
-     * Instantiates a new polygon API.
+     * Instantiates a new PolygonAPI.
      */
     public PolygonAPI() {
         this(PolygonProperties.KEY_ID_VALUE);
@@ -86,20 +86,20 @@ public class PolygonAPI {
     }
 
     /**
-     * Instantiates a new polygon API.
+     * Instantiates a new PolygonAPI.
      *
-     * @param keyId the key id
+     * @param keyID the key ID
      */
-    public PolygonAPI(String keyId) {
-        this(PolygonProperties.BASE_API_URL_VALUE, PolygonProperties.POLYGON_WEB_SOCKET_SERVER_URL_VALUE, keyId);
+    public PolygonAPI(String keyID) {
+        this(PolygonProperties.BASE_API_URL_VALUE, PolygonProperties.POLYGON_WEB_SOCKET_SERVER_URL_VALUE, keyID);
     }
 
     /**
      * Instantiates a new polygon API.
      *
-     * @param baseAPIURL   the base api url
-     * @param websocketURL the websocket url
-     * @param keyID        the key id
+     * @param baseAPIURL   the base API URL
+     * @param websocketURL the websocket URL
+     * @param keyID        the key ID
      */
     public PolygonAPI(String baseAPIURL, String websocketURL, String keyID) {
         this.baseAPIURL = baseAPIURL;

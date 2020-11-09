@@ -49,6 +49,9 @@ public class AlpacaWebsocketClient implements WebsocketClient {
     /** The secret. */
     private final String secret;
 
+    /** The OAuth token. */
+    private final String oAuthToken;
+
     /** The Base api url. */
     private final String streamAPIURL;
 
@@ -62,15 +65,31 @@ public class AlpacaWebsocketClient implements WebsocketClient {
     private boolean authenticated;
 
     /**
-     * Instantiates a new Alpaca websocket client.
+     * Instantiates a new AlpacaWebsocketClient.
      *
-     * @param keyId      the key id
+     * @param keyId      the key ID
      * @param secret     the secret
      * @param baseAPIURL the base API URL
      */
     public AlpacaWebsocketClient(String keyId, String secret, String baseAPIURL) {
         this.keyId = keyId;
         this.secret = secret;
+        this.oAuthToken = null;
+        this.streamAPIURL = baseAPIURL.replace("https", "wss") + "/stream";
+
+        this.listeners = new ArrayList<>();
+    }
+
+    /**
+     * Instantiates a new AlpacaWebsocketClient.
+     *
+     * @param oAuthToken the OAuth token
+     * @param baseAPIURL the base API URL
+     */
+    public AlpacaWebsocketClient(String oAuthToken, String baseAPIURL) {
+        this.keyId = null;
+        this.secret = null;
+        this.oAuthToken = oAuthToken;
         this.streamAPIURL = baseAPIURL.replace("https", "wss") + "/stream";
 
         this.listeners = new ArrayList<>();
@@ -146,8 +165,13 @@ public class AlpacaWebsocketClient implements WebsocketClient {
         authRequest.addProperty("action", "authenticate");
 
         JsonObject payload = new JsonObject();
-        payload.addProperty("key_id", keyId);
-        payload.addProperty("secret_key", secret);
+
+        if (oAuthToken != null) {
+            payload.addProperty("oauth_token", oAuthToken);
+        } else {
+            payload.addProperty("key_id", keyId);
+            payload.addProperty("secret_key", secret);
+        }
 
         authRequest.add("data", payload);
 
