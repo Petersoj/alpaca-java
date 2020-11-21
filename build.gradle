@@ -144,7 +144,7 @@ processResources {
 //
 // START allJar task
 //
-// Used for creating a far jar (a jar packaged with dependencies)
+// Used for creating a fat jar (a jar packaged with dependencies)
 task allJar(type: Jar) {
     from {
         configurations.compile.collect { it.isDirectory() ? it : zipTree(it) }
