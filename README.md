@@ -36,7 +36,7 @@ Add the following dependency to your build.gradle file:
 
 ```
 dependencies {
-    compile "net.jacobpeterson:alpaca-java:6.0"
+    compile "net.jacobpeterson:alpaca-java:6.0.1"
 }
 ```
 
@@ -48,7 +48,7 @@ Add the following dependency to your pom.xml file:
 <dependency>
     <groupId>net.jacobpeterson</groupId>
     <artifactId>alpaca-java</artifactId>
-    <version>6.0</version>
+    <version>6.0.1</version>
     <scope>compile</scope>
 </dependency>
 ```
@@ -65,12 +65,12 @@ that you use in your trading algorithm projects is indeed legitimate, we need to
 with the Jar MD5 checksum from this source code:
 1. Clone the repo somewhere: `git clone https://github.com/Petersoj/alpaca-java`
 2. `cd alpaca-java`
-3. Checkout/reset to the latest version: `git reset 6.0 --hard`
+3. Checkout/reset to the latest version: `git reset 6.0.1 --hard`
 4. Build the project: `./gradlew build`
     1. Note: if you build the project twice without a `clean` task in between (e.g. `./gradlew build; ./gradlew build`), the MD5 checksum will change.
-5. Generate the MD5 checksum: `md5 build/libs/alpaca-java-6.0.jar`
+5. Generate the MD5 checksum: `md5 build/libs/alpaca-java-6.0.1.jar`
 6. Confirm that the checksum value in Maven Central is the same as in step 4:
-`curl https://repo1.maven.org/maven2/net/jacobpeterson/alpaca-java/6.0/alpaca-java-6.0.jar.md5`
+`curl https://repo1.maven.org/maven2/net/jacobpeterson/alpaca-java/6.0.1/alpaca-java-6.0.1.jar.md5`
 
 If the checksums are different, please [create a new issue](https://github.com/Petersoj/alpaca-java/issues/new)!
 
