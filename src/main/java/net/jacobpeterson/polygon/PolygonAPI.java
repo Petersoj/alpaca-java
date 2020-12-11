@@ -6,7 +6,7 @@ import com.mashape.unirest.http.HttpResponse;
 import net.jacobpeterson.abstracts.websocket.exception.WebsocketException;
 import net.jacobpeterson.domain.polygon.aggregates.AggregatesResponse;
 import net.jacobpeterson.domain.polygon.conditionsmapping.ConditionsMapping;
-import net.jacobpeterson.domain.polygon.dailyopenclose.DailyOpenCloseResponse;
+import net.jacobpeterson.domain.polygon.dailyopenclose.DailyOpenClose;
 import net.jacobpeterson.domain.polygon.exchanges.Exchange;
 import net.jacobpeterson.domain.polygon.groupeddaily.GroupedDailyResponse;
 import net.jacobpeterson.domain.polygon.historicquotes.HistoricQuotesResponse;
@@ -53,7 +53,8 @@ import java.util.ArrayList;
 import java.util.StringJoiner;
 
 /**
- * The class {@link PolygonAPI}. Note that most of these methods are blocking methods and this class in NOT thread-safe.
+ * The class {@link PolygonAPI}. Note that most of these methods are blocking methods and this class in NOT
+ * thread-safe.
  */
 public class PolygonAPI {
 
@@ -651,7 +652,7 @@ public class PolygonAPI {
      * @throws PolygonAPIRequestException the polygon API exception
      * @see <a href="https://polygon.io/docs/#!/Stocks--Equities/get_v1_open_close_symbol_date">Daily Open/Close</a>
      */
-    public DailyOpenCloseResponse getDailyOpenClose(String symbol, LocalDate date) throws PolygonAPIRequestException {
+    public DailyOpenClose getDailyOpenClose(String symbol, LocalDate date) throws PolygonAPIRequestException {
         Preconditions.checkNotNull(symbol);
         Preconditions.checkNotNull(date);
 
@@ -666,7 +667,7 @@ public class PolygonAPI {
             throw new PolygonAPIRequestException(response);
         }
 
-        return polygonRequest.getResponseObject(response, DailyOpenCloseResponse.class);
+        return polygonRequest.getResponseObject(response, DailyOpenClose.class);
     }
 
     /**

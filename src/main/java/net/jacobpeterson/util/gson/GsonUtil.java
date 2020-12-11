@@ -10,6 +10,7 @@ import org.apache.logging.log4j.Logger;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
+import java.time.LocalDate;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -30,6 +31,7 @@ public class GsonUtil {
     /** The constant GSON which include ISO date time to ZonedDateTime objects */
     public static final Gson GSON = new GsonBuilder()
             .registerTypeAdapter(ZonedDateTime.class, new ZonedDateTimeAdapter())
+            .registerTypeAdapter(LocalDate.class, new LocalDateAdapter())
             .enableComplexMapKeySerialization()
             .setLenient()
             .create();

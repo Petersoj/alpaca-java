@@ -1,0 +1,46 @@
+{
+  "type": "object",
+  "title": "See <a href=\"https://polygon.io/docs/get_v1_open-close__stocksTicker___date__anchor\">https://polygon.io/docs/get_v1_open-close__stocksTicker___date__anchor</a>",
+  "properties": {
+    "status": {
+      "existingJavaType": "java.lang.String",
+      "title": "The status of this request's response."
+    },
+    "from": {
+      "existingJavaType": "java.time.LocalDate",
+      "title": "The requested date."
+    },
+    "symbol": {
+      "existingJavaType": "java.lang.String",
+      "title": "The exchange symbol that this item is traded under."
+    },
+    "open": {
+      "existingJavaType": "java.lang.Double",
+      "title": "The open price for the symbol in the given time period."
+    },
+    "high": {
+      "existingJavaType": "java.lang.Double",
+      "title": "The highest price for the symbol in the given time period."
+    },
+    "low": {
+      "existingJavaType": "java.lang.Double",
+      "title": "The lowest price for the symbol in the given time period."
+    },
+    "close": {
+      "existingJavaType": "java.lang.Double",
+      "title": "The close price for the symbol in the given time period."
+    },
+    "volume": {
+      "existingJavaType": "java.lang.Long",
+      "title": "The trading volume of the symbol in the given time period."
+    },
+    "preMarket": {
+      "existingJavaType": "java.lang.Double",
+      "title": "The open price of the ticker symbol in pre-market trading."
+    },
+    "afterHours": {
+      "existingJavaType": "java.lang.Double",
+      "title": "The close price of the ticker symbol in after hours trading."
+    }
+  }
+}
