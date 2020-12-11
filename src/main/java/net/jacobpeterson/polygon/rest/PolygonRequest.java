@@ -8,7 +8,7 @@ import net.jacobpeterson.polygon.properties.PolygonProperties;
 import java.io.InputStream;
 
 /**
- * The Class PolygonRequest.
+ * The Class {@link PolygonRequest}.
  */
 public class PolygonRequest extends AbstractRequest {
 
@@ -22,7 +22,7 @@ public class PolygonRequest extends AbstractRequest {
     private final String keyId;
 
     /**
-     * Instantiates a new polygon request.
+     * Instantiates a new {@link PolygonRequest}.
      *
      * @param keyID the key id
      */

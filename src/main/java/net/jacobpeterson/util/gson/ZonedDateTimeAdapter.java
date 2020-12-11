@@ -13,7 +13,7 @@ import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 
 /**
- * The GSON ZonedDateTime (de)serialization adapter.
+ * The GSON {@link ZonedDateTimeAdapter} (de)serialization adapter.
  */
 public class ZonedDateTimeAdapter implements JsonSerializer<ZonedDateTime>, JsonDeserializer<ZonedDateTime> {
 

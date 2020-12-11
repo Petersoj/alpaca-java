@@ -7,12 +7,12 @@ import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.ThreadFactory;
 
 /**
- * The Class ScheduledThreadPoolExecutorTracer.
+ * The Class {@link ScheduledThreadPoolExecutorTracer}.
  */
 class ScheduledThreadPoolExecutorTracer extends ScheduledThreadPoolExecutor {
 
     /**
-     * Instantiates a new scheduled thread pool executor tracer.
+     * Instantiates a new {@link ScheduledThreadPoolExecutorTracer}.
      *
      * @param corePoolSize  the core pool size
      * @param threadFactory the thread factory
@@ -22,7 +22,7 @@ class ScheduledThreadPoolExecutorTracer extends ScheduledThreadPoolExecutor {
     }
 
     /**
-     * Instantiates a new scheduled thread pool executor tracer.
+     * Instantiates a new {@link ScheduledThreadPoolExecutorTracer}.
      *
      * @param corePoolSize the core pool size
      */

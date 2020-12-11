@@ -37,7 +37,7 @@ import java.util.StringJoiner;
 import java.util.stream.Collectors;
 
 /**
- * The Class WebsocketClient.
+ * The Class {@link PolygonWebsocketClient}.
  */
 public class PolygonWebsocketClient implements WebsocketClient {
 
@@ -66,7 +66,7 @@ public class PolygonWebsocketClient implements WebsocketClient {
     private boolean authenticated;
 
     /**
-     * Instantiates a new Polygon websocket client.
+     * Instantiates a new {@link PolygonWebsocketClient}.
      *
      * @param keyId        the key id
      * @param websocketURL the websocket url
@@ -382,7 +382,7 @@ public class PolygonWebsocketClient implements WebsocketClient {
     }
 
     /**
-     * The enum Polygon stream action.
+     * The enum {@link PolygonStreamAction}.
      */
     private enum PolygonStreamAction {
         /** The subscribe. */
@@ -391,11 +391,11 @@ public class PolygonWebsocketClient implements WebsocketClient {
         /** The unsubscribe. */
         UNSUBSCRIBE("unsubscribe");
 
-        /** The api name. */
+        /** The API name. */
         String apiName;
 
         /**
-         * Instantiates a new stream action.
+         * Instantiates a new {@link PolygonStreamAction}.
          *
          * @param apiName the api name
          */
@@ -404,9 +404,9 @@ public class PolygonWebsocketClient implements WebsocketClient {
         }
 
         /**
-         * Gets api name.
+         * Gets API name.
          *
-         * @return the api name
+         * @return the API name
          */
         public String getAPIName() {
             return apiName;

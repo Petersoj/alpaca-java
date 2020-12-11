@@ -7,7 +7,7 @@ import java.util.StringJoiner;
 import static net.jacobpeterson.util.properties.PropertyUtil.getProperty;
 
 /**
- * The Class AlpacaProperties.
+ * The Class {@link PolygonProperties}.
  */
 public class PolygonProperties {
 

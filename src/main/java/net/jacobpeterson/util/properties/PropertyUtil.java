@@ -11,7 +11,7 @@ import java.util.Map;
 import java.util.Properties;
 
 /**
- * The type Property util.
+ * The type {@link PropertyUtil}.
  */
 public class PropertyUtil {
 

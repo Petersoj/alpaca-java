@@ -34,7 +34,6 @@ import net.jacobpeterson.polygon.enums.FinancialReportType;
 import net.jacobpeterson.polygon.enums.FinancialSort;
 import net.jacobpeterson.polygon.enums.GainersLosersDirection;
 import net.jacobpeterson.polygon.enums.Market;
-import net.jacobpeterson.polygon.enums.StockType;
 import net.jacobpeterson.polygon.enums.TickerSort;
 import net.jacobpeterson.polygon.enums.Timespan;
 import net.jacobpeterson.polygon.properties.PolygonProperties;
@@ -54,7 +53,7 @@ import java.util.ArrayList;
 import java.util.StringJoiner;
 
 /**
- * The class PolygonAPI. Note that most of these methods are blocking methods and this class in NOT thread-safe.
+ * The class {@link PolygonAPI}. Note that most of these methods are blocking methods and this class in NOT thread-safe.
  */
 public class PolygonAPI {
 
@@ -77,7 +76,7 @@ public class PolygonAPI {
     private final String keyID;
 
     /**
-     * Instantiates a new PolygonAPI.
+     * Instantiates a new {@link PolygonAPI}.
      */
     public PolygonAPI() {
         this(PolygonProperties.KEY_ID_VALUE);
@@ -86,7 +85,7 @@ public class PolygonAPI {
     }
 
     /**
-     * Instantiates a new PolygonAPI.
+     * Instantiates a new {@link PolygonAPI}.
      *
      * @param keyID the key ID
      */
@@ -95,7 +94,7 @@ public class PolygonAPI {
     }
 
     /**
-     * Instantiates a new polygon API.
+     * Instantiates a new {@link PolygonAPI}.
      *
      * @param baseAPIURL   the base API URL
      * @param websocketURL the websocket URL
@@ -116,7 +115,7 @@ public class PolygonAPI {
      * Query all ticker symbols which are supported by Polygon.io.
      *
      * @param tickerSort Which field to sort by.
-     * @param stockType  If you want the results to only container a certain type.
+     * @param tickerType Get tickers of a certain type. See Ticker Types for available types.
      * @param market     Get tickers for a specific market
      * @param locale     Get tickers for a specific region/locale
      * @param search     Search the name of tickers
@@ -129,7 +128,7 @@ public class PolygonAPI {
      * @throws PolygonAPIRequestException the polygon API exception
      * @see <a href="https://polygon.io/docs/#!/Reference/get_v2_reference_tickers">Tickers</a>
      */
-    public TickersResponse getTickers(TickerSort tickerSort, StockType stockType, Market market, String locale,
+    public TickersResponse getTickers(TickerSort tickerSort, String tickerType, Market market, String locale,
             String search, Integer perpage, Integer page, Boolean active) throws PolygonAPIRequestException {
         PolygonRequestBuilder builder = new PolygonRequestBuilder(baseAPIURL, PolygonConstants.VERSION_2_ENDPOINT,
                 PolygonConstants.REFERENCE_ENDPOINT,
@@ -139,8 +138,8 @@ public class PolygonAPI {
             builder.appendURLParameter(PolygonConstants.SORT_PARAMETER, tickerSort.getAPIName());
         }
 
-        if (stockType != null) {
-            builder.appendURLParameter(PolygonConstants.TYPE_PARAMETER, stockType.getAPIName());
+        if (tickerType != null) {
+            builder.appendURLParameter(PolygonConstants.TYPE_PARAMETER, tickerType);
         }
 
         if (market != null) {

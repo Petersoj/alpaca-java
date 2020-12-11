@@ -9,7 +9,7 @@ import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 
 /**
- * The Class FormatUtil.
+ * The Class {@link FormatUtil}.
  */
 public class FormatUtil {
 

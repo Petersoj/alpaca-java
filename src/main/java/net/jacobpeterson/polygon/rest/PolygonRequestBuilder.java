@@ -5,12 +5,12 @@ import net.jacobpeterson.abstracts.rest.AbstractRequestBuilder;
 import java.util.Arrays;
 
 /**
- * The Class PolygonRequestBuilder.
+ * The Class {@link PolygonRequestBuilder}.
  */
 public class PolygonRequestBuilder extends AbstractRequestBuilder {
 
     /**
-     * Instantiates a new Polygon request builder.
+     * Instantiates a new {@link PolygonRequestBuilder}.
      *
      * @param baseUrl    the base url
      * @param apiVersion the api version

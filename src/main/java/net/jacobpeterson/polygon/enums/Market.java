@@ -3,36 +3,36 @@ package net.jacobpeterson.polygon.enums;
 import net.jacobpeterson.abstracts.enums.APIName;
 
 /**
- * The Enum SymbolsMarket.
+ * The Enum {@link Market}.
  */
 public enum Market implements APIName {
 
-    /** Stocks market. */
+    /** Stocks {@link Market}. */
     STOCKS("stocks"),
 
-    /** Indices market. */
+    /** Indices {@link Market}. */
     INDICES("indices"),
 
-    /** Crypto market */
+    /** Crypto {@link Market} */
     CRYPTO("crypto"),
 
-    /** Fx market. */
+    /** Forex {@link Market}. */
     FX("fx"),
 
-    /** Bonds market. */
+    /** Bonds {@link Market}. */
     BONDS("bonds"),
 
-    /** Mf market. */
+    /** Mutual Funds {@link Market}. */
     MF("mf"),
 
-    /** Mmf market. */
+    /** Money Market Funds {@link Market}. */
     MMF("mmf");
 
-    /** The api name. */
+    /** The API name. */
     String apiName;
 
     /**
-     * Instantiates a new order type.
+     * Instantiates a new {@link Market}.
      *
      * @param apiName the api name
      */

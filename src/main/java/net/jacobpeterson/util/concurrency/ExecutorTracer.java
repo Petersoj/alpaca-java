@@ -16,12 +16,12 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
 /**
- * The Class ExecutorTracer.
+ * The Class {@link ExecutorTracer}.
  */
 public class ExecutorTracer {
 
     /**
-     * Instantiates a new executor tracer.
+     * Instantiates a new {@link ExecutorTracer}.
      */
     private ExecutorTracer() {
     }
@@ -129,7 +129,7 @@ public class ExecutorTracer {
     }
 
     /**
-     * The Class DelegatedExecutorService.
+     * The Class {@link DelegatedExecutorService}.
      */
     public static class DelegatedExecutorService extends AbstractExecutorService {
 
@@ -272,7 +272,7 @@ public class ExecutorTracer {
     }
 
     /**
-     * The Class FinalizableDelegatedExecutorService.
+     * The Class {@link FinalizableDelegatedExecutorService}.
      */
     public static class FinalizableDelegatedExecutorService extends DelegatedExecutorService {
 
@@ -296,7 +296,7 @@ public class ExecutorTracer {
     }
 
     /**
-     * The Class DelegatedScheduledExecutorService.
+     * The Class {@link DelegatedScheduledExecutorService}.
      */
     static class DelegatedScheduledExecutorService extends DelegatedExecutorService
             implements ScheduledExecutorService {

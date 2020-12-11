@@ -13,13 +13,13 @@ import javax.websocket.Session;
 import java.net.URI;
 
 /**
- * The type Polygon websocket client endpoint.
+ * The type {@link PolygonWebsocketClientEndpoint}.
  */
 @ClientEndpoint(subprotocols = "TEXT")
 public class PolygonWebsocketClientEndpoint extends AbstractWebsocketClientEndpoint {
 
     /**
-     * Instantiates a new Polygon websocket client endpoint.
+     * Instantiates a new {@link PolygonWebsocketClientEndpoint}.
      *
      * @param websocketClient the websocket client
      * @param endpointURI     the endpoint uri

@@ -9,12 +9,12 @@ import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
 /**
- * The Class ThreadPoolExecutorTracer.
+ * The Class {@link ThreadPoolExecutorTracer}.
  */
 public class ThreadPoolExecutorTracer extends ThreadPoolExecutor {
 
     /**
-     * Instantiates a new thread pool executor tracer.
+     * Instantiates a new {@link ThreadPoolExecutorTracer}.
      *
      * @param corePoolSize    the core pool size
      * @param maximumPoolSize the maximum pool size
@@ -28,7 +28,7 @@ public class ThreadPoolExecutorTracer extends ThreadPoolExecutor {
     }
 
     /**
-     * Instantiates a new thread pool executor tracer.
+     * Instantiates a new {@link ThreadPoolExecutorTracer}.
      *
      * @param corePoolSize    the core pool size
      * @param maximumPoolSize the maximum pool size

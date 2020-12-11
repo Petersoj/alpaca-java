@@ -16,13 +16,16 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
 
+/**
+ * The type {@link GsonUtil}.
+ */
 public class GsonUtil {
 
     /** The logger. */
     private static final Logger LOGGER = LogManager.getLogger(GsonUtil.class);
 
     /** The constant CLASS_ANNOTATION_CACHE. */
-    private static final HashMap<Class, ArrayList<SerializedName>> CLASS_ANNOTATION_CACHE = new HashMap<>();
+    private static final HashMap<Class<?>, ArrayList<SerializedName>> CLASS_ANNOTATION_CACHE = new HashMap<>();
 
     /** The constant GSON which include ISO date time to ZonedDateTime objects */
     public static final Gson GSON = new GsonBuilder()
@@ -43,7 +46,7 @@ public class GsonUtil {
      *
      * @return the boolean
      */
-    public static boolean doesGsonPOJOMatch(Class jsonPOJOClass, JsonObject jsonObject) {
+    public static boolean doesGsonPOJOMatch(Class<?> jsonPOJOClass, JsonObject jsonObject) {
         ArrayList<SerializedName> gsonSerializedNameAnnotations = getGsonSerializedNameAnnotations(jsonPOJOClass);
         Set<String> jsonObjectKeys = jsonObject.keySet();
 
@@ -65,7 +68,7 @@ public class GsonUtil {
      *
      * @return the gson serialized name annotations
      */
-    private static synchronized ArrayList<SerializedName> getGsonSerializedNameAnnotations(Class theClass) {
+    private static synchronized ArrayList<SerializedName> getGsonSerializedNameAnnotations(Class<?> theClass) {
         // Use a caching system because Reflection can be quite expensive
         if (CLASS_ANNOTATION_CACHE.containsKey(theClass)) {
             return CLASS_ANNOTATION_CACHE.get(theClass);
@@ -77,7 +80,7 @@ public class GsonUtil {
 
         ArrayList<SerializedName> serializedNameAnnotations = new ArrayList<>();
 
-        Class currentClass = theClass;
+        Class<?> currentClass = theClass;
         do {
             for (Field field : currentClass.getDeclaredFields()) { // Loop through all the fields
                 for (Annotation annotation : field.getDeclaredAnnotations()) { // Loop through all the field annotations

@@ -2,17 +2,22 @@ package net.jacobpeterson.polygon.enums;
 
 import net.jacobpeterson.abstracts.enums.APIName;
 
+/**
+ * The enum {@link GainersLosersDirection}.
+ */
 public enum GainersLosersDirection implements APIName {
 
+    /** Gainers {@link GainersLosersDirection}. */
     GAINERS("gainers"),
 
+    /** Losers {@link GainersLosersDirection}. */
     LOSERS("losers");
 
-    /** The api name. */
+    /** The API name. */
     String apiName;
 
     /**
-     * Instantiates a new Gainers losers direction.
+     * Instantiates a new {@link GainersLosersDirection}.
      *
      * @param apiName the api name
      */

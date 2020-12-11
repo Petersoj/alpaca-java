@@ -15,6 +15,9 @@ import javax.xml.xpath.XPathFactory;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 
+/**
+ * The type {@link Documentation2JSONSchema}.
+ */
 public class Documentation2JSONSchema {
 
     /**

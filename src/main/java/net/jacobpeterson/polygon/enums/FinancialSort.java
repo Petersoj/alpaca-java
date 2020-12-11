@@ -3,27 +3,27 @@ package net.jacobpeterson.polygon.enums;
 import net.jacobpeterson.abstracts.enums.APIName;
 
 /**
- * The enum Financial sort.
+ * The enum {@link FinancialSort}.
  */
 public enum FinancialSort implements APIName {
 
-    /** Report period ascending financial sort. */
+    /** Report period ascending {@link FinancialSort}. */
     REPORT_PERIOD_ASCENDING("reportPeriod"),
 
-    /** Report period descending financial sort */
+    /** Report period descending {@link FinancialSort} */
     REPORT_PERIOD_DESCENDING("-reportPeriod"),
 
-    /** Calendar date ascending financial sort. */
+    /** Calendar date ascending {@link FinancialSort}. */
     CALENDAR_DATE_ASCENDING("calendarDate"),
 
-    /** Calendar date descending financial sort. */
+    /** Calendar date descending {@link FinancialSort}. */
     CALENDAR_DATE_DESCENDING("-calendarDate");
 
-    /** The api name. */
+    /** The API name. */
     String apiName;
 
     /**
-     * Instantiates a new Financial sort.
+     * Instantiates a new {@link FinancialSort}.
      *
      * @param apiName the api name
      */

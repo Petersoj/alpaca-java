@@ -3,21 +3,21 @@ package net.jacobpeterson.polygon.enums;
 import net.jacobpeterson.abstracts.enums.APIName;
 
 /**
- * The enum Condition mappings type.
+ * The enum {@link ConditionMappingsType}.
  */
 public enum ConditionMappingsType implements APIName {
 
-    /** Trades condition mapping type. */
+    /** Trades {@link ConditionMappingsType}. */
     TRADES("trades"),
 
-    /** Quotes condition mapping type. */
+    /** Quotes {@link ConditionMappingsType}. */
     QUOTES("quotes");
 
-    /** The api name. */
+    /** The API name. */
     String apiName;
 
     /**
-     * Instantiates a new Condition mappings type.
+     * Instantiates a new {@link ConditionMappingsType}.
      *
      * @param apiName the api name
      */

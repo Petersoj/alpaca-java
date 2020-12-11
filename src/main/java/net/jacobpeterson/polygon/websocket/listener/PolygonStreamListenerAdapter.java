@@ -11,7 +11,7 @@ import java.util.Map.Entry;
 import java.util.Set;
 
 /**
- * The Class PolygonStreamListenerAdapter.
+ * The Class {@link PolygonStreamListenerAdapter}.
  */
 public class PolygonStreamListenerAdapter implements PolygonStreamListener {
 
@@ -19,7 +19,7 @@ public class PolygonStreamListenerAdapter implements PolygonStreamListener {
     private final Map<String, Set<PolygonStreamMessageType>> stockChannels = new HashMap<>();
 
     /**
-     * Instantiates a new polygon stream listener adapter.
+     * Instantiates a new {@link PolygonStreamListenerAdapter}.
      *
      * @param ticker       the ticker
      * @param channelTypes the channel types
@@ -33,7 +33,7 @@ public class PolygonStreamListenerAdapter implements PolygonStreamListener {
     }
 
     /**
-     * Instantiates a new polygon stream listener adapter.
+     * Instantiates a new {@link PolygonStreamListenerAdapter}.
      *
      * @param tickers      the tickers
      * @param channelTypes the channel types
@@ -49,7 +49,7 @@ public class PolygonStreamListenerAdapter implements PolygonStreamListener {
     }
 
     /**
-     * Instantiates a new polygon stream listener adapter.
+     * Instantiates a new {@link PolygonStreamListenerAdapter}.
      *
      * @param stockChannels the stock channel types
      */

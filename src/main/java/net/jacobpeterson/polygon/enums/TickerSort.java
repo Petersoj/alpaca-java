@@ -3,27 +3,27 @@ package net.jacobpeterson.polygon.enums;
 import net.jacobpeterson.abstracts.enums.APIName;
 
 /**
- * The enum Ticker sort.
+ * The enum {@link TickerSort}.
  */
 public enum TickerSort implements APIName {
 
-    /** The ticker ascending. */
+    /** The ticker ascending {@link TickerSort}. */
     TICKER_ASCENDING("ticker"),
 
-    /** The ticker descending. */
+    /** The ticker descending {@link TickerSort}. */
     TICKER_DESCENDING("-ticker"),
 
-    /** The type ascending. */
+    /** The type ascending {@link TickerSort}. */
     TYPE_ASCENDING("type"),
 
-    /** The type descending. */
+    /** The type descending {@link TickerSort}. */
     TYPE_DESCENDING("-type");
 
-    /** The api name. */
+    /** The API name. */
     String apiName;
 
     /**
-     * Instantiates a new order type.
+     * Instantiates a new {@link TickerSort}.
      *
      * @param apiName the api name
      */

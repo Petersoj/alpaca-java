@@ -1,7 +1,7 @@
 package net.jacobpeterson.polygon;
 
 /**
- * The type Polygon constants.
+ * The type {@link PolygonConstants}.
  */
 public class PolygonConstants {
 

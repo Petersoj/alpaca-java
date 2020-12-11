@@ -3,33 +3,33 @@ package net.jacobpeterson.polygon.enums;
 import net.jacobpeterson.abstracts.enums.APIName;
 
 /**
- * The enum Financial report type.
+ * The enum {@link FinancialReportType}.
  */
 public enum FinancialReportType implements APIName {
 
-    /** Y financial report type. */
+    /** Y {@link FinancialReportType}. */
     Y("Y"),
 
-    /** YA financial report type. */
+    /** YA {@link FinancialReportType}. */
     YA("YA"),
 
-    /** Q financial report type. */
+    /** Q {@link FinancialReportType}. */
     Q("Q"),
 
-    /** Qa financial report type. */
+    /** QA {@link FinancialReportType}. */
     QA("QA"),
 
-    /** T financial report type. */
+    /** T {@link FinancialReportType}. */
     T("T"),
 
-    /** Ta financial report type. */
+    /** TA {@link FinancialReportType}. */
     TA("TA");
 
-    /** The api name. */
+    /** The API name. */
     String apiName;
 
     /**
-     * Instantiates a new Financial report type.
+     * Instantiates a new {@link FinancialReportType}.
      *
      * @param apiName the api name
      */

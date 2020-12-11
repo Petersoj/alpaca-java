@@ -189,8 +189,8 @@ public class AlpacaAPI {
      * @param after         The response will contain only activities submitted after this date. (Cannot be used with
      *                      date.)
      * @param direction     asc or desc (default desc if unspecified.)
-     * @param pageSize      The maximum number of entries to return in the response. (See the section on paging above.)
-     * @param pageToken     The ID of the end of your current page of results. (See the section on paging above.)
+     * @param pageSize      The maximum number of entries to return in the response. (See the section on paging.)
+     * @param pageToken     The ID of the end of your current page of results. (See the section on paging.)
      * @param activityTypes the activity types (null for all activities)
      *
      * @return the account activities

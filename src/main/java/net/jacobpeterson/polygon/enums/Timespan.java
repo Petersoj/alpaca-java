@@ -3,36 +3,36 @@ package net.jacobpeterson.polygon.enums;
 import net.jacobpeterson.abstracts.enums.APIName;
 
 /**
- * The Enum Timespan.
+ * The Enum {@link Timespan}.
  */
 public enum Timespan implements APIName {
 
-    /** The Minute. */
+    /** The Minute {@link Timespan}. */
     MINUTE("minute"),
 
-    /** The Hour. */
+    /** The Hour {@link Timespan}. */
     HOUR("hour"),
 
-    /** The Day. */
+    /** The Day {@link Timespan}. */
     DAY("day"),
 
-    /** The Week. */
+    /** The Week {@link Timespan}. */
     WEEK("week"),
 
-    /** The Month. */
+    /** The Month {@link Timespan}. */
     MONTH("month"),
 
-    /** The Quarter. */
+    /** The Quarter {@link Timespan}. */
     QUARTER("quarter"),
 
-    /** The Year. */
+    /** The Year {@link Timespan}. */
     YEAR("year");
 
-    /** The api name. */
+    /** The API name. */
     String apiName;
 
     /**
-     * Instantiates a new order type.
+     * Instantiates a new {@link Timespan}.
      *
      * @param apiName the api name
      */

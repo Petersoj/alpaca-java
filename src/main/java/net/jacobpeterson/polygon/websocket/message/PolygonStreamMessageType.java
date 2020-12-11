@@ -6,35 +6,35 @@ import net.jacobpeterson.abstracts.websocket.message.StreamMessageType;
 import net.jacobpeterson.util.gson.GsonUtil;
 
 /**
- * The enum Polygon stream message type.
+ * The enum {@link PolygonStreamMessageType}.
  */
 public enum PolygonStreamMessageType implements StreamMessageType, APIName {
 
-    /** Status polygon stream message type. */
+    /** Status {@link PolygonStreamMessageType}. */
     @SerializedName("status")
     STATUS(false),
 
-    /** Trade polygon stream message type. */
+    /** Trade {@link PolygonStreamMessageType}. */
     @SerializedName("T")
     TRADE(true),
 
-    /** Quote polygon stream message type. */
+    /** Quote {@link PolygonStreamMessageType}. */
     @SerializedName("Q")
     QUOTE(true),
 
-    /** Aggregate per second polygon stream message type. */
+    /** Aggregate per second {@link PolygonStreamMessageType}. */
     @SerializedName("A")
     AGGREGATE_PER_SECOND(true),
 
-    /** Aggregate per minute polygon stream message type. */
+    /** Aggregate per minute {@link PolygonStreamMessageType}. */
     @SerializedName("AM")
     AGGREGATE_PER_MINUTE(true);
 
-    /** The is api subscribable. */
+    /** Is API subscribable. */
     private final boolean isAPISubscribable;
 
     /**
-     * Instantiates a new Polygon stream message type.
+     * Instantiates a new {@link PolygonStreamMessageType}.
      *
      * @param isAPISubscribable the is api subscribable
      */
@@ -48,7 +48,7 @@ public enum PolygonStreamMessageType implements StreamMessageType, APIName {
     }
 
     /**
-     * Is api subscribable boolean.
+     * Is API subscribable boolean.
      *
      * @return the boolean
      */
