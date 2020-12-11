@@ -13,13 +13,13 @@ import javax.websocket.Session;
 import java.net.URI;
 
 /**
- * The type Market data websocket client endpoint.
+ * The type {@link MarketDataWebsocketClientEndpoint}.
  */
 @ClientEndpoint(subprotocols = "STRING")
 public class MarketDataWebsocketClientEndpoint extends AbstractWebsocketClientEndpoint {
 
     /**
-     * Instantiates a new Market data websocket client endpoint.
+     * Instantiates a new {@link MarketDataWebsocketClientEndpoint}.
      *
      * @param websocketClient the websocket client
      * @param endpointURI     the endpoint uri

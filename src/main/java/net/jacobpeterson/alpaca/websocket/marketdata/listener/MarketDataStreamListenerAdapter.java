@@ -10,7 +10,7 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- * The type Market data stream listener adapter.
+ * The type {@link MarketDataStreamListenerAdapter}.
  */
 public class MarketDataStreamListenerAdapter implements MarketDataStreamListener {
 
@@ -18,7 +18,7 @@ public class MarketDataStreamListenerAdapter implements MarketDataStreamListener
     private final Map<String, Set<MarketDataStreamMessageType>> dataStreams = new HashMap<>();
 
     /**
-     * Instantiates a new Market data stream listener adapter.
+     * Instantiates a new {@link MarketDataStreamListenerAdapter}.
      *
      * @param ticker           the ticker
      * @param dataMessageTypes the data message types
@@ -32,7 +32,7 @@ public class MarketDataStreamListenerAdapter implements MarketDataStreamListener
     }
 
     /**
-     * Instantiates a new Market data stream listener adapter.
+     * Instantiates a new {@link MarketDataStreamListenerAdapter}.
      *
      * @param tickers          the tickers
      * @param dataMessageTypes the data message types
@@ -48,7 +48,7 @@ public class MarketDataStreamListenerAdapter implements MarketDataStreamListener
     }
 
     /**
-     * Instantiates a new Market data stream listener adapter.
+     * Instantiates a new {@link MarketDataStreamListenerAdapter}.
      *
      * @param dataStreams the data streams
      */

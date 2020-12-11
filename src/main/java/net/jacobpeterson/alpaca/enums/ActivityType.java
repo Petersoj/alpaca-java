@@ -3,12 +3,15 @@ package net.jacobpeterson.alpaca.enums;
 import net.jacobpeterson.abstracts.enums.APIName;
 
 /**
- * The enum Activity type.
+ * The enum {@link AccountStatus}.
  *
  * @see
  * <a href="https://docs.alpaca.markets/api-documentation/api-v2/account-activities/">https://docs.alpaca.markets/api-documentation/api-v2/account-activities/</a>
  */
 public enum ActivityType implements APIName {
+
+    // The names of these enums must be the API name exactly
+    // @see AccountStatus#getAPIName()
 
     /** Order fills (both partial and full fills) */
     FILL,

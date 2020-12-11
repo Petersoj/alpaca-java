@@ -3,29 +3,27 @@ package net.jacobpeterson.alpaca.enums;
 import net.jacobpeterson.abstracts.enums.APIName;
 
 /**
- * The enum Account status.
- *
- * @see <a href="https://docs.alpaca.markets/api-documentation/api-v2/orders/">Account Status</a>
+ * The enum {@link OrderClass}.
  */
 public enum OrderClass implements APIName {
 
-    /** Simple order class. */
+    /** Simple {@link OrderClass}. */
     SIMPLE("simple"),
 
-    /** Bracket order class. */
+    /** Bracket {@link OrderClass}. */
     BRACKET("bracket"),
 
-    /** One-Cancels-Other order class. */
+    /** One-Cancels-Other {@link OrderClass}. */
     OCO("oco"),
 
-    /** One-Triggers-Other order class. */
+    /** One-Triggers-Other {@link OrderClass}. */
     OTO("oto");
 
-    /** The api name. */
+    /** The API name. */
     String apiName;
 
     /**
-     * Instantiates a new order class.
+     * Instantiates a new {@link OrderClass}.
      *
      * @param apiName the api name
      */

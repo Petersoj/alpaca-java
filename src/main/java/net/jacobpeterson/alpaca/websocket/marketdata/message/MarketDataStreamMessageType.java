@@ -6,27 +6,27 @@ import net.jacobpeterson.abstracts.websocket.message.StreamMessageType;
 import net.jacobpeterson.util.gson.GsonUtil;
 
 /**
- * The enum Market data stream message type.
+ * The enum {@link MarketDataStreamMessageType}.
  */
 public enum MarketDataStreamMessageType implements StreamMessageType, APIName {
 
-    /** Listening market data stream message type. */
+    /** Listening {@link MarketDataStreamMessageType}. */
     @SerializedName("listening")
     LISTENING(false),
 
-    /** Authorization market data stream message type. */
+    /** Authorization {@link MarketDataStreamMessageType}. */
     @SerializedName("authorization")
     AUTHORIZATION(false),
 
-    /** Trades market data stream message type. */
+    /** Trades {@link MarketDataStreamMessageType}. */
     @SerializedName("T")
     TRADES(true),
 
-    /** Quotes market data stream message type. */
+    /** Quotes {@link MarketDataStreamMessageType}. */
     @SerializedName("Q")
     QUOTES(true),
 
-    /** Aggregate minute market data stream message type. */
+    /** Aggregate {@link MarketDataStreamMessageType}. */
     @SerializedName("AM")
     AGGREGATE_MINUTE(true);
 
@@ -34,7 +34,7 @@ public enum MarketDataStreamMessageType implements StreamMessageType, APIName {
     private final boolean isAPISubscribable;
 
     /**
-     * Instantiates a new Market data stream message type.
+     * Instantiates a new {@link MarketDataStreamMessageType}.
      *
      * @param isAPISubscribable the is api subscribable
      */

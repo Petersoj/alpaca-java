@@ -6,12 +6,12 @@ import net.jacobpeterson.abstracts.rest.exception.AbstractAPIRequestException;
 import java.io.InputStream;
 
 /**
- * The Class AlpacaAPIException.
+ * The Class {@link AlpacaAPIRequestException}.
  */
 public class AlpacaAPIRequestException extends AbstractAPIRequestException {
 
     /**
-     * Instantiates a new Alpaca api exception.
+     * Instantiates a new {@link AlpacaAPIRequestException}.
      *
      * @param httpResponse the http response
      */

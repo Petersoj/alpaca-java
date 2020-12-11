@@ -5,7 +5,7 @@ import net.jacobpeterson.abstracts.rest.AbstractRequest;
 import net.jacobpeterson.alpaca.properties.AlpacaProperties;
 
 /**
- * The Class AlpacaRequest.
+ * The Class {@link AlpacaRequest}.
  */
 public class AlpacaRequest extends AbstractRequest {
 
@@ -22,7 +22,7 @@ public class AlpacaRequest extends AbstractRequest {
     private static final String AUTH_TOKEN = "Authorization";
 
     /**
-     * Instantiates a new AlpacaRequest.
+     * Instantiates a new {@link AlpacaRequest}.
      *
      * @param keyID     the key ID
      * @param secretKey the secret key
@@ -38,7 +38,7 @@ public class AlpacaRequest extends AbstractRequest {
     }
 
     /**
-     * Instantiates a new AlpacaRequest.
+     * Instantiates a new {@link AlpacaRequest}.
      *
      * @param oAuthToken the OAuth token
      */

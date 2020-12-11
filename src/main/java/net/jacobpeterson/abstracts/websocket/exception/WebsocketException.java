@@ -3,12 +3,12 @@ package net.jacobpeterson.abstracts.websocket.exception;
 import java.io.IOException;
 
 /**
- * The type WebsocketException.
+ * The type {@link WebsocketException}.
  */
 public class WebsocketException extends IOException {
 
     /**
-     * Instantiates a new WebsocketException.
+     * Instantiates a new {@link WebsocketException}.
      *
      * @param message the message
      */
@@ -17,7 +17,7 @@ public class WebsocketException extends IOException {
     }
 
     /**
-     * Instantiates a new WebsocketException.
+     * Instantiates a new {@link WebsocketException}.
      *
      * @param message the message
      * @param cause   the cause
@@ -27,7 +27,7 @@ public class WebsocketException extends IOException {
     }
 
     /**
-     * Instantiates a new WebsocketException.
+     * Instantiates a new {@link WebsocketException}.
      *
      * @param exception the Exception
      */

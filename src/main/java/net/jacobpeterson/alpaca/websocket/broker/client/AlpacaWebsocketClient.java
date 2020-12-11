@@ -33,7 +33,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
- * The type Alpaca websocket client.
+ * The type {@link AlpacaWebsocketClient}.
  */
 public class AlpacaWebsocketClient implements WebsocketClient {
 
@@ -65,7 +65,7 @@ public class AlpacaWebsocketClient implements WebsocketClient {
     private boolean authenticated;
 
     /**
-     * Instantiates a new AlpacaWebsocketClient.
+     * Instantiates a new {@link AlpacaWebsocketClient}.
      *
      * @param keyId      the key ID
      * @param secret     the secret
@@ -81,7 +81,7 @@ public class AlpacaWebsocketClient implements WebsocketClient {
     }
 
     /**
-     * Instantiates a new AlpacaWebsocketClient.
+     * Instantiates a new {@link AlpacaWebsocketClient}.
      *
      * @param oAuthToken the OAuth token
      * @param baseAPIURL the base API URL

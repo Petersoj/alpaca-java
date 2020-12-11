@@ -5,17 +5,11 @@ import java.util.StringJoiner;
 import static net.jacobpeterson.util.properties.PropertyUtil.getProperty;
 
 /**
- * The Class AlpacaProperties.
+ * The Class {@link AlpacaProperties}.
  */
 public class AlpacaProperties {
 
     private static final String ALPACA_PROPERTIES_FILE = "alpaca.properties";
-
-    /** The Constant API_VERSION_KEY. */
-    private static final String API_VERSION_KEY = "api_version";
-
-    /** The Constant API_VERSION_VALUE. */
-    public static final String API_VERSION_VALUE = getProperty(ALPACA_PROPERTIES_FILE, API_VERSION_KEY);
 
     /** The Constant KEY_ID_KEY. */
     private static final String KEY_ID_KEY = "key_id";
@@ -55,8 +49,6 @@ public class AlpacaProperties {
     public static String staticToString() {
         return new StringJoiner(", ", AlpacaProperties.class.getSimpleName() + "[", "]")
                 .add("ALPACA_PROPERTIES_FILE = " + ALPACA_PROPERTIES_FILE)
-                .add("API_VERSION_KEY = " + API_VERSION_KEY)
-                .add("API_VERSION_VALUE = " + API_VERSION_VALUE)
                 .add("BASE_API_URL_KEY = " + BASE_API_URL_KEY)
                 .add("BASE_API_URL_VALUE = " + BASE_API_URL_VALUE)
                 .add("BASE_DATA_URL_KEY = " + BASE_DATA_URL_KEY)

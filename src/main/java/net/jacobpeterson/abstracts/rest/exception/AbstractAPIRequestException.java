@@ -9,7 +9,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 
 /**
- * The type Abstract API request exception.
+ * The type {@link AbstractAPIRequestException}.
  */
 public abstract class AbstractAPIRequestException extends Exception {
 
@@ -41,7 +41,7 @@ public abstract class AbstractAPIRequestException extends Exception {
     protected String apiResponseMessage;
 
     /**
-     * Instantiates a new Abstract api request exception.
+     * Instantiates a new {@link AbstractAPIRequestException}.
      *
      * @param apiName      the api name
      * @param httpResponse the http response

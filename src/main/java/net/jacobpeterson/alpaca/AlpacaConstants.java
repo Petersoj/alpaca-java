@@ -1,7 +1,7 @@
 package net.jacobpeterson.alpaca;
 
 /**
- * The Class AlpacaConstants.
+ * The Class {@link AlpacaConstants}.
  */
 public class AlpacaConstants {
 
@@ -154,5 +154,4 @@ public class AlpacaConstants {
 
     /** The Constant UTF_ENCODING. */
     public static final String UTF_ENCODING = "UTF-8";
-
 }

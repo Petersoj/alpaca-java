@@ -8,7 +8,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 /**
- * The Class AlpacaStreamListenerAdapter.
+ * The Class {@link AlpacaStreamListenerAdapter}.
  */
 public class AlpacaStreamListenerAdapter implements AlpacaStreamListener {
 
@@ -16,7 +16,7 @@ public class AlpacaStreamListenerAdapter implements AlpacaStreamListener {
     private final HashSet<AlpacaStreamMessageType> streamUpdateTypes = new HashSet<>();
 
     /**
-     * Instantiates a new Alpaca stream listener adapter.
+     * Instantiates a new {@link AlpacaStreamListenerAdapter}.
      *
      * @param streamUpdateTypes the stream update types
      */

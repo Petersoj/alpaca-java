@@ -6,7 +6,7 @@ import net.jacobpeterson.abstracts.websocket.message.StreamMessage;
 import net.jacobpeterson.abstracts.websocket.message.StreamMessageType;
 
 /**
- * The type Websocket client.
+ * The type {@link WebsocketClient}.
  */
 public interface WebsocketClient {
 

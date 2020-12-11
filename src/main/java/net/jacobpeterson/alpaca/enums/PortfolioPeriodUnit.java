@@ -3,27 +3,27 @@ package net.jacobpeterson.alpaca.enums;
 import net.jacobpeterson.abstracts.enums.APIName;
 
 /**
- * The enum Portfolio period unit.
+ * The enum {@link PortfolioPeriodUnit}.
  */
 public enum PortfolioPeriodUnit implements APIName {
 
-    /** Day portfolio period unit. */
+    /** Day {@link PortfolioPeriodUnit}. */
     DAY("D"),
 
-    /** Week portfolio period unit. */
+    /** Week {@link PortfolioPeriodUnit}. */
     WEEK("W"),
 
-    /** Month portfolio period unit. */
+    /** Month {@link PortfolioPeriodUnit}. */
     MONTH("M"),
 
-    /** Year portfolio period unit. */
+    /** Year {@link PortfolioPeriodUnit}. */
     YEAR("A");
 
-    /** The api name. */
+    /** The API name. */
     String apiName;
 
     /**
-     * Instantiates a new Portfolio period unit.
+     * Instantiates a new {@link PortfolioPeriodUnit}.
      *
      * @param apiName the api name
      */

@@ -4,7 +4,7 @@ import net.jacobpeterson.abstracts.websocket.message.StreamMessage;
 import net.jacobpeterson.abstracts.websocket.message.StreamMessageType;
 
 /**
- * The type Stream listener.
+ * The type {@link StreamListener}.
  *
  * @param <T> the stream message type type parameter
  * @param <M> the stream message type parameter

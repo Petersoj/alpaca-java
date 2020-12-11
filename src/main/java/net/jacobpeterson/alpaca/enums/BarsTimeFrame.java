@@ -3,27 +3,27 @@ package net.jacobpeterson.alpaca.enums;
 import net.jacobpeterson.abstracts.enums.APIName;
 
 /**
- * The Enum BarsTimeFrame.
+ * The Enum {@link BarsTimeFrame}.
  */
 public enum BarsTimeFrame implements APIName {
 
-    /** One min bars time frame. */
+    /** 1 minute {@link BarsTimeFrame}. */
     ONE_MIN("1Min"),
 
-    /** Five minute bars time frame. */
+    /** 5 minute {@link BarsTimeFrame}. */
     FIVE_MINUTE("5Min"),
 
-    /** Fifteen minute bars time frame. */
+    /** 15 minute {@link BarsTimeFrame}. */
     FIFTEEN_MINUTE("15Min"),
 
-    /** One day bars time frame. */
+    /** 1 day {@link BarsTimeFrame}. */
     ONE_DAY("1D");
 
-    /** The api name. */
+    /** The API name. */
     String apiName;
 
     /**
-     * Instantiates a new bars time frame.
+     * Instantiates a new {@link BarsTimeFrame}.
      *
      * @param apiName the api name
      */

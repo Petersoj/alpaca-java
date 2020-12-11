@@ -4,25 +4,28 @@ import com.google.gson.annotations.SerializedName;
 import net.jacobpeterson.abstracts.enums.APIName;
 import net.jacobpeterson.util.gson.GsonUtil;
 
+/**
+ * The enum {@link PortfolioTimeFrame}.
+ */
 public enum PortfolioTimeFrame implements APIName {
 
-    /** One min portfolio time frame. */
+    /** 1 min {@link PortfolioTimeFrame}. */
     @SerializedName("1Min")
     ONE_MIN,
 
-    /** Five minute portfolio time frame. */
+    /** 5 minute {@link PortfolioTimeFrame}. */
     @SerializedName("5Min")
     FIVE_MINUTE,
 
-    /** Fifteen minute portfolio time frame. */
+    /** 15 minute {@link PortfolioTimeFrame}. */
     @SerializedName("15Min")
     FIFTEEN_MINUTE,
 
-    /** One hour portfolio time frame. */
+    /** 1 hour {@link PortfolioTimeFrame}. */
     @SerializedName("1H")
     ONE_HOUR,
 
-    /** One day portfolio time frame. */
+    /** 1 day {@link PortfolioTimeFrame}. */
     @SerializedName("1D")
     ONE_DAY;
 

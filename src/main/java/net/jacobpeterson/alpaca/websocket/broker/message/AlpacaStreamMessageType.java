@@ -6,31 +6,31 @@ import net.jacobpeterson.abstracts.websocket.message.StreamMessageType;
 import net.jacobpeterson.util.gson.GsonUtil;
 
 /**
- * The enum Alpaca stream message type.
+ * The enum {@link AlpacaStreamMessageType}.
  */
 public enum AlpacaStreamMessageType implements StreamMessageType, APIName {
 
-    /** Listening alpaca stream message type. */
+    /** Listening {@link AlpacaStreamMessageType}. */
     @SerializedName("listening")
     LISTENING(false),
 
-    /** Authorization alpaca stream message type. */
+    /** Authorization {@link AlpacaStreamMessageType}. */
     @SerializedName("authorization")
     AUTHORIZATION(false),
 
-    /** Trade updates alpaca stream message type. */
+    /** Trade updates {@link AlpacaStreamMessageType}. */
     @SerializedName("trade_updates")
     TRADE_UPDATES(true),
 
-    /** Account updates alpaca stream message type. */
+    /** Account updates {@link AlpacaStreamMessageType}. */
     @SerializedName("account_updates")
     ACCOUNT_UPDATES(true);
 
-    /** The is api subscribable. */
+    /** Is API subscribable. */
     private final boolean isAPISubscribable;
 
     /**
-     * Instantiates a new Alpaca stream message type.
+     * Instantiates a new {@link AlpacaStreamMessageType}.
      *
      * @param isAPISubscribable the is api subscribable
      */

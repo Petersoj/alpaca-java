@@ -37,7 +37,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
- * The type Alpaca websocket client.
+ * The type {@link MarketDataWebsocketClient}.
  */
 public class MarketDataWebsocketClient implements WebsocketClient {
 
@@ -90,7 +90,7 @@ public class MarketDataWebsocketClient implements WebsocketClient {
     private boolean authenticated;
 
     /**
-     * Instantiates a new MarketDataWebsocketClient.
+     * Instantiates a new {@link MarketDataWebsocketClient}.
      *
      * @param keyId       the key id
      * @param secret      the secret
@@ -106,7 +106,7 @@ public class MarketDataWebsocketClient implements WebsocketClient {
     }
 
     /**
-     * Instantiates a new MarketDataWebsocketClient.
+     * Instantiates a new {@link MarketDataWebsocketClient}.
      *
      * @param oAuthToken  the OAuth token
      * @param baseDataUrl the base data url

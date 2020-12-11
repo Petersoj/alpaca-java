@@ -18,7 +18,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * The type Abstract request.
+ * The type {@link AbstractRequest}.
  */
 public abstract class AbstractRequest {
 

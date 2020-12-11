@@ -14,13 +14,13 @@ import java.net.URI;
 import java.nio.charset.StandardCharsets;
 
 /**
- * The type Alpaca websocket client endpoint.
+ * The type {@link AlpacaWebsocketClientEndpoint}.
  */
 @ClientEndpoint(subprotocols = "BINARY")
 public class AlpacaWebsocketClientEndpoint extends AbstractWebsocketClientEndpoint {
 
     /**
-     * Instantiates a new Alpaca websocket client endpoint.
+     * Instantiates a new {@link AlpacaWebsocketClientEndpoint}.
      *
      * @param websocketClient the websocket client
      * @param endpointURI     the endpoint uri

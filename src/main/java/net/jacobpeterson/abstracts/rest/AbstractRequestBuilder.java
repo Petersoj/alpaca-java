@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * The type Abstract request builder.
+ * The type {@link AbstractRequestBuilder}.
  */
 public abstract class AbstractRequestBuilder {
 

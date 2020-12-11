@@ -3,24 +3,24 @@ package net.jacobpeterson.alpaca.enums;
 import net.jacobpeterson.abstracts.enums.APIName;
 
 /**
- * The Enum OrderStatus.
+ * The Enum {@link OrderStatus}.
  */
 public enum OrderStatus implements APIName {
 
-    /** The open. */
+    /** Open {@link OrderStatus}. */
     OPEN("open"),
 
-    /** The closed. */
+    /** Closed {@link OrderStatus}. */
     CLOSED("closed"),
 
-    /** The all. */
+    /** All {@link OrderStatus}es. */
     ALL("all");
 
-    /** The api name. */
+    /** The API name. */
     String apiName;
 
     /**
-     * Instantiates a new order status.
+     * Instantiates a new {@link OrderStatus}.
      *
      * @param apiName the api name
      */

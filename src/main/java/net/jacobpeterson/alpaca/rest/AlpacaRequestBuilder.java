@@ -5,12 +5,12 @@ import net.jacobpeterson.abstracts.rest.AbstractRequestBuilder;
 import java.util.Arrays;
 
 /**
- * The Class AlpacaRequestBuilder.
+ * The Class {@link AlpacaRequestBuilder}.
  */
 public class AlpacaRequestBuilder extends AbstractRequestBuilder {
 
     /**
-     * Instantiates a new alpaca request builder.
+     * Instantiates a new {@link AlpacaRequestBuilder}.
      *
      * @param baseUrl    the base url
      * @param apiVersion the api version

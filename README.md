@@ -78,9 +78,9 @@ The current MD5 checksum of build `6.0.1` is: `425532e598e3d812b29a3270cf4c5e73`
 
 ## Configuration
 
-If you plan on using the alpaca.properties, set the following properties in an alpaca.properties file on the classpath:
+Creating an `alpaca.properties` file on the classpath of the following format allows you to easily load various properties
+using the `AlpacaAPI()` default constructor:
 ```
-api_version = <v1 or v2>
 key_id = <YOUR KEY>
 secret = <YOUR SECRET>
 base_api_url = https://paper-api.alpaca.markets
@@ -89,10 +89,10 @@ user_agent=a_user_agent
 ```
 The default values for `alpaca.properties` can be found [here](https://github.com/Petersoj/alpaca-java/tree/master/src/main/resources).
 
-Similarly, set the following properties in a polygon.properties file on the classpath for using the PolygonAPI:
+Similarly, creating a `polygon.properties` file on the classpath of the following format allows you to easily load various properties
+using the `PolygonAPI()` default constructor:
 ```
-#key_id will default to what is set in alpaca.properties
-key_id = <INSERT HERE>
+key_id = <YOUR KEY> (Note that this will default to what is set in alpaca.properties)
 base_api_url = https://api.polygon.io
 web_socket_server_url = wss://alpaca.socket.polygon.io/stocks
 user_agent=a_user_agent

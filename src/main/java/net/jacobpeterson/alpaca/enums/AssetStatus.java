@@ -3,21 +3,21 @@ package net.jacobpeterson.alpaca.enums;
 import net.jacobpeterson.abstracts.enums.APIName;
 
 /**
- * The Enum AssetStatus.
+ * The Enum {@link AssetStatus}.
  */
 public enum AssetStatus implements APIName {
 
-    /** The active. */
+    /** The active {@link AssetStatus}. */
     ACTIVE("active"),
 
-    /** The inactive. */
+    /** The inactive {@link AssetStatus}. */
     INACTIVE("inactive");
 
-    /** The api name. */
+    /** The API name. */
     String apiName;
 
     /**
-     * Instantiates a new asset status.
+     * Instantiates a new {@link AssetStatus}.
      *
      * @param apiName the api name
      */

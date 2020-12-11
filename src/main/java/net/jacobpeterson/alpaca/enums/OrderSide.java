@@ -3,21 +3,21 @@ package net.jacobpeterson.alpaca.enums;
 import net.jacobpeterson.abstracts.enums.APIName;
 
 /**
- * The Enum OrderSide.
+ * The Enum {@link OrderSide}.
  */
 public enum OrderSide implements APIName {
 
-    /** The buy. */
+    /** The buy {@link OrderSide}. */
     BUY("buy"),
 
-    /** The sell. */
+    /** The sell {@link OrderSide}. */
     SELL("sell");
 
-    /** The api name. */
+    /** The API name. */
     String apiName;
 
     /**
-     * Instantiates a new order side.
+     * Instantiates a new {@link OrderSide}.
      *
      * @param apiName the api name
      */

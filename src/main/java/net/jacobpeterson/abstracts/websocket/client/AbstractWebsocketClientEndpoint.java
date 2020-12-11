@@ -15,7 +15,7 @@ import java.net.URI;
 import java.util.concurrent.ExecutorService;
 
 /**
- * The type Abstract websocket client endpoint.
+ * The type {@link AbstractWebsocketClientEndpoint}.
  * <br>
  * NOTES: You MUST annotate a subclass with {@link javax.websocket.ClientEndpoint} and the appropriate websocket
  * subprotocols because websocket annotations don't work with inheritance. The subclass must also contain separate
@@ -49,7 +49,7 @@ public abstract class AbstractWebsocketClientEndpoint {
     private Session userSession;
 
     /**
-     * Instantiates a new Abstract websocket client endpoint.
+     * Instantiates a new {@link AbstractWebsocketClientEndpoint}.
      *
      * @param websocketClient   the websocket client
      * @param endpointURI       the endpoint uri

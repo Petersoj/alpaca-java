@@ -3,21 +3,21 @@ package net.jacobpeterson.alpaca.enums;
 import net.jacobpeterson.abstracts.enums.APIName;
 
 /**
- * The Enum Direction.
+ * The Enum {@link Direction}.
  */
 public enum Direction implements APIName {
 
-    /** The asc. */
+    /** The Ascending {@link Direction}. */
     ASCENDING("asc"),
 
-    /** The desc. */
+    /** The Descending {@link Direction}. */
     DESCENDING("desc");
 
-    /** The api name. */
+    /** The API name. */
     String apiName;
 
     /**
-     * Instantiates a new direction.
+     * Instantiates a new {@link Direction}.
      *
      * @param apiName the api name
      */
