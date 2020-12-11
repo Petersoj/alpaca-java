@@ -5,7 +5,7 @@
 </p>
 
 ## Overview
-This is a Java implementation for <a href="https://alpaca.markets/">Alpaca</a>. Alpaca  lets you build and trade with real-time market data for free. This library is community developed and if you have any questions, please ask them on the [Alpaca Slack #dev-alpaca-java channel](https://alpaca.markets/slack) or on the [Alpaca Forums](https://forum.alpaca.markets/).
+This is a Java implementation for the <a href="https://alpaca.markets/">Alpaca</a> API. Alpaca lets you build and trade with real-time market data for free. This library is community developed and if you have any questions, please ask them on [Github Discussions](https://github.com/Petersoj/alpaca-java/discussions), the [Alpaca Slack #dev-alpaca-java channel](https://alpaca.markets/slack), or on the [Alpaca Forums](https://forum.alpaca.markets/).
 
 ## Table of Contents
 1. [Building](#building)
@@ -67,12 +67,14 @@ with the Jar MD5 checksum from this source code:
 2. `cd alpaca-java`
 3. Checkout/reset to the latest version: `git reset 6.0.1 --hard`
 4. Build the project: `./gradlew build`
-    1. Note: if you build the project twice without a `clean` task in between (e.g. `./gradlew build; ./gradlew build`), the MD5 checksum will change.
+    1. If you build the project twice without a `clean` task in between (e.g. `./gradlew build; ./gradlew build`), the MD5 checksum will change.
+    2. Use Java 8 (JDK 1.8) to build, otherwise the MD5 checksums will differ.
 5. Generate the MD5 checksum: `md5 build/libs/alpaca-java-6.0.1.jar`
 6. Confirm that the checksum value in Maven Central is the same as in step 4:
 `curl https://repo1.maven.org/maven2/net/jacobpeterson/alpaca-java/6.0.1/alpaca-java-6.0.1.jar.md5`
 
 If the checksums are different, please [create a new issue](https://github.com/Petersoj/alpaca-java/issues/new)!
+The current MD5 checksum of build `6.0.1` is: `425532e598e3d812b29a3270cf4c5e73`
 
 ## Configuration
 
