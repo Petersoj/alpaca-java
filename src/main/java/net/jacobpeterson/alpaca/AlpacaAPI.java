@@ -56,6 +56,7 @@ import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 import java.util.StringJoiner;
 import java.util.stream.Collectors;
@@ -336,6 +337,7 @@ public class AlpacaAPI {
      * @param direction The chronological order of response based on the submission time. asc or desc. Defaults to
      *                  desc.
      * @param nested    If true, the result will roll up multi-leg orders under the legs field of primary order.
+     * @param symbols   A list of symbols to filter the result by (null for no filter).
      *
      * @return the orders
      *
@@ -343,7 +345,7 @@ public class AlpacaAPI {
      * @see <a href="https://docs.alpaca.markets/api-documentation/api-v2/orders/">Orders</a>
      */
     public ArrayList<Order> getOrders(OrderStatus status, Integer limit, ZonedDateTime after, ZonedDateTime until,
-            Direction direction, Boolean nested) throws AlpacaAPIRequestException {
+            Direction direction, Boolean nested, List<String> symbols) throws AlpacaAPIRequestException {
         AlpacaRequestBuilder urlBuilder = new AlpacaRequestBuilder(baseAPIURL, AlpacaConstants.VERSION_2_ENDPOINT,
                 AlpacaConstants.ORDERS_ENDPOINT);
 
@@ -371,6 +373,10 @@ public class AlpacaAPI {
 
         if (nested != null) {
             urlBuilder.appendURLParameter(AlpacaConstants.NESTED_PARAMETER, nested.toString());
+        }
+
+        if (symbols != null && !symbols.isEmpty()) {
+            urlBuilder.appendURLParameter(AlpacaConstants.SYMBOLS_PARAMETER, String.join(",", symbols));
         }
 
         HttpResponse<InputStream> response = alpacaRequest.invokeGet(urlBuilder);
