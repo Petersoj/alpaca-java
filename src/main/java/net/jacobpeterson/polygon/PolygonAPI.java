@@ -43,8 +43,8 @@ import net.jacobpeterson.polygon.rest.exception.PolygonAPIRequestException;
 import net.jacobpeterson.polygon.websocket.client.PolygonWebsocketClient;
 import net.jacobpeterson.polygon.websocket.listener.PolygonStreamListener;
 import net.jacobpeterson.util.format.FormatUtil;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.InputStream;
 import java.lang.reflect.Type;
@@ -59,7 +59,7 @@ import java.util.StringJoiner;
 public class PolygonAPI {
 
     /** The logger. */
-    private static final Logger LOGGER = LogManager.getLogger(PolygonAPI.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(PolygonAPI.class);
 
     /** The PolygonWebsocketClient. */
     private final PolygonWebsocketClient polygonWebsocketClient;

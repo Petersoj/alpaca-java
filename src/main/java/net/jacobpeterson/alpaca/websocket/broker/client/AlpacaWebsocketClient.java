@@ -19,8 +19,8 @@ import net.jacobpeterson.domain.alpaca.streaming.authorization.AuthorizationMess
 import net.jacobpeterson.domain.alpaca.streaming.listening.ListeningMessage;
 import net.jacobpeterson.domain.alpaca.streaming.trade.TradeUpdateMessage;
 import net.jacobpeterson.util.gson.GsonUtil;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.websocket.DeploymentException;
 import java.io.IOException;
@@ -38,7 +38,7 @@ import java.util.stream.Collectors;
 public class AlpacaWebsocketClient implements WebsocketClient {
 
     /** The logger. */
-    private static final Logger LOGGER = LogManager.getLogger(AlpacaWebsocketClient.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(AlpacaWebsocketClient.class);
 
     /** The constant STREAM_KEY. */
     private static final String STREAM_KEY = "stream";
@@ -205,14 +205,14 @@ public class AlpacaWebsocketClient implements WebsocketClient {
 
                         authenticated = isAuthorizationMessageSuccess(authorizationMessage);
 
-                        LOGGER.debug(authorizationMessage);
+                        if (LOGGER.isDebugEnabled()) { LOGGER.debug(authorizationMessage.toString()); }
                         break;
                     case LISTENING:
                         ListeningMessage listeningMessage = GsonUtil.GSON.fromJson(messageJsonObject,
                                 ListeningMessage.class);
                         sendStreamMessageToListeners(alpacaStreamMessageType, listeningMessage);
 
-                        LOGGER.debug(listeningMessage);
+                        if (LOGGER.isDebugEnabled()) { LOGGER.debug(listeningMessage.toString()); }
                         break;
                     case TRADE_UPDATES:
                         sendStreamMessageToListeners(alpacaStreamMessageType, GsonUtil.GSON.fromJson(messageJsonObject,

@@ -46,8 +46,8 @@ import net.jacobpeterson.domain.alpaca.position.Position;
 import net.jacobpeterson.domain.alpaca.watchlist.Watchlist;
 import net.jacobpeterson.util.format.FormatUtil;
 import net.jacobpeterson.util.gson.GsonUtil;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.InputStream;
 import java.lang.reflect.Type;
@@ -69,7 +69,7 @@ import java.util.stream.Collectors;
 public class AlpacaAPI {
 
     /** The logger. */
-    private static final Logger LOGGER = LogManager.getLogger(AlpacaAPI.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(AlpacaAPI.class);
 
     /** The key ID. */
     private final String keyID;
