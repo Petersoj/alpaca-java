@@ -147,25 +147,6 @@ processResources {
 //
 
 //
-// START allJar task
-//
-// Used for creating a fat jar (a jar packaged with all dependencies)
-task fatJar(type: Jar) {
-    from {
-        configurations.compile.collect { it.isDirectory() ? it : zipTree(it) }
-        configurations.implemenation.collect { it.isDirectory() ? it : zipTree(it) }
-        configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
-    }
-
-    archiveClassifier.set "fat"
-
-    with jar
-}
-//
-// END allJar task
-//
-
-//
 // START POJO generation
 //
 // The generated POJOs will be in a package structure analogous to the path in the 'schema_json/' directory
