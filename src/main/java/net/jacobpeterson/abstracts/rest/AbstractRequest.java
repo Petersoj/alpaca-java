@@ -8,8 +8,8 @@ import com.mashape.unirest.http.exceptions.UnirestException;
 import com.mashape.unirest.request.GetRequest;
 import com.mashape.unirest.request.HttpRequestWithBody;
 import net.jacobpeterson.util.gson.GsonUtil;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -23,7 +23,7 @@ import java.util.Map;
 public abstract class AbstractRequest {
 
     /** The logger. */
-    private static final Logger LOGGER = LogManager.getLogger(AbstractRequest.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(AbstractRequest.class);
 
     /** The headers. */
     protected final Map<String, String> headers = new HashMap<>();

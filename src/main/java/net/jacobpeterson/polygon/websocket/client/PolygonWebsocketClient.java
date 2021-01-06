@@ -20,8 +20,8 @@ import net.jacobpeterson.domain.polygon.websocket.trade.TradeMessage;
 import net.jacobpeterson.polygon.websocket.listener.PolygonStreamListener;
 import net.jacobpeterson.polygon.websocket.message.PolygonStreamMessageType;
 import net.jacobpeterson.util.gson.GsonUtil;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.websocket.DeploymentException;
 import java.io.IOException;
@@ -42,7 +42,7 @@ import java.util.stream.Collectors;
 public class PolygonWebsocketClient implements WebsocketClient {
 
     /** The logger. */
-    private static final Logger LOGGER = LogManager.getLogger(PolygonWebsocketClient.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(PolygonWebsocketClient.class);
 
     /** The all tickers. */
     private static final String ALL_TICKERS = "*";
@@ -172,7 +172,7 @@ public class PolygonWebsocketClient implements WebsocketClient {
 
                             authenticated = isAuthenticatedStatusMessage(statusMessage);
 
-                            LOGGER.debug(statusMessage);
+                            if (LOGGER.isDebugEnabled()) { LOGGER.debug(statusMessage.toString()); }
                             break;
                         case TRADE:
                             sendStreamMessageToListeners(polygonStreamMessageType,
@@ -193,8 +193,8 @@ public class PolygonWebsocketClient implements WebsocketClient {
                         default:
                             LOGGER.error("Unknown stream object: {}", messageJsonObject);
                     }
-                } catch (JsonSyntaxException e) {
-                    LOGGER.throwing(e);
+                } catch (JsonSyntaxException exception) {
+                    LOGGER.error("Could not parse Websocket message!", exception);
                 }
             } else {
                 LOGGER.error("Unknown stream message: {}", messageJsonObject);

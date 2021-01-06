@@ -12,6 +12,7 @@
     },
     "body": {
       "existingJavaType": "net.jacobpeterson.domain.alpaca.order.Order",
+      "javaName": "order",
       "title": "The cancelled order"
     }
   }

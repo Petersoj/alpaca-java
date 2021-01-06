@@ -46,8 +46,8 @@ import net.jacobpeterson.domain.alpaca.position.Position;
 import net.jacobpeterson.domain.alpaca.watchlist.Watchlist;
 import net.jacobpeterson.util.format.FormatUtil;
 import net.jacobpeterson.util.gson.GsonUtil;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.InputStream;
 import java.lang.reflect.Type;
@@ -69,7 +69,7 @@ import java.util.stream.Collectors;
 public class AlpacaAPI {
 
     /** The logger. */
-    private static final Logger LOGGER = LogManager.getLogger(AlpacaAPI.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(AlpacaAPI.class);
 
     /** The key ID. */
     private final String keyID;
@@ -1461,7 +1461,7 @@ public class AlpacaAPI {
     }
 
     /**
-     * Returns the market calendar.
+     * Returns the market calendar from 1970 to 2029.
      *
      * @return the calendar
      *
@@ -1560,8 +1560,8 @@ public class AlpacaAPI {
      * @throws AlpacaAPIRequestException the alpaca API exception
      * @see <a href="https://docs.alpaca.markets/api-documentation/api-v2/market-data/bars/">Bars</a>
      */
-    public Map<String, ArrayList<Bar>> getBars(BarsTimeFrame timeframe, String symbol, Integer limit,
-            ZonedDateTime start, ZonedDateTime end, ZonedDateTime after, ZonedDateTime until)
+    public Map<String, List<Bar>> getBars(BarsTimeFrame timeframe, String symbol, Integer limit, ZonedDateTime start,
+            ZonedDateTime end, ZonedDateTime after, ZonedDateTime until)
             throws AlpacaAPIRequestException {
         return this.getBars(timeframe, new String[]{symbol}, limit, start, end, after, until);
     }
@@ -1588,8 +1588,8 @@ public class AlpacaAPI {
      * @throws AlpacaAPIRequestException the alpaca API exception
      * @see <a href="https://docs.alpaca.markets/api-documentation/api-v2/market-data/bars/">Bars</a>
      */
-    public Map<String, ArrayList<Bar>> getBars(BarsTimeFrame timeframe, String[] symbols, Integer limit,
-            ZonedDateTime start, ZonedDateTime end, ZonedDateTime after, ZonedDateTime until)
+    public Map<String, List<Bar>> getBars(BarsTimeFrame timeframe, String[] symbols, Integer limit, ZonedDateTime start,
+            ZonedDateTime end, ZonedDateTime after, ZonedDateTime until)
             throws AlpacaAPIRequestException {
         AlpacaRequestBuilder urlBuilder = new AlpacaRequestBuilder(baseDataUrl, AlpacaConstants.VERSION_1_ENDPOINT,
                 AlpacaConstants.BARS_ENDPOINT);

@@ -22,8 +22,8 @@ import net.jacobpeterson.domain.alpaca.marketdata.streaming.listening.ListeningM
 import net.jacobpeterson.domain.alpaca.marketdata.streaming.quote.QuoteMessage;
 import net.jacobpeterson.domain.alpaca.marketdata.streaming.trade.TradeMessage;
 import net.jacobpeterson.util.gson.GsonUtil;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.websocket.DeploymentException;
 import java.io.IOException;
@@ -42,7 +42,7 @@ import java.util.stream.Collectors;
 public class MarketDataWebsocketClient implements WebsocketClient {
 
     /** The logger. */
-    private static final Logger LOGGER = LogManager.getLogger(MarketDataWebsocketClient.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(MarketDataWebsocketClient.class);
 
     /** The constant STREAM_KEY. */
     private static final String STREAM_KEY = "stream";
@@ -256,35 +256,35 @@ public class MarketDataWebsocketClient implements WebsocketClient {
 
                             authenticated = isAuthorizationMessageSuccess(authorizationMessage);
 
-                            LOGGER.debug(authorizationMessage);
+                            if (LOGGER.isDebugEnabled()) { LOGGER.debug(authorizationMessage.toString()); }
                             break;
                         case LISTENING:
                             ListeningMessage listeningMessage = GsonUtil.GSON.fromJson(messageJsonObject,
                                     ListeningMessage.class);
                             sendStreamMessageToListeners(marketDataStreamMessageType, listeningMessage);
 
-                            LOGGER.debug(listeningMessage);
+                            if (LOGGER.isDebugEnabled()) { LOGGER.debug(listeningMessage.toString()); }
                             break;
                         case TRADES:
                             TradeMessage tradeMessage = GsonUtil.GSON.fromJson(messageJsonObject.get(DATA_KEY),
                                     TradeMessage.class);
                             sendStreamMessageToListeners(marketDataStreamMessageType, tradeMessage);
 
-                            LOGGER.debug(tradeMessage);
+                            if (LOGGER.isDebugEnabled()) { LOGGER.debug(tradeMessage.toString()); }
                             break;
                         case QUOTES:
                             QuoteMessage quoteMessage = GsonUtil.GSON.fromJson(messageJsonObject.get(DATA_KEY),
                                     QuoteMessage.class);
                             sendStreamMessageToListeners(marketDataStreamMessageType, quoteMessage);
 
-                            LOGGER.debug(quoteMessage);
+                            if (LOGGER.isDebugEnabled()) { LOGGER.debug(quoteMessage.toString()); }
                             break;
                         case AGGREGATE_MINUTE:
                             AggregateMinuteMessage aggregateMinuteMessage = GsonUtil.GSON.fromJson(
                                     messageJsonObject.get(DATA_KEY), AggregateMinuteMessage.class);
                             sendStreamMessageToListeners(marketDataStreamMessageType, aggregateMinuteMessage);
 
-                            LOGGER.debug(aggregateMinuteMessage);
+                            if (LOGGER.isDebugEnabled()) { LOGGER.debug(aggregateMinuteMessage.toString()); }
                             break;
                         default:
                             LOGGER.error("Unhandled stream type: " + marketDataStreamMessageType);

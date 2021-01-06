@@ -1,26 +1,26 @@
 {
   "type": "object",
-  "title": "See <a href=\"https://polygon.io/docs/#!/Reference/get_v2_reference_tickers\">https://polygon.io/docs/#!/Reference/get_v2_reference_tickers</a>",
+  "title": "See <a href=\"https://polygon.io/docs/get_v2_reference_tickers_anchor\">https://polygon.io/docs/get_v2_reference_tickers_anchor</a>",
   "properties": {
     "status": {
       "existingJavaType": "java.lang.String",
-      "title": "Status"
+      "title": "The status of this request's response."
     },
     "page": {
       "existingJavaType": "java.lang.Integer",
-      "title": "Page"
+      "title": "The page number of the current response."
     },
     "perPage": {
       "existingJavaType": "java.lang.Integer",
-      "title": "Per Page"
+      "title": "The number of results per page."
     },
     "count": {
       "existingJavaType": "java.lang.Integer",
-      "title": "Count"
+      "title": "The total number of results for this request."
     },
-    "results": {
+    "tickers": {
       "existingJavaType": "java.util.ArrayList<net.jacobpeterson.domain.polygon.tickers.ticker.Ticker>",
-      "title": "Results"
+      "title": "The tickers."
     }
   }
 }

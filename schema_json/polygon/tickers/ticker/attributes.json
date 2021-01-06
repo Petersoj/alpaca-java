@@ -1,0 +1,22 @@
+{
+  "type": "object",
+  "title": "See <a href=\"https://polygon.io/docs/get_v2_reference_tickers_anchor\">https://polygon.io/docs/get_v2_reference_tickers_anchor</a>",
+  "properties": {
+    "currencyName": {
+      "existingJavaType": "java.lang.String",
+      "title": "The name of the variable/quote currency."
+    },
+    "currency": {
+      "existingJavaType": "java.lang.String",
+      "title": "The currency code of the variable/quote currency."
+    },
+    "baseName": {
+      "existingJavaType": "java.lang.String",
+      "title": "The name of the base currency."
+    },
+    "base": {
+      "existingJavaType": "java.lang.String",
+      "title": "The currency code of the base currency."
+    }
+  }
+}

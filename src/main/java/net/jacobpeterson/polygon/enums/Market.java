@@ -34,7 +34,7 @@ public enum Market implements APIName {
     /**
      * Instantiates a new {@link Market}.
      *
-     * @param apiName the api name
+     * @param apiName the API name
      */
     Market(String apiName) {
         this.apiName = apiName;

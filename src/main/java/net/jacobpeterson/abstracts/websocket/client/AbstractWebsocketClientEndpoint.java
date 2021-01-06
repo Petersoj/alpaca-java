@@ -1,9 +1,9 @@
 package net.jacobpeterson.abstracts.websocket.client;
 
 import net.jacobpeterson.util.concurrency.ExecutorTracer;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.eclipse.jetty.util.component.LifeCycle;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.websocket.CloseReason;
 import javax.websocket.ContainerProvider;
@@ -25,7 +25,7 @@ import java.util.concurrent.ExecutorService;
 public abstract class AbstractWebsocketClientEndpoint {
 
     /** The constant LOGGER. */
-    private static final Logger LOGGER = LogManager.getLogger(AbstractWebsocketClientEndpoint.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(AbstractWebsocketClientEndpoint.class);
 
     /** The Websocket client. */
     private final WebsocketClient websocketClient;
@@ -130,8 +130,8 @@ public abstract class AbstractWebsocketClientEndpoint {
             try {
                 connect();
                 websocketClient.handleResubscribing();
-            } catch (Exception e) {
-                LOGGER.catching(e);
+            } catch (Exception exception) {
+                LOGGER.error("Could not reconnect!", exception);
             }
         } else {
             this.userSession = null;
@@ -154,7 +154,7 @@ public abstract class AbstractWebsocketClientEndpoint {
      * @param throwable the throwable
      */
     protected void onError(Throwable throwable) {
-        LOGGER.error(throwable);
+        LOGGER.error("Websocket Error!", throwable);
     }
 
     /**
