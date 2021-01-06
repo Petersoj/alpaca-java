@@ -1461,7 +1461,7 @@ public class AlpacaAPI {
     }
 
     /**
-     * Returns the market calendar.
+     * Returns the market calendar from 1970 to 2029.
      *
      * @return the calendar
      *
@@ -1560,8 +1560,8 @@ public class AlpacaAPI {
      * @throws AlpacaAPIRequestException the alpaca API exception
      * @see <a href="https://docs.alpaca.markets/api-documentation/api-v2/market-data/bars/">Bars</a>
      */
-    public Map<String, ArrayList<Bar>> getBars(BarsTimeFrame timeframe, String symbol, Integer limit,
-            ZonedDateTime start, ZonedDateTime end, ZonedDateTime after, ZonedDateTime until)
+    public Map<String, List<Bar>> getBars(BarsTimeFrame timeframe, String symbol, Integer limit, ZonedDateTime start,
+            ZonedDateTime end, ZonedDateTime after, ZonedDateTime until)
             throws AlpacaAPIRequestException {
         return this.getBars(timeframe, new String[]{symbol}, limit, start, end, after, until);
     }
@@ -1588,8 +1588,8 @@ public class AlpacaAPI {
      * @throws AlpacaAPIRequestException the alpaca API exception
      * @see <a href="https://docs.alpaca.markets/api-documentation/api-v2/market-data/bars/">Bars</a>
      */
-    public Map<String, ArrayList<Bar>> getBars(BarsTimeFrame timeframe, String[] symbols, Integer limit,
-            ZonedDateTime start, ZonedDateTime end, ZonedDateTime after, ZonedDateTime until)
+    public Map<String, List<Bar>> getBars(BarsTimeFrame timeframe, String[] symbols, Integer limit, ZonedDateTime start,
+            ZonedDateTime end, ZonedDateTime after, ZonedDateTime until)
             throws AlpacaAPIRequestException {
         AlpacaRequestBuilder urlBuilder = new AlpacaRequestBuilder(baseDataUrl, AlpacaConstants.VERSION_1_ENDPOINT,
                 AlpacaConstants.BARS_ENDPOINT);

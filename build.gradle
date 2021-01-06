@@ -175,12 +175,6 @@ task generatePOJOs() {
     final def jsonSourceDirectory = file("${project.projectDir}/schema_json").getPath()
     final def jsonPackageNameStart = "net.jacobpeterson.domain"
 
-    // Configure this task to participate in incremental builds and build caching so that it only executes when changes occur
-    configure {
-        inputs.files(fileTree(targetDirectory)).withPathSensitivity(PathSensitivity.RELATIVE)
-        outputs.cacheIf { true }
-    }
-
     // Loop through all files in schema JSON file tree
     file(jsonSourceDirectory).eachFileRecurse { jsonFile ->
         if (jsonFile.getName().endsWith(".json")) {
@@ -192,6 +186,12 @@ task generatePOJOs() {
 
             def jsonToPOJOTask = tasks.create('json2POJOTask-' + targetPackage + "." + jsonFile.getName(),
                     GenerateJsonSchemaJavaTask)
+
+            // Configure this task to participate in incremental builds so that it only executes when changes occur
+            jsonToPOJOTask.configure {
+                inputs.file(jsonFile)
+                outputs.dir(targetDirectory)
+            }
 
             jsonToPOJOTask.doFirst {
                 jsonToPOJOTask.configuration.source = files(jsonFile.getAbsolutePath())
