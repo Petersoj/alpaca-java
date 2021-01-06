@@ -31,7 +31,7 @@ This is a Java implementation for the <a href="https://alpaca.markets/">Alpaca</
 1. [PolygonAPI](#polygonapi)
     - [PolygonAPIRequestException](#PolygonAPIRequestException)
     - [Usage](#Usage)
-    - [Basic Example](#Basic Example)
+    - [Basic Example](#Basic-Example)
 1. [Building](#building)
 
 ## Gradle and Maven Integration
