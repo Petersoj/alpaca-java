@@ -18,25 +18,18 @@ import java.util.List;
 import java.util.Set;
 
 /**
- * The type {@link GsonUtil}.
+ * {@link GsonUtil} contains utility methods relating to {@link Gson}.
  */
 public class GsonUtil {
 
-    /** The logger. */
     private static final Logger LOGGER = LoggerFactory.getLogger(GsonUtil.class);
-
-    /** The constant CLASS_ANNOTATION_CACHE. */
     private static final HashMap<Class<?>, ArrayList<SerializedName>> CLASS_ANNOTATION_CACHE = new HashMap<>();
-
-    /** The constant GSON which include ISO date time to ZonedDateTime objects */
     public static final Gson GSON = new GsonBuilder()
             .registerTypeAdapter(ZonedDateTime.class, new ZonedDateTimeAdapter())
             .registerTypeAdapter(LocalDate.class, new LocalDateAdapter())
             .enableComplexMapKeySerialization()
             .setLenient()
             .create();
-
-    /** The constant JSON_PARSER. */
     public static final JsonParser JSON_PARSER = new JsonParser();
 
     /**

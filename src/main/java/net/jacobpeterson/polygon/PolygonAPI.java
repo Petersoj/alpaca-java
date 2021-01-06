@@ -34,7 +34,6 @@ import net.jacobpeterson.polygon.enums.FinancialReportType;
 import net.jacobpeterson.polygon.enums.FinancialSort;
 import net.jacobpeterson.polygon.enums.GainersLosersDirection;
 import net.jacobpeterson.polygon.enums.Market;
-import net.jacobpeterson.polygon.enums.TickerSort;
 import net.jacobpeterson.polygon.enums.Timespan;
 import net.jacobpeterson.polygon.properties.PolygonProperties;
 import net.jacobpeterson.polygon.rest.PolygonRequest;
@@ -113,30 +112,31 @@ public class PolygonAPI {
     }
 
     /**
-     * Query all ticker symbols which are supported by Polygon.io.
+     * Query all ticker symbols which are supported by Polygon.io. Returns basic reference data for each matched ticker
+     * symbol. This API includes Crypto, Forex, and Stocks/Equities.
      *
-     * @param tickerSort Which field to sort by.
+     * @param sort       Which field to sort by.
      * @param tickerType Get tickers of a certain type. See Ticker Types for available types.
      * @param market     Get tickers for a specific market
      * @param locale     Get tickers for a specific region/locale
      * @param search     Search the name of tickers
-     * @param perpage    How many items to be on each page during pagination. Max 50
+     * @param perpage    How many items to be on each page during pagination. Max 50 and default 50.
      * @param page       Which page of results to return
      * @param active     Filter for only active or inactive symbols
      *
      * @return the tickers
      *
      * @throws PolygonAPIRequestException the polygon API exception
-     * @see <a href="https://polygon.io/docs/#!/Reference/get_v2_reference_tickers">Tickers</a>
+     * @see <a href="https://polygon.io/docs/get_v2_reference_tickers_anchor">Tickers</a>
      */
-    public TickersResponse getTickers(TickerSort tickerSort, String tickerType, Market market, String locale,
+    public TickersResponse getTickers(String sort, String tickerType, Market market, String locale,
             String search, Integer perpage, Integer page, Boolean active) throws PolygonAPIRequestException {
         PolygonRequestBuilder builder = new PolygonRequestBuilder(baseAPIURL, PolygonConstants.VERSION_2_ENDPOINT,
                 PolygonConstants.REFERENCE_ENDPOINT,
                 PolygonConstants.TICKERS_ENDPOINT);
 
-        if (tickerSort != null) {
-            builder.appendURLParameter(PolygonConstants.SORT_PARAMETER, tickerSort.getAPIName());
+        if (sort != null) {
+            builder.appendURLParameter(PolygonConstants.SORT_PARAMETER, sort);
         }
 
         if (tickerType != null) {
