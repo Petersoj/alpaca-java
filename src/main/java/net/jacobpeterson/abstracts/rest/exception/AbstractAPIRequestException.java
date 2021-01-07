@@ -9,35 +9,18 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 
 /**
- * The type {@link AbstractAPIRequestException}.
+ * {@link AbstractAPIRequestException} represents {@link HttpResponse} request exceptions.
  */
 public abstract class AbstractAPIRequestException extends Exception {
 
-    /** The Constant serialVersionUID. */
-    private static final long serialVersionUID = 1L;
-
-    /** The constant CODE_KEY. */
     protected static final String CODE_KEY = "code";
-
-    /** The constant MESSAGE_KEY. */
     protected static final String MESSAGE_KEY = "message";
 
-    /** The Api name. */
     protected final String apiName;
-
-    /** The Http response. */
     protected HttpResponse<InputStream> httpResponse;
-
-    /** The Request code. */
     protected int requestStatusCode;
-
-    /** The Request status text. */
     protected String requestStatusText;
-
-    /** The API response code. */
     protected Integer apiResponseCode;
-
-    /** The API response message. */
     protected String apiResponseMessage;
 
     /**
@@ -65,9 +48,7 @@ public abstract class AbstractAPIRequestException extends Exception {
     protected abstract void parseAPIExceptionMessage();
 
     /**
-     * Parse a standard API exception response.
-     * <p>
-     * The following format is parsed:
+     * Parse a standard API exception response of the following format:
      * <pre>
      *  {
      *     "code": 40010001,
@@ -96,6 +77,9 @@ public abstract class AbstractAPIRequestException extends Exception {
         }
     }
 
+    /**
+     * {@inheritDoc} This will call {@link #parseAPIExceptionMessage()} and return a formatted message.
+     */
     @Override
     public String getMessage() {
         this.parseAPIExceptionMessage();
@@ -134,18 +118,18 @@ public abstract class AbstractAPIRequestException extends Exception {
     }
 
     /**
-     * Gets api response code.
+     * Gets API response code.
      *
-     * @return the api response code
+     * @return the API response code
      */
     public int getAPIResponseCode() {
         return apiResponseCode;
     }
 
     /**
-     * Gets api response message.
+     * Gets API response message.
      *
-     * @return the api response message
+     * @return the API response message
      */
     public String getAPIResponseMessage() {
         return apiResponseMessage;

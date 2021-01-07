@@ -4,18 +4,18 @@ import net.jacobpeterson.abstracts.websocket.message.StreamMessage;
 import net.jacobpeterson.abstracts.websocket.message.StreamMessageType;
 
 /**
- * The type {@link StreamListener}.
+ * {@link StreamListener} is an interface for listening to stream updates.
  *
- * @param <T> the stream message type type parameter
- * @param <M> the stream message type parameter
+ * @param <T> the {@link StreamMessageType} type parameter
+ * @param <M> the {@link StreamMessage} type parameter
  */
 public interface StreamListener<T extends StreamMessageType, M extends StreamMessage> {
 
     /**
-     * On stream update.
+     * Called on a stream update.
      *
-     * @param streamMessageType the stream message type
-     * @param streamMessage     the stream message
+     * @param streamMessageType the {@link StreamMessageType}
+     * @param streamMessage     the {@link StreamMessage}
      */
     void onStreamUpdate(T streamMessageType, M streamMessage);
 }

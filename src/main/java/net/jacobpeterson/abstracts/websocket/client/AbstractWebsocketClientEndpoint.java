@@ -1,6 +1,5 @@
 package net.jacobpeterson.abstracts.websocket.client;
 
-import net.jacobpeterson.util.concurrency.ExecutorTracer;
 import org.eclipse.jetty.util.component.LifeCycle;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,54 +12,45 @@ import javax.websocket.WebSocketContainer;
 import java.io.IOException;
 import java.net.URI;
 import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 /**
- * The type {@link AbstractWebsocketClientEndpoint}.
+ * {@link AbstractWebsocketClientEndpoint} is used for handling the Websockets.
  * <br>
- * NOTES: You MUST annotate a subclass with {@link javax.websocket.ClientEndpoint} and the appropriate websocket
- * subprotocols because websocket annotations don't work with inheritance. The subclass must also contain separate
- * methods with the following annotations: {@link javax.websocket.OnOpen}, {@link javax.websocket.OnClose}, {@link
- * javax.websocket.OnMessage}, and {@link javax.websocket.OnError}.
+ * NOTES: You MUST annotate a subclass with @see and the appropriate websocket sub-protocols because Websocket
+ * annotations don't work with inheritance. The subclass must also contain separate methods with the following
+ * annotations: {@link javax.websocket.OnOpen}, {@link javax.websocket.OnClose}, {@link javax.websocket.OnMessage}, and
+ * {@link javax.websocket.OnError}.
  */
 public abstract class AbstractWebsocketClientEndpoint {
 
-    /** The constant LOGGER. */
     private static final Logger LOGGER = LoggerFactory.getLogger(AbstractWebsocketClientEndpoint.class);
 
-    /** The Websocket client. */
     private final WebsocketClient websocketClient;
-
-    /** The Endpoint uri. */
     private final URI endpointURI;
-
-    /** The Message thread name. */
     private final String messageThreadName;
 
     /**
-     * The Executor service, which passes message handlers to a different thread, will prevent overflow of server
-     * buffers (causing a disconnect) from not consuming data fast enough on the client end.
+     * {@link ExecutorService} passes message handlers to a different thread, which will prevent overflow of server
+     * buffers which may cause a disconnect from not consuming data fast enough on the client end.
      */
     private ExecutorService executorService;
-
-    /** The automatically reconnect boolean. */
     private boolean automaticallyReconnect;
-
-    /** The User session. */
     private Session userSession;
 
     /**
      * Instantiates a new {@link AbstractWebsocketClientEndpoint}.
      *
-     * @param websocketClient   the websocket client
-     * @param endpointURI       the endpoint uri
+     * @param websocketClient   the {@link WebsocketClient}
+     * @param endpointURI       the endpoint {@link URI}
      * @param messageThreadName the message thread name
      */
-    public AbstractWebsocketClientEndpoint(WebsocketClient websocketClient, URI endpointURI,
-            String messageThreadName) {
+    public AbstractWebsocketClientEndpoint(WebsocketClient websocketClient, URI endpointURI, String messageThreadName) {
         this.websocketClient = websocketClient;
         this.endpointURI = endpointURI;
         this.messageThreadName = messageThreadName;
-        this.automaticallyReconnect = true;
+
+        automaticallyReconnect = true;
     }
 
     /**
@@ -70,7 +60,7 @@ public abstract class AbstractWebsocketClientEndpoint {
      * @throws IOException         Signals that an I/O exception has occurred.
      */
     public void connect() throws DeploymentException, IOException {
-        executorService = ExecutorTracer.newSingleThreadExecutor(r -> new Thread(r, messageThreadName));
+        executorService = Executors.newSingleThreadExecutor(runnable -> new Thread(runnable, messageThreadName));
 
         WebSocketContainer container = ContainerProvider.getWebSocketContainer();
 

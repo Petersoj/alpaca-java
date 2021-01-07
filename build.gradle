@@ -44,6 +44,7 @@ dependencies {
     implementation group: 'org.eclipse.jetty.websocket', name: 'javax-websocket-client-impl', version: '9.4.28.v20200408'
 
     testImplementation group: 'junit', name: 'junit', version: '4.12'
+    testImplementation group: 'org.mockito', name: 'mockito-core', version: '3.7.0'
 }
 
 // Exclude any SLF4j-implementation transitive dependencies so users can use a logging framework of their choice
@@ -51,39 +52,20 @@ configurations.implementation {
     exclude group: 'commons-logging', module: 'commons-logging'
 }
 
-//
-// START Build options
-//
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
 [compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
 
-// Used to suppress java doc warnings
-javadoc.options.addStringOption('Xdoclint:none', '-quiet')
-// Explicitly define Charset for Javadocs
-javadoc.options.addStringOption("charset", "UTF-8")
-//
-// END Build options
-//
+javadoc {
+    // Used to suppress Javadoc linting warnings
+    options.addStringOption('Xdoclint:none', '-quiet')
+    // Explicitly define Charset for Javadocs
+    options.addStringOption("charset", "UTF-8")
 
-//
-// START reproducible builds
-//
-// Reference: https://dzone.com/articles/reproducible-builds-in-java
-// Prevent manifest from changing every build
-project.tasks.withType(Jar) {
-    manifest.attributes Date: ''
-    preserveFileTimestamps = false
+    options {
+        links 'https://docs.oracle.com/javase/8/docs/api/'
+    }
 }
-
-// Prevent timestamps from appearing in JAR and use reproducible file order
-tasks.withType(AbstractArchiveTask) {
-    preserveFileTimestamps = false
-    reproducibleFileOrder = true
-}
-//
-// END reproducible builds
-//
 
 //
 // START publishing

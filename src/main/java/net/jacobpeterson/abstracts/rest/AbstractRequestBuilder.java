@@ -9,95 +9,81 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * The type {@link AbstractRequestBuilder}.
+ * {@link AbstractRequestBuilder} is a builder for URL Strings.
  */
 public abstract class AbstractRequestBuilder {
 
-    /** The Constant URL_SEPARATOR. */
-    private final static String URL_SEPARATOR = "/";
+    private static final String URL_SEPARATOR = "/";
 
-    /** The appended endpoints. */
-    private final List<String> appendedEndpoints = new ArrayList<>();
+    private final String baseURL;
+    private final List<String> appendedEndpoints;
+    private final Map<String, String> urlParameters;
+    private final JsonObject bodyJsonObject;
 
-    /** The url parameters. */
-    private final Map<String, String> urlParameters = new LinkedHashMap<>();
-
-    /** The Body json object. */
-    private final JsonObject bodyJsonObject = new JsonObject();
-
-    /** The base url. */
-    private final String baseUrl;
-
-    /** The custom body. */
     private String customBody;
 
     /**
-     * Instantiates a new abstract request builder.
+     * Instantiates a new {@link AbstractRequestBuilder}.
      *
-     * @param baseUrl the base url
+     * @param baseURL the base URL
      */
-    public AbstractRequestBuilder(String baseUrl) {
-        this.baseUrl = baseUrl;
+    public AbstractRequestBuilder(String baseURL) {
+        this.baseURL = baseURL;
+
+        appendedEndpoints = new ArrayList<>();
+        urlParameters = new LinkedHashMap<>();
+        bodyJsonObject = new JsonObject();
     }
 
     /**
-     * Append endpoint.
+     * Appends an endpoint.
      *
      * @param endpoint the endpoint
      */
     public void appendEndpoint(String endpoint) {
-        if (endpoint != null) {
-            appendedEndpoints.add(endpoint);
-        }
+        appendedEndpoints.add(endpoint);
     }
 
     /**
-     * Append URL parameter.
+     * Appends a URL parameter.
      *
-     * @param urlKey   the url key
-     * @param urlValue the url value
+     * @param urlKey   the URL key
+     * @param urlValue the URL value
      */
     public void appendURLParameter(String urlKey, String urlValue) {
-        if (urlValue != null) {
-            urlParameters.put(urlKey, urlValue);
-        }
+        urlParameters.put(urlKey, urlValue);
     }
 
     /**
-     * Append json body property.
+     * Appends a JSON string property to {@link #buildBody()}.
      *
      * @param bodyKey   the body key
      * @param bodyValue the body value
      */
     public void appendJSONBodyProperty(String bodyKey, String bodyValue) {
-        if (bodyValue != null) {
-            bodyJsonObject.addProperty(bodyKey, bodyValue);
-        }
+        bodyJsonObject.addProperty(bodyKey, bodyValue);
     }
 
     /**
-     * Append body json property.
+     * Appends a {@link JsonElement} property to {@link #buildBody()}.
      *
      * @param bodyKey   the body key
-     * @param bodyValue the body value
+     * @param bodyValue the {@link JsonElement} body value
      */
     public void appendJSONBodyJSONProperty(String bodyKey, JsonElement bodyValue) {
-        if (bodyValue != null) {
-            bodyJsonObject.add(bodyKey, bodyValue);
-        }
+        bodyJsonObject.add(bodyKey, bodyValue);
     }
 
     /**
-     * Gets the url.
+     * Builds the URL string {@link AbstractRequestBuilder}.
      *
-     * @return the url
+     * @return the built URL string
      */
-    public String getURL() {
-        StringBuilder builder = new StringBuilder(baseUrl);
+    public String buildURL() {
+        StringBuilder builder = new StringBuilder(baseURL);
 
         for (String appendedEndpoint : appendedEndpoints) {
-            builder.append(URL_SEPARATOR);
-            builder.append(appendedEndpoint);
+            builder.append(URL_SEPARATOR).append(appendedEndpoint);
         }
 
         if (!urlParameters.isEmpty()) {
@@ -109,7 +95,8 @@ public abstract class AbstractRequestBuilder {
                 builder.append(entry.getValue().trim());
                 builder.append('&');
             }
-            // removes last &
+
+            // removes last '&'
             builder.deleteCharAt(builder.length() - 1);
         }
 
@@ -117,11 +104,11 @@ public abstract class AbstractRequestBuilder {
     }
 
     /**
-     * Gets the body.
+     * Builds the body string of this {@link AbstractRequestBuilder}.
      *
-     * @return the body
+     * @return the body string
      */
-    public String getBody() {
+    public String buildBody() {
         if (customBody != null) {
             return customBody;
         } else if (bodyJsonObject.size() > 0) {
@@ -132,9 +119,9 @@ public abstract class AbstractRequestBuilder {
     }
 
     /**
-     * Sets custom body.
+     * Sets a custom body string for {@link #buildBody()}.
      *
-     * @param customBody the custom body
+     * @param customBody the custom body string
      */
     public void setCustomBody(String customBody) {
         this.customBody = customBody;

@@ -248,6 +248,7 @@ public class AlpacaAPI {
         if (response.getStatus() != 200) {
             throw new AlpacaAPIRequestException(response);
         }
+
         JsonElement responseJsonElement = alpacaRequest.getResponseJSON(response);
         ArrayList<AccountActivity> accountActivities = new ArrayList<>();
 
@@ -1672,7 +1673,7 @@ public class AlpacaAPI {
      * @return the last quote response object
      *
      * @throws AlpacaAPIRequestException the alpaca api request exception
-     * @see <a href="https://alpaca.markets/docs/api-documentation/api-v2/market-data/last-quote/>Last Quote</a>
+     * @see <a href="https://alpaca.markets/docs/api-documentation/api-v2/market-data/last-quote/">Last Quote</a>
      */
     public LastQuoteResponse getLastQuote(String symbol) throws AlpacaAPIRequestException {
         Preconditions.checkNotNull(symbol);
