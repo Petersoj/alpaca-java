@@ -8,7 +8,7 @@ import net.jacobpeterson.polygon.properties.PolygonProperties;
 import java.io.InputStream;
 
 /**
- * The Class {@link PolygonRequest}.
+ * {@link PolygonRequest} contains methods for HTTP requests for {@link net.jacobpeterson.polygon.PolygonAPI}.
  */
 public class PolygonRequest extends AbstractRequest {
 

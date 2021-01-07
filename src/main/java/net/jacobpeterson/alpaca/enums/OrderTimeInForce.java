@@ -3,7 +3,7 @@ package net.jacobpeterson.alpaca.enums;
 import net.jacobpeterson.abstracts.enums.APIName;
 
 /**
- * The Enum {@link OrderTimeInForce}.
+ * {@link OrderTimeInForce} defines enums for various {@link net.jacobpeterson.domain.alpaca.order.Order} TIFs.
  *
  * @see <a href="https://alpaca.markets/docs/trading-on-alpaca/orders/#time-in-force">Time in Force</a>
  */
@@ -60,7 +60,7 @@ public enum OrderTimeInForce implements APIName {
     /**
      * Instantiates a new {@link OrderTimeInForce}.
      *
-     * @param apiName the api name
+     * @param apiName the API name
      */
     OrderTimeInForce(String apiName) {
         this.apiName = apiName;

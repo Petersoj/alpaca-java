@@ -6,37 +6,37 @@ import net.jacobpeterson.abstracts.websocket.message.StreamMessageType;
 import net.jacobpeterson.util.gson.GsonUtil;
 
 /**
- * The enum {@link MarketDataStreamMessageType}.
+ * {@link MarketDataStreamMessageType} defines enums for various message types for {@link
+ * net.jacobpeterson.alpaca.websocket.marketdata.listener.MarketDataStreamListener}.
  */
 public enum MarketDataStreamMessageType implements StreamMessageType, APIName {
 
-    /** Listening {@link MarketDataStreamMessageType}. */
+    /** The listening status {@link MarketDataStreamMessageType}. */
     @SerializedName("listening")
     LISTENING(false),
 
-    /** Authorization {@link MarketDataStreamMessageType}. */
+    /** The authorization status {@link MarketDataStreamMessageType}. */
     @SerializedName("authorization")
     AUTHORIZATION(false),
 
-    /** Trades {@link MarketDataStreamMessageType}. */
+    /** The trades {@link MarketDataStreamMessageType}. */
     @SerializedName("T")
     TRADES(true),
 
-    /** Quotes {@link MarketDataStreamMessageType}. */
+    /** The quotes {@link MarketDataStreamMessageType}. */
     @SerializedName("Q")
     QUOTES(true),
 
-    /** Aggregate {@link MarketDataStreamMessageType}. */
+    /** The aggregate minute {@link MarketDataStreamMessageType}. */
     @SerializedName("AM")
     AGGREGATE_MINUTE(true);
 
-    /** The is api subscribable. */
     private final boolean isAPISubscribable;
 
     /**
      * Instantiates a new {@link MarketDataStreamMessageType}.
      *
-     * @param isAPISubscribable the is api subscribable
+     * @param isAPISubscribable true if API subscribable
      */
     MarketDataStreamMessageType(boolean isAPISubscribable) {
         this.isAPISubscribable = isAPISubscribable;
@@ -48,9 +48,9 @@ public enum MarketDataStreamMessageType implements StreamMessageType, APIName {
     }
 
     /**
-     * Is the API subscribable.
+     * Returns true if API subscribable.
      *
-     * @return the boolean
+     * @return true if API subscribable
      */
     public boolean isAPISubscribable() {
         return isAPISubscribable;

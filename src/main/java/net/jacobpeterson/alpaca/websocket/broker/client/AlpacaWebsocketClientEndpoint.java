@@ -14,7 +14,8 @@ import java.net.URI;
 import java.nio.charset.StandardCharsets;
 
 /**
- * The type {@link AlpacaWebsocketClientEndpoint}.
+ * {@link AlpacaWebsocketClientEndpoint} is used for handling a Websocket directly for {@link
+ * net.jacobpeterson.alpaca.AlpacaAPI}.
  */
 @ClientEndpoint(subprotocols = "BINARY")
 public class AlpacaWebsocketClientEndpoint extends AbstractWebsocketClientEndpoint {
@@ -22,8 +23,8 @@ public class AlpacaWebsocketClientEndpoint extends AbstractWebsocketClientEndpoi
     /**
      * Instantiates a new {@link AlpacaWebsocketClientEndpoint}.
      *
-     * @param websocketClient the websocket client
-     * @param endpointURI     the endpoint uri
+     * @param websocketClient the {@link WebsocketClient}
+     * @param endpointURI     the endpoint {@link URI}
      */
     public AlpacaWebsocketClientEndpoint(WebsocketClient websocketClient, URI endpointURI) {
         super(websocketClient, endpointURI, "AlpacaWebsocketThread");

@@ -3,7 +3,9 @@ package net.jacobpeterson.alpaca.enums;
 import net.jacobpeterson.abstracts.enums.APIName;
 
 /**
- * The enum {@link PortfolioPeriodUnit}.
+ * {@link PortfolioPeriodUnit} defines enums for various
+ * {@link net.jacobpeterson.domain.alpaca.portfoliohistory.PortfolioHistory}
+ * period units.
  */
 public enum PortfolioPeriodUnit implements APIName {
 
@@ -25,7 +27,7 @@ public enum PortfolioPeriodUnit implements APIName {
     /**
      * Instantiates a new {@link PortfolioPeriodUnit}.
      *
-     * @param apiName the api name
+     * @param apiName the API name
      */
     PortfolioPeriodUnit(String apiName) {
         this.apiName = apiName;

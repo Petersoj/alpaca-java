@@ -5,7 +5,7 @@ import net.jacobpeterson.abstracts.rest.AbstractRequestBuilder;
 import java.util.Arrays;
 
 /**
- * The Class {@link AlpacaRequestBuilder}.
+ * {@link AlpacaRequestBuilder} is a builder for URL Strings for {@link net.jacobpeterson.alpaca.AlpacaAPI}.
  */
 public class AlpacaRequestBuilder extends AbstractRequestBuilder {
 
@@ -13,7 +13,7 @@ public class AlpacaRequestBuilder extends AbstractRequestBuilder {
      * Instantiates a new {@link AlpacaRequestBuilder}.
      *
      * @param baseUrl    the base url
-     * @param apiVersion the api version
+     * @param apiVersion the API version
      * @param endpoints  the endpoints
      */
     public AlpacaRequestBuilder(String baseUrl, String apiVersion, String... endpoints) {

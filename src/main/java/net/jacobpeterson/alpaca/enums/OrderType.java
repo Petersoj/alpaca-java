@@ -3,7 +3,7 @@ package net.jacobpeterson.alpaca.enums;
 import net.jacobpeterson.abstracts.enums.APIName;
 
 /**
- * The Enum {@link OrderType}.
+ * {@link OrderType} defines enums for various {@link net.jacobpeterson.domain.alpaca.order.Order} types.
  *
  * @see <a href="https://alpaca.markets/docs/trading-on-alpaca/orders/#order-types">Order Types</a>
  */
@@ -55,7 +55,7 @@ public enum OrderType implements APIName {
     /**
      * Instantiates a new {@link OrderType}.
      *
-     * @param apiName the api name
+     * @param apiName the API name
      */
     OrderType(String apiName) {
         this.apiName = apiName;

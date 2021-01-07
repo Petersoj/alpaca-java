@@ -3,7 +3,7 @@ package net.jacobpeterson.alpaca.enums;
 import net.jacobpeterson.abstracts.enums.APIName;
 
 /**
- * The Enum {@link AssetStatus}.
+ * {@link AssetStatus} defines enums of various asset statuses.
  */
 public enum AssetStatus implements APIName {
 
@@ -19,7 +19,7 @@ public enum AssetStatus implements APIName {
     /**
      * Instantiates a new {@link AssetStatus}.
      *
-     * @param apiName the api name
+     * @param apiName the API name
      */
     AssetStatus(String apiName) {
         this.apiName = apiName;

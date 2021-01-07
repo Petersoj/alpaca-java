@@ -6,78 +6,78 @@ import net.jacobpeterson.abstracts.websocket.message.StreamMessage;
 import net.jacobpeterson.abstracts.websocket.message.StreamMessageType;
 
 /**
- * The type {@link WebsocketClient}.
+ * {@link WebsocketClient} represents a client for a Websocket.
  */
 public interface WebsocketClient {
 
     /**
-     * Adds a listener. Note that this method is blocking.
+     * Adds a {@link StreamListener}. Note that this method is blocking.
      *
-     * @param streamListener the stream listener
+     * @param streamListener the {@link StreamListener}
      *
-     * @throws WebsocketException the WebsocketException
+     * @throws WebsocketException thrown for {@link WebsocketException}s
      */
     void addListener(StreamListener<?, ?> streamListener) throws WebsocketException;
 
     /**
-     * Remove listener. Note that this method is blocking.
+     * Removes a {@link StreamListener}. Note that this method is blocking.
      *
-     * @param streamListener the stream listener
+     * @param streamListener the {@link StreamListener}
      *
-     * @throws WebsocketException the WebsocketException
+     * @throws WebsocketException thrown for {@link WebsocketException}s
      */
     void removeListener(StreamListener<?, ?> streamListener) throws WebsocketException;
 
     /**
-     * Connects. Note that this method is blocking.
+     * Connects the Websocket. Note that this method is blocking.
      *
-     * @throws Exception the Exception
+     * @throws Exception thrown for {@link Exception}s
      */
     void connect() throws Exception;
 
     /**
-     * Disconnects. Note that this method is blocking.
+     * Disconnects the Websocket. Note that this method is blocking.
      *
-     * @throws Exception the Exception
+     * @throws Exception thrown for {@link Exception}s
      */
     void disconnect() throws Exception;
 
     /**
-     * Send authentication message. Note that this method is blocking.
+     * Sends the authentication message. Note that this method is blocking.
      */
     void sendAuthenticationMessage();
 
     /**
-     * Handle resubscribing. Note that this method is blocking.
+     * Handles resubscribing. Note that this method is blocking.
      */
     void handleResubscribing();
 
     /**
-     * Handle websocket message.
+     * Handles a Websocket message.
      *
      * @param message the message
      */
     void handleWebsocketMessage(String message);
 
     /**
-     * Send stream message to listeners.
+     * Sends a {@link StreamMessage} to {@link StreamListener}s.
      *
-     * @param streamMessageType the stream message type
-     * @param streamMessage     the stream message
+     * @param streamMessageType the {@link StreamMessageType}
+     * @param streamMessage     the {@link StreamMessage}
      */
     void sendStreamMessageToListeners(StreamMessageType streamMessageType, StreamMessage streamMessage);
 
     /**
-     * Returns true if the websocket is connected.
+     * Returns true if the Websocket is connected.
      *
-     * @return the boolean
+     * @return true if the Websocket is connected
      */
     boolean isConnected();
 
     /**
-     * Returns true if the websocket is authenticated.
+     * Returns true if the Websocket is authenticated.
      *
-     * @return the boolean
+     * @return true if the Websocket is authenticated
      */
     boolean isAuthenticated();
 }

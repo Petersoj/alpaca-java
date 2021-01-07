@@ -3,7 +3,7 @@ package net.jacobpeterson.alpaca.enums;
 import net.jacobpeterson.abstracts.enums.APIName;
 
 /**
- * The Enum {@link Direction}.
+ * {@link Direction} defines enums of various directional orderings.
  */
 public enum Direction implements APIName {
 

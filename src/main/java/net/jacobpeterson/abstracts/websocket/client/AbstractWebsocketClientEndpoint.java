@@ -15,7 +15,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 /**
- * {@link AbstractWebsocketClientEndpoint} is used for handling the Websockets.
+ * {@link AbstractWebsocketClientEndpoint} is used for handling a Websocket directly.
  * <br>
  * NOTES: You MUST annotate a subclass with @see and the appropriate websocket sub-protocols because Websocket
  * annotations don't work with inheritance. The subclass must also contain separate methods with the following
@@ -54,10 +54,10 @@ public abstract class AbstractWebsocketClientEndpoint {
     }
 
     /**
-     * Connect.
+     * Connects this Websocket.
      *
-     * @throws DeploymentException the deployment exception
-     * @throws IOException         Signals that an I/O exception has occurred.
+     * @throws DeploymentException throw for {@link DeploymentException}s
+     * @throws IOException         throw for {@link IOException}s
      */
     public void connect() throws DeploymentException, IOException {
         executorService = Executors.newSingleThreadExecutor(runnable -> new Thread(runnable, messageThreadName));
@@ -69,9 +69,9 @@ public abstract class AbstractWebsocketClientEndpoint {
     }
 
     /**
-     * Disconnect.
+     * Disconnects this Websocket.
      *
-     * @throws IOException the io exception
+     * @throws IOException throw for {@link IOException}s
      */
     public void disconnect() throws Exception {
         automaticallyReconnect = false;
@@ -91,9 +91,9 @@ public abstract class AbstractWebsocketClientEndpoint {
     }
 
     /**
-     * On open.
+     * Handles the Websocket open.
      *
-     * @param userSession the user session
+     * @param userSession the user {@link Session}
      */
     protected void onOpen(Session userSession) {
         this.userSession = userSession;
@@ -104,10 +104,10 @@ public abstract class AbstractWebsocketClientEndpoint {
     }
 
     /**
-     * On close.
+     * Handles the Websocket close.
      *
-     * @param userSession the user session
-     * @param reason      the reason
+     * @param userSession the user {@link Session}
+     * @param reason      the {@link CloseReason}
      */
     protected void onClose(Session userSession, CloseReason reason) {
         LOGGER.debug("onClose {}", userSession);
@@ -130,7 +130,7 @@ public abstract class AbstractWebsocketClientEndpoint {
     }
 
     /**
-     * On message.
+     * Called when the Websocket message is received.
      *
      * @param message the message
      */
@@ -139,16 +139,16 @@ public abstract class AbstractWebsocketClientEndpoint {
     }
 
     /**
-     * On error.
+     * Handles the Websocket error.
      *
-     * @param throwable the throwable
+     * @param throwable the {@link Throwable}
      */
     protected void onError(Throwable throwable) {
         LOGGER.error("Websocket Error!", throwable);
     }
 
     /**
-     * Send a message.
+     * Sends a message through the Websocket.
      *
      * @param message the message
      */
@@ -158,27 +158,30 @@ public abstract class AbstractWebsocketClientEndpoint {
     }
 
     /**
-     * Gets user session.
+     * Gets user {@link Session}.
      *
-     * @return the user session
+     * @return the user {@link Session}
      */
     public Session getUserSession() {
         return userSession;
     }
 
     /**
-     * Does automatically reconnect boolean.
+     * Returns true if the Websocket is automatically reconnected except when {@link CloseReason} is {@link
+     * CloseReason.CloseCodes#NORMAL_CLOSURE}.
      *
-     * @return the boolean
+     * @return true if the Websocket is automatically reconnected except when {@link CloseReason} is {@link
+     * CloseReason.CloseCodes#NORMAL_CLOSURE}.
      */
     public boolean doesAutomaticallyReconnect() {
         return automaticallyReconnect;
     }
 
     /**
-     * Sets automatically reconnect.
+     * Sets the Websocket to automatically reconnected except when {@link CloseReason} is {@link
+     * CloseReason.CloseCodes#NORMAL_CLOSURE}.
      *
-     * @param automaticallyReconnect the automatically reconnect
+     * @param automaticallyReconnect true to automatically reconnect
      */
     public void setAutomaticallyReconnect(boolean automaticallyReconnect) {
         this.automaticallyReconnect = automaticallyReconnect;
