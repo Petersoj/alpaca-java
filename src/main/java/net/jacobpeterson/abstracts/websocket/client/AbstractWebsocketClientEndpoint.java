@@ -5,6 +5,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.websocket.CloseReason;
+import javax.websocket.CloseReason.CloseCodes;
 import javax.websocket.ContainerProvider;
 import javax.websocket.DeploymentException;
 import javax.websocket.Session;
@@ -17,10 +18,10 @@ import java.util.concurrent.Executors;
 /**
  * {@link AbstractWebsocketClientEndpoint} is used for handling a Websocket directly.
  * <br>
- * NOTES: You MUST annotate a subclass with @see and the appropriate websocket sub-protocols because Websocket
- * annotations don't work with inheritance. The subclass must also contain separate methods with the following
- * annotations: {@link javax.websocket.OnOpen}, {@link javax.websocket.OnClose}, {@link javax.websocket.OnMessage}, and
- * {@link javax.websocket.OnError}.
+ * NOTES: You MUST annotate a subclass's {@link #onOpen(Session)}, {@link #onClose(Session, CloseReason)}, {@link
+ * #onMessage(String)}, and {@link #onError(Throwable)} with {@link javax.websocket.OnOpen}, {@link
+ * javax.websocket.OnClose}, {@link javax.websocket.OnMessage}, and {@link javax.websocket.OnError} respectively and
+ * with the appropriate websocket sub-protocols because Websocket annotations don't work with inheritance.
  */
 public abstract class AbstractWebsocketClientEndpoint {
 
@@ -112,10 +113,10 @@ public abstract class AbstractWebsocketClientEndpoint {
     protected void onClose(Session userSession, CloseReason reason) {
         LOGGER.debug("onClose {}", userSession);
 
-        if (!reason.getCloseCode().equals(CloseReason.CloseCodes.NORMAL_CLOSURE) && automaticallyReconnect) {
+        if (!reason.getCloseCode().equals(CloseCodes.NORMAL_CLOSURE) && automaticallyReconnect) {
 
             LOGGER.info("Reconnecting due to closure: {}",
-                    CloseReason.CloseCodes.getCloseCode(reason.getCloseCode().getCode()));
+                    CloseCodes.getCloseCode(reason.getCloseCode().getCode()));
 
             try {
                 connect();
@@ -168,10 +169,10 @@ public abstract class AbstractWebsocketClientEndpoint {
 
     /**
      * Returns true if the Websocket is automatically reconnected except when {@link CloseReason} is {@link
-     * CloseReason.CloseCodes#NORMAL_CLOSURE}.
+     * CloseCodes#NORMAL_CLOSURE}.
      *
      * @return true if the Websocket is automatically reconnected except when {@link CloseReason} is {@link
-     * CloseReason.CloseCodes#NORMAL_CLOSURE}.
+     * CloseCodes#NORMAL_CLOSURE}.
      */
     public boolean doesAutomaticallyReconnect() {
         return automaticallyReconnect;
@@ -179,7 +180,7 @@ public abstract class AbstractWebsocketClientEndpoint {
 
     /**
      * Sets the Websocket to automatically reconnected except when {@link CloseReason} is {@link
-     * CloseReason.CloseCodes#NORMAL_CLOSURE}.
+     * CloseCodes#NORMAL_CLOSURE}.
      *
      * @param automaticallyReconnect true to automatically reconnect
      */

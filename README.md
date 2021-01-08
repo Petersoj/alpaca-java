@@ -32,7 +32,8 @@ This is a Java implementation for the <a href="https://alpaca.markets/">Alpaca</
     - [PolygonAPIRequestException](#PolygonAPIRequestException)
     - [Usage](#Usage)
     - [Basic Example](#Basic-Example)
-1. [Building](#building)
+1. [Building](#Building)
+1. [Testing](#Testing)
 
 ## Gradle and Maven Integration
 If you are using Gradle as your build tool, add the following dependency to your `build.gradle` file:
@@ -535,7 +536,19 @@ To build this project yourself, clone this repository and run:
 
 To install built artifacts to your local maven repo, run:
 ```
-./gradlew build install
+./gradlew install -x test
+```
+
+## Testing
+
+To run mocked tests using Mockito, run:
+```
+./gradlew test
+```
+
+To run live endpoint tests with Alpaca Paper credentials, create `alpaca.properties` and `polygon.properties` files in `src/test/resources` with the corresponding credentials. Then run:
+```
+./gradlew test -PtestPackage=live
 ```
 
 Contributions are welcome!
