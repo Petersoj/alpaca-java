@@ -106,7 +106,7 @@ jacocoTestReport {
         html.enabled false
     }
 }
-check.dependsOn jacocoTestReport
+jacocoTestReport.dependsOn check
 
 //
 // START publishing
