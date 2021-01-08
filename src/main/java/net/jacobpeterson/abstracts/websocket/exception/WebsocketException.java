@@ -3,7 +3,7 @@ package net.jacobpeterson.abstracts.websocket.exception;
 import java.io.IOException;
 
 /**
- * The type {@link WebsocketException}.
+ * {@link WebsocketException} is used for Websocket-related exceptions.
  */
 public class WebsocketException extends IOException {
 
@@ -29,7 +29,7 @@ public class WebsocketException extends IOException {
     /**
      * Instantiates a new {@link WebsocketException}.
      *
-     * @param exception the Exception
+     * @param exception the {@link Exception}
      */
     public WebsocketException(Exception exception) {
         super(exception.getMessage(), exception.getCause());

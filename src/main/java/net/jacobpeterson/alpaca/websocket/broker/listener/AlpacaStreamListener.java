@@ -13,9 +13,10 @@ import java.util.Set;
 public interface AlpacaStreamListener extends StreamListener<AlpacaStreamMessageType, AlpacaStreamMessage> {
 
     /**
-     * Gets the stream message types for this listener. Null or empty to listen to all other stream messages.
+     * Gets the {@link AlpacaStreamMessageType}s for this {@link AlpacaStreamListener}. Null or empty to listen to all
+     * other stream messages.
      *
-     * @return the stream message types
+     * @return the {@link AlpacaStreamMessageType}s
      */
     Set<AlpacaStreamMessageType> getStreamMessageTypes();
 }

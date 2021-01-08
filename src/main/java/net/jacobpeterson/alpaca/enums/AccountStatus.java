@@ -3,7 +3,7 @@ package net.jacobpeterson.alpaca.enums;
 import net.jacobpeterson.abstracts.enums.APIName;
 
 /**
- * The enum {@link AccountStatus}.
+ * {@link AccountStatus} defines enums for various account statuses.
  *
  * @see <a href="https://docs.alpaca.markets/api-documentation/api-v2/account#account-status">Account Status</a>
  */
@@ -50,7 +50,7 @@ public enum AccountStatus implements APIName {
     /**
      * Instantiates a new {@link AccountStatus}.
      *
-     * @param apiName the api name
+     * @param apiName the API name
      */
     AccountStatus(String apiName) {
         this.apiName = apiName;

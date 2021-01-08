@@ -4,3 +4,5 @@ build/
 .settings
 .DS_Store
 .idea/
+alpaca.properties
+polygon.properties

@@ -6,33 +6,33 @@ import net.jacobpeterson.abstracts.websocket.message.StreamMessageType;
 import net.jacobpeterson.util.gson.GsonUtil;
 
 /**
- * The enum {@link AlpacaStreamMessageType}.
+ * {@link AlpacaStreamMessageType} defines enums for various message types for {@link
+ * net.jacobpeterson.alpaca.websocket.broker.listener.AlpacaStreamListener}.
  */
 public enum AlpacaStreamMessageType implements StreamMessageType, APIName {
 
-    /** Listening {@link AlpacaStreamMessageType}. */
+    /** The listening status {@link AlpacaStreamMessageType}. */
     @SerializedName("listening")
     LISTENING(false),
 
-    /** Authorization {@link AlpacaStreamMessageType}. */
+    /** The authorization status {@link AlpacaStreamMessageType}. */
     @SerializedName("authorization")
     AUTHORIZATION(false),
 
-    /** Trade updates {@link AlpacaStreamMessageType}. */
+    /** The trade updates {@link AlpacaStreamMessageType}. */
     @SerializedName("trade_updates")
     TRADE_UPDATES(true),
 
-    /** Account updates {@link AlpacaStreamMessageType}. */
+    /** The account updates {@link AlpacaStreamMessageType}. */
     @SerializedName("account_updates")
     ACCOUNT_UPDATES(true);
 
-    /** Is API subscribable. */
     private final boolean isAPISubscribable;
 
     /**
      * Instantiates a new {@link AlpacaStreamMessageType}.
      *
-     * @param isAPISubscribable the is api subscribable
+     * @param isAPISubscribable true if API subscribable
      */
     AlpacaStreamMessageType(boolean isAPISubscribable) {
         this.isAPISubscribable = isAPISubscribable;
@@ -44,9 +44,9 @@ public enum AlpacaStreamMessageType implements StreamMessageType, APIName {
     }
 
     /**
-     * Is the API subscribable.
+     * Returns true if API subscribable.
      *
-     * @return the boolean
+     * @return true if API subscribable
      */
     public boolean isAPISubscribable() {
         return isAPISubscribable;

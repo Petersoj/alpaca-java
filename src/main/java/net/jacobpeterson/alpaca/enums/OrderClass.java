@@ -3,7 +3,7 @@ package net.jacobpeterson.alpaca.enums;
 import net.jacobpeterson.abstracts.enums.APIName;
 
 /**
- * The enum {@link OrderClass}.
+ * {@link OrderClass} defines enums of various {@link net.jacobpeterson.domain.alpaca.order.Order} classes.
  */
 public enum OrderClass implements APIName {
 
@@ -25,7 +25,7 @@ public enum OrderClass implements APIName {
     /**
      * Instantiates a new {@link OrderClass}.
      *
-     * @param apiName the api name
+     * @param apiName the API name
      */
     OrderClass(String apiName) {
         this.apiName = apiName;

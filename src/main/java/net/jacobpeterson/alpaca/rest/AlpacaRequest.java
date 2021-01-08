@@ -5,20 +5,13 @@ import net.jacobpeterson.abstracts.rest.AbstractRequest;
 import net.jacobpeterson.alpaca.properties.AlpacaProperties;
 
 /**
- * The Class {@link AlpacaRequest}.
+ * {@link AlpacaRequest} contains methods for HTTP requests for {@link net.jacobpeterson.alpaca.AlpacaAPI}.
  */
 public class AlpacaRequest extends AbstractRequest {
 
-    /** The Constant USER_AGENT_KEY. */
     private static final String USER_AGENT_KEY = "user-agent";
-
-    /** The Constant API_KEY_ID. */
     private static final String API_KEY_ID = "APCA-API-KEY-ID";
-
-    /** The Constant API_SECRET_KEY. */
     private static final String API_SECRET_KEY = "APCA-API-SECRET-KEY";
-
-    /** The Constant AUTH_TOKEN. */
     private static final String AUTH_TOKEN = "Authorization";
 
     /**

@@ -6,14 +6,15 @@ import net.jacobpeterson.abstracts.rest.exception.AbstractAPIRequestException;
 import java.io.InputStream;
 
 /**
- * The Class {@link AlpacaAPIRequestException}.
+ * {@link AlpacaAPIRequestException} represents {@link HttpResponse} request exceptions for {@link
+ * net.jacobpeterson.alpaca.AlpacaAPI}.
  */
 public class AlpacaAPIRequestException extends AbstractAPIRequestException {
 
     /**
      * Instantiates a new {@link AlpacaAPIRequestException}.
      *
-     * @param httpResponse the http response
+     * @param httpResponse the {@link HttpResponse}
      */
     public AlpacaAPIRequestException(HttpResponse<InputStream> httpResponse) {
         super("Alpaca", httpResponse);

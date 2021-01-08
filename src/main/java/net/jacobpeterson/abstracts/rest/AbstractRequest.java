@@ -11,6 +11,7 @@ import net.jacobpeterson.util.gson.GsonUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.lang.reflect.Type;
@@ -18,291 +19,283 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * The type {@link AbstractRequest}.
+ * {@link AbstractRequest} contains methods for HTTP requests.
  */
 public abstract class AbstractRequest {
 
-    /** The logger. */
     private static final Logger LOGGER = LoggerFactory.getLogger(AbstractRequest.class);
 
-    /** The headers. */
-    protected final Map<String, String> headers = new HashMap<>();
+    protected final Map<String, String> headers;
 
     /**
-     * Invoke get.
+     * Instantiates a new {@link AbstractRequest}.
+     */
+    public AbstractRequest() {
+        headers = new HashMap<>();
+    }
+
+    /**
+     * Invoke GET request.
      *
-     * @param abstractRequestBuilder the abstract request builder
+     * @param abstractRequestBuilder the {@link AbstractRequestBuilder}
      *
-     * @return the http response
+     * @return the {@link HttpResponse}
      */
     public HttpResponse<InputStream> invokeGet(AbstractRequestBuilder abstractRequestBuilder) {
-        try {
-            String url = abstractRequestBuilder.getURL();
+        String url = abstractRequestBuilder.buildURL();
 
-            LOGGER.debug("GET URL " + url);
+        LOGGER.debug("GET URL {}", url);
 
-            GetRequest request = Unirest.get(url);
+        GetRequest request = Unirest.get(url);
 
-            if (!headers.isEmpty()) {
-                request.headers(headers);
+        if (!headers.isEmpty()) {
+            request.headers(headers);
 
-                LOGGER.debug("GET Headers: " + headers);
-            }
-
-            return request.asBinary();
-        } catch (UnirestException e) {
-            LOGGER.error("UnirestException", e);
+            LOGGER.debug("GET Headers: {}", headers);
         }
 
-        return null;
+        try {
+            return request.asBinary();
+        } catch (UnirestException exception) {
+            LOGGER.error("Could not get request as binary!", exception);
+            return null;
+        }
     }
 
     /**
-     * Invoke head.
+     * Invoke HEAD request.
      *
-     * @param abstractRequestBuilder the abstract request builder
+     * @param abstractRequestBuilder the {@link AbstractRequestBuilder}
      *
-     * @return the http response
+     * @return the {@link HttpResponse}
      */
     public HttpResponse<InputStream> invokeHead(AbstractRequestBuilder abstractRequestBuilder) {
-        try {
-            String url = abstractRequestBuilder.getURL();
+        String url = abstractRequestBuilder.buildURL();
 
-            LOGGER.debug("HEAD URL " + url);
+        LOGGER.debug("HEAD URL {}", url);
 
-            GetRequest request = Unirest.head(url);
+        GetRequest request = Unirest.head(url);
 
-            if (!headers.isEmpty()) {
-                request.headers(headers);
+        if (!headers.isEmpty()) {
+            request.headers(headers);
 
-                LOGGER.debug("HEAD Headers: " + headers);
-            }
-
-            return request.asBinary();
-        } catch (UnirestException e) {
-            LOGGER.error("UnirestException", e);
+            LOGGER.debug("HEAD Headers: {}", headers);
         }
 
-        return null;
+        try {
+            return request.asBinary();
+        } catch (UnirestException exception) {
+            LOGGER.error("Could not get request as binary!", exception);
+            return null;
+        }
     }
 
     /**
-     * Invoke post.
+     * Invoke POST request.
      *
-     * @param abstractRequestBuilder the abstract request builder
+     * @param abstractRequestBuilder the {@link AbstractRequestBuilder}
      *
-     * @return the http response
+     * @return the {@link HttpResponse}
      */
     public HttpResponse<InputStream> invokePost(AbstractRequestBuilder abstractRequestBuilder) {
-        try {
-            String url = abstractRequestBuilder.getURL();
+        String url = abstractRequestBuilder.buildURL();
 
-            LOGGER.debug("POST URL: " + url);
+        LOGGER.debug("POST URL: {}", url);
 
-            HttpRequestWithBody request = Unirest.post(url);
+        HttpRequestWithBody request = Unirest.post(url);
 
-            if (!headers.isEmpty()) {
-                request.headers(headers);
+        if (!headers.isEmpty()) {
+            request.headers(headers);
 
-                LOGGER.debug("POST Headers: " + headers);
-            }
-
-            String body = abstractRequestBuilder.getBody();
-            if (body != null) {
-                request.body(body);
-
-                LOGGER.debug("POST Body: " + body);
-            }
-
-            return request.asBinary();
-        } catch (UnirestException e) {
-            LOGGER.error("UnirestException", e);
+            LOGGER.debug("POST Headers: {}", headers);
         }
 
-        return null;
+        String body = abstractRequestBuilder.buildBody();
+        if (body != null) {
+            request.body(body);
+
+            LOGGER.debug("POST Body: {}", body);
+        }
+
+        try {
+            return request.asBinary();
+        } catch (UnirestException exception) {
+            LOGGER.error("Could not get request as binary!", exception);
+            return null;
+        }
     }
 
     /**
-     * Invoke patch.
+     * Invoke PATCH request.
      *
-     * @param abstractRequestBuilder the abstract request builder
+     * @param abstractRequestBuilder the {@link AbstractRequestBuilder}
      *
-     * @return the http response
+     * @return the {@link HttpResponse}
      */
     public HttpResponse<InputStream> invokePatch(AbstractRequestBuilder abstractRequestBuilder) {
-        try {
-            String url = abstractRequestBuilder.getURL();
+        String url = abstractRequestBuilder.buildURL();
 
-            LOGGER.debug("PATCH URL " + url);
+        LOGGER.debug("PATCH URL {}", url);
 
-            HttpRequestWithBody request = Unirest.patch(url);
+        HttpRequestWithBody request = Unirest.patch(url);
 
-            if (!headers.isEmpty()) {
-                request.headers(headers);
+        if (!headers.isEmpty()) {
+            request.headers(headers);
 
-                LOGGER.debug("PATCH Headers: " + headers);
-            }
-
-            String body = abstractRequestBuilder.getBody();
-            if (body != null) {
-                request.body(body);
-
-                LOGGER.debug("PATCH Body: " + body);
-            }
-
-            return request.asBinary();
-        } catch (UnirestException e) {
-            LOGGER.error("UnirestException", e);
+            LOGGER.debug("PATCH Headers: {}", headers);
         }
 
-        return null;
+        String body = abstractRequestBuilder.buildBody();
+        if (body != null) {
+            request.body(body);
+
+            LOGGER.debug("PATCH Body: {}", body);
+        }
+
+        try {
+            return request.asBinary();
+        } catch (UnirestException exception) {
+            LOGGER.error("Could not get request as binary!", exception);
+            return null;
+        }
     }
 
     /**
-     * Invoke put http response.
+     * Invoke PUT request.
      *
-     * @param abstractRequestBuilder the abstract request builder
+     * @param abstractRequestBuilder the {@link AbstractRequestBuilder}
      *
-     * @return the http response
+     * @return the {@link HttpResponse}
      */
     public HttpResponse<InputStream> invokePut(AbstractRequestBuilder abstractRequestBuilder) {
-        try {
-            String url = abstractRequestBuilder.getURL();
+        String url = abstractRequestBuilder.buildURL();
 
-            LOGGER.debug("PUT URL " + url);
+        LOGGER.debug("PUT URL {}", url);
 
-            HttpRequestWithBody request = Unirest.put(url);
+        HttpRequestWithBody request = Unirest.put(url);
 
-            if (!headers.isEmpty()) {
-                request.headers(headers);
+        if (!headers.isEmpty()) {
+            request.headers(headers);
 
-                LOGGER.debug("PUT Headers: " + headers);
-            }
-
-            String body = abstractRequestBuilder.getBody();
-            if (body != null) {
-                request.body(body);
-
-                LOGGER.debug("PUT Body: " + body);
-            }
-
-            return request.asBinary();
-        } catch (UnirestException e) {
-            LOGGER.error("UnirestException", e);
+            LOGGER.debug("PUT Headers: {}", headers);
         }
 
-        return null;
+        String body = abstractRequestBuilder.buildBody();
+        if (body != null) {
+            request.body(body);
+
+            LOGGER.debug("PUT Body: " + body);
+        }
+
+        try {
+            return request.asBinary();
+        } catch (UnirestException exception) {
+            LOGGER.error("Could not get request as binary!", exception);
+            return null;
+        }
     }
 
     /**
-     * Invoke delete.
+     * Invoke DELETE request.
      *
-     * @param abstractRequestBuilder the abstract request builder
+     * @param abstractRequestBuilder the {@link AbstractRequestBuilder}
      *
-     * @return the http response
+     * @return the {@link HttpResponse}
      */
     public HttpResponse<InputStream> invokeDelete(AbstractRequestBuilder abstractRequestBuilder) {
-        try {
-            String url = abstractRequestBuilder.getURL();
+        String url = abstractRequestBuilder.buildURL();
 
-            LOGGER.debug("DELETE URL " + url);
+        LOGGER.debug("DELETE URL {}", url);
 
-            HttpRequestWithBody request = Unirest.delete(url);
+        HttpRequestWithBody request = Unirest.delete(url);
 
-            if (!headers.isEmpty()) {
-                request.headers(headers);
+        if (!headers.isEmpty()) {
+            request.headers(headers);
 
-                LOGGER.debug("DELETE Headers: " + headers);
-            }
-
-            String body = abstractRequestBuilder.getBody();
-            if (body != null) {
-                request.body(body);
-
-                LOGGER.debug("DELETE Body: " + body);
-            }
-
-            return request.asBinary();
-        } catch (UnirestException e) {
-            LOGGER.error("UnirestException", e);
+            LOGGER.debug("DELETE Headers: {}", headers);
         }
 
-        return null;
+        String body = abstractRequestBuilder.buildBody();
+        if (body != null) {
+            request.body(body);
+
+            LOGGER.debug("DELETE Body: {}", body);
+        }
+
+        try {
+            return request.asBinary();
+        } catch (UnirestException exception) {
+            LOGGER.error("Could not get request as binary!", exception);
+            return null;
+        }
     }
 
     /**
-     * Invoke options.
+     * Invoke OPTIONS request.
      *
-     * @param abstractRequestBuilder the abstract request builder
+     * @param abstractRequestBuilder the {@link AbstractRequestBuilder}
      *
-     * @return the http response
+     * @return the {@link HttpResponse}
      */
     public HttpResponse<InputStream> invokeOptions(AbstractRequestBuilder abstractRequestBuilder) {
-        try {
-            String url = abstractRequestBuilder.getURL();
+        String url = abstractRequestBuilder.buildURL();
 
-            LOGGER.debug("OPTIONS URL " + url);
+        LOGGER.debug("OPTIONS URL {}", url);
 
-            HttpRequestWithBody request = Unirest.options(url);
+        HttpRequestWithBody request = Unirest.options(url);
 
-            if (!headers.isEmpty()) {
-                request.headers(headers);
+        if (!headers.isEmpty()) {
+            request.headers(headers);
 
-                LOGGER.debug("OPTIONS Headers: " + headers);
-            }
-
-            String body = abstractRequestBuilder.getBody();
-            if (body != null) {
-                request.body(body);
-
-                LOGGER.debug("OPTIONS Body: " + body);
-            }
-
-            return request.asBinary();
-        } catch (UnirestException e) {
-            LOGGER.error("UnirestException", e);
+            LOGGER.debug("OPTIONS Headers: {}", headers);
         }
 
-        return null;
+        String body = abstractRequestBuilder.buildBody();
+        if (body != null) {
+            request.body(body);
+
+            LOGGER.debug("OPTIONS Body: {}", body);
+        }
+
+        try {
+            return request.asBinary();
+        } catch (UnirestException exception) {
+            LOGGER.error("Could not get request as binary!", exception);
+            return null;
+        }
     }
 
     /**
-     * Gets the response object.
+     * Gets a parsed Object with {@link GsonUtil#GSON} given {@link HttpResponse#getRawBody()} JSON.
      *
      * @param <T>          the generic type
-     * @param httpResponse the http response
-     * @param type         the type
+     * @param httpResponse the {@link HttpResponse}
+     * @param type         the type of object
      *
-     * @return the response object
+     * @return the {@link HttpResponse#getRawBody()} parsed Object
      */
     public <T> T getResponseObject(HttpResponse<InputStream> httpResponse, Type type) {
-        T responseObjectFromJson = null;
-
         try (JsonReader jsonReader = new JsonReader(new InputStreamReader(httpResponse.getRawBody()))) {
-            responseObjectFromJson = GsonUtil.GSON.fromJson(jsonReader, type);
-        } catch (Exception e) {
-            LOGGER.error("Exception", e);
+            return GsonUtil.GSON.fromJson(jsonReader, type);
+        } catch (IOException ioException) {
+            LOGGER.error("Could not parse response JSON object", ioException);
+            return null;
         }
-
-        return responseObjectFromJson;
     }
 
     /**
-     * Gets response json.
+     * Gets a {@link JsonElement} with {@link GsonUtil#GSON} given {@link HttpResponse#getRawBody()} JSON.
      *
-     * @param httpResponse the http response
+     * @param httpResponse the {@link HttpResponse}
      *
-     * @return the response json
+     * @return the {@link HttpResponse#getRawBody()} {@link JsonElement}
      */
     public JsonElement getResponseJSON(HttpResponse<InputStream> httpResponse) {
-        JsonElement responseJsonElement = null;
-
         try (JsonReader jsonReader = new JsonReader(new InputStreamReader(httpResponse.getRawBody()))) {
-            responseJsonElement = GsonUtil.JSON_PARSER.parse(jsonReader);
-        } catch (Exception e) {
-            LOGGER.error("Exception", e);
+            return GsonUtil.JSON_PARSER.parse(jsonReader);
+        } catch (IOException ioException) {
+            LOGGER.error("Could not parse response JSON object", ioException);
+            return null;
         }
-
-        return responseJsonElement;
     }
 }

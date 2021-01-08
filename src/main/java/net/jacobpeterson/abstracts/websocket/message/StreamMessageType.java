@@ -1,7 +1,7 @@
 package net.jacobpeterson.abstracts.websocket.message;
 
 /**
- * The type {@link StreamMessageType}.
+ * {@link StreamMessageType} is an interface to define a stream message type.
  */
 public interface StreamMessageType {
 }

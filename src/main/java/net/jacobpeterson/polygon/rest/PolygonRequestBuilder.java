@@ -5,7 +5,7 @@ import net.jacobpeterson.abstracts.rest.AbstractRequestBuilder;
 import java.util.Arrays;
 
 /**
- * The Class {@link PolygonRequestBuilder}.
+ * {@link PolygonRequestBuilder} is a builder for URL Strings for {@link net.jacobpeterson.polygon.PolygonAPI}.
  */
 public class PolygonRequestBuilder extends AbstractRequestBuilder {
 

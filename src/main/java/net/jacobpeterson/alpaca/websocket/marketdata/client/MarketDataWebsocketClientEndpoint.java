@@ -13,7 +13,8 @@ import javax.websocket.Session;
 import java.net.URI;
 
 /**
- * The type {@link MarketDataWebsocketClientEndpoint}.
+ * {@link MarketDataWebsocketClientEndpoint} is used for handling a Websocket directly for {@link
+ * net.jacobpeterson.alpaca.AlpacaAPI} market data.
  */
 @ClientEndpoint(subprotocols = "STRING")
 public class MarketDataWebsocketClientEndpoint extends AbstractWebsocketClientEndpoint {
@@ -21,8 +22,8 @@ public class MarketDataWebsocketClientEndpoint extends AbstractWebsocketClientEn
     /**
      * Instantiates a new {@link MarketDataWebsocketClientEndpoint}.
      *
-     * @param websocketClient the websocket client
-     * @param endpointURI     the endpoint uri
+     * @param websocketClient the {@link WebsocketClient}
+     * @param endpointURI     the endpoint {@link URI}
      */
     public MarketDataWebsocketClientEndpoint(WebsocketClient websocketClient, URI endpointURI) {
         super(websocketClient, endpointURI, "MarketDataWebsocketThread");

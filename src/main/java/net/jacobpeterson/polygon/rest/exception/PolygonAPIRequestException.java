@@ -6,14 +6,15 @@ import net.jacobpeterson.abstracts.rest.exception.AbstractAPIRequestException;
 import java.io.InputStream;
 
 /**
- * The Class {@link PolygonAPIRequestException}.
+ * {@link PolygonAPIRequestException} represents {@link HttpResponse} request exceptions for {@link
+ * net.jacobpeterson.polygon.PolygonAPI}.
  */
 public class PolygonAPIRequestException extends AbstractAPIRequestException {
 
     /**
      * Instantiates a new {@link PolygonAPIRequestException}.
      *
-     * @param httpResponse the http response
+     * @param httpResponse the {@link HttpResponse}
      */
     public PolygonAPIRequestException(HttpResponse<InputStream> httpResponse) {
         super("Polygon", httpResponse);

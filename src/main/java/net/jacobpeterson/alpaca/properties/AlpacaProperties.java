@@ -5,46 +5,31 @@ import java.util.StringJoiner;
 import static net.jacobpeterson.util.properties.PropertyUtil.getProperty;
 
 /**
- * The Class {@link AlpacaProperties}.
+ * {@link AlpacaProperties} defines properties for {@link net.jacobpeterson.alpaca.AlpacaAPI}.
  */
 public class AlpacaProperties {
 
     private static final String ALPACA_PROPERTIES_FILE = "alpaca.properties";
 
-    /** The Constant KEY_ID_KEY. */
     private static final String KEY_ID_KEY = "key_id";
-
-    /** The Constant KEY_ID_VALUE. */
     public static final String KEY_ID_VALUE = getProperty(ALPACA_PROPERTIES_FILE, KEY_ID_KEY);
 
-    /** The Constant SECRET_KEY. */
     private static final String SECRET_KEY = "secret";
-
-    /** The Constant SECRET_VALUE. */
     public static final String SECRET_VALUE = getProperty(ALPACA_PROPERTIES_FILE, SECRET_KEY);
 
-    /** The Constant BASE_API_URL_KEY. */
     private static final String BASE_API_URL_KEY = "base_api_url";
-
-    /** The Constant BASE_API_URL_VALUE. */
     public static final String BASE_API_URL_VALUE = getProperty(ALPACA_PROPERTIES_FILE, BASE_API_URL_KEY);
 
-    /** The Constant BASE_DATA_URL_KEY. */
     private static final String BASE_DATA_URL_KEY = "base_data_url";
-
-    /** The base data url value. */
     public static final String BASE_DATA_URL_VALUE = getProperty(ALPACA_PROPERTIES_FILE, BASE_DATA_URL_KEY);
 
-    /** The Constant USER_AGENT_KEY. */
     private static final String USER_AGENT_KEY = "user_agent";
-
-    /** The Constant USER_AGENT_VALUE. */
     public static final String USER_AGENT_VALUE = getProperty(ALPACA_PROPERTIES_FILE, USER_AGENT_KEY);
 
     /**
-     * Static to string string.
+     * Static {@link #toString()}.
      *
-     * @return the string
+     * @return the static {@link #toString()}
      */
     public static String staticToString() {
         return new StringJoiner(", ", AlpacaProperties.class.getSimpleName() + "[", "]")

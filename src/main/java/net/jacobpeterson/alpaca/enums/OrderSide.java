@@ -3,7 +3,7 @@ package net.jacobpeterson.alpaca.enums;
 import net.jacobpeterson.abstracts.enums.APIName;
 
 /**
- * The Enum {@link OrderSide}.
+ * {@link OrderSide} defines enums for various {@link net.jacobpeterson.domain.alpaca.order.Order} sides.
  */
 public enum OrderSide implements APIName {
 
@@ -19,7 +19,7 @@ public enum OrderSide implements APIName {
     /**
      * Instantiates a new {@link OrderSide}.
      *
-     * @param apiName the api name
+     * @param apiName the API name
      */
     OrderSide(String apiName) {
         this.apiName = apiName;

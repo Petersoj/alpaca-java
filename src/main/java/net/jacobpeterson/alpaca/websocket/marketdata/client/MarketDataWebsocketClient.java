@@ -11,6 +11,7 @@ import net.jacobpeterson.abstracts.websocket.exception.WebsocketException;
 import net.jacobpeterson.abstracts.websocket.listener.StreamListener;
 import net.jacobpeterson.abstracts.websocket.message.StreamMessage;
 import net.jacobpeterson.abstracts.websocket.message.StreamMessageType;
+import net.jacobpeterson.alpaca.websocket.broker.client.AlpacaWebsocketClient;
 import net.jacobpeterson.alpaca.websocket.marketdata.listener.MarketDataStreamListener;
 import net.jacobpeterson.alpaca.websocket.marketdata.message.MarketDataStreamMessageType;
 import net.jacobpeterson.domain.alpaca.marketdata.streaming.MarketDataStreamMessage;
@@ -37,87 +38,69 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
- * The type {@link MarketDataWebsocketClient}.
+ * {@link MarketDataWebsocketClient} represents a client for the {@link net.jacobpeterson.alpaca.AlpacaAPI} market data
+ * Websocket stream.
  */
 public class MarketDataWebsocketClient implements WebsocketClient {
 
-    /** The logger. */
     private static final Logger LOGGER = LoggerFactory.getLogger(MarketDataWebsocketClient.class);
 
-    /** The constant STREAM_KEY. */
     private static final String STREAM_KEY = "stream";
-
-    /** The constant EVENT_TYPE_KEY. */
     private static final String EVENT_TYPE_KEY = "ev";
-
-    /** The constant EVENT_TYPE_KEY. */
     private static final String DATA_KEY = "data";
-
-    /** The constant ALL_TICKERS. */
     private static final String ALL_TICKERS = "*";
-
-    /** The constant TRADES_STREAM_PREFIX. */
     private static final String TRADES_STREAM_PREFIX =
             GsonUtil.GSON.toJson(MarketDataStreamMessageType.TRADES).replace("\"", "") + ".";
-
-    /** The constant QUOTES_STREAM_PREFIX. */
     private static final String QUOTES_STREAM_PREFIX =
             GsonUtil.GSON.toJson(MarketDataStreamMessageType.QUOTES).replace("\"", "") + ".";
-
-    /** The constant AGGREGATE_MINUTE_STREAM_PREFIX. */
     private static final String AGGREGATE_MINUTE_STREAM_PREFIX =
             GsonUtil.GSON.toJson(MarketDataStreamMessageType.AGGREGATE_MINUTE).replace("\"", "") + ".";
 
-    /** The key id. */
-    private final String keyId;
-
-    /** The secret. */
+    private final String keyID;
     private final String secret;
-
-    /** The OAuth token. */
     private final String oAuthToken;
-
-    /** The Stream API URL. */
     private final String streamAPIURL;
-
-    /** The observers. */
     private final List<MarketDataStreamListener> listeners;
 
-    /** The client end point. */
     private MarketDataWebsocketClientEndpoint marketDataWebsocketClientEndpoint;
-
-    /** The Authenticated. */
     private boolean authenticated;
 
     /**
-     * Instantiates a new {@link MarketDataWebsocketClient}.
+     * Instantiates a new {@link AlpacaWebsocketClient}.
      *
-     * @param keyId       the key id
+     * @param keyID       the key ID
      * @param secret      the secret
-     * @param baseDataUrl the base data url
+     * @param baseDataUrl the base data URL
      */
-    public MarketDataWebsocketClient(String keyId, String secret, String baseDataUrl) {
-        this.keyId = keyId;
-        this.secret = secret;
-        this.oAuthToken = null;
-        this.streamAPIURL = baseDataUrl.replace("https", "wss") + "/stream";
-
-        this.listeners = new ArrayList<>();
+    public MarketDataWebsocketClient(String keyID, String secret, String baseDataUrl) {
+        this(keyID, secret, null, baseDataUrl);
     }
 
     /**
-     * Instantiates a new {@link MarketDataWebsocketClient}.
+     * Instantiates a new {@link AlpacaWebsocketClient}.
      *
-     * @param oAuthToken  the OAuth token
-     * @param baseDataUrl the base data url
+     * @param oAuthToken the OAuth token
+     * @param baseAPIURL the base API URL
      */
-    public MarketDataWebsocketClient(String oAuthToken, String baseDataUrl) {
-        this.keyId = null;
-        this.secret = null;
+    public MarketDataWebsocketClient(String oAuthToken, String baseAPIURL) {
+        this(null, null, oAuthToken, baseAPIURL);
+    }
+
+    /**
+     * Instantiates a new {@link AlpacaWebsocketClient}.
+     *
+     * @param keyID       the key ID
+     * @param secret      the secret
+     * @param oAuthToken  the OAuth token
+     * @param baseDataUrl the base data URL
+     */
+    private MarketDataWebsocketClient(String keyID, String secret, String oAuthToken, String baseDataUrl) {
+        this.keyID = keyID;
+        this.secret = secret;
         this.oAuthToken = oAuthToken;
         this.streamAPIURL = baseDataUrl.replace("https", "wss") + "/stream";
 
-        this.listeners = new ArrayList<>();
+        listeners = new ArrayList<>();
     }
 
     @Override
@@ -193,7 +176,7 @@ public class MarketDataWebsocketClient implements WebsocketClient {
         if (oAuthToken != null) {
             dataJson.addProperty("oauth_token", oAuthToken);
         } else {
-            dataJson.addProperty("key_id", keyId);
+            dataJson.addProperty("key_id", keyID);
             dataJson.addProperty("secret_key", secret);
         }
 
@@ -356,11 +339,11 @@ public class MarketDataWebsocketClient implements WebsocketClient {
     }
 
     /**
-     * Is authorization message success boolean.
+     * Returns true if {@link AuthorizationMessage} states success.
      *
-     * @param authorizationMessage the authorization message
+     * @param authorizationMessage the {@link AuthorizationMessage}
      *
-     * @return the boolean
+     * @return true if {@link AuthorizationMessage} states success
      */
     private boolean isAuthorizationMessageSuccess(AuthorizationMessage authorizationMessage) {
         return authorizationMessage.getData().getStatus().equalsIgnoreCase("authorized") &&
@@ -368,7 +351,7 @@ public class MarketDataWebsocketClient implements WebsocketClient {
     }
 
     /**
-     * Submit stream request.
+     * Submits a stream request.
      */
     private void submitStreamRequest() {
         /* Stream request example:
@@ -397,9 +380,9 @@ public class MarketDataWebsocketClient implements WebsocketClient {
     }
 
     /**
-     * Gets the registered message types. May contain duplicates.
+     * Gets the registered {@link MarketDataStreamMessageType}s of tickers. May contain duplicates.
      *
-     * @return the registered message types
+     * @return the registered {@link MarketDataStreamMessageType}s of tickers
      */
     public HashMap<String, Set<MarketDataStreamMessageType>> getRegisteredMessageTypes() {
         HashMap<String, Set<MarketDataStreamMessageType>> allMarketDataStreamMessageTypes = new HashMap<>();

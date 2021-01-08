@@ -14,9 +14,10 @@ import java.util.Set;
 public interface MarketDataStreamListener extends StreamListener<MarketDataStreamMessageType, MarketDataStreamMessage> {
 
     /**
-     * Gets the data streams for this listener. Null or empty to listen to all stream messages.
+     * Gets the {@link MarketDataStreamMessageType} of tickers {@link Map} for this {@link MarketDataStreamListener}.
+     * Null or empty to listen to all stream messages.
      *
-     * @return the stream message types
+     * @return the {@link MarketDataStreamMessageType} of tickers {@link Map}
      */
     Map<String, Set<MarketDataStreamMessageType>> getDataStreams();
 }

@@ -1,11 +1,11 @@
 package net.jacobpeterson.abstracts.websocket.client;
 
-import net.jacobpeterson.util.concurrency.ExecutorTracer;
 import org.eclipse.jetty.util.component.LifeCycle;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.websocket.CloseReason;
+import javax.websocket.CloseReason.CloseCodes;
 import javax.websocket.ContainerProvider;
 import javax.websocket.DeploymentException;
 import javax.websocket.Session;
@@ -13,64 +13,55 @@ import javax.websocket.WebSocketContainer;
 import java.io.IOException;
 import java.net.URI;
 import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 /**
- * The type {@link AbstractWebsocketClientEndpoint}.
+ * {@link AbstractWebsocketClientEndpoint} is used for handling a Websocket directly.
  * <br>
- * NOTES: You MUST annotate a subclass with {@link javax.websocket.ClientEndpoint} and the appropriate websocket
- * subprotocols because websocket annotations don't work with inheritance. The subclass must also contain separate
- * methods with the following annotations: {@link javax.websocket.OnOpen}, {@link javax.websocket.OnClose}, {@link
- * javax.websocket.OnMessage}, and {@link javax.websocket.OnError}.
+ * NOTES: You MUST annotate a subclass's {@link #onOpen(Session)}, {@link #onClose(Session, CloseReason)}, {@link
+ * #onMessage(String)}, and {@link #onError(Throwable)} with {@link javax.websocket.OnOpen}, {@link
+ * javax.websocket.OnClose}, {@link javax.websocket.OnMessage}, and {@link javax.websocket.OnError} respectively and
+ * with the appropriate websocket sub-protocols because Websocket annotations don't work with inheritance.
  */
 public abstract class AbstractWebsocketClientEndpoint {
 
-    /** The constant LOGGER. */
     private static final Logger LOGGER = LoggerFactory.getLogger(AbstractWebsocketClientEndpoint.class);
 
-    /** The Websocket client. */
     private final WebsocketClient websocketClient;
-
-    /** The Endpoint uri. */
     private final URI endpointURI;
-
-    /** The Message thread name. */
     private final String messageThreadName;
 
     /**
-     * The Executor service, which passes message handlers to a different thread, will prevent overflow of server
-     * buffers (causing a disconnect) from not consuming data fast enough on the client end.
+     * {@link ExecutorService} passes message handlers to a different thread, which will prevent overflow of server
+     * buffers which may cause a disconnect from not consuming data fast enough on the client end.
      */
     private ExecutorService executorService;
-
-    /** The automatically reconnect boolean. */
     private boolean automaticallyReconnect;
-
-    /** The User session. */
     private Session userSession;
 
     /**
      * Instantiates a new {@link AbstractWebsocketClientEndpoint}.
      *
-     * @param websocketClient   the websocket client
-     * @param endpointURI       the endpoint uri
+     * @param websocketClient   the {@link WebsocketClient}
+     * @param endpointURI       the endpoint {@link URI}
      * @param messageThreadName the message thread name
      */
-    public AbstractWebsocketClientEndpoint(WebsocketClient websocketClient, URI endpointURI,
-            String messageThreadName) {
+    public AbstractWebsocketClientEndpoint(WebsocketClient websocketClient, URI endpointURI, String messageThreadName) {
         this.websocketClient = websocketClient;
         this.endpointURI = endpointURI;
         this.messageThreadName = messageThreadName;
-        this.automaticallyReconnect = true;
+
+        automaticallyReconnect = true;
     }
 
     /**
-     * Connect.
+     * Connects this Websocket.
      *
-     * @throws DeploymentException the deployment exception
-     * @throws IOException         Signals that an I/O exception has occurred.
+     * @throws DeploymentException throw for {@link DeploymentException}s
+     * @throws IOException         throw for {@link IOException}s
      */
     public void connect() throws DeploymentException, IOException {
-        executorService = ExecutorTracer.newSingleThreadExecutor(r -> new Thread(r, messageThreadName));
+        executorService = Executors.newSingleThreadExecutor(runnable -> new Thread(runnable, messageThreadName));
 
         WebSocketContainer container = ContainerProvider.getWebSocketContainer();
 
@@ -79,9 +70,9 @@ public abstract class AbstractWebsocketClientEndpoint {
     }
 
     /**
-     * Disconnect.
+     * Disconnects this Websocket.
      *
-     * @throws IOException the io exception
+     * @throws IOException throw for {@link IOException}s
      */
     public void disconnect() throws Exception {
         automaticallyReconnect = false;
@@ -101,9 +92,9 @@ public abstract class AbstractWebsocketClientEndpoint {
     }
 
     /**
-     * On open.
+     * Handles the Websocket open.
      *
-     * @param userSession the user session
+     * @param userSession the user {@link Session}
      */
     protected void onOpen(Session userSession) {
         this.userSession = userSession;
@@ -114,18 +105,18 @@ public abstract class AbstractWebsocketClientEndpoint {
     }
 
     /**
-     * On close.
+     * Handles the Websocket close.
      *
-     * @param userSession the user session
-     * @param reason      the reason
+     * @param userSession the user {@link Session}
+     * @param reason      the {@link CloseReason}
      */
     protected void onClose(Session userSession, CloseReason reason) {
         LOGGER.debug("onClose {}", userSession);
 
-        if (!reason.getCloseCode().equals(CloseReason.CloseCodes.NORMAL_CLOSURE) && automaticallyReconnect) {
+        if (!reason.getCloseCode().equals(CloseCodes.NORMAL_CLOSURE) && automaticallyReconnect) {
 
             LOGGER.info("Reconnecting due to closure: {}",
-                    CloseReason.CloseCodes.getCloseCode(reason.getCloseCode().getCode()));
+                    CloseCodes.getCloseCode(reason.getCloseCode().getCode()));
 
             try {
                 connect();
@@ -140,7 +131,7 @@ public abstract class AbstractWebsocketClientEndpoint {
     }
 
     /**
-     * On message.
+     * Called when the Websocket message is received.
      *
      * @param message the message
      */
@@ -149,16 +140,16 @@ public abstract class AbstractWebsocketClientEndpoint {
     }
 
     /**
-     * On error.
+     * Handles the Websocket error.
      *
-     * @param throwable the throwable
+     * @param throwable the {@link Throwable}
      */
     protected void onError(Throwable throwable) {
         LOGGER.error("Websocket Error!", throwable);
     }
 
     /**
-     * Send a message.
+     * Sends a message through the Websocket.
      *
      * @param message the message
      */
@@ -168,27 +159,30 @@ public abstract class AbstractWebsocketClientEndpoint {
     }
 
     /**
-     * Gets user session.
+     * Gets user {@link Session}.
      *
-     * @return the user session
+     * @return the user {@link Session}
      */
     public Session getUserSession() {
         return userSession;
     }
 
     /**
-     * Does automatically reconnect boolean.
+     * Returns true if the Websocket is automatically reconnected except when {@link CloseReason} is {@link
+     * CloseCodes#NORMAL_CLOSURE}.
      *
-     * @return the boolean
+     * @return true if the Websocket is automatically reconnected except when {@link CloseReason} is {@link
+     * CloseCodes#NORMAL_CLOSURE}.
      */
     public boolean doesAutomaticallyReconnect() {
         return automaticallyReconnect;
     }
 
     /**
-     * Sets automatically reconnect.
+     * Sets the Websocket to automatically reconnected except when {@link CloseReason} is {@link
+     * CloseCodes#NORMAL_CLOSURE}.
      *
-     * @param automaticallyReconnect the automatically reconnect
+     * @param automaticallyReconnect true to automatically reconnect
      */
     public void setAutomaticallyReconnect(boolean automaticallyReconnect) {
         this.automaticallyReconnect = automaticallyReconnect;

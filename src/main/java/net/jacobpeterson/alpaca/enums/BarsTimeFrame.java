@@ -3,7 +3,7 @@ package net.jacobpeterson.alpaca.enums;
 import net.jacobpeterson.abstracts.enums.APIName;
 
 /**
- * The Enum {@link BarsTimeFrame}.
+ * {@link BarsTimeFrame} defines enums for time frames of a {@link net.jacobpeterson.domain.alpaca.marketdata.Bar}.
  */
 public enum BarsTimeFrame implements APIName {
 
@@ -25,7 +25,7 @@ public enum BarsTimeFrame implements APIName {
     /**
      * Instantiates a new {@link BarsTimeFrame}.
      *
-     * @param apiName the api name
+     * @param apiName the API name
      */
     BarsTimeFrame(String apiName) {
         this.apiName = apiName;

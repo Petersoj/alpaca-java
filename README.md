@@ -1,6 +1,6 @@
 <p align="center"><a href="https://petersoj.github.io/alpaca-java/" target="_blank"><img src="https://i.imgur.com/QNzjpub.png"></a></p>
 <p align="center">
-<a href="https://search.maven.org/artifact/net.jacobpeterson/alpaca-java" target="_blank"><img alt="Maven Central" src="https://img.shields.io/maven-central/v/net.jacobpeterson/alpaca-java"></a> <a href="https://javadoc.io/doc/net.jacobpeterson/alpaca-java" target="_blank"><img src="https://javadoc.io/badge/net.jacobpeterson/alpaca-java.svg" alt="Javadocs"></a> <a href="https://travis-ci.com/github/Petersoj/alpaca-java" target="_blank"><img src="https://travis-ci.com/Petersoj/alpaca-java.svg?branch=master" alt="Build Status"></a> <a href="https://codecov.io/gh/petersoj/alpaca-java" target="_blank"><img src="https://codecov.io/gh/petersoj/alpaca-java/branch/unittesting/graph/badge.svg" />
+<a href="https://search.maven.org/artifact/net.jacobpeterson/alpaca-java" target="_blank"><img alt="Maven Central" src="https://img.shields.io/maven-central/v/net.jacobpeterson/alpaca-java"></a> <a href="https://javadoc.io/doc/net.jacobpeterson/alpaca-java" target="_blank"><img src="https://javadoc.io/badge/net.jacobpeterson/alpaca-java.svg" alt="Javadocs"></a> <a href="https://travis-ci.com/github/Petersoj/alpaca-java" target="_blank"><img src="https://travis-ci.com/Petersoj/alpaca-java.svg?branch=master" alt="Build Status"></a> <a href="https://codecov.io/gh/petersoj/alpaca-java" target="_blank"><img src="https://codecov.io/gh/petersoj/alpaca-java/branch/master/graph/badge.svg" />
 </a> <a href="https://opensource.org/licenses/MIT" target="_blank"><img alt="GitHub" src="https://img.shields.io/github/license/petersoj/alpaca-java"></a>    
 </p>
 
@@ -32,7 +32,8 @@ This is a Java implementation for the <a href="https://alpaca.markets/">Alpaca</
     - [PolygonAPIRequestException](#PolygonAPIRequestException)
     - [Usage](#Usage)
     - [Basic Example](#Basic-Example)
-1. [Building](#building)
+1. [Building](#Building)
+1. [Testing](#Testing)
 
 ## Gradle and Maven Integration
 If you are using Gradle as your build tool, add the following dependency to your `build.gradle` file:
@@ -392,8 +393,8 @@ Alpaca offers WebSocket streaming for account and order updates.
 Example usage:
 ```java
 try {
-    // List to account updates and trade updates from Alpaca and print their outputs
-    alpacaAPI.addAlpacaStreamListener(new AlpacaStreamListenerAdapter(
+    // List to account updates and trade updates from Alpaca and print their messages out
+    AlpacaStreamListener alpacaStreamListener = new AlpacaStreamListenerAdapter(
             AlpacaStreamMessageType.ACCOUNT_UPDATES,
             AlpacaStreamMessageType.TRADE_UPDATES) {
         @Override
@@ -408,7 +409,20 @@ try {
                     break;
             }
         }
-    });
+    };
+
+    // Add the 'AlpacaStreamListener'
+    // Note that when the first 'AlpacaStreamListener' is added, the Websocket
+    // connection is created.
+    alpacaAPI.addAlpacaStreamListener(alpacaStreamListener);
+
+    // Wait for 5 seconds
+    Thread.sleep(5000);
+
+    // Remove the 'AlpacaStreamListener'
+    // Note that when the last 'AlpacaStreamListener' is removed, the Websocket
+    // connection is closed.
+    alpacaAPI.removeAlpacaStreamListener(alpacaStreamListener);
 } catch (WebsocketException exception) {
     exception.printStackTrace();
 }
@@ -420,8 +434,8 @@ Alpaca's Data API provides websocket streaming for trades, quotes and minute bar
 Example usage:
 ```java
 try {
-    // Print TSLA quotes, trades, and minute aggregates
-    alpacaAPI.addMarketDataStreamListener(new MarketDataStreamListenerAdapter(
+    // Listen to TSLA quotes, trades, and minute aggregates and print their messages out
+    MarketDataStreamListener streamListenerTSLA = new MarketDataStreamListenerAdapter(
             "TSLA",
             MarketDataStreamMessageType.QUOTES,
             MarketDataStreamMessageType.TRADES,
@@ -441,7 +455,20 @@ try {
                     break;
             }
         }
-    });
+    };
+
+    // Add the 'MarketDataStreamListener'
+    // Note that when the first 'MarketDataStreamListener' is added, the Websocket
+    // connection is created.
+    alpacaAPI.addMarketDataStreamListener(streamListenerTSLA);
+
+    // Wait for 5 seconds
+    Thread.sleep(5000);
+
+    // Remove the 'MarketDataStreamListener'
+    // Note that when the last 'MarketDataStreamListener' is removed, the Websocket
+    // connection is closed.
+    alpacaAPI.removeMarketDataStreamListener(streamListenerTSLA);
 } catch (WebsocketException exception) {
     exception.printStackTrace();
 }
@@ -489,12 +516,14 @@ try {
     polygonAPI.addPolygonStreamListener(new PolygonStreamListenerAdapter("AAPL",
             PolygonStreamMessageType.values()) {
         @Override
-        public void onStreamUpdate(PolygonStreamMessageType streamMessageType, PolygonStreamMessage streamMessage) {
-            System.out.println("===> streamUpdate " + streamMessageType + " " + streamMessage);
+        public void onStreamUpdate(PolygonStreamMessageType streamMessageType,
+                                   PolygonStreamMessage streamMessage) {
+            System.out.printf("%s stream update: %s \n",
+                    streamMessageType, streamMessage);
         }
     });
-} catch (WebsocketException e) {
-    e.printStackTrace();
+} catch (WebsocketException exception) {
+    exception.printStackTrace();
 }
 ```
 Again, refer to the `PolygonAPI` [Javadoc](https://javadoc.io/doc/net.jacobpeterson/alpaca-java/latest/net/jacobpeterson/polygon/PolygonAPI.html) for an exhaustive list of all available methods.
@@ -507,7 +536,19 @@ To build this project yourself, clone this repository and run:
 
 To install built artifacts to your local maven repo, run:
 ```
-./gradlew build install
+./gradlew install -x test
+```
+
+## Testing
+
+To run mocked tests using Mockito, run:
+```
+./gradlew test
+```
+
+To run live endpoint tests with Alpaca Paper credentials, create `alpaca.properties` and `polygon.properties` files in `src/test/resources` with the corresponding credentials. Then run:
+```
+./gradlew test -PtestPackage=live
 ```
 
 Contributions are welcome!

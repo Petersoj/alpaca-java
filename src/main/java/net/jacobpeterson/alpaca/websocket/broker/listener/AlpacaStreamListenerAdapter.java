@@ -8,19 +8,20 @@ import java.util.HashSet;
 import java.util.Set;
 
 /**
- * The Class {@link AlpacaStreamListenerAdapter}.
+ * {@link AlpacaStreamListenerAdapter} is an adapter for {@link AlpacaStreamListener}.
  */
 public class AlpacaStreamListenerAdapter implements AlpacaStreamListener {
 
-    /** The message types. */
-    private final HashSet<AlpacaStreamMessageType> streamUpdateTypes = new HashSet<>();
+    private final HashSet<AlpacaStreamMessageType> streamUpdateTypes;
 
     /**
      * Instantiates a new {@link AlpacaStreamListenerAdapter}.
      *
-     * @param streamUpdateTypes the stream update types
+     * @param streamUpdateTypes the {@link AlpacaStreamMessageType}s
      */
     public AlpacaStreamListenerAdapter(AlpacaStreamMessageType... streamUpdateTypes) {
+        this.streamUpdateTypes = new HashSet<>();
+
         if (streamUpdateTypes != null && streamUpdateTypes.length > 0) {
             this.streamUpdateTypes.addAll(Arrays.asList(streamUpdateTypes));
         }
@@ -32,6 +33,5 @@ public class AlpacaStreamListenerAdapter implements AlpacaStreamListener {
     }
 
     @Override
-    public void onStreamUpdate(AlpacaStreamMessageType streamMessageType, AlpacaStreamMessage streamMessage) {
-    }
+    public void onStreamUpdate(AlpacaStreamMessageType streamMessageType, AlpacaStreamMessage streamMessage) { }
 }

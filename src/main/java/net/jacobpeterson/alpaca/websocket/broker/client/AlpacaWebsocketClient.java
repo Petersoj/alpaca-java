@@ -33,51 +33,32 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
- * The type {@link AlpacaWebsocketClient}.
+ * {@link AlpacaWebsocketClient} represents a client for the {@link net.jacobpeterson.alpaca.AlpacaAPI} Websocket
+ * stream.
  */
 public class AlpacaWebsocketClient implements WebsocketClient {
 
-    /** The logger. */
     private static final Logger LOGGER = LoggerFactory.getLogger(AlpacaWebsocketClient.class);
-
-    /** The constant STREAM_KEY. */
     private static final String STREAM_KEY = "stream";
 
-    /** The key id. */
-    private final String keyId;
-
-    /** The secret. */
+    private final String keyID;
     private final String secret;
-
-    /** The OAuth token. */
     private final String oAuthToken;
-
-    /** The Base api url. */
     private final String streamAPIURL;
-
-    /** The observers. */
     private final List<AlpacaStreamListener> listeners;
 
-    /** The client end point. */
     private AlpacaWebsocketClientEndpoint alpacaWebsocketClientEndpoint;
-
-    /** The Authenticated. */
     private boolean authenticated;
 
     /**
      * Instantiates a new {@link AlpacaWebsocketClient}.
      *
-     * @param keyId      the key ID
+     * @param keyID      the key ID
      * @param secret     the secret
      * @param baseAPIURL the base API URL
      */
-    public AlpacaWebsocketClient(String keyId, String secret, String baseAPIURL) {
-        this.keyId = keyId;
-        this.secret = secret;
-        this.oAuthToken = null;
-        this.streamAPIURL = baseAPIURL.replace("https", "wss") + "/stream";
-
-        this.listeners = new ArrayList<>();
+    public AlpacaWebsocketClient(String keyID, String secret, String baseAPIURL) {
+        this(keyID, secret, null, baseAPIURL);
     }
 
     /**
@@ -87,12 +68,24 @@ public class AlpacaWebsocketClient implements WebsocketClient {
      * @param baseAPIURL the base API URL
      */
     public AlpacaWebsocketClient(String oAuthToken, String baseAPIURL) {
-        this.keyId = null;
-        this.secret = null;
+        this(null, null, oAuthToken, baseAPIURL);
+    }
+
+    /**
+     * Instantiates a new {@link AlpacaWebsocketClient}.
+     *
+     * @param keyID      the key ID
+     * @param secret     the secret
+     * @param oAuthToken the OAuth token
+     * @param baseAPIURL the base API URL
+     */
+    private AlpacaWebsocketClient(String keyID, String secret, String oAuthToken, String baseAPIURL) {
+        this.keyID = keyID;
+        this.secret = secret;
         this.oAuthToken = oAuthToken;
         this.streamAPIURL = baseAPIURL.replace("https", "wss") + "/stream";
 
-        this.listeners = new ArrayList<>();
+        listeners = new ArrayList<>();
     }
 
     @Override
@@ -169,7 +162,7 @@ public class AlpacaWebsocketClient implements WebsocketClient {
         if (oAuthToken != null) {
             payload.addProperty("oauth_token", oAuthToken);
         } else {
-            payload.addProperty("key_id", keyId);
+            payload.addProperty("key_id", keyID);
             payload.addProperty("secret_key", secret);
         }
 
@@ -261,11 +254,11 @@ public class AlpacaWebsocketClient implements WebsocketClient {
     }
 
     /**
-     * Is authorization message success boolean.
+     * Returns true if {@link AuthorizationMessage} states success.
      *
-     * @param authorizationMessage the authorization message
+     * @param authorizationMessage the {@link AuthorizationMessage}
      *
-     * @return the boolean
+     * @return true if {@link AuthorizationMessage} states success
      */
     private boolean isAuthorizationMessageSuccess(AuthorizationMessage authorizationMessage) {
         return authorizationMessage.getData().getStatus().equalsIgnoreCase("authorized") &&
@@ -273,7 +266,7 @@ public class AlpacaWebsocketClient implements WebsocketClient {
     }
 
     /**
-     * Submit stream request.
+     * Submits a stream request.
      */
     private void submitStreamRequestUpdate() {
         // Stream request example:
@@ -302,9 +295,9 @@ public class AlpacaWebsocketClient implements WebsocketClient {
     }
 
     /**
-     * Gets the registered message types.
+     * Gets the registered {@link AlpacaStreamMessageType}.
      *
-     * @return the registered message types
+     * @return the registered {@link AlpacaStreamMessageType}
      */
     public Set<AlpacaStreamMessageType> getRegisteredMessageTypes() {
         Set<AlpacaStreamMessageType> registeredStreamMessageTypes = new HashSet<>();

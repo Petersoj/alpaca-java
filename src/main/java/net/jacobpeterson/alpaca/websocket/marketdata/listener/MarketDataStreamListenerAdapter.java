@@ -10,18 +10,17 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- * The type {@link MarketDataStreamListenerAdapter}.
+ * {@link MarketDataStreamListenerAdapter} is an adapter for {@link MarketDataStreamListener}.
  */
 public class MarketDataStreamListenerAdapter implements MarketDataStreamListener {
 
-    /** The Data streams. */
     private final Map<String, Set<MarketDataStreamMessageType>> dataStreams = new HashMap<>();
 
     /**
      * Instantiates a new {@link MarketDataStreamListenerAdapter}.
      *
      * @param ticker           the ticker
-     * @param dataMessageTypes the data message types
+     * @param dataMessageTypes the {@link MarketDataStreamMessageType}s
      */
     public MarketDataStreamListenerAdapter(String ticker, MarketDataStreamMessageType... dataMessageTypes) {
         if (dataMessageTypes != null && dataMessageTypes.length > 0) {
@@ -35,7 +34,7 @@ public class MarketDataStreamListenerAdapter implements MarketDataStreamListener
      * Instantiates a new {@link MarketDataStreamListenerAdapter}.
      *
      * @param tickers          the tickers
-     * @param dataMessageTypes the data message types
+     * @param dataMessageTypes the {@link MarketDataStreamMessageType}s
      */
     public MarketDataStreamListenerAdapter(Set<String> tickers, MarketDataStreamMessageType... dataMessageTypes) {
         for (String ticker : tickers) {
@@ -50,12 +49,10 @@ public class MarketDataStreamListenerAdapter implements MarketDataStreamListener
     /**
      * Instantiates a new {@link MarketDataStreamListenerAdapter}.
      *
-     * @param dataStreams the data streams
+     * @param dataStreams the {@link MarketDataStreamMessageType}s of the ticker {@link Map}
      */
     public MarketDataStreamListenerAdapter(Map<String, Set<MarketDataStreamMessageType>> dataStreams) {
-        for (Map.Entry<String, Set<MarketDataStreamMessageType>> entry : dataStreams.entrySet()) {
-            dataStreams.put(entry.getKey(), new HashSet<>(entry.getValue()));
-        }
+        dataStreams.replaceAll((k, v) -> new HashSet<>(v));
     }
 
     @Override
@@ -64,6 +61,5 @@ public class MarketDataStreamListenerAdapter implements MarketDataStreamListener
     }
 
     @Override
-    public void onStreamUpdate(MarketDataStreamMessageType streamMessageType, MarketDataStreamMessage streamMessage) {
-    }
+    public void onStreamUpdate(MarketDataStreamMessageType streamMessageType, MarketDataStreamMessage streamMessage) { }
 }

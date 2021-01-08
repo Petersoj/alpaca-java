@@ -5,7 +5,9 @@ import net.jacobpeterson.abstracts.enums.APIName;
 import net.jacobpeterson.util.gson.GsonUtil;
 
 /**
- * The enum {@link PortfolioTimeFrame}.
+ * {@link PortfolioTimeFrame} defines enums for various
+ * {@link net.jacobpeterson.domain.alpaca.portfoliohistory.PortfolioHistory}
+ * time frames.
  */
 public enum PortfolioTimeFrame implements APIName {
 
