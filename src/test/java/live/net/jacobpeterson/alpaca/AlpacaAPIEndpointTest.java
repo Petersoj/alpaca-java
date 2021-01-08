@@ -15,6 +15,10 @@ import org.slf4j.LoggerFactory;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.fail;
 
+/**
+ * {@link AlpacaAPIEndpointTest} tests live endpoints using Alpaca Paper credentials given in the
+ * <code>alpaca.properties</code> file on the classpath.
+ */
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class AlpacaAPIEndpointTest {
 
@@ -31,6 +35,10 @@ public class AlpacaAPIEndpointTest {
     public void beforeEach() {
     }
 
+    /**
+     * Executed after each test. Note that this will {@link Thread#sleep(long)} for {@link #RATE_LIMIT_MILLIS} to
+     * protect against rate limiting.
+     */
     @AfterEach
     public void afterEach() {
         try {
