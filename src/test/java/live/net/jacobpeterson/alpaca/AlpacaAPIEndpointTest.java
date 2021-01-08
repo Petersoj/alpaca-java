@@ -56,6 +56,7 @@ public class AlpacaAPIEndpointTest {
      */
     @Test
     @Order(1)
+    @SuppressWarnings("ResultOfMethodCallIgnored")
     public void testGetAccount() throws AlpacaAPIRequestException, NumberFormatException {
         AlpacaAPI alpacaAPI = new AlpacaAPI();
 

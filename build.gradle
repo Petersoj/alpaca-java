@@ -15,9 +15,13 @@ buildscript {
 plugins {
     id 'java'
     id 'eclipse'
+
     id 'maven-publish'
     id 'com.bmuschko.nexus' version '2.3.1'
     id 'io.codearte.nexus-staging' version '0.11.0'
+
+    // For code coverage reports
+    id 'jacoco'
 }
 
 // Calling 'apply' here because 'jsonschema2pojo' doesn't exist in Gradle Central Plugin Repository
@@ -96,6 +100,14 @@ test {
     }
 }
 
+jacocoTestReport {
+    reports {
+        xml.enabled true
+        html.enabled false
+    }
+}
+check.dependsOn jacocoTestReport
+
 //
 // START publishing
 //
@@ -162,8 +174,10 @@ processResources {
 //
 // The generated POJOs will be in a package structure analogous to the path in the 'schema_json/' directory
 // See: https://github.com/joelittlejohn/jsonschema2pojo/wiki/Reference
+
+final def targetDirectoryPath = file("${project.buildDir}/generated-sources/schemajson").getPath()
+
 task generatePOJOs() {
-    final def targetDirectory = file("${project.buildDir}/generated-sources/schemajson").getPath()
     final def jsonSourceDirectory = file("${project.projectDir}/schema_json").getPath()
     final def jsonPackageNameStart = "net.jacobpeterson.domain"
 
@@ -182,12 +196,12 @@ task generatePOJOs() {
             // Configure this task to participate in incremental builds so that it only executes when changes occur
             jsonToPOJOTask.configure {
                 inputs.file(jsonFile)
-                outputs.dir(targetDirectory)
+                outputs.dir(targetDirectoryPath)
             }
 
             jsonToPOJOTask.doFirst {
                 jsonToPOJOTask.configuration.source = files(jsonFile.getAbsolutePath())
-                jsonToPOJOTask.configuration.targetDirectory = file(targetDirectory)
+                jsonToPOJOTask.configuration.targetDirectory = file(targetDirectoryPath)
                 jsonToPOJOTask.configuration.targetPackage = targetPackage
             }
 
@@ -203,15 +217,14 @@ compileJava {
 sourceSets {
     main {
         java {
-            srcDir 'src/main/java'
-            srcDir 'build/generated-sources/schemajson'
+            srcDir targetDirectoryPath
         }
     }
 }
 
 jsonSchema2Pojo {
     includeAdditionalProperties = true
-    targetDirectory = file('build/generated-sources/schemajson')
+    targetDirectory = file(targetDirectoryPath)
     propertyWordDelimiters = ['-', '_'] as char[]
     annotationStyle = 'gson'
     sourceType = 'jsonschema'
