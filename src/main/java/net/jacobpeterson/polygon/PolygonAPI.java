@@ -4,6 +4,8 @@ import com.google.common.base.Preconditions;
 import com.google.gson.reflect.TypeToken;
 import com.mashape.unirest.http.HttpResponse;
 import net.jacobpeterson.abstracts.websocket.exception.WebsocketException;
+import net.jacobpeterson.alpaca.AlpacaConstants;
+import net.jacobpeterson.alpaca.enums.Direction;
 import net.jacobpeterson.domain.polygon.aggregates.AggregatesResponse;
 import net.jacobpeterson.domain.polygon.conditionsmapping.ConditionsMapping;
 import net.jacobpeterson.domain.polygon.dailyopenclose.DailyOpenClose;
@@ -29,6 +31,7 @@ import net.jacobpeterson.domain.polygon.tickerdetails.TickerDetails;
 import net.jacobpeterson.domain.polygon.tickernews.TickerNews;
 import net.jacobpeterson.domain.polygon.tickers.TickersResponse;
 import net.jacobpeterson.domain.polygon.tickertypes.TickerTypes;
+import net.jacobpeterson.polygon.enums.AggregatesSort;
 import net.jacobpeterson.polygon.enums.ConditionMappingsType;
 import net.jacobpeterson.polygon.enums.FinancialReportType;
 import net.jacobpeterson.polygon.enums.FinancialSort;
@@ -880,7 +883,7 @@ public class PolygonAPI {
      * <a href="https://polygon.io/docs/#!/Stocks--Equities/get_v2_aggs_ticker_ticker_range_multiplier_timespan_from_to">Aggregates</a>
      */
     public AggregatesResponse getAggregates(String ticker, Integer multiplier, Timespan timeSpan, LocalDate fromDate,
-            LocalDate toDate, Boolean unadjusted) throws PolygonAPIRequestException {
+            LocalDate toDate, Integer limit, AggregatesSort sort, Boolean unadjusted) throws PolygonAPIRequestException {
         Preconditions.checkNotNull(ticker);
         Preconditions.checkNotNull(timeSpan);
         Preconditions.checkNotNull(fromDate);
@@ -898,6 +901,14 @@ public class PolygonAPI {
 
         if (unadjusted != null) {
             builder.appendURLParameter(PolygonConstants.UNADJUSTED_PARAMETER, unadjusted.toString());
+        }
+
+        if (limit != null) {
+            builder.appendURLParameter(PolygonConstants.LIMIT_PARAMETER, String.valueOf(limit));
+        }
+
+        if (sort != null) {
+            builder.appendURLParameter(PolygonConstants.SORT_PARAMETER, sort.getAPIName());
         }
 
         HttpResponse<InputStream> response = polygonRequest.invokeGet(builder);

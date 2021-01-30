@@ -11,6 +11,10 @@
       "existingJavaType": "java.lang.Long",
       "title": "Volume"
     },
+    "vw": {
+      "existingJavaType": "java.lang.Double",
+      "title": "VWap"
+    },
     "o": {
       "existingJavaType": "java.lang.Double",
       "title": "Open"
