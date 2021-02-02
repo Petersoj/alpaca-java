@@ -921,6 +921,60 @@ public class PolygonAPI {
     }
 
     /**
+     * Get aggregates for a date range, in custom time window sizes
+     *
+     * @param ticker     Ticker symbol of the request
+     * @param multiplier Size of the timespan multiplier
+     * @param timeSpan   Size of the time window
+     * @param fromDateUNIX long UTC timestamp
+     * @param toDateUNIX long UTC timestamp
+     * @param unadjusted Set to true if the results should NOT be adjusted for splits
+     *
+     * @return the aggregates
+     *
+     * @throws PolygonAPIRequestException the polygon API exception
+     * @see
+     * <a href="https://polygon.io/docs/#!/Stocks--Equities/get_v2_aggs_ticker_ticker_range_multiplier_timespan_from_to">Aggregates</a>
+     */
+    public AggregatesResponse getAggregates(String ticker, Integer multiplier, Timespan timeSpan, Long fromDateUNIX,
+            Long toDateUNIX, Integer limit, AggregatesSort sort, Boolean unadjusted) throws PolygonAPIRequestException {
+        Preconditions.checkNotNull(ticker);
+        Preconditions.checkNotNull(timeSpan);
+        Preconditions.checkNotNull(fromDateUNIX);
+        Preconditions.checkNotNull(toDateUNIX);
+
+        PolygonRequestBuilder builder = new PolygonRequestBuilder(baseAPIURL, PolygonConstants.VERSION_2_ENDPOINT,
+                PolygonConstants.AGGS_ENDPOINT,
+                PolygonConstants.TICKER_ENDPOINT,
+                ticker,
+                PolygonConstants.RANGE_ENDPOINT,
+                Integer.toString((multiplier == null) ? 1 : multiplier),
+                timeSpan.getAPIName(),
+                fromDateUNIX.toString(),
+                toDateUNIX.toString());
+
+        if (unadjusted != null) {
+            builder.appendURLParameter(PolygonConstants.UNADJUSTED_PARAMETER, unadjusted.toString());
+        }
+
+        if (limit != null) {
+            builder.appendURLParameter(PolygonConstants.LIMIT_PARAMETER, String.valueOf(limit));
+        }
+
+        if (sort != null) {
+            builder.appendURLParameter(PolygonConstants.SORT_PARAMETER, sort.getAPIName());
+        }
+
+        HttpResponse<InputStream> response = polygonRequest.invokeGet(builder);
+
+        if (response.getStatus() != 200) {
+            throw new PolygonAPIRequestException(response);
+        }
+
+        return polygonRequest.getResponseObject(response, AggregatesResponse.class);
+    }
+
+    /**
      * Get the daily OHLC for entire markets.
      *
      * @param locale     Locale of the aggregates ( See 'Locales' API )
