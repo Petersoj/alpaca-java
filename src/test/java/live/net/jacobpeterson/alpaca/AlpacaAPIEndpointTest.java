@@ -64,37 +64,7 @@ public class AlpacaAPIEndpointTest {
 
         LOGGER.debug(account.toString());
 
-        // Assert basic data exists
-        assertNotNull(account.getId());
-        assertNotNull(account.getAccountNumber());
-        assertNotNull(account.getStatus());
-        assertNotNull(account.getCurrency());
-        assertNotNull(account.getCash());
-        assertNotNull(account.getPortfolioValue());
-        assertNotNull(account.getPatternDayTrader());
-        assertNotNull(account.getTradeSuspendedByUser());
-        assertNotNull(account.getTradingBlocked());
-        assertNotNull(account.getTransfersBlocked());
-        assertNotNull(account.getAccountBlocked());
-        assertNotNull(account.getCreatedAt());
-        assertNotNull(account.getShortingEnabled());
-        assertNotNull(account.getLongMarketValue());
-        assertNotNull(account.getShortMarketValue());
-        assertNotNull(account.getEquity());
-        assertNotNull(account.getLastEquity());
-        assertNotNull(account.getMultiplier());
-        assertNotNull(account.getBuyingPower());
-        assertNotNull(account.getInitialMargin());
-        assertNotNull(account.getMaintenanceMargin());
-        assertNotNull(account.getSma());
-        assertNotNull(account.getDaytradeCount());
-        assertNotNull(account.getLastMaintenanceMargin());
-        assertNotNull(account.getDaytradingBuyingPower());
-        assertNotNull(account.getRegtBuyingPower());
-
-        // Assert basic data integrity
-        Double.parseDouble(account.getCash());
-        Double.parseDouble(account.getEquity());
+        // Assert basic data integrity and not null
         Double.parseDouble(account.getCash());
         Double.parseDouble(account.getPortfolioValue());
         Double.parseDouble(account.getLongMarketValue());
@@ -107,5 +77,21 @@ public class AlpacaAPIEndpointTest {
         Double.parseDouble(account.getLastMaintenanceMargin());
         Double.parseDouble(account.getDaytradingBuyingPower());
         Double.parseDouble(account.getRegtBuyingPower());
+
+        // Assert other data exists
+        assertNotNull(account.getId());
+        assertNotNull(account.getAccountNumber());
+        assertNotNull(account.getStatus());
+        assertNotNull(account.getCurrency());
+        assertNotNull(account.getPatternDayTrader());
+        assertNotNull(account.getTradeSuspendedByUser());
+        assertNotNull(account.getTradingBlocked());
+        assertNotNull(account.getTransfersBlocked());
+        assertNotNull(account.getAccountBlocked());
+        assertNotNull(account.getCreatedAt());
+        assertNotNull(account.getShortingEnabled());
+        assertNotNull(account.getMultiplier());
+        assertNotNull(account.getSma());
+        assertNotNull(account.getDaytradeCount());
     }
 }
