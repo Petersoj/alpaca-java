@@ -3,9 +3,8 @@ package net.jacobpeterson.polygon;
 import com.google.common.base.Preconditions;
 import com.google.gson.reflect.TypeToken;
 import com.mashape.unirest.http.HttpResponse;
+import net.jacobpeterson.abstracts.enums.SortDirection;
 import net.jacobpeterson.abstracts.websocket.exception.WebsocketException;
-import net.jacobpeterson.alpaca.AlpacaConstants;
-import net.jacobpeterson.alpaca.enums.Direction;
 import net.jacobpeterson.domain.polygon.aggregates.AggregatesResponse;
 import net.jacobpeterson.domain.polygon.conditionsmapping.ConditionsMapping;
 import net.jacobpeterson.domain.polygon.dailyopenclose.DailyOpenClose;
@@ -31,13 +30,9 @@ import net.jacobpeterson.domain.polygon.tickerdetails.TickerDetails;
 import net.jacobpeterson.domain.polygon.tickernews.TickerNews;
 import net.jacobpeterson.domain.polygon.tickers.TickersResponse;
 import net.jacobpeterson.domain.polygon.tickertypes.TickerTypes;
-import net.jacobpeterson.polygon.enums.AggregatesSort;
-import net.jacobpeterson.polygon.enums.ConditionMappingsType;
-import net.jacobpeterson.polygon.enums.FinancialReportType;
-import net.jacobpeterson.polygon.enums.FinancialSort;
-import net.jacobpeterson.polygon.enums.GainersLosersDirection;
-import net.jacobpeterson.polygon.enums.Market;
-import net.jacobpeterson.polygon.enums.Timespan;
+import net.jacobpeterson.polygon.PolygonConstants.Endpoints;
+import net.jacobpeterson.polygon.PolygonConstants.Parameters;
+import net.jacobpeterson.polygon.enums.*;
 import net.jacobpeterson.polygon.properties.PolygonProperties;
 import net.jacobpeterson.polygon.rest.PolygonRequest;
 import net.jacobpeterson.polygon.rest.PolygonRequestBuilder;
@@ -129,45 +124,45 @@ public class PolygonAPI {
      *
      * @return the tickers
      *
-     * @throws PolygonAPIRequestException the polygon API exception
+     * @throws PolygonAPIRequestException throw for {@link PolygonAPIRequestException}s
      * @see <a href="https://polygon.io/docs/get_v2_reference_tickers_anchor">Tickers</a>
      */
     public TickersResponse getTickers(String sort, String tickerType, Market market, String locale,
             String search, Integer perpage, Integer page, Boolean active) throws PolygonAPIRequestException {
-        PolygonRequestBuilder builder = new PolygonRequestBuilder(baseAPIURL, PolygonConstants.VERSION_2_ENDPOINT,
-                PolygonConstants.REFERENCE_ENDPOINT,
-                PolygonConstants.TICKERS_ENDPOINT);
+        PolygonRequestBuilder builder = new PolygonRequestBuilder(baseAPIURL, Endpoints.VERSION_2,
+                Endpoints.REFERENCE,
+                Endpoints.TICKERS);
 
         if (sort != null) {
-            builder.appendURLParameter(PolygonConstants.SORT_PARAMETER, sort);
+            builder.appendURLParameter(Parameters.SORT, sort);
         }
 
         if (tickerType != null) {
-            builder.appendURLParameter(PolygonConstants.TYPE_PARAMETER, tickerType);
+            builder.appendURLParameter(Parameters.TYPE, tickerType);
         }
 
         if (market != null) {
-            builder.appendURLParameter(PolygonConstants.MARKET_PARAMETER, market.getAPIName());
+            builder.appendURLParameter(Parameters.MARKET, market.getAPIName());
         }
 
         if (locale != null) {
-            builder.appendURLParameter(PolygonConstants.LOCALE_PARAMETER, locale);
+            builder.appendURLParameter(Parameters.LOCALE, locale);
         }
 
         if (search != null) {
-            builder.appendURLParameter(PolygonConstants.SEARCH_PARAMETER, search);
+            builder.appendURLParameter(Parameters.SEARCH, search);
         }
 
         if (perpage != null) {
-            builder.appendURLParameter(PolygonConstants.PERPAGE_PARAMETER, String.valueOf(perpage));
+            builder.appendURLParameter(Parameters.PERPAGE, String.valueOf(perpage));
         }
 
         if (page != null) {
-            builder.appendURLParameter(PolygonConstants.PAGE_PARAMETER, String.valueOf(page));
+            builder.appendURLParameter(Parameters.PAGE, String.valueOf(page));
         }
 
         if (active != null) {
-            builder.appendURLParameter(PolygonConstants.ACTIVE_PARAMETER, String.valueOf(active));
+            builder.appendURLParameter(Parameters.ACTIVE, String.valueOf(active));
         }
 
         HttpResponse<InputStream> response = polygonRequest.invokeGet(builder);
@@ -187,9 +182,9 @@ public class PolygonAPI {
      * @see <a href="https://polygon.io/docs/#!/Reference/get_v2_reference_types">Ticker Types</a>
      */
     public TickerTypes getTickerTypes() throws PolygonAPIRequestException {
-        PolygonRequestBuilder builder = new PolygonRequestBuilder(baseAPIURL, PolygonConstants.VERSION_2_ENDPOINT,
-                PolygonConstants.REFERENCE_ENDPOINT,
-                PolygonConstants.TYPES_ENDPOINT);
+        PolygonRequestBuilder builder = new PolygonRequestBuilder(baseAPIURL, Endpoints.VERSION_2,
+                Endpoints.REFERENCE,
+                Endpoints.TYPES);
 
         HttpResponse<InputStream> response = polygonRequest.invokeGet(builder);
 
@@ -208,17 +203,17 @@ public class PolygonAPI {
      *
      * @return the ticker details
      *
-     * @throws PolygonAPIRequestException the polygon API exception
+     * @throws PolygonAPIRequestException throw for {@link PolygonAPIRequestException}s
      * @see <a href="https://polygon.io/docs/#!/Meta-Data/get_v1_meta_symbols_symbol_company">Ticker Details</a>
      */
     public TickerDetails getTickerDetails(String symbol) throws PolygonAPIRequestException {
         Preconditions.checkNotNull(symbol);
 
-        PolygonRequestBuilder builder = new PolygonRequestBuilder(baseAPIURL, PolygonConstants.VERSION_1_ENDPOINT,
-                PolygonConstants.META_ENDPOINT,
-                PolygonConstants.SYMBOLS_ENDPOINT,
+        PolygonRequestBuilder builder = new PolygonRequestBuilder(baseAPIURL, Endpoints.VERSION_1,
+                Endpoints.META,
+                Endpoints.SYMBOLS,
                 symbol,
-                PolygonConstants.COMPANY_ENDPOINT);
+                Endpoints.COMPANY);
 
         HttpResponse<InputStream> response = polygonRequest.invokeGet(builder);
 
@@ -238,25 +233,25 @@ public class PolygonAPI {
      *
      * @return the ticker news
      *
-     * @throws PolygonAPIRequestException the polygon API exception
+     * @throws PolygonAPIRequestException throw for {@link PolygonAPIRequestException}s
      * @see <a href="https://polygon.io/docs/#!/Meta-Data/get_v1_meta_symbols_symbol_news">Ticker News</a>
      */
     public ArrayList<TickerNews> getTickerNews(String symbol, Integer perpage, Integer page)
             throws PolygonAPIRequestException {
         Preconditions.checkNotNull(symbol);
 
-        PolygonRequestBuilder builder = new PolygonRequestBuilder(baseAPIURL, PolygonConstants.VERSION_1_ENDPOINT,
-                PolygonConstants.META_ENDPOINT,
-                PolygonConstants.SYMBOLS_ENDPOINT,
+        PolygonRequestBuilder builder = new PolygonRequestBuilder(baseAPIURL, Endpoints.VERSION_1,
+                Endpoints.META,
+                Endpoints.SYMBOLS,
                 symbol,
-                PolygonConstants.NEWS_ENDPOINT);
+                Endpoints.NEWS);
 
         if (perpage != null) {
-            builder.appendURLParameter(PolygonConstants.PERPAGE_PARAMETER, String.valueOf(perpage));
+            builder.appendURLParameter(Parameters.PERPAGE, String.valueOf(perpage));
         }
 
         if (page != null) {
-            builder.appendURLParameter(PolygonConstants.PAGE_PARAMETER, String.valueOf(page));
+            builder.appendURLParameter(Parameters.PAGE, String.valueOf(page));
         }
 
         HttpResponse<InputStream> response = polygonRequest.invokeGet(builder);
@@ -275,13 +270,13 @@ public class PolygonAPI {
      *
      * @return the markets
      *
-     * @throws PolygonAPIRequestException the polygon API exception
+     * @throws PolygonAPIRequestException throw for {@link PolygonAPIRequestException}s
      * @see <a href="https://polygon.io/docs/#!/Reference/get_v2_reference_markets">Markets</a>
      */
     public MarketsResponse getMarkets() throws PolygonAPIRequestException {
-        PolygonRequestBuilder builder = new PolygonRequestBuilder(baseAPIURL, PolygonConstants.VERSION_2_ENDPOINT,
-                PolygonConstants.REFERENCE_ENDPOINT,
-                PolygonConstants.MARKETS_ENDPOINT);
+        PolygonRequestBuilder builder = new PolygonRequestBuilder(baseAPIURL, Endpoints.VERSION_2,
+                Endpoints.REFERENCE,
+                Endpoints.MARKETS);
 
         HttpResponse<InputStream> response = polygonRequest.invokeGet(builder);
 
@@ -297,13 +292,13 @@ public class PolygonAPI {
      *
      * @return the locales
      *
-     * @throws PolygonAPIRequestException the polygon API exception
+     * @throws PolygonAPIRequestException throw for {@link PolygonAPIRequestException}s
      * @see <a href="https://polygon.io/docs/#!/Reference/get_v2_reference_locales">Locales</a>
      */
     public LocalesResponse getLocales() throws PolygonAPIRequestException {
-        PolygonRequestBuilder builder = new PolygonRequestBuilder(baseAPIURL, PolygonConstants.VERSION_2_ENDPOINT,
-                PolygonConstants.REFERENCE_ENDPOINT,
-                PolygonConstants.LOCALES_ENDPOINT);
+        PolygonRequestBuilder builder = new PolygonRequestBuilder(baseAPIURL, Endpoints.VERSION_2,
+                Endpoints.REFERENCE,
+                Endpoints.LOCALES);
 
         HttpResponse<InputStream> response = polygonRequest.invokeGet(builder);
 
@@ -321,15 +316,15 @@ public class PolygonAPI {
      *
      * @return the stock splits
      *
-     * @throws PolygonAPIRequestException the polygon API exception
+     * @throws PolygonAPIRequestException throw for {@link PolygonAPIRequestException}s
      * @see <a href="https://polygon.io/docs/#!/Reference/get_v2_reference_splits_symbol">Stock Splits</a>
      */
     public StockSplitsResponse getStockSplits(String symbol) throws PolygonAPIRequestException {
         Preconditions.checkNotNull(symbol);
 
-        PolygonRequestBuilder builder = new PolygonRequestBuilder(baseAPIURL, PolygonConstants.VERSION_2_ENDPOINT,
-                PolygonConstants.REFERENCE_ENDPOINT,
-                PolygonConstants.SPLITS_ENDPOINT, symbol);
+        PolygonRequestBuilder builder = new PolygonRequestBuilder(baseAPIURL, Endpoints.VERSION_2,
+                Endpoints.REFERENCE,
+                Endpoints.SPLITS, symbol);
 
         HttpResponse<InputStream> response = polygonRequest.invokeGet(builder);
 
@@ -347,15 +342,15 @@ public class PolygonAPI {
      *
      * @return the stock dividends
      *
-     * @throws PolygonAPIRequestException the polygon API exception
+     * @throws PolygonAPIRequestException throw for {@link PolygonAPIRequestException}s
      * @see <a href="https://polygon.io/docs/#!/Meta-Data/get_v1_meta_symbols_symbol_dividends">Stock Dividends</a>
      */
     public StockDividendsResponse getStockDividends(String symbol) throws PolygonAPIRequestException {
         Preconditions.checkNotNull(symbol);
 
-        PolygonRequestBuilder builder = new PolygonRequestBuilder(baseAPIURL, PolygonConstants.VERSION_2_ENDPOINT,
-                PolygonConstants.REFERENCE_ENDPOINT,
-                PolygonConstants.DIVIDENDS_ENDPOINT,
+        PolygonRequestBuilder builder = new PolygonRequestBuilder(baseAPIURL, Endpoints.VERSION_2,
+                Endpoints.REFERENCE,
+                Endpoints.DIVIDENDS,
                 symbol);
 
         HttpResponse<InputStream> response = polygonRequest.invokeGet(builder);
@@ -377,28 +372,28 @@ public class PolygonAPI {
      *
      * @return the symbol financials
      *
-     * @throws PolygonAPIRequestException the polygon API exception
+     * @throws PolygonAPIRequestException throw for {@link PolygonAPIRequestException}s
      * @see <a href="https://polygon.io/docs/#!/Reference/get_v2_reference_financials_symbol">Stock Financials</a>
      */
     public StockFinancialsResponse getStockFinancials(String symbol, Integer limit,
             FinancialReportType financialReportType, FinancialSort financialSort) throws PolygonAPIRequestException {
         Preconditions.checkNotNull(symbol);
 
-        PolygonRequestBuilder builder = new PolygonRequestBuilder(baseAPIURL, PolygonConstants.VERSION_2_ENDPOINT,
-                PolygonConstants.REFERENCE_ENDPOINT,
-                PolygonConstants.FINANCIALS_ENDPOINT,
+        PolygonRequestBuilder builder = new PolygonRequestBuilder(baseAPIURL, Endpoints.VERSION_2,
+                Endpoints.REFERENCE,
+                Endpoints.FINANCIALS,
                 symbol);
 
         if (limit != null) {
-            builder.appendURLParameter(PolygonConstants.LIMIT_PARAMETER, String.valueOf(limit));
+            builder.appendURLParameter(Parameters.LIMIT, String.valueOf(limit));
         }
 
         if (financialReportType != null) {
-            builder.appendURLParameter(PolygonConstants.TYPE_PARAMETER, financialReportType.getAPIName());
+            builder.appendURLParameter(Parameters.TYPE, financialReportType.getAPIName());
         }
 
         if (financialSort != null) {
-            builder.appendURLParameter(PolygonConstants.SORT_PARAMETER, financialSort.getAPIName());
+            builder.appendURLParameter(Parameters.SORT, financialSort.getAPIName());
         }
 
         HttpResponse<InputStream> response = polygonRequest.invokeGet(builder);
@@ -419,9 +414,9 @@ public class PolygonAPI {
      * @see <a href="https://polygon.io/docs/#!/Reference/get_v1_marketstatus_now">Market Status</a>
      */
     public MarketStatus getMarketStatus() throws PolygonAPIRequestException {
-        PolygonRequestBuilder builder = new PolygonRequestBuilder(baseAPIURL, PolygonConstants.VERSION_1_ENDPOINT,
-                PolygonConstants.MARKET_STATUS_ENDPOINT,
-                PolygonConstants.NOW_ENDPOINT);
+        PolygonRequestBuilder builder = new PolygonRequestBuilder(baseAPIURL, Endpoints.VERSION_1,
+                Endpoints.MARKET_STATUS,
+                Endpoints.NOW);
 
         HttpResponse<InputStream> response = polygonRequest.invokeGet(builder);
 
@@ -441,9 +436,9 @@ public class PolygonAPI {
      * @see <a href="https://polygon.io/docs/#!/Reference/get_v1_marketstatus_upcoming">Market Holidays</a>
      */
     public ArrayList<MarketHoliday> getMarketHolidays() throws PolygonAPIRequestException {
-        PolygonRequestBuilder builder = new PolygonRequestBuilder(baseAPIURL, PolygonConstants.VERSION_1_ENDPOINT,
-                PolygonConstants.MARKET_STATUS_ENDPOINT,
-                PolygonConstants.UPCOMING_ENDPOINT);
+        PolygonRequestBuilder builder = new PolygonRequestBuilder(baseAPIURL, Endpoints.VERSION_1,
+                Endpoints.MARKET_STATUS,
+                Endpoints.UPCOMING);
 
         HttpResponse<InputStream> response = polygonRequest.invokeGet(builder);
 
@@ -461,13 +456,13 @@ public class PolygonAPI {
      *
      * @return the exchanges
      *
-     * @throws PolygonAPIRequestException the polygon API exception
+     * @throws PolygonAPIRequestException throw for {@link PolygonAPIRequestException}s
      * @see <a href="https://polygon.io/docs/#!/Stocks--Equities/get_v1_meta_exchanges">Exchanges</a>
      */
     public ArrayList<Exchange> getExchanges() throws PolygonAPIRequestException {
-        PolygonRequestBuilder builder = new PolygonRequestBuilder(baseAPIURL, PolygonConstants.VERSION_1_ENDPOINT,
-                PolygonConstants.META_ENDPOINT,
-                PolygonConstants.EXCHANGES_ENDPOINT);
+        PolygonRequestBuilder builder = new PolygonRequestBuilder(baseAPIURL, Endpoints.VERSION_1,
+                Endpoints.META,
+                Endpoints.EXCHANGES);
 
         HttpResponse<InputStream> response = polygonRequest.invokeGet(builder);
 
@@ -494,7 +489,7 @@ public class PolygonAPI {
      *
      * @return the historic trades
      *
-     * @throws PolygonAPIRequestException the polygon API exception
+     * @throws PolygonAPIRequestException throw for {@link PolygonAPIRequestException}s
      * @see <a href="https://polygon.io/docs/#!/Stocks--Equities/get_v2_ticks_stocks_trades_ticker_date">Historic
      * Trades</a>
      */
@@ -503,27 +498,27 @@ public class PolygonAPI {
         Preconditions.checkNotNull(ticker);
         Preconditions.checkNotNull(date);
 
-        PolygonRequestBuilder builder = new PolygonRequestBuilder(baseAPIURL, PolygonConstants.VERSION_2_ENDPOINT,
-                PolygonConstants.TICKS_ENDPOINT,
-                PolygonConstants.STOCKS_ENDPOINT,
-                PolygonConstants.TRADES_ENDPOINT,
+        PolygonRequestBuilder builder = new PolygonRequestBuilder(baseAPIURL, Endpoints.VERSION_2,
+                Endpoints.TICKS,
+                Endpoints.STOCKS,
+                Endpoints.TRADES,
                 ticker,
                 FormatUtil.toDateString(date));
 
         if (timestamp != null) {
-            builder.appendURLParameter(PolygonConstants.TIMESTAMP_PARAMETER, String.valueOf(timestamp));
+            builder.appendURLParameter(Parameters.TIMESTAMP, String.valueOf(timestamp));
         }
 
         if (timestampLimit != null) {
-            builder.appendURLParameter(PolygonConstants.TIMESTAMP_LIMIT_PARAMETER, String.valueOf(timestampLimit));
+            builder.appendURLParameter(Parameters.TIMESTAMP_LIMIT, String.valueOf(timestampLimit));
         }
 
         if (reverse != null) {
-            builder.appendURLParameter(PolygonConstants.REVERSE_PARAMETER, String.valueOf(reverse));
+            builder.appendURLParameter(Parameters.REVERSE, String.valueOf(reverse));
         }
 
         if (limit != null) {
-            builder.appendURLParameter(PolygonConstants.LIMIT_PARAMETER, String.valueOf(limit));
+            builder.appendURLParameter(Parameters.LIMIT, String.valueOf(limit));
         }
 
         HttpResponse<InputStream> response = polygonRequest.invokeGet(builder);
@@ -549,7 +544,7 @@ public class PolygonAPI {
      *
      * @return the historic quotes
      *
-     * @throws PolygonAPIRequestException the polygon API exception
+     * @throws PolygonAPIRequestException throw for {@link PolygonAPIRequestException}s
      * @see <a href="https://polygon.io/docs/#!/Stocks--Equities/get_v2_ticks_stocks_nbbo_ticker_date">Historic
      * Quotes</a>
      */
@@ -558,27 +553,27 @@ public class PolygonAPI {
         Preconditions.checkNotNull(ticker);
         Preconditions.checkNotNull(date);
 
-        PolygonRequestBuilder builder = new PolygonRequestBuilder(baseAPIURL, PolygonConstants.VERSION_2_ENDPOINT,
-                PolygonConstants.TICKS_ENDPOINT,
-                PolygonConstants.STOCKS_ENDPOINT,
-                PolygonConstants.NBBO_ENDPOINT,
+        PolygonRequestBuilder builder = new PolygonRequestBuilder(baseAPIURL, Endpoints.VERSION_2,
+                Endpoints.TICKS,
+                Endpoints.STOCKS,
+                Endpoints.NBBO,
                 ticker,
                 FormatUtil.toDateString(date));
 
         if (timestamp != null) {
-            builder.appendURLParameter(PolygonConstants.TIMESTAMP_PARAMETER, String.valueOf(timestamp));
+            builder.appendURLParameter(Parameters.TIMESTAMP, String.valueOf(timestamp));
         }
 
         if (timestampLimit != null) {
-            builder.appendURLParameter(PolygonConstants.TIMESTAMP_LIMIT_PARAMETER, String.valueOf(timestampLimit));
+            builder.appendURLParameter(Parameters.TIMESTAMP_LIMIT, String.valueOf(timestampLimit));
         }
 
         if (reverse != null) {
-            builder.appendURLParameter(PolygonConstants.REVERSE_PARAMETER, String.valueOf(reverse));
+            builder.appendURLParameter(Parameters.REVERSE, String.valueOf(reverse));
         }
 
         if (limit != null) {
-            builder.appendURLParameter(PolygonConstants.LIMIT_PARAMETER, String.valueOf(limit));
+            builder.appendURLParameter(Parameters.LIMIT, String.valueOf(limit));
         }
 
         HttpResponse<InputStream> response = polygonRequest.invokeGet(builder);
@@ -597,15 +592,15 @@ public class PolygonAPI {
      *
      * @return the last trade
      *
-     * @throws PolygonAPIRequestException the polygon API exception
+     * @throws PolygonAPIRequestException throw for {@link PolygonAPIRequestException}s
      * @see <a href="https://polygon.io/docs/#!/Stocks--Equities/get_v1_last_stocks_symbol">Last Trade</a>
      */
     public LastTradeResponse getLastTrade(String symbol) throws PolygonAPIRequestException {
         Preconditions.checkNotNull(symbol);
 
-        PolygonRequestBuilder builder = new PolygonRequestBuilder(baseAPIURL, PolygonConstants.VERSION_1_ENDPOINT,
-                PolygonConstants.LAST_ENDPOINT,
-                PolygonConstants.STOCKS_ENDPOINT,
+        PolygonRequestBuilder builder = new PolygonRequestBuilder(baseAPIURL, Endpoints.VERSION_1,
+                Endpoints.LAST,
+                Endpoints.STOCKS,
                 symbol);
 
         HttpResponse<InputStream> response = polygonRequest.invokeGet(builder);
@@ -624,15 +619,15 @@ public class PolygonAPI {
      *
      * @return the last quote
      *
-     * @throws PolygonAPIRequestException the polygon API exception
+     * @throws PolygonAPIRequestException throw for {@link PolygonAPIRequestException}s
      * @see <a href="https://polygon.io/docs/#!/Stocks--Equities/get_v1_last_quote_stocks_symbol">Last Quote</a>
      */
     public LastQuoteResponse getLastQuote(String symbol) throws PolygonAPIRequestException {
         Preconditions.checkNotNull(symbol);
 
-        PolygonRequestBuilder builder = new PolygonRequestBuilder(baseAPIURL, PolygonConstants.VERSION_1_ENDPOINT,
-                PolygonConstants.LAST_QUOTE_ENDPOINT,
-                PolygonConstants.STOCKS_ENDPOINT,
+        PolygonRequestBuilder builder = new PolygonRequestBuilder(baseAPIURL, Endpoints.VERSION_1,
+                Endpoints.LAST_QUOTE,
+                Endpoints.STOCKS,
                 symbol);
 
         HttpResponse<InputStream> response = polygonRequest.invokeGet(builder);
@@ -652,15 +647,15 @@ public class PolygonAPI {
      *
      * @return the daily open close
      *
-     * @throws PolygonAPIRequestException the polygon API exception
+     * @throws PolygonAPIRequestException throw for {@link PolygonAPIRequestException}s
      * @see <a href="https://polygon.io/docs/#!/Stocks--Equities/get_v1_open_close_symbol_date">Daily Open/Close</a>
      */
     public DailyOpenClose getDailyOpenClose(String symbol, LocalDate date) throws PolygonAPIRequestException {
         Preconditions.checkNotNull(symbol);
         Preconditions.checkNotNull(date);
 
-        PolygonRequestBuilder builder = new PolygonRequestBuilder(baseAPIURL, PolygonConstants.VERSION_1_ENDPOINT,
-                PolygonConstants.OPEN_CLOSE_ENDPOINT,
+        PolygonRequestBuilder builder = new PolygonRequestBuilder(baseAPIURL, Endpoints.VERSION_1,
+                Endpoints.OPEN_CLOSE,
                 symbol,
                 FormatUtil.toDateString(date));
 
@@ -687,9 +682,9 @@ public class PolygonAPI {
             throws PolygonAPIRequestException {
         Preconditions.checkNotNull(conditionMappingsType);
 
-        PolygonRequestBuilder builder = new PolygonRequestBuilder(baseAPIURL, PolygonConstants.VERSION_1_ENDPOINT,
-                PolygonConstants.META_ENDPOINT,
-                PolygonConstants.CONDITIONS_ENDPOINT,
+        PolygonRequestBuilder builder = new PolygonRequestBuilder(baseAPIURL, Endpoints.VERSION_1,
+                Endpoints.META,
+                Endpoints.CONDITIONS,
                 conditionMappingsType.getAPIName());
 
         HttpResponse<InputStream> response = polygonRequest.invokeGet(builder);
@@ -707,19 +702,19 @@ public class PolygonAPI {
      *
      * @return the snapshot all tickers
      *
-     * @throws PolygonAPIRequestException the polygon API exception
+     * @throws PolygonAPIRequestException throw for {@link PolygonAPIRequestException}s
      * @see
      * <a href="https://polygon.io/docs/#!/Stocks--Equities/get_v2_snapshot_locale_us_markets_stocks_tickers">Snapshot
      * - All Tickers</a>
      */
     public SnapshotAllTickersResponse getSnapshotAllTickers() throws PolygonAPIRequestException {
-        PolygonRequestBuilder builder = new PolygonRequestBuilder(baseAPIURL, PolygonConstants.VERSION_2_ENDPOINT,
-                PolygonConstants.SNAPSHOT_ENDPOINT,
-                PolygonConstants.LOCALE_ENDPOINT,
-                PolygonConstants.US_ENDPOINT,
-                PolygonConstants.MARKETS_ENDPOINT,
-                PolygonConstants.STOCKS_ENDPOINT,
-                PolygonConstants.TICKERS_ENDPOINT);
+        PolygonRequestBuilder builder = new PolygonRequestBuilder(baseAPIURL, Endpoints.VERSION_2,
+                Endpoints.SNAPSHOT,
+                Endpoints.LOCALE,
+                Endpoints.US,
+                Endpoints.MARKETS,
+                Endpoints.STOCKS,
+                Endpoints.TICKERS);
 
         HttpResponse<InputStream> response = polygonRequest.invokeGet(builder);
 
@@ -737,7 +732,7 @@ public class PolygonAPI {
      *
      * @return the snapshot single ticker
      *
-     * @throws PolygonAPIRequestException the polygon API exception
+     * @throws PolygonAPIRequestException throw for {@link PolygonAPIRequestException}s
      * @see
      * <a href="https://polygon.io/docs/#!/Stocks--Equities/get_v2_snapshot_locale_us_markets_stocks_tickers_ticker">Snapshot
      * - Single Ticker</a>
@@ -745,13 +740,13 @@ public class PolygonAPI {
     public SnapshotSingleTickerResponse getSnapshotSingleTicker(String ticker) throws PolygonAPIRequestException {
         Preconditions.checkNotNull(ticker);
 
-        PolygonRequestBuilder builder = new PolygonRequestBuilder(baseAPIURL, PolygonConstants.VERSION_2_ENDPOINT,
-                PolygonConstants.SNAPSHOT_ENDPOINT,
-                PolygonConstants.LOCALE_ENDPOINT,
-                PolygonConstants.US_ENDPOINT,
-                PolygonConstants.MARKETS_ENDPOINT,
-                PolygonConstants.STOCKS_ENDPOINT,
-                PolygonConstants.TICKERS_ENDPOINT,
+        PolygonRequestBuilder builder = new PolygonRequestBuilder(baseAPIURL, Endpoints.VERSION_2,
+                Endpoints.SNAPSHOT,
+                Endpoints.LOCALE,
+                Endpoints.US,
+                Endpoints.MARKETS,
+                Endpoints.STOCKS,
+                Endpoints.TICKERS,
                 ticker);
 
         HttpResponse<InputStream> response = polygonRequest.invokeGet(builder);
@@ -770,7 +765,7 @@ public class PolygonAPI {
      *
      * @return the snapshots gainers
      *
-     * @throws PolygonAPIRequestException the polygon API exception
+     * @throws PolygonAPIRequestException throw for {@link PolygonAPIRequestException}s
      * @see
      * <a href="https://polygon.io/docs/#!/Stocks--Equities/get_v2_snapshot_locale_us_markets_stocks_gainers">Snapshot
      * - Gainers / Losers</a>
@@ -779,12 +774,12 @@ public class PolygonAPI {
             throws PolygonAPIRequestException {
         Preconditions.checkNotNull(gainersLosersDirection);
 
-        PolygonRequestBuilder builder = new PolygonRequestBuilder(baseAPIURL, PolygonConstants.VERSION_2_ENDPOINT,
-                PolygonConstants.SNAPSHOT_ENDPOINT,
-                PolygonConstants.LOCALE_ENDPOINT,
-                PolygonConstants.US_ENDPOINT,
-                PolygonConstants.MARKETS_ENDPOINT,
-                PolygonConstants.STOCKS_ENDPOINT,
+        PolygonRequestBuilder builder = new PolygonRequestBuilder(baseAPIURL, Endpoints.VERSION_2,
+                Endpoints.SNAPSHOT,
+                Endpoints.LOCALE,
+                Endpoints.US,
+                Endpoints.MARKETS,
+                Endpoints.STOCKS,
                 gainersLosersDirection.getAPIName());
 
         HttpResponse<InputStream> response = polygonRequest.invokeGet(builder);
@@ -805,7 +800,7 @@ public class PolygonAPI {
      *
      * @return the snapshot ticker book
      *
-     * @throws PolygonAPIRequestException the polygon API exception
+     * @throws PolygonAPIRequestException throw for {@link PolygonAPIRequestException}s
      * @see <a href="">Docs not public yet</a>
      */
     public SnapshotTickerBook getSnapshotTickerBook(String locale, Market market, String ticker)
@@ -814,15 +809,15 @@ public class PolygonAPI {
         Preconditions.checkNotNull(market);
         Preconditions.checkNotNull(ticker);
 
-        PolygonRequestBuilder builder = new PolygonRequestBuilder(baseAPIURL, PolygonConstants.VERSION_2_ENDPOINT,
-                PolygonConstants.SNAPSHOT_ENDPOINT,
-                PolygonConstants.LOCALE_ENDPOINT,
+        PolygonRequestBuilder builder = new PolygonRequestBuilder(baseAPIURL, Endpoints.VERSION_2,
+                Endpoints.SNAPSHOT,
+                Endpoints.LOCALE,
                 locale,
-                PolygonConstants.MARKETS_ENDPOINT,
+                Endpoints.MARKETS,
                 market.getAPIName(),
-                PolygonConstants.TICKERS_ENDPOINT,
+                Endpoints.TICKERS,
                 ticker,
-                PolygonConstants.BOOK_ENDPOINT);
+                Endpoints.BOOK);
 
         HttpResponse<InputStream> response = polygonRequest.invokeGet(builder);
 
@@ -841,20 +836,20 @@ public class PolygonAPI {
      *
      * @return the previous close
      *
-     * @throws PolygonAPIRequestException the polygon API exception
+     * @throws PolygonAPIRequestException throw for {@link PolygonAPIRequestException}s
      * @see <a href="https://polygon.io/docs/#!/Stocks--Equities/get_v2_aggs_ticker_ticker_prev">Previous Close</a>
      */
     public PreviousCloseResponse getPreviousClose(String ticker, Boolean unadjusted) throws PolygonAPIRequestException {
         Preconditions.checkNotNull(ticker);
 
-        PolygonRequestBuilder builder = new PolygonRequestBuilder(baseAPIURL, PolygonConstants.VERSION_2_ENDPOINT,
-                PolygonConstants.AGGS_ENDPOINT,
-                PolygonConstants.TICKER_ENDPOINT,
+        PolygonRequestBuilder builder = new PolygonRequestBuilder(baseAPIURL, Endpoints.VERSION_2,
+                Endpoints.AGGS,
+                Endpoints.TICKER,
                 ticker,
-                PolygonConstants.PREV_ENDPOINT);
+                Endpoints.PREV);
 
         if (unadjusted != null) {
-            builder.appendURLParameter(PolygonConstants.UNADJUSTED_PARAMETER, unadjusted.toString());
+            builder.appendURLParameter(Parameters.UNADJUSTED, unadjusted.toString());
         }
 
         HttpResponse<InputStream> response = polygonRequest.invokeGet(builder);
@@ -878,37 +873,38 @@ public class PolygonAPI {
      *
      * @return the aggregates
      *
-     * @throws PolygonAPIRequestException the polygon API exception
+     * @throws PolygonAPIRequestException throw for {@link PolygonAPIRequestException}s
      * @see
      * <a href="https://polygon.io/docs/#!/Stocks--Equities/get_v2_aggs_ticker_ticker_range_multiplier_timespan_from_to">Aggregates</a>
      */
     public AggregatesResponse getAggregates(String ticker, Integer multiplier, Timespan timeSpan, LocalDate fromDate,
-            LocalDate toDate, Integer limit, AggregatesSort sort, Boolean unadjusted) throws PolygonAPIRequestException {
+            LocalDate toDate, Integer limit, SortDirection sortDirection, Boolean unadjusted)
+            throws PolygonAPIRequestException {
         Preconditions.checkNotNull(ticker);
         Preconditions.checkNotNull(timeSpan);
         Preconditions.checkNotNull(fromDate);
         Preconditions.checkNotNull(toDate);
 
-        PolygonRequestBuilder builder = new PolygonRequestBuilder(baseAPIURL, PolygonConstants.VERSION_2_ENDPOINT,
-                PolygonConstants.AGGS_ENDPOINT,
-                PolygonConstants.TICKER_ENDPOINT,
+        PolygonRequestBuilder builder = new PolygonRequestBuilder(baseAPIURL, Endpoints.VERSION_2,
+                Endpoints.AGGS,
+                Endpoints.TICKER,
                 ticker,
-                PolygonConstants.RANGE_ENDPOINT,
+                Endpoints.RANGE,
                 Integer.toString((multiplier == null) ? 1 : multiplier),
                 timeSpan.getAPIName(),
                 FormatUtil.toDateString(fromDate),
                 FormatUtil.toDateString(toDate));
 
-        if (unadjusted != null) {
-            builder.appendURLParameter(PolygonConstants.UNADJUSTED_PARAMETER, unadjusted.toString());
-        }
-
         if (limit != null) {
-            builder.appendURLParameter(PolygonConstants.LIMIT_PARAMETER, String.valueOf(limit));
+            builder.appendURLParameter(Parameters.LIMIT, String.valueOf(limit));
         }
 
-        if (sort != null) {
-            builder.appendURLParameter(PolygonConstants.SORT_PARAMETER, sort.getAPIName());
+        if (sortDirection != null) {
+            builder.appendURLParameter(Parameters.SORT, sortDirection.getAPIName());
+        }
+
+        if (unadjusted != null) {
+            builder.appendURLParameter(Parameters.UNADJUSTED, unadjusted.toString());
         }
 
         HttpResponse<InputStream> response = polygonRequest.invokeGet(builder);
@@ -923,46 +919,47 @@ public class PolygonAPI {
     /**
      * Get aggregates for a date range, in custom time window sizes
      *
-     * @param ticker     Ticker symbol of the request
-     * @param multiplier Size of the timespan multiplier
-     * @param timeSpan   Size of the time window
+     * @param ticker       Ticker symbol of the request
+     * @param multiplier   Size of the timespan multiplier
+     * @param timeSpan     Size of the time window
      * @param fromDateUNIX long UTC timestamp
-     * @param toDateUNIX long UTC timestamp
-     * @param unadjusted Set to true if the results should NOT be adjusted for splits
+     * @param toDateUNIX   long UTC timestamp
+     * @param unadjusted   Set to true if the results should NOT be adjusted for splits
      *
      * @return the aggregates
      *
-     * @throws PolygonAPIRequestException the polygon API exception
+     * @throws PolygonAPIRequestException throw for {@link PolygonAPIRequestException}s
      * @see
      * <a href="https://polygon.io/docs/#!/Stocks--Equities/get_v2_aggs_ticker_ticker_range_multiplier_timespan_from_to">Aggregates</a>
      */
     public AggregatesResponse getAggregates(String ticker, Integer multiplier, Timespan timeSpan, Long fromDateUNIX,
-            Long toDateUNIX, Integer limit, AggregatesSort sort, Boolean unadjusted) throws PolygonAPIRequestException {
+            Long toDateUNIX, Integer limit, SortDirection sortDirection, Boolean unadjusted)
+            throws PolygonAPIRequestException {
         Preconditions.checkNotNull(ticker);
         Preconditions.checkNotNull(timeSpan);
         Preconditions.checkNotNull(fromDateUNIX);
         Preconditions.checkNotNull(toDateUNIX);
 
-        PolygonRequestBuilder builder = new PolygonRequestBuilder(baseAPIURL, PolygonConstants.VERSION_2_ENDPOINT,
-                PolygonConstants.AGGS_ENDPOINT,
-                PolygonConstants.TICKER_ENDPOINT,
+        PolygonRequestBuilder builder = new PolygonRequestBuilder(baseAPIURL, Endpoints.VERSION_2,
+                Endpoints.AGGS,
+                Endpoints.TICKER,
                 ticker,
-                PolygonConstants.RANGE_ENDPOINT,
+                Endpoints.RANGE,
                 Integer.toString((multiplier == null) ? 1 : multiplier),
                 timeSpan.getAPIName(),
                 fromDateUNIX.toString(),
                 toDateUNIX.toString());
 
         if (unadjusted != null) {
-            builder.appendURLParameter(PolygonConstants.UNADJUSTED_PARAMETER, unadjusted.toString());
+            builder.appendURLParameter(Parameters.UNADJUSTED, unadjusted.toString());
         }
 
         if (limit != null) {
-            builder.appendURLParameter(PolygonConstants.LIMIT_PARAMETER, String.valueOf(limit));
+            builder.appendURLParameter(Parameters.LIMIT, String.valueOf(limit));
         }
 
-        if (sort != null) {
-            builder.appendURLParameter(PolygonConstants.SORT_PARAMETER, sort.getAPIName());
+        if (sortDirection != null) {
+            builder.appendURLParameter(Parameters.SORT, sortDirection.getAPIName());
         }
 
         HttpResponse<InputStream> response = polygonRequest.invokeGet(builder);
@@ -984,7 +981,7 @@ public class PolygonAPI {
      *
      * @return the grouped daily
      *
-     * @throws PolygonAPIRequestException the polygon API exception
+     * @throws PolygonAPIRequestException throw for {@link PolygonAPIRequestException}s
      * @see
      * <a href="https://polygon.io/docs/#!/Stocks--Equities/get_v2_aggs_grouped_locale_locale_market_market_date">Grouped
      * Daily</a>
@@ -995,17 +992,17 @@ public class PolygonAPI {
         Preconditions.checkNotNull(market);
         Preconditions.checkNotNull(date);
 
-        PolygonRequestBuilder builder = new PolygonRequestBuilder(baseAPIURL, PolygonConstants.VERSION_2_ENDPOINT,
-                PolygonConstants.AGGS_ENDPOINT,
-                PolygonConstants.GROUPED_ENDPOINT,
-                PolygonConstants.LOCALE_ENDPOINT,
+        PolygonRequestBuilder builder = new PolygonRequestBuilder(baseAPIURL, Endpoints.VERSION_2,
+                Endpoints.AGGS,
+                Endpoints.GROUPED,
+                Endpoints.LOCALE,
                 locale,
-                PolygonConstants.MARKET_ENDPOINT,
+                Endpoints.MARKET,
                 market.getAPIName(),
                 FormatUtil.toDateString(date));
 
         if (unadjusted != null) {
-            builder.appendURLParameter(PolygonConstants.UNADJUSTED_PARAMETER, unadjusted.toString());
+            builder.appendURLParameter(Parameters.UNADJUSTED, unadjusted.toString());
         }
 
         HttpResponse<InputStream> response = polygonRequest.invokeGet(builder);

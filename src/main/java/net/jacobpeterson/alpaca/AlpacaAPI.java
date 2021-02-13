@@ -7,20 +7,11 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
 import com.google.gson.reflect.TypeToken;
 import com.mashape.unirest.http.HttpResponse;
+import net.jacobpeterson.abstracts.enums.SortDirection;
 import net.jacobpeterson.abstracts.websocket.exception.WebsocketException;
 import net.jacobpeterson.alpaca.AlpacaConstants.Endpoints;
 import net.jacobpeterson.alpaca.AlpacaConstants.Parameters;
-import net.jacobpeterson.alpaca.enums.ActivityType;
-import net.jacobpeterson.alpaca.enums.AssetStatus;
-import net.jacobpeterson.alpaca.enums.BarsTimeFrame;
-import net.jacobpeterson.alpaca.enums.Direction;
-import net.jacobpeterson.alpaca.enums.OrderClass;
-import net.jacobpeterson.alpaca.enums.OrderSide;
-import net.jacobpeterson.alpaca.enums.OrderStatus;
-import net.jacobpeterson.alpaca.enums.OrderTimeInForce;
-import net.jacobpeterson.alpaca.enums.OrderType;
-import net.jacobpeterson.alpaca.enums.PortfolioPeriodUnit;
-import net.jacobpeterson.alpaca.enums.PortfolioTimeFrame;
+import net.jacobpeterson.alpaca.enums.*;
 import net.jacobpeterson.alpaca.properties.AlpacaProperties;
 import net.jacobpeterson.alpaca.rest.AlpacaRequest;
 import net.jacobpeterson.alpaca.rest.AlpacaRequestBuilder;
@@ -56,11 +47,7 @@ import java.lang.reflect.Type;
 import java.time.LocalDate;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
-import java.util.StringJoiner;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -182,7 +169,7 @@ public class AlpacaAPI {
      *                      date.)
      * @param after         The response will contain only activities submitted after this date. (Cannot be used with
      *                      date.)
-     * @param direction     asc or desc (default desc if unspecified.)
+     * @param sortDirection asc or desc (default desc if unspecified.)
      * @param pageSize      The maximum number of entries to return in the response. (See the section on paging.)
      * @param pageToken     The ID of the end of your current page of results. (See the section on paging.)
      * @param activityTypes the activity types (null for all activities)
@@ -194,7 +181,7 @@ public class AlpacaAPI {
      * Activities</a>
      */
     public ArrayList<AccountActivity> getAccountActivities(ZonedDateTime date, ZonedDateTime until, ZonedDateTime after,
-            Direction direction, Integer pageSize, String pageToken, ActivityType... activityTypes)
+            SortDirection sortDirection, Integer pageSize, String pageToken, ActivityType... activityTypes)
             throws AlpacaAPIRequestException {
         AlpacaRequestBuilder urlBuilder = new AlpacaRequestBuilder(baseAPIURL, Endpoints.VERSION_2,
                 Endpoints.ACCOUNT,
@@ -224,8 +211,8 @@ public class AlpacaAPI {
                     after.format(DateTimeFormatter.ISO_OFFSET_DATE_TIME));
         }
 
-        if (direction != null) {
-            urlBuilder.appendURLParameter(Parameters.DIRECTION, direction.getAPIName());
+        if (sortDirection != null) {
+            urlBuilder.appendURLParameter(Parameters.DIRECTION, sortDirection.getAPIName());
         }
 
         if (pageSize != null) {
@@ -324,14 +311,14 @@ public class AlpacaAPI {
     /**
      * Retrieves a list of orders for the account, filtered by the supplied query parameters.
      *
-     * @param status    Order status to be queried. open, closed or all. Defaults to open.
-     * @param limit     The maximum number of orders in response. Defaults to 50 and max is 500.
-     * @param after     The response will include only ones submitted after this timestamp (exclusive.)
-     * @param until     The response will include only ones submitted until this timestamp (exclusive.)
-     * @param direction The chronological order of response based on the submission time. asc or desc. Defaults to
-     *                  desc.
-     * @param nested    If true, the result will roll up multi-leg orders under the legs field of primary order.
-     * @param symbols   A list of symbols to filter the result by (null for no filter).
+     * @param status        Order status to be queried. open, closed or all. Defaults to open.
+     * @param limit         The maximum number of orders in response. Defaults to 50 and max is 500.
+     * @param after         The response will include only ones submitted after this timestamp (exclusive.)
+     * @param until         The response will include only ones submitted until this timestamp (exclusive.)
+     * @param sortDirection The chronological order of response based on the submission time. asc or desc. Defaults to
+     *                      desc.
+     * @param nested        If true, the result will roll up multi-leg orders under the legs field of primary order.
+     * @param symbols       A list of symbols to filter the result by (null for no filter).
      *
      * @return the orders
      *
@@ -339,7 +326,7 @@ public class AlpacaAPI {
      * @see <a href="https://docs.alpaca.markets/api-documentation/api-v2/orders/">Orders</a>
      */
     public ArrayList<Order> getOrders(OrderStatus status, Integer limit, ZonedDateTime after, ZonedDateTime until,
-            Direction direction, Boolean nested, List<String> symbols) throws AlpacaAPIRequestException {
+            SortDirection sortDirection, Boolean nested, List<String> symbols) throws AlpacaAPIRequestException {
         AlpacaRequestBuilder urlBuilder = new AlpacaRequestBuilder(baseAPIURL, Endpoints.VERSION_2,
                 Endpoints.ORDERS);
 
@@ -361,8 +348,8 @@ public class AlpacaAPI {
                     until.format(DateTimeFormatter.ISO_OFFSET_DATE_TIME));
         }
 
-        if (direction != null) {
-            urlBuilder.appendURLParameter(Parameters.DIRECTION, direction.getAPIName());
+        if (sortDirection != null) {
+            urlBuilder.appendURLParameter(Parameters.DIRECTION, sortDirection.getAPIName());
         }
 
         if (nested != null) {
