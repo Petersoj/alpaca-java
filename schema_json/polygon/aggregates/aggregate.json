@@ -5,35 +5,39 @@
     "T": {
       "existingJavaType": "java.lang.String",
       "javaName": "ticker",
-      "title": "Ticker symbol"
+      "title": "The ticker symbol."
     },
     "v": {
       "existingJavaType": "java.lang.Long",
-      "title": "Volume"
+      "title": "The trading volume of the symbol in the given time period."
+    },
+    "vw": {
+      "existingJavaType": "java.lang.Double",
+      "title": "The volume weighted average price."
     },
     "o": {
       "existingJavaType": "java.lang.Double",
-      "title": "Open"
+      "title": "The open price for the symbol in the given time period."
     },
     "c": {
       "existingJavaType": "java.lang.Double",
-      "title": "Close"
+      "title": "The close price for the symbol in the given time period."
     },
     "h": {
       "existingJavaType": "java.lang.Double",
-      "title": "High"
+      "title": "The highest price for the symbol in the given time period."
     },
     "l": {
       "existingJavaType": "java.lang.Double",
-      "title": "Low"
+      "title": "The lowest price for the symbol in the given time period."
     },
     "t": {
       "existingJavaType": "java.lang.Long",
-      "title": "Unix Msec Timestamp ( Start of Aggregate window )"
+      "title": "The Unix Msec timestamp for the start of the aggregate window."
     },
     "n": {
       "existingJavaType": "java.lang.Integer",
-      "title": "Number of items in aggregate window"
+      "title": "The number of items in the aggregate window."
     }
   }
 }
