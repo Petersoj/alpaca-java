@@ -2,9 +2,9 @@
 #key_id = <YOUR KEY> (Note that this will default to what is set in alpaca.properties)
 #base_api_url = https://api.polygon.io
 #web_socket_server_url = wss://alpaca.socket.polygon.io/stocks
-#user_agent=Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/67.0.3396.87 Safari/537.36
+#user_agent = Mozilla/5.0 AppleWebKit/537.36 (KHTML, like Gecko) Chrome/67.0.3396.87 Safari/537.36
 
 #Defauls:
 base_api_url = https://api.polygon.io
 web_socket_server_url = wss://alpaca.socket.polygon.io/stocks
-user_agent=Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/67.0.3396.87 Safari/537.36
+user_agent = Java/ Unirest/1.4.9

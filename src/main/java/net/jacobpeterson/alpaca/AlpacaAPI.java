@@ -141,9 +141,9 @@ public class AlpacaAPI {
     }
 
     /**
-     * Returns the account associated with the API key.
+     * Returns the {@link Account} associated with the API key.
      *
-     * @return the account
+     * @return the {@link Account}
      *
      * @throws AlpacaAPIRequestException thrown for {@link AlpacaAPIRequestException}s
      * @see <a href="https://docs.alpaca.markets/api-documentation/api-v2/account/">Get the Account</a>
@@ -162,7 +162,7 @@ public class AlpacaAPI {
     }
 
     /**
-     * Returns account activity entries for many or for a specific type of activity.
+     * Returns {@link AccountActivity} entries for many or for a specific type of activity.
      *
      * @param date          The date for which you want to see activities.
      * @param until         The response will contain only activities submitted before this date. (Cannot be used with
@@ -174,13 +174,13 @@ public class AlpacaAPI {
      * @param pageToken     The ID of the end of your current page of results. (See the section on paging.)
      * @param activityTypes the activity types (null for all activities)
      *
-     * @return the account activities
+     * @return the {@link AccountActivity} {@link List}
      *
      * @throws AlpacaAPIRequestException the alpaca api exception
      * @see <a href="https://docs.alpaca.markets/api-documentation/api-v2/account-activities/">Gets the Account
      * Activities</a>
      */
-    public ArrayList<AccountActivity> getAccountActivities(ZonedDateTime date, ZonedDateTime until, ZonedDateTime after,
+    public List<AccountActivity> getAccountActivities(ZonedDateTime date, ZonedDateTime until, ZonedDateTime after,
             SortDirection sortDirection, Integer pageSize, String pageToken, ActivityType... activityTypes)
             throws AlpacaAPIRequestException {
         AlpacaRequestBuilder urlBuilder = new AlpacaRequestBuilder(baseAPIURL, Endpoints.VERSION_2,
@@ -1442,42 +1442,30 @@ public class AlpacaAPI {
     }
 
     /**
-     * Returns the market calendar from 1970 to 2029.
+     * Returns the market {@link Calendar} from 1970 to 2029.
      *
-     * @return the calendar
+     * @return the {@link Calendar} {@link List}
      *
      * @throws AlpacaAPIRequestException thrown for {@link AlpacaAPIRequestException}s
      * @see <a href="https://docs.alpaca.markets/api-documentation/api-v2/calendar/">Calendar</a>
      */
-    public ArrayList<Calendar> getCalendar() throws AlpacaAPIRequestException {
-        AlpacaRequestBuilder urlBuilder = new AlpacaRequestBuilder(baseAPIURL, Endpoints.VERSION_2,
-                Endpoints.CALENDAR);
-
-        HttpResponse<InputStream> response = alpacaRequest.invokeGet(urlBuilder);
-
-        if (response.getStatus() != 200) {
-            throw new AlpacaAPIRequestException(response);
-        }
-
-        Type arrayListType = new TypeToken<ArrayList<Calendar>>() {}.getType();
-
-        return alpacaRequest.getResponseObject(response, arrayListType);
+    public List<Calendar> getCalendar() throws AlpacaAPIRequestException {
+        return getCalendar(null, null);
     }
 
     /**
-     * Returns the market calendar.
+     * Returns the market {@link Calendar}.
      *
      * @param start The first date to retrieve data for (inclusive)
      * @param end   The last date to retrieve data for (inclusive)
      *
-     * @return the calendar
+     * @return the {@link Calendar} {@link List}
      *
      * @throws AlpacaAPIRequestException thrown for {@link AlpacaAPIRequestException}s
      * @see <a href="https://docs.alpaca.markets/api-documentation/api-v2/calendar/">Calendar</a>
      */
-    public ArrayList<Calendar> getCalendar(LocalDate start, LocalDate end) throws AlpacaAPIRequestException {
-        AlpacaRequestBuilder urlBuilder = new AlpacaRequestBuilder(baseAPIURL, Endpoints.VERSION_2,
-                Endpoints.CALENDAR);
+    public List<Calendar> getCalendar(LocalDate start, LocalDate end) throws AlpacaAPIRequestException {
+        AlpacaRequestBuilder urlBuilder = new AlpacaRequestBuilder(baseAPIURL, Endpoints.VERSION_2, Endpoints.CALENDAR);
 
         if (start != null) {
             urlBuilder.appendURLParameter(Parameters.START, FormatUtil.toDateString(start));
@@ -1499,9 +1487,9 @@ public class AlpacaAPI {
     }
 
     /**
-     * Returns the market clock.
+     * Returns the market {@link Clock}.
      *
-     * @return the clock
+     * @return the {@link Clock}
      *
      * @throws AlpacaAPIRequestException thrown for {@link AlpacaAPIRequestException}s
      * @see <a href="https://docs.alpaca.markets/api-documentation/api-v2/clock/">Clock</a>
