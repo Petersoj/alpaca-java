@@ -176,7 +176,7 @@ public class AlpacaAPI {
      *
      * @return the {@link AccountActivity} {@link List}
      *
-     * @throws AlpacaAPIRequestException the alpaca api exception
+     * @throws AlpacaAPIRequestException thrown for {@link AlpacaAPIRequestException}s
      * @see <a href="https://docs.alpaca.markets/api-documentation/api-v2/account-activities/">Gets the Account
      * Activities</a>
      */
@@ -257,11 +257,11 @@ public class AlpacaAPI {
     }
 
     /**
-     * Returns the current account configuration values.
+     * Returns the current {@link AccountConfiguration} values.
      *
-     * @return the account configurations
+     * @return the {@link AccountConfiguration}
      *
-     * @throws AlpacaAPIRequestException the alpaca api exception
+     * @throws AlpacaAPIRequestException thrown for {@link AlpacaAPIRequestException}s
      * @see <a href="https://docs.alpaca.markets/api-documentation/api-v2/account-configuration/">Account
      * Configuration</a>
      */
@@ -280,13 +280,13 @@ public class AlpacaAPI {
     }
 
     /**
-     * Sets account configuration.
+     * Sets {@link AccountConfiguration}.
      *
      * @param accountConfiguration the account configuration
      *
-     * @return the updated account configuration
+     * @return the updated {@link AccountConfiguration}
      *
-     * @throws AlpacaAPIRequestException the alpaca api exception
+     * @throws AlpacaAPIRequestException thrown for {@link AlpacaAPIRequestException}s
      * @see <a href="https://docs.alpaca.markets/api-documentation/api-v2/account-configuration/">Account
      * Configuration</a>
      */
@@ -313,8 +313,8 @@ public class AlpacaAPI {
      *
      * @param status        Order status to be queried. open, closed or all. Defaults to open.
      * @param limit         The maximum number of orders in response. Defaults to 50 and max is 500.
-     * @param after         The response will include only ones submitted after this timestamp (exclusive.)
-     * @param until         The response will include only ones submitted until this timestamp (exclusive.)
+     * @param after         The response will include only ones submitted after this timestamp (exclusive)
+     * @param until         The response will include only ones submitted until this timestamp (exclusive)
      * @param sortDirection The chronological order of response based on the submission time. asc or desc. Defaults to
      *                      desc.
      * @param nested        If true, the result will roll up multi-leg orders under the legs field of primary order.
@@ -325,7 +325,7 @@ public class AlpacaAPI {
      * @throws AlpacaAPIRequestException thrown for {@link AlpacaAPIRequestException}s
      * @see <a href="https://docs.alpaca.markets/api-documentation/api-v2/orders/">Orders</a>
      */
-    public ArrayList<Order> getOrders(OrderStatus status, Integer limit, ZonedDateTime after, ZonedDateTime until,
+    public List<Order> getOrders(OrderStatus status, Integer limit, ZonedDateTime after, ZonedDateTime until,
             SortDirection sortDirection, Boolean nested, List<String> symbols) throws AlpacaAPIRequestException {
         AlpacaRequestBuilder urlBuilder = new AlpacaRequestBuilder(baseAPIURL, Endpoints.VERSION_2,
                 Endpoints.ORDERS);
@@ -1187,7 +1187,7 @@ public class AlpacaAPI {
      *
      * @return the watch lists
      *
-     * @throws AlpacaAPIRequestException the alpaca api exception
+     * @throws AlpacaAPIRequestException thrown for {@link AlpacaAPIRequestException}s
      * @see <a href="https://docs.alpaca.markets/api-documentation/api-v2/watchlist/">Watchlists</a>
      */
     public ArrayList<Watchlist> getWatchlists() throws AlpacaAPIRequestException {
@@ -1212,7 +1212,7 @@ public class AlpacaAPI {
      *
      * @return the created watchlist
      *
-     * @throws AlpacaAPIRequestException the alpaca api exception
+     * @throws AlpacaAPIRequestException thrown for {@link AlpacaAPIRequestException}s
      * @see <a href="https://docs.alpaca.markets/api-documentation/api-v2/watchlist/">Watchlists</a>
      */
     public Watchlist createWatchlist(String name, String... symbols) throws AlpacaAPIRequestException {
@@ -1247,7 +1247,7 @@ public class AlpacaAPI {
      *
      * @return the watchlist
      *
-     * @throws AlpacaAPIRequestException the alpaca api exception
+     * @throws AlpacaAPIRequestException thrown for {@link AlpacaAPIRequestException}s
      * @see <a href="https://docs.alpaca.markets/api-documentation/api-v2/watchlist/">Watchlists</a>
      */
     public Watchlist getWatchlist(String watchlistID) throws AlpacaAPIRequestException {
@@ -1275,7 +1275,7 @@ public class AlpacaAPI {
      *
      * @return the updated watchlist
      *
-     * @throws AlpacaAPIRequestException the alpaca api exception
+     * @throws AlpacaAPIRequestException thrown for {@link AlpacaAPIRequestException}s
      * @see <a href="https://docs.alpaca.markets/api-documentation/api-v2/watchlist/">Watchlists</a>
      */
     public Watchlist updateWatchlist(String watchlistID, String name, String... symbols)
@@ -1314,7 +1314,7 @@ public class AlpacaAPI {
      *
      * @return the watchlist
      *
-     * @throws AlpacaAPIRequestException the alpaca api exception
+     * @throws AlpacaAPIRequestException thrown for {@link AlpacaAPIRequestException}s
      * @see <a href="https://docs.alpaca.markets/api-documentation/api-v2/watchlist/">Watchlists</a>
      */
     public Watchlist addWatchlistAsset(String watchlistID, String symbol) throws AlpacaAPIRequestException {
@@ -1343,7 +1343,7 @@ public class AlpacaAPI {
      *
      * @return if the watchlist was deleted
      *
-     * @throws AlpacaAPIRequestException the alpaca api exception
+     * @throws AlpacaAPIRequestException thrown for {@link AlpacaAPIRequestException}s
      * @see <a href="https://docs.alpaca.markets/api-documentation/api-v2/watchlist/">Watchlists</a>
      */
     public boolean deleteWatchlist(String watchlistID) throws AlpacaAPIRequestException {
@@ -1370,7 +1370,7 @@ public class AlpacaAPI {
      *
      * @return the updated watchlist
      *
-     * @throws AlpacaAPIRequestException the alpaca api exception
+     * @throws AlpacaAPIRequestException thrown for {@link AlpacaAPIRequestException}s
      * @see <a href="https://docs.alpaca.markets/api-documentation/api-v2/watchlist/">Watchlists</a>
      */
     public Watchlist removeSymbolFromWatchlist(String watchlistID, String symbol) throws AlpacaAPIRequestException {
