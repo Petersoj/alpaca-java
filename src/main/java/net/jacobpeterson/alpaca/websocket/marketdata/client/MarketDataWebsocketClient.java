@@ -239,35 +239,35 @@ public class MarketDataWebsocketClient implements WebsocketClient {
 
                             authenticated = isAuthorizationMessageSuccess(authorizationMessage);
 
-                            if (LOGGER.isDebugEnabled()) { LOGGER.debug(authorizationMessage.toString()); }
+                            LOGGER.debug("{}", authorizationMessage);
                             break;
                         case LISTENING:
                             ListeningMessage listeningMessage = GsonUtil.GSON.fromJson(messageJsonObject,
                                     ListeningMessage.class);
                             sendStreamMessageToListeners(marketDataStreamMessageType, listeningMessage);
 
-                            if (LOGGER.isDebugEnabled()) { LOGGER.debug(listeningMessage.toString()); }
+                            LOGGER.debug("{}", listeningMessage.toString());
                             break;
                         case TRADES:
                             TradeMessage tradeMessage = GsonUtil.GSON.fromJson(messageJsonObject.get(DATA_KEY),
                                     TradeMessage.class);
                             sendStreamMessageToListeners(marketDataStreamMessageType, tradeMessage);
 
-                            if (LOGGER.isDebugEnabled()) { LOGGER.debug(tradeMessage.toString()); }
+                            LOGGER.debug("{}", tradeMessage.toString());
                             break;
                         case QUOTES:
                             QuoteMessage quoteMessage = GsonUtil.GSON.fromJson(messageJsonObject.get(DATA_KEY),
                                     QuoteMessage.class);
                             sendStreamMessageToListeners(marketDataStreamMessageType, quoteMessage);
 
-                            if (LOGGER.isDebugEnabled()) { LOGGER.debug(quoteMessage.toString()); }
+                            LOGGER.debug("{}", quoteMessage.toString());
                             break;
                         case AGGREGATE_MINUTE:
                             AggregateMinuteMessage aggregateMinuteMessage = GsonUtil.GSON.fromJson(
                                     messageJsonObject.get(DATA_KEY), AggregateMinuteMessage.class);
                             sendStreamMessageToListeners(marketDataStreamMessageType, aggregateMinuteMessage);
 
-                            if (LOGGER.isDebugEnabled()) { LOGGER.debug(aggregateMinuteMessage.toString()); }
+                            LOGGER.debug("{}", aggregateMinuteMessage.toString());
                             break;
                         default:
                             LOGGER.error("Unhandled stream type: " + marketDataStreamMessageType);

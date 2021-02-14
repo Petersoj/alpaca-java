@@ -198,14 +198,14 @@ public class AlpacaWebsocketClient implements WebsocketClient {
 
                         authenticated = isAuthorizationMessageSuccess(authorizationMessage);
 
-                        if (LOGGER.isDebugEnabled()) { LOGGER.debug(authorizationMessage.toString()); }
+                        LOGGER.debug("{}", authorizationMessage.toString());
                         break;
                     case LISTENING:
                         ListeningMessage listeningMessage = GsonUtil.GSON.fromJson(messageJsonObject,
                                 ListeningMessage.class);
                         sendStreamMessageToListeners(alpacaStreamMessageType, listeningMessage);
 
-                        if (LOGGER.isDebugEnabled()) { LOGGER.debug(listeningMessage.toString()); }
+                        LOGGER.debug("{}", listeningMessage.toString());
                         break;
                     case TRADE_UPDATES:
                         sendStreamMessageToListeners(alpacaStreamMessageType, GsonUtil.GSON.fromJson(messageJsonObject,

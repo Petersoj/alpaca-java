@@ -172,7 +172,7 @@ public class PolygonWebsocketClient implements WebsocketClient {
 
                             authenticated = isAuthenticatedStatusMessage(statusMessage);
 
-                            if (LOGGER.isDebugEnabled()) { LOGGER.debug(statusMessage.toString()); }
+                            LOGGER.debug("{}", statusMessage.toString());
                             break;
                         case TRADE:
                             sendStreamMessageToListeners(polygonStreamMessageType,
