@@ -114,7 +114,7 @@ jacocoTestReport.dependsOn check
 modifyPom {
     project {
         name = 'alpaca-java'
-        description = 'Java API for Alpaca and Polygon'
+        description = 'Java API for Alpaca'
         url = 'https://github.com/Petersoj/alpaca-java'
         inceptionYear = '2018'
 
@@ -163,7 +163,7 @@ nexusStaging {
 
 // Used to prevent accidental publication of Alpaca keys
 processResources {
-    exclude('alpaca.properties', 'polygon.properties')
+    exclude('alpaca.properties')
 }
 //
 // END publishing

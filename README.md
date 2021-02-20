@@ -8,7 +8,7 @@
 </p>
 
 ## Overview
-This is a Java implementation for the <a href="https://alpaca.markets/">Alpaca</a> API and the <a href="https://polygon.io/">Polygon</a> API. Alpaca lets you trade with algorithms, connect with apps, and build services all with a commission-free stock trading API and Polygon provides real-time and historical market data for free. This library is community developed and if you have any questions, please ask them on [Github Discussions](https://github.com/Petersoj/alpaca-java/discussions), the [Alpaca Slack #dev-alpaca-java channel](https://alpaca.markets/slack), or on the [Alpaca Forums](https://forum.alpaca.markets/).
+This is a Java implementation for the <a href="https://alpaca.markets/">Alpaca</a> API. Alpaca lets you trade with algorithms, connect with apps, and build services all with a commission-free stock trading API. This library is community developed and if you have any questions, please ask them on [Github Discussions](https://github.com/Petersoj/alpaca-java/discussions), the [Alpaca Slack #dev-alpaca-java channel](https://alpaca.markets/slack), or on the [Alpaca Forums](https://forum.alpaca.markets/).
 
 ## Table of Contents
 1. [Gradle and Maven Integration](#Gradle-and-Maven-Integration)
@@ -31,10 +31,6 @@ This is a Java implementation for the <a href="https://alpaca.markets/">Alpaca</
     - [LastQuote](#LastQuote)
     - [Alpaca Streaming](#Alpaca-Streaming)
     - [Alpaca Market Data Streaming](#Alpaca-Market-Data-Streaming)
-1. [PolygonAPI](#polygonapi)
-    - [PolygonAPIRequestException](#PolygonAPIRequestException)
-    - [Usage](#Usage)
-    - [Basic Example](#Basic-Example)
 1. [Building](#Building)
 1. [Testing](#Testing)
 
@@ -67,12 +63,6 @@ key_id = <YOUR KEY>
 secret = <YOUR SECRET>
 ```
 The default values for `alpaca.properties` can be found [here](https://github.com/Petersoj/alpaca-java/tree/master/src/main/resources).
-
-Similarly, creating a `polygon.properties` file on the classpath with the following format allows you to easily load properties using the `PolygonAPI()` default constructor:
-```
-key_id = <YOUR KEY> (Note that this will default to what is set in 'alpaca.properties')
-```
-The default values for `polygon.properties` can be found [here](https://github.com/Petersoj/alpaca-java/tree/master/src/main/resources).
 
 ## Logger
 For logging, this library uses [SLF4j](http://www.slf4j.org/) which serves as an interface for various logging frameworks. This enables you to use whatever logging framework you would like. However, if you do not add a logging framework as a dependency in your project, the console will output a message stating that SLF4j is defaulting to a no-operation (NOP) logger implementation. To enable logging, add a logging framework of your choice as a dependency to your project such as [Log4j 2](http://logging.apache.org/log4j/2.x/index.html), [SLF4j-simple](http://www.slf4j.org/manual.html), or [Apache Commons Logging](https://commons.apache.org/proper/commons-logging/).
@@ -230,7 +220,7 @@ try {
 ```
 
 ### Assets
-The Assets API serves as the master list of assets available for trade and data consumption from Alpaca. Assets are sorted by asset class, exchange and symbol. Some assets are only available for data consumption via Polygon, and are not tradable with Alpaca. These assets will be marked with the flag `tradable=false`.
+The Assets API serves as the master list of assets available for trade and data consumption from Alpaca. Assets are sorted by asset class, exchange and symbol.
 
 Example usage:
 ```java
@@ -477,60 +467,6 @@ try {
 }
 ```
 
-## PolygonAPI
-The `PolygonAPI` class contains several methods to interface with Polygon. You will generally only need one instance of it in your application. The Polygon API specification is located [here](https://polygon.io/docs/) and the `PolygonAPI` javadoc is located [here](https://javadoc.io/doc/net.jacobpeterson/alpaca-java/latest/net/jacobpeterson/polygon/PolygonAPI.html).
-
-Example usage:
-```java
-// This constructor uses the 'polygon.properties' file on the classpath for configuration
-Polygon polygonAPI = new PolygonAPI();
-
-// This constructor passes in a 'keyID' String
-String keyID = "<some key ID>";
-PolygonAPI polygonAPI = new PolygonAPI(keyID);
-```
-
-### PolygonAPIRequestException
-The `PolygonAPIRequestException` is thrown anytime an exception occurs when using various `PolygonAPI` methods. It should be caught and handled within your trading algorithm application accordingly.
-
-### Usage
-There are many Polygon endpoints (too many to show here in the README), but only certain ones are available to Alpaca users. The usage of the `PolygonAPI` class is very similar to the `AlpacaAPI` class so refer to the `PolygonAPI` [Javadoc](https://javadoc.io/doc/net.jacobpeterson/alpaca-java/latest/net/jacobpeterson/polygon/PolygonAPI.html) for all the available methods and endpoints accessible by Alpaca users.
-
-### Basic Example
-Here is a very basic example for requesting aggregate data and streaming real-time market data from Polygon:
-```java
-try {
-    // Get adjusted hour aggregates/bars on 12/23/2020 of AAPL and print them out
-    AggregatesResponse aaplAggregates = polygonAPI.getAggregates(
-            "AAPL",
-            1,
-            Timespan.HOUR,
-            LocalDate.of(2020, 12, 23),
-            LocalDate.of(2020, 12, 24),
-            false);
-    aaplAggregates.getResults().forEach(System.out::println);
-} catch (PolygonAPIRequestException exception) {
-    exception.printStackTrace();
-}
-
-try {
-    // Add a Polygon stream listener to listen to "T.AAPL", "Q.AAPL",
-    // "A.AAPL", "AM.AAPL", and status messages
-    polygonAPI.addPolygonStreamListener(new PolygonStreamListenerAdapter("AAPL",
-            PolygonStreamMessageType.values()) {
-        @Override
-        public void onStreamUpdate(PolygonStreamMessageType streamMessageType,
-                                   PolygonStreamMessage streamMessage) {
-            System.out.printf("%s stream update: %s \n",
-                    streamMessageType, streamMessage);
-        }
-    });
-} catch (WebsocketException exception) {
-    exception.printStackTrace();
-}
-```
-Again, refer to the `PolygonAPI` [Javadoc](https://javadoc.io/doc/net.jacobpeterson/alpaca-java/latest/net/jacobpeterson/polygon/PolygonAPI.html) for an exhaustive list of all available methods.
-
 ## Building
 To build this project yourself, clone this repository and run:
 ```
@@ -549,7 +485,7 @@ To run mocked tests using Mockito, run:
 ./gradlew test
 ```
 
-To run live endpoint tests with Alpaca Paper credentials, create `alpaca.properties` and `polygon.properties` files in `src/test/resources` with the corresponding credentials. Then run:
+To run live endpoint tests with Alpaca Paper credentials, create the `alpaca.properties` file in `src/test/resources` with the corresponding credentials. Then run:
 ```
 ./gradlew test -PtestPackage=live
 ```

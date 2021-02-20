@@ -49,35 +49,7 @@ public class Documentation2JSONSchema {
     }
 
     /**
-     * This is a standalone helper method that converts response schema HTML copied from the Polygon docs page into a
-     * json schema property list that includes the type and the description. It's kinda hacky, but it helps in the
-     * generation of JSON POJOs with Javadocs. Must be in the format of a list of:
-     * <pre>
-     * &lt;div class="description"&gt;
-     *     &lt;div&gt;
-     *         &lt;span class="propLabels"&gt;
-     *             &lt;span class="propName propOpt"&gt;name&lt;/span&gt;
-     *             &lt;span class="propType" title="string"&gt;string&lt;/span&gt;
-     *         &lt;/span&gt;
-     *         &lt;span class="propDesc"&gt;Name of the item.&lt;/span&gt;
-     *     &lt;/div&gt;
-     *     ...
-     * &lt;/div&gt;
-     * </pre>
-     *
-     * @param polygonDocXML the polygon doc xml
-     */
-    public static void printPolygonHTMLWebDocAsJSONSchema(String polygonDocXML)
-            throws ParserConfigurationException, SAXException, IOException, XPathExpressionException {
-        String nameXPath = "//span[" + xPathClassName("propName") + "]";
-        String typeXPath = "//span[" + xPathClassName("propType") + "]";
-        String descriptionXPath = "//span[" + xPathClassName("propDesc") + "]";
-
-        System.out.println(getSchemaFromDoc(polygonDocXML, nameXPath, typeXPath, descriptionXPath));
-    }
-
-    /**
-     * Converts a generic HTML doc for Alpaca or Polygon with JSON property fields for "name", "type", and "description"
+     * Converts a generic HTML doc for Alpaca with JSON property fields for "name", "type", and "description"
      * into schema JSON used for
      * <a href="https://github.com/joelittlejohn/jsonschema2pojo/wiki/Reference">jsonSchema2POJO</a>.
      *

@@ -1,4 +1,0 @@
-key_id = ABCDEFGHIJKLMNOPQURSTUVWXYZ
-base_api_url = https://api.polygon.io
-web_socket_server_url = wss://alpaca.socket.polygon.io/stocks
-user_agent = Java/ Unirest/1.4.9
