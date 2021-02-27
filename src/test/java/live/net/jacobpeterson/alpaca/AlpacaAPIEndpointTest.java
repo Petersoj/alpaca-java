@@ -82,7 +82,7 @@ public class AlpacaAPIEndpointTest {
         Clock clock = alpacaAPI.getClock();
         assertNotNull(clock);
 
-        LOGGER.debug(clock.toString());
+        LOGGER.debug("{}", clock);
 
         assertNotNull(clock.getTimestamp());
         assertNotNull(clock.getIsOpen());
@@ -109,7 +109,7 @@ public class AlpacaAPIEndpointTest {
         Account account = alpacaAPI.getAccount();
         assertNotNull(account);
 
-        LOGGER.debug(account.toString());
+        LOGGER.debug("{}", account);
 
         // Assert basic data integrity and not null
         Double.parseDouble(account.getCash());
@@ -201,7 +201,7 @@ public class AlpacaAPIEndpointTest {
         AccountConfiguration accountConfiguration = alpacaAPI.getAccountConfiguration();
         assertNotNull(accountConfiguration);
 
-        LOGGER.debug(accountConfiguration.toString());
+        LOGGER.debug("{}", accountConfiguration);
 
         assertNotNull(accountConfiguration.getDtbpCheck());
         assertNotNull(accountConfiguration.getTradeConfirmEmail());
@@ -252,7 +252,7 @@ public class AlpacaAPIEndpointTest {
         assertNotNull(orders);
         assertFalse(orders.isEmpty());
 
-        orders.forEach(order -> LOGGER.debug(order.toString()));
+        orders.forEach(order -> LOGGER.debug("{}", order));
 
         // Assert required fields are present
         Order order = orders.get(0);

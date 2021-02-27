@@ -198,14 +198,14 @@ public class AlpacaWebsocketClient implements WebsocketClient {
 
                         authenticated = isAuthorizationMessageSuccess(authorizationMessage);
 
-                        LOGGER.debug("{}", authorizationMessage.toString());
+                        LOGGER.debug("{}", authorizationMessage);
                         break;
                     case LISTENING:
                         ListeningMessage listeningMessage = GsonUtil.GSON.fromJson(messageJsonObject,
                                 ListeningMessage.class);
                         sendStreamMessageToListeners(alpacaStreamMessageType, listeningMessage);
 
-                        LOGGER.debug("{}", listeningMessage.toString());
+                        LOGGER.debug("{}", listeningMessage);
                         break;
                     case TRADE_UPDATES:
                         sendStreamMessageToListeners(alpacaStreamMessageType, GsonUtil.GSON.fromJson(messageJsonObject,
@@ -216,13 +216,13 @@ public class AlpacaWebsocketClient implements WebsocketClient {
                                 AccountUpdateMessage.class));
                         break;
                     default:
-                        LOGGER.error("Unhandled stream type: " + alpacaStreamMessageType);
+                        LOGGER.error("Unhandled stream type: {}", alpacaStreamMessageType);
                 }
             } catch (JsonSyntaxException exception) {
-                LOGGER.error("Could not parse message: " + messageJsonObject, exception);
+                LOGGER.error("Could not parse message: {}\n{}", messageJsonObject, exception);
             }
         } else {
-            LOGGER.error("Unknown stream message: " + messageJsonObject);
+            LOGGER.error("Unknown stream message: {}", messageJsonObject);
         }
     }
 
@@ -291,7 +291,7 @@ public class AlpacaWebsocketClient implements WebsocketClient {
 
         alpacaWebsocketClientEndpoint.sendMessage(streamRequestJsonObject.toString());
 
-        LOGGER.info("Requested subscriptions to update to " + streamsJsonArray);
+        LOGGER.info("Requested subscriptions to update to {}", streamsJsonArray);
     }
 
     /**

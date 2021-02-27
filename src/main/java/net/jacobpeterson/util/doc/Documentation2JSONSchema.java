@@ -49,8 +49,8 @@ public class Documentation2JSONSchema {
     }
 
     /**
-     * Converts a generic HTML doc for Alpaca with JSON property fields for "name", "type", and "description"
-     * into schema JSON used for
+     * Converts a generic HTML doc for Alpaca with JSON property fields for "name", "type", and "description" into
+     * schema JSON used for
      * <a href="https://github.com/joelittlejohn/jsonschema2pojo/wiki/Reference">jsonSchema2POJO</a>.
      *
      * @param docHTML          the doc html

@@ -246,37 +246,37 @@ public class MarketDataWebsocketClient implements WebsocketClient {
                                     ListeningMessage.class);
                             sendStreamMessageToListeners(marketDataStreamMessageType, listeningMessage);
 
-                            LOGGER.debug("{}", listeningMessage.toString());
+                            LOGGER.debug("{}", listeningMessage);
                             break;
                         case TRADES:
                             TradeMessage tradeMessage = GsonUtil.GSON.fromJson(messageJsonObject.get(DATA_KEY),
                                     TradeMessage.class);
                             sendStreamMessageToListeners(marketDataStreamMessageType, tradeMessage);
 
-                            LOGGER.debug("{}", tradeMessage.toString());
+                            LOGGER.debug("{}", tradeMessage);
                             break;
                         case QUOTES:
                             QuoteMessage quoteMessage = GsonUtil.GSON.fromJson(messageJsonObject.get(DATA_KEY),
                                     QuoteMessage.class);
                             sendStreamMessageToListeners(marketDataStreamMessageType, quoteMessage);
 
-                            LOGGER.debug("{}", quoteMessage.toString());
+                            LOGGER.debug("{}", quoteMessage);
                             break;
                         case AGGREGATE_MINUTE:
                             AggregateMinuteMessage aggregateMinuteMessage = GsonUtil.GSON.fromJson(
                                     messageJsonObject.get(DATA_KEY), AggregateMinuteMessage.class);
                             sendStreamMessageToListeners(marketDataStreamMessageType, aggregateMinuteMessage);
 
-                            LOGGER.debug("{}", aggregateMinuteMessage.toString());
+                            LOGGER.debug("{}", aggregateMinuteMessage);
                             break;
                         default:
-                            LOGGER.error("Unhandled stream type: " + marketDataStreamMessageType);
+                            LOGGER.error("Unhandled stream type: {}", marketDataStreamMessageType);
                     }
                 } catch (JsonParseException exception) {
-                    LOGGER.error("Could not parse message: " + messageJsonObject, exception);
+                    LOGGER.error("Could not parse message: {}\n{}", messageJsonObject, exception);
                 }
             } else {
-                LOGGER.error("Unknown stream message: " + messageJsonObject);
+                LOGGER.error("Unknown stream message: {}", messageJsonObject);
             }
         }
     }
@@ -376,7 +376,7 @@ public class MarketDataWebsocketClient implements WebsocketClient {
 
         marketDataWebsocketClientEndpoint.sendMessage(streamRequestJsonObject.toString());
 
-        LOGGER.info("Requested subscriptions to update to " + streamsJsonArray);
+        LOGGER.info("Requested subscriptions to update to {}", streamsJsonArray);
     }
 
     /**

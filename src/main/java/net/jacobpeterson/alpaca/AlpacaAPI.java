@@ -11,7 +11,16 @@ import net.jacobpeterson.abstracts.enums.SortDirection;
 import net.jacobpeterson.abstracts.websocket.exception.WebsocketException;
 import net.jacobpeterson.alpaca.AlpacaConstants.Endpoints;
 import net.jacobpeterson.alpaca.AlpacaConstants.Parameters;
-import net.jacobpeterson.alpaca.enums.*;
+import net.jacobpeterson.alpaca.enums.ActivityType;
+import net.jacobpeterson.alpaca.enums.AssetStatus;
+import net.jacobpeterson.alpaca.enums.BarsTimeFrame;
+import net.jacobpeterson.alpaca.enums.OrderClass;
+import net.jacobpeterson.alpaca.enums.OrderSide;
+import net.jacobpeterson.alpaca.enums.OrderStatus;
+import net.jacobpeterson.alpaca.enums.OrderTimeInForce;
+import net.jacobpeterson.alpaca.enums.OrderType;
+import net.jacobpeterson.alpaca.enums.PortfolioPeriodUnit;
+import net.jacobpeterson.alpaca.enums.PortfolioTimeFrame;
 import net.jacobpeterson.alpaca.properties.AlpacaProperties;
 import net.jacobpeterson.alpaca.rest.AlpacaRequest;
 import net.jacobpeterson.alpaca.rest.AlpacaRequestBuilder;
@@ -47,7 +56,11 @@ import java.lang.reflect.Type;
 import java.time.LocalDate;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
+import java.util.StringJoiner;
 import java.util.stream.Collectors;
 
 /**
@@ -137,7 +150,7 @@ public class AlpacaAPI {
         marketDataWebSocketClient = isOAuth ? new MarketDataWebsocketClient(oAuthToken, baseDataURL) :
                 new MarketDataWebsocketClient(keyID, secret, baseDataURL);
 
-        LOGGER.debug(this.toString());
+        LOGGER.debug("{}", this);
     }
 
     /**

@@ -69,7 +69,7 @@ public class GsonUtil {
             return CLASS_ANNOTATION_CACHE.get(theClass);
         }
 
-        LOGGER.debug("Caching Gson @SerializedName annotations for " + theClass.getName());
+        LOGGER.debug("Caching Gson @SerializedName annotations for {}", theClass.getName());
 
         // Below is expensive, but it only has to be done once per class.
 

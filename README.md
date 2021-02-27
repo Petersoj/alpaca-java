@@ -484,10 +484,12 @@ To run mocked tests using Mockito, run:
 ```
 ./gradlew test
 ```
+Note that mocked tests never send real API requests to Alpaca. Mocked tests are meant to test the basic integrity of this API locally.
 
 To run live endpoint tests with Alpaca Paper credentials, create the `alpaca.properties` file in `src/test/resources` with the corresponding credentials. Then run:
 ```
 ./gradlew test -PtestPackage=live
 ```
+Note that the live tests will modify your account minimally. It's meant to test live endpoints on a real paper account during market hours to confirm that API methods are working properly. Please read through the live endpoint tests [here](https://github.com/Petersoj/alpaca-java/tree/master/src/test/java/live/net/jacobpeterson/alpaca) before running this testing suite on your own paper account.
 
 Contributions are welcome!

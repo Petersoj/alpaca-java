@@ -75,20 +75,20 @@ public class PropertyUtil {
             // Load the properties
             try {
                 defaultProperties.load(defaultPropertyStream);
-                LOGGER.debug("Loaded default properties file: " + defaultPropertyFile);
+                LOGGER.debug("Loaded default properties file: {}", defaultPropertyFile);
             } catch (IOException exception) {
-                LOGGER.error("Could not load default property file: " + defaultPropertyFile, exception);
+                LOGGER.error("Could not load default property file: {}\n{}", defaultPropertyFile, exception);
             }
 
             // Close the InputStream
             try {
                 defaultPropertyStream.close();
             } catch (IOException exception) {
-                LOGGER.error("Could not close default property file stream: " + defaultPropertyFile, exception);
+                LOGGER.error("Could not close default property file stream: {}\n{}", defaultPropertyFile, exception);
             }
 
         } else {
-            LOGGER.warn("No default property file found for: " + propertyFile);
+            LOGGER.warn("No default property file found for: {}", propertyFile);
         }
 
         // Load the property file
@@ -101,22 +101,22 @@ public class PropertyUtil {
             // Load the properties
             try {
                 properties.load(propertyStream);
-                LOGGER.info("Loaded properties file: " + propertyFile);
+                LOGGER.info("Loaded properties file: {}", propertyFile);
             } catch (IOException exception) {
-                LOGGER.error("Could not load property file: " + propertyFile, exception);
+                LOGGER.error("Could not load property file: {}\n{}", propertyFile, exception);
             }
 
             // Close the InputStream
             try {
                 propertyStream.close();
             } catch (IOException exception) {
-                LOGGER.error("Could not close property file stream: " + propertyFile, exception);
+                LOGGER.error("Could not close property file stream: {}\n{}", propertyFile, exception);
             }
         } else {
-            LOGGER.error("Could not find property file: " + propertyFile);
+            LOGGER.error("Could not find property file: {}", propertyFile);
 
             if (defaultProperties != null) {
-                LOGGER.info("Using default properties for: " + propertyFile);
+                LOGGER.info("Using default properties for: {}", propertyFile);
                 properties = defaultProperties;
             }
         }
