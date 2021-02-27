@@ -1,12 +1,19 @@
 package mock.net.jacobpeterson.alpaca;
 
 import net.jacobpeterson.alpaca.AlpacaAPI;
+import net.jacobpeterson.alpaca.enums.api.EndpointAPIType;
 import org.junit.jupiter.api.Test;
 
 /**
  * {@link AlpacaAPITest} tests {@link AlpacaAPI} using mocked objects with Mockito.
  */
 public class AlpacaAPITest {
+
+    static {
+        // Log trace-level
+        System.setProperty("org.slf4j.simpleLogger.log.net.jacobpeterson", "trace");
+        System.setProperty("org.slf4j.simpleLogger.log.mock.net.jacobpeterson", "trace");
+    }
 
     /**
      * Tests {@link AlpacaAPI#AlpacaAPI()}.
@@ -28,15 +35,15 @@ public class AlpacaAPITest {
     }
 
     /**
-     * Tests {@link AlpacaAPI#AlpacaAPI(String, String, String)}.
+     * Tests {@link AlpacaAPI#AlpacaAPI(String, String, EndpointAPIType)}.
      */
     @Test
-    public void testAlpacaAPIConstructor_keyID_secret_baseAPIURL() {
+    public void testAlpacaAPIConstructor_keyID_secret_endpointAPIType() {
         String keyID = "ABCDEFGHIJKLM";
         String secret = "NOPQURSTUVWXYZ";
-        String baseAPIURL = "https://paper-api.foo.bar";
 
-        new AlpacaAPI(keyID, secret, baseAPIURL);
+        new AlpacaAPI(keyID, secret, EndpointAPIType.LIVE);
+        new AlpacaAPI(keyID, secret, EndpointAPIType.PAPER);
     }
 
     /**
@@ -50,15 +57,15 @@ public class AlpacaAPITest {
     }
 
     /**
-     * Tests {@link AlpacaAPI#AlpacaAPI(String, String, String, String)}.
+     * Tests {@link AlpacaAPI#AlpacaAPI(String, String, String, EndpointAPIType)}.
      */
     @Test
-    public void testAlpacaAPIConstructor_keyID_secret_oAuthToken_baseAPIURL_baseDataURL() {
+    public void testAlpacaAPIConstructor_keyID_secret_oAuthToken_endpointAPIType() {
         String keyID = "ABCDEFGHIJKLM";
         String secret = "NOPQURSTUVWXYZ";
         String oAuthToken = "ABCDEFGHIJKLMNOPQURSTUVWXYZ";
-        String baseAPIURL = "https://paper-api.foo.bar";
 
-        new AlpacaAPI(keyID, secret, oAuthToken, baseAPIURL);
+        new AlpacaAPI(keyID, secret, oAuthToken, EndpointAPIType.LIVE);
+        new AlpacaAPI(keyID, secret, oAuthToken, EndpointAPIType.PAPER);
     }
 }

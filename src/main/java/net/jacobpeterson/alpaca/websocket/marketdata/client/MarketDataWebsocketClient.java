@@ -11,6 +11,7 @@ import net.jacobpeterson.abstracts.websocket.exception.WebsocketException;
 import net.jacobpeterson.abstracts.websocket.listener.StreamListener;
 import net.jacobpeterson.abstracts.websocket.message.StreamMessage;
 import net.jacobpeterson.abstracts.websocket.message.StreamMessageType;
+import net.jacobpeterson.alpaca.AlpacaConstants;
 import net.jacobpeterson.alpaca.websocket.broker.client.AlpacaWebsocketClient;
 import net.jacobpeterson.alpaca.websocket.marketdata.listener.MarketDataStreamListener;
 import net.jacobpeterson.alpaca.websocket.marketdata.message.MarketDataStreamMessageType;
@@ -68,37 +69,34 @@ public class MarketDataWebsocketClient implements WebsocketClient {
     /**
      * Instantiates a new {@link AlpacaWebsocketClient}.
      *
-     * @param keyID       the key ID
-     * @param secret      the secret
-     * @param baseDataUrl the base data URL
+     * @param keyID  the key ID
+     * @param secret the secret
      */
-    public MarketDataWebsocketClient(String keyID, String secret, String baseDataUrl) {
-        this(keyID, secret, null, baseDataUrl);
+    public MarketDataWebsocketClient(String keyID, String secret) {
+        this(keyID, secret, null);
     }
 
     /**
      * Instantiates a new {@link AlpacaWebsocketClient}.
      *
      * @param oAuthToken the OAuth token
-     * @param baseAPIURL the base API URL
      */
-    public MarketDataWebsocketClient(String oAuthToken, String baseAPIURL) {
-        this(null, null, oAuthToken, baseAPIURL);
+    public MarketDataWebsocketClient(String oAuthToken) {
+        this(null, null, oAuthToken);
     }
 
     /**
      * Instantiates a new {@link AlpacaWebsocketClient}.
      *
-     * @param keyID       the key ID
-     * @param secret      the secret
-     * @param oAuthToken  the OAuth token
-     * @param baseDataUrl the base data URL
+     * @param keyID      the key ID
+     * @param secret     the secret
+     * @param oAuthToken the OAuth token
      */
-    private MarketDataWebsocketClient(String keyID, String secret, String oAuthToken, String baseDataUrl) {
+    private MarketDataWebsocketClient(String keyID, String secret, String oAuthToken) {
         this.keyID = keyID;
         this.secret = secret;
         this.oAuthToken = oAuthToken;
-        this.streamAPIURL = baseDataUrl.replace("https", "wss") + "/stream";
+        this.streamAPIURL = AlpacaConstants.URLs.DATA_V2.replace("https", "wss") + "/stream";
 
         listeners = new ArrayList<>();
     }

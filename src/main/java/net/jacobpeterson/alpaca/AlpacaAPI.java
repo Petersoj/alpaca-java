@@ -33,9 +33,6 @@ import net.jacobpeterson.domain.alpaca.accountconfiguration.AccountConfiguration
 import net.jacobpeterson.domain.alpaca.asset.Asset;
 import net.jacobpeterson.domain.alpaca.calendar.Calendar;
 import net.jacobpeterson.domain.alpaca.clock.Clock;
-import net.jacobpeterson.domain.alpaca.marketdata.Bar;
-import net.jacobpeterson.domain.alpaca.marketdata.LastQuoteResponse;
-import net.jacobpeterson.domain.alpaca.marketdata.LastTradeResponse;
 import net.jacobpeterson.domain.alpaca.order.CancelledOrder;
 import net.jacobpeterson.domain.alpaca.order.Order;
 import net.jacobpeterson.domain.alpaca.portfoliohistory.PortfolioHistory;
@@ -52,7 +49,10 @@ import java.lang.reflect.Type;
 import java.time.LocalDate;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.StringJoiner;
 import java.util.stream.Collectors;
 
 /**
@@ -79,7 +79,8 @@ public class AlpacaAPI {
      * associated defaults).
      */
     public AlpacaAPI() {
-        this(AlpacaProperties.KEY_ID_VALUE, AlpacaProperties.SECRET_VALUE, null);
+        this(AlpacaProperties.KEY_ID_VALUE, AlpacaProperties.SECRET_VALUE,
+                EndpointAPIType.fromPropertyName(AlpacaProperties.API_ENDPOINT_TYPE_VALUE));
 
         LOGGER.debug(AlpacaProperties.staticToString());
     }
@@ -133,8 +134,8 @@ public class AlpacaAPI {
 
         alpacaRequest = isOAuth ? new AlpacaRequest(oAuthToken) :
                 new AlpacaRequest(keyID, secret);
-        alpacaWebSocketClient = isOAuth ? new AlpacaWebsocketClient(oAuthToken) :
-                new AlpacaWebsocketClient(keyID, secret);
+        alpacaWebSocketClient = isOAuth ? new AlpacaWebsocketClient(oAuthToken, endpointAPIType) :
+                new AlpacaWebsocketClient(keyID, secret, endpointAPIType);
         marketDataWebSocketClient = isOAuth ? new MarketDataWebsocketClient(oAuthToken) :
                 new MarketDataWebsocketClient(keyID, secret);
 
@@ -1506,159 +1507,6 @@ public class AlpacaAPI {
         }
 
         return alpacaRequest.getResponseObject(response, Clock.class);
-    }
-
-    /**
-     * Retrieves a list of bars for each requested symbol. It is guaranteed all bars are in ascending order by time.
-     * <p>
-     * Currently, no “incomplete” bars are returned. For example, a 1 minute bar for 09:30 will not be returned until
-     * 09:31.
-     *
-     * @param timeframe One of minute, 1Min, 5Min, 15Min, day or 1D. minute is an alias of 1Min. Similarly, day is of
-     *                  1D.
-     * @param symbol    One symbol name.
-     * @param limit     The maximum number of bars to be returned for each symbol. It can be between 1 and 1000. Default
-     *                  is 100 if parameter is unspecified or 0.
-     * @param start     Filter bars equal to or after this time. Cannot be used with after.
-     * @param end       Filter bars equal to or before this time. Cannot be used with until.
-     * @param after     Filter bars after this time. Cannot be used with start.
-     * @param until     Filter bars before this time. Cannot be used with end.
-     *
-     * @return An object with a key for each symbol and the Bars object as the values. Note that it returns status 200
-     * with an empty object if no requested symbol is found.
-     *
-     * @throws AlpacaAPIRequestException thrown for {@link AlpacaAPIRequestException}s
-     * @see <a href="https://docs.alpaca.markets/api-documentation/api-v2/market-data/bars/">Bars</a>
-     */
-    public Map<String, List<Bar>> getBars(BarsTimeFrame timeframe, String symbol, Integer limit, ZonedDateTime start,
-            ZonedDateTime end, ZonedDateTime after, ZonedDateTime until)
-            throws AlpacaAPIRequestException {
-        return this.getBars(timeframe, new String[]{symbol}, limit, start, end, after, until);
-    }
-
-    /**
-     * Retrieves a list of bars for each requested symbol. It is guaranteed all bars are in ascending order by time.
-     * <p>
-     * Currently, no “incomplete” bars are returned. For example, a 1 minute bar for 09:30 will not be returned until
-     * 09:31.
-     *
-     * @param timeframe One of minute, 1Min, 5Min, 15Min, day or 1D. minute is an alias of 1Min. Similarly, day is of
-     *                  1D.
-     * @param symbols   One or more (max 200) symbol names split by commas (“,”).
-     * @param limit     The maximum number of bars to be returned for each symbol. It can be between 1 and 1000. Default
-     *                  is 100 if parameter is unspecified or 0.
-     * @param start     Filter bars equal to or after this time. Cannot be used with after.
-     * @param end       Filter bars equal to or before this time. Cannot be used with until.
-     * @param after     Filter bars after this time. Cannot be used with start.
-     * @param until     Filter bars before this time. Cannot be used with end.
-     *
-     * @return @return An object with a key for each symbol and the Bars object as the values. Note that it returns
-     * status 200 with an empty object if no requested symbol is found.
-     *
-     * @throws AlpacaAPIRequestException thrown for {@link AlpacaAPIRequestException}s
-     * @see <a href="https://docs.alpaca.markets/api-documentation/api-v2/market-data/bars/">Bars</a>
-     */
-    public Map<String, List<Bar>> getBars(BarsTimeFrame timeframe, String[] symbols, Integer limit, ZonedDateTime start,
-            ZonedDateTime end, ZonedDateTime after, ZonedDateTime until)
-            throws AlpacaAPIRequestException {
-        AlpacaRequestBuilder urlBuilder = new AlpacaRequestBuilder(baseDataUrl, Endpoints.VERSION_1,
-                Endpoints.BARS);
-
-        if (timeframe != null) {
-            urlBuilder.appendEndpoint(timeframe.getAPIName());
-        }
-
-        if (symbols != null) {
-            urlBuilder.appendURLParameter(Parameters.SYMBOLS, String.join(",", symbols));
-        }
-
-        if (limit != null) {
-            urlBuilder.appendURLParameter(Parameters.LIMIT, limit.toString());
-        }
-
-        if (start != null) {
-            urlBuilder.appendURLParameter(Parameters.START,
-                    start.format(DateTimeFormatter.ISO_OFFSET_DATE_TIME));
-        }
-
-        if (end != null) {
-            urlBuilder.appendURLParameter(Parameters.END,
-                    end.format(DateTimeFormatter.ISO_OFFSET_DATE_TIME));
-        }
-
-        if (after != null) {
-            urlBuilder.appendURLParameter(Parameters.AFTER,
-                    after.format(DateTimeFormatter.ISO_OFFSET_DATE_TIME));
-        }
-
-        if (until != null) {
-            urlBuilder.appendURLParameter(Parameters.UNTIL,
-                    until.format(DateTimeFormatter.ISO_OFFSET_DATE_TIME));
-        }
-
-        HttpResponse<InputStream> response = alpacaRequest.invokeGet(urlBuilder);
-
-        if (response.getStatus() != 200) {
-            throw new AlpacaAPIRequestException(response);
-        }
-
-        Type mapType = new TypeToken<Map<String, ArrayList<Bar>>>() {}.getType();
-
-        return alpacaRequest.getResponseObject(response, mapType);
-    }
-
-    /**
-     * Retrieves the last trade for the requested symbol.
-     *
-     * @param symbol A stock ticker symbol to retrieve the last trade of
-     *
-     * @return the last trade response object
-     *
-     * @throws AlpacaAPIRequestException thrown for {@link AlpacaAPIRequestException}s
-     * @see <a href="https://alpaca.markets/docs/api-documentation/api-v2/market-data/last-trade/">Last Trade</a>
-     */
-    public LastTradeResponse getLastTrade(String symbol) throws AlpacaAPIRequestException {
-        Preconditions.checkNotNull(symbol);
-
-        AlpacaRequestBuilder urlBuilder = new AlpacaRequestBuilder(baseDataUrl, Endpoints.VERSION_1,
-                Endpoints.LAST,
-                Endpoints.STOCKS,
-                symbol);
-
-        HttpResponse<InputStream> response = alpacaRequest.invokeGet(urlBuilder);
-
-        if (response.getStatus() != 200) {
-            throw new AlpacaAPIRequestException(response);
-        }
-
-        return alpacaRequest.getResponseObject(response, LastTradeResponse.class);
-    }
-
-    /**
-     * Retrieves the last quote for the requested symbol.
-     *
-     * @param symbol A stock ticker symbol to retrieve the last trade of
-     *
-     * @return the last quote response object
-     *
-     * @throws AlpacaAPIRequestException thrown for {@link AlpacaAPIRequestException}s
-     * @see <a href="https://alpaca.markets/docs/api-documentation/api-v2/market-data/last-quote/">Last Quote</a>
-     */
-    public LastQuoteResponse getLastQuote(String symbol) throws AlpacaAPIRequestException {
-        Preconditions.checkNotNull(symbol);
-
-        AlpacaRequestBuilder urlBuilder = new AlpacaRequestBuilder(baseDataUrl, Endpoints.VERSION_1,
-                Endpoints.LAST_QUOTE,
-                Endpoints.STOCKS,
-                symbol);
-
-        HttpResponse<InputStream> response = alpacaRequest.invokeGet(urlBuilder);
-
-        if (response.getStatus() != 200) {
-            throw new AlpacaAPIRequestException(response);
-        }
-
-        return alpacaRequest.getResponseObject(response, LastQuoteResponse.class);
     }
 
     /**

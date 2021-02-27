@@ -1,16 +1,13 @@
 package net.jacobpeterson.alpaca.websocket.broker.client;
 
 import com.google.common.base.Preconditions;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonPrimitive;
-import com.google.gson.JsonSyntaxException;
+import com.google.gson.*;
 import net.jacobpeterson.abstracts.websocket.client.WebsocketClient;
 import net.jacobpeterson.abstracts.websocket.exception.WebsocketException;
 import net.jacobpeterson.abstracts.websocket.listener.StreamListener;
 import net.jacobpeterson.abstracts.websocket.message.StreamMessage;
 import net.jacobpeterson.abstracts.websocket.message.StreamMessageType;
+import net.jacobpeterson.alpaca.enums.api.EndpointAPIType;
 import net.jacobpeterson.alpaca.websocket.broker.listener.AlpacaStreamListener;
 import net.jacobpeterson.alpaca.websocket.broker.message.AlpacaStreamMessageType;
 import net.jacobpeterson.domain.alpaca.streaming.AlpacaStreamMessage;
@@ -53,22 +50,22 @@ public class AlpacaWebsocketClient implements WebsocketClient {
     /**
      * Instantiates a new {@link AlpacaWebsocketClient}.
      *
-     * @param keyID      the key ID
-     * @param secret     the secret
-     * @param baseAPIURL the base API URL
+     * @param keyID           the key ID
+     * @param secret          the secret
+     * @param endpointAPIType the {@link EndpointAPIType}
      */
-    public AlpacaWebsocketClient(String keyID, String secret, String baseAPIURL) {
-        this(keyID, secret, null, baseAPIURL);
+    public AlpacaWebsocketClient(String keyID, String secret, EndpointAPIType endpointAPIType) {
+        this(keyID, secret, null, endpointAPIType);
     }
 
     /**
      * Instantiates a new {@link AlpacaWebsocketClient}.
      *
-     * @param oAuthToken the OAuth token
-     * @param baseAPIURL the base API URL
+     * @param oAuthToken      the OAuth token
+     * @param endpointAPIType the {@link EndpointAPIType}
      */
-    public AlpacaWebsocketClient(String oAuthToken, String baseAPIURL) {
-        this(null, null, oAuthToken, baseAPIURL);
+    public AlpacaWebsocketClient(String oAuthToken, EndpointAPIType endpointAPIType) {
+        this(null, null, oAuthToken, endpointAPIType);
     }
 
     /**
@@ -77,13 +74,12 @@ public class AlpacaWebsocketClient implements WebsocketClient {
      * @param keyID      the key ID
      * @param secret     the secret
      * @param oAuthToken the OAuth token
-     * @param baseAPIURL the base API URL
      */
-    private AlpacaWebsocketClient(String keyID, String secret, String oAuthToken, String baseAPIURL) {
+    private AlpacaWebsocketClient(String keyID, String secret, String oAuthToken, EndpointAPIType endpointAPIType) {
         this.keyID = keyID;
         this.secret = secret;
         this.oAuthToken = oAuthToken;
-        this.streamAPIURL = baseAPIURL.replace("https", "wss") + "/stream";
+        this.streamAPIURL = endpointAPIType.getURL().replace("https", "wss") + "/stream";
 
         listeners = new ArrayList<>();
     }

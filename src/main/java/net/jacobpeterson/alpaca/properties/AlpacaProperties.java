@@ -40,16 +40,18 @@ public class AlpacaProperties {
      * @return the static {@link #toString()}
      */
     public static String staticToString() {
-        return ReflectionUtil.getAllDeclaredFields(AlpacaProperties.class).stream()
-                .filter(field -> !field.getName().contains("LOGGER"))
-                .map(field -> {
-                    try {
-                        return field.getName() + " = " + field.get(null);
-                    } catch (IllegalAccessException exception) {
-                        LOGGER.error("Could not get field!", exception);
-                    }
+        return AlpacaProperties.class.getName() + "[" +
+                ReflectionUtil.getAllDeclaredFields(AlpacaProperties.class).stream()
+                        .filter(field -> !field.getName().contains("LOGGER"))
+                        .map(field -> {
+                            try {
+                                return field.getName() + " = " + field.get(null);
+                            } catch (IllegalAccessException exception) {
+                                LOGGER.error("Could not get field!", exception);
+                            }
 
-                    return field.getName() + " = ?";
-                }).collect(Collectors.joining());
+                            return field.getName() + " = ?";
+                        }).collect(Collectors.joining(", "))
+                + "]";
     }
 }
