@@ -11,10 +11,16 @@ import net.jacobpeterson.abstracts.enums.SortDirection;
 import net.jacobpeterson.abstracts.websocket.exception.WebsocketException;
 import net.jacobpeterson.alpaca.AlpacaConstants.Endpoints;
 import net.jacobpeterson.alpaca.AlpacaConstants.Parameters;
+import net.jacobpeterson.alpaca.AlpacaConstants.URLs;
 import net.jacobpeterson.alpaca.enums.activity.ActivityType;
 import net.jacobpeterson.alpaca.enums.api.EndpointAPIType;
 import net.jacobpeterson.alpaca.enums.asset.AssetStatus;
-import net.jacobpeterson.alpaca.enums.order.*;
+import net.jacobpeterson.alpaca.enums.marketdata.BarsTimeFrame;
+import net.jacobpeterson.alpaca.enums.order.OrderClass;
+import net.jacobpeterson.alpaca.enums.order.OrderSide;
+import net.jacobpeterson.alpaca.enums.order.OrderStatus;
+import net.jacobpeterson.alpaca.enums.order.OrderTimeInForce;
+import net.jacobpeterson.alpaca.enums.order.OrderType;
 import net.jacobpeterson.alpaca.enums.portfolio.PortfolioPeriodUnit;
 import net.jacobpeterson.alpaca.enums.portfolio.PortfolioTimeFrame;
 import net.jacobpeterson.alpaca.properties.AlpacaProperties;
@@ -33,6 +39,12 @@ import net.jacobpeterson.domain.alpaca.accountconfiguration.AccountConfiguration
 import net.jacobpeterson.domain.alpaca.asset.Asset;
 import net.jacobpeterson.domain.alpaca.calendar.Calendar;
 import net.jacobpeterson.domain.alpaca.clock.Clock;
+import net.jacobpeterson.domain.alpaca.marketdata.historical.bar.Bar;
+import net.jacobpeterson.domain.alpaca.marketdata.historical.bar.BarsResponse;
+import net.jacobpeterson.domain.alpaca.marketdata.historical.quote.Quote;
+import net.jacobpeterson.domain.alpaca.marketdata.historical.quote.QuotesResponse;
+import net.jacobpeterson.domain.alpaca.marketdata.historical.trade.Trade;
+import net.jacobpeterson.domain.alpaca.marketdata.historical.trade.TradesResponse;
 import net.jacobpeterson.domain.alpaca.order.CancelledOrder;
 import net.jacobpeterson.domain.alpaca.order.Order;
 import net.jacobpeterson.domain.alpaca.portfoliohistory.PortfolioHistory;
@@ -426,22 +438,22 @@ public class AlpacaAPI {
 
         if (limitPrice != null) {
             urlBuilder.appendJSONBodyProperty(Parameters.LIMIT_PRICE,
-                    FormatUtil.toDecimalFormat(limitPrice));
+                    FormatUtil.toCurrencyFormat(limitPrice));
         }
 
         if (stopPrice != null) {
             urlBuilder.appendJSONBodyProperty(Parameters.STOP_PRICE,
-                    FormatUtil.toDecimalFormat(stopPrice));
+                    FormatUtil.toCurrencyFormat(stopPrice));
         }
 
         if (trailPrice != null) {
             urlBuilder.appendJSONBodyProperty(Parameters.TRAIL_PRICE,
-                    FormatUtil.toDecimalFormat(trailPrice));
+                    FormatUtil.toCurrencyFormat(trailPrice));
         }
 
         if (trailPercent != null) {
             urlBuilder.appendJSONBodyProperty(Parameters.TRAIL_PERCENT,
-                    FormatUtil.toDecimalFormat(trailPercent));
+                    FormatUtil.toCurrencyFormat(trailPercent));
         }
 
         if (extendedHours != null) {
@@ -947,17 +959,17 @@ public class AlpacaAPI {
 
         if (limitPrice != null) {
             urlBuilder.appendJSONBodyProperty(Parameters.LIMIT_PRICE,
-                    FormatUtil.toDecimalFormat(limitPrice));
+                    FormatUtil.toCurrencyFormat(limitPrice));
         }
 
         if (stopPrice != null) {
             urlBuilder.appendJSONBodyProperty(Parameters.STOP_PRICE,
-                    FormatUtil.toDecimalFormat(stopPrice));
+                    FormatUtil.toCurrencyFormat(stopPrice));
         }
 
         if (trail != null) {
             urlBuilder.appendJSONBodyProperty(Parameters.TRAIL,
-                    FormatUtil.toDecimalFormat(trail));
+                    FormatUtil.toCurrencyFormat(trail));
         }
 
         if (clientOrderId != null) {
@@ -1427,7 +1439,7 @@ public class AlpacaAPI {
         }
 
         if (dateEnd != null) {
-            urlBuilder.appendURLParameter(Parameters.DATE_END, FormatUtil.toDateString(dateEnd));
+            urlBuilder.appendURLParameter(Parameters.DATE_END, dateEnd.format(DateTimeFormatter.ISO_DATE));
         }
 
         if (extendedHours != null) {
@@ -1458,8 +1470,8 @@ public class AlpacaAPI {
     /**
      * Returns the market {@link Calendar}.
      *
-     * @param start The first date to retrieve data for (inclusive)
-     * @param end   The last date to retrieve data for (inclusive)
+     * @param start the first date to retrieve data for (inclusive)
+     * @param end   the last date to retrieve data for (inclusive)
      *
      * @return the {@link Calendar} {@link List}
      *
@@ -1470,11 +1482,11 @@ public class AlpacaAPI {
         AlpacaRequestBuilder urlBuilder = new AlpacaRequestBuilder(apiURL, Endpoints.VERSION_2, Endpoints.CALENDAR);
 
         if (start != null) {
-            urlBuilder.appendURLParameter(Parameters.START, FormatUtil.toDateString(start));
+            urlBuilder.appendURLParameter(Parameters.START, start.format(DateTimeFormatter.ISO_DATE));
         }
 
         if (end != null) {
-            urlBuilder.appendURLParameter(Parameters.END, FormatUtil.toDateString(end));
+            urlBuilder.appendURLParameter(Parameters.END, end.format(DateTimeFormatter.ISO_DATE));
         }
 
         HttpResponse<InputStream> response = alpacaRequest.invokeGet(urlBuilder);
@@ -1507,6 +1519,153 @@ public class AlpacaAPI {
         }
 
         return alpacaRequest.getResponseObject(response, Clock.class);
+    }
+
+    /**
+     * Gets {@link Trade} historical data for the requested security.
+     *
+     * @param symbol    the symbol to query for
+     * @param start     filter data equal to or after this {@link ZonedDateTime}. Fractions of a second are not
+     *                  accepted
+     * @param end       filter data equal to or before this {@link ZonedDateTime}. Fractions of a second are not
+     *                  accepted
+     * @param limit     number of data points to return. Must be in range 1-10000, defaults to 1000 if null is given
+     * @param pageToken pagination token to continue from
+     *
+     * @return the {@link TradesResponse}
+     *
+     * @throws AlpacaAPIRequestException thrown for {@link AlpacaAPIRequestException}s
+     * @see <a href="https://alpaca.markets/docs/api-documentation/api-v2/market-data/alpaca-data-api-v2/historical/">
+     * Historical Market Data</a>
+     */
+    public TradesResponse getTrades(String symbol, ZonedDateTime start, ZonedDateTime end, Integer limit,
+            String pageToken) throws AlpacaAPIRequestException {
+        Preconditions.checkNotNull(symbol);
+        Preconditions.checkNotNull(start);
+        Preconditions.checkNotNull(end);
+
+        AlpacaRequestBuilder urlBuilder = new AlpacaRequestBuilder(URLs.DATA, Endpoints.VERSION_2,
+                Endpoints.STOCKS,
+                symbol,
+                Endpoints.TRADES);
+
+        urlBuilder.appendURLParameter(Parameters.START, start.format(DateTimeFormatter.ISO_OFFSET_DATE_TIME));
+        urlBuilder.appendURLParameter(Parameters.END, end.format(DateTimeFormatter.ISO_OFFSET_DATE_TIME));
+
+        if (limit != null) {
+            urlBuilder.appendURLParameter(Parameters.LIMIT, limit.toString());
+        }
+
+        if (pageToken != null) {
+            urlBuilder.appendURLParameter(Parameters.PAGE_TOKEN, pageToken);
+        }
+
+        HttpResponse<InputStream> response = alpacaRequest.invokeGet(urlBuilder);
+
+        if (response.getStatus() != 200) {
+            throw new AlpacaAPIRequestException(response);
+        }
+
+        return alpacaRequest.getResponseObject(response, TradesResponse.class);
+    }
+
+    /**
+     * Gets {@link Quote} (NBBO or National Best Bid and Offer) historical data for the requested security.
+     *
+     * @param symbol    the symbol to query for
+     * @param start     filter data equal to or after this {@link ZonedDateTime}. Fractions of a second are not
+     *                  accepted
+     * @param end       filter data equal to or before this {@link ZonedDateTime}. Fractions of a second are not
+     *                  accepted
+     * @param limit     number of data points to return. Must be in range 1-10000, defaults to 1000 if null is given
+     * @param pageToken pagination token to continue from
+     *
+     * @return the {@link QuotesResponse}
+     *
+     * @throws AlpacaAPIRequestException thrown for {@link AlpacaAPIRequestException}s
+     * @see <a href="https://alpaca.markets/docs/api-documentation/api-v2/market-data/alpaca-data-api-v2/historical/">
+     * Historical Market Data</a>
+     */
+    public QuotesResponse getQuotes(String symbol, ZonedDateTime start, ZonedDateTime end, Integer limit,
+            String pageToken) throws AlpacaAPIRequestException {
+        Preconditions.checkNotNull(symbol);
+        Preconditions.checkNotNull(start);
+        Preconditions.checkNotNull(end);
+
+        AlpacaRequestBuilder urlBuilder = new AlpacaRequestBuilder(URLs.DATA, Endpoints.VERSION_2,
+                Endpoints.STOCKS,
+                symbol,
+                Endpoints.QUOTES);
+
+        urlBuilder.appendURLParameter(Parameters.START, start.format(DateTimeFormatter.ISO_OFFSET_DATE_TIME));
+        urlBuilder.appendURLParameter(Parameters.END, end.format(DateTimeFormatter.ISO_OFFSET_DATE_TIME));
+
+        if (limit != null) {
+            urlBuilder.appendURLParameter(Parameters.LIMIT, limit.toString());
+        }
+
+        if (pageToken != null) {
+            urlBuilder.appendURLParameter(Parameters.PAGE_TOKEN, pageToken);
+        }
+
+        HttpResponse<InputStream> response = alpacaRequest.invokeGet(urlBuilder);
+
+        if (response.getStatus() != 200) {
+            throw new AlpacaAPIRequestException(response);
+        }
+
+        return alpacaRequest.getResponseObject(response, QuotesResponse.class);
+    }
+
+    /**
+     * Gets {@link Bar} aggregate historical data for the requested security.
+     *
+     * @param symbol    the symbol to query for
+     * @param start     filter data equal to or after this {@link ZonedDateTime}. Fractions of a second are not
+     *                  accepted
+     * @param end       filter data equal to or before this {@link ZonedDateTime}. Fractions of a second are not
+     *                  accepted
+     * @param limit     number of data points to return. Must be in range 1-10000, defaults to 1000 if null is given
+     * @param pageToken pagination token to continue from
+     * @param timeFrame the {@link BarsTimeFrame} for the aggregation
+     *
+     * @return the {@link BarsResponse}
+     *
+     * @throws AlpacaAPIRequestException thrown for {@link AlpacaAPIRequestException}s
+     * @see <a href="https://alpaca.markets/docs/api-documentation/api-v2/market-data/alpaca-data-api-v2/historical/">
+     * Historical Market Data</a>
+     */
+    public BarsResponse getBars(String symbol, ZonedDateTime start, ZonedDateTime end, Integer limit,
+            String pageToken, BarsTimeFrame timeFrame) throws AlpacaAPIRequestException {
+        Preconditions.checkNotNull(symbol);
+        Preconditions.checkNotNull(start);
+        Preconditions.checkNotNull(end);
+        Preconditions.checkNotNull(timeFrame);
+
+        AlpacaRequestBuilder urlBuilder = new AlpacaRequestBuilder(URLs.DATA, Endpoints.VERSION_2,
+                Endpoints.STOCKS,
+                symbol,
+                Endpoints.BARS);
+
+        urlBuilder.appendURLParameter(Parameters.START, start.format(DateTimeFormatter.ISO_OFFSET_DATE_TIME));
+        urlBuilder.appendURLParameter(Parameters.END, end.format(DateTimeFormatter.ISO_OFFSET_DATE_TIME));
+        urlBuilder.appendURLParameter(Parameters.TIMEFRAME, timeFrame.getAPIName());
+
+        if (limit != null) {
+            urlBuilder.appendURLParameter(Parameters.LIMIT, limit.toString());
+        }
+
+        if (pageToken != null) {
+            urlBuilder.appendURLParameter(Parameters.PAGE_TOKEN, pageToken);
+        }
+
+        HttpResponse<InputStream> response = alpacaRequest.invokeGet(urlBuilder);
+
+        if (response.getStatus() != 200) {
+            throw new AlpacaAPIRequestException(response);
+        }
+
+        return alpacaRequest.getResponseObject(response, BarsResponse.class);
     }
 
     /**

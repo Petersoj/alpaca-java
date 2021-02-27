@@ -1,11 +1,7 @@
 package net.jacobpeterson.alpaca.websocket.marketdata.client;
 
 import com.google.common.base.Preconditions;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParseException;
-import com.google.gson.JsonPrimitive;
+import com.google.gson.*;
 import net.jacobpeterson.abstracts.websocket.client.WebsocketClient;
 import net.jacobpeterson.abstracts.websocket.exception.WebsocketException;
 import net.jacobpeterson.abstracts.websocket.listener.StreamListener;
@@ -31,11 +27,7 @@ import javax.websocket.DeploymentException;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -96,7 +88,7 @@ public class MarketDataWebsocketClient implements WebsocketClient {
         this.keyID = keyID;
         this.secret = secret;
         this.oAuthToken = oAuthToken;
-        this.streamAPIURL = AlpacaConstants.URLs.DATA_V2.replace("https", "wss") + "/stream";
+        this.streamAPIURL = AlpacaConstants.URLs.DATA.replace("https", "wss") + "/stream";
 
         listeners = new ArrayList<>();
     }

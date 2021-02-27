@@ -10,7 +10,7 @@ public class AlpacaConstants {
      */
     public static class URLs {
 
-        public static final String DATA_V2 = "https://data.alpaca.markets/v2";
+        public static final String DATA = "https://data.alpaca.markets/";
     }
 
     /**
@@ -18,11 +18,7 @@ public class AlpacaConstants {
      */
     public static class Endpoints {
 
-        public static final String VERSION_1 = "v1";
         public static final String VERSION_2 = "v2";
-        public static final String BARS = "bars";
-        public static final String LAST = "last";
-        public static final String LAST_QUOTE = "last_quote";
         public static final String STOCKS = "stocks";
         public static final String CLOCK = "clock";
         public static final String CALENDAR = "calendar";
@@ -36,6 +32,9 @@ public class AlpacaConstants {
         public static final String WATCHLISTS = "watchlists";
         public static final String PORTFOLIO = "portfolio";
         public static final String HISTORY = "history";
+        public static final String TRADES = "trades";
+        public static final String QUOTES = "quotes";
+        public static final String BARS = "bars";
     }
 
     /**

@@ -2,100 +2,25 @@ package net.jacobpeterson.util.format;
 
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
 
 /**
- * The Class {@link FormatUtil}.
+ * {@link FormatUtil} is a utility class for various formatting.
  */
 public class FormatUtil {
 
-    /** The constant PREV_UNIX_EPOCH_NANO_TIME. */
+    private static final NumberFormat CURRENCY_FORMATTER = new DecimalFormat("#0.00");
     private static final long PREV_UNIX_EPOCH_NANO_TIME = System.currentTimeMillis() * 1000000L;
-    /** The constant PREV_UNIX_EPOCH_NANO_TIME. */
     private static final long PREV_UNIX_EPOCH_MICRO_TIME = PREV_UNIX_EPOCH_NANO_TIME / 1000L;
-    /** The date time formatter. */
-    private static final DateTimeFormatter INPUT_DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern(
-            "[yyyyMMdd][yyyy-MM-dd][yyyy-DDD]['T'[HHmmss][HHmm][HH:mm:ss][HH:mm][.SSSSSSSSS][.SSSSSSSS][.SSSSSSS][" +
-                    ".SSSSSS][.SSSSS][.SSS][.SS][.S]][OOOO][O][z][XXXXX][XXXX]['['VV']']");
-    /** The output date time formatter. */
-    private static final DateTimeFormatter OUTPUT_DATE_TIME_FORMATTER =
-            DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss'Z'").withZone(ZoneId.of("UTC"));
-    /** The number formatter. */
-    private static final NumberFormat NUMBER_FORMATTER = new DecimalFormat("#0.00");
 
     /**
-     * To date time string.
+     * Formats an arbitrary number to a currency format. e.g. $123.45
      *
-     * @param ldt the ldt
+     * @param numberToFormat the {@link Number} to format
      *
-     * @return the string
+     * @return the formatted string
      */
-    public static String toDateTimeString(LocalDateTime ldt) {
-        ZonedDateTime ldtZoned = ldt.atZone(ZoneId.systemDefault());
-
-        ZonedDateTime localTimeZoned = ldtZoned.withZoneSameInstant(ZoneId.of("UTC"));
-
-        return OUTPUT_DATE_TIME_FORMATTER.format(localTimeZoned);
-    }
-
-    /**
-     * To decimal format.
-     *
-     * @param numberToFormat the number to format
-     *
-     * @return the string
-     */
-    public static String toDecimalFormat(Number numberToFormat) {
-        return NUMBER_FORMATTER.format(numberToFormat);
-    }
-
-    /**
-     * To date string.
-     *
-     * @param ld the ld
-     *
-     * @return the string
-     */
-    public static String toDateString(LocalDate ld) {
-        return ld.format(DateTimeFormatter.ISO_DATE);
-    }
-
-    /**
-     * From date time string.
-     *
-     * @param dateTimeString the date time string
-     *
-     * @return the local date time using the system time zone
-     */
-    public static LocalDateTime fromDateTimeString(String dateTimeString) {
-        LocalDateTime ldt = LocalDateTime.parse(dateTimeString, INPUT_DATE_TIME_FORMATTER);
-
-        ZonedDateTime ldtZoned;
-
-        if (dateTimeString.endsWith("Z")) {
-            ldtZoned = ldt.atZone(ZoneId.of("UTC"));
-        } else {
-            ldtZoned = ldt.atZone(ZoneId.of("America/New_York"));
-        }
-
-        ZonedDateTime localTimeZoned = ldtZoned.withZoneSameInstant(ZoneId.systemDefault());
-
-        return localTimeZoned.toLocalDateTime();
-    }
-
-    /**
-     * From date string.
-     *
-     * @param dateString the date string
-     *
-     * @return the local date
-     */
-    public static LocalDate fromDateString(String dateString) {
-        return LocalDate.parse(dateString, DateTimeFormatter.ISO_DATE);
+    public static String toCurrencyFormat(Number numberToFormat) {
+        return CURRENCY_FORMATTER.format(numberToFormat);
     }
 
     /**

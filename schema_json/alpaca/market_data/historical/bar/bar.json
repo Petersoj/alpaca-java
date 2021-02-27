@@ -1,0 +1,30 @@
+{
+  "type": "object",
+  "title": "See <a href=\"https://alpaca.markets/docs/api-documentation/api-v2/market-data/alpaca-data-api-v2/historical/\">https://alpaca.markets/docs/api-documentation/api-v2/market-data/alpaca-data-api-v2/historical/</a>",
+  "properties": {
+    "t": {
+      "existingJavaType": "java.time.ZonedDateTime",
+      "title": "Timestamp with nanosecond precision."
+    },
+    "o": {
+      "existingJavaType": "java.lang.Double",
+      "title": "Open price."
+    },
+    "h": {
+      "existingJavaType": "java.lang.Double",
+      "title": "High price."
+    },
+    "l": {
+      "existingJavaType": "java.lang.Double",
+      "title": "Low price."
+    },
+    "c": {
+      "existingJavaType": "java.lang.Double",
+      "title": "Close price."
+    },
+    "v": {
+      "existingJavaType": "java.lang.Double",
+      "title": "Volume."
+    }
+  }
+}

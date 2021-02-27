@@ -1,0 +1,34 @@
+{
+  "type": "object",
+  "title": "See <a href=\"https://alpaca.markets/docs/api-documentation/api-v2/market-data/alpaca-data-api-v2/historical/\">https://alpaca.markets/docs/api-documentation/api-v2/market-data/alpaca-data-api-v2/historical/</a>",
+  "properties": {
+    "t": {
+      "existingJavaType": "java.time.ZonedDateTime",
+      "title": "Timestamp with nanosecond precision."
+    },
+    "x": {
+      "existingJavaType": "java.lang.String",
+      "title": "Exchange where the trade happened."
+    },
+    "p": {
+      "existingJavaType": "java.lang.Double",
+      "title": "Trade price."
+    },
+    "s": {
+      "existingJavaType": "java.lang.Integer",
+      "title": "Trade size."
+    },
+    "c": {
+      "existingJavaType": "java.util.ArrayList<String>",
+      "title": "Trade conditions."
+    },
+    "i": {
+      "existingJavaType": "java.lang.Long",
+      "title": "Trade ID."
+    },
+    "z": {
+      "existingJavaType": "java.lang.String",
+      "title": "Tape."
+    }
+  }
+}

@@ -1,0 +1,38 @@
+{
+  "type": "object",
+  "title": "See <a href=\"https://alpaca.markets/docs/api-documentation/api-v2/market-data/alpaca-data-api-v2/historical/\">https://alpaca.markets/docs/api-documentation/api-v2/market-data/alpaca-data-api-v2/historical/</a>",
+  "properties": {
+    "t": {
+      "existingJavaType": "java.time.ZonedDateTime",
+      "title": "Timestamp with nanosecond precision."
+    },
+    "ax": {
+      "existingJavaType": "java.lang.String",
+      "title": "Ask exchange."
+    },
+    "ap": {
+      "existingJavaType": "java.lang.Double",
+      "title": "Ask price."
+    },
+    "as": {
+      "existingJavaType": "java.lang.Integer",
+      "title": "Ask size."
+    },
+    "bx": {
+      "existingJavaType": "java.lang.String",
+      "title": "Bid exchange."
+    },
+    "bp": {
+      "existingJavaType": "java.lang.Double",
+      "title": "Bid price."
+    },
+    "bs": {
+      "existingJavaType": "java.lang.Integer",
+      "title": "Bid size."
+    },
+    "c": {
+      "existingJavaType": "java.util.ArrayList<String>",
+      "title": "Quote conditions."
+    }
+  }
+}

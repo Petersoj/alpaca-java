@@ -12,7 +12,7 @@ public class AlpacaRequestBuilder extends AbstractRequestBuilder {
     /**
      * Instantiates a new {@link AlpacaRequestBuilder}.
      *
-     * @param baseUrl    the base url
+     * @param baseUrl    the base URL
      * @param apiVersion the API version
      * @param endpoints  the endpoints
      */
