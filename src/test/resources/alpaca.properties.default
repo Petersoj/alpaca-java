@@ -1,5 +1,0 @@
-key_id = ABCDEFGHIJKLM
-secret = NOPQURSTUVWXYZ
-base_api_url = https://paper-api.alpaca.markets
-base_data_url = https://data.alpaca.markets
-user_agent = Java/ Unirest/1.4.9

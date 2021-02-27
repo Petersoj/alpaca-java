@@ -11,63 +11,81 @@ import java.util.Map;
 import java.util.Properties;
 
 /**
- * The type {@link PropertyUtil}.
+ * {@link PropertyUtil} is a util class for all things {@link Properties}.
  */
 public class PropertyUtil {
 
-    /** The logger. */
     private static final Logger LOGGER = LoggerFactory.getLogger(PropertyUtil.class);
 
-    /** The property file. */
     public static final Map<String, Properties> CACHED_PROPERTIES = Collections.synchronizedMap(new HashMap<>());
 
     /**
-     * Get property string. Will try to IO load the properties in the property file if not cached already.
+     * Gets a string property from a property file. Will try to IO load the properties in the property file if not
+     * cached already.
      *
-     * @param propertyFile the property file (.default properties files are also cached if they exist)
+     * @param propertyFile the property file
      * @param key          the key
      *
      * @return the string
      */
     public static String getProperty(String propertyFile, String key) {
-        return getProperty(propertyFile, key, null);
+        return getProperty(propertyFile, null, key, null);
     }
 
     /**
-     * Get property string. Will try to IO load the properties in the property file if not cached already.
+     * Gets a string property from a property file. Will try to IO load the properties in the property file if not
+     * cached already. If the desired property is not found in the "propertyFile", then the "defaultPropertyFile" is
+     * searched.
      *
-     * @param propertyFile the property file (.default properties files are also cached if they exist)
-     * @param key          the key
-     * @param defaultValue the default value (if not .default properties were found, then this is returned)
+     * @param propertyFile        the property file
+     * @param defaultPropertyFile the default property file
+     * @param key                 the key
      *
      * @return the string
      */
-    public static String getProperty(String propertyFile, String key, String defaultValue) {
-        if (!CACHED_PROPERTIES.containsKey(propertyFile)) {
-            CACHED_PROPERTIES.put(propertyFile, loadPropertyFile(propertyFile));
-        }
-        Properties properties = CACHED_PROPERTIES.get(propertyFile);
-        if (properties != null) {
-            return properties.getProperty(key, defaultValue);
-        }
-        return null;
+    public static String getProperty(String propertyFile, String defaultPropertyFile, String key) {
+        return getProperty(propertyFile, defaultPropertyFile, key, null);
     }
 
     /**
-     * Load property file properties.
+     * Gets a string property from a property file. Will try to IO load the properties in the property file if not
+     * cached already. If the desired property is not found in the "propertyFile", then the "defaultPropertyFile" is
+     * searched, and if it's not there, then "defaultValue" is returned.
      *
-     * @param propertyFile the property file name (.default properties files are also searched)
+     * @param propertyFile        the property file
+     * @param defaultPropertyFile the default property file
+     * @param key                 the key
+     * @param defaultValue        the default value (if the desired property wasn't found, then this is returned)
+     *
+     * @return the string
+     */
+    public static String getProperty(String propertyFile, String defaultPropertyFile, String key, String defaultValue) {
+        Properties properties;
+
+        if (!CACHED_PROPERTIES.containsKey(propertyFile)) {
+            properties = loadPropertyFile(propertyFile, defaultPropertyFile);
+            CACHED_PROPERTIES.put(propertyFile, properties);
+        } else {
+            properties = CACHED_PROPERTIES.get(propertyFile);
+        }
+
+        return properties == null ? defaultValue : properties.getProperty(key, defaultValue);
+    }
+
+    /**
+     * Loads property file {@link Properties}.
+     *
+     * @param propertyFile        the property file name
+     * @param defaultPropertyFile the default property file name
      *
      * @return the properties
      */
-    public synchronized static Properties loadPropertyFile(String propertyFile) {
+    public synchronized static Properties loadPropertyFile(String propertyFile, String defaultPropertyFile) {
         Properties properties = null;
 
         // Load the default property file if exists
         Properties defaultProperties = null;
-        String defaultPropertyFile = propertyFile + ".default";
-        InputStream defaultPropertyStream = ClassLoader.getSystemClassLoader()
-                .getResourceAsStream(defaultPropertyFile);
+        InputStream defaultPropertyStream = ClassLoader.getSystemClassLoader().getResourceAsStream(defaultPropertyFile);
 
         if (defaultPropertyStream != null) {
             defaultProperties = new Properties();

@@ -1,4 +1,4 @@
-package net.jacobpeterson.alpaca.enums;
+package net.jacobpeterson.alpaca.enums.portfolio;
 
 import net.jacobpeterson.abstracts.enums.APIName;
 

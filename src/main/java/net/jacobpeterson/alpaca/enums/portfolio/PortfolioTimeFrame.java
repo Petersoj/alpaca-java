@@ -1,4 +1,4 @@
-package net.jacobpeterson.alpaca.enums;
+package net.jacobpeterson.alpaca.enums.portfolio;
 
 import com.google.gson.annotations.SerializedName;
 import net.jacobpeterson.abstracts.enums.APIName;

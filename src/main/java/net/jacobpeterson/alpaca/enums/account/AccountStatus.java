@@ -1,4 +1,4 @@
-package net.jacobpeterson.alpaca.enums;
+package net.jacobpeterson.alpaca.enums.account;
 
 import net.jacobpeterson.abstracts.enums.APIName;
 
@@ -17,7 +17,7 @@ public enum AccountStatus implements APIName {
     /**
      * The account application submission failed for some reason.
      */
-    SUBMISSION_FAILED(""),
+    SUBMISSION_FAILED("SUBMISSION_FAILED"),
 
     /**
      * The account application has been submitted for review.

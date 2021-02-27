@@ -6,6 +6,14 @@ package net.jacobpeterson.alpaca;
 public class AlpacaConstants {
 
     /**
+     * Defines URLs of {@link AlpacaAPI}
+     */
+    public static class URLs {
+
+        public static final String DATA_V2 = "https://data.alpaca.markets/v2";
+    }
+
+    /**
      * Defines endpoints of {@link AlpacaAPI}.
      */
     public static class Endpoints {

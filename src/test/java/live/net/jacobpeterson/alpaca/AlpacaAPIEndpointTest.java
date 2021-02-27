@@ -2,8 +2,8 @@ package live.net.jacobpeterson.alpaca;
 
 import net.jacobpeterson.abstracts.enums.SortDirection;
 import net.jacobpeterson.alpaca.AlpacaAPI;
-import net.jacobpeterson.alpaca.enums.ActivityType;
-import net.jacobpeterson.alpaca.enums.OrderStatus;
+import net.jacobpeterson.alpaca.enums.activity.ActivityType;
+import net.jacobpeterson.alpaca.enums.order.OrderStatus;
 import net.jacobpeterson.alpaca.rest.exception.AlpacaAPIRequestException;
 import net.jacobpeterson.domain.alpaca.account.Account;
 import net.jacobpeterson.domain.alpaca.accountactivities.AccountActivity;

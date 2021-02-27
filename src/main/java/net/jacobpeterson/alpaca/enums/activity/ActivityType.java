@@ -1,9 +1,9 @@
-package net.jacobpeterson.alpaca.enums;
+package net.jacobpeterson.alpaca.enums.activity;
 
 import net.jacobpeterson.abstracts.enums.APIName;
 
 /**
- * {@link AccountStatus} defines enums for various account activity types.
+ * {@link ActivityType} defines enums for various account activity types.
  *
  * @see
  * <a href="https://docs.alpaca.markets/api-documentation/api-v2/account-activities/">https://docs.alpaca.markets/api-documentation/api-v2/account-activities/</a>

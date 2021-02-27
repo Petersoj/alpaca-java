@@ -50,7 +50,7 @@ public class AlpacaAPITest {
     }
 
     /**
-     * Tests {@link AlpacaAPI#AlpacaAPI(String, String, String, String, String)}.
+     * Tests {@link AlpacaAPI#AlpacaAPI(String, String, String, String)}.
      */
     @Test
     public void testAlpacaAPIConstructor_keyID_secret_oAuthToken_baseAPIURL_baseDataURL() {
@@ -58,8 +58,7 @@ public class AlpacaAPITest {
         String secret = "NOPQURSTUVWXYZ";
         String oAuthToken = "ABCDEFGHIJKLMNOPQURSTUVWXYZ";
         String baseAPIURL = "https://paper-api.foo.bar";
-        String baseDataURL = "https://data.foo.bar";
 
-        new AlpacaAPI(keyID, secret, oAuthToken, baseAPIURL, baseDataURL);
+        new AlpacaAPI(keyID, secret, oAuthToken, baseAPIURL);
     }
 }

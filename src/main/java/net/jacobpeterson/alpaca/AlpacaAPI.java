@@ -11,16 +11,12 @@ import net.jacobpeterson.abstracts.enums.SortDirection;
 import net.jacobpeterson.abstracts.websocket.exception.WebsocketException;
 import net.jacobpeterson.alpaca.AlpacaConstants.Endpoints;
 import net.jacobpeterson.alpaca.AlpacaConstants.Parameters;
-import net.jacobpeterson.alpaca.enums.ActivityType;
-import net.jacobpeterson.alpaca.enums.AssetStatus;
-import net.jacobpeterson.alpaca.enums.BarsTimeFrame;
-import net.jacobpeterson.alpaca.enums.OrderClass;
-import net.jacobpeterson.alpaca.enums.OrderSide;
-import net.jacobpeterson.alpaca.enums.OrderStatus;
-import net.jacobpeterson.alpaca.enums.OrderTimeInForce;
-import net.jacobpeterson.alpaca.enums.OrderType;
-import net.jacobpeterson.alpaca.enums.PortfolioPeriodUnit;
-import net.jacobpeterson.alpaca.enums.PortfolioTimeFrame;
+import net.jacobpeterson.alpaca.enums.activity.ActivityType;
+import net.jacobpeterson.alpaca.enums.api.EndpointAPIType;
+import net.jacobpeterson.alpaca.enums.asset.AssetStatus;
+import net.jacobpeterson.alpaca.enums.order.*;
+import net.jacobpeterson.alpaca.enums.portfolio.PortfolioPeriodUnit;
+import net.jacobpeterson.alpaca.enums.portfolio.PortfolioTimeFrame;
 import net.jacobpeterson.alpaca.properties.AlpacaProperties;
 import net.jacobpeterson.alpaca.rest.AlpacaRequest;
 import net.jacobpeterson.alpaca.rest.AlpacaRequestBuilder;
@@ -56,11 +52,7 @@ import java.lang.reflect.Type;
 import java.time.LocalDate;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
-import java.util.StringJoiner;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -77,19 +69,17 @@ public class AlpacaAPI {
     private static final Logger LOGGER = LoggerFactory.getLogger(AlpacaAPI.class);
 
     private final String keyID;
-    private final String baseAPIURL;
+    private final String apiURL;
     private final AlpacaRequest alpacaRequest;
-    private final String baseDataUrl;
     private final AlpacaWebsocketClient alpacaWebSocketClient;
     private final MarketDataWebsocketClient marketDataWebSocketClient;
 
     /**
      * Instantiates a new {@link AlpacaAPI} using properties specified in <code>alpaca.properties</code> file (or their
-     * associated defaults)
+     * associated defaults).
      */
     public AlpacaAPI() {
-        this(AlpacaProperties.KEY_ID_VALUE, AlpacaProperties.SECRET_VALUE, null, AlpacaProperties.BASE_API_URL_VALUE,
-                AlpacaProperties.BASE_DATA_URL_VALUE);
+        this(AlpacaProperties.KEY_ID_VALUE, AlpacaProperties.SECRET_VALUE, null);
 
         LOGGER.debug(AlpacaProperties.staticToString());
     }
@@ -101,18 +91,18 @@ public class AlpacaAPI {
      * @param secret the secret
      */
     public AlpacaAPI(String keyID, String secret) {
-        this(keyID, secret, null, AlpacaProperties.BASE_API_URL_VALUE, AlpacaProperties.BASE_DATA_URL_VALUE);
+        this(keyID, secret, null, EndpointAPIType.fromPropertyName(AlpacaProperties.API_ENDPOINT_TYPE_VALUE));
     }
 
     /**
      * Instantiates a new {@link AlpacaAPI}.
      *
-     * @param keyID      the key ID
-     * @param secret     the secret
-     * @param baseAPIURL the API URL
+     * @param keyID           the key ID
+     * @param secret          the secret
+     * @param endpointAPIType the {@link EndpointAPIType}
      */
-    public AlpacaAPI(String keyID, String secret, String baseAPIURL) {
-        this(keyID, secret, null, baseAPIURL, AlpacaProperties.BASE_DATA_URL_VALUE);
+    public AlpacaAPI(String keyID, String secret, EndpointAPIType endpointAPIType) {
+        this(keyID, secret, null, endpointAPIType);
     }
 
     /**
@@ -121,34 +111,32 @@ public class AlpacaAPI {
      * @param oAuthToken the OAuth token
      */
     public AlpacaAPI(String oAuthToken) {
-        this(null, null, oAuthToken, AlpacaProperties.BASE_API_URL_VALUE, AlpacaProperties.BASE_DATA_URL_VALUE);
+        this(null, null, oAuthToken, EndpointAPIType.fromPropertyName(AlpacaProperties.API_ENDPOINT_TYPE_VALUE));
     }
 
     /**
      * Instantiates a new {@link AlpacaAPI}.
      *
-     * @param keyID       the key ID
-     * @param secret      the secret
-     * @param oAuthToken  the OAuth token
-     * @param baseAPIURL  the base API URL
-     * @param baseDataURL the base data URL
+     * @param keyID           the key ID
+     * @param secret          the secret
+     * @param oAuthToken      the OAuth token
+     * @param endpointAPIType the {@link EndpointAPIType}
      */
-    public AlpacaAPI(String keyID, String secret, String oAuthToken, String baseAPIURL,
-            String baseDataURL) {
+    public AlpacaAPI(String keyID, String secret, String oAuthToken, EndpointAPIType endpointAPIType) {
         Preconditions.checkState((keyID != null && secret != null) || oAuthToken != null);
+        Preconditions.checkNotNull(endpointAPIType);
 
         this.keyID = keyID;
-        this.baseAPIURL = baseAPIURL;
-        this.baseDataUrl = baseDataURL;
+        this.apiURL = endpointAPIType.getURL();
 
         boolean isOAuth = oAuthToken != null;
 
         alpacaRequest = isOAuth ? new AlpacaRequest(oAuthToken) :
                 new AlpacaRequest(keyID, secret);
-        alpacaWebSocketClient = isOAuth ? new AlpacaWebsocketClient(oAuthToken, baseAPIURL) :
-                new AlpacaWebsocketClient(keyID, secret, baseAPIURL);
-        marketDataWebSocketClient = isOAuth ? new MarketDataWebsocketClient(oAuthToken, baseDataURL) :
-                new MarketDataWebsocketClient(keyID, secret, baseDataURL);
+        alpacaWebSocketClient = isOAuth ? new AlpacaWebsocketClient(oAuthToken) :
+                new AlpacaWebsocketClient(keyID, secret);
+        marketDataWebSocketClient = isOAuth ? new MarketDataWebsocketClient(oAuthToken) :
+                new MarketDataWebsocketClient(keyID, secret);
 
         LOGGER.debug("{}", this);
     }
@@ -162,7 +150,7 @@ public class AlpacaAPI {
      * @see <a href="https://docs.alpaca.markets/api-documentation/api-v2/account/">Get the Account</a>
      */
     public Account getAccount() throws AlpacaAPIRequestException {
-        AlpacaRequestBuilder urlBuilder = new AlpacaRequestBuilder(baseAPIURL, Endpoints.VERSION_2,
+        AlpacaRequestBuilder urlBuilder = new AlpacaRequestBuilder(apiURL, Endpoints.VERSION_2,
                 Endpoints.ACCOUNT);
 
         HttpResponse<InputStream> response = alpacaRequest.invokeGet(urlBuilder);
@@ -196,7 +184,7 @@ public class AlpacaAPI {
     public List<AccountActivity> getAccountActivities(ZonedDateTime date, ZonedDateTime until, ZonedDateTime after,
             SortDirection sortDirection, Integer pageSize, String pageToken, ActivityType... activityTypes)
             throws AlpacaAPIRequestException {
-        AlpacaRequestBuilder urlBuilder = new AlpacaRequestBuilder(baseAPIURL, Endpoints.VERSION_2,
+        AlpacaRequestBuilder urlBuilder = new AlpacaRequestBuilder(apiURL, Endpoints.VERSION_2,
                 Endpoints.ACCOUNT,
                 Endpoints.ACTIVITIES);
 
@@ -279,7 +267,7 @@ public class AlpacaAPI {
      * Configuration</a>
      */
     public AccountConfiguration getAccountConfiguration() throws AlpacaAPIRequestException {
-        AlpacaRequestBuilder urlBuilder = new AlpacaRequestBuilder(baseAPIURL, Endpoints.VERSION_2,
+        AlpacaRequestBuilder urlBuilder = new AlpacaRequestBuilder(apiURL, Endpoints.VERSION_2,
                 Endpoints.ACCOUNT,
                 Endpoints.CONFIGURATIONS);
 
@@ -307,7 +295,7 @@ public class AlpacaAPI {
             throws AlpacaAPIRequestException {
         Preconditions.checkNotNull(accountConfiguration);
 
-        AlpacaRequestBuilder urlBuilder = new AlpacaRequestBuilder(baseAPIURL, Endpoints.VERSION_2,
+        AlpacaRequestBuilder urlBuilder = new AlpacaRequestBuilder(apiURL, Endpoints.VERSION_2,
                 Endpoints.ACCOUNT,
                 Endpoints.CONFIGURATIONS);
         urlBuilder.setCustomBody(GsonUtil.GSON.toJson(accountConfiguration));
@@ -340,7 +328,7 @@ public class AlpacaAPI {
      */
     public List<Order> getOrders(OrderStatus status, Integer limit, ZonedDateTime after, ZonedDateTime until,
             SortDirection sortDirection, Boolean nested, List<String> symbols) throws AlpacaAPIRequestException {
-        AlpacaRequestBuilder urlBuilder = new AlpacaRequestBuilder(baseAPIURL, Endpoints.VERSION_2,
+        AlpacaRequestBuilder urlBuilder = new AlpacaRequestBuilder(apiURL, Endpoints.VERSION_2,
                 Endpoints.ORDERS);
 
         if (status != null) {
@@ -426,7 +414,7 @@ public class AlpacaAPI {
         Preconditions.checkNotNull(type);
         Preconditions.checkNotNull(timeInForce);
 
-        AlpacaRequestBuilder urlBuilder = new AlpacaRequestBuilder(baseAPIURL, Endpoints.VERSION_2,
+        AlpacaRequestBuilder urlBuilder = new AlpacaRequestBuilder(apiURL, Endpoints.VERSION_2,
                 Endpoints.ORDERS);
 
         urlBuilder.appendJSONBodyProperty(Parameters.SYMBOL, symbol);
@@ -880,7 +868,7 @@ public class AlpacaAPI {
     public Order getOrder(String orderID, Boolean nested) throws AlpacaAPIRequestException {
         Preconditions.checkNotNull(orderID);
 
-        AlpacaRequestBuilder urlBuilder = new AlpacaRequestBuilder(baseAPIURL, Endpoints.VERSION_2,
+        AlpacaRequestBuilder urlBuilder = new AlpacaRequestBuilder(apiURL, Endpoints.VERSION_2,
                 Endpoints.ORDERS,
                 orderID);
 
@@ -910,7 +898,7 @@ public class AlpacaAPI {
     public Order getOrderByClientID(String clientOrderId) throws AlpacaAPIRequestException {
         Preconditions.checkNotNull(clientOrderId);
 
-        AlpacaRequestBuilder urlBuilder = new AlpacaRequestBuilder(baseAPIURL, Endpoints.VERSION_2,
+        AlpacaRequestBuilder urlBuilder = new AlpacaRequestBuilder(apiURL, Endpoints.VERSION_2,
                 Endpoints.ORDERS_BY_CLIENT_ORDER_ID);
         urlBuilder.appendURLParameter(Parameters.CLIENT_ORDER_ID, clientOrderId);
 
@@ -944,7 +932,7 @@ public class AlpacaAPI {
             Double stopPrice, Double trail, String clientOrderId) throws AlpacaAPIRequestException {
         Preconditions.checkNotNull(orderID);
 
-        AlpacaRequestBuilder urlBuilder = new AlpacaRequestBuilder(baseAPIURL, Endpoints.VERSION_2,
+        AlpacaRequestBuilder urlBuilder = new AlpacaRequestBuilder(apiURL, Endpoints.VERSION_2,
                 Endpoints.ORDERS,
                 orderID);
 
@@ -994,7 +982,7 @@ public class AlpacaAPI {
      * @see <a href="https://docs.alpaca.markets/api-documentation/api-v2/orders/">Orders</a>
      */
     public ArrayList<CancelledOrder> cancelAllOrders() throws AlpacaAPIRequestException {
-        AlpacaRequestBuilder urlBuilder = new AlpacaRequestBuilder(baseAPIURL, Endpoints.VERSION_2,
+        AlpacaRequestBuilder urlBuilder = new AlpacaRequestBuilder(apiURL, Endpoints.VERSION_2,
                 Endpoints.ORDERS);
 
         HttpResponse<InputStream> response = alpacaRequest.invokeDelete(urlBuilder);
@@ -1022,7 +1010,7 @@ public class AlpacaAPI {
     public boolean cancelOrder(String orderId) throws AlpacaAPIRequestException {
         Preconditions.checkNotNull(orderId);
 
-        AlpacaRequestBuilder urlBuilder = new AlpacaRequestBuilder(baseAPIURL, Endpoints.VERSION_2,
+        AlpacaRequestBuilder urlBuilder = new AlpacaRequestBuilder(apiURL, Endpoints.VERSION_2,
                 Endpoints.ORDERS,
                 orderId);
 
@@ -1044,7 +1032,7 @@ public class AlpacaAPI {
      * @see <a href="https://docs.alpaca.markets/api-documentation/api-v2/positions/">Positions</a>
      */
     public ArrayList<Position> getOpenPositions() throws AlpacaAPIRequestException {
-        AlpacaRequestBuilder urlBuilder = new AlpacaRequestBuilder(baseAPIURL, Endpoints.VERSION_2,
+        AlpacaRequestBuilder urlBuilder = new AlpacaRequestBuilder(apiURL, Endpoints.VERSION_2,
                 Endpoints.POSITIONS);
 
         HttpResponse<InputStream> response = alpacaRequest.invokeGet(urlBuilder);
@@ -1071,7 +1059,7 @@ public class AlpacaAPI {
     public Position getOpenPositionBySymbol(String symbol) throws AlpacaAPIRequestException {
         Preconditions.checkNotNull(symbol);
 
-        AlpacaRequestBuilder urlBuilder = new AlpacaRequestBuilder(baseAPIURL, Endpoints.VERSION_2,
+        AlpacaRequestBuilder urlBuilder = new AlpacaRequestBuilder(apiURL, Endpoints.VERSION_2,
                 Endpoints.POSITIONS,
                 symbol.trim());
 
@@ -1095,7 +1083,7 @@ public class AlpacaAPI {
      * @see <a href="https://docs.alpaca.markets/api-documentation/api-v2/positions/">Positions</a>
      */
     public ArrayList<ClosePositionOrder> closeAllPositions() throws AlpacaAPIRequestException {
-        AlpacaRequestBuilder urlBuilder = new AlpacaRequestBuilder(baseAPIURL, Endpoints.VERSION_2,
+        AlpacaRequestBuilder urlBuilder = new AlpacaRequestBuilder(apiURL, Endpoints.VERSION_2,
                 Endpoints.POSITIONS);
 
         HttpResponse<InputStream> response = alpacaRequest.invokeDelete(urlBuilder);
@@ -1122,7 +1110,7 @@ public class AlpacaAPI {
     public Order closePosition(String symbol) throws AlpacaAPIRequestException {
         Preconditions.checkNotNull(symbol);
 
-        AlpacaRequestBuilder urlBuilder = new AlpacaRequestBuilder(baseAPIURL, Endpoints.VERSION_2,
+        AlpacaRequestBuilder urlBuilder = new AlpacaRequestBuilder(apiURL, Endpoints.VERSION_2,
                 Endpoints.POSITIONS,
                 symbol);
 
@@ -1147,7 +1135,7 @@ public class AlpacaAPI {
      * @see <a href="https://docs.alpaca.markets/api-documentation/api-v2/assets/">Assets</a>
      */
     public ArrayList<Asset> getAssets(AssetStatus assetStatus, String assetClass) throws AlpacaAPIRequestException {
-        AlpacaRequestBuilder urlBuilder = new AlpacaRequestBuilder(baseAPIURL, Endpoints.VERSION_2,
+        AlpacaRequestBuilder urlBuilder = new AlpacaRequestBuilder(apiURL, Endpoints.VERSION_2,
                 Endpoints.ASSETS);
 
         if (assetStatus != null) {
@@ -1182,7 +1170,7 @@ public class AlpacaAPI {
     public Asset getAssetBySymbol(String symbolOrAssetID) throws AlpacaAPIRequestException {
         Preconditions.checkNotNull(symbolOrAssetID);
 
-        AlpacaRequestBuilder urlBuilder = new AlpacaRequestBuilder(baseAPIURL, Endpoints.VERSION_2,
+        AlpacaRequestBuilder urlBuilder = new AlpacaRequestBuilder(apiURL, Endpoints.VERSION_2,
                 Endpoints.ASSETS,
                 symbolOrAssetID.trim());
 
@@ -1204,7 +1192,7 @@ public class AlpacaAPI {
      * @see <a href="https://docs.alpaca.markets/api-documentation/api-v2/watchlist/">Watchlists</a>
      */
     public ArrayList<Watchlist> getWatchlists() throws AlpacaAPIRequestException {
-        AlpacaRequestBuilder urlBuilder = new AlpacaRequestBuilder(baseAPIURL, Endpoints.VERSION_2,
+        AlpacaRequestBuilder urlBuilder = new AlpacaRequestBuilder(apiURL, Endpoints.VERSION_2,
                 Endpoints.WATCHLISTS);
 
         HttpResponse<InputStream> response = alpacaRequest.invokeGet(urlBuilder);
@@ -1232,7 +1220,7 @@ public class AlpacaAPI {
         Preconditions.checkNotNull(name);
         Preconditions.checkState(name.length() <= 64);
 
-        AlpacaRequestBuilder urlBuilder = new AlpacaRequestBuilder(baseAPIURL, Endpoints.VERSION_2,
+        AlpacaRequestBuilder urlBuilder = new AlpacaRequestBuilder(apiURL, Endpoints.VERSION_2,
                 Endpoints.WATCHLISTS);
 
         urlBuilder.appendJSONBodyProperty("name", name);
@@ -1266,7 +1254,7 @@ public class AlpacaAPI {
     public Watchlist getWatchlist(String watchlistID) throws AlpacaAPIRequestException {
         Preconditions.checkNotNull(watchlistID);
 
-        AlpacaRequestBuilder urlBuilder = new AlpacaRequestBuilder(baseAPIURL, Endpoints.VERSION_2,
+        AlpacaRequestBuilder urlBuilder = new AlpacaRequestBuilder(apiURL, Endpoints.VERSION_2,
                 Endpoints.WATCHLISTS,
                 watchlistID);
 
@@ -1295,7 +1283,7 @@ public class AlpacaAPI {
             throws AlpacaAPIRequestException {
         Preconditions.checkNotNull(watchlistID);
 
-        AlpacaRequestBuilder urlBuilder = new AlpacaRequestBuilder(baseAPIURL, Endpoints.VERSION_2,
+        AlpacaRequestBuilder urlBuilder = new AlpacaRequestBuilder(apiURL, Endpoints.VERSION_2,
                 Endpoints.WATCHLISTS,
                 watchlistID);
 
@@ -1334,7 +1322,7 @@ public class AlpacaAPI {
         Preconditions.checkNotNull(watchlistID);
         Preconditions.checkNotNull(symbol);
 
-        AlpacaRequestBuilder urlBuilder = new AlpacaRequestBuilder(baseAPIURL, Endpoints.VERSION_2,
+        AlpacaRequestBuilder urlBuilder = new AlpacaRequestBuilder(apiURL, Endpoints.VERSION_2,
                 Endpoints.WATCHLISTS,
                 watchlistID);
 
@@ -1362,7 +1350,7 @@ public class AlpacaAPI {
     public boolean deleteWatchlist(String watchlistID) throws AlpacaAPIRequestException {
         Preconditions.checkNotNull(watchlistID);
 
-        AlpacaRequestBuilder urlBuilder = new AlpacaRequestBuilder(baseAPIURL, Endpoints.VERSION_2,
+        AlpacaRequestBuilder urlBuilder = new AlpacaRequestBuilder(apiURL, Endpoints.VERSION_2,
                 Endpoints.WATCHLISTS,
                 watchlistID);
 
@@ -1390,7 +1378,7 @@ public class AlpacaAPI {
         Preconditions.checkNotNull(watchlistID);
         Preconditions.checkNotNull(symbol);
 
-        AlpacaRequestBuilder urlBuilder = new AlpacaRequestBuilder(baseAPIURL, Endpoints.VERSION_2,
+        AlpacaRequestBuilder urlBuilder = new AlpacaRequestBuilder(apiURL, Endpoints.VERSION_2,
                 Endpoints.WATCHLISTS,
                 watchlistID,
                 symbol);
@@ -1424,7 +1412,7 @@ public class AlpacaAPI {
      */
     public PortfolioHistory getPortfolioHistory(Integer periodLength, PortfolioPeriodUnit periodUnit,
             PortfolioTimeFrame timeFrame, LocalDate dateEnd, Boolean extendedHours) throws AlpacaAPIRequestException {
-        AlpacaRequestBuilder urlBuilder = new AlpacaRequestBuilder(baseAPIURL, Endpoints.VERSION_2,
+        AlpacaRequestBuilder urlBuilder = new AlpacaRequestBuilder(apiURL, Endpoints.VERSION_2,
                 Endpoints.ACCOUNT,
                 Endpoints.PORTFOLIO,
                 Endpoints.HISTORY);
@@ -1478,7 +1466,7 @@ public class AlpacaAPI {
      * @see <a href="https://docs.alpaca.markets/api-documentation/api-v2/calendar/">Calendar</a>
      */
     public List<Calendar> getCalendar(LocalDate start, LocalDate end) throws AlpacaAPIRequestException {
-        AlpacaRequestBuilder urlBuilder = new AlpacaRequestBuilder(baseAPIURL, Endpoints.VERSION_2, Endpoints.CALENDAR);
+        AlpacaRequestBuilder urlBuilder = new AlpacaRequestBuilder(apiURL, Endpoints.VERSION_2, Endpoints.CALENDAR);
 
         if (start != null) {
             urlBuilder.appendURLParameter(Parameters.START, FormatUtil.toDateString(start));
@@ -1508,7 +1496,7 @@ public class AlpacaAPI {
      * @see <a href="https://docs.alpaca.markets/api-documentation/api-v2/clock/">Clock</a>
      */
     public Clock getClock() throws AlpacaAPIRequestException {
-        AlpacaRequestBuilder urlBuilder = new AlpacaRequestBuilder(baseAPIURL, Endpoints.VERSION_2,
+        AlpacaRequestBuilder urlBuilder = new AlpacaRequestBuilder(apiURL, Endpoints.VERSION_2,
                 Endpoints.CLOCK);
 
         HttpResponse<InputStream> response = alpacaRequest.invokeGet(urlBuilder);
@@ -1724,8 +1712,7 @@ public class AlpacaAPI {
     @Override
     public String toString() {
         return new StringJoiner(", ", this.getClass().getSimpleName() + "[", "]")
-                .add("baseAPIURL = " + baseAPIURL)
-                .add("baseDataUrl = " + baseDataUrl)
+                .add("apiURL = " + apiURL)
                 .add("keyID = " + keyID)
                 .toString();
     }
