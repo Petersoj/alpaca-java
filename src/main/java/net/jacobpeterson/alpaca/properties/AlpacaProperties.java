@@ -26,9 +26,13 @@ public class AlpacaProperties {
     public static final String SECRET_VALUE = getProperty(ALPACA_PROPERTIES_FILE, ALPACA_DEFAULT_PROPERTIES_FILE,
             SECRET_KEY);
 
-    private static final String API_ENDPOINT_TYPE_KEY = "endpoint_api_type";
-    public static final String API_ENDPOINT_TYPE_VALUE = getProperty(ALPACA_PROPERTIES_FILE,
-            ALPACA_DEFAULT_PROPERTIES_FILE, API_ENDPOINT_TYPE_KEY);
+    private static final String ENDPOINT_API_TYPE_KEY = "endpoint_api_type";
+    public static final String ENDPOINT_API_TYPE_VALUE = getProperty(ALPACA_PROPERTIES_FILE,
+            ALPACA_DEFAULT_PROPERTIES_FILE, ENDPOINT_API_TYPE_KEY);
+
+    private static final String DATA_API_TYPE_KEY = "data_api_type";
+    public static final String DATA_API_TYPE_VALUE = getProperty(ALPACA_PROPERTIES_FILE,
+            ALPACA_DEFAULT_PROPERTIES_FILE, DATA_API_TYPE_KEY);
 
     private static final String USER_AGENT_KEY = "user_agent";
     public static final String USER_AGENT_VALUE = getProperty(ALPACA_PROPERTIES_FILE, ALPACA_DEFAULT_PROPERTIES_FILE,

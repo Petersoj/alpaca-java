@@ -49,8 +49,7 @@ public enum OrderType implements APIName {
      */
     TRAILING_STOP("trailing_stop");
 
-    /** The API name. */
-    String apiName;
+    private final String apiName;
 
     /**
      * Instantiates a new {@link OrderType}.

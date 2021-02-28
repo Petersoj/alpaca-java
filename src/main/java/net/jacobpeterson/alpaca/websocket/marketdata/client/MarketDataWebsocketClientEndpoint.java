@@ -3,13 +3,7 @@ package net.jacobpeterson.alpaca.websocket.marketdata.client;
 import net.jacobpeterson.abstracts.websocket.client.AbstractWebsocketClientEndpoint;
 import net.jacobpeterson.abstracts.websocket.client.WebsocketClient;
 
-import javax.websocket.ClientEndpoint;
-import javax.websocket.CloseReason;
-import javax.websocket.OnClose;
-import javax.websocket.OnError;
-import javax.websocket.OnMessage;
-import javax.websocket.OnOpen;
-import javax.websocket.Session;
+import javax.websocket.*;
 import java.net.URI;
 
 /**

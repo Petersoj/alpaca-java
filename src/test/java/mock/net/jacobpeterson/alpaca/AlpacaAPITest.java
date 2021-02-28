@@ -1,6 +1,7 @@
 package mock.net.jacobpeterson.alpaca;
 
 import net.jacobpeterson.alpaca.AlpacaAPI;
+import net.jacobpeterson.alpaca.enums.api.DataAPIType;
 import net.jacobpeterson.alpaca.enums.api.EndpointAPIType;
 import org.junit.jupiter.api.Test;
 
@@ -35,15 +36,15 @@ public class AlpacaAPITest {
     }
 
     /**
-     * Tests {@link AlpacaAPI#AlpacaAPI(String, String, EndpointAPIType)}.
+     * Tests {@link AlpacaAPI#AlpacaAPI(String, String, EndpointAPIType, DataAPIType)}.
      */
     @Test
-    public void testAlpacaAPIConstructor_keyID_secret_endpointAPIType() {
+    public void testAlpacaAPIConstructor_keyID_secret_endpointAPIType_dataAPIType() {
         String keyID = "ABCDEFGHIJKLM";
         String secret = "NOPQURSTUVWXYZ";
 
-        new AlpacaAPI(keyID, secret, EndpointAPIType.LIVE);
-        new AlpacaAPI(keyID, secret, EndpointAPIType.PAPER);
+        new AlpacaAPI(keyID, secret, EndpointAPIType.PAPER, DataAPIType.IEX);
+        new AlpacaAPI(keyID, secret, EndpointAPIType.LIVE, DataAPIType.SIP);
     }
 
     /**
@@ -57,15 +58,15 @@ public class AlpacaAPITest {
     }
 
     /**
-     * Tests {@link AlpacaAPI#AlpacaAPI(String, String, String, EndpointAPIType)}.
+     * Tests {@link AlpacaAPI#AlpacaAPI(String, String, String, EndpointAPIType, DataAPIType)}.
      */
     @Test
-    public void testAlpacaAPIConstructor_keyID_secret_oAuthToken_endpointAPIType() {
+    public void testAlpacaAPIConstructor_keyID_secret_oAuthToken_endpointAPIType_dataAPIType() {
         String keyID = "ABCDEFGHIJKLM";
         String secret = "NOPQURSTUVWXYZ";
         String oAuthToken = "ABCDEFGHIJKLMNOPQURSTUVWXYZ";
 
-        new AlpacaAPI(keyID, secret, oAuthToken, EndpointAPIType.LIVE);
-        new AlpacaAPI(keyID, secret, oAuthToken, EndpointAPIType.PAPER);
+        new AlpacaAPI(keyID, secret, oAuthToken, EndpointAPIType.PAPER, DataAPIType.IEX);
+        new AlpacaAPI(keyID, secret, oAuthToken, EndpointAPIType.LIVE, DataAPIType.SIP);
     }
 }

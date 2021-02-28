@@ -21,8 +21,7 @@ public enum PortfolioPeriodUnit implements APIName {
     /** Year {@link PortfolioPeriodUnit}. */
     YEAR("A");
 
-    /** The API name. */
-    String apiName;
+    private final String apiName;
 
     /**
      * Instantiates a new {@link PortfolioPeriodUnit}.

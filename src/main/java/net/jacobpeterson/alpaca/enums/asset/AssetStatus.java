@@ -13,8 +13,7 @@ public enum AssetStatus implements APIName {
     /** The inactive {@link AssetStatus}. */
     INACTIVE("inactive");
 
-    /** The API name. */
-    String apiName;
+    private final String apiName;
 
     /**
      * Instantiates a new {@link AssetStatus}.

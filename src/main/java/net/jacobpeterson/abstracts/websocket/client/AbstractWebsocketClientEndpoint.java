@@ -4,12 +4,8 @@ import org.eclipse.jetty.util.component.LifeCycle;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.websocket.CloseReason;
+import javax.websocket.*;
 import javax.websocket.CloseReason.CloseCodes;
-import javax.websocket.ContainerProvider;
-import javax.websocket.DeploymentException;
-import javax.websocket.Session;
-import javax.websocket.WebSocketContainer;
 import java.io.IOException;
 import java.net.URI;
 import java.util.concurrent.ExecutorService;
@@ -155,6 +151,7 @@ public abstract class AbstractWebsocketClientEndpoint {
      */
     public void sendMessage(String message) {
         LOGGER.debug("sendMessage {}", message);
+
         userSession.getAsyncRemote().sendText(message);
     }
 

@@ -1,7 +1,7 @@
 package net.jacobpeterson.alpaca.enums.api;
 
 /**
- * {@link EndpointAPIType} defines the type of API endpoint to use with Alpaca.
+ * {@link EndpointAPIType} defines the types of API endpoint to use with Alpaca.
  */
 public enum EndpointAPIType {
 
@@ -11,11 +11,8 @@ public enum EndpointAPIType {
     /** The paper {@link EndpointAPIType}. */
     PAPER("https://paper-api.alpaca.markets/", "paper");
 
-    /** The URL. */
-    String url;
-
-    /** The property name. */
-    String propertyName;
+    private final String url;
+    private final String propertyName;
 
     /**
      * Instantiates a new {@link EndpointAPIType}.

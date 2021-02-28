@@ -32,7 +32,7 @@ public enum AlpacaStreamMessageType implements StreamMessageType, APIName {
     /**
      * Instantiates a new {@link AlpacaStreamMessageType}.
      *
-     * @param isAPISubscribable true if API subscribable
+     * @param isAPISubscribable true if API is subscribable
      */
     AlpacaStreamMessageType(boolean isAPISubscribable) {
         this.isAPISubscribable = isAPISubscribable;
@@ -44,9 +44,9 @@ public enum AlpacaStreamMessageType implements StreamMessageType, APIName {
     }
 
     /**
-     * Returns true if API subscribable.
+     * Returns true if API is subscribable.
      *
-     * @return true if API subscribable
+     * @return true if API is subscribable
      */
     public boolean isAPISubscribable() {
         return isAPISubscribable;

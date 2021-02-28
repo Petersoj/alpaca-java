@@ -1,0 +1,59 @@
+{
+  "type": "object",
+  "extends": {
+    "existingJavaType": "net.jacobpeterson.domain.alpaca.marketdata.realtime.MarketDataMessage"
+  },
+  "title": "See <a href=\"https://alpaca.markets/docs/api-documentation/api-v2/market-data/streaming/\">https://alpaca.markets/docs/api-documentation/api-v2/market-data/streaming/</a>",
+  "properties": {
+    "S": {
+      "existingJavaType": "java.lang.String",
+      "javaName": "symbol",
+      "title": "Symbol"
+    },
+    "ax": {
+      "existingJavaType": "java.lang.String",
+      "javaName": "askExchangeCode",
+      "title": "Ask exchange code"
+    },
+    "ap": {
+      "existingJavaType": "java.lang.Double",
+      "javaName": "askPrice",
+      "title": "Ask price"
+    },
+    "as": {
+      "existingJavaType": "java.lang.Integer",
+      "javaName": "askSize",
+      "title": "Ask size"
+    },
+    "bx": {
+      "existingJavaType": "java.lang.String",
+      "javaName": "bidExchangeCode",
+      "title": "Bid exchange code"
+    },
+    "bp": {
+      "existingJavaType": "java.lang.Double",
+      "javaName": "bidPrice",
+      "title": "Bid price"
+    },
+    "bs": {
+      "existingJavaType": "java.lang.Integer",
+      "javaName": "bidSize",
+      "title": "Bid size"
+    },
+    "t": {
+      "existingJavaType": "java.time.ZonedDateTime",
+      "javaName": "timestamp",
+      "title": "Timestamp with nanosecond precision"
+    },
+    "c": {
+      "existingJavaType": "java.util.ArrayList<String>",
+      "javaName": "conditions",
+      "title": "Quote conditions"
+    },
+    "z": {
+      "existingJavaType": "java.lang.String",
+      "javaName": "tape",
+      "title": "Tape"
+    }
+  }
+}

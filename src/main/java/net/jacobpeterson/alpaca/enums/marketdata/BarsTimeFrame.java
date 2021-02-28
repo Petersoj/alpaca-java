@@ -16,8 +16,7 @@ public enum BarsTimeFrame implements APIName {
     /** 1 Day {@link BarsTimeFrame}. */
     DAY("1Day");
 
-    /** The API name. */
-    String apiName;
+    private final String apiName;
 
     /**
      * Instantiates a new {@link BarsTimeFrame}.

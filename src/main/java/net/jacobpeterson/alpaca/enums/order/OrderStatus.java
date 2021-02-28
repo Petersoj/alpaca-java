@@ -16,8 +16,7 @@ public enum OrderStatus implements APIName {
     /** All {@link OrderStatus}es. */
     ALL("all");
 
-    /** The API name. */
-    String apiName;
+    private final String apiName;
 
     /**
      * Instantiates a new {@link OrderStatus}.

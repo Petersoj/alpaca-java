@@ -1,24 +1,20 @@
 package net.jacobpeterson.alpaca.websocket.marketdata.client;
 
 import com.google.common.base.Preconditions;
-import com.google.gson.*;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParseException;
+import com.google.gson.JsonPrimitive;
 import net.jacobpeterson.abstracts.websocket.client.WebsocketClient;
 import net.jacobpeterson.abstracts.websocket.exception.WebsocketException;
 import net.jacobpeterson.abstracts.websocket.listener.StreamListener;
 import net.jacobpeterson.abstracts.websocket.message.StreamMessage;
 import net.jacobpeterson.abstracts.websocket.message.StreamMessageType;
-import net.jacobpeterson.alpaca.AlpacaConstants;
+import net.jacobpeterson.alpaca.enums.api.DataAPIType;
 import net.jacobpeterson.alpaca.websocket.broker.client.AlpacaWebsocketClient;
-import net.jacobpeterson.alpaca.websocket.marketdata.listener.MarketDataStreamListener;
-import net.jacobpeterson.alpaca.websocket.marketdata.message.MarketDataStreamMessageType;
-import net.jacobpeterson.domain.alpaca.marketdata.streaming.MarketDataStreamMessage;
-import net.jacobpeterson.domain.alpaca.marketdata.streaming.abstracts.MarketDataStreamDataMessage;
-import net.jacobpeterson.domain.alpaca.marketdata.streaming.abstracts.MarketDataStreamStatusMessage;
-import net.jacobpeterson.domain.alpaca.marketdata.streaming.aggregate.AggregateMinuteMessage;
-import net.jacobpeterson.domain.alpaca.marketdata.streaming.authorization.AuthorizationMessage;
-import net.jacobpeterson.domain.alpaca.marketdata.streaming.listening.ListeningMessage;
-import net.jacobpeterson.domain.alpaca.marketdata.streaming.quote.QuoteMessage;
-import net.jacobpeterson.domain.alpaca.marketdata.streaming.trade.TradeMessage;
+import net.jacobpeterson.alpaca.websocket.marketdata.listener.MarketDataListener;
+import net.jacobpeterson.alpaca.websocket.marketdata.message.MarketDataMessageType;
 import net.jacobpeterson.util.gson.GsonUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,7 +23,11 @@ import javax.websocket.DeploymentException;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
@@ -43,17 +43,17 @@ public class MarketDataWebsocketClient implements WebsocketClient {
     private static final String DATA_KEY = "data";
     private static final String ALL_TICKERS = "*";
     private static final String TRADES_STREAM_PREFIX =
-            GsonUtil.GSON.toJson(MarketDataStreamMessageType.TRADES).replace("\"", "") + ".";
+            GsonUtil.GSON.toJson(MarketDataMessageType.TRADES).replace("\"", "") + ".";
     private static final String QUOTES_STREAM_PREFIX =
-            GsonUtil.GSON.toJson(MarketDataStreamMessageType.QUOTES).replace("\"", "") + ".";
+            GsonUtil.GSON.toJson(MarketDataMessageType.QUOTES).replace("\"", "") + ".";
     private static final String AGGREGATE_MINUTE_STREAM_PREFIX =
-            GsonUtil.GSON.toJson(MarketDataStreamMessageType.AGGREGATE_MINUTE).replace("\"", "") + ".";
+            GsonUtil.GSON.toJson(MarketDataMessageType.AGGREGATE_MINUTE).replace("\"", "") + ".";
 
     private final String keyID;
     private final String secret;
     private final String oAuthToken;
-    private final String streamAPIURL;
-    private final List<MarketDataStreamListener> listeners;
+    private final String websocketAPIURL;
+    private final List<MarketDataListener> listeners;
 
     private MarketDataWebsocketClientEndpoint marketDataWebsocketClientEndpoint;
     private boolean authenticated;
@@ -61,58 +61,61 @@ public class MarketDataWebsocketClient implements WebsocketClient {
     /**
      * Instantiates a new {@link AlpacaWebsocketClient}.
      *
-     * @param keyID  the key ID
-     * @param secret the secret
+     * @param keyID       the key ID
+     * @param secret      the secret
+     * @param dataAPIType the {@link DataAPIType}
      */
-    public MarketDataWebsocketClient(String keyID, String secret) {
-        this(keyID, secret, null);
+    public MarketDataWebsocketClient(String keyID, String secret, DataAPIType dataAPIType) {
+        this(keyID, secret, null, dataAPIType);
     }
 
     /**
      * Instantiates a new {@link AlpacaWebsocketClient}.
      *
-     * @param oAuthToken the OAuth token
+     * @param oAuthToken  the OAuth token
+     * @param dataAPIType the {@link DataAPIType}
      */
-    public MarketDataWebsocketClient(String oAuthToken) {
-        this(null, null, oAuthToken);
+    public MarketDataWebsocketClient(String oAuthToken, DataAPIType dataAPIType) {
+        this(null, null, oAuthToken, dataAPIType);
     }
 
     /**
      * Instantiates a new {@link AlpacaWebsocketClient}.
      *
-     * @param keyID      the key ID
-     * @param secret     the secret
-     * @param oAuthToken the OAuth token
+     * @param keyID       the key ID
+     * @param secret      the secret
+     * @param oAuthToken  the OAuth token
+     * @param dataAPIType the {@link DataAPIType}
      */
-    private MarketDataWebsocketClient(String keyID, String secret, String oAuthToken) {
+    private MarketDataWebsocketClient(String keyID, String secret, String oAuthToken, DataAPIType dataAPIType) {
         this.keyID = keyID;
         this.secret = secret;
         this.oAuthToken = oAuthToken;
-        this.streamAPIURL = AlpacaConstants.URLs.DATA.replace("https", "wss") + "/stream";
+        this.websocketAPIURL = dataAPIType.getURL();
 
         listeners = new ArrayList<>();
     }
 
     @Override
     public void addListener(StreamListener<?, ?> streamListener) throws WebsocketException {
-        Preconditions.checkState(streamListener instanceof MarketDataStreamListener);
+        Preconditions.checkState(streamListener instanceof MarketDataListener);
 
-        if (listeners.isEmpty()) {
+        if (!isConnected()) {
             try {
                 connect();
-            } catch (IOException | URISyntaxException | DeploymentException exception) {
+            } catch (Exception exception) {
                 throw new WebsocketException(exception);
             }
         }
 
-        listeners.add((MarketDataStreamListener) streamListener);
+        listeners.add((MarketDataListener) streamListener);
 
         submitStreamRequest();
     }
 
     @Override
     public void removeListener(StreamListener<?, ?> streamListener) throws WebsocketException {
-        Preconditions.checkState(streamListener instanceof MarketDataStreamListener);
+        Preconditions.checkState(streamListener instanceof MarketDataListener);
 
         listeners.remove(streamListener);
 
@@ -131,7 +134,7 @@ public class MarketDataWebsocketClient implements WebsocketClient {
     public void connect() throws URISyntaxException, IOException, DeploymentException {
         LOGGER.info("Connecting...");
 
-        marketDataWebsocketClientEndpoint = new MarketDataWebsocketClientEndpoint(this, new URI(streamAPIURL));
+        marketDataWebsocketClientEndpoint = new MarketDataWebsocketClientEndpoint(this, new URI(websocketAPIURL));
         marketDataWebsocketClientEndpoint.setAutomaticallyReconnect(true);
         marketDataWebsocketClientEndpoint.connect();
 
@@ -205,7 +208,7 @@ public class MarketDataWebsocketClient implements WebsocketClient {
                 try {
                     String streamString = streamJsonElement.getAsString();
 
-                    MarketDataStreamMessageType marketDataStreamMessageType;
+                    MarketDataMessageType marketDataMessageType;
 
                     // Check if the "stream" is a data stream, that is, Q, T, or AM
                     if (streamString.startsWith(TRADES_STREAM_PREFIX) ||
@@ -213,19 +216,19 @@ public class MarketDataWebsocketClient implements WebsocketClient {
                             streamString.startsWith(AGGREGATE_MINUTE_STREAM_PREFIX)) {
 
                         // Set the stream message type to the parsed EVENT_TYPE_KEY
-                        marketDataStreamMessageType = GsonUtil.GSON.fromJson(
+                        marketDataMessageType = GsonUtil.GSON.fromJson(
                                 messageJsonObject.get(DATA_KEY).getAsJsonObject().get(EVENT_TYPE_KEY),
-                                MarketDataStreamMessageType.class);
+                                MarketDataMessageType.class);
                     } else {
-                        marketDataStreamMessageType = GsonUtil.GSON.fromJson(streamJsonElement,
-                                MarketDataStreamMessageType.class);
+                        marketDataMessageType = GsonUtil.GSON.fromJson(streamJsonElement,
+                                MarketDataMessageType.class);
                     }
 
-                    switch (marketDataStreamMessageType) {
+                    switch (marketDataMessageType) {
                         case AUTHORIZATION:
                             AuthorizationMessage authorizationMessage = GsonUtil.GSON.fromJson(messageJsonObject,
                                     AuthorizationMessage.class);
-                            sendStreamMessageToListeners(marketDataStreamMessageType, authorizationMessage);
+                            sendStreamMessageToListeners(marketDataMessageType, authorizationMessage);
 
                             authenticated = isAuthorizationMessageSuccess(authorizationMessage);
 
@@ -234,33 +237,33 @@ public class MarketDataWebsocketClient implements WebsocketClient {
                         case LISTENING:
                             ListeningMessage listeningMessage = GsonUtil.GSON.fromJson(messageJsonObject,
                                     ListeningMessage.class);
-                            sendStreamMessageToListeners(marketDataStreamMessageType, listeningMessage);
+                            sendStreamMessageToListeners(marketDataMessageType, listeningMessage);
 
                             LOGGER.debug("{}", listeningMessage);
                             break;
                         case TRADES:
                             TradeMessage tradeMessage = GsonUtil.GSON.fromJson(messageJsonObject.get(DATA_KEY),
                                     TradeMessage.class);
-                            sendStreamMessageToListeners(marketDataStreamMessageType, tradeMessage);
+                            sendStreamMessageToListeners(marketDataMessageType, tradeMessage);
 
                             LOGGER.debug("{}", tradeMessage);
                             break;
                         case QUOTES:
                             QuoteMessage quoteMessage = GsonUtil.GSON.fromJson(messageJsonObject.get(DATA_KEY),
                                     QuoteMessage.class);
-                            sendStreamMessageToListeners(marketDataStreamMessageType, quoteMessage);
+                            sendStreamMessageToListeners(marketDataMessageType, quoteMessage);
 
                             LOGGER.debug("{}", quoteMessage);
                             break;
                         case AGGREGATE_MINUTE:
                             AggregateMinuteMessage aggregateMinuteMessage = GsonUtil.GSON.fromJson(
                                     messageJsonObject.get(DATA_KEY), AggregateMinuteMessage.class);
-                            sendStreamMessageToListeners(marketDataStreamMessageType, aggregateMinuteMessage);
+                            sendStreamMessageToListeners(marketDataMessageType, aggregateMinuteMessage);
 
                             LOGGER.debug("{}", aggregateMinuteMessage);
                             break;
                         default:
-                            LOGGER.error("Unhandled stream type: {}", marketDataStreamMessageType);
+                            LOGGER.error("Unhandled stream type: {}", marketDataMessageType);
                     }
                 } catch (JsonParseException exception) {
                     LOGGER.error("Could not parse message: {}\n{}", messageJsonObject, exception);
@@ -273,13 +276,13 @@ public class MarketDataWebsocketClient implements WebsocketClient {
 
     @Override
     public void sendStreamMessageToListeners(StreamMessageType streamMessageType, StreamMessage streamMessage) {
-        Preconditions.checkState(streamMessageType instanceof MarketDataStreamMessageType);
+        Preconditions.checkState(streamMessageType instanceof MarketDataMessageType);
         Preconditions.checkState(streamMessage instanceof MarketDataStreamMessage);
 
-        MarketDataStreamMessageType marketDataStreamMessageType = (MarketDataStreamMessageType) streamMessageType;
+        MarketDataMessageType marketDataMessageType = (MarketDataMessageType) streamMessageType;
         MarketDataStreamMessage marketDataStreamMessage = (MarketDataStreamMessage) streamMessage;
 
-        for (MarketDataStreamListener streamListener : new ArrayList<>(listeners)) {
+        for (MarketDataListener streamListener : new ArrayList<>(listeners)) {
             boolean sendToStreamListener = false;
 
             if (marketDataStreamMessage instanceof MarketDataStreamStatusMessage) {
@@ -287,8 +290,8 @@ public class MarketDataWebsocketClient implements WebsocketClient {
                     // Send the message if any message type registered in the listener for
                     // any ticker is a status message
                     sendToStreamListener = streamListener.getDataStreams().values().stream().anyMatch(types ->
-                            types.contains(MarketDataStreamMessageType.LISTENING) ||
-                                    types.contains(MarketDataStreamMessageType.AUTHORIZATION));
+                            types.contains(MarketDataMessageType.LISTENING) ||
+                                    types.contains(MarketDataMessageType.AUTHORIZATION));
                 } else { // If the data streams list is empty or null, send the message
                     sendToStreamListener = true;
                 }
@@ -297,15 +300,15 @@ public class MarketDataWebsocketClient implements WebsocketClient {
                         marketDataStreamMessage;
 
                 if (streamListener.getDataStreams() != null && !streamListener.getDataStreams().isEmpty()) {
-                    Set<MarketDataStreamMessageType> tickerMessageTypes =
+                    Set<MarketDataMessageType> tickerMessageTypes =
                             streamListener.getDataStreams().getOrDefault(marketDataStreamDataMessage.getTicker(), null);
-                    Set<MarketDataStreamMessageType> allTickerMessageTypes =
+                    Set<MarketDataMessageType> allTickerMessageTypes =
                             streamListener.getDataStreams().getOrDefault(ALL_TICKERS, null);
 
                     if (tickerMessageTypes != null) {
-                        sendToStreamListener = tickerMessageTypes.contains(marketDataStreamMessageType);
+                        sendToStreamListener = tickerMessageTypes.contains(marketDataMessageType);
                     } else if (allTickerMessageTypes != null) {
-                        sendToStreamListener = allTickerMessageTypes.contains(marketDataStreamMessageType);
+                        sendToStreamListener = allTickerMessageTypes.contains(marketDataMessageType);
                     }
                 } else { // If the data streams list is empty or null, send the message
                     sendToStreamListener = true;
@@ -313,7 +316,7 @@ public class MarketDataWebsocketClient implements WebsocketClient {
             }
 
             if (sendToStreamListener) {
-                streamListener.onStreamUpdate(marketDataStreamMessageType, marketDataStreamMessage);
+                streamListener.onStreamUpdate(marketDataMessageType, marketDataStreamMessage);
             }
         }
     }
@@ -370,22 +373,22 @@ public class MarketDataWebsocketClient implements WebsocketClient {
     }
 
     /**
-     * Gets the registered {@link MarketDataStreamMessageType}s of tickers. May contain duplicates.
+     * Gets the registered {@link MarketDataMessageType}s of tickers. May contain duplicates.
      *
-     * @return the registered {@link MarketDataStreamMessageType}s of tickers
+     * @return the registered {@link MarketDataMessageType}s of tickers
      */
-    public HashMap<String, Set<MarketDataStreamMessageType>> getRegisteredMessageTypes() {
-        HashMap<String, Set<MarketDataStreamMessageType>> allMarketDataStreamMessageTypes = new HashMap<>();
+    public HashMap<String, Set<MarketDataMessageType>> getRegisteredMessageTypes() {
+        HashMap<String, Set<MarketDataMessageType>> allMarketDataStreamMessageTypes = new HashMap<>();
 
-        for (MarketDataStreamListener streamListener : new ArrayList<>(listeners)) {
+        for (MarketDataListener streamListener : new ArrayList<>(listeners)) {
             if (streamListener.getDataStreams() == null || streamListener.getDataStreams().isEmpty()) {
                 continue; // Skip over empty/null data stream listeners
             }
 
             streamListener.getDataStreams().forEach((dataStreamTicker, marketDataStreamMessageTypes) -> {
                 // Filter to only subscribable message types and use HashSet to prevent duplicates
-                HashSet<MarketDataStreamMessageType> subscribableMessageTypes = marketDataStreamMessageTypes.stream()
-                        .filter(MarketDataStreamMessageType::isAPISubscribable)
+                HashSet<MarketDataMessageType> subscribableMessageTypes = marketDataStreamMessageTypes.stream()
+                        .filter(MarketDataMessageType::isAPISubscribable)
                         .collect(Collectors.toCollection(HashSet::new));
 
                 // Add the subscribableMessageTypes if the ticker already exists, otherwise insert a new pair

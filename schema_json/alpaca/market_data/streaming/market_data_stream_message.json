@@ -1,7 +1,0 @@
-{
-  "type": "object",
-  "javaInterfaces": [
-    "net.jacobpeterson.abstracts.websocket.message.StreamMessage"
-  ],
-  "title": "See <a href=\"https://alpaca.markets/docs/api-documentation/api-v2/market-data/streaming/\">https://alpaca.markets/docs/api-documentation/api-v2/market-data/streaming/</a>"
-}

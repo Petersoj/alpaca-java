@@ -13,8 +13,7 @@ public enum OrderSide implements APIName {
     /** The sell {@link OrderSide}. */
     SELL("sell");
 
-    /** The API name. */
-    String apiName;
+    private final String apiName;
 
     /**
      * Instantiates a new {@link OrderSide}.

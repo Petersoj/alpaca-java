@@ -44,8 +44,7 @@ public enum AccountStatus implements APIName {
      */
     REJECTED("REJECTED");
 
-    /** The API name. */
-    String apiName;
+    private final String apiName;
 
     /**
      * Instantiates a new {@link AccountStatus}.

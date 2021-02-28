@@ -54,8 +54,7 @@ public enum OrderTimeInForce implements APIName {
      */
     FOK("fok");
 
-    /** The API name. */
-    String apiName;
+    private final String apiName;
 
     /**
      * Instantiates a new {@link OrderTimeInForce}.

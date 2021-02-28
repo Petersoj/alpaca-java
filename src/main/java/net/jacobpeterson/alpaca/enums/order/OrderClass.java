@@ -19,8 +19,7 @@ public enum OrderClass implements APIName {
     /** One-Triggers-Other {@link OrderClass}. */
     OTO("oto");
 
-    /** The API name. */
-    String apiName;
+    private final String apiName;
 
     /**
      * Instantiates a new {@link OrderClass}.

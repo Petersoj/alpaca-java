@@ -13,6 +13,7 @@ import net.jacobpeterson.alpaca.AlpacaConstants.Endpoints;
 import net.jacobpeterson.alpaca.AlpacaConstants.Parameters;
 import net.jacobpeterson.alpaca.AlpacaConstants.URLs;
 import net.jacobpeterson.alpaca.enums.activity.ActivityType;
+import net.jacobpeterson.alpaca.enums.api.DataAPIType;
 import net.jacobpeterson.alpaca.enums.api.EndpointAPIType;
 import net.jacobpeterson.alpaca.enums.asset.AssetStatus;
 import net.jacobpeterson.alpaca.enums.marketdata.BarsTimeFrame;
@@ -30,7 +31,7 @@ import net.jacobpeterson.alpaca.rest.exception.AlpacaAPIRequestException;
 import net.jacobpeterson.alpaca.websocket.broker.client.AlpacaWebsocketClient;
 import net.jacobpeterson.alpaca.websocket.broker.listener.AlpacaStreamListener;
 import net.jacobpeterson.alpaca.websocket.marketdata.client.MarketDataWebsocketClient;
-import net.jacobpeterson.alpaca.websocket.marketdata.listener.MarketDataStreamListener;
+import net.jacobpeterson.alpaca.websocket.marketdata.listener.MarketDataListener;
 import net.jacobpeterson.domain.alpaca.account.Account;
 import net.jacobpeterson.domain.alpaca.accountactivities.AccountActivity;
 import net.jacobpeterson.domain.alpaca.accountactivities.NonTradeActivity;
@@ -92,7 +93,8 @@ public class AlpacaAPI {
      */
     public AlpacaAPI() {
         this(AlpacaProperties.KEY_ID_VALUE, AlpacaProperties.SECRET_VALUE,
-                EndpointAPIType.fromPropertyName(AlpacaProperties.API_ENDPOINT_TYPE_VALUE));
+                EndpointAPIType.fromPropertyName(AlpacaProperties.ENDPOINT_API_TYPE_VALUE),
+                DataAPIType.fromPropertyName(AlpacaProperties.DATA_API_TYPE_VALUE));
 
         LOGGER.debug(AlpacaProperties.staticToString());
     }
@@ -104,7 +106,8 @@ public class AlpacaAPI {
      * @param secret the secret
      */
     public AlpacaAPI(String keyID, String secret) {
-        this(keyID, secret, null, EndpointAPIType.fromPropertyName(AlpacaProperties.API_ENDPOINT_TYPE_VALUE));
+        this(keyID, secret, null, EndpointAPIType.fromPropertyName(AlpacaProperties.ENDPOINT_API_TYPE_VALUE),
+                DataAPIType.fromPropertyName(AlpacaProperties.DATA_API_TYPE_VALUE));
     }
 
     /**
@@ -113,9 +116,10 @@ public class AlpacaAPI {
      * @param keyID           the key ID
      * @param secret          the secret
      * @param endpointAPIType the {@link EndpointAPIType}
+     * @param dataAPIType     the {@link DataAPIType}
      */
-    public AlpacaAPI(String keyID, String secret, EndpointAPIType endpointAPIType) {
-        this(keyID, secret, null, endpointAPIType);
+    public AlpacaAPI(String keyID, String secret, EndpointAPIType endpointAPIType, DataAPIType dataAPIType) {
+        this(keyID, secret, null, endpointAPIType, dataAPIType);
     }
 
     /**
@@ -124,7 +128,8 @@ public class AlpacaAPI {
      * @param oAuthToken the OAuth token
      */
     public AlpacaAPI(String oAuthToken) {
-        this(null, null, oAuthToken, EndpointAPIType.fromPropertyName(AlpacaProperties.API_ENDPOINT_TYPE_VALUE));
+        this(null, null, oAuthToken, EndpointAPIType.fromPropertyName(AlpacaProperties.ENDPOINT_API_TYPE_VALUE),
+                DataAPIType.fromPropertyName(AlpacaProperties.DATA_API_TYPE_VALUE));
     }
 
     /**
@@ -134,10 +139,13 @@ public class AlpacaAPI {
      * @param secret          the secret
      * @param oAuthToken      the OAuth token
      * @param endpointAPIType the {@link EndpointAPIType}
+     * @param dataAPIType     the {@link DataAPIType}
      */
-    public AlpacaAPI(String keyID, String secret, String oAuthToken, EndpointAPIType endpointAPIType) {
+    public AlpacaAPI(String keyID, String secret, String oAuthToken, EndpointAPIType endpointAPIType,
+            DataAPIType dataAPIType) {
         Preconditions.checkState((keyID != null && secret != null) || oAuthToken != null);
         Preconditions.checkNotNull(endpointAPIType);
+        Preconditions.checkNotNull(dataAPIType);
 
         this.keyID = keyID;
         this.apiURL = endpointAPIType.getURL();
@@ -148,8 +156,8 @@ public class AlpacaAPI {
                 new AlpacaRequest(keyID, secret);
         alpacaWebSocketClient = isOAuth ? new AlpacaWebsocketClient(oAuthToken, endpointAPIType) :
                 new AlpacaWebsocketClient(keyID, secret, endpointAPIType);
-        marketDataWebSocketClient = isOAuth ? new MarketDataWebsocketClient(oAuthToken) :
-                new MarketDataWebsocketClient(keyID, secret);
+        marketDataWebSocketClient = isOAuth ? new MarketDataWebsocketClient(oAuthToken, dataAPIType) :
+                new MarketDataWebsocketClient(keyID, secret, dataAPIType);
 
         LOGGER.debug("{}", this);
     }
@@ -1693,26 +1701,26 @@ public class AlpacaAPI {
     }
 
     /**
-     * Adds the {@link MarketDataStreamListener}. Note that when the first {@link AlpacaStreamListener} is added, the
+     * Adds the {@link MarketDataListener}. Note that when the first {@link AlpacaStreamListener} is added, the
      * Websocket connection is created.
      *
-     * @param streamListener the {@link MarketDataStreamListener}
+     * @param streamListener the {@link MarketDataListener}
      *
      * @throws WebsocketException thrown for {@link WebsocketException}s
      */
-    public void addMarketDataStreamListener(MarketDataStreamListener streamListener) throws WebsocketException {
+    public void addMarketDataStreamListener(MarketDataListener streamListener) throws WebsocketException {
         marketDataWebSocketClient.addListener(streamListener);
     }
 
     /**
-     * Removes the {@link MarketDataStreamListener}. Note that when the last {@link MarketDataStreamListener} is
-     * removed, the Websocket connection is closed.
+     * Removes the {@link MarketDataListener}. Note that when the last {@link MarketDataListener} is removed, the
+     * Websocket connection is closed.
      *
-     * @param streamListener the {@link MarketDataStreamListener}
+     * @param streamListener the {@link MarketDataListener}
      *
      * @throws WebsocketException thrown for {@link WebsocketException}s
      */
-    public void removeMarketDataStreamListener(MarketDataStreamListener streamListener) throws WebsocketException {
+    public void removeMarketDataStreamListener(MarketDataListener streamListener) throws WebsocketException {
         marketDataWebSocketClient.removeListener(streamListener);
     }
 
