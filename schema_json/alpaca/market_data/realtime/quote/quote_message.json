@@ -1,15 +1,10 @@
 {
   "type": "object",
   "extends": {
-    "existingJavaType": "net.jacobpeterson.domain.alpaca.marketdata.realtime.MarketDataMessage"
+    "existingJavaType": "net.jacobpeterson.domain.alpaca.marketdata.realtime.SymbolMessage"
   },
   "title": "See <a href=\"https://alpaca.markets/docs/api-documentation/api-v2/market-data/streaming/\">https://alpaca.markets/docs/api-documentation/api-v2/market-data/streaming/</a>",
   "properties": {
-    "S": {
-      "existingJavaType": "java.lang.String",
-      "javaName": "symbol",
-      "title": "Symbol"
-    },
     "ax": {
       "existingJavaType": "java.lang.String",
       "javaName": "askExchangeCode",

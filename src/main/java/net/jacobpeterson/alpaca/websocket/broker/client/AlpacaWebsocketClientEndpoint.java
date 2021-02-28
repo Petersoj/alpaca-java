@@ -1,7 +1,6 @@
 package net.jacobpeterson.alpaca.websocket.broker.client;
 
 import net.jacobpeterson.abstracts.websocket.client.AbstractWebsocketClientEndpoint;
-import net.jacobpeterson.abstracts.websocket.client.WebsocketClient;
 
 import javax.websocket.ClientEndpoint;
 import javax.websocket.CloseReason;
@@ -18,15 +17,15 @@ import java.nio.charset.StandardCharsets;
  * net.jacobpeterson.alpaca.AlpacaAPI}.
  */
 @ClientEndpoint(subprotocols = "BINARY")
-public class AlpacaWebsocketClientEndpoint extends AbstractWebsocketClientEndpoint {
+public class AlpacaWebsocketClientEndpoint extends AbstractWebsocketClientEndpoint<AlpacaWebsocketClient> {
 
     /**
      * Instantiates a new {@link AlpacaWebsocketClientEndpoint}.
      *
-     * @param websocketClient the {@link WebsocketClient}
+     * @param websocketClient the {@link AlpacaWebsocketClient}
      * @param endpointURI     the endpoint {@link URI}
      */
-    public AlpacaWebsocketClientEndpoint(WebsocketClient websocketClient, URI endpointURI) {
+    public AlpacaWebsocketClientEndpoint(AlpacaWebsocketClient websocketClient, URI endpointURI) {
         super(websocketClient, endpointURI, "AlpacaWebsocketThread");
     }
 

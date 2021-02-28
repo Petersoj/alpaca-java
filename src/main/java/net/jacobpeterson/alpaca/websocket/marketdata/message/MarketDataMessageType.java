@@ -17,6 +17,10 @@ public enum MarketDataMessageType implements StreamMessageType, APIName {
     @SerializedName("error")
     ERROR("error", false),
 
+    /** The subscription {@link MarketDataMessageType}. */
+    @SerializedName("subscription")
+    SUBSCRIPTION("subscription", false),
+
     /** The trade {@link MarketDataMessageType}. */
     @SerializedName("t")
     TRADE("t", true),

@@ -1,12 +1,13 @@
 package net.jacobpeterson.alpaca.websocket.broker.client;
 
 import com.google.common.base.Preconditions;
-import com.google.gson.*;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonPrimitive;
+import com.google.gson.JsonSyntaxException;
 import net.jacobpeterson.abstracts.websocket.client.WebsocketClient;
 import net.jacobpeterson.abstracts.websocket.exception.WebsocketException;
-import net.jacobpeterson.abstracts.websocket.listener.StreamListener;
-import net.jacobpeterson.abstracts.websocket.message.StreamMessage;
-import net.jacobpeterson.abstracts.websocket.message.StreamMessageType;
 import net.jacobpeterson.alpaca.enums.api.EndpointAPIType;
 import net.jacobpeterson.alpaca.websocket.broker.listener.AlpacaStreamListener;
 import net.jacobpeterson.alpaca.websocket.broker.message.AlpacaStreamMessageType;
@@ -33,7 +34,8 @@ import java.util.stream.Collectors;
  * {@link AlpacaWebsocketClient} represents a client for the {@link net.jacobpeterson.alpaca.AlpacaAPI} Websocket
  * stream.
  */
-public class AlpacaWebsocketClient implements WebsocketClient {
+public class AlpacaWebsocketClient implements WebsocketClient<AlpacaStreamListener, AlpacaStreamMessageType,
+        AlpacaStreamMessage> {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(AlpacaWebsocketClient.class);
     private static final String STREAM_KEY = "stream";
@@ -85,9 +87,7 @@ public class AlpacaWebsocketClient implements WebsocketClient {
     }
 
     @Override
-    public void addListener(StreamListener<?, ?> streamListener) throws WebsocketException {
-        Preconditions.checkState(streamListener instanceof AlpacaStreamListener);
-
+    public void addListener(AlpacaStreamListener streamListener) throws WebsocketException {
         if (listeners.isEmpty()) {
             try {
                 connect();
@@ -96,15 +96,13 @@ public class AlpacaWebsocketClient implements WebsocketClient {
             }
         }
 
-        listeners.add((AlpacaStreamListener) streamListener);
+        listeners.add(streamListener);
 
         submitStreamRequestUpdate();
     }
 
     @Override
-    public void removeListener(StreamListener<?, ?> streamListener) throws WebsocketException {
-        Preconditions.checkState(streamListener instanceof AlpacaStreamListener);
-
+    public void removeListener(AlpacaStreamListener streamListener) throws WebsocketException {
         listeners.remove(streamListener);
 
         if (listeners.isEmpty()) {
@@ -223,13 +221,8 @@ public class AlpacaWebsocketClient implements WebsocketClient {
     }
 
     @Override
-    public void sendStreamMessageToListeners(StreamMessageType streamMessageType, StreamMessage streamMessage) {
-        Preconditions.checkState(streamMessageType instanceof AlpacaStreamMessageType);
-        Preconditions.checkState(streamMessage instanceof AlpacaStreamMessage);
-
-        AlpacaStreamMessageType alpacaStreamMessageType = (AlpacaStreamMessageType) streamMessageType;
-        AlpacaStreamMessage alpacaStreamMessage = (AlpacaStreamMessage) streamMessage;
-
+    public void sendStreamMessageToListeners(AlpacaStreamMessageType alpacaStreamMessageType,
+            AlpacaStreamMessage alpacaStreamMessage) {
         for (AlpacaStreamListener alpacaStreamListener : new ArrayList<>(listeners)) {
             if (alpacaStreamListener.getStreamMessageTypes() == null ||
                     alpacaStreamListener.getStreamMessageTypes().isEmpty() ||

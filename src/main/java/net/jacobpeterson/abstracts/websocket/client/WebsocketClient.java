@@ -7,8 +7,12 @@ import net.jacobpeterson.abstracts.websocket.message.StreamMessageType;
 
 /**
  * {@link WebsocketClient} represents a client for a Websocket.
+ *
+ * @param <L> the {@link StreamListener} type parameter
+ * @param <T> the {@link StreamMessageType} type parameter
+ * @param <M> the {@link StreamMessage} type parameter
  */
-public interface WebsocketClient {
+public interface WebsocketClient<L extends StreamListener<T, M>, T extends StreamMessageType, M extends StreamMessage> {
 
     /**
      * Adds a {@link StreamListener}. Note that this method is blocking.
@@ -17,7 +21,7 @@ public interface WebsocketClient {
      *
      * @throws WebsocketException thrown for {@link WebsocketException}s
      */
-    void addListener(StreamListener<?, ?> streamListener) throws WebsocketException;
+    void addListener(L streamListener) throws WebsocketException;
 
     /**
      * Removes a {@link StreamListener}. Note that this method is blocking.
@@ -26,7 +30,7 @@ public interface WebsocketClient {
      *
      * @throws WebsocketException thrown for {@link WebsocketException}s
      */
-    void removeListener(StreamListener<?, ?> streamListener) throws WebsocketException;
+    void removeListener(L streamListener) throws WebsocketException;
 
     /**
      * Connects the Websocket. Note that this method is blocking.
@@ -65,7 +69,7 @@ public interface WebsocketClient {
      * @param streamMessageType the {@link StreamMessageType}
      * @param streamMessage     the {@link StreamMessage}
      */
-    void sendStreamMessageToListeners(StreamMessageType streamMessageType, StreamMessage streamMessage);
+    void sendStreamMessageToListeners(T streamMessageType, M streamMessage);
 
     /**
      * Returns true if the Websocket is connected.

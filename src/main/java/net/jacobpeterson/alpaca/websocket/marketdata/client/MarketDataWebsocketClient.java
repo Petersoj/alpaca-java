@@ -4,17 +4,20 @@ import com.google.common.base.Preconditions;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import com.google.gson.JsonParseException;
-import com.google.gson.JsonPrimitive;
 import net.jacobpeterson.abstracts.websocket.client.WebsocketClient;
 import net.jacobpeterson.abstracts.websocket.exception.WebsocketException;
-import net.jacobpeterson.abstracts.websocket.listener.StreamListener;
-import net.jacobpeterson.abstracts.websocket.message.StreamMessage;
-import net.jacobpeterson.abstracts.websocket.message.StreamMessageType;
 import net.jacobpeterson.alpaca.enums.api.DataAPIType;
 import net.jacobpeterson.alpaca.websocket.broker.client.AlpacaWebsocketClient;
 import net.jacobpeterson.alpaca.websocket.marketdata.listener.MarketDataListener;
 import net.jacobpeterson.alpaca.websocket.marketdata.message.MarketDataMessageType;
+import net.jacobpeterson.domain.alpaca.marketdata.realtime.MarketDataMessage;
+import net.jacobpeterson.domain.alpaca.marketdata.realtime.SymbolMessage;
+import net.jacobpeterson.domain.alpaca.marketdata.realtime.bar.BarMessage;
+import net.jacobpeterson.domain.alpaca.marketdata.realtime.control.ErrorMessage;
+import net.jacobpeterson.domain.alpaca.marketdata.realtime.control.SubscriptionsMessage;
+import net.jacobpeterson.domain.alpaca.marketdata.realtime.control.SuccessMessage;
+import net.jacobpeterson.domain.alpaca.marketdata.realtime.quote.QuoteMessage;
+import net.jacobpeterson.domain.alpaca.marketdata.realtime.trade.TradeMessage;
 import net.jacobpeterson.util.gson.GsonUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,30 +27,20 @@ import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 /**
  * {@link MarketDataWebsocketClient} represents a client for the {@link net.jacobpeterson.alpaca.AlpacaAPI} market data
  * Websocket stream.
  */
-public class MarketDataWebsocketClient implements WebsocketClient {
+public class MarketDataWebsocketClient implements WebsocketClient<MarketDataListener, MarketDataMessageType,
+        MarketDataMessage> {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(MarketDataWebsocketClient.class);
-
-    private static final String STREAM_KEY = "stream";
-    private static final String EVENT_TYPE_KEY = "ev";
-    private static final String DATA_KEY = "data";
     private static final String ALL_TICKERS = "*";
-    private static final String TRADES_STREAM_PREFIX =
-            GsonUtil.GSON.toJson(MarketDataMessageType.TRADES).replace("\"", "") + ".";
-    private static final String QUOTES_STREAM_PREFIX =
-            GsonUtil.GSON.toJson(MarketDataMessageType.QUOTES).replace("\"", "") + ".";
-    private static final String AGGREGATE_MINUTE_STREAM_PREFIX =
-            GsonUtil.GSON.toJson(MarketDataMessageType.AGGREGATE_MINUTE).replace("\"", "") + ".";
+    private static final String MESSAGE_TYPE_KEY = "T";
 
     private final String keyID;
     private final String secret;
@@ -97,9 +90,7 @@ public class MarketDataWebsocketClient implements WebsocketClient {
     }
 
     @Override
-    public void addListener(StreamListener<?, ?> streamListener) throws WebsocketException {
-        Preconditions.checkState(streamListener instanceof MarketDataListener);
-
+    public void addListener(MarketDataListener streamListener) throws WebsocketException {
         if (!isConnected()) {
             try {
                 connect();
@@ -108,15 +99,13 @@ public class MarketDataWebsocketClient implements WebsocketClient {
             }
         }
 
-        listeners.add((MarketDataListener) streamListener);
+        listeners.add(streamListener);
 
-        submitStreamRequest();
+        submitRequest(streamListener, false);
     }
 
     @Override
-    public void removeListener(StreamListener<?, ?> streamListener) throws WebsocketException {
-        Preconditions.checkState(streamListener instanceof MarketDataListener);
-
+    public void removeListener(MarketDataListener streamListener) throws WebsocketException {
         listeners.remove(streamListener);
 
         if (listeners.isEmpty()) {
@@ -126,7 +115,7 @@ public class MarketDataWebsocketClient implements WebsocketClient {
                 throw new WebsocketException(exception);
             }
         } else {
-            submitStreamRequest();
+            submitRequest(streamListener, true);
         }
     }
 
@@ -153,170 +142,108 @@ public class MarketDataWebsocketClient implements WebsocketClient {
     @Override
     public void sendAuthenticationMessage() {
         /* Format of message is:
-         *  {
-         *      "action": "authenticate",
-         *      "data": {
-         *          "key_id": "{YOUR_API_KEY_ID}",
-         *          "secret_key": "{YOUR_API_SECRET_KEY}"
-         *      }
-         *  }
+         * {"action": "auth", "key": "{APCA-API-KEY-ID}", "secret": "{APCA-API-SECRET-KEY}"}
          */
 
         JsonObject authRequest = new JsonObject();
-        authRequest.addProperty("action", "authenticate");
+        authRequest.addProperty("action", "auth");
 
-        JsonObject dataJson = new JsonObject();
         if (oAuthToken != null) {
-            dataJson.addProperty("oauth_token", oAuthToken);
+            throw new UnsupportedOperationException("OAuth isn't currently implemented!");
         } else {
-            dataJson.addProperty("key_id", keyID);
-            dataJson.addProperty("secret_key", secret);
+            authRequest.addProperty("key", keyID);
+            authRequest.addProperty("secret", secret);
         }
-
-        authRequest.add("data", dataJson);
 
         marketDataWebsocketClientEndpoint.sendMessage(authRequest.toString());
     }
 
     @Override
     public void handleResubscribing() {
-        submitStreamRequest();
-    }
-
-    @Override
-    public void handleWebsocketMessage(String message) {
-        /* Format of authorization message:
-         * {"stream":"authorization","data":{"action":"authenticate","status":"authorized"}}
-         *
-         * Format of listened streams message:
-         * {"stream":"listening","data":{"streams":["Q.AAPL"]}}
-         *
-         * Format of stream data message:
-         * {"stream":"Q.AAPL","data":{"ev":"Q","T":"AAPL","x":17,"p":112.12,"s":1,"X":3,"P":112.98,"S":1,
-         * "c":[0],"t":1601645053026000000}}
-         */
-
-        JsonElement messageJsonElement = GsonUtil.JSON_PARSER.parse(message);
-        Preconditions.checkState(messageJsonElement instanceof JsonObject);
-
-        JsonObject messageJsonObject = messageJsonElement.getAsJsonObject();
-
-        if (messageJsonObject.has(STREAM_KEY)) {
-            JsonElement streamJsonElement = messageJsonObject.get(STREAM_KEY);
-
-            if (streamJsonElement instanceof JsonPrimitive) {
-                try {
-                    String streamString = streamJsonElement.getAsString();
-
-                    MarketDataMessageType marketDataMessageType;
-
-                    // Check if the "stream" is a data stream, that is, Q, T, or AM
-                    if (streamString.startsWith(TRADES_STREAM_PREFIX) ||
-                            streamString.startsWith(QUOTES_STREAM_PREFIX) ||
-                            streamString.startsWith(AGGREGATE_MINUTE_STREAM_PREFIX)) {
-
-                        // Set the stream message type to the parsed EVENT_TYPE_KEY
-                        marketDataMessageType = GsonUtil.GSON.fromJson(
-                                messageJsonObject.get(DATA_KEY).getAsJsonObject().get(EVENT_TYPE_KEY),
-                                MarketDataMessageType.class);
-                    } else {
-                        marketDataMessageType = GsonUtil.GSON.fromJson(streamJsonElement,
-                                MarketDataMessageType.class);
-                    }
-
-                    switch (marketDataMessageType) {
-                        case AUTHORIZATION:
-                            AuthorizationMessage authorizationMessage = GsonUtil.GSON.fromJson(messageJsonObject,
-                                    AuthorizationMessage.class);
-                            sendStreamMessageToListeners(marketDataMessageType, authorizationMessage);
-
-                            authenticated = isAuthorizationMessageSuccess(authorizationMessage);
-
-                            LOGGER.debug("{}", authorizationMessage);
-                            break;
-                        case LISTENING:
-                            ListeningMessage listeningMessage = GsonUtil.GSON.fromJson(messageJsonObject,
-                                    ListeningMessage.class);
-                            sendStreamMessageToListeners(marketDataMessageType, listeningMessage);
-
-                            LOGGER.debug("{}", listeningMessage);
-                            break;
-                        case TRADES:
-                            TradeMessage tradeMessage = GsonUtil.GSON.fromJson(messageJsonObject.get(DATA_KEY),
-                                    TradeMessage.class);
-                            sendStreamMessageToListeners(marketDataMessageType, tradeMessage);
-
-                            LOGGER.debug("{}", tradeMessage);
-                            break;
-                        case QUOTES:
-                            QuoteMessage quoteMessage = GsonUtil.GSON.fromJson(messageJsonObject.get(DATA_KEY),
-                                    QuoteMessage.class);
-                            sendStreamMessageToListeners(marketDataMessageType, quoteMessage);
-
-                            LOGGER.debug("{}", quoteMessage);
-                            break;
-                        case AGGREGATE_MINUTE:
-                            AggregateMinuteMessage aggregateMinuteMessage = GsonUtil.GSON.fromJson(
-                                    messageJsonObject.get(DATA_KEY), AggregateMinuteMessage.class);
-                            sendStreamMessageToListeners(marketDataMessageType, aggregateMinuteMessage);
-
-                            LOGGER.debug("{}", aggregateMinuteMessage);
-                            break;
-                        default:
-                            LOGGER.error("Unhandled stream type: {}", marketDataMessageType);
-                    }
-                } catch (JsonParseException exception) {
-                    LOGGER.error("Could not parse message: {}\n{}", messageJsonObject, exception);
-                }
-            } else {
-                LOGGER.error("Unknown stream message: {}", messageJsonObject);
-            }
+        for (MarketDataListener marketDataListener : listeners) {
+            submitRequest(marketDataListener, false);
         }
     }
 
     @Override
-    public void sendStreamMessageToListeners(StreamMessageType streamMessageType, StreamMessage streamMessage) {
-        Preconditions.checkState(streamMessageType instanceof MarketDataMessageType);
-        Preconditions.checkState(streamMessage instanceof MarketDataStreamMessage);
+    public void handleWebsocketMessage(String message) {
+        JsonElement messageJsonElement = GsonUtil.JSON_PARSER.parse(message);
+        Preconditions.checkState(messageJsonElement instanceof JsonArray);
 
-        MarketDataMessageType marketDataMessageType = (MarketDataMessageType) streamMessageType;
-        MarketDataStreamMessage marketDataStreamMessage = (MarketDataStreamMessage) streamMessage;
+        JsonArray messageJsonArray = messageJsonElement.getAsJsonArray();
 
-        for (MarketDataListener streamListener : new ArrayList<>(listeners)) {
+        for (JsonElement arrayJsonElement : messageJsonArray) {
+            if (!(arrayJsonElement instanceof JsonObject)) {
+                continue;
+            }
+
+            JsonObject messageJsonObject = arrayJsonElement.getAsJsonObject();
+            MarketDataMessageType marketDataMessageType = GsonUtil.GSON.fromJson(
+                    messageJsonObject.get(MESSAGE_TYPE_KEY), MarketDataMessageType.class);
+            if (marketDataMessageType == null) {
+                LOGGER.error("Message type not found in message: {}", messageJsonObject);
+                continue;
+            }
+
+            MarketDataMessage marketDataMessage;
+            switch (marketDataMessageType) {
+                case SUCCESS:
+                    marketDataMessage = GsonUtil.GSON.fromJson(messageJsonObject, SuccessMessage.class);
+                    authenticated = isAuthorizationMessageSuccess((SuccessMessage) marketDataMessage);
+                    break;
+                case ERROR:
+                    marketDataMessage = GsonUtil.GSON.fromJson(messageJsonObject, ErrorMessage.class);
+                    LOGGER.error("{}", marketDataMessage);
+                    break;
+                case SUBSCRIPTION:
+                    marketDataMessage = GsonUtil.GSON.fromJson(messageJsonObject, SubscriptionsMessage.class);
+                    break;
+                case TRADE:
+                    marketDataMessage = GsonUtil.GSON.fromJson(messageJsonObject, TradeMessage.class);
+                    break;
+                case QUOTE:
+                    marketDataMessage = GsonUtil.GSON.fromJson(messageJsonObject, QuoteMessage.class);
+                    break;
+                case BAR:
+                    marketDataMessage = GsonUtil.GSON.fromJson(messageJsonObject, BarMessage.class);
+                    break;
+                default:
+                    LOGGER.error("Message type {} not implemented!", marketDataMessageType);
+                    continue;
+            }
+
+            LOGGER.debug("{}", marketDataMessage);
+            sendStreamMessageToListeners(marketDataMessageType, marketDataMessage);
+        }
+    }
+
+    @Override
+    public void sendStreamMessageToListeners(MarketDataMessageType marketDataMessageType,
+            MarketDataMessage marketDataMessage) {
+        for (MarketDataListener marketDataListener : new ArrayList<>(listeners)) {
             boolean sendToStreamListener = false;
 
-            if (marketDataStreamMessage instanceof MarketDataStreamStatusMessage) {
-                if (streamListener.getDataStreams() != null && !streamListener.getDataStreams().isEmpty()) {
-                    // Send the message if any message type registered in the listener for
-                    // any ticker is a status message
-                    sendToStreamListener = streamListener.getDataStreams().values().stream().anyMatch(types ->
-                            types.contains(MarketDataMessageType.LISTENING) ||
-                                    types.contains(MarketDataMessageType.AUTHORIZATION));
-                } else { // If the data streams list is empty or null, send the message
-                    sendToStreamListener = true;
-                }
-            } else if (marketDataStreamMessage instanceof MarketDataStreamDataMessage) {
-                MarketDataStreamDataMessage marketDataStreamDataMessage = (MarketDataStreamDataMessage)
-                        marketDataStreamMessage;
+            if (marketDataListener.getDataStreams() == null || marketDataListener.getDataStreams().isEmpty()) {
+                sendToStreamListener = true;
+            } else if (!(marketDataMessage instanceof SymbolMessage) && marketDataListener.getDataStreams()
+                    .values().stream().anyMatch(types -> types.contains(marketDataMessageType))) {
+                sendToStreamListener = true;
+            } else if (marketDataMessage instanceof SymbolMessage) {
+                SymbolMessage symbolMessage = (SymbolMessage) marketDataMessage;
+                Set<MarketDataMessageType> symbolMessageTypes = marketDataListener.getDataStreams()
+                        .getOrDefault(symbolMessage.getMessageType(), null);
+                Set<MarketDataMessageType> allMessageTypes = marketDataListener.getDataStreams()
+                        .getOrDefault(ALL_TICKERS, null);
 
-                if (streamListener.getDataStreams() != null && !streamListener.getDataStreams().isEmpty()) {
-                    Set<MarketDataMessageType> tickerMessageTypes =
-                            streamListener.getDataStreams().getOrDefault(marketDataStreamDataMessage.getTicker(), null);
-                    Set<MarketDataMessageType> allTickerMessageTypes =
-                            streamListener.getDataStreams().getOrDefault(ALL_TICKERS, null);
-
-                    if (tickerMessageTypes != null) {
-                        sendToStreamListener = tickerMessageTypes.contains(marketDataMessageType);
-                    } else if (allTickerMessageTypes != null) {
-                        sendToStreamListener = allTickerMessageTypes.contains(marketDataMessageType);
-                    }
-                } else { // If the data streams list is empty or null, send the message
-                    sendToStreamListener = true;
+                if (symbolMessageTypes != null) {
+                    sendToStreamListener = symbolMessageTypes.contains(marketDataMessageType);
+                } else if (allMessageTypes != null) {
+                    sendToStreamListener = allMessageTypes.contains(marketDataMessageType);
                 }
             }
 
             if (sendToStreamListener) {
-                streamListener.onStreamUpdate(marketDataMessageType, marketDataStreamMessage);
+                marketDataListener.onStreamUpdate(marketDataMessageType, marketDataMessage);
             }
         }
     }
@@ -332,74 +259,49 @@ public class MarketDataWebsocketClient implements WebsocketClient {
     }
 
     /**
-     * Returns true if {@link AuthorizationMessage} states success.
+     * Returns true if {@link SuccessMessage} states authentication.
      *
-     * @param authorizationMessage the {@link AuthorizationMessage}
+     * @param successMessage the {@link SuccessMessage}
      *
-     * @return true if {@link AuthorizationMessage} states success
+     * @return true if {@link SuccessMessage} states authentication
      */
-    private boolean isAuthorizationMessageSuccess(AuthorizationMessage authorizationMessage) {
-        return authorizationMessage.getData().getStatus().equalsIgnoreCase("authorized") &&
-                authorizationMessage.getData().getAction().equalsIgnoreCase("authenticate");
+    private boolean isAuthorizationMessageSuccess(SuccessMessage successMessage) {
+        return successMessage.getMessage().equals("authenticated");
     }
 
     /**
-     * Submits a stream request.
+     * Submits a (un)subscribe request.
+     *
+     * @param marketDataListener the {@link MarketDataListener}s
+     * @param unsubscribe        true to unsubscribe, false to subscribe
      */
-    private void submitStreamRequest() {
-        /* Stream request example:
-         * {
-         *     "action": "listen",
-         *     "data": {
-         *         "streams": ["T.SPY", "Q.SPY", "AM.SPY"]
-         *     }
-         * }
-         */
-
+    private void submitRequest(MarketDataListener marketDataListener, boolean unsubscribe) {
         JsonObject streamRequestJsonObject = new JsonObject();
-        streamRequestJsonObject.addProperty("action", "listen");
+        streamRequestJsonObject.addProperty("action", unsubscribe ? "unsubscribe" : "subscribe");
 
-        JsonArray streamsJsonArray = new JsonArray();
-        getRegisteredMessageTypes().forEach((s, m) -> m.forEach(i -> streamsJsonArray.add(i.getAPIName() + "." + s)));
+        JsonArray tradesJsonArray = new JsonArray();
+        JsonArray quotesJsonArray = new JsonArray();
+        JsonArray barsJsonArray = new JsonArray();
 
-        JsonObject dataJsonObject = new JsonObject();
-        dataJsonObject.add("streams", streamsJsonArray);
+        for (Map.Entry<String, Set<MarketDataMessageType>> listenerEntry : marketDataListener
+                .getDataStreams().entrySet()) {
+            if (listenerEntry.getValue().contains(MarketDataMessageType.TRADE)) {
+                tradesJsonArray.add(listenerEntry.getKey());
+            }
+            if (listenerEntry.getValue().contains(MarketDataMessageType.QUOTE)) {
+                quotesJsonArray.add(listenerEntry.getKey());
+            }
+            if (listenerEntry.getValue().contains(MarketDataMessageType.BAR)) {
+                barsJsonArray.add(listenerEntry.getKey());
+            }
+        }
 
-        streamRequestJsonObject.add("data", dataJsonObject);
+        streamRequestJsonObject.add("trades", tradesJsonArray);
+        streamRequestJsonObject.add("quotes", quotesJsonArray);
+        streamRequestJsonObject.add("bars", barsJsonArray);
 
         marketDataWebsocketClientEndpoint.sendMessage(streamRequestJsonObject.toString());
 
-        LOGGER.info("Requested subscriptions to update to {}", streamsJsonArray);
-    }
-
-    /**
-     * Gets the registered {@link MarketDataMessageType}s of tickers. May contain duplicates.
-     *
-     * @return the registered {@link MarketDataMessageType}s of tickers
-     */
-    public HashMap<String, Set<MarketDataMessageType>> getRegisteredMessageTypes() {
-        HashMap<String, Set<MarketDataMessageType>> allMarketDataStreamMessageTypes = new HashMap<>();
-
-        for (MarketDataListener streamListener : new ArrayList<>(listeners)) {
-            if (streamListener.getDataStreams() == null || streamListener.getDataStreams().isEmpty()) {
-                continue; // Skip over empty/null data stream listeners
-            }
-
-            streamListener.getDataStreams().forEach((dataStreamTicker, marketDataStreamMessageTypes) -> {
-                // Filter to only subscribable message types and use HashSet to prevent duplicates
-                HashSet<MarketDataMessageType> subscribableMessageTypes = marketDataStreamMessageTypes.stream()
-                        .filter(MarketDataMessageType::isAPISubscribable)
-                        .collect(Collectors.toCollection(HashSet::new));
-
-                // Add the subscribableMessageTypes if the ticker already exists, otherwise insert a new pair
-                if (allMarketDataStreamMessageTypes.containsKey(dataStreamTicker)) {
-                    allMarketDataStreamMessageTypes.get(dataStreamTicker).addAll(subscribableMessageTypes);
-                } else {
-                    allMarketDataStreamMessageTypes.put(dataStreamTicker, subscribableMessageTypes);
-                }
-            });
-        }
-
-        return allMarketDataStreamMessageTypes;
+        LOGGER.info("Requested subscriptions to update to {}", streamRequestJsonObject);
     }
 }

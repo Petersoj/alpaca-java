@@ -4,8 +4,12 @@ import org.eclipse.jetty.util.component.LifeCycle;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.websocket.*;
+import javax.websocket.CloseReason;
 import javax.websocket.CloseReason.CloseCodes;
+import javax.websocket.ContainerProvider;
+import javax.websocket.DeploymentException;
+import javax.websocket.Session;
+import javax.websocket.WebSocketContainer;
 import java.io.IOException;
 import java.net.URI;
 import java.util.concurrent.ExecutorService;
@@ -15,15 +19,17 @@ import java.util.concurrent.Executors;
  * {@link AbstractWebsocketClientEndpoint} is used for handling a Websocket directly.
  * <br>
  * NOTES: You MUST annotate a subclass's {@link #onOpen(Session)}, {@link #onClose(Session, CloseReason)}, {@link
- * #onMessage(String)}, and {@link #onError(Throwable)} with {@link javax.websocket.OnOpen}, {@link
- * javax.websocket.OnClose}, {@link javax.websocket.OnMessage}, and {@link javax.websocket.OnError} respectively and
+ * #onMessage(String)}*, and {@link #onError(Throwable)} with {@link javax.websocket.OnOpen}, {@link
+ * javax.websocket.OnClose}*, {@link javax.websocket.OnMessage}, and {@link javax.websocket.OnError} respectively and
  * with the appropriate websocket sub-protocols because Websocket annotations don't work with inheritance.
+ *
+ * @param <T> the {@link WebsocketClient} type parameter
  */
-public abstract class AbstractWebsocketClientEndpoint {
+public abstract class AbstractWebsocketClientEndpoint<T extends WebsocketClient<?, ?, ?>> {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(AbstractWebsocketClientEndpoint.class);
 
-    private final WebsocketClient websocketClient;
+    private final T websocketClient;
     private final URI endpointURI;
     private final String messageThreadName;
 
@@ -38,11 +44,11 @@ public abstract class AbstractWebsocketClientEndpoint {
     /**
      * Instantiates a new {@link AbstractWebsocketClientEndpoint}.
      *
-     * @param websocketClient   the {@link WebsocketClient}
+     * @param websocketClient   the {@link WebsocketClient} type
      * @param endpointURI       the endpoint {@link URI}
      * @param messageThreadName the message thread name
      */
-    public AbstractWebsocketClientEndpoint(WebsocketClient websocketClient, URI endpointURI, String messageThreadName) {
+    public AbstractWebsocketClientEndpoint(T websocketClient, URI endpointURI, String messageThreadName) {
         this.websocketClient = websocketClient;
         this.endpointURI = endpointURI;
         this.messageThreadName = messageThreadName;

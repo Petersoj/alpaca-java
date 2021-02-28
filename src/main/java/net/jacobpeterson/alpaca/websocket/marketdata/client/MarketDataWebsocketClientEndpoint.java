@@ -1,9 +1,14 @@
 package net.jacobpeterson.alpaca.websocket.marketdata.client;
 
 import net.jacobpeterson.abstracts.websocket.client.AbstractWebsocketClientEndpoint;
-import net.jacobpeterson.abstracts.websocket.client.WebsocketClient;
 
-import javax.websocket.*;
+import javax.websocket.ClientEndpoint;
+import javax.websocket.CloseReason;
+import javax.websocket.OnClose;
+import javax.websocket.OnError;
+import javax.websocket.OnMessage;
+import javax.websocket.OnOpen;
+import javax.websocket.Session;
 import java.net.URI;
 
 /**
@@ -11,15 +16,15 @@ import java.net.URI;
  * net.jacobpeterson.alpaca.AlpacaAPI} market data.
  */
 @ClientEndpoint(subprotocols = "STRING")
-public class MarketDataWebsocketClientEndpoint extends AbstractWebsocketClientEndpoint {
+public class MarketDataWebsocketClientEndpoint extends AbstractWebsocketClientEndpoint<MarketDataWebsocketClient> {
 
     /**
      * Instantiates a new {@link MarketDataWebsocketClientEndpoint}.
      *
-     * @param websocketClient the {@link WebsocketClient}
+     * @param websocketClient the {@link MarketDataWebsocketClient}
      * @param endpointURI     the endpoint {@link URI}
      */
-    public MarketDataWebsocketClientEndpoint(WebsocketClient websocketClient, URI endpointURI) {
+    public MarketDataWebsocketClientEndpoint(MarketDataWebsocketClient websocketClient, URI endpointURI) {
         super(websocketClient, endpointURI, "MarketDataWebsocketThread");
     }
 
