@@ -231,7 +231,7 @@ public class MarketDataWebsocketClient implements WebsocketClient<MarketDataList
             } else if (marketDataMessage instanceof SymbolMessage) {
                 SymbolMessage symbolMessage = (SymbolMessage) marketDataMessage;
                 Set<MarketDataMessageType> symbolMessageTypes = marketDataListener.getDataStreams()
-                        .getOrDefault(symbolMessage.getMessageType(), null);
+                        .getOrDefault(symbolMessage.getSymbol(), null);
                 Set<MarketDataMessageType> allMessageTypes = marketDataListener.getDataStreams()
                         .getOrDefault(ALL_TICKERS, null);
 
@@ -250,7 +250,13 @@ public class MarketDataWebsocketClient implements WebsocketClient<MarketDataList
 
     @Override
     public boolean isConnected() {
-        return marketDataWebsocketClientEndpoint.getUserSession().isOpen();
+        if (marketDataWebsocketClientEndpoint == null) {
+            return false;
+        } else if (marketDataWebsocketClientEndpoint.getUserSession() != null) {
+            return marketDataWebsocketClientEndpoint.getUserSession().isOpen();
+        } else {
+            return false;
+        }
     }
 
     @Override

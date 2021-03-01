@@ -1,11 +1,7 @@
 package net.jacobpeterson.alpaca.websocket.broker.client;
 
 import com.google.common.base.Preconditions;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonPrimitive;
-import com.google.gson.JsonSyntaxException;
+import com.google.gson.*;
 import net.jacobpeterson.abstracts.websocket.client.WebsocketClient;
 import net.jacobpeterson.abstracts.websocket.exception.WebsocketException;
 import net.jacobpeterson.alpaca.enums.api.EndpointAPIType;
@@ -234,7 +230,13 @@ public class AlpacaWebsocketClient implements WebsocketClient<AlpacaStreamListen
 
     @Override
     public boolean isConnected() {
-        return alpacaWebsocketClientEndpoint.getUserSession().isOpen();
+        if (alpacaWebsocketClientEndpoint == null) {
+            return false;
+        } else if (alpacaWebsocketClientEndpoint.getUserSession() != null) {
+            return alpacaWebsocketClientEndpoint.getUserSession().isOpen();
+        } else {
+            return false;
+        }
     }
 
     @Override
