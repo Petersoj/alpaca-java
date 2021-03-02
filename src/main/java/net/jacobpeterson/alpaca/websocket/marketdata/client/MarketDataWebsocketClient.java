@@ -27,6 +27,7 @@ import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -108,7 +109,7 @@ public class MarketDataWebsocketClient implements WebsocketClient<MarketDataList
     public void removeListener(MarketDataListener streamListener) throws WebsocketException {
         listeners.remove(streamListener);
 
-        if (listeners.isEmpty()) {
+        if (listeners.isEmpty() && isConnected()) {
             try {
                 disconnect();
             } catch (Exception exception) {
@@ -134,7 +135,9 @@ public class MarketDataWebsocketClient implements WebsocketClient<MarketDataList
     public void disconnect() throws Exception {
         LOGGER.info("Disconnecting...");
 
-        marketDataWebsocketClientEndpoint.disconnect();
+        if (marketDataWebsocketClientEndpoint != null) {
+            marketDataWebsocketClientEndpoint.disconnect();
+        }
 
         LOGGER.info("Disconnected.");
     }
@@ -250,13 +253,9 @@ public class MarketDataWebsocketClient implements WebsocketClient<MarketDataList
 
     @Override
     public boolean isConnected() {
-        if (marketDataWebsocketClientEndpoint == null) {
-            return false;
-        } else if (marketDataWebsocketClientEndpoint.getUserSession() != null) {
-            return marketDataWebsocketClientEndpoint.getUserSession().isOpen();
-        } else {
-            return false;
-        }
+        return marketDataWebsocketClientEndpoint != null &&
+                marketDataWebsocketClientEndpoint.getUserSession() != null &&
+                marketDataWebsocketClientEndpoint.getUserSession().isOpen();
     }
 
     @Override
@@ -289,15 +288,36 @@ public class MarketDataWebsocketClient implements WebsocketClient<MarketDataList
         JsonArray quotesJsonArray = new JsonArray();
         JsonArray barsJsonArray = new JsonArray();
 
+        Map<String, Set<MarketDataMessageType>> flattenedDataStreams = listeners.stream()
+                .filter(listener -> listener != marketDataListener) // Filter out listener being added
+                .flatMap(listener -> listener.getDataStreams().entrySet().stream()) // Flat map all data streams
+                .collect(HashMap::new, // Collect all data streams into one map
+                        (cumulativeMap, listenerEntry) -> {
+                            Set<MarketDataMessageType> listenerMessageTypes =
+                                    cumulativeMap.getOrDefault(listenerEntry.getKey(), null);
+                            if (listenerMessageTypes != null) {
+                                cumulativeMap.get(listenerEntry.getKey()).addAll(listenerEntry.getValue());
+                            } else {
+                                cumulativeMap.put(listenerEntry.getKey(), listenerEntry.getValue());
+                            }
+                        },
+                        HashMap::putAll);
+
         for (Map.Entry<String, Set<MarketDataMessageType>> listenerEntry : marketDataListener
                 .getDataStreams().entrySet()) {
-            if (listenerEntry.getValue().contains(MarketDataMessageType.TRADE)) {
+            Set<MarketDataMessageType> currentListenedTypes = flattenedDataStreams
+                    .getOrDefault(listenerEntry.getKey(), null);
+
+            if (listenerEntry.getValue().contains(MarketDataMessageType.TRADE) &&
+                    (currentListenedTypes == null || !currentListenedTypes.contains(MarketDataMessageType.TRADE))) {
                 tradesJsonArray.add(listenerEntry.getKey());
             }
-            if (listenerEntry.getValue().contains(MarketDataMessageType.QUOTE)) {
+            if (listenerEntry.getValue().contains(MarketDataMessageType.QUOTE) &&
+                    (currentListenedTypes == null || !currentListenedTypes.contains(MarketDataMessageType.QUOTE))) {
                 quotesJsonArray.add(listenerEntry.getKey());
             }
-            if (listenerEntry.getValue().contains(MarketDataMessageType.BAR)) {
+            if (listenerEntry.getValue().contains(MarketDataMessageType.BAR) &&
+                    (currentListenedTypes == null || !currentListenedTypes.contains(MarketDataMessageType.BAR))) {
                 barsJsonArray.add(listenerEntry.getKey());
             }
         }

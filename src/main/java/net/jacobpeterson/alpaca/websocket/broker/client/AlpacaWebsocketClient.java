@@ -1,7 +1,11 @@
 package net.jacobpeterson.alpaca.websocket.broker.client;
 
 import com.google.common.base.Preconditions;
-import com.google.gson.*;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonPrimitive;
+import com.google.gson.JsonSyntaxException;
 import net.jacobpeterson.abstracts.websocket.client.WebsocketClient;
 import net.jacobpeterson.abstracts.websocket.exception.WebsocketException;
 import net.jacobpeterson.alpaca.enums.api.EndpointAPIType;
@@ -101,7 +105,7 @@ public class AlpacaWebsocketClient implements WebsocketClient<AlpacaStreamListen
     public void removeListener(AlpacaStreamListener streamListener) throws WebsocketException {
         listeners.remove(streamListener);
 
-        if (listeners.isEmpty()) {
+        if (listeners.isEmpty() && isConnected()) {
             try {
                 disconnect();
             } catch (Exception exception) {
@@ -127,7 +131,9 @@ public class AlpacaWebsocketClient implements WebsocketClient<AlpacaStreamListen
     public void disconnect() throws Exception {
         LOGGER.info("Disconnecting...");
 
-        alpacaWebsocketClientEndpoint.disconnect();
+        if (alpacaWebsocketClientEndpoint != null) {
+            alpacaWebsocketClientEndpoint.disconnect();
+        }
 
         LOGGER.info("Disconnected.");
     }
@@ -230,13 +236,9 @@ public class AlpacaWebsocketClient implements WebsocketClient<AlpacaStreamListen
 
     @Override
     public boolean isConnected() {
-        if (alpacaWebsocketClientEndpoint == null) {
-            return false;
-        } else if (alpacaWebsocketClientEndpoint.getUserSession() != null) {
-            return alpacaWebsocketClientEndpoint.getUserSession().isOpen();
-        } else {
-            return false;
-        }
+        return alpacaWebsocketClientEndpoint != null &&
+                alpacaWebsocketClientEndpoint.getUserSession() != null &&
+                alpacaWebsocketClientEndpoint.getUserSession().isOpen();
     }
 
     @Override

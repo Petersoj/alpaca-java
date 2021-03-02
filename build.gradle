@@ -79,10 +79,8 @@ javadoc {
     options.addStringOption('Xdoclint:none', '-quiet')
     // Explicitly define Charset for Javadocs
     options.addStringOption("charset", "UTF-8")
-
-    options {
-        links 'https://docs.oracle.com/javase/8/docs/api/'
-    }
+    // Add Java SE 8 link
+    options.addStringOption("link", "https://docs.oracle.com/javase/8/docs/api/")
 }
 
 test {
