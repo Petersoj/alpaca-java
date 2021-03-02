@@ -26,11 +26,11 @@ This is a Java implementation for the <a href="https://alpaca.markets/">Alpaca</
     - [PortfolioHistory](#PortfolioHistory)
     - [Calendar](#Calendar)
     - [Clock](#Clock)
-    - [Bars](#Bars)
-    - [LastTrade](#LastTrade)
-    - [LastQuote](#LastQuote)
     - [Alpaca Streaming](#Alpaca-Streaming)
-    - [Alpaca Market Data Streaming](#Alpaca-Market-Data-Streaming)
+    - [Trades](#Trades)
+    - [Quotes](#Quotes)
+    - [Bars](#Bars)
+    - [Realtime Market Data](#Realtime-Market-Data)
 1. [Building](#Building)
 1. [Testing](#Testing)
 
@@ -39,7 +39,7 @@ If you are using Gradle as your build tool, add the following dependency to your
 
 ```
 dependencies {
-    implementation group: 'net.jacobpeterson', name: 'alpaca-java', version: '6.1'
+    implementation group: 'net.jacobpeterson', name: 'alpaca-java', version: '7.0'
 }
 ```
 
@@ -49,7 +49,7 @@ If you are using Maven as your build tool, add the following dependency to your 
 <dependency>
     <groupId>net.jacobpeterson</groupId>
     <artifactId>alpaca-java</artifactId>
-    <version>6.1</version>
+    <version>7.0</version>
     <scope>compile</scope>
 </dependency>
 ```
@@ -61,6 +61,8 @@ Creating an `alpaca.properties` file on the classpath with the following format 
 ```
 key_id = <YOUR KEY>
 secret = <YOUR SECRET>
+endpoint_api_type = <must be either "paper" or "live">
+data_api_type = <must be either "iex" or "sip">
 ```
 The default values for `alpaca.properties` can be found [here](https://github.com/Petersoj/alpaca-java/tree/master/src/main/resources).
 

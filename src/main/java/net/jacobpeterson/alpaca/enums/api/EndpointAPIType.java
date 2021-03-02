@@ -6,10 +6,10 @@ package net.jacobpeterson.alpaca.enums.api;
 public enum EndpointAPIType {
 
     /** The live {@link EndpointAPIType}. */
-    LIVE("https://api.alpaca.markets/", "live"),
+    LIVE("https://api.alpaca.markets", "live"),
 
     /** The paper {@link EndpointAPIType}. */
-    PAPER("https://paper-api.alpaca.markets/", "paper");
+    PAPER("https://paper-api.alpaca.markets", "paper");
 
     private final String url;
     private final String propertyName;
