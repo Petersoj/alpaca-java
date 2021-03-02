@@ -10,7 +10,7 @@ public class AlpacaConstants {
      */
     public static class URLs {
 
-        public static final String DATA = "https://data.alpaca.markets/";
+        public static final String DATA = "https://data.alpaca.markets";
     }
 
     /**

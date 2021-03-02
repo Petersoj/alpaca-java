@@ -1557,8 +1557,8 @@ public class AlpacaAPI {
                 symbol,
                 Endpoints.TRADES);
 
-        urlBuilder.appendURLParameter(Parameters.START, start.format(DateTimeFormatter.ISO_OFFSET_DATE_TIME));
-        urlBuilder.appendURLParameter(Parameters.END, end.format(DateTimeFormatter.ISO_OFFSET_DATE_TIME));
+        urlBuilder.appendURLParameter(Parameters.START, FormatUtil.toRFC3339Format(start));
+        urlBuilder.appendURLParameter(Parameters.END, FormatUtil.toRFC3339Format(end));
 
         if (limit != null) {
             urlBuilder.appendURLParameter(Parameters.LIMIT, limit.toString());
@@ -1605,8 +1605,8 @@ public class AlpacaAPI {
                 symbol,
                 Endpoints.QUOTES);
 
-        urlBuilder.appendURLParameter(Parameters.START, start.format(DateTimeFormatter.ISO_OFFSET_DATE_TIME));
-        urlBuilder.appendURLParameter(Parameters.END, end.format(DateTimeFormatter.ISO_OFFSET_DATE_TIME));
+        urlBuilder.appendURLParameter(Parameters.START, FormatUtil.toRFC3339Format(start));
+        urlBuilder.appendURLParameter(Parameters.END, FormatUtil.toRFC3339Format(end));
 
         if (limit != null) {
             urlBuilder.appendURLParameter(Parameters.LIMIT, limit.toString());
@@ -1655,8 +1655,8 @@ public class AlpacaAPI {
                 symbol,
                 Endpoints.BARS);
 
-        urlBuilder.appendURLParameter(Parameters.START, start.format(DateTimeFormatter.ISO_OFFSET_DATE_TIME));
-        urlBuilder.appendURLParameter(Parameters.END, end.format(DateTimeFormatter.ISO_OFFSET_DATE_TIME));
+        urlBuilder.appendURLParameter(Parameters.START, FormatUtil.toRFC3339Format(start));
+        urlBuilder.appendURLParameter(Parameters.END, FormatUtil.toRFC3339Format(end));
         urlBuilder.appendURLParameter(Parameters.TIMEFRAME, timeFrame.getAPIName());
 
         if (limit != null) {

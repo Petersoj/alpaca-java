@@ -2,6 +2,10 @@ package net.jacobpeterson.util.format;
 
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.TemporalAccessor;
 
 /**
  * {@link FormatUtil} is a utility class for various formatting.
@@ -9,6 +13,8 @@ import java.text.NumberFormat;
 public class FormatUtil {
 
     private static final NumberFormat CURRENCY_FORMATTER = new DecimalFormat("#0.00");
+    private static final DateTimeFormatter RFC_3339_FORMATTER =
+            DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss'Z'").withZone(ZoneId.of("America/New_York"));
     private static final long PREV_UNIX_EPOCH_NANO_TIME = System.currentTimeMillis() * 1000000L;
     private static final long PREV_UNIX_EPOCH_MICRO_TIME = PREV_UNIX_EPOCH_NANO_TIME / 1000L;
 
@@ -21,6 +27,17 @@ public class FormatUtil {
      */
     public static String toCurrencyFormat(Number numberToFormat) {
         return CURRENCY_FORMATTER.format(numberToFormat);
+    }
+
+    /**
+     * Formats a {@link TemporalAccessor} using {@link #RFC_3339_FORMATTER} {@link DateTimeFormatter}.
+     *
+     * @param zonedDateTime the {@link ZonedDateTime}
+     *
+     * @return the formatted string
+     */
+    public static String toRFC3339Format(ZonedDateTime zonedDateTime) {
+        return RFC_3339_FORMATTER.format(zonedDateTime);
     }
 
     /**

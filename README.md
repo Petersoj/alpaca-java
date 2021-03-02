@@ -332,54 +332,6 @@ try {
 }
 ```
 
-### Bars
-The bars API provides time-aggregated price and volume data from the IEX exchange.
-
-Example usage:
-```java
-try {
-    // Get 15min bars of AAPL and TSLA from 12/23/2020 at 9:30 AM to
-    // 12/24/2020 at 4 PM and print them out
-    Map<String, ArrayList<Bar>> bars = alpacaAPI.getBars(
-            BarsTimeFrame.FIFTEEN_MINUTE,
-            new String[]{"AAPL", "TSLA"},
-            null,
-            ZonedDateTime.of(2020, 12, 23, 9, 30, 0, 0, ZoneId.of("America/New_York")),
-            ZonedDateTime.of(2020, 12, 24, 12 + 4, 0, 0, 0, ZoneId.of("America/New_York")),
-            null,
-            null);
-    bars.entrySet().forEach(System.out::println);
-} catch (AlpacaAPIRequestException e) {
-    e.printStackTrace();
-}
-```
-
-### LastTrade
-The Last Trade API provides last trade details for a symbol.
-
-Example usage:
-```java
-try {
-    // Print out the last trade of AAPL
-    System.out.println(alpacaAPI.getLastTrade("AAPL"));
-} catch (AlpacaAPIRequestException e) {
-    e.printStackTrace();
-}
-```
-
-### LastQuote
-The Last Quote API provides last quote details for a symbol.
-
-Example usage:
-```java
-try {
-    // Print out the last quote of AAPL
-    System.out.println(alpacaAPI.getLastQuote("AAPL"));
-} catch (AlpacaAPIRequestException e) {
-    e.printStackTrace();
-}
-```
-
 ### Alpaca Streaming
 Alpaca offers WebSocket streaming for account and order updates.
 
@@ -421,47 +373,118 @@ try {
 }
 ```
 
-### Alpaca Market Data Streaming
+### Trades
+The Trades API provides historical trade data for a given ticker symbol in a specified date range.
+
+Example usage:
+```java
+try {
+    // Get first 100 trades of AAPL of first minute on 3/1/2021 and print them out
+    TradesResponse appleTradesResponse = alpacaAPI.getTrades(
+            "AAPL",
+            ZonedDateTime.of(2021, 3, 1, 9, 30, 0, 0, ZoneId.of("America/New_York")),
+            ZonedDateTime.of(2021, 3, 1, 9, 31, 0, 0, ZoneId.of("America/New_York")),
+            100,
+            null);
+    appleTradesResponse.getTrades().forEach(System.out::println);
+} catch (AlpacaAPIRequestException e) {
+    e.printStackTrace();
+}
+```
+
+### Quotes
+The Quotes API provides NBBO quotes for a given ticker symbol in a specified date range.
+
+Example usage:
+```java
+try {
+    // Get first 100 quotes of AAPL of first minute on 3/1/2021 and print them out
+    QuotesResponse appleQuotesResponse = alpacaAPI.getQuotes(
+            "AAPL",
+            ZonedDateTime.of(2021, 3, 1, 9, 30, 0, 0, ZoneId.of("America/New_York")),
+            ZonedDateTime.of(2021, 3, 1, 9, 31, 0, 0, ZoneId.of("America/New_York")),
+            100,
+            null);
+    appleQuotesResponse.getQuotes().forEach(System.out::println);
+} catch (AlpacaAPIRequestException e) {
+    e.printStackTrace();
+}
+```
+
+### Bars
+The bars API returns aggregate historical data for the requested securities.
+
+Example usage:
+```java
+try {
+    // Get hour bars of AAPL from 2/22/2021 at 9:30 AM to 2/24/2021 at 4 PM and print them out
+    BarsResponse appleBarsResponse = alpacaAPI.getBars(
+            "AAPL",
+            ZonedDateTime.of(2021, 2, 22, 9, 30, 0, 0, ZoneId.of("America/New_York")),
+            ZonedDateTime.of(2021, 2, 24, 12 + 4, 0, 0, 0, ZoneId.of("America/New_York")),
+            null,
+            null,
+            BarsTimeFrame.HOUR);
+    appleBarsResponse.getBars().forEach(System.out::println);
+} catch (AlpacaAPIRequestException e) {
+    e.printStackTrace();
+}
+```
+
+### Realtime Market Data
 Alpaca's Data API provides websocket streaming for trades, quotes and minute bars. This helps receive the most up to date market information that could help your trading strategy to act upon certain market movement.
 
 Example usage:
 ```java
 try {
-    // Listen to TSLA quotes, trades, and minute aggregates and print their messages out
-    MarketDataStreamListener streamListenerTSLA = new MarketDataStreamListenerAdapter(
+    // Listen to TSLA quotes, trades, and minute bars and print their messages out
+    MarketDataListener listenerTSLA = new MarketDataListenerAdapter(
             "TSLA",
-            MarketDataStreamMessageType.QUOTES,
-            MarketDataStreamMessageType.TRADES,
-            MarketDataStreamMessageType.AGGREGATE_MINUTE) {
+            MarketDataMessageType.TRADE,
+            MarketDataMessageType.QUOTE,
+            MarketDataMessageType.BAR) {
         @Override
-        public void onStreamUpdate(MarketDataStreamMessageType streamMessageType,
-                                   MarketDataStreamMessage streamMessage) {
+        public void onStreamUpdate(MarketDataMessageType streamMessageType, MarketDataMessage streamMessage) {
             switch (streamMessageType) {
-                case QUOTES:
-                    System.out.println((QuoteMessage) streamMessage);
+                case TRADE:
+                    TradeMessage tradeMessage = (TradeMessage) streamMessage;
+                    System.out.printf("Trade: Price=%.2f Size=%d Time=%s\n",
+                            tradeMessage.getPrice(), tradeMessage.getSize(), tradeMessage.getTimestamp());
                     break;
-                case TRADES:
-                    System.out.println((TradeMessage) streamMessage);
+                case QUOTE:
+                    QuoteMessage quoteMessage = (QuoteMessage) streamMessage;
+                    System.out.printf("Quote: Ask Price=%.2f Ask Size=%d Bid Price=%.2f Bid Size=%d Time=%s\n",
+                            quoteMessage.getAskPrice(),
+                            quoteMessage.getAskSize(),
+                            quoteMessage.getBidPrice(),
+                            quoteMessage.getBidSize(),
+                            quoteMessage.getTimestamp());
                     break;
-                case AGGREGATE_MINUTE:
-                    System.out.println((AggregateMinuteMessage) streamMessage);
+                case BAR:
+                    BarMessage barMessage = (BarMessage) streamMessage;
+                    System.out.printf("Bar: O=%.2f H=%.2f L=%.2f C=%.2f Time=%s \n",
+                            barMessage.getOpen(),
+                            barMessage.getHigh(),
+                            barMessage.getLow(),
+                            barMessage.getClose(),
+                            barMessage.getTimestamp());
                     break;
             }
         }
     };
 
-    // Add the 'MarketDataStreamListener'
-    // Note that when the first 'MarketDataStreamListener' is added, the Websocket
+    // Add the 'MarketDataListener'
+    // Note that when the first 'MarketDataListener' is added, the Websocket
     // connection is created.
-    alpacaAPI.addMarketDataStreamListener(streamListenerTSLA);
+    alpacaAPI.addMarketDataStreamListener(listenerTSLA);
 
     // Wait for 5 seconds
     Thread.sleep(5000);
 
-    // Remove the 'MarketDataStreamListener'
-    // Note that when the last 'MarketDataStreamListener' is removed, the Websocket
+    // Remove the 'MarketDataListener'
+    // Note that when the last 'MarketDataListener' is removed, the Websocket
     // connection is closed.
-    alpacaAPI.removeMarketDataStreamListener(streamListenerTSLA);
+    alpacaAPI.removeMarketDataStreamListener(listenerTSLA);
 } catch (WebsocketException exception) {
     exception.printStackTrace();
 }

@@ -296,7 +296,7 @@ public class MarketDataWebsocketClient implements WebsocketClient<MarketDataList
                             Set<MarketDataMessageType> listenerMessageTypes =
                                     cumulativeMap.getOrDefault(listenerEntry.getKey(), null);
                             if (listenerMessageTypes != null) {
-                                cumulativeMap.get(listenerEntry.getKey()).addAll(listenerEntry.getValue());
+                                listenerMessageTypes.addAll(listenerEntry.getValue());
                             } else {
                                 cumulativeMap.put(listenerEntry.getKey(), listenerEntry.getValue());
                             }
