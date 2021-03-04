@@ -61,6 +61,7 @@ public class AlpacaConstants {
         public static final String TYPE = "type";
         public static final String SIDE = "side";
         public static final String QTY = "qty";
+        public static final String NOTIONAL = "notional";
         public static final String SYMBOL = "symbol";
         public static final String DIRECTION = "direction";
         public static final String NESTED = "nested";

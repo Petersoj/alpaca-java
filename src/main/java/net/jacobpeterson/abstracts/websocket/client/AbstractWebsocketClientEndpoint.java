@@ -19,8 +19,8 @@ import java.util.concurrent.Executors;
  * {@link AbstractWebsocketClientEndpoint} is used for handling a Websocket directly.
  * <br>
  * NOTES: You MUST annotate a subclass's {@link #onOpen(Session)}, {@link #onClose(Session, CloseReason)}, {@link
- * #onMessage(String)}*, and {@link #onError(Throwable)} with {@link javax.websocket.OnOpen}, {@link
- * javax.websocket.OnClose}*, {@link javax.websocket.OnMessage}, and {@link javax.websocket.OnError} respectively and
+ * #onMessage(String)}, and {@link #onError(Throwable)} with {@link javax.websocket.OnOpen}, {@link
+ * javax.websocket.OnClose}, {@link javax.websocket.OnMessage}, and {@link javax.websocket.OnError} respectively and
  * with the appropriate websocket sub-protocols because Websocket annotations don't work with inheritance.
  *
  * @param <T> the {@link WebsocketClient} type parameter
@@ -74,23 +74,16 @@ public abstract class AbstractWebsocketClientEndpoint<T extends WebsocketClient<
     /**
      * Disconnects this Websocket.
      *
-     * @throws IOException throw for {@link IOException}s
+     * @throws Exception throw for {@link Exception}s
      */
     public void disconnect() throws Exception {
         automaticallyReconnect = false;
 
         if (userSession != null) {
             userSession.close();
-
-            WebSocketContainer webSocketContainer = userSession.getContainer();
-            if (webSocketContainer instanceof LifeCycle) {
-                ((LifeCycle) webSocketContainer).stop(); // Closes all websocket-related threads
-            }
         }
 
-        if (executorService != null) {
-            executorService.shutdown();
-        }
+        cleanUp();
     }
 
     /**
@@ -127,8 +120,31 @@ public abstract class AbstractWebsocketClientEndpoint<T extends WebsocketClient<
                 LOGGER.error("Could not reconnect!", exception);
             }
         } else {
-            this.userSession = null;
+            try {
+                cleanUp();
+            } catch (Exception exception) {
+                LOGGER.error("Could not clean up websocket client endpoint!", exception);
+            }
+
             LOGGER.info("Websocket closed");
+        }
+    }
+
+    /**
+     * Cleans up websocket-related threads.
+     *
+     * @throws Exception thrown for {@link Exception}s
+     */
+    private void cleanUp() throws Exception {
+        if (userSession != null) {
+            WebSocketContainer webSocketContainer = userSession.getContainer();
+            if (webSocketContainer instanceof LifeCycle) {
+                ((LifeCycle) webSocketContainer).stop(); // Closes all websocket-related threads
+            }
+        }
+
+        if (executorService != null) {
+            executorService.shutdown();
         }
     }
 
