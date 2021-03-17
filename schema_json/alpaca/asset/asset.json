@@ -37,6 +37,10 @@
     "easy_to_borrow": {
       "existingJavaType": "java.lang.Boolean",
       "title": "Asset is easy-to-borrow or not (filtering for easy_to_borrow = True is the best way to check whether the name is currently available to short at Alpaca)."
+    },
+    "fractionable": {
+      "existingJavaType": "java.lang.Boolean",
+      "title": "Asset is fractionable or not."
     }
   }
 }
