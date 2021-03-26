@@ -1,12 +1,8 @@
 package net.jacobpeterson.abstracts.rest.exception;
 
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
 import com.mashape.unirest.http.HttpResponse;
-import net.jacobpeterson.util.gson.GsonUtil;
 
 import java.io.InputStream;
-import java.io.InputStreamReader;
 
 /**
  * {@link AbstractAPIRequestException} represents {@link HttpResponse} request exceptions.
@@ -16,12 +12,21 @@ public abstract class AbstractAPIRequestException extends Exception {
     protected static final String CODE_KEY = "code";
     protected static final String MESSAGE_KEY = "message";
 
-    protected final String apiName;
+    protected String apiName;
     protected HttpResponse<InputStream> httpResponse;
-    protected int requestStatusCode;
+    protected Integer requestStatusCode;
     protected String requestStatusText;
     protected Integer apiResponseCode;
     protected String apiResponseMessage;
+
+    /**
+     * Instantiates a new {@link AbstractAPIRequestException}.
+     *
+     * @param cause the cause
+     */
+    public AbstractAPIRequestException(Exception cause) {
+        super(cause);
+    }
 
     /**
      * Instantiates a new {@link AbstractAPIRequestException}.
@@ -48,55 +53,29 @@ public abstract class AbstractAPIRequestException extends Exception {
     protected abstract void parseAPIExceptionMessage();
 
     /**
-     * Parse a standard API exception response of the following format:
-     * <pre>
-     *  {
-     *     "code": 40010001,
-     *     "message": "Error message"
-     *  }
-     * </pre>
-     */
-    protected void parseStandardAPIExceptionResponse() {
-        JsonElement responseJsonElement = GsonUtil.JSON_PARSER.parse(new InputStreamReader(httpResponse.getBody()));
-
-        if (responseJsonElement instanceof JsonObject) {
-            JsonObject responseJsonObject = (JsonObject) responseJsonElement;
-
-            if (responseJsonObject.has(CODE_KEY)) {
-                apiResponseCode = responseJsonObject.get(CODE_KEY).getAsInt();
-            }
-
-            if (responseJsonObject.has(MESSAGE_KEY)) {
-                apiResponseMessage = responseJsonObject.get(MESSAGE_KEY).getAsString();
-            }
-        }
-
-        // Just use the response JSON if the message could not be parsed.
-        if (apiResponseMessage == null) {
-            apiResponseMessage = responseJsonElement.toString();
-        }
-    }
-
-    /**
      * {@inheritDoc} This will call {@link #parseAPIExceptionMessage()} and return a formatted message.
      */
     @Override
     public String getMessage() {
-        this.parseAPIExceptionMessage();
+        if (getCause() == null) {
+            this.parseAPIExceptionMessage();
 
-        StringBuilder messageBuilder = new StringBuilder(apiName).append(" API Request Exception! : ");
-        messageBuilder.append("Status Code = ").append(requestStatusCode);
-        messageBuilder.append(", Status Text = \"").append(requestStatusText).append("\"");
+            StringBuilder messageBuilder = new StringBuilder(apiName).append(" API Request Exception! : ");
+            messageBuilder.append("Status Code = ").append(requestStatusCode);
+            messageBuilder.append(", Status Text = \"").append(requestStatusText).append("\"");
 
-        if (apiResponseCode != null) {
-            messageBuilder.append(", API Response Code = ").append(apiResponseCode);
+            if (apiResponseCode != null) {
+                messageBuilder.append(", API Response Code = ").append(apiResponseCode);
+            }
+
+            if (apiResponseMessage != null) {
+                messageBuilder.append(", API Response Message = \"").append(apiResponseMessage).append("\"");
+            }
+
+            return messageBuilder.toString();
+        } else {
+            return super.getMessage();
         }
-
-        if (apiResponseMessage != null) {
-            messageBuilder.append(", API Response Message = \"").append(apiResponseMessage).append("\"");
-        }
-
-        return messageBuilder.toString();
     }
 
     /**
@@ -104,7 +83,7 @@ public abstract class AbstractAPIRequestException extends Exception {
      *
      * @return the request status code
      */
-    public int getRequestStatusCode() {
+    public Integer getRequestStatusCode() {
         return requestStatusCode;
     }
 
@@ -122,7 +101,7 @@ public abstract class AbstractAPIRequestException extends Exception {
      *
      * @return the API response code
      */
-    public int getAPIResponseCode() {
+    public Integer getAPIResponseCode() {
         return apiResponseCode;
     }
 

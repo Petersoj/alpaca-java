@@ -40,8 +40,10 @@ public abstract class AbstractRequest {
      * @param abstractRequestBuilder the {@link AbstractRequestBuilder}
      *
      * @return the {@link HttpResponse}
+     *
+     * @throws UnirestException thrown for {@link UnirestException}s
      */
-    public HttpResponse<InputStream> invokeGet(AbstractRequestBuilder abstractRequestBuilder) {
+    public HttpResponse<InputStream> invokeGet(AbstractRequestBuilder abstractRequestBuilder) throws UnirestException {
         String url = abstractRequestBuilder.buildURL();
 
         LOGGER.debug("GET URL {}", url);
@@ -54,12 +56,7 @@ public abstract class AbstractRequest {
             LOGGER.debug("GET Headers: {}", headers);
         }
 
-        try {
-            return request.asBinary();
-        } catch (UnirestException exception) {
-            LOGGER.error("Could not get request as binary!", exception);
-            return null;
-        }
+        return request.asBinary();
     }
 
     /**
@@ -68,8 +65,10 @@ public abstract class AbstractRequest {
      * @param abstractRequestBuilder the {@link AbstractRequestBuilder}
      *
      * @return the {@link HttpResponse}
+     *
+     * @throws UnirestException thrown for {@link UnirestException}s
      */
-    public HttpResponse<InputStream> invokeHead(AbstractRequestBuilder abstractRequestBuilder) {
+    public HttpResponse<InputStream> invokeHead(AbstractRequestBuilder abstractRequestBuilder) throws UnirestException {
         String url = abstractRequestBuilder.buildURL();
 
         LOGGER.debug("HEAD URL {}", url);
@@ -82,12 +81,7 @@ public abstract class AbstractRequest {
             LOGGER.debug("HEAD Headers: {}", headers);
         }
 
-        try {
-            return request.asBinary();
-        } catch (UnirestException exception) {
-            LOGGER.error("Could not get request as binary!", exception);
-            return null;
-        }
+        return request.asBinary();
     }
 
     /**
@@ -96,8 +90,10 @@ public abstract class AbstractRequest {
      * @param abstractRequestBuilder the {@link AbstractRequestBuilder}
      *
      * @return the {@link HttpResponse}
+     *
+     * @throws UnirestException thrown for {@link UnirestException}s
      */
-    public HttpResponse<InputStream> invokePost(AbstractRequestBuilder abstractRequestBuilder) {
+    public HttpResponse<InputStream> invokePost(AbstractRequestBuilder abstractRequestBuilder) throws UnirestException {
         String url = abstractRequestBuilder.buildURL();
 
         LOGGER.debug("POST URL: {}", url);
@@ -117,12 +113,7 @@ public abstract class AbstractRequest {
             LOGGER.debug("POST Body: {}", body);
         }
 
-        try {
-            return request.asBinary();
-        } catch (UnirestException exception) {
-            LOGGER.error("Could not get request as binary!", exception);
-            return null;
-        }
+        return request.asBinary();
     }
 
     /**
@@ -131,8 +122,11 @@ public abstract class AbstractRequest {
      * @param abstractRequestBuilder the {@link AbstractRequestBuilder}
      *
      * @return the {@link HttpResponse}
+     *
+     * @throws UnirestException thrown for {@link UnirestException}s
      */
-    public HttpResponse<InputStream> invokePatch(AbstractRequestBuilder abstractRequestBuilder) {
+    public HttpResponse<InputStream> invokePatch(AbstractRequestBuilder abstractRequestBuilder)
+            throws UnirestException {
         String url = abstractRequestBuilder.buildURL();
 
         LOGGER.debug("PATCH URL {}", url);
@@ -152,12 +146,7 @@ public abstract class AbstractRequest {
             LOGGER.debug("PATCH Body: {}", body);
         }
 
-        try {
-            return request.asBinary();
-        } catch (UnirestException exception) {
-            LOGGER.error("Could not get request as binary!", exception);
-            return null;
-        }
+        return request.asBinary();
     }
 
     /**
@@ -166,8 +155,10 @@ public abstract class AbstractRequest {
      * @param abstractRequestBuilder the {@link AbstractRequestBuilder}
      *
      * @return the {@link HttpResponse}
+     *
+     * @throws UnirestException thrown for {@link UnirestException}s
      */
-    public HttpResponse<InputStream> invokePut(AbstractRequestBuilder abstractRequestBuilder) {
+    public HttpResponse<InputStream> invokePut(AbstractRequestBuilder abstractRequestBuilder) throws UnirestException {
         String url = abstractRequestBuilder.buildURL();
 
         LOGGER.debug("PUT URL {}", url);
@@ -187,12 +178,7 @@ public abstract class AbstractRequest {
             LOGGER.debug("PUT Body: " + body);
         }
 
-        try {
-            return request.asBinary();
-        } catch (UnirestException exception) {
-            LOGGER.error("Could not get request as binary!", exception);
-            return null;
-        }
+        return request.asBinary();
     }
 
     /**
@@ -201,8 +187,11 @@ public abstract class AbstractRequest {
      * @param abstractRequestBuilder the {@link AbstractRequestBuilder}
      *
      * @return the {@link HttpResponse}
+     *
+     * @throws UnirestException thrown for {@link UnirestException}s
      */
-    public HttpResponse<InputStream> invokeDelete(AbstractRequestBuilder abstractRequestBuilder) {
+    public HttpResponse<InputStream> invokeDelete(AbstractRequestBuilder abstractRequestBuilder)
+            throws UnirestException {
         String url = abstractRequestBuilder.buildURL();
 
         LOGGER.debug("DELETE URL {}", url);
@@ -222,12 +211,7 @@ public abstract class AbstractRequest {
             LOGGER.debug("DELETE Body: {}", body);
         }
 
-        try {
-            return request.asBinary();
-        } catch (UnirestException exception) {
-            LOGGER.error("Could not get request as binary!", exception);
-            return null;
-        }
+        return request.asBinary();
     }
 
     /**
@@ -236,8 +220,11 @@ public abstract class AbstractRequest {
      * @param abstractRequestBuilder the {@link AbstractRequestBuilder}
      *
      * @return the {@link HttpResponse}
+     *
+     * @throws UnirestException thrown for {@link UnirestException}s
      */
-    public HttpResponse<InputStream> invokeOptions(AbstractRequestBuilder abstractRequestBuilder) {
+    public HttpResponse<InputStream> invokeOptions(AbstractRequestBuilder abstractRequestBuilder)
+            throws UnirestException {
         String url = abstractRequestBuilder.buildURL();
 
         LOGGER.debug("OPTIONS URL {}", url);
@@ -257,12 +244,7 @@ public abstract class AbstractRequest {
             LOGGER.debug("OPTIONS Body: {}", body);
         }
 
-        try {
-            return request.asBinary();
-        } catch (UnirestException exception) {
-            LOGGER.error("Could not get request as binary!", exception);
-            return null;
-        }
+        return request.asBinary();
     }
 
     /**

@@ -1,8 +1,14 @@
 package net.jacobpeterson.alpaca.rest;
 
 import com.google.common.base.Preconditions;
+import com.mashape.unirest.http.HttpResponse;
+import com.mashape.unirest.http.exceptions.UnirestException;
 import net.jacobpeterson.abstracts.rest.AbstractRequest;
 import net.jacobpeterson.alpaca.properties.AlpacaProperties;
+import net.jacobpeterson.alpaca.rest.exception.AlpacaAPIRequestException;
+
+import java.io.InputStream;
+import java.lang.reflect.Type;
 
 /**
  * {@link AlpacaRequest} contains methods for HTTP requests for {@link net.jacobpeterson.alpaca.AlpacaAPI}.
@@ -41,5 +47,180 @@ public class AlpacaRequest extends AbstractRequest {
 
         headers.put(USER_AGENT_KEY, AlpacaProperties.USER_AGENT_VALUE);
         headers.put(AUTH_TOKEN, "Bearer " + oAuthToken);
+    }
+
+    /**
+     * Invokes a GET request and handles/returns the response object.
+     *
+     * @param <T>        the type
+     * @param urlBuilder the {@link AlpacaRequestBuilder}
+     * @param type       the type to return
+     *
+     * @return the response object type
+     *
+     * @throws AlpacaAPIRequestException thrown for {@link AlpacaAPIRequestException}s
+     */
+    public <T> T get(AlpacaRequestBuilder urlBuilder, Type type) throws AlpacaAPIRequestException {
+        try {
+            HttpResponse<InputStream> response = invokeGet(urlBuilder);
+
+            if (response.getStatus() != 200) {
+                throw new AlpacaAPIRequestException(response);
+            }
+
+            return getResponseObject(response, type);
+        } catch (UnirestException exception) {
+            throw new AlpacaAPIRequestException(exception);
+        }
+    }
+
+    /**
+     * Invokes a HEAD request and handles/returns the response object.
+     *
+     * @param <T>        the type
+     * @param urlBuilder the {@link AlpacaRequestBuilder}
+     * @param type       the type to return
+     *
+     * @return the response object type
+     *
+     * @throws AlpacaAPIRequestException thrown for {@link AlpacaAPIRequestException}s
+     */
+    public <T> T head(AlpacaRequestBuilder urlBuilder, Type type) throws AlpacaAPIRequestException {
+        try {
+            HttpResponse<InputStream> response = invokeHead(urlBuilder);
+
+            if (response.getStatus() != 200) {
+                throw new AlpacaAPIRequestException(response);
+            }
+
+            return getResponseObject(response, type);
+        } catch (UnirestException exception) {
+            throw new AlpacaAPIRequestException(exception);
+        }
+    }
+
+    /**
+     * Invokes a POST request and handles/returns the response object.
+     *
+     * @param <T>        the type
+     * @param urlBuilder the {@link AlpacaRequestBuilder}
+     * @param type       the type to return
+     *
+     * @return the response object type
+     *
+     * @throws AlpacaAPIRequestException thrown for {@link AlpacaAPIRequestException}s
+     */
+    public <T> T post(AlpacaRequestBuilder urlBuilder, Type type) throws AlpacaAPIRequestException {
+        try {
+            HttpResponse<InputStream> response = invokePost(urlBuilder);
+
+            if (response.getStatus() != 200) {
+                throw new AlpacaAPIRequestException(response);
+            }
+
+            return getResponseObject(response, type);
+        } catch (UnirestException exception) {
+            throw new AlpacaAPIRequestException(exception);
+        }
+    }
+
+    /**
+     * Invokes a PATCH request and handles/returns the response object.
+     *
+     * @param <T>        the type
+     * @param urlBuilder the {@link AlpacaRequestBuilder}
+     * @param type       the type to return
+     *
+     * @return the response object type
+     *
+     * @throws AlpacaAPIRequestException thrown for {@link AlpacaAPIRequestException}s
+     */
+    public <T> T patch(AlpacaRequestBuilder urlBuilder, Type type) throws AlpacaAPIRequestException {
+        try {
+            HttpResponse<InputStream> response = invokePatch(urlBuilder);
+
+            if (response.getStatus() != 200) {
+                throw new AlpacaAPIRequestException(response);
+            }
+
+            return getResponseObject(response, type);
+        } catch (UnirestException exception) {
+            throw new AlpacaAPIRequestException(exception);
+        }
+    }
+
+    /**
+     * Invokes a POST request and handles/returns the response object.
+     *
+     * @param <T>        the type
+     * @param urlBuilder the {@link AlpacaRequestBuilder}
+     * @param type       the type to return
+     *
+     * @return the response object type
+     *
+     * @throws AlpacaAPIRequestException thrown for {@link AlpacaAPIRequestException}s
+     */
+    public <T> T put(AlpacaRequestBuilder urlBuilder, Type type) throws AlpacaAPIRequestException {
+        try {
+            HttpResponse<InputStream> response = invokePut(urlBuilder);
+
+            if (response.getStatus() != 200) {
+                throw new AlpacaAPIRequestException(response);
+            }
+
+            return getResponseObject(response, type);
+        } catch (UnirestException exception) {
+            throw new AlpacaAPIRequestException(exception);
+        }
+    }
+
+    /**
+     * Invokes a DELETE request and handles/returns the response object.
+     *
+     * @param <T>        the type
+     * @param urlBuilder the {@link AlpacaRequestBuilder}
+     * @param type       the type to return
+     *
+     * @return the response object type
+     *
+     * @throws AlpacaAPIRequestException thrown for {@link AlpacaAPIRequestException}s
+     */
+    public <T> T delete(AlpacaRequestBuilder urlBuilder, Type type) throws AlpacaAPIRequestException {
+        try {
+            HttpResponse<InputStream> response = invokeDelete(urlBuilder);
+
+            if (response.getStatus() != 200) {
+                throw new AlpacaAPIRequestException(response);
+            }
+
+            return getResponseObject(response, type);
+        } catch (UnirestException exception) {
+            throw new AlpacaAPIRequestException(exception);
+        }
+    }
+
+    /**
+     * Invokes a OPTIONS request and handles/returns the response object.
+     *
+     * @param <T>        the type
+     * @param urlBuilder the {@link AlpacaRequestBuilder}
+     * @param type       the type to return
+     *
+     * @return the response object type
+     *
+     * @throws AlpacaAPIRequestException thrown for {@link AlpacaAPIRequestException}s
+     */
+    public <T> T options(AlpacaRequestBuilder urlBuilder, Type type) throws AlpacaAPIRequestException {
+        try {
+            HttpResponse<InputStream> response = invokeOptions(urlBuilder);
+
+            if (response.getStatus() != 200) {
+                throw new AlpacaAPIRequestException(response);
+            }
+
+            return getResponseObject(response, type);
+        } catch (UnirestException exception) {
+            throw new AlpacaAPIRequestException(exception);
+        }
     }
 }

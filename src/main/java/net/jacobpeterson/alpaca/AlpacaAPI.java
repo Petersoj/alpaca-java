@@ -7,6 +7,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
 import com.google.gson.reflect.TypeToken;
 import com.mashape.unirest.http.HttpResponse;
+import com.mashape.unirest.http.exceptions.UnirestException;
 import net.jacobpeterson.abstracts.enums.SortDirection;
 import net.jacobpeterson.abstracts.websocket.exception.WebsocketException;
 import net.jacobpeterson.alpaca.AlpacaConstants.Endpoints;
@@ -174,13 +175,7 @@ public class AlpacaAPI {
         AlpacaRequestBuilder urlBuilder = new AlpacaRequestBuilder(apiURL, Endpoints.VERSION_2,
                 Endpoints.ACCOUNT);
 
-        HttpResponse<InputStream> response = alpacaRequest.invokeGet(urlBuilder);
-
-        if (response.getStatus() != 200) {
-            throw new AlpacaAPIRequestException(response);
-        }
-
-        return alpacaRequest.getResponseObject(response, Account.class);
+        return alpacaRequest.get(urlBuilder, Account.class);
     }
 
     /**
@@ -245,7 +240,12 @@ public class AlpacaAPI {
             urlBuilder.appendURLParameter(Parameters.PAGE_TOKEN, pageToken);
         }
 
-        HttpResponse<InputStream> response = alpacaRequest.invokeGet(urlBuilder);
+        HttpResponse<InputStream> response;
+        try {
+            response = alpacaRequest.invokeGet(urlBuilder);
+        } catch (UnirestException exception) {
+            throw new AlpacaAPIRequestException(exception);
+        }
 
         if (response.getStatus() != 200) {
             throw new AlpacaAPIRequestException(response);
@@ -292,13 +292,7 @@ public class AlpacaAPI {
                 Endpoints.ACCOUNT,
                 Endpoints.CONFIGURATIONS);
 
-        HttpResponse<InputStream> response = alpacaRequest.invokeGet(urlBuilder);
-
-        if (response.getStatus() != 200) {
-            throw new AlpacaAPIRequestException(response);
-        }
-
-        return alpacaRequest.getResponseObject(response, AccountConfiguration.class);
+        return alpacaRequest.get(urlBuilder, AccountConfiguration.class);
     }
 
     /**
@@ -321,13 +315,7 @@ public class AlpacaAPI {
                 Endpoints.CONFIGURATIONS);
         urlBuilder.setCustomBody(GsonUtil.GSON.toJson(accountConfiguration));
 
-        HttpResponse<InputStream> response = alpacaRequest.invokePatch(urlBuilder);
-
-        if (response.getStatus() != 200) {
-            throw new AlpacaAPIRequestException(response);
-        }
-
-        return alpacaRequest.getResponseObject(response, AccountConfiguration.class);
+        return alpacaRequest.patch(urlBuilder, AccountConfiguration.class);
     }
 
     /**
@@ -382,15 +370,7 @@ public class AlpacaAPI {
             urlBuilder.appendURLParameter(Parameters.SYMBOLS, String.join(",", symbols));
         }
 
-        HttpResponse<InputStream> response = alpacaRequest.invokeGet(urlBuilder);
-
-        if (response.getStatus() != 200) {
-            throw new AlpacaAPIRequestException(response);
-        }
-
-        Type arrayListType = new TypeToken<ArrayList<Order>>() {}.getType();
-
-        return alpacaRequest.getResponseObject(response, arrayListType);
+        return alpacaRequest.get(urlBuilder, new TypeToken<ArrayList<Order>>() {}.getType());
     }
 
     /**
@@ -503,13 +483,7 @@ public class AlpacaAPI {
             urlBuilder.appendJSONBodyJSONProperty(Parameters.STOP_LOSS, stopLoss);
         }
 
-        HttpResponse<InputStream> response = alpacaRequest.invokePost(urlBuilder);
-
-        if (response.getStatus() != 200) {
-            throw new AlpacaAPIRequestException(response);
-        }
-
-        return alpacaRequest.getResponseObject(response, Order.class);
+        return alpacaRequest.post(urlBuilder, Order.class);
     }
 
     /**
@@ -952,13 +926,7 @@ public class AlpacaAPI {
             urlBuilder.appendURLParameter(Parameters.NESTED, nested.toString());
         }
 
-        HttpResponse<InputStream> response = alpacaRequest.invokeGet(urlBuilder);
-
-        if (response.getStatus() != 200) {
-            throw new AlpacaAPIRequestException(response);
-        }
-
-        return alpacaRequest.getResponseObject(response, Order.class);
+        return alpacaRequest.get(urlBuilder, Order.class);
     }
 
     /**
@@ -978,13 +946,7 @@ public class AlpacaAPI {
                 Endpoints.ORDERS_BY_CLIENT_ORDER_ID);
         urlBuilder.appendURLParameter(Parameters.CLIENT_ORDER_ID, clientOrderId);
 
-        HttpResponse<InputStream> response = alpacaRequest.invokeGet(urlBuilder);
-
-        if (response.getStatus() != 200) {
-            throw new AlpacaAPIRequestException(response);
-        }
-
-        return alpacaRequest.getResponseObject(response, Order.class);
+        return alpacaRequest.get(urlBuilder, Order.class);
     }
 
     /**
@@ -1038,14 +1000,7 @@ public class AlpacaAPI {
         if (clientOrderId != null) {
             urlBuilder.appendJSONBodyProperty(Parameters.CLIENT_ORDER_ID, clientOrderId);
         }
-
-        HttpResponse<InputStream> response = alpacaRequest.invokePatch(urlBuilder);
-
-        if (response.getStatus() != 200) {
-            throw new AlpacaAPIRequestException(response);
-        }
-
-        return alpacaRequest.getResponseObject(response, Order.class);
+        return alpacaRequest.patch(urlBuilder, Order.class);
     }
 
     /**
@@ -1061,15 +1016,17 @@ public class AlpacaAPI {
         AlpacaRequestBuilder urlBuilder = new AlpacaRequestBuilder(apiURL, Endpoints.VERSION_2,
                 Endpoints.ORDERS);
 
-        HttpResponse<InputStream> response = alpacaRequest.invokeDelete(urlBuilder);
+        try {
+            HttpResponse<InputStream> response = alpacaRequest.invokeDelete(urlBuilder);
 
-        if (response.getStatus() != 207) { // This returns a 207 multi-status message
-            throw new AlpacaAPIRequestException(response);
+            if (response.getStatus() != 207) { // This returns a 207 multi-status message
+                throw new AlpacaAPIRequestException(response);
+            }
+
+            return alpacaRequest.getResponseObject(response, new TypeToken<ArrayList<CancelledOrder>>() {}.getType());
+        } catch (UnirestException exception) {
+            throw new AlpacaAPIRequestException(exception);
         }
-
-        Type arrayListType = new TypeToken<ArrayList<CancelledOrder>>() {}.getType();
-
-        return alpacaRequest.getResponseObject(response, arrayListType);
     }
 
     /**
@@ -1090,13 +1047,17 @@ public class AlpacaAPI {
                 Endpoints.ORDERS,
                 orderId);
 
-        HttpResponse<InputStream> response = alpacaRequest.invokeDelete(urlBuilder);
+        try {
+            HttpResponse<InputStream> response = alpacaRequest.invokeDelete(urlBuilder);
 
-        if ((response.getStatus() != 200 && response.getStatus() != 204)) {
-            throw new AlpacaAPIRequestException(response);
+            if (!(response.getStatus() == 200 || response.getStatus() == 204)) {
+                throw new AlpacaAPIRequestException(response);
+            }
+
+            return true;
+        } catch (UnirestException exception) {
+            throw new AlpacaAPIRequestException(exception);
         }
-
-        return response.getStatus() == 200 || response.getStatus() == 204;
     }
 
     /**
@@ -1111,15 +1072,7 @@ public class AlpacaAPI {
         AlpacaRequestBuilder urlBuilder = new AlpacaRequestBuilder(apiURL, Endpoints.VERSION_2,
                 Endpoints.POSITIONS);
 
-        HttpResponse<InputStream> response = alpacaRequest.invokeGet(urlBuilder);
-
-        if (response.getStatus() != 200) {
-            throw new AlpacaAPIRequestException(response);
-        }
-
-        Type arrayListType = new TypeToken<ArrayList<Position>>() {}.getType();
-
-        return alpacaRequest.getResponseObject(response, arrayListType);
+        return alpacaRequest.get(urlBuilder, new TypeToken<ArrayList<Position>>() {}.getType());
     }
 
     /**
@@ -1139,13 +1092,7 @@ public class AlpacaAPI {
                 Endpoints.POSITIONS,
                 symbol.trim());
 
-        HttpResponse<InputStream> response = alpacaRequest.invokeGet(urlBuilder);
-
-        if (response.getStatus() != 200) {
-            throw new AlpacaAPIRequestException(response);
-        }
-
-        return alpacaRequest.getResponseObject(response, Position.class);
+        return alpacaRequest.get(urlBuilder, Position.class);
     }
 
     /**
@@ -1162,15 +1109,7 @@ public class AlpacaAPI {
         AlpacaRequestBuilder urlBuilder = new AlpacaRequestBuilder(apiURL, Endpoints.VERSION_2,
                 Endpoints.POSITIONS);
 
-        HttpResponse<InputStream> response = alpacaRequest.invokeDelete(urlBuilder);
-
-        if (response.getStatus() != 207) { // This returns a 207 multi-status message
-            throw new AlpacaAPIRequestException(response);
-        }
-
-        Type arrayListType = new TypeToken<ArrayList<ClosePositionOrder>>() {}.getType();
-
-        return alpacaRequest.getResponseObject(response, arrayListType);
+        return alpacaRequest.delete(urlBuilder, new TypeToken<ArrayList<ClosePositionOrder>>() {}.getType());
     }
 
     /**
@@ -1190,13 +1129,7 @@ public class AlpacaAPI {
                 Endpoints.POSITIONS,
                 symbol);
 
-        HttpResponse<InputStream> response = alpacaRequest.invokeDelete(urlBuilder);
-
-        if (response.getStatus() != 200) {
-            throw new AlpacaAPIRequestException(response);
-        }
-
-        return alpacaRequest.getResponseObject(response, Order.class);
+        return alpacaRequest.delete(urlBuilder, Order.class);
     }
 
     /**
@@ -1222,15 +1155,7 @@ public class AlpacaAPI {
             urlBuilder.appendURLParameter(Parameters.ASSET_CLASS, assetClass.trim());
         }
 
-        HttpResponse<InputStream> response = alpacaRequest.invokeGet(urlBuilder);
-
-        if (response.getStatus() != 200) {
-            throw new AlpacaAPIRequestException(response);
-        }
-
-        Type arrayListType = new TypeToken<ArrayList<Asset>>() {}.getType();
-
-        return alpacaRequest.getResponseObject(response, arrayListType);
+        return alpacaRequest.get(urlBuilder, new TypeToken<ArrayList<Asset>>() {}.getType());
     }
 
     /**
@@ -1250,13 +1175,7 @@ public class AlpacaAPI {
                 Endpoints.ASSETS,
                 symbolOrAssetID.trim());
 
-        HttpResponse<InputStream> response = alpacaRequest.invokeGet(urlBuilder);
-
-        if (response.getStatus() != 200) {
-            throw new AlpacaAPIRequestException(response);
-        }
-
-        return alpacaRequest.getResponseObject(response, Asset.class);
+        return alpacaRequest.get(urlBuilder, Asset.class);
     }
 
     /**
@@ -1271,14 +1190,7 @@ public class AlpacaAPI {
         AlpacaRequestBuilder urlBuilder = new AlpacaRequestBuilder(apiURL, Endpoints.VERSION_2,
                 Endpoints.WATCHLISTS);
 
-        HttpResponse<InputStream> response = alpacaRequest.invokeGet(urlBuilder);
-
-        if (response.getStatus() != 200) {
-            throw new AlpacaAPIRequestException(response);
-        }
-
-        Type arrayListType = new TypeToken<ArrayList<Watchlist>>() {}.getType();
-        return alpacaRequest.getResponseObject(response, arrayListType);
+        return alpacaRequest.get(urlBuilder, new TypeToken<ArrayList<Watchlist>>() {}.getType());
     }
 
     /**
@@ -1308,13 +1220,7 @@ public class AlpacaAPI {
             urlBuilder.appendJSONBodyJSONProperty("symbols", symbolsArray);
         }
 
-        HttpResponse<InputStream> response = alpacaRequest.invokePost(urlBuilder);
-
-        if (response.getStatus() != 200) {
-            throw new AlpacaAPIRequestException(response);
-        }
-
-        return alpacaRequest.getResponseObject(response, Watchlist.class);
+        return alpacaRequest.post(urlBuilder, Watchlist.class);
     }
 
     /**
@@ -1334,13 +1240,7 @@ public class AlpacaAPI {
                 Endpoints.WATCHLISTS,
                 watchlistID);
 
-        HttpResponse<InputStream> response = alpacaRequest.invokeGet(urlBuilder);
-
-        if (response.getStatus() != 200) {
-            throw new AlpacaAPIRequestException(response);
-        }
-
-        return alpacaRequest.getResponseObject(response, Watchlist.class);
+        return alpacaRequest.get(urlBuilder, Watchlist.class);
     }
 
     /**
@@ -1374,13 +1274,7 @@ public class AlpacaAPI {
             urlBuilder.appendJSONBodyJSONProperty("symbols", symbolsArray);
         }
 
-        HttpResponse<InputStream> response = alpacaRequest.invokePut(urlBuilder);
-
-        if (response.getStatus() != 200) {
-            throw new AlpacaAPIRequestException(response);
-        }
-
-        return alpacaRequest.getResponseObject(response, Watchlist.class);
+        return alpacaRequest.put(urlBuilder, Watchlist.class);
     }
 
     /**
@@ -1404,13 +1298,7 @@ public class AlpacaAPI {
 
         urlBuilder.appendJSONBodyProperty("symbol", symbol);
 
-        HttpResponse<InputStream> response = alpacaRequest.invokePost(urlBuilder);
-
-        if (response.getStatus() != 200) {
-            throw new AlpacaAPIRequestException(response);
-        }
-
-        return alpacaRequest.getResponseObject(response, Watchlist.class);
+        return alpacaRequest.post(urlBuilder, Watchlist.class);
     }
 
     /**
@@ -1430,13 +1318,17 @@ public class AlpacaAPI {
                 Endpoints.WATCHLISTS,
                 watchlistID);
 
-        HttpResponse<InputStream> response = alpacaRequest.invokeDelete(urlBuilder);
+        try {
+            HttpResponse<InputStream> response = alpacaRequest.invokeDelete(urlBuilder);
 
-        if ((response.getStatus() != 200 && response.getStatus() != 204)) {
-            throw new AlpacaAPIRequestException(response);
+            if (!(response.getStatus() == 200 || response.getStatus() == 204)) {
+                throw new AlpacaAPIRequestException(response);
+            }
+
+            return true;
+        } catch (UnirestException exception) {
+            throw new AlpacaAPIRequestException(exception);
         }
-
-        return response.getStatus() == 200 || response.getStatus() == 204;
     }
 
     /**
@@ -1459,13 +1351,7 @@ public class AlpacaAPI {
                 watchlistID,
                 symbol);
 
-        HttpResponse<InputStream> response = alpacaRequest.invokeDelete(urlBuilder);
-
-        if (response.getStatus() != 200) {
-            throw new AlpacaAPIRequestException(response);
-        }
-
-        return alpacaRequest.getResponseObject(response, Watchlist.class);
+        return alpacaRequest.delete(urlBuilder, Watchlist.class);
     }
 
     /**
@@ -1509,13 +1395,7 @@ public class AlpacaAPI {
             urlBuilder.appendURLParameter(Parameters.EXTENDED_HOURS, extendedHours.toString());
         }
 
-        HttpResponse<InputStream> response = alpacaRequest.invokeGet(urlBuilder);
-
-        if (response.getStatus() != 200) {
-            throw new AlpacaAPIRequestException(response);
-        }
-
-        return alpacaRequest.getResponseObject(response, PortfolioHistory.class);
+        return alpacaRequest.get(urlBuilder, PortfolioHistory.class);
     }
 
     /**
@@ -1552,15 +1432,7 @@ public class AlpacaAPI {
             urlBuilder.appendURLParameter(Parameters.END, end.format(DateTimeFormatter.ISO_DATE));
         }
 
-        HttpResponse<InputStream> response = alpacaRequest.invokeGet(urlBuilder);
-
-        if (response.getStatus() != 200) {
-            throw new AlpacaAPIRequestException(response);
-        }
-
-        Type arrayListType = new TypeToken<ArrayList<Calendar>>() {}.getType();
-
-        return alpacaRequest.getResponseObject(response, arrayListType);
+        return alpacaRequest.get(urlBuilder, new TypeToken<ArrayList<Calendar>>() {}.getType());
     }
 
     /**
@@ -1575,13 +1447,7 @@ public class AlpacaAPI {
         AlpacaRequestBuilder urlBuilder = new AlpacaRequestBuilder(apiURL, Endpoints.VERSION_2,
                 Endpoints.CLOCK);
 
-        HttpResponse<InputStream> response = alpacaRequest.invokeGet(urlBuilder);
-
-        if (response.getStatus() != 200) {
-            throw new AlpacaAPIRequestException(response);
-        }
-
-        return alpacaRequest.getResponseObject(response, Clock.class);
+        return alpacaRequest.get(urlBuilder, Clock.class);
     }
 
     /**
@@ -1623,13 +1489,7 @@ public class AlpacaAPI {
             urlBuilder.appendURLParameter(Parameters.PAGE_TOKEN, pageToken);
         }
 
-        HttpResponse<InputStream> response = alpacaRequest.invokeGet(urlBuilder);
-
-        if (response.getStatus() != 200) {
-            throw new AlpacaAPIRequestException(response);
-        }
-
-        return alpacaRequest.getResponseObject(response, TradesResponse.class);
+        return alpacaRequest.get(urlBuilder, TradesResponse.class);
     }
 
     /**
@@ -1671,13 +1531,7 @@ public class AlpacaAPI {
             urlBuilder.appendURLParameter(Parameters.PAGE_TOKEN, pageToken);
         }
 
-        HttpResponse<InputStream> response = alpacaRequest.invokeGet(urlBuilder);
-
-        if (response.getStatus() != 200) {
-            throw new AlpacaAPIRequestException(response);
-        }
-
-        return alpacaRequest.getResponseObject(response, QuotesResponse.class);
+        return alpacaRequest.get(urlBuilder, QuotesResponse.class);
     }
 
     /**
@@ -1722,13 +1576,7 @@ public class AlpacaAPI {
             urlBuilder.appendURLParameter(Parameters.PAGE_TOKEN, pageToken);
         }
 
-        HttpResponse<InputStream> response = alpacaRequest.invokeGet(urlBuilder);
-
-        if (response.getStatus() != 200) {
-            throw new AlpacaAPIRequestException(response);
-        }
-
-        return alpacaRequest.getResponseObject(response, BarsResponse.class);
+        return alpacaRequest.get(urlBuilder, BarsResponse.class);
     }
 
     /**
