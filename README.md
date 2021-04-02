@@ -161,7 +161,7 @@ try {
             null,
             ZonedDateTime.of(2020, 12, 23, 0, 0, 0, 0, ZoneId.of("America/New_York")),
             null,
-            Direction.ASCENDING,
+            SortDirection.ASCENDING,
             true,
             Arrays.asList("AAPL", "TSLA"));
     orders.forEach(System.out::println);

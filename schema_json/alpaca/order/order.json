@@ -62,17 +62,33 @@
       "existingJavaType": "java.lang.String",
       "title": "Asset class"
     },
+    "notional": {
+      "existingJavaType": "java.lang.String",
+      "title": "Ordered notional amount. If entered, qty will be null. Can take up to 9 decimal points."
+    },
     "qty": {
       "existingJavaType": "java.lang.String",
-      "title": "Ordered quantity"
+      "title": "Ordered quantity. If entered, notional will be null. Can take up to 9 decimal points."
     },
     "filled_qty": {
       "existingJavaType": "java.lang.String",
       "title": "Filled quantity"
     },
+    "filled_avg_price": {
+      "existingJavaType": "java.lang.String",
+      "title": "Filled average price"
+    },
+    "order_class": {
+      "existingJavaType": "java.lang.String",
+      "title": "simple, bracket, oco or oto. For details of non-simple order classes, please see Bracket Order Overview"
+    },
+    "order_type": {
+      "existingJavaType": "java.lang.String",
+      "title": "(Deprecated with just type field below.)"
+    },
     "type": {
       "existingJavaType": "java.lang.String",
-      "title": "Valid values: market, limit, stop, stop_limit"
+      "title": "Valid values: market, limit, stop, stop_limit, trailing_stop"
     },
     "side": {
       "existingJavaType": "java.lang.String",
@@ -90,10 +106,6 @@
       "existingJavaType": "java.lang.String",
       "title": "Stop price"
     },
-    "filled_avg_price": {
-      "existingJavaType": "java.lang.String",
-      "title": "Stop price"
-    },
     "status": {
       "existingJavaType": "java.lang.String",
       "title": "See Orders page"
@@ -104,15 +116,15 @@
     },
     "legs": {
       "existingJavaType": "java.util.ArrayList<net.jacobpeterson.domain.alpaca.order.Order>",
-      "title": "When querying non-simple order_class orders in a nested style, an array of Order entities associated with this order is returned. Otherwise, null."
-    },
-    "trail_price": {
-      "existingJavaType": "java.lang.String",
-      "title": "The dollar value away from the high water mark for trailing stop orders."
+      "title": "When querying non-simple order_class orders in a nested style, an array of Order entities associated with this order. Otherwise, null."
     },
     "trail_percent": {
       "existingJavaType": "java.lang.String",
       "title": "The percent value away from the high water mark for trailing stop orders."
+    },
+    "trail_price": {
+      "existingJavaType": "java.lang.String",
+      "title": "The dollar value away from the high water mark for trailing stop orders."
     },
     "hwm": {
       "existingJavaType": "java.lang.String",
