@@ -116,7 +116,7 @@ try {
             null,
             null,
             ZonedDateTime.of(2020, 12, 23, 0, 0, 0, 0, ZoneId.of("America/New_York")),
-            Direction.ASCENDING,
+            SortDirection.ASCENDING,
             null,
             null,
             (ActivityType[]) null);

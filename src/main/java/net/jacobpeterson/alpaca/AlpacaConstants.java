@@ -75,4 +75,12 @@ public class AlpacaConstants {
         public static final String PAGE_SIZE = "page_size";
         public static final String PAGE_TOKEN = "page_token";
     }
+
+    /**
+     * Defines miscellaneous fields of {@link AlpacaAPI}.
+     */
+    public static class Fields {
+
+        public static final String ACTIVITY_TYPE = "activity_type";
+    }
 }

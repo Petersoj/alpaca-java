@@ -59,7 +59,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.InputStream;
-import java.lang.reflect.Type;
 import java.time.LocalDate;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
@@ -68,6 +67,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.StringJoiner;
 import java.util.stream.Collectors;
+
+import static net.jacobpeterson.alpaca.AlpacaConstants.Fields.ACTIVITY_TYPE;
 
 /**
  * {@link AlpacaAPI} contains several methods to interface with Alpaca. You will generally only need one instance of it
@@ -259,14 +260,19 @@ public class AlpacaAPI {
 
             for (JsonElement arrayJsonElement : responseJsonArray) { // Loop through response array
                 if (arrayJsonElement instanceof JsonObject) {
-                    JsonObject arrayJsonObject = (JsonObject) arrayJsonElement;
+                    JsonObject arrayJsonObject = arrayJsonElement.getAsJsonObject();
 
-                    if (GsonUtil.doesGsonPOJOMatch(TradeActivity.class, arrayJsonObject)) {
-                        accountActivities.add(GsonUtil.GSON.fromJson(arrayJsonObject, TradeActivity.class));
-                    } else if (GsonUtil.doesGsonPOJOMatch(NonTradeActivity.class, arrayJsonObject)) {
-                        accountActivities.add(GsonUtil.GSON.fromJson(arrayJsonObject, NonTradeActivity.class));
+                    if (arrayJsonObject.has(ACTIVITY_TYPE)) {
+                        String activityType = arrayJsonObject.get(ACTIVITY_TYPE).getAsString();
+
+                        // A 'TradeActivity' always has 'activity_type' field as 'FILL'
+                        if (activityType.equals(ActivityType.FILL.getAPIName())) {
+                            accountActivities.add(GsonUtil.GSON.fromJson(arrayJsonObject, TradeActivity.class));
+                        } else {
+                            accountActivities.add(GsonUtil.GSON.fromJson(arrayJsonObject, NonTradeActivity.class));
+                        }
                     } else {
-                        LOGGER.warn("Received unknown JSON Object in response!");
+                        LOGGER.warn("JSON Object does not have 'activity_type' in response! {}", arrayJsonObject);
                     }
                 } else {
                     throw new IllegalStateException("All array elements must be objects!");

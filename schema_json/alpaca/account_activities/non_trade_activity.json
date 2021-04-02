@@ -36,6 +36,10 @@
     "description": {
       "existingJavaType": "java.lang.String",
       "title": "For Transaction records (TRANS,CSR,CSD) a description field is present (even if the docs don't mention it!"
+    },
+    "status": {
+      "existingJavaType": "java.lang.String",
+      "title": "The status."
     }
   }
 }

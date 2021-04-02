@@ -50,9 +50,11 @@ public class GsonUtil {
 
         for (String key : jsonObjectKeys) {
             if (!classKeys.contains(key)) {
+                LOGGER.trace("Class '{}' did not contain key '{}'", jsonPOJOClass, key);
                 return false;
             }
         }
+
         return true;
     }
 
