@@ -166,7 +166,7 @@ try {
             Arrays.asList("AAPL", "TSLA"));
     orders.forEach(System.out::println);
     
-    // Request a new buy limit order for TSLA for 100 shares at a limit price
+    // Request a new limit order for TSLA for 100 shares at a limit price
     // of 600.00 and TIF of DAY.
     Order limitOrderTSLA = alpacaAPI.requestNewLimitOrder(
             "TSLA",
@@ -196,6 +196,11 @@ try {
     for (CancelledOrder cancelledOrder : cancelledOrders) {
         System.out.println("Cancelled Order: " + cancelledOrder.getOrder());
     }
+    
+    // Request a new fractional market order for 0.5 shares of GME 
+    alpacaAPI.requestNewFractionalMarketOrder("GME", 0.5, OrderSide.BUY);
+    // Request a new notional market order for $25 worth of GME shares
+    alpacaAPI.requestNewNotionalMarketOrder("GME", 25d, OrderSide.BUY);
 } catch (AlpacaAPIRequestException e) {
     e.printStackTrace();
 }
