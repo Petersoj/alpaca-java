@@ -18,6 +18,10 @@
       "existingJavaType": "java.lang.String",
       "title": "symbol"
     },
+    "name": {
+      "existingJavaType": "java.lang.String",
+      "title": "The official name of the asset"
+    },
     "status": {
       "existingJavaType": "java.lang.String",
       "title": "active or inactive"
