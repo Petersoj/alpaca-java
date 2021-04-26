@@ -1,18 +1,24 @@
 package net.jacobpeterson.util.format;
 
 import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
 import java.text.NumberFormat;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.TemporalAccessor;
+import java.util.Locale;
 
 /**
  * {@link FormatUtil} is a utility class for various formatting.
  */
 public class FormatUtil {
 
-    private static final NumberFormat CURRENCY_FORMATTER = new DecimalFormat("#0.00");
+    // Alpaca uses the following rounding mechanics with respect to buy orders: (1) rounded down to two decimal
+    // places if the last trade price is over $1.00; otherwise, rounded down to four decimal places, hence the '#' in
+    // the 3rd and 4th least significant decimal digits.
+    private static final NumberFormat CURRENCY_FORMATTER = new DecimalFormat("#0.00##",
+            DecimalFormatSymbols.getInstance(Locale.US));
     private static final DateTimeFormatter RFC_3339_FORMATTER =
             DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss'Z'").withZone(ZoneId.of("America/New_York"));
     private static final long PREV_UNIX_EPOCH_NANO_TIME = System.currentTimeMillis() * 1000000L;
