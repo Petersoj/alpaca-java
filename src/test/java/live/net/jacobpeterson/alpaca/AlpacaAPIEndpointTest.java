@@ -12,7 +12,12 @@ import net.jacobpeterson.domain.alpaca.accountactivities.TradeActivity;
 import net.jacobpeterson.domain.alpaca.accountconfiguration.AccountConfiguration;
 import net.jacobpeterson.domain.alpaca.clock.Clock;
 import net.jacobpeterson.domain.alpaca.order.Order;
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.MethodOrderer;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestMethodOrder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -20,7 +25,6 @@ import java.time.ZonedDateTime;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
 /**
  * {@link AlpacaAPIEndpointTest} tests live endpoints using Alpaca Paper credentials given in the
@@ -261,7 +265,6 @@ public class AlpacaAPIEndpointTest {
         assertNotNull(order.getCreatedAt());
         assertNotNull(order.getUpdatedAt());
         assertNotNull(order.getSubmittedAt());
-        assertNotNull(order.getFilledAt());
         assertNotNull(order.getAssetId());
         assertNotNull(order.getSymbol());
         assertNotNull(order.getAssetClass());
@@ -270,13 +273,7 @@ public class AlpacaAPIEndpointTest {
         assertNotNull(order.getType());
         assertNotNull(order.getSide());
         assertNotNull(order.getTimeInForce());
-        assertNotNull(order.getFilledAvgPrice());
         assertNotNull(order.getStatus());
         assertNotNull(order.getExtendedHours());
-    }
-
-    @Test
-    public void test() {
-        assumeTrue(marketOpen, "Market is not open. Skipping!");
     }
 }
