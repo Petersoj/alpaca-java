@@ -6,7 +6,7 @@
   },
   "properties": {
     "activity_type": {
-      "existingJavaType": "java.lang.String",
+      "existingJavaType": "net.jacobpeterson.alpaca.enums.activity.ActivityType",
       "title": "FILL"
     },
     "id": {
