@@ -3,7 +3,7 @@
   "title": "See <a href=\"https://docs.alpaca.markets/api-documentation/api-v2/streaming/\">https://docs.alpaca.markets/api-documentation/api-v2/streaming/</a>",
   "properties": {
     "event": {
-      "existingJavaType": "java.lang.String",
+      "existingJavaType": "net.jacobpeterson.alpaca.enums.streaming.TradeUpdateEvent",
       "title": "The event type"
     },
     "price": {
