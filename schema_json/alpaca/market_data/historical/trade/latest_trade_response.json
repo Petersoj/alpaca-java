@@ -1,0 +1,14 @@
+{
+  "type": "object",
+  "title": "See <a href=\"https://alpaca.markets/docs/api-documentation/api-v2/market-data/alpaca-data-api-v2/historical/\">https://alpaca.markets/docs/api-documentation/api-v2/market-data/alpaca-data-api-v2/historical/</a>",
+  "properties": {
+    "symbol": {
+      "existingJavaType": "java.lang.String",
+      "title": "Symbol that was queried."
+    },
+    "trade": {
+      "existingJavaType": "net.jacobpeterson.domain.alpaca.marketdata.historical.trade.Trade",
+      "title": "The latest trade."
+    }
+  }
+}

@@ -399,6 +399,19 @@ try {
 }
 ```
 
+### Latest Trade
+The Latest trade API provides the latest trade data for a given ticker symbol.
+
+Example usage:
+```java
+try {
+    LatestTradeResponse latestAAPLTrade = alpacaAPI.getLatestTrade("AAPL");
+    System.out.println(latestAAPLTrade);
+} catch (AlpacaAPIRequestException e) {
+    e.printStackTrace();
+}
+```
+
 ### Quotes
 The Quotes API provides NBBO quotes for a given ticker symbol in a specified date range.
 
@@ -413,6 +426,19 @@ try {
             100,
             null);
     appleQuotesResponse.getQuotes().forEach(System.out::println);
+} catch (AlpacaAPIRequestException e) {
+    e.printStackTrace();
+}
+```
+
+### Latest Quote
+The Latest quote API provides the latest quote data for a given ticker symbol.
+
+Example usage:
+```java
+try {
+    LatestQuoteResponse latestAAPLQuote = alpacaAPI.getLatestQuote("AAPL");
+    System.out.println(latestAAPLQuote);
 } catch (AlpacaAPIRequestException e) {
     e.printStackTrace();
 }
@@ -433,6 +459,22 @@ try {
             null,
             BarsTimeFrame.HOUR);
     appleBarsResponse.getBars().forEach(System.out::println);
+} catch (AlpacaAPIRequestException e) {
+    e.printStackTrace();
+}
+```
+
+### Snapshot
+The Snapshot API for multiple tickers provides the latest trade, latest quote, minute bar daily bar and previous daily bar data for the given ticker symbols.
+
+Example usage:
+```java
+try {
+    Map<String, Snapshot> snapshotsOfSymbols = alpacaAPI.getSnapshots(Arrays.asList("AAPL", "TSLA", "GME"));
+    snapshotsOfSymbols.entrySet().forEach(System.out::println);
+    
+    Snapshot msftSnapshot = alpacaAPI.getSnapshot("MSFT");
+    System.out.println(msftSnapshot);
 } catch (AlpacaAPIRequestException e) {
     e.printStackTrace();
 }

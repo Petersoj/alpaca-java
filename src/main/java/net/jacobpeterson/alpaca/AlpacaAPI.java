@@ -43,8 +43,11 @@ import net.jacobpeterson.domain.alpaca.calendar.Calendar;
 import net.jacobpeterson.domain.alpaca.clock.Clock;
 import net.jacobpeterson.domain.alpaca.marketdata.historical.bar.Bar;
 import net.jacobpeterson.domain.alpaca.marketdata.historical.bar.BarsResponse;
+import net.jacobpeterson.domain.alpaca.marketdata.historical.quote.LatestQuoteResponse;
 import net.jacobpeterson.domain.alpaca.marketdata.historical.quote.Quote;
 import net.jacobpeterson.domain.alpaca.marketdata.historical.quote.QuotesResponse;
+import net.jacobpeterson.domain.alpaca.marketdata.historical.snapshot.Snapshot;
+import net.jacobpeterson.domain.alpaca.marketdata.historical.trade.LatestTradeResponse;
 import net.jacobpeterson.domain.alpaca.marketdata.historical.trade.Trade;
 import net.jacobpeterson.domain.alpaca.marketdata.historical.trade.TradesResponse;
 import net.jacobpeterson.domain.alpaca.order.CancelledOrder;
@@ -64,7 +67,9 @@ import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.StringJoiner;
 import java.util.stream.Collectors;
 
@@ -1503,13 +1508,13 @@ public class AlpacaAPI {
      *
      * @param symbol the symbol to query for
      *
-     * @return the {@link Trade}
+     * @return the {@link LatestTradeResponse}
      *
      * @throws AlpacaAPIRequestException thrown for {@link AlpacaAPIRequestException}s
      * @see <a href="https://alpaca.markets/docs/api-documentation/api-v2/market-data/alpaca-data-api-v2/historical/">
      * Historical Market Data</a>
      */
-    public Trade getLatestTrade(String symbol) throws AlpacaAPIRequestException {
+    public LatestTradeResponse getLatestTrade(String symbol) throws AlpacaAPIRequestException {
         Preconditions.checkNotNull(symbol);
 
         AlpacaRequestBuilder urlBuilder = new AlpacaRequestBuilder(URLs.DATA, Endpoints.VERSION_2,
@@ -1518,7 +1523,7 @@ public class AlpacaAPI {
                 Endpoints.TRADES,
                 Endpoints.LATEST);
 
-        return alpacaRequest.get(urlBuilder, Trade.class);
+        return alpacaRequest.get(urlBuilder, LatestTradeResponse.class);
     }
 
     /**
@@ -1568,13 +1573,13 @@ public class AlpacaAPI {
      *
      * @param symbol the symbol to query for
      *
-     * @return the {@link Quote}
+     * @return the {@link LatestQuoteResponse}
      *
      * @throws AlpacaAPIRequestException thrown for {@link AlpacaAPIRequestException}s
      * @see <a href="https://alpaca.markets/docs/api-documentation/api-v2/market-data/alpaca-data-api-v2/historical/">
      * Historical Market Data</a>
      */
-    public Quote getLatestQuote(String symbol) throws AlpacaAPIRequestException {
+    public LatestQuoteResponse getLatestQuote(String symbol) throws AlpacaAPIRequestException {
         Preconditions.checkNotNull(symbol);
 
         AlpacaRequestBuilder urlBuilder = new AlpacaRequestBuilder(URLs.DATA, Endpoints.VERSION_2,
@@ -1583,7 +1588,7 @@ public class AlpacaAPI {
                 Endpoints.QUOTES,
                 Endpoints.LATEST);
 
-        return alpacaRequest.get(urlBuilder, Quote.class);
+        return alpacaRequest.get(urlBuilder, LatestQuoteResponse.class);
     }
 
     /**
@@ -1629,6 +1634,83 @@ public class AlpacaAPI {
         }
 
         return alpacaRequest.get(urlBuilder, BarsResponse.class);
+    }
+
+    /**
+     * The Snapshot API for one ticker provides the latest trade, latest quote, minute bar daily bar and previous daily
+     * bar data for a given ticker symbol
+     *
+     * @param symbols the symbols to query for
+     *
+     * @return a {@link Map} with they keys being the symbol and the value being the {@link Snapshot}
+     *
+     * @throws AlpacaAPIRequestException thrown for {@link AlpacaAPIRequestException}s
+     * @see <a href="https://alpaca.markets/docs/api-documentation/api-v2/market-data/alpaca-data-api-v2/historical/">
+     * Historical Market Data</a>
+     */
+    public Map<String, Snapshot> getSnapshots(List<String> symbols) throws AlpacaAPIRequestException {
+        Preconditions.checkNotNull(symbols);
+        Preconditions.checkState(!symbols.isEmpty());
+
+        AlpacaRequestBuilder urlBuilder = new AlpacaRequestBuilder(URLs.DATA, Endpoints.VERSION_2,
+                Endpoints.STOCKS,
+                Endpoints.SNAPSHOTS);
+
+        urlBuilder.appendURLParameter(Parameters.SYMBOLS, String.join(",", symbols));
+
+        HttpResponse<InputStream> response;
+        try {
+            response = alpacaRequest.invokeGet(urlBuilder);
+        } catch (UnirestException exception) {
+            throw new AlpacaAPIRequestException(exception);
+        }
+
+        if (response.getStatus() != 200) {
+            throw new AlpacaAPIRequestException(response);
+        }
+
+        JsonElement responseJsonElement = alpacaRequest.getResponseJSON(response);
+        HashMap<String, Snapshot> snapshotsOfSymbols = new HashMap<>();
+
+        if (responseJsonElement instanceof JsonObject) {
+            JsonObject responseJsonObject = (JsonObject) responseJsonElement;
+
+            for (String symbol : responseJsonObject.keySet()) { // Loop through response object keys
+                JsonElement jsonObjectElement = responseJsonObject.get(symbol);
+
+                if (jsonObjectElement instanceof JsonObject) {
+                    snapshotsOfSymbols.put(symbol, GsonUtil.GSON.fromJson(jsonObjectElement, Snapshot.class));
+                } else {
+                    throw new IllegalStateException("The response object must only contain objects!");
+                }
+            }
+            return snapshotsOfSymbols;
+        } else {
+            throw new IllegalStateException("The response must be an object!");
+        }
+    }
+
+    /**
+     * The Snapshot API for one ticker provides the latest trade, latest quote, minute bar daily bar and previous daily
+     * bar data for a given ticker symbol
+     *
+     * @param symbol the symbol to query for
+     *
+     * @return the {@link Snapshot}
+     *
+     * @throws AlpacaAPIRequestException thrown for {@link AlpacaAPIRequestException}s
+     * @see <a href="https://alpaca.markets/docs/api-documentation/api-v2/market-data/alpaca-data-api-v2/historical/">
+     * Historical Market Data</a>
+     */
+    public Snapshot getSnapshot(String symbol) throws AlpacaAPIRequestException {
+        Preconditions.checkNotNull(symbol);
+
+        AlpacaRequestBuilder urlBuilder = new AlpacaRequestBuilder(URLs.DATA, Endpoints.VERSION_2,
+                Endpoints.STOCKS,
+                symbol,
+                Endpoints.SNAPSHOT);
+
+        return alpacaRequest.get(urlBuilder, Snapshot.class);
     }
 
     /**
