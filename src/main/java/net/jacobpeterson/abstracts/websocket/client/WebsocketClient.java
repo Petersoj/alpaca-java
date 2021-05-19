@@ -84,4 +84,11 @@ public interface WebsocketClient<L extends StreamListener<T, M>, T extends Strea
      * @return true if the Websocket is authenticated
      */
     boolean isAuthenticated();
+
+    /**
+     * Sets the {@link WebsocketStateListener} for this {@link WebsocketClient}.
+     *
+     * @param websocketStateListener the {@link WebsocketStateListener}
+     */
+    void setWebsocketStateListener(WebsocketStateListener websocketStateListener);
 }

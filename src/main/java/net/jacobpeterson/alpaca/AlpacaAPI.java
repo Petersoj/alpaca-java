@@ -9,6 +9,7 @@ import com.google.gson.reflect.TypeToken;
 import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.exceptions.UnirestException;
 import net.jacobpeterson.abstracts.enums.SortDirection;
+import net.jacobpeterson.abstracts.websocket.client.WebsocketStateListener;
 import net.jacobpeterson.abstracts.websocket.exception.WebsocketException;
 import net.jacobpeterson.alpaca.AlpacaConstants.Endpoints;
 import net.jacobpeterson.alpaca.AlpacaConstants.Parameters;
@@ -1738,6 +1739,15 @@ public class AlpacaAPI {
     }
 
     /**
+     * Sets the {@link AlpacaWebsocketClient} {@link WebsocketStateListener} to listen to websocket state changes.
+     *
+     * @param websocketStateListener the {@link WebsocketStateListener}
+     */
+    public void setAlpacaStreamWebsocketStateListener(WebsocketStateListener websocketStateListener) {
+        alpacaWebSocketClient.setWebsocketStateListener(websocketStateListener);
+    }
+
+    /**
      * Adds the {@link MarketDataListener}. Note that when the first {@link AlpacaStreamListener} is added, the
      * Websocket connection is created.
      *
@@ -1759,6 +1769,15 @@ public class AlpacaAPI {
      */
     public void removeMarketDataStreamListener(MarketDataListener streamListener) throws WebsocketException {
         marketDataWebSocketClient.removeListener(streamListener);
+    }
+
+    /**
+     * Sets the {@link MarketDataWebsocketClient} {@link WebsocketStateListener} to listen to websocket state changes.
+     *
+     * @param websocketStateListener the {@link WebsocketStateListener}
+     */
+    public void setMarketDataStreamWebsocketStateListener(WebsocketStateListener websocketStateListener) {
+        marketDataWebSocketClient.setWebsocketStateListener(websocketStateListener);
     }
 
     @Override

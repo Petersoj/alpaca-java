@@ -7,6 +7,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
 import com.google.gson.JsonSyntaxException;
 import net.jacobpeterson.abstracts.websocket.client.WebsocketClient;
+import net.jacobpeterson.abstracts.websocket.client.WebsocketStateListener;
 import net.jacobpeterson.abstracts.websocket.exception.WebsocketException;
 import net.jacobpeterson.alpaca.enums.api.EndpointAPIType;
 import net.jacobpeterson.alpaca.websocket.broker.listener.AlpacaStreamListener;
@@ -47,6 +48,7 @@ public class AlpacaWebsocketClient implements WebsocketClient<AlpacaStreamListen
     private final List<AlpacaStreamListener> listeners;
 
     private AlpacaWebsocketClientEndpoint alpacaWebsocketClientEndpoint;
+    private WebsocketStateListener websocketStateListener;
     private boolean authenticated;
 
     /**
@@ -121,6 +123,7 @@ public class AlpacaWebsocketClient implements WebsocketClient<AlpacaStreamListen
         LOGGER.info("Connecting...");
 
         alpacaWebsocketClientEndpoint = new AlpacaWebsocketClientEndpoint(this, new URI(streamAPIURL));
+        alpacaWebsocketClientEndpoint.setWebsocketStateListener(websocketStateListener);
         alpacaWebsocketClientEndpoint.setAutomaticallyReconnect(true);
         alpacaWebsocketClientEndpoint.connect();
 
@@ -244,6 +247,11 @@ public class AlpacaWebsocketClient implements WebsocketClient<AlpacaStreamListen
     @Override
     public boolean isAuthenticated() {
         return authenticated;
+    }
+
+    @Override
+    public void setWebsocketStateListener(WebsocketStateListener websocketStateListener) {
+        this.websocketStateListener = websocketStateListener;
     }
 
     /**

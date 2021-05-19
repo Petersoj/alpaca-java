@@ -38,6 +38,7 @@ public abstract class AbstractWebsocketClientEndpoint<T extends WebsocketClient<
      * buffers which may cause a disconnect from not consuming data fast enough on the client end.
      */
     private ExecutorService executorService;
+    private WebsocketStateListener websocketStateListener;
     private boolean automaticallyReconnect;
     private Session userSession;
 
@@ -96,6 +97,9 @@ public abstract class AbstractWebsocketClientEndpoint<T extends WebsocketClient<
 
         LOGGER.debug("onOpen {}", userSession);
         LOGGER.info("Websocket opened... Authenticating...");
+        if (websocketStateListener != null) {
+            websocketStateListener.onConnected();
+        }
         websocketClient.sendAuthenticationMessage();
     }
 
@@ -107,6 +111,10 @@ public abstract class AbstractWebsocketClientEndpoint<T extends WebsocketClient<
      */
     protected void onClose(Session userSession, CloseReason reason) {
         LOGGER.debug("onClose {}", userSession);
+
+        if (websocketStateListener != null) {
+            websocketStateListener.onDisconnected();
+        }
 
         if (!reason.getCloseCode().equals(CloseCodes.NORMAL_CLOSURE) && automaticallyReconnect) {
 
@@ -164,6 +172,9 @@ public abstract class AbstractWebsocketClientEndpoint<T extends WebsocketClient<
      */
     protected void onError(Throwable throwable) {
         LOGGER.error("Websocket Error!", throwable);
+        if (websocketStateListener != null) {
+            websocketStateListener.onError(throwable);
+        }
     }
 
     /**
@@ -178,12 +189,12 @@ public abstract class AbstractWebsocketClientEndpoint<T extends WebsocketClient<
     }
 
     /**
-     * Gets user {@link Session}.
+     * Sets {@link #websocketStateListener}.
      *
-     * @return the user {@link Session}
+     * @param websocketStateListener the {@link WebsocketStateListener}
      */
-    public Session getUserSession() {
-        return userSession;
+    public void setWebsocketStateListener(WebsocketStateListener websocketStateListener) {
+        this.websocketStateListener = websocketStateListener;
     }
 
     /**
@@ -205,5 +216,14 @@ public abstract class AbstractWebsocketClientEndpoint<T extends WebsocketClient<
      */
     public void setAutomaticallyReconnect(boolean automaticallyReconnect) {
         this.automaticallyReconnect = automaticallyReconnect;
+    }
+
+    /**
+     * Gets user {@link Session}.
+     *
+     * @return the user {@link Session}
+     */
+    public Session getUserSession() {
+        return userSession;
     }
 }

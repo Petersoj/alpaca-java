@@ -5,6 +5,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import net.jacobpeterson.abstracts.websocket.client.WebsocketClient;
+import net.jacobpeterson.abstracts.websocket.client.WebsocketStateListener;
 import net.jacobpeterson.abstracts.websocket.exception.WebsocketException;
 import net.jacobpeterson.alpaca.enums.api.DataAPIType;
 import net.jacobpeterson.alpaca.websocket.broker.client.AlpacaWebsocketClient;
@@ -50,6 +51,7 @@ public class MarketDataWebsocketClient implements WebsocketClient<MarketDataList
     private final List<MarketDataListener> listeners;
 
     private MarketDataWebsocketClientEndpoint marketDataWebsocketClientEndpoint;
+    private WebsocketStateListener websocketStateListener;
     private boolean authenticated;
 
     /**
@@ -125,6 +127,7 @@ public class MarketDataWebsocketClient implements WebsocketClient<MarketDataList
         LOGGER.info("Connecting...");
 
         marketDataWebsocketClientEndpoint = new MarketDataWebsocketClientEndpoint(this, new URI(websocketAPIURL));
+        marketDataWebsocketClientEndpoint.setWebsocketStateListener(websocketStateListener);
         marketDataWebsocketClientEndpoint.setAutomaticallyReconnect(true);
         marketDataWebsocketClientEndpoint.connect();
 
@@ -261,6 +264,11 @@ public class MarketDataWebsocketClient implements WebsocketClient<MarketDataList
     @Override
     public boolean isAuthenticated() {
         return authenticated;
+    }
+
+    @Override
+    public void setWebsocketStateListener(WebsocketStateListener websocketStateListener) {
+        this.websocketStateListener = websocketStateListener;
     }
 
     /**
