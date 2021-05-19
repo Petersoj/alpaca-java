@@ -35,6 +35,7 @@ public class AlpacaConstants {
         public static final String TRADES = "trades";
         public static final String QUOTES = "quotes";
         public static final String BARS = "bars";
+        public static final String LATEST = "trades";
     }
 
     /**

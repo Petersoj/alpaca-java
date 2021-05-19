@@ -1499,6 +1499,29 @@ public class AlpacaAPI {
     }
 
     /**
+     * The Latest trade API provides the latest {@link Trade} data for a given ticker symbol.
+     *
+     * @param symbol the symbol to query for
+     *
+     * @return the {@link Trade}
+     *
+     * @throws AlpacaAPIRequestException thrown for {@link AlpacaAPIRequestException}s
+     * @see <a href="https://alpaca.markets/docs/api-documentation/api-v2/market-data/alpaca-data-api-v2/historical/">
+     * Historical Market Data</a>
+     */
+    public Trade getLatestTrade(String symbol) throws AlpacaAPIRequestException {
+        Preconditions.checkNotNull(symbol);
+
+        AlpacaRequestBuilder urlBuilder = new AlpacaRequestBuilder(URLs.DATA, Endpoints.VERSION_2,
+                Endpoints.STOCKS,
+                symbol,
+                Endpoints.TRADES,
+                Endpoints.LATEST);
+
+        return alpacaRequest.get(urlBuilder, Trade.class);
+    }
+
+    /**
      * Gets {@link Quote} (NBBO or National Best Bid and Offer) historical data for the requested security.
      *
      * @param symbol    the symbol to query for
@@ -1538,6 +1561,29 @@ public class AlpacaAPI {
         }
 
         return alpacaRequest.get(urlBuilder, QuotesResponse.class);
+    }
+
+    /**
+     * The Latest quote API provides the latest quote data for a given ticker symbol.
+     *
+     * @param symbol the symbol to query for
+     *
+     * @return the {@link Quote}
+     *
+     * @throws AlpacaAPIRequestException thrown for {@link AlpacaAPIRequestException}s
+     * @see <a href="https://alpaca.markets/docs/api-documentation/api-v2/market-data/alpaca-data-api-v2/historical/">
+     * Historical Market Data</a>
+     */
+    public Quote getLatestQuote(String symbol) throws AlpacaAPIRequestException {
+        Preconditions.checkNotNull(symbol);
+
+        AlpacaRequestBuilder urlBuilder = new AlpacaRequestBuilder(URLs.DATA, Endpoints.VERSION_2,
+                Endpoints.STOCKS,
+                symbol,
+                Endpoints.QUOTES,
+                Endpoints.LATEST);
+
+        return alpacaRequest.get(urlBuilder, Quote.class);
     }
 
     /**
