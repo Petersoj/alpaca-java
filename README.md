@@ -42,7 +42,7 @@ If you are using Gradle as your build tool, add the following dependency to your
 
 ```
 dependencies {
-    implementation group: 'net.jacobpeterson', name: 'alpaca-java', version: '7.2'
+    implementation group: 'net.jacobpeterson', name: 'alpaca-java', version: '7.2.1'
 }
 ```
 
@@ -52,7 +52,7 @@ If you are using Maven as your build tool, add the following dependency to your 
 <dependency>
     <groupId>net.jacobpeterson</groupId>
     <artifactId>alpaca-java</artifactId>
-    <version>7.2</version>
+    <version>7.2.1</version>
     <scope>compile</scope>
 </dependency>
 ```
