@@ -1,4 +1,10 @@
 {
   "type": "object",
-  "title": "See <a href=\"https://docs.alpaca.markets/api-documentation/api-v2/account-activities/\">https://docs.alpaca.markets/api-documentation/api-v2/account-activities/</a>"
+  "title": "See <a href=\"https://docs.alpaca.markets/api-documentation/api-v2/account-activities/\">https://docs.alpaca.markets/api-documentation/api-v2/account-activities/</a>",
+  "properties": {
+    "activity_type": {
+      "existingJavaType": "net.jacobpeterson.alpaca.enums.activity.ActivityType",
+      "title": "See https://docs.alpaca.markets/api-documentation/api-v2/account-activities/#activity-types for a list of possible values."
+    }
+  }
 }

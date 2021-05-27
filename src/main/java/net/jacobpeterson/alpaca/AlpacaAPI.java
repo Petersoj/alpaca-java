@@ -151,7 +151,8 @@ public class AlpacaAPI {
      */
     public AlpacaAPI(String keyID, String secret, String oAuthToken, EndpointAPIType endpointAPIType,
             DataAPIType dataAPIType) {
-        Preconditions.checkState((keyID != null && secret != null) || oAuthToken != null);
+        Preconditions.checkState((keyID != null && secret != null) || oAuthToken != null,
+                "You must specify a KeyID and Secret or an OAuthToken!");
         Preconditions.checkNotNull(endpointAPIType);
         Preconditions.checkNotNull(dataAPIType);
 
@@ -215,7 +216,7 @@ public class AlpacaAPI {
             if (activityTypes.length == 1) { // Get one activity
                 urlBuilder.appendEndpoint(activityTypes[0].getAPIName());
             } else { // Get list of activities
-                urlBuilder.appendURLParameter("activity_types", Arrays.stream(activityTypes)
+                urlBuilder.appendURLParameter(Parameters.ACTIVITY_TYPES, Arrays.stream(activityTypes)
                         .map(ActivityType::getAPIName).collect(Collectors.joining(","))); // Makes comma-separated list
             }
         }
@@ -270,15 +271,22 @@ public class AlpacaAPI {
 
                     if (arrayJsonObject.has(ACTIVITY_TYPE)) {
                         String activityType = arrayJsonObject.get(ACTIVITY_TYPE).getAsString();
+                        AccountActivity accountActivity;
 
                         // A 'TradeActivity' always has 'activity_type' field as 'FILL'
                         if (activityType.equals(ActivityType.FILL.getAPIName())) {
-                            accountActivities.add(GsonUtil.GSON.fromJson(arrayJsonObject, TradeActivity.class));
+                            accountActivity = GsonUtil.GSON.fromJson(arrayJsonObject, TradeActivity.class);
                         } else {
-                            accountActivities.add(GsonUtil.GSON.fromJson(arrayJsonObject, NonTradeActivity.class));
+                            accountActivity = GsonUtil.GSON.fromJson(arrayJsonObject, NonTradeActivity.class);
                         }
+
+                        if (accountActivity.getActivityType() == null) {
+                            LOGGER.error("No Activity Type enum exists for {}\nReport this!", activityType);
+                        }
+
+                        accountActivities.add(accountActivity);
                     } else {
-                        LOGGER.warn("JSON Object does not have 'activity_type' in response! {}", arrayJsonObject);
+                        LOGGER.error("JSON Object does not have 'activity_type' in response! {}", arrayJsonObject);
                     }
                 } else {
                     throw new IllegalStateException("All array elements must be objects!");

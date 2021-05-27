@@ -71,6 +71,7 @@ public class AlpacaConstants {
         public static final String UNTIL = "until";
         public static final String AFTER = "after";
         public static final String LIMIT = "limit";
+        public static final String ACTIVITY_TYPES = "activity_types";
         public static final String STATUS = "status";
         public static final String PERIOD = "period";
         public static final String TIMEFRAME = "timeframe";

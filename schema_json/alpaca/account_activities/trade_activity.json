@@ -5,10 +5,6 @@
     "existingJavaType": "net.jacobpeterson.domain.alpaca.accountactivities.AccountActivity"
   },
   "properties": {
-    "activity_type": {
-      "existingJavaType": "net.jacobpeterson.alpaca.enums.activity.ActivityType",
-      "title": "FILL"
-    },
     "id": {
       "existingJavaType": "java.lang.String",
       "title": "An id for the activity. Always in “::” format. Can be sent as page_token in requests to facilitate the paging of results."
