@@ -1,7 +1,0 @@
-{
-  "type": "object",
-  "extends": {
-    "existingJavaType": "net.jacobpeterson.domain.alpaca.account.Account"
-  },
-  "title": "See <a href=\"https://docs.alpaca.markets/api-documentation/api-v2/streaming/\">https://docs.alpaca.markets/api-documentation/api-v2/streaming/</a>"
-}

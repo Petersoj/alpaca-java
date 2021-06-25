@@ -1,6 +1,6 @@
 package net.jacobpeterson.alpaca.enums.marketdata;
 
-import net.jacobpeterson.abstracts.enums.APIName;
+import net.jacobpeterson.alpaca.abstracts.enums.APIName;
 
 /**
  * The {@link BarsTimeFrame} enum defines time frame enums for the Bars endpoint.

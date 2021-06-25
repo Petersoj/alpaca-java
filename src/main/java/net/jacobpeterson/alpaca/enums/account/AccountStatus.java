@@ -1,6 +1,6 @@
 package net.jacobpeterson.alpaca.enums.account;
 
-import net.jacobpeterson.abstracts.enums.APIName;
+import net.jacobpeterson.alpaca.abstracts.enums.APIName;
 
 /**
  * {@link AccountStatus} defines enums for various account statuses.

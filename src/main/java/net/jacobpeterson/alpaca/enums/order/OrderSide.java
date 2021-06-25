@@ -1,9 +1,9 @@
 package net.jacobpeterson.alpaca.enums.order;
 
-import net.jacobpeterson.abstracts.enums.APIName;
+import net.jacobpeterson.alpaca.abstracts.enums.APIName;
 
 /**
- * {@link OrderSide} defines enums for various {@link net.jacobpeterson.domain.alpaca.order.Order} sides.
+ * {@link OrderSide} defines enums for various {@link net.jacobpeterson.alpaca.domain.order.Order} sides.
  */
 public enum OrderSide implements APIName {
 

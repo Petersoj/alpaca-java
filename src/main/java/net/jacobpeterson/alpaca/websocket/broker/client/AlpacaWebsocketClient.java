@@ -6,18 +6,19 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
 import com.google.gson.JsonSyntaxException;
-import net.jacobpeterson.abstracts.websocket.client.WebsocketClient;
-import net.jacobpeterson.abstracts.websocket.client.WebsocketStateListener;
-import net.jacobpeterson.abstracts.websocket.exception.WebsocketException;
+import net.jacobpeterson.alpaca.AlpacaAPI;
+import net.jacobpeterson.alpaca.abstracts.websocket.client.WebsocketClient;
+import net.jacobpeterson.alpaca.abstracts.websocket.client.WebsocketStateListener;
+import net.jacobpeterson.alpaca.abstracts.websocket.exception.WebsocketException;
+import net.jacobpeterson.alpaca.domain.streaming.AlpacaStreamMessage;
+import net.jacobpeterson.alpaca.domain.streaming.account.AccountUpdateMessage;
+import net.jacobpeterson.alpaca.domain.streaming.authorization.AuthorizationMessage;
+import net.jacobpeterson.alpaca.domain.streaming.listening.ListeningMessage;
+import net.jacobpeterson.alpaca.domain.streaming.trade.TradeUpdateMessage;
 import net.jacobpeterson.alpaca.enums.api.EndpointAPIType;
+import net.jacobpeterson.alpaca.util.gson.GsonUtil;
 import net.jacobpeterson.alpaca.websocket.broker.listener.AlpacaStreamListener;
 import net.jacobpeterson.alpaca.websocket.broker.message.AlpacaStreamMessageType;
-import net.jacobpeterson.domain.alpaca.streaming.AlpacaStreamMessage;
-import net.jacobpeterson.domain.alpaca.streaming.account.AccountUpdateMessage;
-import net.jacobpeterson.domain.alpaca.streaming.authorization.AuthorizationMessage;
-import net.jacobpeterson.domain.alpaca.streaming.listening.ListeningMessage;
-import net.jacobpeterson.domain.alpaca.streaming.trade.TradeUpdateMessage;
-import net.jacobpeterson.util.gson.GsonUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -32,8 +33,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
- * {@link AlpacaWebsocketClient} represents a client for the {@link net.jacobpeterson.alpaca.AlpacaAPI} Websocket
- * stream.
+ * {@link AlpacaWebsocketClient} represents a client for the {@link AlpacaAPI} Websocket stream.
  */
 public class AlpacaWebsocketClient implements WebsocketClient<AlpacaStreamListener, AlpacaStreamMessageType,
         AlpacaStreamMessage> {

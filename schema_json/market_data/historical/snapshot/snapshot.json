@@ -1,0 +1,26 @@
+{
+  "type": "object",
+  "title": "See <a href=\"https://alpaca.markets/docs/api-documentation/api-v2/market-data/alpaca-data-api-v2/historical/\">https://alpaca.markets/docs/api-documentation/api-v2/market-data/alpaca-data-api-v2/historical/</a>",
+  "properties": {
+    "latestTrade": {
+      "existingJavaType": "net.jacobpeterson.alpaca.domain.marketdata.historical.trade.Trade",
+      "title": "Latest trade."
+    },
+    "latestQuote": {
+      "existingJavaType": "net.jacobpeterson.alpaca.domain.marketdata.historical.quote.Quote",
+      "title": "Latest quote."
+    },
+    "minuteBar": {
+      "existingJavaType": "net.jacobpeterson.alpaca.domain.marketdata.historical.bar.Bar",
+      "title": "Minute bar."
+    },
+    "dailyBar": {
+      "existingJavaType": "net.jacobpeterson.alpaca.domain.marketdata.historical.bar.Bar",
+      "title": "Daily bar."
+    },
+    "prevDailyBar": {
+      "existingJavaType": "net.jacobpeterson.alpaca.domain.marketdata.historical.bar.Bar",
+      "title": "Previous daily close bar."
+    }
+  }
+}

@@ -6,7 +6,7 @@ package net.jacobpeterson.alpaca;
 public class AlpacaConstants {
 
     /**
-     * Defines URLs of {@link AlpacaAPI}
+     * Defines URLs for {@link AlpacaAPI}
      */
     public static class URLs {
 
@@ -14,7 +14,7 @@ public class AlpacaConstants {
     }
 
     /**
-     * Defines endpoints of {@link AlpacaAPI}.
+     * Defines endpoints for {@link AlpacaAPI}.
      */
     public static class Endpoints {
 
@@ -41,7 +41,7 @@ public class AlpacaConstants {
     }
 
     /**
-     * Defines parameters of {@link AlpacaAPI}.
+     * Defines parameters for {@link AlpacaAPI}.
      */
     public static class Parameters {
 
@@ -81,7 +81,7 @@ public class AlpacaConstants {
     }
 
     /**
-     * Defines miscellaneous fields of {@link AlpacaAPI}.
+     * Defines miscellaneous fields for {@link AlpacaAPI}.
      */
     public static class Fields {
 

@@ -1,6 +1,6 @@
 package net.jacobpeterson.alpaca.enums.activity;
 
-import net.jacobpeterson.abstracts.enums.APIName;
+import net.jacobpeterson.alpaca.abstracts.enums.APIName;
 
 /**
  * {@link ActivityType} defines enums for various account activity types.

@@ -1,30 +1,27 @@
 package live.net.jacobpeterson.alpaca;
 
-import net.jacobpeterson.abstracts.enums.SortDirection;
 import net.jacobpeterson.alpaca.AlpacaAPI;
+import net.jacobpeterson.alpaca.abstracts.enums.SortDirection;
+import net.jacobpeterson.alpaca.domain.account.Account;
+import net.jacobpeterson.alpaca.domain.accountactivities.AccountActivity;
+import net.jacobpeterson.alpaca.domain.accountactivities.NonTradeActivity;
+import net.jacobpeterson.alpaca.domain.accountactivities.TradeActivity;
+import net.jacobpeterson.alpaca.domain.accountconfiguration.AccountConfiguration;
+import net.jacobpeterson.alpaca.domain.clock.Clock;
+import net.jacobpeterson.alpaca.domain.order.Order;
 import net.jacobpeterson.alpaca.enums.activity.ActivityType;
 import net.jacobpeterson.alpaca.enums.order.OrderStatus;
 import net.jacobpeterson.alpaca.rest.exception.AlpacaAPIRequestException;
-import net.jacobpeterson.domain.alpaca.account.Account;
-import net.jacobpeterson.domain.alpaca.accountactivities.AccountActivity;
-import net.jacobpeterson.domain.alpaca.accountactivities.NonTradeActivity;
-import net.jacobpeterson.domain.alpaca.accountactivities.TradeActivity;
-import net.jacobpeterson.domain.alpaca.accountconfiguration.AccountConfiguration;
-import net.jacobpeterson.domain.alpaca.clock.Clock;
-import net.jacobpeterson.domain.alpaca.order.Order;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.MethodOrderer;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestMethodOrder;
+import org.junit.jupiter.api.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.time.ZonedDateTime;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.fail;
 
 /**
  * {@link AlpacaAPIEndpointTest} tests live endpoints using Alpaca Paper credentials given in the

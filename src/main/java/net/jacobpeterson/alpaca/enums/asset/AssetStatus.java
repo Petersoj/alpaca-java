@@ -1,6 +1,6 @@
 package net.jacobpeterson.alpaca.enums.asset;
 
-import net.jacobpeterson.abstracts.enums.APIName;
+import net.jacobpeterson.alpaca.abstracts.enums.APIName;
 
 /**
  * {@link AssetStatus} defines enums of various asset statuses.

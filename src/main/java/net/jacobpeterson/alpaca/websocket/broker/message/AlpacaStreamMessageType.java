@@ -1,9 +1,9 @@
 package net.jacobpeterson.alpaca.websocket.broker.message;
 
 import com.google.gson.annotations.SerializedName;
-import net.jacobpeterson.abstracts.enums.APIName;
-import net.jacobpeterson.abstracts.websocket.message.StreamMessageType;
-import net.jacobpeterson.util.gson.GsonUtil;
+import net.jacobpeterson.alpaca.abstracts.enums.APIName;
+import net.jacobpeterson.alpaca.abstracts.websocket.message.StreamMessageType;
+import net.jacobpeterson.alpaca.util.gson.GsonUtil;
 
 /**
  * {@link AlpacaStreamMessageType} defines enums for various message types for {@link

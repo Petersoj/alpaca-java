@@ -1,9 +1,9 @@
 package net.jacobpeterson.alpaca.enums.order;
 
-import net.jacobpeterson.abstracts.enums.APIName;
+import net.jacobpeterson.alpaca.abstracts.enums.APIName;
 
 /**
- * {@link OrderClass} defines enums of various {@link net.jacobpeterson.domain.alpaca.order.Order} classes.
+ * {@link OrderClass} defines enums of various {@link net.jacobpeterson.alpaca.domain.order.Order} classes.
  */
 public enum OrderClass implements APIName {
 

@@ -3,15 +3,15 @@ package net.jacobpeterson.alpaca.rest.exception;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.mashape.unirest.http.HttpResponse;
-import net.jacobpeterson.abstracts.rest.exception.AbstractAPIRequestException;
-import net.jacobpeterson.util.gson.GsonUtil;
+import net.jacobpeterson.alpaca.AlpacaAPI;
+import net.jacobpeterson.alpaca.abstracts.rest.exception.AbstractAPIRequestException;
+import net.jacobpeterson.alpaca.util.gson.GsonUtil;
 
 import java.io.InputStream;
 import java.io.InputStreamReader;
 
 /**
- * {@link AlpacaAPIRequestException} represents {@link HttpResponse} request exceptions for {@link
- * net.jacobpeterson.alpaca.AlpacaAPI}.
+ * {@link AlpacaAPIRequestException} represents {@link HttpResponse} {@link Exception}s for {@link AlpacaAPI}.
  */
 public class AlpacaAPIRequestException extends AbstractAPIRequestException {
 

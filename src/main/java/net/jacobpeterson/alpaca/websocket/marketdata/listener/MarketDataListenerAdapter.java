@@ -1,7 +1,7 @@
 package net.jacobpeterson.alpaca.websocket.marketdata.listener;
 
+import net.jacobpeterson.alpaca.domain.marketdata.realtime.MarketDataMessage;
 import net.jacobpeterson.alpaca.websocket.marketdata.message.MarketDataMessageType;
-import net.jacobpeterson.domain.alpaca.marketdata.realtime.MarketDataMessage;
 
 import java.util.Arrays;
 import java.util.HashMap;

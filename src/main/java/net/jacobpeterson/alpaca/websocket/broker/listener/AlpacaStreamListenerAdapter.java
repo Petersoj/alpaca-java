@@ -1,7 +1,7 @@
 package net.jacobpeterson.alpaca.websocket.broker.listener;
 
+import net.jacobpeterson.alpaca.domain.streaming.AlpacaStreamMessage;
 import net.jacobpeterson.alpaca.websocket.broker.message.AlpacaStreamMessageType;
-import net.jacobpeterson.domain.alpaca.streaming.AlpacaStreamMessage;
 
 import java.util.Arrays;
 import java.util.HashSet;

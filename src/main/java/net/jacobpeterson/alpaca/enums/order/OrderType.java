@@ -1,9 +1,9 @@
 package net.jacobpeterson.alpaca.enums.order;
 
-import net.jacobpeterson.abstracts.enums.APIName;
+import net.jacobpeterson.alpaca.abstracts.enums.APIName;
 
 /**
- * {@link OrderType} defines enums for various {@link net.jacobpeterson.domain.alpaca.order.Order} types.
+ * {@link OrderType} defines enums for various {@link net.jacobpeterson.alpaca.domain.order.Order} types.
  *
  * @see <a href="https://alpaca.markets/docs/trading-on-alpaca/orders/#order-types">Order Types</a>
  */

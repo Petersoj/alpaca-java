@@ -1,11 +1,12 @@
 package net.jacobpeterson.alpaca.rest;
 
-import net.jacobpeterson.abstracts.rest.AbstractRequestBuilder;
+import net.jacobpeterson.alpaca.AlpacaAPI;
+import net.jacobpeterson.alpaca.abstracts.rest.AbstractRequestBuilder;
 
 import java.util.Arrays;
 
 /**
- * {@link AlpacaRequestBuilder} is a builder for URL Strings for {@link net.jacobpeterson.alpaca.AlpacaAPI}.
+ * {@link AlpacaRequestBuilder} is a builder for URL Strings for {@link AlpacaAPI}.
  */
 public class AlpacaRequestBuilder extends AbstractRequestBuilder {
 

@@ -1,10 +1,10 @@
 package net.jacobpeterson.alpaca.enums.portfolio;
 
-import net.jacobpeterson.abstracts.enums.APIName;
+import net.jacobpeterson.alpaca.abstracts.enums.APIName;
 
 /**
  * {@link PortfolioPeriodUnit} defines enums for various
- * {@link net.jacobpeterson.domain.alpaca.portfoliohistory.PortfolioHistory}
+ * {@link net.jacobpeterson.alpaca.domain.portfoliohistory.PortfolioHistory}
  * period units.
  */
 public enum PortfolioPeriodUnit implements APIName {

@@ -1,8 +1,8 @@
 package net.jacobpeterson.alpaca.websocket.marketdata.message;
 
 import com.google.gson.annotations.SerializedName;
-import net.jacobpeterson.abstracts.enums.APIName;
-import net.jacobpeterson.abstracts.websocket.message.StreamMessageType;
+import net.jacobpeterson.alpaca.abstracts.enums.APIName;
+import net.jacobpeterson.alpaca.abstracts.websocket.message.StreamMessageType;
 
 /**
  * {@link MarketDataMessageType} defines enums for various market data stream message types.

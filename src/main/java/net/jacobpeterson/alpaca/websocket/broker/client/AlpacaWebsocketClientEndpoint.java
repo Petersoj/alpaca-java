@@ -1,6 +1,7 @@
 package net.jacobpeterson.alpaca.websocket.broker.client;
 
-import net.jacobpeterson.abstracts.websocket.client.AbstractWebsocketClientEndpoint;
+import net.jacobpeterson.alpaca.AlpacaAPI;
+import net.jacobpeterson.alpaca.abstracts.websocket.client.AbstractWebsocketClientEndpoint;
 
 import javax.websocket.ClientEndpoint;
 import javax.websocket.CloseReason;
@@ -13,8 +14,7 @@ import java.net.URI;
 import java.nio.charset.StandardCharsets;
 
 /**
- * {@link AlpacaWebsocketClientEndpoint} is used for handling a Websocket directly for {@link
- * net.jacobpeterson.alpaca.AlpacaAPI}.
+ * {@link AlpacaWebsocketClientEndpoint} is used for handling a Websocket directly for {@link AlpacaAPI}.
  */
 @ClientEndpoint(subprotocols = "BINARY")
 public class AlpacaWebsocketClientEndpoint extends AbstractWebsocketClientEndpoint<AlpacaWebsocketClient> {

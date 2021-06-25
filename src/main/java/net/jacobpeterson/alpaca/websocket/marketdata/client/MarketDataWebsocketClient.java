@@ -4,22 +4,23 @@ import com.google.common.base.Preconditions;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import net.jacobpeterson.abstracts.websocket.client.WebsocketClient;
-import net.jacobpeterson.abstracts.websocket.client.WebsocketStateListener;
-import net.jacobpeterson.abstracts.websocket.exception.WebsocketException;
+import net.jacobpeterson.alpaca.AlpacaAPI;
+import net.jacobpeterson.alpaca.abstracts.websocket.client.WebsocketClient;
+import net.jacobpeterson.alpaca.abstracts.websocket.client.WebsocketStateListener;
+import net.jacobpeterson.alpaca.abstracts.websocket.exception.WebsocketException;
+import net.jacobpeterson.alpaca.domain.marketdata.realtime.MarketDataMessage;
+import net.jacobpeterson.alpaca.domain.marketdata.realtime.SymbolMessage;
+import net.jacobpeterson.alpaca.domain.marketdata.realtime.bar.BarMessage;
+import net.jacobpeterson.alpaca.domain.marketdata.realtime.control.ErrorMessage;
+import net.jacobpeterson.alpaca.domain.marketdata.realtime.control.SubscriptionsMessage;
+import net.jacobpeterson.alpaca.domain.marketdata.realtime.control.SuccessMessage;
+import net.jacobpeterson.alpaca.domain.marketdata.realtime.quote.QuoteMessage;
+import net.jacobpeterson.alpaca.domain.marketdata.realtime.trade.TradeMessage;
 import net.jacobpeterson.alpaca.enums.api.DataAPIType;
+import net.jacobpeterson.alpaca.util.gson.GsonUtil;
 import net.jacobpeterson.alpaca.websocket.broker.client.AlpacaWebsocketClient;
 import net.jacobpeterson.alpaca.websocket.marketdata.listener.MarketDataListener;
 import net.jacobpeterson.alpaca.websocket.marketdata.message.MarketDataMessageType;
-import net.jacobpeterson.domain.alpaca.marketdata.realtime.MarketDataMessage;
-import net.jacobpeterson.domain.alpaca.marketdata.realtime.SymbolMessage;
-import net.jacobpeterson.domain.alpaca.marketdata.realtime.bar.BarMessage;
-import net.jacobpeterson.domain.alpaca.marketdata.realtime.control.ErrorMessage;
-import net.jacobpeterson.domain.alpaca.marketdata.realtime.control.SubscriptionsMessage;
-import net.jacobpeterson.domain.alpaca.marketdata.realtime.control.SuccessMessage;
-import net.jacobpeterson.domain.alpaca.marketdata.realtime.quote.QuoteMessage;
-import net.jacobpeterson.domain.alpaca.marketdata.realtime.trade.TradeMessage;
-import net.jacobpeterson.util.gson.GsonUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -34,8 +35,7 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- * {@link MarketDataWebsocketClient} represents a client for the {@link net.jacobpeterson.alpaca.AlpacaAPI} market data
- * Websocket stream.
+ * {@link MarketDataWebsocketClient} represents a client for the {@link AlpacaAPI} market data Websocket stream.
  */
 public class MarketDataWebsocketClient implements WebsocketClient<MarketDataListener, MarketDataMessageType,
         MarketDataMessage> {

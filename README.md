@@ -10,32 +10,7 @@
 ## Overview
 This is a Java implementation for the <a href="https://alpaca.markets/">Alpaca</a> API. Alpaca lets you trade with algorithms, connect with apps, and build services all with a commission-free stock trading API. This library is community developed and if you have any questions, please ask them on [Github Discussions](https://github.com/Petersoj/alpaca-java/discussions), the [Alpaca Slack #dev-alpaca-java channel](https://alpaca.markets/slack), or on the [Alpaca Forums](https://forum.alpaca.markets/).
 
-## Table of Contents
-1. [Gradle and Maven Integration](#Gradle-and-Maven-Integration)
-1. [Configuration](#Configuration)
-1. [Logger](#Logger)
-1. [AlpacaAPI](#AlpacaAPI)
-    - [AlpacaAPIRequestException](#AlpacaAPIRequestException)
-    - [Account](#Account)
-    - [AccountActivity](#AccountActivity)
-    - [AccountConfiguration](#AccountConfiguration)
-    - [Orders](#Orders)
-    - [Positions](#Positions)
-    - [Assets](#Assets)
-    - [Watchlist](#Watchlist)
-    - [PortfolioHistory](#PortfolioHistory)
-    - [Calendar](#Calendar)
-    - [Clock](#Clock)
-    - [Alpaca Streaming](#Alpaca-Streaming)
-    - [Trades](#Trades)
-    - [Latest Trade](#Latest-Trade)
-    - [Quotes](#Quotes)
-    - [Latest Quote](#Latest-Quote)
-    - [Bars](#Bars)
-    - [Snapshot](#Snapshot)
-    - [Realtime Market Data](#Realtime-Market-Data)
-1. [Building](#Building)
-1. [Testing](#Testing)
+Give this repository a star ⭐ if it helped you build an awesome trading algorithm in Java!
 
 ## Gradle and Maven Integration
 If you are using Gradle as your build tool, add the following dependency to your `build.gradle` file:

@@ -1,8 +1,8 @@
 package net.jacobpeterson.alpaca.enums.streaming;
 
 import com.google.gson.annotations.SerializedName;
-import net.jacobpeterson.abstracts.enums.APIName;
-import net.jacobpeterson.util.gson.GsonUtil;
+import net.jacobpeterson.alpaca.abstracts.enums.APIName;
+import net.jacobpeterson.alpaca.util.gson.GsonUtil;
 
 /**
  * {@link TradeUpdateEvent} defines enums for various trade update events.

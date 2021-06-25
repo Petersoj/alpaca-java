@@ -3,7 +3,8 @@ package net.jacobpeterson.alpaca.rest;
 import com.google.common.base.Preconditions;
 import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.exceptions.UnirestException;
-import net.jacobpeterson.abstracts.rest.AbstractRequest;
+import net.jacobpeterson.alpaca.AlpacaAPI;
+import net.jacobpeterson.alpaca.abstracts.rest.AbstractRequest;
 import net.jacobpeterson.alpaca.properties.AlpacaProperties;
 import net.jacobpeterson.alpaca.rest.exception.AlpacaAPIRequestException;
 
@@ -11,7 +12,7 @@ import java.io.InputStream;
 import java.lang.reflect.Type;
 
 /**
- * {@link AlpacaRequest} contains methods for HTTP requests for {@link net.jacobpeterson.alpaca.AlpacaAPI}.
+ * {@link AlpacaRequest} contains methods for HTTP requests for {@link AlpacaAPI}.
  */
 public class AlpacaRequest extends AbstractRequest {
 

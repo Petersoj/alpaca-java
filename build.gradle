@@ -3,7 +3,6 @@ import org.jsonschema2pojo.gradle.GenerateJsonSchemaJavaTask
 buildscript {
     repositories {
         mavenCentral()
-        jcenter()
     }
 
     dependencies {
@@ -33,9 +32,7 @@ group = 'net.jacobpeterson'
 version = '7.2.1-SNAPSHOT'
 
 repositories {
-    mavenLocal()
     mavenCentral()
-    jcenter()
 }
 
 dependencies {
@@ -163,6 +160,7 @@ nexusStaging {
 processResources {
     exclude('alpaca.properties')
 }
+
 //
 // END publishing
 //
@@ -170,6 +168,7 @@ processResources {
 //
 // START POJO generation
 //
+
 // The generated POJOs will be in a package structure analogous to the path in the 'schema_json/' directory
 // See: https://github.com/joelittlejohn/jsonschema2pojo/wiki/Reference
 
@@ -177,7 +176,7 @@ final def targetDirectoryPath = file("${project.buildDir}/generated-sources/sche
 
 task generatePOJOs() {
     final def jsonSourceDirectory = file("${project.projectDir}/schema_json").getPath()
-    final def jsonPackageNameStart = "net.jacobpeterson.domain"
+    final def jsonPackageNameStart = "net.jacobpeterson.alpaca.domain"
 
     // Loop through all files in schema JSON file tree
     file(jsonSourceDirectory).eachFileRecurse { jsonFile ->
@@ -232,6 +231,7 @@ jsonSchema2Pojo {
     includeGetters = true
     includeSetters = true
 }
+
 //
 // END POJO generation
 //

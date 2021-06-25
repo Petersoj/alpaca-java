@@ -1,8 +1,8 @@
 package net.jacobpeterson.alpaca.websocket.marketdata.listener;
 
-import net.jacobpeterson.abstracts.websocket.listener.StreamListener;
+import net.jacobpeterson.alpaca.abstracts.websocket.listener.StreamListener;
+import net.jacobpeterson.alpaca.domain.marketdata.realtime.MarketDataMessage;
 import net.jacobpeterson.alpaca.websocket.marketdata.message.MarketDataMessageType;
-import net.jacobpeterson.domain.alpaca.marketdata.realtime.MarketDataMessage;
 
 import java.util.Map;
 import java.util.Set;

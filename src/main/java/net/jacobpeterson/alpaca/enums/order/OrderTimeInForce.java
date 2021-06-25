@@ -1,9 +1,9 @@
 package net.jacobpeterson.alpaca.enums.order;
 
-import net.jacobpeterson.abstracts.enums.APIName;
+import net.jacobpeterson.alpaca.abstracts.enums.APIName;
 
 /**
- * {@link OrderTimeInForce} defines enums for various {@link net.jacobpeterson.domain.alpaca.order.Order} TIFs.
+ * {@link OrderTimeInForce} defines enums for various {@link net.jacobpeterson.alpaca.domain.order.Order} TIFs.
  *
  * @see <a href="https://alpaca.markets/docs/trading-on-alpaca/orders/#time-in-force">Time in Force</a>
  */

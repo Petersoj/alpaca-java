@@ -1,9 +1,9 @@
 package net.jacobpeterson.alpaca.enums.order;
 
-import net.jacobpeterson.abstracts.enums.APIName;
+import net.jacobpeterson.alpaca.abstracts.enums.APIName;
 
 /**
- * {@link OrderStatus} defines enums for various {@link net.jacobpeterson.domain.alpaca.order.Order} statuses.
+ * {@link OrderStatus} defines enums for various {@link net.jacobpeterson.alpaca.domain.order.Order} statuses.
  */
 public enum OrderStatus implements APIName {
 

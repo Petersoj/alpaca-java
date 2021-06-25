@@ -1,0 +1,39 @@
+{
+  "type": "object",
+  "extends": {
+    "existingJavaType": "net.jacobpeterson.alpaca.domain.marketdata.realtime.SymbolMessage"
+  },
+  "title": "See <a href=\"https://alpaca.markets/docs/api-documentation/api-v2/market-data/streaming/\">https://alpaca.markets/docs/api-documentation/api-v2/market-data/streaming/</a>",
+  "properties": {
+    "o": {
+      "existingJavaType": "java.lang.Double",
+      "javaName": "open",
+      "title": "Open price"
+    },
+    "h": {
+      "existingJavaType": "java.lang.Double",
+      "javaName": "high",
+      "title": "High price"
+    },
+    "l": {
+      "existingJavaType": "java.lang.Double",
+      "javaName": "low",
+      "title": "Low price"
+    },
+    "c": {
+      "existingJavaType": "java.lang.Double",
+      "javaName": "close",
+      "title": "Close price"
+    },
+    "v": {
+      "existingJavaType": "java.lang.Integer",
+      "javaName": "volume",
+      "title": "Volume"
+    },
+    "t": {
+      "existingJavaType": "java.time.ZonedDateTime",
+      "javaName": "timestamp",
+      "title": "Timestamp"
+    }
+  }
+}

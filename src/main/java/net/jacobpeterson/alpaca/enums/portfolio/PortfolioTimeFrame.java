@@ -1,12 +1,12 @@
 package net.jacobpeterson.alpaca.enums.portfolio;
 
 import com.google.gson.annotations.SerializedName;
-import net.jacobpeterson.abstracts.enums.APIName;
-import net.jacobpeterson.util.gson.GsonUtil;
+import net.jacobpeterson.alpaca.abstracts.enums.APIName;
+import net.jacobpeterson.alpaca.util.gson.GsonUtil;
 
 /**
  * {@link PortfolioTimeFrame} defines enums for various
- * {@link net.jacobpeterson.domain.alpaca.portfoliohistory.PortfolioHistory}
+ * {@link net.jacobpeterson.alpaca.domain.portfoliohistory.PortfolioHistory}
  * time frames.
  */
 public enum PortfolioTimeFrame implements APIName {

@@ -1,0 +1,12 @@
+{
+  "type": "object",
+  "extends": {
+    "existingJavaType": "net.jacobpeterson.alpaca.domain.streaming.AlpacaStreamMessage"
+  },
+  "title": "See <a href=\"https://docs.alpaca.markets/api-documentation/api-v2/streaming/\">https://docs.alpaca.markets/api-documentation/api-v2/streaming/</a>",
+  "properties": {
+    "data": {
+      "existingJavaType": "net.jacobpeterson.alpaca.domain.streaming.account.AccountUpdate"
+    }
+  }
+}
