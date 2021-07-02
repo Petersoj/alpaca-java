@@ -6,50 +6,39 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
 import com.google.gson.reflect.TypeToken;
-import com.mashape.unirest.http.HttpResponse;
-import com.mashape.unirest.http.exceptions.UnirestException;
-import net.jacobpeterson.alpaca.AlpacaConstants.Endpoints;
-import net.jacobpeterson.alpaca.AlpacaConstants.Parameters;
-import net.jacobpeterson.alpaca.AlpacaConstants.URLs;
-import net.jacobpeterson.alpaca.abstracts.enums.SortDirection;
 import net.jacobpeterson.alpaca.abstracts.websocket.client.WebsocketStateListener;
 import net.jacobpeterson.alpaca.abstracts.websocket.exception.WebsocketException;
-import net.jacobpeterson.alpaca.domain.account.Account;
-import net.jacobpeterson.alpaca.domain.accountactivities.AccountActivity;
-import net.jacobpeterson.alpaca.domain.accountactivities.NonTradeActivity;
-import net.jacobpeterson.alpaca.domain.accountactivities.TradeActivity;
-import net.jacobpeterson.alpaca.domain.accountconfiguration.AccountConfiguration;
-import net.jacobpeterson.alpaca.domain.asset.Asset;
-import net.jacobpeterson.alpaca.domain.calendar.Calendar;
-import net.jacobpeterson.alpaca.domain.clock.Clock;
-import net.jacobpeterson.alpaca.domain.marketdata.historical.bar.Bar;
-import net.jacobpeterson.alpaca.domain.marketdata.historical.bar.BarsResponse;
-import net.jacobpeterson.alpaca.domain.marketdata.historical.quote.LatestQuoteResponse;
-import net.jacobpeterson.alpaca.domain.marketdata.historical.quote.Quote;
-import net.jacobpeterson.alpaca.domain.marketdata.historical.quote.QuotesResponse;
-import net.jacobpeterson.alpaca.domain.marketdata.historical.snapshot.Snapshot;
-import net.jacobpeterson.alpaca.domain.marketdata.historical.trade.LatestTradeResponse;
-import net.jacobpeterson.alpaca.domain.marketdata.historical.trade.Trade;
-import net.jacobpeterson.alpaca.domain.marketdata.historical.trade.TradesResponse;
-import net.jacobpeterson.alpaca.domain.order.CancelledOrder;
-import net.jacobpeterson.alpaca.domain.order.Order;
-import net.jacobpeterson.alpaca.domain.portfoliohistory.PortfolioHistory;
-import net.jacobpeterson.alpaca.domain.position.ClosePositionOrder;
-import net.jacobpeterson.alpaca.domain.position.Position;
-import net.jacobpeterson.alpaca.domain.watchlist.Watchlist;
-import net.jacobpeterson.alpaca.enums.activity.ActivityType;
+import net.jacobpeterson.alpaca.model.account.Account;
+import net.jacobpeterson.alpaca.model.accountactivities.AccountActivity;
+import net.jacobpeterson.alpaca.model.accountactivities.NonTradeActivity;
+import net.jacobpeterson.alpaca.model.accountactivities.TradeActivity;
+import net.jacobpeterson.alpaca.model.accountactivities.enums.ActivityType;
+import net.jacobpeterson.alpaca.model.accountconfiguration.AccountConfiguration;
+import net.jacobpeterson.alpaca.model.asset.Asset;
+import net.jacobpeterson.alpaca.model.asset.enums.AssetStatus;
+import net.jacobpeterson.alpaca.model.marketdata.historical.bar.Bar;
+import net.jacobpeterson.alpaca.model.marketdata.historical.bar.BarsResponse;
+import net.jacobpeterson.alpaca.model.marketdata.historical.quote.LatestQuoteResponse;
+import net.jacobpeterson.alpaca.model.marketdata.historical.quote.Quote;
+import net.jacobpeterson.alpaca.model.marketdata.historical.quote.QuotesResponse;
+import net.jacobpeterson.alpaca.model.marketdata.historical.trade.LatestTradeResponse;
+import net.jacobpeterson.alpaca.model.marketdata.historical.trade.Trade;
+import net.jacobpeterson.alpaca.model.marketdata.historical.trade.TradesResponse;
+import net.jacobpeterson.alpaca.model.order.CancelledOrder;
+import net.jacobpeterson.alpaca.model.order.Order;
+import net.jacobpeterson.alpaca.model.order.enums.OrderClass;
+import net.jacobpeterson.alpaca.model.order.enums.OrderSide;
+import net.jacobpeterson.alpaca.model.order.enums.OrderStatus;
+import net.jacobpeterson.alpaca.model.order.enums.OrderTimeInForce;
+import net.jacobpeterson.alpaca.model.order.enums.OrderType;
+import net.jacobpeterson.alpaca.model.portfoliohistory.PortfolioHistory;
+import net.jacobpeterson.alpaca.model.portfoliohistory.enums.PortfolioPeriodUnit;
+import net.jacobpeterson.alpaca.model.portfoliohistory.enums.PortfolioTimeFrame;
+import net.jacobpeterson.alpaca.model.position.ClosePositionOrder;
+import net.jacobpeterson.alpaca.model.watchlist.Watchlist;
+import net.jacobpeterson.alpaca.properties.AlpacaProperties;
 import net.jacobpeterson.alpaca.properties.enums.DataAPIType;
 import net.jacobpeterson.alpaca.properties.enums.EndpointAPIType;
-import net.jacobpeterson.alpaca.enums.asset.AssetStatus;
-import net.jacobpeterson.alpaca.enums.marketdata.BarsTimeFrame;
-import net.jacobpeterson.alpaca.enums.order.OrderClass;
-import net.jacobpeterson.alpaca.enums.order.OrderSide;
-import net.jacobpeterson.alpaca.enums.order.OrderStatus;
-import net.jacobpeterson.alpaca.enums.order.OrderTimeInForce;
-import net.jacobpeterson.alpaca.enums.order.OrderType;
-import net.jacobpeterson.alpaca.enums.portfolio.PortfolioPeriodUnit;
-import net.jacobpeterson.alpaca.enums.portfolio.PortfolioTimeFrame;
-import net.jacobpeterson.alpaca.properties.AlpacaProperties;
 import net.jacobpeterson.alpaca.rest.AlpacaRequest;
 import net.jacobpeterson.alpaca.rest.AlpacaRequestBuilder;
 import net.jacobpeterson.alpaca.rest.exception.AlpacaAPIRequestException;
@@ -74,7 +63,7 @@ import java.util.Map;
 import java.util.StringJoiner;
 import java.util.stream.Collectors;
 
-import static net.jacobpeterson.alpaca.AlpacaConstants.Fields.ACTIVITY_TYPE;
+import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
  * {@link AlpacaAPI} contains several methods to interface with Alpaca. You will generally only need one instance of it
@@ -86,6 +75,89 @@ import static net.jacobpeterson.alpaca.AlpacaConstants.Fields.ACTIVITY_TYPE;
  * @see <a href="https://docs.alpaca.markets/api-documentation/api-v2/">Alpaca API documentation</a>
  */
 public class AlpacaAPI {
+
+    /**
+     * Defines URLs constants.
+     */
+    static class URLs {
+
+        public static final String DATA = "https://data.alpaca.markets";
+    }
+
+    /**
+     * Defines endpoint constants.
+     */
+    static class Endpoints {
+
+        public static final String VERSION_2 = "v2";
+        public static final String STOCKS = "stocks";
+        public static final String CLOCK = "clock";
+        public static final String CALENDAR = "calendar";
+        public static final String ASSETS = "assets";
+        public static final String POSITIONS = "positions";
+        public static final String ACCOUNT = "account";
+        public static final String ACTIVITIES = "activities";
+        public static final String CONFIGURATIONS = "configurations";
+        public static final String ORDERS_BY_CLIENT_ORDER_ID = "orders:by_client_order_id";
+        public static final String ORDERS = "orders";
+        public static final String WATCHLISTS = "watchlists";
+        public static final String PORTFOLIO = "portfolio";
+        public static final String HISTORY = "history";
+        public static final String TRADES = "trades";
+        public static final String QUOTES = "quotes";
+        public static final String BARS = "bars";
+        public static final String SNAPSHOT = "snapshot";
+        public static final String SNAPSHOTS = "snapshots";
+        public static final String LATEST = "latest";
+    }
+
+    /**
+     * Defines parameters constants.
+     */
+    static class Parameters {
+
+        public static final String SYMBOLS = "symbols";
+        public static final String END = "end";
+        public static final String START = "start";
+        public static final String DATE = "date";
+        public static final String ASSET_CLASS = "asset_class";
+        public static final String CLIENT_ORDER_ID = "client_order_id";
+        public static final String ORDER_CLASS = "order_class";
+        public static final String TAKE_PROFIT = "take_profit";
+        public static final String STOP_LOSS = "stop_loss";
+        public static final String STOP_PRICE = "stop_price";
+        public static final String TRAIL_PRICE = "trail_price";
+        public static final String TRAIL_PERCENT = "trail_percent";
+        public static final String TRAIL = "trail";
+        public static final String LIMIT_PRICE = "limit_price";
+        public static final String TIME_IN_FORCE = "time_in_force";
+        public static final String EXTENDED_HOURS = "extended_hours";
+        public static final String TYPE = "type";
+        public static final String SIDE = "side";
+        public static final String QTY = "qty";
+        public static final String NOTIONAL = "notional";
+        public static final String SYMBOL = "symbol";
+        public static final String DIRECTION = "direction";
+        public static final String NESTED = "nested";
+        public static final String UNTIL = "until";
+        public static final String AFTER = "after";
+        public static final String LIMIT = "limit";
+        public static final String ACTIVITY_TYPES = "activity_types";
+        public static final String STATUS = "status";
+        public static final String PERIOD = "period";
+        public static final String TIMEFRAME = "timeframe";
+        public static final String DATE_END = "date_end";
+        public static final String PAGE_SIZE = "page_size";
+        public static final String PAGE_TOKEN = "page_token";
+    }
+
+    /**
+     * Defines field constants.
+     */
+    static class Fields {
+
+        public static final String ACTIVITY_TYPE = "activity_type";
+    }
 
     private static final Logger LOGGER = LoggerFactory.getLogger(AlpacaAPI.class);
 
@@ -100,11 +172,10 @@ public class AlpacaAPI {
      * associated defaults).
      */
     public AlpacaAPI() {
-        this(AlpacaProperties.KEY_ID_VALUE, AlpacaProperties.SECRET_VALUE,
+        this(AlpacaProperties.KEY_ID_VALUE,
+                AlpacaProperties.SECRET_VALUE,
                 EndpointAPIType.fromPropertyName(AlpacaProperties.ENDPOINT_API_TYPE_VALUE),
                 DataAPIType.fromPropertyName(AlpacaProperties.DATA_API_TYPE_VALUE));
-
-        LOGGER.debug(AlpacaProperties.staticToString());
     }
 
     /**
@@ -114,7 +185,8 @@ public class AlpacaAPI {
      * @param secret the secret
      */
     public AlpacaAPI(String keyID, String secret) {
-        this(keyID, secret, null, EndpointAPIType.fromPropertyName(AlpacaProperties.ENDPOINT_API_TYPE_VALUE),
+        this(keyID, secret, null,
+                EndpointAPIType.fromPropertyName(AlpacaProperties.ENDPOINT_API_TYPE_VALUE),
                 DataAPIType.fromPropertyName(AlpacaProperties.DATA_API_TYPE_VALUE));
     }
 
@@ -136,7 +208,8 @@ public class AlpacaAPI {
      * @param oAuthToken the OAuth token
      */
     public AlpacaAPI(String oAuthToken) {
-        this(null, null, oAuthToken, EndpointAPIType.fromPropertyName(AlpacaProperties.ENDPOINT_API_TYPE_VALUE),
+        this(null, null, oAuthToken,
+                EndpointAPIType.fromPropertyName(AlpacaProperties.ENDPOINT_API_TYPE_VALUE),
                 DataAPIType.fromPropertyName(AlpacaProperties.DATA_API_TYPE_VALUE));
     }
 
@@ -152,9 +225,9 @@ public class AlpacaAPI {
     public AlpacaAPI(String keyID, String secret, String oAuthToken, EndpointAPIType endpointAPIType,
             DataAPIType dataAPIType) {
         Preconditions.checkState((keyID != null && secret != null) || oAuthToken != null,
-                "You must specify a KeyID and Secret or an OAuthToken!");
-        Preconditions.checkNotNull(endpointAPIType);
-        Preconditions.checkNotNull(dataAPIType);
+                "You must specify a (KeyID and Secret) or an OAuthToken!");
+        checkNotNull(endpointAPIType);
+        checkNotNull(dataAPIType);
 
         this.keyID = keyID;
         this.apiURL = endpointAPIType.getURL();
@@ -328,7 +401,7 @@ public class AlpacaAPI {
      */
     public AccountConfiguration setAccountConfiguration(AccountConfiguration accountConfiguration)
             throws AlpacaAPIRequestException {
-        Preconditions.checkNotNull(accountConfiguration);
+        checkNotNull(accountConfiguration);
 
         AlpacaRequestBuilder urlBuilder = new AlpacaRequestBuilder(apiURL, Endpoints.VERSION_2,
                 Endpoints.ACCOUNT,
@@ -431,11 +504,11 @@ public class AlpacaAPI {
             Boolean extendedHours, String clientOrderId, OrderClass orderClass, Double takeProfitLimitPrice,
             Double stopLossStopPrice, Double stopLossLimitPrice)
             throws AlpacaAPIRequestException {
-        Preconditions.checkNotNull(symbol);
+        checkNotNull(symbol);
         Preconditions.checkState(quantity != null ^ notional != null, "Either 'quantity' or 'notional' are required.");
-        Preconditions.checkNotNull(side);
-        Preconditions.checkNotNull(type);
-        Preconditions.checkNotNull(timeInForce);
+        checkNotNull(side);
+        checkNotNull(type);
+        checkNotNull(timeInForce);
 
         AlpacaRequestBuilder urlBuilder = new AlpacaRequestBuilder(apiURL, Endpoints.VERSION_2, Endpoints.ORDERS);
 
@@ -936,7 +1009,7 @@ public class AlpacaAPI {
      * @see <a href="https://docs.alpaca.markets/api-documentation/api-v2/orders/">Orders</a>
      */
     public Order getOrder(String orderID, Boolean nested) throws AlpacaAPIRequestException {
-        Preconditions.checkNotNull(orderID);
+        checkNotNull(orderID);
 
         AlpacaRequestBuilder urlBuilder = new AlpacaRequestBuilder(apiURL, Endpoints.VERSION_2,
                 Endpoints.ORDERS,
@@ -960,7 +1033,7 @@ public class AlpacaAPI {
      * @see <a href="https://docs.alpaca.markets/api-documentation/api-v2/orders/">Orders</a>
      */
     public Order getOrderByClientID(String clientOrderId) throws AlpacaAPIRequestException {
-        Preconditions.checkNotNull(clientOrderId);
+        checkNotNull(clientOrderId);
 
         AlpacaRequestBuilder urlBuilder = new AlpacaRequestBuilder(apiURL, Endpoints.VERSION_2,
                 Endpoints.ORDERS_BY_CLIENT_ORDER_ID);
@@ -988,7 +1061,7 @@ public class AlpacaAPI {
      */
     public Order replaceOrder(String orderID, Integer quantity, OrderTimeInForce timeInForce, Double limitPrice,
             Double stopPrice, Double trail, String clientOrderId) throws AlpacaAPIRequestException {
-        Preconditions.checkNotNull(orderID);
+        checkNotNull(orderID);
 
         AlpacaRequestBuilder urlBuilder = new AlpacaRequestBuilder(apiURL, Endpoints.VERSION_2,
                 Endpoints.ORDERS,
@@ -1061,7 +1134,7 @@ public class AlpacaAPI {
      * @see <a href="https://docs.alpaca.markets/api-documentation/api-v2/orders/">Orders</a>
      */
     public boolean cancelOrder(String orderId) throws AlpacaAPIRequestException {
-        Preconditions.checkNotNull(orderId);
+        checkNotNull(orderId);
 
         AlpacaRequestBuilder urlBuilder = new AlpacaRequestBuilder(apiURL, Endpoints.VERSION_2,
                 Endpoints.ORDERS,
@@ -1106,7 +1179,7 @@ public class AlpacaAPI {
      * @see <a href="https://docs.alpaca.markets/api-documentation/api-v2/positions/">Positions</a>
      */
     public Position getOpenPositionBySymbol(String symbol) throws AlpacaAPIRequestException {
-        Preconditions.checkNotNull(symbol);
+        checkNotNull(symbol);
 
         AlpacaRequestBuilder urlBuilder = new AlpacaRequestBuilder(apiURL, Endpoints.VERSION_2,
                 Endpoints.POSITIONS,
@@ -1143,7 +1216,7 @@ public class AlpacaAPI {
      * @see <a href="https://docs.alpaca.markets/api-documentation/api-v2/positions/">Positions</a>
      */
     public Order closePosition(String symbol) throws AlpacaAPIRequestException {
-        Preconditions.checkNotNull(symbol);
+        checkNotNull(symbol);
 
         AlpacaRequestBuilder urlBuilder = new AlpacaRequestBuilder(apiURL, Endpoints.VERSION_2,
                 Endpoints.POSITIONS,
@@ -1189,7 +1262,7 @@ public class AlpacaAPI {
      * @see <a href="https://docs.alpaca.markets/api-documentation/api-v2/assets/">Assets</a>
      */
     public Asset getAssetBySymbol(String symbolOrAssetID) throws AlpacaAPIRequestException {
-        Preconditions.checkNotNull(symbolOrAssetID);
+        checkNotNull(symbolOrAssetID);
 
         AlpacaRequestBuilder urlBuilder = new AlpacaRequestBuilder(apiURL, Endpoints.VERSION_2,
                 Endpoints.ASSETS,
@@ -1225,7 +1298,7 @@ public class AlpacaAPI {
      * @see <a href="https://docs.alpaca.markets/api-documentation/api-v2/watchlist/">Watchlists</a>
      */
     public Watchlist createWatchlist(String name, String... symbols) throws AlpacaAPIRequestException {
-        Preconditions.checkNotNull(name);
+        checkNotNull(name);
         Preconditions.checkState(name.length() <= 64);
 
         AlpacaRequestBuilder urlBuilder = new AlpacaRequestBuilder(apiURL, Endpoints.VERSION_2,
@@ -1254,7 +1327,7 @@ public class AlpacaAPI {
      * @see <a href="https://docs.alpaca.markets/api-documentation/api-v2/watchlist/">Watchlists</a>
      */
     public Watchlist getWatchlist(String watchlistID) throws AlpacaAPIRequestException {
-        Preconditions.checkNotNull(watchlistID);
+        checkNotNull(watchlistID);
 
         AlpacaRequestBuilder urlBuilder = new AlpacaRequestBuilder(apiURL, Endpoints.VERSION_2,
                 Endpoints.WATCHLISTS,
@@ -1277,7 +1350,7 @@ public class AlpacaAPI {
      */
     public Watchlist updateWatchlist(String watchlistID, String name, String... symbols)
             throws AlpacaAPIRequestException {
-        Preconditions.checkNotNull(watchlistID);
+        checkNotNull(watchlistID);
 
         AlpacaRequestBuilder urlBuilder = new AlpacaRequestBuilder(apiURL, Endpoints.VERSION_2,
                 Endpoints.WATCHLISTS,
@@ -1309,8 +1382,8 @@ public class AlpacaAPI {
      * @see <a href="https://docs.alpaca.markets/api-documentation/api-v2/watchlist/">Watchlists</a>
      */
     public Watchlist addWatchlistAsset(String watchlistID, String symbol) throws AlpacaAPIRequestException {
-        Preconditions.checkNotNull(watchlistID);
-        Preconditions.checkNotNull(symbol);
+        checkNotNull(watchlistID);
+        checkNotNull(symbol);
 
         AlpacaRequestBuilder urlBuilder = new AlpacaRequestBuilder(apiURL, Endpoints.VERSION_2,
                 Endpoints.WATCHLISTS,
@@ -1332,7 +1405,7 @@ public class AlpacaAPI {
      * @see <a href="https://docs.alpaca.markets/api-documentation/api-v2/watchlist/">Watchlists</a>
      */
     public boolean deleteWatchlist(String watchlistID) throws AlpacaAPIRequestException {
-        Preconditions.checkNotNull(watchlistID);
+        checkNotNull(watchlistID);
 
         AlpacaRequestBuilder urlBuilder = new AlpacaRequestBuilder(apiURL, Endpoints.VERSION_2,
                 Endpoints.WATCHLISTS,
@@ -1363,8 +1436,8 @@ public class AlpacaAPI {
      * @see <a href="https://docs.alpaca.markets/api-documentation/api-v2/watchlist/">Watchlists</a>
      */
     public Watchlist removeSymbolFromWatchlist(String watchlistID, String symbol) throws AlpacaAPIRequestException {
-        Preconditions.checkNotNull(watchlistID);
-        Preconditions.checkNotNull(symbol);
+        checkNotNull(watchlistID);
+        checkNotNull(symbol);
 
         AlpacaRequestBuilder urlBuilder = new AlpacaRequestBuilder(apiURL, Endpoints.VERSION_2,
                 Endpoints.WATCHLISTS,
@@ -1489,9 +1562,9 @@ public class AlpacaAPI {
      */
     public TradesResponse getTrades(String symbol, ZonedDateTime start, ZonedDateTime end, Integer limit,
             String pageToken) throws AlpacaAPIRequestException {
-        Preconditions.checkNotNull(symbol);
-        Preconditions.checkNotNull(start);
-        Preconditions.checkNotNull(end);
+        checkNotNull(symbol);
+        checkNotNull(start);
+        checkNotNull(end);
 
         AlpacaRequestBuilder urlBuilder = new AlpacaRequestBuilder(URLs.DATA, Endpoints.VERSION_2,
                 Endpoints.STOCKS,
@@ -1524,7 +1597,7 @@ public class AlpacaAPI {
      * Historical Market Data</a>
      */
     public LatestTradeResponse getLatestTrade(String symbol) throws AlpacaAPIRequestException {
-        Preconditions.checkNotNull(symbol);
+        checkNotNull(symbol);
 
         AlpacaRequestBuilder urlBuilder = new AlpacaRequestBuilder(URLs.DATA, Endpoints.VERSION_2,
                 Endpoints.STOCKS,
@@ -1554,9 +1627,9 @@ public class AlpacaAPI {
      */
     public QuotesResponse getQuotes(String symbol, ZonedDateTime start, ZonedDateTime end, Integer limit,
             String pageToken) throws AlpacaAPIRequestException {
-        Preconditions.checkNotNull(symbol);
-        Preconditions.checkNotNull(start);
-        Preconditions.checkNotNull(end);
+        checkNotNull(symbol);
+        checkNotNull(start);
+        checkNotNull(end);
 
         AlpacaRequestBuilder urlBuilder = new AlpacaRequestBuilder(URLs.DATA, Endpoints.VERSION_2,
                 Endpoints.STOCKS,
@@ -1589,7 +1662,7 @@ public class AlpacaAPI {
      * Historical Market Data</a>
      */
     public LatestQuoteResponse getLatestQuote(String symbol) throws AlpacaAPIRequestException {
-        Preconditions.checkNotNull(symbol);
+        checkNotNull(symbol);
 
         AlpacaRequestBuilder urlBuilder = new AlpacaRequestBuilder(URLs.DATA, Endpoints.VERSION_2,
                 Endpoints.STOCKS,
@@ -1620,10 +1693,10 @@ public class AlpacaAPI {
      */
     public BarsResponse getBars(String symbol, ZonedDateTime start, ZonedDateTime end, Integer limit,
             String pageToken, BarsTimeFrame timeFrame) throws AlpacaAPIRequestException {
-        Preconditions.checkNotNull(symbol);
-        Preconditions.checkNotNull(start);
-        Preconditions.checkNotNull(end);
-        Preconditions.checkNotNull(timeFrame);
+        checkNotNull(symbol);
+        checkNotNull(start);
+        checkNotNull(end);
+        checkNotNull(timeFrame);
 
         AlpacaRequestBuilder urlBuilder = new AlpacaRequestBuilder(URLs.DATA, Endpoints.VERSION_2,
                 Endpoints.STOCKS,
@@ -1658,7 +1731,7 @@ public class AlpacaAPI {
      * Historical Market Data</a>
      */
     public Map<String, Snapshot> getSnapshots(List<String> symbols) throws AlpacaAPIRequestException {
-        Preconditions.checkNotNull(symbols);
+        checkNotNull(symbols);
         Preconditions.checkState(!symbols.isEmpty());
 
         AlpacaRequestBuilder urlBuilder = new AlpacaRequestBuilder(URLs.DATA, Endpoints.VERSION_2,
@@ -1712,7 +1785,7 @@ public class AlpacaAPI {
      * Historical Market Data</a>
      */
     public Snapshot getSnapshot(String symbol) throws AlpacaAPIRequestException {
-        Preconditions.checkNotNull(symbol);
+        checkNotNull(symbol);
 
         AlpacaRequestBuilder urlBuilder = new AlpacaRequestBuilder(URLs.DATA, Endpoints.VERSION_2,
                 Endpoints.STOCKS,

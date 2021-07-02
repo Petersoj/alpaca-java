@@ -43,18 +43,18 @@ public enum EndpointAPIType {
     }
 
     /**
-     * Gets URL.
+     * Gets {@link #url}.
      *
-     * @return the URL
+     * @return a {@link String}
      */
     public String getURL() {
         return url;
     }
 
     /**
-     * Gets property name.
+     * Gets {@link #propertyName}.
      *
-     * @return the property name
+     * @return a {@link String}
      */
     public String getPropertyName() {
         return propertyName;

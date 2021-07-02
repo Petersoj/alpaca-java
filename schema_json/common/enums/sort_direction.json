@@ -1,0 +1,16 @@
+{
+  "type": "string",
+  "title": "Defines enums for sort directions.",
+  "enum": [
+    "asc",
+    "desc"
+  ],
+  "javaEnums": [
+    {
+      "name": "ASCENDING"
+    },
+    {
+      "name": "DESCENDING"
+    }
+  ]
+}

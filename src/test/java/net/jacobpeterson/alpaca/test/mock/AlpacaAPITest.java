@@ -1,4 +1,4 @@
-package mock.net.jacobpeterson.alpaca;
+package net.jacobpeterson.alpaca.test.mock;
 
 import net.jacobpeterson.alpaca.AlpacaAPI;
 import net.jacobpeterson.alpaca.properties.enums.DataAPIType;
@@ -11,9 +11,7 @@ import org.junit.jupiter.api.Test;
 public class AlpacaAPITest {
 
     static {
-        // Log trace-level
-        System.setProperty("org.slf4j.simpleLogger.log.net.jacobpeterson", "trace");
-        System.setProperty("org.slf4j.simpleLogger.log.mock.net.jacobpeterson", "trace");
+        System.setProperty("org.slf4j.simpleLogger.log.net.jacobpeterson.alpaca", "trace");
     }
 
     /**

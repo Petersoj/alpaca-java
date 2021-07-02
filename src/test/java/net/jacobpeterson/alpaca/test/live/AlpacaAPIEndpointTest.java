@@ -1,4 +1,4 @@
-package live.net.jacobpeterson.alpaca;
+package net.jacobpeterson.alpaca.test.live;
 
 import net.jacobpeterson.alpaca.AlpacaAPI;
 import net.jacobpeterson.alpaca.abstracts.enums.SortDirection;

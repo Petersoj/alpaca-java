@@ -22,15 +22,6 @@ public abstract class AbstractAPIRequestException extends Exception {
     /**
      * Instantiates a new {@link AbstractAPIRequestException}.
      *
-     * @param cause the cause
-     */
-    public AbstractAPIRequestException(Exception cause) {
-        super(cause);
-    }
-
-    /**
-     * Instantiates a new {@link AbstractAPIRequestException}.
-     *
      * @param apiName      the api name
      * @param httpResponse the http response
      */
@@ -53,7 +44,9 @@ public abstract class AbstractAPIRequestException extends Exception {
     protected abstract void parseAPIExceptionMessage();
 
     /**
-     * {@inheritDoc} This will call {@link #parseAPIExceptionMessage()} and return a formatted message.
+     * {@inheritDoc}
+     * <br>
+     * This will call {@link #parseAPIExceptionMessage()} and return a formatted message.
      */
     @Override
     public String getMessage() {
