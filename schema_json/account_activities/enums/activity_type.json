@@ -1,0 +1,144 @@
+{
+  "type": "string",
+  "title": "See <a href=\"https://alpaca.markets/docs/api-documentation/api-v2/account-activities/\">Account Activities</a>.",
+  "enum": [
+    "FILL",
+    "TRANS",
+    "MISC",
+    "ACATC",
+    "ACATS",
+    "CSD",
+    "CSR",
+    "CSW",
+    "DIV",
+    "DIVCGL",
+    "DIVCGS",
+    "DIVFEE",
+    "DIVFT",
+    "DIVNRA",
+    "DIVROC",
+    "DIVTW",
+    "DIVTXEX",
+    "INT",
+    "INTNRA",
+    "INTTW",
+    "JNL",
+    "JNLC",
+    "JNLS",
+    "MA",
+    "NC",
+    "OPASN",
+    "OPEXP",
+    "OPXRC",
+    "PTC",
+    "PTR",
+    "FEE",
+    "REORG",
+    "SC",
+    "SSO"
+  ],
+  "javaEnums": [
+    {
+      "description": "Order fills (both partial and full fills)."
+    },
+    {
+      "description": "Cash transactions (both CSD and CSW)."
+    },
+    {
+      "description": "Miscellaneous or rarely used activity types (All types except those in TRANS, DIV, or FILL)."
+    },
+    {
+      "description": "ACATS IN/OUT (Cash)."
+    },
+    {
+      "description": "ACATS IN/OUT (Securities)."
+    },
+    {
+      "description": "Cash deposit(+)."
+    },
+    {
+      "description": "Cash receipt(-)."
+    },
+    {
+      "description": "Cash withdrawal(-)."
+    },
+    {
+      "description": "Dividends."
+    },
+    {
+      "description": "Dividend (capital gain long term)."
+    },
+    {
+      "description": "Dividend (capital gain short term)."
+    },
+    {
+      "description": "Dividend fee."
+    },
+    {
+      "description": "Dividend adjusted (Foreign Tax Withheld)."
+    },
+    {
+      "description": "Dividend adjusted (NRA Withheld)."
+    },
+    {
+      "description": "Dividend return of capital."
+    },
+    {
+      "description": "Dividend adjusted (Tefra Withheld)."
+    },
+    {
+      "description": "Dividend (tax exempt)."
+    },
+    {
+      "description": "Interest (credit/margin)."
+    },
+    {
+      "description": "Interest adjusted (NRA Withheld)."
+    },
+    {
+      "description": "Interest adjusted (Tefra Withheld)."
+    },
+    {
+      "description": "Journal entry."
+    },
+    {
+      "description": "Journal entry (cash)."
+    },
+    {
+      "description": "Journal entry (stock)."
+    },
+    {
+      "description": "Merger/Acquisition."
+    },
+    {
+      "description": "Name change."
+    },
+    {
+      "description": "Option assignment."
+    },
+    {
+      "description": "Option expiration."
+    },
+    {
+      "description": "Option exercise."
+    },
+    {
+      "description": "Pass Thru Charge."
+    },
+    {
+      "description": "Pass Thru Rebate."
+    },
+    {
+      "description": "REG/TAF fees."
+    },
+    {
+      "description": "Reorg CA."
+    },
+    {
+      "description": "Symbol change."
+    },
+    {
+      "description": "Stock spinoff."
+    }
+  ]
+}

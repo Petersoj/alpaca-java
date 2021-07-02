@@ -1,10 +1,14 @@
 {
   "type": "object",
-  "title": "See <a href=\"https://docs.alpaca.markets/api-documentation/api-v2/account-activities/\">https://docs.alpaca.markets/api-documentation/api-v2/account-activities/</a>",
+  "title": "See <a href=\"https://alpaca.markets/docs/api-documentation/api-v2/account-activities/\">Account Activities</a>.",
   "properties": {
     "activity_type": {
-      "existingJavaType": "net.jacobpeterson.alpaca.enums.activity.ActivityType",
-      "title": "See https://docs.alpaca.markets/api-documentation/api-v2/account-activities/#activity-types for a list of possible values."
+      "existingJavaType": "net.jacobpeterson.alpaca.model.accountactivities.enums.ActivityType",
+      "title": "The {@link net.jacobpeterson.alpaca.model.accountactivities.enums.ActivityType}."
+    },
+    "id": {
+      "existingJavaType": "java.lang.String",
+      "title": "An ID for the activity, always in \"::\" format. Can be sent as page_token in requests to facilitate the paging of results."
     }
   }
 }

@@ -3,7 +3,6 @@ package net.jacobpeterson.alpaca.util.gson;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
 import com.google.gson.annotations.SerializedName;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,19 +29,18 @@ public class GsonUtil {
             .enableComplexMapKeySerialization()
             .setLenient()
             .create();
-    public static final JsonParser JSON_PARSER = new JsonParser();
 
     /**
-     * Checks if all Gson {@link SerializedName} annotation values (including inherited ones) in the JSON POJO are
-     * present in the <strong>immediate</strong> JSON object.
+     * Checks if all {@link Gson} {@link SerializedName} annotation values (including inherited ones) in the JSON POJO
+     * are present in the <strong>immediate</strong> JSON object.
      *
-     * @param jsonPOJOClass the json pojo class
-     * @param jsonObject    the json object
+     * @param jsonPOJOClass the JSON POJO class
+     * @param jsonObject    the JSON object
      *
-     * @return the boolean
+     * @return a boolean
      */
     public static boolean doesGsonPOJOMatch(Class<?> jsonPOJOClass, JsonObject jsonObject) {
-        ArrayList<SerializedName> gsonSerializedNameAnnotations = getGsonSerializedNameAnnotations(jsonPOJOClass);
+        List<SerializedName> gsonSerializedNameAnnotations = getGsonSerializedNameAnnotations(jsonPOJOClass);
         Set<String> jsonObjectKeys = jsonObject.keySet();
 
         List<String> classKeys = new ArrayList<>();
@@ -59,25 +57,25 @@ public class GsonUtil {
     }
 
     /**
-     * Gets gson serialized name annotations.
+     * Gets {@link Gson} {@link SerializedName} annotations from a given {@link Class}
      *
-     * @param theClass the the class
+     * @param clazz the {@link Class}
      *
-     * @return the gson serialized name annotations
+     * @return a {@link List} of {@link SerializedName}s
      */
-    private static synchronized ArrayList<SerializedName> getGsonSerializedNameAnnotations(Class<?> theClass) {
+    private static synchronized List<SerializedName> getGsonSerializedNameAnnotations(Class<?> clazz) {
         // Use a caching system because Reflection can be quite expensive
-        if (CLASS_ANNOTATION_CACHE.containsKey(theClass)) {
-            return CLASS_ANNOTATION_CACHE.get(theClass);
+        if (CLASS_ANNOTATION_CACHE.containsKey(clazz)) {
+            return CLASS_ANNOTATION_CACHE.get(clazz);
         }
 
-        LOGGER.debug("Caching Gson @SerializedName annotations for {}", theClass.getName());
+        LOGGER.debug("Caching Gson @SerializedName annotations for {}", clazz.getName());
 
         // Below is expensive, but it only has to be done once per class.
 
-        ArrayList<SerializedName> serializedNameAnnotations = new ArrayList<>();
+        List<SerializedName> serializedNameAnnotations = new ArrayList<>();
 
-        Class<?> currentClass = theClass;
+        Class<?> currentClass = clazz;
         do {
             for (Field field : currentClass.getDeclaredFields()) { // Loop through all the fields
                 for (Annotation annotation : field.getDeclaredAnnotations()) { // Loop through all the field annotations
@@ -90,7 +88,7 @@ public class GsonUtil {
             currentClass = currentClass.getSuperclass();
         } while (currentClass != null); // Loop through all inherited classes
 
-        CLASS_ANNOTATION_CACHE.put(theClass, serializedNameAnnotations);
+        CLASS_ANNOTATION_CACHE.put(clazz, serializedNameAnnotations);
 
         return serializedNameAnnotations;
     }

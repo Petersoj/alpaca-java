@@ -1,0 +1,102 @@
+{
+  "type": "string",
+  "title": "See <a href=\"https://alpaca.markets/docs/api-documentation/api-v2/orders/\">Orders</a>.",
+  "enum": [
+    "new",
+    "fill",
+    "partial_fill",
+    "canceled",
+    "expired",
+    "done_for_day",
+    "replaced",
+    "rejected",
+    "pending_new",
+    "stopped",
+    "pending_cancel",
+    "pending_replace",
+    "calculated",
+    "suspended",
+    "order_replace_rejected",
+    "order_cancel_rejected"
+  ],
+  "javaEnums": [
+    {
+      "description": "Sent when an order has been routed to exchanges for execution."
+    },
+    {
+      "description": "Sent when your order has been completely filled."
+    },
+    {
+      "description": "The time at which the order was filled."
+    },
+    {
+      "description": "The average price per share at which the order was filled."
+    },
+    {
+      "description": "The size of your total position, after this fill event, in shares. Positive for long positions, negative for short positions."
+    },
+    {
+      "description": "Sent when a number of shares less than the total remaining quantity on your order has been filled."
+    },
+    {
+      "description": "The time at which the shares were filled."
+    },
+    {
+      "description": "The average price per share at which the shares were filled."
+    },
+    {
+      "description": "The size of your total position, after this fill event, in shares. Positive for long positions, negative for short positions."
+    },
+    {
+      "description": "Sent when your requested cancelation of an order is processed."
+    },
+    {
+      "description": "The time at which the order was canceled."
+    },
+    {
+      "description": "Sent when an order has reached the end of its lifespan, as determined by the order’s time in force value."
+    },
+    {
+      "description": "The time at which the order expired."
+    },
+    {
+      "description": "Sent when the order is done executing for the day, and will not receive further updates until the next trading day."
+    },
+    {
+      "description": "Sent when your requested replacement of an order is processed."
+    },
+    {
+      "description": "The time at which the order was replaced."
+    },
+    {
+      "description": "Sent when your order has been rejected."
+    },
+    {
+      "description": "The time at which the rejection occurred."
+    },
+    {
+      "description": "Sent when the order has been received by Alpaca and routed to the exchanges, but has not yet been accepted for execution."
+    },
+    {
+      "description": "Sent when your order has been stopped, and a trade is guaranteed for the order, usually at a stated price or better, but has not yet occurred."
+    },
+    {
+      "description": "Sent when the order is awaiting cancelation. Most cancelations will occur without the order entering this state."
+    },
+    {
+      "description": "Sent when the order is awaiting replacement."
+    },
+    {
+      "description": "Sent when the order has been completed for the day - it is either “filled” or “done_for_day” - but remaining settlement calculations are still pending."
+    },
+    {
+      "description": "Sent when the order has been suspended and is not eligible for trading."
+    },
+    {
+      "description": "Sent when the order replace has been rejected."
+    },
+    {
+      "description": "Sent when the order cancel has been rejected."
+    }
+  ]
+}

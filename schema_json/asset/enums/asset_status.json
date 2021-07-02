@@ -1,0 +1,8 @@
+{
+  "type": "string",
+  "title": "See <a href=\"https://alpaca.markets/docs/api-documentation/api-v2/assets/\">Assets</a>.",
+  "enum": [
+    "active",
+    "inactive"
+  ]
+}

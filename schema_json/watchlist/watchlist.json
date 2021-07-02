@@ -1,30 +1,30 @@
 {
   "type": "object",
-  "title": "See <a href=\"https://docs.alpaca.markets/api-documentation/api-v2/watchlist/\">https://docs.alpaca.markets/api-documentation/api-v2/watchlist/</a>",
+  "title": "See <a href=\"https://alpaca.markets/docs/api-documentation/api-v2/watchlist/\">Watchlist</a>.",
   "properties": {
     "id": {
       "existingJavaType": "java.lang.String",
-      "title": "Watchlist ID"
+      "title": "Watchlist ID."
     },
     "created_at": {
-      "existingJavaType": "java.lang.String",
-      "title": "Created at"
+      "existingJavaType": "java.time.ZonedDateTime",
+      "title": "Created at."
     },
     "updated_at": {
-      "existingJavaType": "java.lang.String",
-      "title": "Updated at"
+      "existingJavaType": "java.time.ZonedDateTime",
+      "title": "Updated at."
     },
     "name": {
       "existingJavaType": "java.lang.String",
-      "title": "User-defined watchlist name (up to 64 characters)"
+      "title": "User-defined watchlist name (up to 64 characters)."
     },
     "account_id": {
       "existingJavaType": "java.lang.String",
-      "title": "Account ID"
+      "title": "Account ID."
     },
     "assets": {
       "existingJavaType": "java.util.ArrayList<net.jacobpeterson.alpaca.domain.asset.Asset>",
-      "title": "The content of this watchlist, in the order as registered by the client"
+      "title": "The content of this watchlist, in the order as registered by the client."
     }
   }
 }

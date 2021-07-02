@@ -1,0 +1,10 @@
+{
+  "type": "string",
+  "javaName": "DTBPCheck",
+  "title": "See <a href=\"https://alpaca.markets/docs/api-documentation/api-v2/account-configuration/\">Account Configuration</a>.",
+  "enum": [
+    "both",
+    "entry",
+    "exit"
+  ]
+}

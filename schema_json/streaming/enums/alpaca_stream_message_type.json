@@ -1,0 +1,10 @@
+{
+  "type": "string",
+  "title": "See <a href=\"https://alpaca.markets/docs/api-documentation/api-v2/streaming/\">Streaming</a>.",
+  "enum": [
+    "listening",
+    "authorization",
+    "trade_updates",
+    "account_updates"
+  ]
+}

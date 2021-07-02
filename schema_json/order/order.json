@@ -1,66 +1,66 @@
 {
   "type": "object",
-  "title": "See <a href=\"https://docs.alpaca.markets/api-documentation/api-v2/orders/\">https://docs.alpaca.markets/api-documentation/api-v2/orders/</a>",
+  "title": "See <a href=\"https://alpaca.markets/docs/api-documentation/api-v2/orders/\">Orders</a>.",
   "properties": {
     "id": {
       "existingJavaType": "java.lang.String",
-      "title": "Order ID"
+      "title": "Order ID."
     },
     "client_order_id": {
       "existingJavaType": "java.lang.String",
-      "title": "Client unique order ID"
+      "title": "Client unique order ID."
     },
     "created_at": {
       "existingJavaType": "java.time.ZonedDateTime",
-      "title": "Created at"
+      "title": "Created at."
     },
     "updated_at": {
       "existingJavaType": "java.time.ZonedDateTime",
-      "title": "Updated at"
+      "title": "Updated at."
     },
     "submitted_at": {
       "existingJavaType": "java.time.ZonedDateTime",
-      "title": "Submitted at"
+      "title": "Submitted at."
     },
     "filled_at": {
       "existingJavaType": "java.time.ZonedDateTime",
-      "title": "Filled at"
+      "title": "Filled at."
     },
     "expired_at": {
       "existingJavaType": "java.time.ZonedDateTime",
-      "title": "Expired at"
+      "title": "Expired at."
     },
     "canceled_at": {
       "existingJavaType": "java.time.ZonedDateTime",
-      "title": "Canceled at"
+      "title": "Canceled at."
     },
     "failed_at": {
       "existingJavaType": "java.time.ZonedDateTime",
-      "title": "Failed at"
+      "title": "Failed at."
     },
     "replaced_at": {
       "existingJavaType": "java.time.ZonedDateTime",
-      "title": "Replaced at"
+      "title": "Replaced at."
     },
     "replaced_by": {
       "existingJavaType": "java.lang.String",
-      "title": "The order ID that this order was replaced by"
+      "title": "The order ID that this order was replaced by."
     },
     "replaces": {
       "existingJavaType": "java.lang.String",
-      "title": "The order ID that this order replaces"
+      "title": "The order ID that this order replaces."
     },
     "asset_id": {
       "existingJavaType": "java.lang.String",
-      "title": "Asset ID"
+      "title": "Asset ID."
     },
     "symbol": {
       "existingJavaType": "java.lang.String",
-      "title": "Asset symbol"
+      "title": "Asset symbol."
     },
     "asset_class": {
       "existingJavaType": "java.lang.String",
-      "title": "Asset class"
+      "title": "Asset class."
     },
     "notional": {
       "existingJavaType": "java.lang.String",
@@ -72,51 +72,51 @@
     },
     "filled_qty": {
       "existingJavaType": "java.lang.String",
-      "title": "Filled quantity"
+      "title": "Filled quantity."
     },
     "filled_avg_price": {
       "existingJavaType": "java.lang.String",
-      "title": "Filled average price"
+      "title": "Filled average price."
     },
     "order_class": {
-      "existingJavaType": "java.lang.String",
-      "title": "simple, bracket, oco or oto. For details of non-simple order classes, please see Bracket Order Overview"
+      "existingJavaType": "net.jacobpeterson.alpaca.model.order.enums.OrderClass",
+      "title": "The {@link net.jacobpeterson.alpaca.model.order.enums.OrderClass}. For details of non-simple order classes, please see Bracket Order Overview."
     },
     "order_type": {
       "existingJavaType": "java.lang.String",
-      "title": "(Deprecated with just type field below.)"
+      "title": "(Deprecated with just type field below.)."
     },
     "type": {
-      "existingJavaType": "java.lang.String",
-      "title": "Valid values: market, limit, stop, stop_limit, trailing_stop"
+      "existingJavaType": "net.jacobpeterson.alpaca.model.order.enums.OrderType",
+      "title": "The {@link net.jacobpeterson.alpaca.model.order.enums.OrderType}."
     },
     "side": {
-      "existingJavaType": "java.lang.String",
-      "title": "Valid values: buy, sell"
+      "existingJavaType": "net.jacobpeterson.alpaca.model.order.enums.OrderSide",
+      "title": "The {@link net.jacobpeterson.alpaca.model.order.enums.OrderSide}."
     },
     "time_in_force": {
-      "existingJavaType": "java.lang.String",
-      "title": "See Orders page"
+      "existingJavaType": "net.jacobpeterson.alpaca.model.order.enums.OrderTimeInForce",
+      "title": "The {@link net.jacobpeterson.alpaca.model.order.enums.OrderTimeInForce}."
     },
     "limit_price": {
       "existingJavaType": "java.lang.String",
-      "title": "Limit price"
+      "title": "Limit price."
     },
     "stop_price": {
       "existingJavaType": "java.lang.String",
-      "title": "Stop price"
+      "title": "Stop price."
     },
     "status": {
-      "existingJavaType": "java.lang.String",
-      "title": "See Orders page"
+      "existingJavaType": "net.jacobpeterson.alpaca.model.order.enums.OrderStatus",
+      "title": "The {@link net.jacobpeterson.alpaca.model.order.enums.OrderStatus}."
     },
     "extended_hours": {
       "existingJavaType": "java.lang.Boolean",
       "title": "If true, eligible for execution outside regular trading hours."
     },
     "legs": {
-      "existingJavaType": "java.util.ArrayList<net.jacobpeterson.alpaca.domain.order.Order>",
-      "title": "When querying non-simple order_class orders in a nested style, an array of Order entities associated with this order. Otherwise, null."
+      "existingJavaType": "java.util.ArrayList<net.jacobpeterson.alpaca.model.order.Order>",
+      "title": "When querying non-simple order_class orders in a nested style, an {@link java.util.ArrayList} of {@link net.jacobpeterson.alpaca.model.order.Order} entities associated with this order. Otherwise, null."
     },
     "trail_percent": {
       "existingJavaType": "java.lang.String",

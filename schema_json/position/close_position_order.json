@@ -4,15 +4,16 @@
   "properties": {
     "symbol": {
       "existingJavaType": "java.lang.String",
-      "title": "The symbol"
+      "title": "The symbol."
     },
     "status": {
       "existingJavaType": "java.lang.Integer",
-      "title": "The HTTP status code of the position-closing order status"
+      "title": "The HTTP status code of the position-closing order."
     },
     "body": {
-      "existingJavaType": "net.jacobpeterson.alpaca.domain.order.Order",
-      "title": "The position-closing order"
+      "existingJavaType": "net.jacobpeterson.alpaca.model.order.Order",
+      "javaName": "order",
+      "title": "The position-closing {@link net.jacobpeterson.alpaca.model.order.Order}."
     }
   }
 }

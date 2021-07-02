@@ -3,12 +3,12 @@
   "javaInterfaces": [
     "net.jacobpeterson.alpaca.abstracts.websocket.message.StreamMessage"
   ],
-  "title": "See <a href=\"https://alpaca.markets/docs/api-documentation/api-v2/market-data/alpaca-data-api-v2/real-time/\">https://alpaca.markets/docs/api-documentation/api-v2/market-data/alpaca-data-api-v2/real-time/</a>",
+  "title": "See <a href=\"https://alpaca.markets/docs/api-documentation/api-v2/market-data/alpaca-data-api-v2/real-time/\">Real-time Data</a>.",
   "properties": {
     "T": {
-      "existingJavaType": "java.lang.String",
+      "existingJavaType": "net.jacobpeterson.alpaca.model.marketdata.realtime.enums.MarketDataMessageType",
       "javaName": "messageType",
-      "title": "The message type."
+      "title": "The {@link net.jacobpeterson.alpaca.model.marketdata.realtime.enums.MarketDataMessageType}."
     }
   }
 }

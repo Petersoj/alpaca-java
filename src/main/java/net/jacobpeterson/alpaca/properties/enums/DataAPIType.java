@@ -1,4 +1,4 @@
-package net.jacobpeterson.alpaca.enums.api;
+package net.jacobpeterson.alpaca.properties.enums;
 
 /**
  * {@link DataAPIType} defines the types of Data APIs to use with Alpaca.

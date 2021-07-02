@@ -1,19 +1,19 @@
 {
   "type": "object",
-  "title": "See <a href=\"https://docs.alpaca.markets/api-documentation/api-v2/orders/\">https://docs.alpaca.markets/api-documentation/api-v2/orders/</a>",
+  "title": "See <a href=\"https://alpaca.markets/docs/api-documentation/api-v2/orders/\">Orders</a>.",
   "properties": {
     "id": {
       "existingJavaType": "java.lang.String",
-      "title": "Order ID"
+      "title": "Order ID."
     },
     "status": {
       "existingJavaType": "java.lang.Integer",
-      "title": "The HTTP status code of the cancel status"
+      "title": "The HTTP status code of the cancelled order."
     },
     "body": {
-      "existingJavaType": "net.jacobpeterson.alpaca.domain.order.Order",
+      "existingJavaType": "net.jacobpeterson.alpaca.model.order.Order",
       "javaName": "order",
-      "title": "The cancelled order"
+      "title": "The cancelled {@link net.jacobpeterson.alpaca.model.order.Order}."
     }
   }
 }

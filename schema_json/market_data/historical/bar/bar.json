@@ -1,6 +1,6 @@
 {
   "type": "object",
-  "title": "See <a href=\"https://alpaca.markets/docs/api-documentation/api-v2/market-data/alpaca-data-api-v2/historical/\">https://alpaca.markets/docs/api-documentation/api-v2/market-data/alpaca-data-api-v2/historical/</a>",
+  "title": "See <a href=\"https://alpaca.markets/docs/api-documentation/api-v2/market-data/alpaca-data-api-v2/historical/\">Historical Data</a>.",
   "properties": {
     "t": {
       "existingJavaType": "java.time.ZonedDateTime",
@@ -23,7 +23,7 @@
       "title": "Close price."
     },
     "v": {
-      "existingJavaType": "java.lang.Double",
+      "existingJavaType": "java.lang.Long",
       "title": "Volume."
     }
   }

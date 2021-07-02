@@ -1,14 +1,10 @@
 {
   "type": "object",
-  "title": "See <a href=\"https://docs.alpaca.markets/api-documentation/api-v2/account-activities/\">https://docs.alpaca.markets/api-documentation/api-v2/account-activities/</a>",
+  "title": "See <a href=\"https://alpaca.markets/docs/api-documentation/api-v2/account-activities/\">Account Activities</a>.",
   "extends": {
     "existingJavaType": "net.jacobpeterson.alpaca.domain.accountactivities.AccountActivity"
   },
   "properties": {
-    "id": {
-      "existingJavaType": "java.lang.String",
-      "title": "An id for the activity. Always in “::” format. Can be sent as page_token in requests to facilitate the paging of results."
-    },
     "cum_qty": {
       "existingJavaType": "java.lang.String",
       "title": "The cumulative quantity of shares involved in the execution."
@@ -26,8 +22,8 @@
       "title": "The number of shares involved in the trade execution."
     },
     "side": {
-      "existingJavaType": "java.lang.String",
-      "title": "Buy or sell"
+      "existingJavaType": "net.jacobpeterson.alpaca.model.accountactivities.enums.TradeActivitySide",
+      "title": "The {@link net.jacobpeterson.alpaca.model.accountactivities.enums.TradeActivitySide}."
     },
     "symbol": {
       "existingJavaType": "java.lang.String",
@@ -42,8 +38,8 @@
       "title": "The id for the order that filled. Always in GUID format."
     },
     "type": {
-      "existingJavaType": "java.lang.String",
-      "title": "fill or partial_fill"
+      "existingJavaType": "net.jacobpeterson.alpaca.model.accountactivities.enums.TradeActivityType",
+      "title": "The {@link net.jacobpeterson.alpaca.model.accountactivities.enums.TradeActivityType}."
     }
   }
 }

@@ -3,52 +3,52 @@
   "extends": {
     "existingJavaType": "net.jacobpeterson.alpaca.domain.marketdata.realtime.SymbolMessage"
   },
-  "title": "See <a href=\"https://alpaca.markets/docs/api-documentation/api-v2/market-data/streaming/\">https://alpaca.markets/docs/api-documentation/api-v2/market-data/streaming/</a>",
+  "title": "See <a href=\"https://alpaca.markets/docs/api-documentation/api-v2/market-data/alpaca-data-api-v2/real-time/\">Real-time Data</a>.",
   "properties": {
     "ax": {
       "existingJavaType": "java.lang.String",
       "javaName": "askExchangeCode",
-      "title": "Ask exchange code"
+      "title": "Ask exchange code."
     },
     "ap": {
       "existingJavaType": "java.lang.Double",
       "javaName": "askPrice",
-      "title": "Ask price"
+      "title": "Ask price."
     },
     "as": {
       "existingJavaType": "java.lang.Integer",
       "javaName": "askSize",
-      "title": "Ask size"
+      "title": "Ask size."
     },
     "bx": {
       "existingJavaType": "java.lang.String",
       "javaName": "bidExchangeCode",
-      "title": "Bid exchange code"
+      "title": "Bid exchange code."
     },
     "bp": {
       "existingJavaType": "java.lang.Double",
       "javaName": "bidPrice",
-      "title": "Bid price"
+      "title": "Bid price."
     },
     "bs": {
       "existingJavaType": "java.lang.Integer",
       "javaName": "bidSize",
-      "title": "Bid size"
+      "title": "Bid size."
     },
     "t": {
       "existingJavaType": "java.time.ZonedDateTime",
       "javaName": "timestamp",
-      "title": "Timestamp with nanosecond precision"
+      "title": "Timestamp with nanosecond precision."
     },
     "c": {
       "existingJavaType": "java.util.ArrayList<String>",
       "javaName": "conditions",
-      "title": "Quote conditions"
+      "title": "The {@link java.util.ArrayList} of quote conditions."
     },
     "z": {
       "existingJavaType": "java.lang.String",
       "javaName": "tape",
-      "title": "Tape"
+      "title": "Tape."
     }
   }
 }

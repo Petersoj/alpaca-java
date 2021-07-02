@@ -1,9 +1,10 @@
 {
   "type": "object",
-  "title": "See <a href=\"https://docs.alpaca.markets/api-documentation/api-v2/streaming/\">https://docs.alpaca.markets/api-documentation/api-v2/streaming/</a>",
+  "title": "See <a href=\"https://alpaca.markets/docs/api-documentation/api-v2/streaming/\">Streaming</a>.",
   "properties": {
     "streams": {
-      "existingJavaType": "java.util.ArrayList<java.lang.String>"
+      "existingJavaType": "java.util.ArrayList<net.jacobpeterson.alpaca.model.streaming.enums.AlpacaStreamMessageType>",
+      "title": "The {@link java.util.ArrayList} of {@link net.jacobpeterson.alpaca.model.streaming.enums.AlpacaStreamMessageType}s."
     }
   }
 }

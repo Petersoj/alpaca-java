@@ -4,6 +4,7 @@ import com.google.common.base.Preconditions;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import net.jacobpeterson.alpaca.AlpacaAPI;
 import net.jacobpeterson.alpaca.abstracts.websocket.client.WebsocketClient;
 import net.jacobpeterson.alpaca.abstracts.websocket.client.WebsocketStateListener;
@@ -16,7 +17,7 @@ import net.jacobpeterson.alpaca.domain.marketdata.realtime.control.Subscriptions
 import net.jacobpeterson.alpaca.domain.marketdata.realtime.control.SuccessMessage;
 import net.jacobpeterson.alpaca.domain.marketdata.realtime.quote.QuoteMessage;
 import net.jacobpeterson.alpaca.domain.marketdata.realtime.trade.TradeMessage;
-import net.jacobpeterson.alpaca.enums.api.DataAPIType;
+import net.jacobpeterson.alpaca.properties.enums.DataAPIType;
 import net.jacobpeterson.alpaca.util.gson.GsonUtil;
 import net.jacobpeterson.alpaca.websocket.broker.client.AlpacaWebsocketClient;
 import net.jacobpeterson.alpaca.websocket.marketdata.listener.MarketDataListener;
@@ -173,7 +174,7 @@ public class MarketDataWebsocketClient implements WebsocketClient<MarketDataList
 
     @Override
     public void handleWebsocketMessage(String message) {
-        JsonElement messageJsonElement = GsonUtil.JSON_PARSER.parse(message);
+        JsonElement messageJsonElement = JsonParser.parseString(message);
         Preconditions.checkState(messageJsonElement instanceof JsonArray);
 
         JsonArray messageJsonArray = messageJsonElement.getAsJsonArray();

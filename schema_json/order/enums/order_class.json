@@ -1,0 +1,24 @@
+{
+  "type": "string",
+  "title": "See <a href=\"https://alpaca.markets/docs/api-documentation/api-v2/orders/\">Orders</a>.",
+  "enum": [
+    "simple",
+    "bracket",
+    "oco",
+    "oto"
+  ],
+  "javaEnums": [
+    {
+      "name": "SIMPLE"
+    },
+    {
+      "name": "BRACKET"
+    },
+    {
+      "name": "ONE_CANCELS_OTHER"
+    },
+    {
+      "name": "ONE_TRIGGERS_OTHER"
+    }
+  ]
+}

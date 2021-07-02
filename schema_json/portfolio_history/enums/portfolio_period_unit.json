@@ -1,0 +1,24 @@
+{
+  "type": "string",
+  "title": "See <a href=\"https://alpaca.markets/docs/api-documentation/api-v2/portfolio-history/\">Portfolio History</a>.",
+  "enum": [
+    "D",
+    "W",
+    "M",
+    "A"
+  ],
+  "javaEnums": [
+    {
+      "name": "DAY"
+    },
+    {
+      "name": "WEEK"
+    },
+    {
+      "name": "MONTH"
+    },
+    {
+      "name": "YEAR"
+    }
+  ]
+}

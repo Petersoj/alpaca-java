@@ -1,14 +1,10 @@
 {
   "type": "object",
-  "title": "See <a href=\"https://docs.alpaca.markets/api-documentation/api-v2/account-activities/\">https://docs.alpaca.markets/api-documentation/api-v2/account-activities/</a>",
+  "title": "See <a href=\"https://alpaca.markets/docs/api-documentation/api-v2/account-activities/\">Account Activities</a>.",
   "extends": {
-    "existingJavaType": "net.jacobpeterson.alpaca.domain.accountactivities.AccountActivity"
+    "existingJavaType": "net.jacobpeterson.alpaca.model.accountactivities.AccountActivity"
   },
   "properties": {
-    "id": {
-      "existingJavaType": "java.lang.String",
-      "title": "An ID for the activity, always in “::” format. Can be sent as page_token in requests to facilitate the paging of results."
-    },
     "date": {
       "existingJavaType": "java.lang.String",
       "title": "The date on which the activity occurred or on which the transaction associated with the activity settled."
@@ -31,7 +27,7 @@
     },
     "description": {
       "existingJavaType": "java.lang.String",
-      "title": "Description field for transaction records (TRANS,CSR,CSD)."
+      "title": "Description field for transaction records (TRANS, CSR, CSD)."
     },
     "status": {
       "existingJavaType": "java.lang.String",

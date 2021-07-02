@@ -2,6 +2,7 @@ package net.jacobpeterson.alpaca.rest.exception;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import com.mashape.unirest.http.HttpResponse;
 import net.jacobpeterson.alpaca.AlpacaAPI;
 import net.jacobpeterson.alpaca.abstracts.rest.exception.AbstractAPIRequestException;
@@ -44,7 +45,7 @@ public class AlpacaAPIRequestException extends AbstractAPIRequestException {
      */
     @Override
     protected void parseAPIExceptionMessage() {
-        JsonElement responseJsonElement = GsonUtil.JSON_PARSER.parse(new InputStreamReader(httpResponse.getBody()));
+        JsonElement responseJsonElement = JsonParser.parseString(new InputStreamReader(httpResponse.getBody()));
 
         if (responseJsonElement instanceof JsonObject) {
             JsonObject responseJsonObject = (JsonObject) responseJsonElement;

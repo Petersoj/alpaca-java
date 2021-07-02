@@ -1,6 +1,7 @@
 package net.jacobpeterson.alpaca.abstracts.rest;
 
 import com.google.gson.JsonElement;
+import com.google.gson.JsonParser;
 import com.google.gson.stream.JsonReader;
 import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.Unirest;
@@ -274,7 +275,7 @@ public abstract class AbstractRequest {
      */
     public JsonElement getResponseJSON(HttpResponse<InputStream> httpResponse) {
         try (JsonReader jsonReader = new JsonReader(new InputStreamReader(httpResponse.getRawBody()))) {
-            return GsonUtil.JSON_PARSER.parse(jsonReader);
+            return JsonParser.parseReader(jsonReader);
         } catch (IOException ioException) {
             LOGGER.error("Could not parse response JSON object", ioException);
             return null;

@@ -1,4 +1,4 @@
-package net.jacobpeterson.alpaca.enums.api;
+package net.jacobpeterson.alpaca.properties.enums;
 
 /**
  * {@link EndpointAPIType} defines the types of API endpoint to use with Alpaca.

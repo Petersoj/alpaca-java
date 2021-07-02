@@ -4,6 +4,7 @@ import com.google.common.base.Preconditions;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import com.google.gson.JsonPrimitive;
 import com.google.gson.JsonSyntaxException;
 import net.jacobpeterson.alpaca.AlpacaAPI;
@@ -15,7 +16,7 @@ import net.jacobpeterson.alpaca.domain.streaming.account.AccountUpdateMessage;
 import net.jacobpeterson.alpaca.domain.streaming.authorization.AuthorizationMessage;
 import net.jacobpeterson.alpaca.domain.streaming.listening.ListeningMessage;
 import net.jacobpeterson.alpaca.domain.streaming.trade.TradeUpdateMessage;
-import net.jacobpeterson.alpaca.enums.api.EndpointAPIType;
+import net.jacobpeterson.alpaca.properties.enums.EndpointAPIType;
 import net.jacobpeterson.alpaca.util.gson.GsonUtil;
 import net.jacobpeterson.alpaca.websocket.broker.listener.AlpacaStreamListener;
 import net.jacobpeterson.alpaca.websocket.broker.message.AlpacaStreamMessageType;
@@ -177,7 +178,7 @@ public class AlpacaWebsocketClient implements WebsocketClient<AlpacaStreamListen
 
     @Override
     public void handleWebsocketMessage(String message) {
-        JsonElement messageJsonElement = GsonUtil.JSON_PARSER.parse(message);
+        JsonElement messageJsonElement = JsonParser.parseString(message);
 
         Preconditions.checkState(messageJsonElement instanceof JsonObject);
 

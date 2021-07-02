@@ -3,37 +3,37 @@
   "extends": {
     "existingJavaType": "net.jacobpeterson.alpaca.domain.marketdata.realtime.SymbolMessage"
   },
-  "title": "See <a href=\"https://alpaca.markets/docs/api-documentation/api-v2/market-data/streaming/\">https://alpaca.markets/docs/api-documentation/api-v2/market-data/streaming/</a>",
+  "title": "See <a href=\"https://alpaca.markets/docs/api-documentation/api-v2/market-data/alpaca-data-api-v2/real-time/\">Real-time Data</a>.",
   "properties": {
     "o": {
       "existingJavaType": "java.lang.Double",
       "javaName": "open",
-      "title": "Open price"
+      "title": "Open price."
     },
     "h": {
       "existingJavaType": "java.lang.Double",
       "javaName": "high",
-      "title": "High price"
+      "title": "High price."
     },
     "l": {
       "existingJavaType": "java.lang.Double",
       "javaName": "low",
-      "title": "Low price"
+      "title": "Low price."
     },
     "c": {
       "existingJavaType": "java.lang.Double",
       "javaName": "close",
-      "title": "Close price"
+      "title": "Close price."
     },
     "v": {
-      "existingJavaType": "java.lang.Integer",
+      "existingJavaType": "java.lang.Long",
       "javaName": "volume",
-      "title": "Volume"
+      "title": "Volume."
     },
     "t": {
       "existingJavaType": "java.time.ZonedDateTime",
       "javaName": "timestamp",
-      "title": "Timestamp"
+      "title": "The timestamp."
     }
   }
 }

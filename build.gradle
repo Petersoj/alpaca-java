@@ -6,15 +6,17 @@ buildscript {
     }
 
     dependencies {
+        // For Maven and Maven Central support
         classpath group: 'com.bmuschko', name: 'gradle-nexus-plugin', version: '2.3.1'
-        classpath group: 'org.jsonschema2pojo', name: 'jsonschema2pojo-gradle-plugin', version: '1.0.2'
+        // For JSONSchema2POJO
+        classpath group: 'org.jsonschema2pojo', name: 'jsonschema2pojo-gradle-plugin', version: '1.1.1'
     }
 }
 
 plugins {
     id 'java'
-    id 'eclipse'
 
+    // For Maven and Maven Central support
     id 'maven-publish'
     id 'com.bmuschko.nexus' version '2.3.1'
     id 'io.codearte.nexus-staging' version '0.11.0'
@@ -23,7 +25,6 @@ plugins {
     id 'jacoco'
 }
 
-// Calling 'apply' here because 'jsonschema2pojo' doesn't exist in Gradle Central Plugin Repository
 apply plugin: 'jsonschema2pojo'
 tasks.getByName("generateJsonSchema2Pojo").enabled(false) // Disable default 'jsonSchema2Pojo' task
 
@@ -36,14 +37,20 @@ repositories {
 }
 
 dependencies {
-    implementation group: 'org.slf4j', name: 'slf4j-api', version: '1.7.30'
-    // This is a bridge for the Jakarta Commons Logging library used in dependencies to actually use SLF4j instead
-    implementation group: 'org.slf4j', name: 'jcl-over-slf4j', version: '1.7.30'
-    implementation group: 'com.google.guava', name: 'guava', version: '20.0'
-    implementation group: 'com.mashape.unirest', name: 'unirest-java', version: '1.4.9'
-    implementation group: 'com.google.code.gson', name: 'gson', version: '2.8.5'
-    implementation group: 'org.eclipse.jetty.websocket', name: 'javax-websocket-client-impl', version: '9.4.28.v20200408'
+    // Logging framework
+    implementation group: 'org.slf4j', name: 'slf4j-api', version: '1.7.31'
+    // This is a bridge for the Apache Jakarta Commons Logging library used in dependencies to actually use SLF4j instead
+    implementation group: 'org.slf4j', name: 'jcl-over-slf4j', version: '1.7.31'
 
+    // Guava and GSON
+    implementation group: 'com.google.guava', name: 'guava', version: '30.1.1-jre'
+    implementation group: 'com.google.code.gson', name: 'gson', version: '2.8.7'
+
+    // OkHttp
+    implementation group: 'com.squareup.okhttp3', name: 'okhttp', version: '4.9.1'
+    implementation group: 'com.github.devcsrj', name: 'slf4j-okhttp3-logging-interceptor', version: '1.0.1'
+
+    // Unit test dependencies
     testImplementation group: 'org.slf4j', name: 'slf4j-simple', version: '1.7.30'
     testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter', version: '5.7.0'
     testImplementation group: 'org.mockito', name: 'mockito-core', version: '3.7.0'
@@ -72,12 +79,14 @@ targetCompatibility = 1.8
 [compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
 
 javadoc {
+    // Explicitly define source version
+    options.addStringOption('source', '8')
     // Used to suppress Javadoc linting warnings
     options.addStringOption('Xdoclint:none', '-quiet')
     // Explicitly define Charset for Javadocs
-    options.addStringOption("charset", "UTF-8")
+    options.addStringOption('charset', 'UTF-8')
     // Add Java SE 8 link
-    options.addStringOption("link", "https://docs.oracle.com/javase/8/docs/api/")
+    options.addStringOption('link', 'https://docs.oracle.com/javase/8/docs/api/')
 }
 
 test {
@@ -176,13 +185,13 @@ final def targetDirectoryPath = file("${project.buildDir}/generated-sources/sche
 
 task generatePOJOs() {
     final def jsonSourceDirectory = file("${project.projectDir}/schema_json").getPath()
-    final def jsonPackageNameStart = "net.jacobpeterson.alpaca.domain"
+    final def jsonPackageNamePrefix = "net.jacobpeterson.alpaca.model"
 
     // Loop through all files in schema JSON file tree
     file(jsonSourceDirectory).eachFileRecurse { jsonFile ->
         if (jsonFile.getName().endsWith(".json")) {
             def startPackageIndex = jsonFile.getAbsolutePath().indexOf(jsonSourceDirectory) + jsonSourceDirectory.length()
-            def targetPackage = jsonPackageNameStart + jsonFile.getParentFile().getAbsolutePath()
+            def targetPackage = jsonPackageNamePrefix + jsonFile.getParentFile().getAbsolutePath()
                     .substring(startPackageIndex)
                     .replace(File.separator, '.').replace('-', '').replace('_', '')
                     .toLowerCase()
