@@ -2,7 +2,7 @@
   "type": "object",
   "title": "See <a href=\"https://alpaca.markets/docs/api-documentation/api-v2/account-activities/\">Account Activities</a>.",
   "extends": {
-    "existingJavaType": "net.jacobpeterson.alpaca.domain.accountactivities.AccountActivity"
+    "existingJavaType": "net.jacobpeterson.alpaca.model.endpoint.accountactivities.AccountActivity"
   },
   "properties": {
     "cum_qty": {

@@ -1,10 +1,14 @@
 package net.jacobpeterson.alpaca.refactor;
 
+import devcsrj.okhttp3.logging.HttpLoggingInterceptor;
 import net.jacobpeterson.alpaca.model.properties.DataAPIType;
 import net.jacobpeterson.alpaca.model.properties.EndpointAPIType;
 import net.jacobpeterson.alpaca.refactor.properties.AlpacaProperties;
 import net.jacobpeterson.alpaca.refactor.rest.AlpacaClient;
 import net.jacobpeterson.alpaca.refactor.rest.endpoint.*;
+import okhttp3.OkHttpClient;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
@@ -17,8 +21,11 @@ import static com.google.common.base.Preconditions.checkNotNull;
  */
 public class AlpacaAPI {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(AlpacaAPI.class);
+
     private static final String VERSION_2_PATH_SEGMENT = "v2";
 
+    private final OkHttpClient okHttpClient;
     private final AlpacaClient brokerClient;
     private final AlpacaClient dataClient;
     // Ordering of fields/methods below are analogous to the ordering in the Alpaca documentation
@@ -52,7 +59,7 @@ public class AlpacaAPI {
      * @param secret the secret
      */
     public AlpacaAPI(String keyID, String secret) {
-        this(keyID, secret, null,
+        this(null, keyID, secret, null,
                 AlpacaProperties.ENDPOINT_API_TYPE,
                 AlpacaProperties.DATA_API_TYPE);
     }
@@ -66,7 +73,7 @@ public class AlpacaAPI {
      * @param dataAPIType     the {@link DataAPIType}
      */
     public AlpacaAPI(String keyID, String secret, EndpointAPIType endpointAPIType, DataAPIType dataAPIType) {
-        this(keyID, secret, null, endpointAPIType, dataAPIType);
+        this(null, keyID, secret, null, endpointAPIType, dataAPIType);
     }
 
     /**
@@ -75,7 +82,7 @@ public class AlpacaAPI {
      * @param oAuthToken the OAuth token. Note that the Data API v2 does not work with OAuth tokens.
      */
     public AlpacaAPI(String oAuthToken) {
-        this(null, null, oAuthToken,
+        this(null, null, null, oAuthToken,
                 AlpacaProperties.ENDPOINT_API_TYPE,
                 AlpacaProperties.DATA_API_TYPE);
     }
@@ -83,16 +90,30 @@ public class AlpacaAPI {
     /**
      * Instantiates a new {@link AlpacaAPI}.
      *
+     * @param okHttpClient    the {@link OkHttpClient} or <code>null</code> to create a default instance
      * @param keyID           the key ID
      * @param secretKey       the secret key
      * @param oAuthToken      the OAuth token
      * @param endpointAPIType the {@link EndpointAPIType}
      * @param dataAPIType     the {@link DataAPIType}
      */
-    public AlpacaAPI(String keyID, String secretKey, String oAuthToken, EndpointAPIType endpointAPIType,
-            DataAPIType dataAPIType) {
+    public AlpacaAPI(OkHttpClient okHttpClient, String keyID, String secretKey, String oAuthToken,
+            EndpointAPIType endpointAPIType, DataAPIType dataAPIType) {
         checkNotNull(endpointAPIType);
         checkNotNull(dataAPIType);
+
+        // Create default 'okHttpClient'
+        if (okHttpClient == null) {
+            OkHttpClient.Builder clientBuilder = new OkHttpClient.Builder();
+
+            if (LOGGER.isDebugEnabled()) {
+                clientBuilder.addInterceptor(new HttpLoggingInterceptor(LOGGER));
+            }
+
+            okHttpClient = clientBuilder.build();
+        }
+
+        this.okHttpClient = okHttpClient;
 
         String brokerHostSubdomain;
         switch (endpointAPIType) {
@@ -107,10 +128,11 @@ public class AlpacaAPI {
         }
 
         if (oAuthToken == null) {
-            brokerClient = new AlpacaClient(keyID, secretKey, brokerHostSubdomain, VERSION_2_PATH_SEGMENT);
-            dataClient = new AlpacaClient(keyID, secretKey, "data", VERSION_2_PATH_SEGMENT);
+            brokerClient = new AlpacaClient(okHttpClient, keyID, secretKey,
+                    brokerHostSubdomain, VERSION_2_PATH_SEGMENT);
+            dataClient = new AlpacaClient(okHttpClient, keyID, secretKey, "data", VERSION_2_PATH_SEGMENT);
         } else {
-            brokerClient = new AlpacaClient(oAuthToken, brokerHostSubdomain, VERSION_2_PATH_SEGMENT);
+            brokerClient = new AlpacaClient(okHttpClient, oAuthToken, brokerHostSubdomain, VERSION_2_PATH_SEGMENT);
             dataClient = null;
         }
 
@@ -271,6 +293,15 @@ public class AlpacaAPI {
     // public void setMarketDataStreamWebsocketStateListener(WebsocketStateListener websocketStateListener) {
     //     marketDataWebSocketClient.setWebsocketStateListener(websocketStateListener);
     // }
+
+    /**
+     * Gets {@link #okHttpClient}.
+     *
+     * @return the {@link OkHttpClient}
+     */
+    public OkHttpClient getOkHttpClient() {
+        return okHttpClient;
+    }
 
     /**
      * Gets {@link #brokerClient}.

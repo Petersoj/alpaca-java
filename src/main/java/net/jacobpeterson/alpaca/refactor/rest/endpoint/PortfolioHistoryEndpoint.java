@@ -15,6 +15,8 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
+import static com.google.common.base.Preconditions.checkState;
+
 /**
  * {@link AbstractEndpoint} for
  * <a href="https://alpaca.markets/docs/api-documentation/api-v2/portfolio-history/">Portfolio
@@ -76,7 +78,7 @@ public class PortfolioHistoryEndpoint extends AbstractEndpoint {
                 PortfolioHistoryResponse.class);
 
         // Check if any response arrays differ in size
-        Preconditions.checkState(response.getTimestamp().size() == response.getEquity().size() &&
+        checkState(response.getTimestamp().size() == response.getEquity().size() &&
                         response.getEquity().size() == response.getProfitLoss().size() &&
                         response.getProfitLoss().size() == response.getProfitLossPct().size(),
                 "Response arrays should not differ in size!");

@@ -10,7 +10,6 @@ import net.jacobpeterson.alpaca.model.endpoint.accountactivities.enums.ActivityT
 import net.jacobpeterson.alpaca.model.endpoint.common.enums.SortDirection;
 import net.jacobpeterson.alpaca.refactor.rest.AlpacaClient;
 import net.jacobpeterson.alpaca.refactor.rest.AlpacaClientException;
-import net.jacobpeterson.alpaca.refactor.util.gson.GsonUtil;
 import okhttp3.HttpUrl;
 import okhttp3.Request;
 import org.slf4j.Logger;
@@ -24,6 +23,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import static com.google.common.base.Preconditions.checkState;
+import static net.jacobpeterson.alpaca.refactor.util.gson.GsonUtil.GSON;
 
 /**
  * {@link AbstractEndpoint} for
@@ -107,28 +107,26 @@ public class AccountActivitiesEndpoint extends AbstractEndpoint {
                 .build();
 
         JsonElement responseJSON = alpacaClient.requestJSON(request);
-        checkState(responseJSON instanceof JsonArray,
-                String.format("The response must be an array! Received: %s", responseJSON));
+        checkState(responseJSON instanceof JsonArray, "The response must be an array! Received: %s", responseJSON);
 
         ArrayList<AccountActivity> accountActivities = new ArrayList<>();
         for (JsonElement responseArrayElement : responseJSON.getAsJsonArray()) {
             checkState(responseArrayElement instanceof JsonObject,
-                    String.format("All array elements must be objects! Received: %s", responseArrayElement));
+                    "All array elements must be objects! Received: %s", responseArrayElement);
 
             JsonObject responseArrayObject = responseArrayElement.getAsJsonObject();
             JsonElement activityTypeElement = responseArrayObject.get(ACTIVITY_TYPE_FIELD);
-            checkState(activityTypeElement != null,
-                    String.format("Activity type elements must have %s field! Received: %s",
-                            ACTIVITY_TYPE_FIELD, responseArrayElement));
+            checkState(activityTypeElement != null, "Activity type elements must have %s field! Received: %s",
+                    ACTIVITY_TYPE_FIELD, responseArrayElement);
 
             String activityType = activityTypeElement.getAsString();
             AccountActivity accountActivity;
 
             // A 'TradeActivity' always has 'activity_type' field as 'FILL'
             if (activityType.equals(ActivityType.FILL.toString())) {
-                accountActivity = GsonUtil.GSON.fromJson(responseArrayObject, TradeActivity.class);
+                accountActivity = GSON.fromJson(responseArrayObject, TradeActivity.class);
             } else {
-                accountActivity = GsonUtil.GSON.fromJson(responseArrayObject, NonTradeActivity.class);
+                accountActivity = GSON.fromJson(responseArrayObject, NonTradeActivity.class);
             }
 
             if (accountActivity.getActivityType() == null) {

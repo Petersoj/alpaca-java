@@ -5,7 +5,7 @@ import net.jacobpeterson.alpaca.refactor.rest.AlpacaClient;
 /**
  * {@link AbstractEndpoint} is an abstract class representing a RestAPI endpoint.
  */
-public class AbstractEndpoint {
+public abstract class AbstractEndpoint {
 
     protected final AlpacaClient alpacaClient;
     protected final String endpointPathSegment;

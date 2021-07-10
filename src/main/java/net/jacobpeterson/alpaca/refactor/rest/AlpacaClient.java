@@ -12,6 +12,7 @@ import java.lang.reflect.Type;
 import java.util.function.Predicate;
 
 import static com.google.common.base.Preconditions.checkArgument;
+import static com.google.common.base.Preconditions.checkNotNull;
 import static net.jacobpeterson.alpaca.refactor.util.gson.GsonUtil.GSON;
 
 /**
@@ -19,47 +20,56 @@ import static net.jacobpeterson.alpaca.refactor.util.gson.GsonUtil.GSON;
  */
 public class AlpacaClient {
 
+    private final OkHttpClient okHttpClient;
     private final HttpUrl baseURL;
     private final Headers requestHeaders;
 
-    private OkHttpClient okHttpClient;
-
     /**
      * Instantiates a new {@link AlpacaClient}.
      *
+     * @param okHttpClient       the {@link OkHttpClient}
      * @param keyID              the key ID
      * @param secretKey          the secret key
      * @param alpacaSubdomain    the Alpaca subdomain
      * @param versionPathSegment the version path segment e.g. "v2"
      */
-    public AlpacaClient(String keyID, String secretKey, String alpacaSubdomain, String versionPathSegment) {
-        this(keyID, secretKey, null, alpacaSubdomain, versionPathSegment);
-    }
-
-    /**
-     * Instantiates a new {@link AlpacaClient}.
-     *
-     * @param oAuthToken         the OAuth token
-     * @param alpacaSubdomain    the Alpaca subdomain
-     * @param versionPathSegment the version path segment e.g. "v2"
-     */
-    public AlpacaClient(String oAuthToken, String alpacaSubdomain, String versionPathSegment) {
-        this(null, null, oAuthToken, alpacaSubdomain, versionPathSegment);
-    }
-
-    /**
-     * Instantiates a new {@link AlpacaClient}.
-     *
-     * @param keyID              the key ID
-     * @param secretKey          the secret key
-     * @param oAuthToken         the OAuth token
-     * @param alpacaSubdomain    the Alpaca subdomain
-     * @param versionPathSegment the version path segment e.g. "v2"
-     */
-    protected AlpacaClient(String keyID, String secretKey, String oAuthToken, String alpacaSubdomain,
+    public AlpacaClient(OkHttpClient okHttpClient, String keyID, String secretKey, String alpacaSubdomain,
             String versionPathSegment) {
-        checkArgument((keyID != null && secretKey != null) || oAuthToken != null,
+        this(okHttpClient, keyID, secretKey, null, alpacaSubdomain, versionPathSegment);
+    }
+
+    /**
+     * Instantiates a new {@link AlpacaClient}.
+     *
+     * @param okHttpClient       the {@link OkHttpClient}
+     * @param oAuthToken         the OAuth token
+     * @param alpacaSubdomain    the Alpaca subdomain
+     * @param versionPathSegment the version path segment e.g. "v2"
+     */
+    public AlpacaClient(OkHttpClient okHttpClient, String oAuthToken, String alpacaSubdomain,
+            String versionPathSegment) {
+        this(okHttpClient, null, null, oAuthToken, alpacaSubdomain, versionPathSegment);
+    }
+
+    /**
+     * Instantiates a new {@link AlpacaClient}.
+     *
+     * @param okHttpClient       the {@link OkHttpClient}
+     * @param keyID              the key ID
+     * @param secretKey          the secret key
+     * @param oAuthToken         the OAuth token
+     * @param alpacaSubdomain    the Alpaca subdomain
+     * @param versionPathSegment the version path segment e.g. "v2"
+     */
+    protected AlpacaClient(OkHttpClient okHttpClient, String keyID, String secretKey, String oAuthToken,
+            String alpacaSubdomain, String versionPathSegment) {
+        checkNotNull(okHttpClient);
+        checkArgument((keyID != null && secretKey != null) ^ oAuthToken != null,
                 "You must specify a (KeyID and Secret Key) or an OAuthToken!");
+        checkNotNull(alpacaSubdomain);
+        checkNotNull(versionPathSegment);
+
+        this.okHttpClient = okHttpClient;
 
         baseURL = new HttpUrl.Builder()
                 .scheme("https")
@@ -77,8 +87,6 @@ public class AlpacaClient {
                     .add("APCA-API-SECRET-KEY", secretKey);
         }
         requestHeaders = requestHeadersBuilder.build();
-
-        okHttpClient = new OkHttpClient();
     }
 
     /**
@@ -202,23 +210,5 @@ public class AlpacaClient {
      */
     public Headers getRequestHeaders() {
         return requestHeaders;
-    }
-
-    /**
-     * Gets {@link #okHttpClient}.
-     *
-     * @return the {@link OkHttpClient}
-     */
-    public OkHttpClient getOkHttpClient() {
-        return okHttpClient;
-    }
-
-    /**
-     * Sets {@link #okHttpClient}.
-     *
-     * @param okHttpClient the {@link OkHttpClient}
-     */
-    public void setOkHttpClient(OkHttpClient okHttpClient) {
-        this.okHttpClient = okHttpClient;
     }
 }

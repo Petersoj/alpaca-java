@@ -60,7 +60,7 @@ public class WatchlistEndpoint extends AbstractEndpoint {
      */
     public Watchlist create(String name, String... symbols) throws AlpacaClientException {
         checkNotNull(name);
-        checkArgument(name.length() <= 64);
+        checkArgument(name.length() <= 64, "'name' cannot be longer than 64 characters!");
 
         HttpUrl.Builder urlBuilder = alpacaClient.urlBuilder()
                 .addPathSegment(endpointPathSegment);
@@ -115,7 +115,7 @@ public class WatchlistEndpoint extends AbstractEndpoint {
     public Watchlist update(String watchlistID, String name, String... symbols)
             throws AlpacaClientException {
         checkNotNull(watchlistID);
-        checkArgument(name == null || name.length() <= 64);
+        checkArgument(name == null || name.length() <= 64, "'name' cannot be longer than 64 characters!");
 
         HttpUrl.Builder urlBuilder = alpacaClient.urlBuilder()
                 .addPathSegment(endpointPathSegment)

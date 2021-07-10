@@ -236,7 +236,7 @@ public class MarketDataEndpoint extends AbstractEndpoint {
      */
     public Map<String, Snapshot> getSnapshots(List<String> symbols) throws AlpacaClientException {
         checkNotNull(symbols);
-        checkArgument(!symbols.isEmpty());
+        checkArgument(!symbols.isEmpty(), "'symbols' cannot be empty!");
 
         HttpUrl.Builder urlBuilder = alpacaClient.urlBuilder()
                 .addPathSegment(endpointPathSegment)

@@ -4,7 +4,6 @@
   "enum": [
     "listening",
     "authorization",
-    "trade_updates",
-    "account_updates"
+    "trade_updates"
   ]
 }
