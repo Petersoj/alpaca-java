@@ -1,5 +1,6 @@
 package net.jacobpeterson.alpaca.refactor.rest.endpoint;
 
+import com.google.common.base.Preconditions;
 import net.jacobpeterson.alpaca.model.endpoint.portfoliohistory.PortfolioHistory;
 import net.jacobpeterson.alpaca.model.endpoint.portfoliohistory.PortfolioHistoryDataPoint;
 import net.jacobpeterson.alpaca.model.endpoint.portfoliohistory.PortfolioHistoryResponse;
@@ -71,29 +72,28 @@ public class PortfolioHistoryEndpoint extends AbstractEndpoint {
         Request request = alpacaClient.requestBuilder(urlBuilder.build())
                 .get()
                 .build();
-        PortfolioHistoryResponse portfolioHistoryResponse = alpacaClient.requestObject(request,
+        PortfolioHistoryResponse response = alpacaClient.requestObject(request,
                 PortfolioHistoryResponse.class);
 
         // Check if any response arrays differ in size
-        if (portfolioHistoryResponse.getTimestamp().size() != portfolioHistoryResponse.getEquity().size() ||
-                portfolioHistoryResponse.getEquity().size() != portfolioHistoryResponse.getProfitLoss().size() ||
-                portfolioHistoryResponse.getProfitLoss().size() != portfolioHistoryResponse.getProfitLossPct().size()) {
-            throw new IllegalStateException("Response arrays should never differ in size!");
-        }
+        Preconditions.checkState(response.getTimestamp().size() == response.getEquity().size() &&
+                        response.getEquity().size() == response.getProfitLoss().size() &&
+                        response.getProfitLoss().size() == response.getProfitLossPct().size(),
+                "Response arrays should not differ in size!");
 
         // Add all data points into one POJO
         ArrayList<PortfolioHistoryDataPoint> dataPoints = new ArrayList<>();
-        for (int index = 0; index < portfolioHistoryResponse.getTimestamp().size(); index++) {
+        for (int index = 0; index < response.getTimestamp().size(); index++) {
             dataPoints.add(new PortfolioHistoryDataPoint(
-                    portfolioHistoryResponse.getTimestamp().get(index),
-                    portfolioHistoryResponse.getEquity().get(index),
-                    portfolioHistoryResponse.getProfitLoss().get(index),
-                    portfolioHistoryResponse.getProfitLossPct().get(index)));
+                    response.getTimestamp().get(index),
+                    response.getEquity().get(index),
+                    response.getProfitLoss().get(index),
+                    response.getProfitLossPct().get(index)));
         }
 
         return new PortfolioHistory(
                 dataPoints,
-                portfolioHistoryResponse.getBaseValue(),
-                portfolioHistoryResponse.getTimeframe());
+                response.getBaseValue(),
+                response.getTimeframe());
     }
 }

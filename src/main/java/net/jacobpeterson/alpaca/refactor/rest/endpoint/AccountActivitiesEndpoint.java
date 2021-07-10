@@ -23,6 +23,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static com.google.common.base.Preconditions.checkState;
+
 /**
  * {@link AbstractEndpoint} for
  * <a href="https://docs.alpaca.markets/api-documentation/api-v2/account-activities/">Account
@@ -105,25 +107,19 @@ public class AccountActivitiesEndpoint extends AbstractEndpoint {
                 .build();
 
         JsonElement responseJSON = alpacaClient.requestJSON(request);
-        if (!(responseJSON instanceof JsonArray)) {
-            throw new IllegalStateException(
-                    String.format("The response must be an array! Received: %s", responseJSON));
-        }
+        checkState(responseJSON instanceof JsonArray,
+                String.format("The response must be an array! Received: %s", responseJSON));
 
         ArrayList<AccountActivity> accountActivities = new ArrayList<>();
         for (JsonElement responseArrayElement : responseJSON.getAsJsonArray()) {
-            if (!(responseArrayElement instanceof JsonObject)) {
-                throw new IllegalStateException(
-                        String.format("All array elements must be objects! Received: %s", responseArrayElement));
-            }
+            checkState(responseArrayElement instanceof JsonObject,
+                    String.format("All array elements must be objects! Received: %s", responseArrayElement));
 
             JsonObject responseArrayObject = responseArrayElement.getAsJsonObject();
             JsonElement activityTypeElement = responseArrayObject.get(ACTIVITY_TYPE_FIELD);
-            if (activityTypeElement == null) {
-                throw new IllegalStateException(
-                        String.format("Activity type elements must have %s field! Received: %s",
-                                ACTIVITY_TYPE_FIELD, responseArrayElement));
-            }
+            checkState(activityTypeElement != null,
+                    String.format("Activity type elements must have %s field! Received: %s",
+                            ACTIVITY_TYPE_FIELD, responseArrayElement));
 
             String activityType = activityTypeElement.getAsString();
             AccountActivity accountActivity;
