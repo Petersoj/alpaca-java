@@ -1,6 +1,6 @@
 package net.jacobpeterson.alpaca.websocket.broker.client;
 
-import net.jacobpeterson.alpaca.AlpacaAPI;
+import net.jacobpeterson.alpaca.refactor.AlpacaAPI;
 import net.jacobpeterson.alpaca.abstracts.websocket.client.AbstractWebsocketClientEndpoint;
 
 import javax.websocket.ClientEndpoint;

@@ -1,0 +1,18 @@
+{
+  "type": "object",
+  "title": "See <a href=\"https://alpaca.markets/docs/api-documentation/api-v2/portfolio-history/\">Portfolio History</a>.",
+  "properties": {
+    "data_points": {
+      "existingJavaType": "java.util.ArrayList<net.jacobpeterson.alpaca.model.endpoint.portfoliohistory.PortfolioHistoryDataPoint>",
+      "title": "The {@link java.util.ArrayList} of {@link net.jacobpeterson.alpaca.model.endpoint.portfoliohistory.PortfolioHistoryDataPoint}s."
+    },
+    "base_value": {
+      "existingJavaType": "java.lang.Double",
+      "title": "Basis in dollar of the profit loss calculation."
+    },
+    "timeframe": {
+      "existingJavaType": "net.jacobpeterson.alpaca.model.endpoint.portfoliohistory.enums.PortfolioTimeFrame",
+      "title": "Time window size of each data element."
+    }
+  }
+}

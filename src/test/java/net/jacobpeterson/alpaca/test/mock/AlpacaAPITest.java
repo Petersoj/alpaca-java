@@ -1,8 +1,8 @@
 package net.jacobpeterson.alpaca.test.mock;
 
-import net.jacobpeterson.alpaca.AlpacaAPI;
-import net.jacobpeterson.alpaca.properties.enums.DataAPIType;
-import net.jacobpeterson.alpaca.properties.enums.EndpointAPIType;
+import net.jacobpeterson.alpaca.model.properties.DataAPIType;
+import net.jacobpeterson.alpaca.model.properties.EndpointAPIType;
+import net.jacobpeterson.alpaca.refactor.AlpacaAPI;
 import org.junit.jupiter.api.Test;
 
 /**

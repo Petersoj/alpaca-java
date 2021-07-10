@@ -1,0 +1,280 @@
+package net.jacobpeterson.alpaca.test.live;
+
+import net.jacobpeterson.alpaca.model.endpoint.account.Account;
+import net.jacobpeterson.alpaca.model.endpoint.accountactivities.AccountActivity;
+import net.jacobpeterson.alpaca.model.endpoint.accountactivities.NonTradeActivity;
+import net.jacobpeterson.alpaca.model.endpoint.accountactivities.TradeActivity;
+import net.jacobpeterson.alpaca.model.endpoint.accountactivities.enums.ActivityType;
+import net.jacobpeterson.alpaca.model.endpoint.accountconfiguration.AccountConfiguration;
+import net.jacobpeterson.alpaca.model.endpoint.accountconfiguration.enums.DTBPCheck;
+import net.jacobpeterson.alpaca.model.endpoint.accountconfiguration.enums.TradeConfirmEmail;
+import net.jacobpeterson.alpaca.model.endpoint.clock.Clock;
+import net.jacobpeterson.alpaca.model.endpoint.common.enums.SortDirection;
+import net.jacobpeterson.alpaca.model.endpoint.order.Order;
+import net.jacobpeterson.alpaca.model.endpoint.order.enums.CurrentOrderStatus;
+import net.jacobpeterson.alpaca.refactor.AlpacaAPI;
+import net.jacobpeterson.alpaca.refactor.rest.AlpacaClientException;
+import net.jacobpeterson.alpaca.refactor.rest.endpoint.AccountConfigurationEndpoint;
+import net.jacobpeterson.alpaca.refactor.rest.endpoint.AccountEndpoint;
+import net.jacobpeterson.alpaca.refactor.rest.endpoint.ClockEndpoint;
+import net.jacobpeterson.alpaca.refactor.rest.endpoint.OrdersEndpoint;
+import org.junit.jupiter.api.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.time.ZonedDateTime;
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+/**
+ * {@link AlpacaAPITest} tests live endpoints using Alpaca Paper credentials given in the
+ * <code>alpaca.properties</code> file on the classpath.
+ */
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+public class AlpacaAPITest {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(AlpacaAPITest.class);
+    private static final int RATE_LIMIT_MILLIS = 200; // Wait 200ms between every test to prevent rate-limiting
+
+    static {
+        // Log trace-level
+        System.setProperty("org.slf4j.simpleLogger.log.net.jacobpeterson", "trace");
+    }
+
+    private static AlpacaAPI alpacaAPI;
+    private static boolean marketOpen;
+    private static AccountConfiguration accountConfiguration;
+
+    /**
+     * Executed before all tests in this class.
+     */
+    @BeforeAll
+    public static void beforeAll() {
+        alpacaAPI = new AlpacaAPI();
+        marketOpen = false;
+    }
+
+    /**
+     * Executed before each test.
+     */
+    @BeforeEach
+    public void beforeEach() {
+    }
+
+    /**
+     * Executed after each test. Note that this will {@link Thread#sleep(long)} for {@link #RATE_LIMIT_MILLIS} to
+     * protect against rate limiting.
+     */
+    @AfterEach
+    public void afterEach() {
+        try {
+            Thread.sleep(RATE_LIMIT_MILLIS);
+        } catch (InterruptedException exception) {
+            fail("Interrupted when tearing down!");
+        }
+    }
+
+    /**
+     * Tests {@link ClockEndpoint#get()}.
+     *
+     * @throws AlpacaClientException thrown for {@link AlpacaClientException}s
+     */
+    @Test
+    @org.junit.jupiter.api.Order(1)
+    public void test_ClockEndpoint_get() throws AlpacaClientException {
+        Clock clock = alpacaAPI.clock().get();
+        assertNotNull(clock);
+
+        LOGGER.debug("{}", clock);
+
+        assertNotNull(clock.getTimestamp());
+        assertNotNull(clock.getIsOpen());
+        assertNotNull(clock.getNextOpen());
+        assertNotNull(clock.getNextClose());
+
+        marketOpen = clock.getIsOpen();
+        if (marketOpen) {
+            LOGGER.info("Market is currently open! All live endpoints will be tested.");
+        } else {
+            LOGGER.info("Market is currently closed! Only some live endpoints will be tested.");
+        }
+    }
+
+    /**
+     * Tests {@link AccountEndpoint#get()}.
+     *
+     * @throws AlpacaClientException thrown for {@link AlpacaClientException}s
+     * @throws NumberFormatException thrown for {@link NumberFormatException}s
+     */
+    @Test
+    @SuppressWarnings("ResultOfMethodCallIgnored")
+    public void test_AccountEndpoint_get() throws AlpacaClientException, NumberFormatException {
+        Account account = alpacaAPI.account().get();
+        assertNotNull(account);
+
+        LOGGER.debug("{}", account);
+
+        // Assert basic data integrity and not null
+        Double.parseDouble(account.getCash());
+        Double.parseDouble(account.getPortfolioValue());
+        Double.parseDouble(account.getLongMarketValue());
+        Double.parseDouble(account.getShortMarketValue());
+        Double.parseDouble(account.getEquity());
+        Double.parseDouble(account.getLastEquity());
+        Double.parseDouble(account.getBuyingPower());
+        Double.parseDouble(account.getInitialMargin());
+        Double.parseDouble(account.getMaintenanceMargin());
+        Double.parseDouble(account.getLastMaintenanceMargin());
+        Double.parseDouble(account.getDaytradingBuyingPower());
+        Double.parseDouble(account.getRegtBuyingPower());
+
+        // Assert other data exists
+        assertNotNull(account.getId());
+        assertNotNull(account.getAccountNumber());
+        assertNotNull(account.getStatus());
+        assertNotNull(account.getCurrency());
+        assertNotNull(account.getPatternDayTrader());
+        assertNotNull(account.getTradeSuspendedByUser());
+        assertNotNull(account.getTradingBlocked());
+        assertNotNull(account.getTransfersBlocked());
+        assertNotNull(account.getAccountBlocked());
+        assertNotNull(account.getCreatedAt());
+        assertNotNull(account.getShortingEnabled());
+        assertNotNull(account.getMultiplier());
+        assertNotNull(account.getSma());
+        assertNotNull(account.getDaytradeCount());
+    }
+
+    /**
+     * Tests @{@link net.jacobpeterson.alpaca.refactor.rest.endpoint.AccountActivitiesEndpoint#get(ZonedDateTime,
+     * ZonedDateTime, ZonedDateTime, SortDirection, Integer, String, ActivityType...)} one {@link AccountActivity}
+     * exists until now.
+     *
+     * @throws AlpacaClientException thrown for {@link AlpacaClientException}s
+     */
+    @Test
+    public void test_AccountActivitiesEndpoint_get_One_Activity_Exists_Until_Now() throws AlpacaClientException {
+        List<AccountActivity> accountActivities = alpacaAPI.accountActivities().get(
+                null,
+                ZonedDateTime.now(),
+                null,
+                SortDirection.ASCENDING,
+                1,
+                null,
+                (ActivityType[]) null);
+        assertNotNull(accountActivities);
+        assertFalse(accountActivities.isEmpty());
+
+        accountActivities.forEach(accountActivity -> LOGGER.debug(accountActivity.toString()));
+
+        AccountActivity accountActivity = accountActivities.get(0);
+        if (accountActivity instanceof TradeActivity) {
+            TradeActivity tradeActivity = (TradeActivity) accountActivity;
+            assertNotNull(tradeActivity.getActivityType());
+            assertNotNull(tradeActivity.getId());
+            assertNotNull(tradeActivity.getCumQty());
+            assertNotNull(tradeActivity.getLeavesQty());
+            assertNotNull(tradeActivity.getPrice());
+            assertNotNull(tradeActivity.getQty());
+            assertNotNull(tradeActivity.getSide());
+            assertNotNull(tradeActivity.getSymbol());
+            assertNotNull(tradeActivity.getTransactionTime());
+            assertNotNull(tradeActivity.getOrderId());
+            assertNotNull(tradeActivity.getType());
+        } else if (accountActivity instanceof NonTradeActivity) {
+            NonTradeActivity nonTradeActivity = (NonTradeActivity) accountActivity;
+            assertNotNull(nonTradeActivity.getActivityType());
+            assertNotNull(nonTradeActivity.getId());
+            assertNotNull(nonTradeActivity.getDate());
+            assertNotNull(nonTradeActivity.getNetAmount());
+            assertNotNull(nonTradeActivity.getSymbol());
+            assertNotNull(nonTradeActivity.getQty());
+            assertNotNull(nonTradeActivity.getPerShareAmount());
+            assertNotNull(nonTradeActivity.getDescription());
+        }
+    }
+
+    /**
+     * Test {@link AccountConfigurationEndpoint#get()}.
+     *
+     * @throws AlpacaClientException thrown for {@link AlpacaClientException}s
+     */
+    @Test
+    @org.junit.jupiter.api.Order(1)
+    public void test_AccountConfigurationEndpoint_get() throws AlpacaClientException {
+        AccountConfiguration accountConfiguration = alpacaAPI.accountConfiguration().get();
+        assertNotNull(accountConfiguration);
+
+        LOGGER.debug("{}", accountConfiguration);
+
+        assertNotNull(accountConfiguration.getDtbpCheck());
+        assertNotNull(accountConfiguration.getTradeConfirmEmail());
+        assertNotNull(accountConfiguration.getSuspendTrade());
+        assertNotNull(accountConfiguration.getNoShorting());
+
+        AlpacaAPITest.accountConfiguration = accountConfiguration;
+    }
+
+    /**
+     * Test {@link AccountConfigurationEndpoint#set(AccountConfiguration)}.
+     *
+     * @throws AlpacaClientException thrown for {@link AlpacaClientException}s
+     */
+    @Test
+    @org.junit.jupiter.api.Order(2)
+    public void test_AccountConfigurationEndpoint_set() throws AlpacaClientException {
+        if (accountConfiguration == null) {
+            AccountConfiguration newAccountConfiguration = new AccountConfiguration(
+                    DTBPCheck.BOTH,
+                    TradeConfirmEmail.NONE,
+                    false,
+                    false);
+            LOGGER.info("Settings Account Configuration to: {}", newAccountConfiguration);
+            alpacaAPI.accountConfiguration().set(newAccountConfiguration);
+        } else {
+            alpacaAPI.accountConfiguration().set(accountConfiguration);
+        }
+    }
+
+    /**
+     * Test {@link OrdersEndpoint#get(CurrentOrderStatus, Integer, ZonedDateTime, ZonedDateTime, SortDirection, Boolean,
+     * List)} one {@link Order} exists until now.
+     *
+     * @throws AlpacaClientException thrown for {@link AlpacaClientException}s
+     */
+    @Test
+    public void test_OrdersEndpoint_get_One_Order_Exists_Until_now() throws AlpacaClientException {
+        List<Order> orders = alpacaAPI.orders().get(
+                CurrentOrderStatus.ALL,
+                1,
+                null,
+                ZonedDateTime.now(),
+                SortDirection.ASCENDING,
+                true,
+                null);
+
+        assertNotNull(orders);
+        assertFalse(orders.isEmpty());
+
+        orders.forEach(order -> LOGGER.debug("{}", order));
+
+        // Assert required fields are present
+        Order order = orders.get(0);
+        assertNotNull(order.getId());
+        assertNotNull(order.getClientOrderId());
+        assertNotNull(order.getCreatedAt());
+        assertNotNull(order.getUpdatedAt());
+        assertNotNull(order.getSubmittedAt());
+        assertNotNull(order.getAssetId());
+        assertNotNull(order.getSymbol());
+        assertNotNull(order.getAssetClass());
+        assertNotNull(order.getQty());
+        assertNotNull(order.getFilledQty());
+        assertNotNull(order.getType());
+        assertNotNull(order.getSide());
+        assertNotNull(order.getTimeInForce());
+        assertNotNull(order.getStatus());
+        assertNotNull(order.getExtendedHours());
+    }
+}

@@ -1,0 +1,28 @@
+{
+  "type": "string",
+  "title": "See <a href=\"https://alpaca.markets/docs/api-documentation/api-v2/portfolio-history/\">Portfolio History</a>.",
+  "enum": [
+    "1Min",
+    "5Min",
+    "15Min",
+    "1H",
+    "1D"
+  ],
+  "javaEnums": [
+    {
+      "name": "ONE_MIN"
+    },
+    {
+      "name": "FIVE_MINUTE"
+    },
+    {
+      "name": "FIFTEEN_MINUTE"
+    },
+    {
+      "name": "ONE_HOUR"
+    },
+    {
+      "name": "ONE_DAY"
+    }
+  ]
+}

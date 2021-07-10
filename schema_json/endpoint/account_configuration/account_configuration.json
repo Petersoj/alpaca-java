@@ -1,0 +1,22 @@
+{
+  "type": "object",
+  "title": "See <a href=\"https://alpaca.markets/docs/api-documentation/api-v2/account-configuration/\">Account Configuration</a>.",
+  "properties": {
+    "dtbp_check": {
+      "existingJavaType": "net.jacobpeterson.alpaca.model.endpoint.accountconfiguration.enums.DTBPCheck",
+      "title": "The {@link net.jacobpeterson.alpaca.model.endpoint.accountconfiguration.enums.DTBPCheck}. Controls Day Trading Margin Call (DTMC) checks."
+    },
+    "trade_confirm_email": {
+      "existingJavaType": "net.jacobpeterson.alpaca.model.endpoint.accountconfiguration.enums.TradeConfirmEmail",
+      "title": "The {@link net.jacobpeterson.alpaca.model.endpoint.accountconfiguration.enums.TradeConfirmEmail}. If {@link net.jacobpeterson.alpaca.model.endpoint.accountconfiguration.enums.TradeConfirmEmail#NONE}, emails for order fills are not sent."
+    },
+    "suspend_trade": {
+      "existingJavaType": "java.lang.Boolean",
+      "title": "If true, new orders are blocked."
+    },
+    "no_shorting": {
+      "existingJavaType": "java.lang.Boolean",
+      "title": "If true, account becomes long-only mode."
+    }
+  }
+}

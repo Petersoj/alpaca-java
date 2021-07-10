@@ -1,0 +1,9 @@
+{
+  "type": "string",
+  "javaName": "DataAPIType",
+  "title": "Defines the data APIs to use with Alpaca.",
+  "enum": [
+    "iex",
+    "sip"
+  ]
+}

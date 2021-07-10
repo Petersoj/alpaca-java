@@ -1,0 +1,13 @@
+{
+  "type": "object",
+  "title": "See <a href=\"https://alpaca.markets/docs/api-documentation/api-v2/streaming/\">Streaming</a>.",
+  "extends": {
+    "existingJavaType": "net.jacobpeterson.alpaca.domain.streaming.AlpacaStreamMessage"
+  },
+  "properties": {
+    "data": {
+      "existingJavaType": "net.jacobpeterson.alpaca.model.endpoint.streaming.authorization.AuthorizationData",
+      "title": "The {@link net.jacobpeterson.alpaca.model.endpoint.streaming.authorization.AuthorizationData}."
+    }
+  }
+}

@@ -1,0 +1,26 @@
+{
+  "type": "object",
+  "title": "See <a href=\"https://alpaca.markets/docs/api-documentation/api-v2/streaming/\">Streaming</a>.",
+  "properties": {
+    "event": {
+      "existingJavaType": "net.jacobpeterson.alpaca.model.endpoint.streaming.trade.enums.TradeUpdateEvent",
+      "title": "The {@link net.jacobpeterson.alpaca.model.endpoint.streaming.trade.enums.TradeUpdateEvent}."
+    },
+    "price": {
+      "existingJavaType": "java.lang.String",
+      "title": "The price."
+    },
+    "timestamp": {
+      "existingJavaType": "java.time.ZonedDateTime",
+      "title": "The timestamp."
+    },
+    "position_qty": {
+      "existingJavaType": "java.lang.String",
+      "title": "The position quantity."
+    },
+    "order": {
+      "existingJavaType": "net.jacobpeterson.alpaca.model.endpoint.order.Order",
+      "title": "The {@link net.jacobpeterson.alpaca.model.endpoint.order.Order}."
+    }
+  }
+}
