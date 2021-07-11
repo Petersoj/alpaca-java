@@ -6,18 +6,23 @@ import net.jacobpeterson.alpaca.model.properties.EndpointAPIType;
 import net.jacobpeterson.alpaca.properties.AlpacaProperties;
 import net.jacobpeterson.alpaca.rest.AlpacaClient;
 import net.jacobpeterson.alpaca.rest.endpoint.*;
+import net.jacobpeterson.alpaca.websocket.AlpacaWebsocket;
+import net.jacobpeterson.alpaca.websocket.marketdata.MarketDataWebsocket;
+import net.jacobpeterson.alpaca.websocket.marketdata.MarketDataWebsocketInterface;
 import net.jacobpeterson.alpaca.websocket.streaming.StreamingWebsocket;
 import net.jacobpeterson.alpaca.websocket.streaming.StreamingWebsocketInterface;
 import okhttp3.OkHttpClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
- * {@link AlpacaAPI} contains several instances of various {@link AbstractEndpoint}s that enable you to interface with
- * Alpaca. You will generally only need one instance of this class in your application. Note that many methods inside
- * the various {@link AbstractEndpoint}s allow <code>null<code/> to be passed in as a parameter if it is optional.
+ * {@link AlpacaAPI} contains several instances of various {@link AbstractEndpoint}s and {@link AlpacaWebsocket}s that
+ * enable you to interface with Alpaca. You will generally only need one instance of this class in your application.
+ * Note that many methods inside the various {@link AbstractEndpoint}s allow <code>null<code/> to be passed in as a
+ * parameter if it is optional.
  *
  * @see <a href="https://docs.alpaca.markets/api-documentation/api-v2/">Alpaca API Documentation</a>
  */
@@ -43,6 +48,7 @@ public class AlpacaAPI {
     private final AccountActivitiesEndpoint accountActivitiesEndpoint;
     private final PortfolioHistoryEndpoint portfolioHistoryEndpoint;
     private final StreamingWebsocket streamingWebsocket;
+    private final MarketDataWebsocket marketDataWebsocket;
 
     /**
      * Instantiates a new {@link AlpacaAPI} using properties specified in <code>alpaca.properties</code> file (or their
@@ -102,6 +108,9 @@ public class AlpacaAPI {
      */
     public AlpacaAPI(OkHttpClient okHttpClient, String keyID, String secretKey, String oAuthToken,
             EndpointAPIType endpointAPIType, DataAPIType dataAPIType) {
+        checkArgument((keyID != null && secretKey != null) ^ oAuthToken != null,
+                "You must specify a (KeyID (%s) and Secret Key (%s)) or an OAuthToken (%s)!",
+                keyID, secretKey, oAuthToken);
         checkNotNull(endpointAPIType);
         checkNotNull(dataAPIType);
 
@@ -135,9 +144,11 @@ public class AlpacaAPI {
             brokerClient = new AlpacaClient(okHttpClient, keyID, secretKey,
                     brokerHostSubdomain, VERSION_2_PATH_SEGMENT);
             dataClient = new AlpacaClient(okHttpClient, keyID, secretKey, "data", VERSION_2_PATH_SEGMENT);
+            marketDataWebsocket = new MarketDataWebsocket(okHttpClient, dataAPIType, keyID, secretKey);
         } else {
             brokerClient = new AlpacaClient(okHttpClient, oAuthToken, brokerHostSubdomain, VERSION_2_PATH_SEGMENT);
             dataClient = null;
+            marketDataWebsocket = null;
         }
 
         accountEndpoint = new AccountEndpoint(brokerClient);
@@ -236,6 +247,13 @@ public class AlpacaAPI {
      */
     public StreamingWebsocketInterface streaming() {
         return streamingWebsocket;
+    }
+
+    /**
+     * @return the {@link MarketDataWebsocketInterface}
+     */
+    public MarketDataWebsocketInterface marketDataStreaming() {
+        return marketDataWebsocket;
     }
 
     /**

@@ -11,7 +11,6 @@ import java.io.Reader;
 import java.lang.reflect.Type;
 import java.util.function.Predicate;
 
-import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.base.Preconditions.checkState;
 import static net.jacobpeterson.alpaca.util.gson.GsonUtil.GSON;
@@ -65,9 +64,6 @@ public class AlpacaClient {
     protected AlpacaClient(OkHttpClient okHttpClient, String keyID, String secretKey, String oAuthToken,
             String alpacaSubdomain, String versionPathSegment) {
         checkNotNull(okHttpClient);
-        checkArgument((keyID != null && secretKey != null) ^ oAuthToken != null,
-                "You must specify a (KeyID (%s) and Secret Key (%s)) or an OAuthToken (%s)!",
-                keyID, secretKey, oAuthToken);
         checkNotNull(alpacaSubdomain);
         checkNotNull(versionPathSegment);
 

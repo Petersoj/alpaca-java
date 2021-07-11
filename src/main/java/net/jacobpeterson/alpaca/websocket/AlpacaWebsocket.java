@@ -13,7 +13,6 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ForkJoinPool;
 import java.util.concurrent.Future;
 
-import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
@@ -86,9 +85,6 @@ public abstract class AlpacaWebsocket<T, M, L extends AlpacaWebsocketMessageList
         checkNotNull(okHttpClient);
         checkNotNull(websocketURL);
         checkNotNull(websocketName);
-        checkArgument((keyID != null && secretKey != null) ^ oAuthToken != null,
-                "You must specify a (KeyID (%s) and Secret Key (%s)) or an OAuthToken (%s)!",
-                keyID, secretKey, oAuthToken);
 
         this.okHttpClient = okHttpClient;
         this.websocketURL = websocketURL;

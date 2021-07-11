@@ -239,6 +239,7 @@ jsonSchema2Pojo {
     serializable = true
     includeGetters = true
     includeSetters = true
+    includeCopyConstructor = true
 }
 
 //
