@@ -544,6 +544,7 @@ Note that the live tests will modify your account minimally. It's meant to test 
 
 # TODO
 - Unit Testing (both live and mocked)
+- Use [TA4j](https://github.com/ta4j/ta4j) `Num` interface instead of `Double` for number variables so that users can use either `Double` or `BigDecimal` for performance or precision in price data.
 - Add [TimeSeriesDataStore](https://github.com/Petersoj/TimeSeriesDataStore) using Alpaca Data API
 
 Contributions are welcome!

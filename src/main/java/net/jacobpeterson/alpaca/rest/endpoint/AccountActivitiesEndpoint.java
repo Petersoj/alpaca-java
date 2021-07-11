@@ -10,7 +10,6 @@ import net.jacobpeterson.alpaca.model.endpoint.accountactivities.enums.ActivityT
 import net.jacobpeterson.alpaca.model.endpoint.common.enums.SortDirection;
 import net.jacobpeterson.alpaca.rest.AlpacaClient;
 import net.jacobpeterson.alpaca.rest.AlpacaClientException;
-import net.jacobpeterson.alpaca.util.gson.GsonUtil;
 import okhttp3.HttpUrl;
 import okhttp3.Request;
 import org.slf4j.Logger;
@@ -24,6 +23,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import static com.google.common.base.Preconditions.checkState;
+import static net.jacobpeterson.alpaca.util.gson.GsonUtil.GSON;
 
 /**
  * {@link AbstractEndpoint} for
@@ -124,9 +124,9 @@ public class AccountActivitiesEndpoint extends AbstractEndpoint {
 
             // A 'TradeActivity' always has 'activity_type' field as 'FILL'
             if (activityType.equals(ActivityType.FILL.toString())) {
-                accountActivity = GsonUtil.GSON.fromJson(responseArrayObject, TradeActivity.class);
+                accountActivity = GSON.fromJson(responseArrayObject, TradeActivity.class);
             } else {
-                accountActivity = GsonUtil.GSON.fromJson(responseArrayObject, NonTradeActivity.class);
+                accountActivity = GSON.fromJson(responseArrayObject, NonTradeActivity.class);
             }
 
             if (accountActivity.getActivityType() == null) {

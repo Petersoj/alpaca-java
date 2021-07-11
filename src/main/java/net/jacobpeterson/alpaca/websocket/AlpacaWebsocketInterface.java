@@ -5,8 +5,10 @@ import java.util.concurrent.Future;
 
 /**
  * {@link AlpacaWebsocketInterface} defines an interface for Alpaca websockets.
+ *
+ * @param <L> the {@link AlpacaWebsocketMessageListener} type parameter
  */
-public interface AlpacaWebsocketInterface {
+public interface AlpacaWebsocketInterface<L extends AlpacaWebsocketMessageListener<?, ?>> {
 
     /**
      * Connects this Websocket.
@@ -60,4 +62,24 @@ public interface AlpacaWebsocketInterface {
     default boolean isValid() {
         return isConnected() && isAuthenticated();
     }
+
+    /**
+     * Adds a {@link AlpacaWebsocketMessageListener}.
+     * <br>
+     * Note that this will call {@link AlpacaWebsocketInterface#connect()} if the {@link AlpacaWebsocketMessageListener}
+     * is not connected already.
+     *
+     * @param listener the {@link AlpacaWebsocketMessageListener}
+     */
+    void addListener(L listener);
+
+    /**
+     * Remove a {@link AlpacaWebsocketMessageListener}.
+     * <br>
+     * Note that this will call {@link AlpacaWebsocketInterface#disconnect()} if this is the last listener being
+     * removed.
+     *
+     * @param listener the {@link AlpacaWebsocketMessageListener}
+     */
+    void removeListener(L listener);
 }

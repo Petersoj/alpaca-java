@@ -4,7 +4,6 @@ import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 import net.jacobpeterson.alpaca.properties.AlpacaProperties;
-import net.jacobpeterson.alpaca.util.gson.GsonUtil;
 import okhttp3.*;
 
 import java.io.IOException;
@@ -15,6 +14,7 @@ import java.util.function.Predicate;
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.base.Preconditions.checkState;
+import static net.jacobpeterson.alpaca.util.gson.GsonUtil.GSON;
 
 /**
  * {@link AlpacaClient} represents an HTTP RestAPI client for Alpaca.
@@ -133,7 +133,7 @@ public class AlpacaClient {
      */
     public <T> T requestObject(Request request, Predicate<Integer> isSuccessCode, Type type)
             throws AlpacaClientException {
-        return GsonUtil.GSON.fromJson(requestJSON(request, isSuccessCode), type);
+        return GSON.fromJson(requestJSON(request, isSuccessCode), type);
     }
 
     /**

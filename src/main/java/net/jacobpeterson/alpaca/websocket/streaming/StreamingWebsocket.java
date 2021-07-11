@@ -1,5 +1,6 @@
 package net.jacobpeterson.alpaca.websocket.streaming;
 
+import com.google.common.collect.Iterables;
 import com.google.gson.*;
 import net.jacobpeterson.alpaca.model.endpoint.streaming.StreamingMessage;
 import net.jacobpeterson.alpaca.model.endpoint.streaming.authorization.AuthorizationData;
@@ -7,7 +8,6 @@ import net.jacobpeterson.alpaca.model.endpoint.streaming.authorization.Authoriza
 import net.jacobpeterson.alpaca.model.endpoint.streaming.enums.StreamingMessageType;
 import net.jacobpeterson.alpaca.model.endpoint.streaming.listening.ListeningMessage;
 import net.jacobpeterson.alpaca.model.endpoint.streaming.trade.TradeUpdateMessage;
-import net.jacobpeterson.alpaca.util.gson.GsonUtil;
 import net.jacobpeterson.alpaca.websocket.AlpacaWebsocket;
 import okhttp3.HttpUrl;
 import okhttp3.OkHttpClient;
@@ -22,11 +22,17 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.base.Preconditions.checkState;
+import static net.jacobpeterson.alpaca.util.gson.GsonUtil.GSON;
 
-public class StreamingWebsocket extends AlpacaWebsocket implements StreamingWebsocketInterface {
+/**
+ * {@link StreamingWebsocket} is an {@link AlpacaWebsocket} implementation and provides the {@link
+ * StreamingWebsocketInterface} interface for
+ * <a href="https://alpaca.markets/docs/api-documentation/api-v2/streaming/">Streaming</a>
+ */
+public class StreamingWebsocket extends AlpacaWebsocket<StreamingMessageType, StreamingMessage, StreamingListener>
+        implements StreamingWebsocketInterface {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(StreamingWebsocket.class);
     private static final String STREAM_ELEMENT_KEY = "stream";
@@ -34,7 +40,7 @@ public class StreamingWebsocket extends AlpacaWebsocket implements StreamingWebs
             StreamingMessageType.TRADE_UPDATES);
 
     /**
-     * Creates a {@link HttpUrl} for {@link StreamingWebsocket} for the given <code>alpacaSubdomain</code>.
+     * Creates a {@link HttpUrl} for {@link StreamingWebsocket} with the given <code>alpacaSubdomain</code>.
      *
      * @param alpacaSubdomain the Alpaca subdomain
      *
@@ -48,10 +54,7 @@ public class StreamingWebsocket extends AlpacaWebsocket implements StreamingWebs
                 .build();
     }
 
-    private final List<StreamingListener> listeners;
-    private final Object listenersLock;
-    private final List<StreamingListener> listenersToAdd;
-    private final List<StreamingListener> listenersToRemove;
+    private final List<StreamingMessageType> listenedStreamMessageTypes;
 
     /**
      * Instantiates a new {@link StreamingWebsocket}.
@@ -66,10 +69,7 @@ public class StreamingWebsocket extends AlpacaWebsocket implements StreamingWebs
             String keyID, String secretKey, String oAuthToken) {
         super(okHttpClient, createWebsocketURL(alpacaSubdomain), "Streaming", keyID, secretKey, oAuthToken);
 
-        listeners = new ArrayList<>();
-        listenersLock = new Object();
-        listenersToAdd = new ArrayList<>();
-        listenersToRemove = new ArrayList<>();
+        listenedStreamMessageTypes = new ArrayList<>();
     }
 
     @Override
@@ -80,15 +80,9 @@ public class StreamingWebsocket extends AlpacaWebsocket implements StreamingWebs
     @Override
     protected void onReconnection() {
         sendAuthenticationMessage();
-    }
-
-    @Override
-    protected void cleanupState() {
-        super.cleanupState();
-
-        listeners.clear();
-        listenersToAdd.clear();
-        listenersToRemove.clear();
+        if (waitForAuthorization()) {
+            subscriptions(Iterables.toArray(listenedStreamMessageTypes, StreamingMessageType.class));
+        }
     }
 
     @Override
@@ -134,11 +128,10 @@ public class StreamingWebsocket extends AlpacaWebsocket implements StreamingWebs
         checkState(streamElement instanceof JsonPrimitive,
                 "Message must contain %s element! Received: %s", STREAM_ELEMENT_KEY, messageElement);
 
-        StreamingMessageType streamingMessageType = GsonUtil.GSON.fromJson(streamElement, StreamingMessageType.class);
+        StreamingMessageType streamingMessageType = GSON.fromJson(streamElement, StreamingMessageType.class);
         switch (streamingMessageType) {
             case AUTHORIZATION:
-                AuthorizationMessage authorizationMessage =
-                        GsonUtil.GSON.fromJson(messageObject, AuthorizationMessage.class);
+                AuthorizationMessage authorizationMessage = GSON.fromJson(messageObject, AuthorizationMessage.class);
 
                 authenticated = isAuthorizationMessageSuccess(authorizationMessage);
 
@@ -156,12 +149,16 @@ public class StreamingWebsocket extends AlpacaWebsocket implements StreamingWebs
                 callListeners(streamingMessageType, authorizationMessage);
                 break;
             case LISTENING:
-                ListeningMessage listeningMessage = GsonUtil.GSON.fromJson(messageObject, ListeningMessage.class);
+                ListeningMessage listeningMessage = GSON.fromJson(messageObject, ListeningMessage.class);
                 LOGGER.debug("{}", listeningMessage);
+
+                listenedStreamMessageTypes.clear();
+                listenedStreamMessageTypes.addAll(listeningMessage.getData().getStreams());
+
                 callListeners(streamingMessageType, listeningMessage);
                 break;
             case TRADE_UPDATES:
-                TradeUpdateMessage tradeUpdateMessage = GsonUtil.GSON.fromJson(messageObject, TradeUpdateMessage.class);
+                TradeUpdateMessage tradeUpdateMessage = GSON.fromJson(messageObject, TradeUpdateMessage.class);
                 LOGGER.debug("{}", tradeUpdateMessage);
                 callListeners(streamingMessageType, tradeUpdateMessage);
                 break;
@@ -183,35 +180,14 @@ public class StreamingWebsocket extends AlpacaWebsocket implements StreamingWebs
                 authorizationData.getAction().equalsIgnoreCase("authenticate");
     }
 
-    /**
-     * Calls the {@link StreamingListener}s in {@link #listeners}.
-     *
-     * @param streamingMessageType the {@link StreamingMessageType}
-     * @param streamingMessage     the {@link StreamingMessage}
-     */
-    private void callListeners(StreamingMessageType streamingMessageType, StreamingMessage streamingMessage) {
-        // Remove all 'StreamingListener's that were request to be removed then add all 'StreamingListener's
-        // that were request to be added on the last call to the listeners.
-        synchronized (listenersLock) {
-            listeners.removeAll(listenersToRemove);
-            listenersToRemove.clear();
-
-            listeners.addAll(listenersToAdd);
-            listenersToAdd.clear();
-        }
-
-        // Note that this doesn't need to acquire 'listenersLock' since 'listeners' is isolated
-        // to this instance and is not modified outside a lock.
-        for (StreamingListener streamingListener : listeners) {
-            streamingListener.onMessage(streamingMessageType, streamingMessage);
-        }
-    }
-
     @Override
     public void subscriptions(StreamingMessageType... streamingMessageTypes) {
         checkState(isConnected(), "Websocket must be connected before requesting subscriptions!");
         checkNotNull(streamingMessageTypes);
-        checkArgument(streamingMessageTypes.length > 0, "'streamingMessageTypes' must be have at least one element.");
+
+        if (streamingMessageTypes.length == 0) {
+            return;
+        }
 
         // Stream request format:
         // {
@@ -240,28 +216,5 @@ public class StreamingWebsocket extends AlpacaWebsocket implements StreamingWebs
 
         websocket.send(requestObject.toString());
         LOGGER.info("Requested subscriptions: {}.", streamsArray);
-    }
-
-    @Override
-    public void addListener(StreamingListener streamingListener) {
-        synchronized (listenersLock) {
-            listenersToAdd.add(streamingListener);
-        }
-
-        if (!isConnected()) {
-            connect();
-            waitForAuthorization();
-        }
-    }
-
-    @Override
-    public void removeListener(StreamingListener streamingListener) {
-        synchronized (listenersLock) {
-            listenersToRemove.add(streamingListener);
-        }
-
-        if (listeners.size() == 1 && listeners.contains(streamingListener)) {
-            disconnect();
-        }
     }
 }

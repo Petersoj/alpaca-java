@@ -7,9 +7,11 @@ import net.jacobpeterson.alpaca.model.endpoint.portfoliohistory.enums.PortfolioP
 import net.jacobpeterson.alpaca.model.endpoint.portfoliohistory.enums.PortfolioTimeFrame;
 import net.jacobpeterson.alpaca.rest.AlpacaClient;
 import net.jacobpeterson.alpaca.rest.AlpacaClientException;
+import net.jacobpeterson.alpaca.util.format.FormatUtil;
 import okhttp3.HttpUrl;
 import okhttp3.Request;
 
+import java.time.Instant;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -86,7 +88,7 @@ public class PortfolioHistoryEndpoint extends AbstractEndpoint {
         ArrayList<PortfolioHistoryDataPoint> dataPoints = new ArrayList<>();
         for (int index = 0; index < response.getTimestamp().size(); index++) {
             dataPoints.add(new PortfolioHistoryDataPoint(
-                    response.getTimestamp().get(index),
+                    Instant.ofEpochSecond(response.getTimestamp().get(index)).atZone(FormatUtil.NEW_YORK_ZONED_ID),
                     response.getEquity().get(index),
                     response.getProfitLoss().get(index),
                     response.getProfitLossPct().get(index)));

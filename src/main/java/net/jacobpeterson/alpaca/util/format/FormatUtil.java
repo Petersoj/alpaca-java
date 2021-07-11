@@ -14,13 +14,16 @@ import java.util.Locale;
  */
 public class FormatUtil {
 
+    /** The {@link ZoneId} for <code>America/New_York</code>. */
+    public static final ZoneId NEW_YORK_ZONED_ID = ZoneId.of("America/New_York");
+
     // Alpaca uses the following rounding mechanics with respect to buy orders: (1) rounded down to two decimal
     // places if the last trade price is over $1.00; otherwise, rounded down to four decimal places, hence the '#' in
     // the 3rd and 4th least significant decimal digits.
     private static final NumberFormat CURRENCY_FORMATTER = new DecimalFormat("#0.00##",
             DecimalFormatSymbols.getInstance(Locale.US));
     private static final DateTimeFormatter RFC_3339_FORMATTER =
-            DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss'Z'").withZone(ZoneId.of("America/New_York"));
+            DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss'Z'").withZone(NEW_YORK_ZONED_ID);
 
     /**
      * Formats an arbitrary number to a currency format. e.g. $123.45

@@ -7,6 +7,8 @@ import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ForkJoinPool;
 import java.util.concurrent.Future;
@@ -16,8 +18,13 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
  * {@link AlpacaWebsocket} represents an abstract websocket for Alpaca.
+ *
+ * @param <L> the {@link AlpacaWebsocketMessageListener} type parameter
+ * @param <T> the 'message type' type parameter
+ * @param <M> the 'message' type parameter
  */
-public abstract class AlpacaWebsocket extends WebSocketListener implements AlpacaWebsocketInterface {
+public abstract class AlpacaWebsocket<T, M, L extends AlpacaWebsocketMessageListener<T, M>> extends WebSocketListener
+        implements AlpacaWebsocketInterface<L> {
 
     /**
      * Defines a websocket normal closure code.
@@ -50,6 +57,10 @@ public abstract class AlpacaWebsocket extends WebSocketListener implements Alpac
     protected final String secretKey;
     protected final String oAuthToken;
     protected final boolean useOAuth;
+    protected final List<L> listeners;
+    protected final Object listenersLock;
+    protected final List<L> listenersToAdd;
+    protected final List<L> listenersToRemove;
 
     protected WebsocketStateListener websocketStateListener;
     protected WebSocket websocket;
@@ -86,6 +97,10 @@ public abstract class AlpacaWebsocket extends WebSocketListener implements Alpac
         this.secretKey = secretKey;
         this.oAuthToken = oAuthToken;
         useOAuth = oAuthToken != null;
+        listeners = new ArrayList<>();
+        listenersLock = new Object();
+        listenersToAdd = new ArrayList<>();
+        listenersToRemove = new ArrayList<>();
 
         automaticallyReconnect = true;
     }
@@ -197,6 +212,10 @@ public abstract class AlpacaWebsocket extends WebSocketListener implements Alpac
      * Cleans up this instances state variables.
      */
     protected void cleanupState() {
+        listeners.clear();
+        listenersToAdd.clear();
+        listenersToRemove.clear();
+
         websocket = null;
         connected = false;
         authenticated = false;
@@ -226,6 +245,54 @@ public abstract class AlpacaWebsocket extends WebSocketListener implements Alpac
         }
 
         return authenticationMessageFuture;
+    }
+
+    /**
+     * Calls the {@link AlpacaWebsocketMessageListener}s in {@link #listeners}.
+     *
+     * @param messageType the message type
+     * @param message     the message
+     */
+    protected void callListeners(T messageType, M message) {
+        // Remove all listeners that were request to be removed then add all listeners that were request to be added
+        // on the last 'onMessage' call to the listeners.
+        synchronized (listenersLock) {
+            listeners.removeAll(listenersToRemove);
+            listenersToRemove.clear();
+
+            listeners.addAll(listenersToAdd);
+            listenersToAdd.clear();
+        }
+
+        // Note that this doesn't need to acquire 'listenersLock' since 'listeners' is isolated
+        // to this instance and is not modified outside a lock.
+        for (L listener : listeners) {
+            listener.onMessage(messageType, message);
+        }
+    }
+
+    @Override
+    public void addListener(L listener) {
+        synchronized (listenersLock) {
+            listenersToAdd.add(listener);
+        }
+
+        if (!isConnected()) {
+            connect();
+            waitForAuthorization();
+        }
+    }
+
+    @Override
+    public void removeListener(L listener) {
+        if (listeners.size() == 1 && listeners.contains(listener)) {
+            disconnect();
+            return;
+        }
+
+        synchronized (listenersLock) {
+            listenersToRemove.add(listener);
+        }
     }
 
     /**

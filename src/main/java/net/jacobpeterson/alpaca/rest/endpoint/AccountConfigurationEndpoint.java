@@ -3,12 +3,12 @@ package net.jacobpeterson.alpaca.rest.endpoint;
 import net.jacobpeterson.alpaca.model.endpoint.accountconfiguration.AccountConfiguration;
 import net.jacobpeterson.alpaca.rest.AlpacaClient;
 import net.jacobpeterson.alpaca.rest.AlpacaClientException;
-import net.jacobpeterson.alpaca.util.gson.GsonUtil;
 import net.jacobpeterson.alpaca.util.okhttp.JSONBodyBuilder;
 import okhttp3.HttpUrl;
 import okhttp3.Request;
 
 import static com.google.common.base.Preconditions.checkNotNull;
+import static net.jacobpeterson.alpaca.util.gson.GsonUtil.GSON;
 
 /**
  * {@link AbstractEndpoint} for
@@ -56,7 +56,7 @@ public class AccountConfigurationEndpoint extends AbstractEndpoint {
         HttpUrl.Builder urlBuilder = alpacaClient.urlBuilder()
                 .addPathSegments(endpointPathSegment);
         Request request = alpacaClient.requestBuilder(urlBuilder.build())
-                .patch(new JSONBodyBuilder(GsonUtil.GSON.toJson(accountConfiguration)).build())
+                .patch(new JSONBodyBuilder(GSON.toJson(accountConfiguration)).build())
                 .build();
         return alpacaClient.requestObject(request, AccountConfiguration.class);
     }
