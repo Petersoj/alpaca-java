@@ -7,15 +7,15 @@
   "properties": {
     "trades": {
       "existingJavaType": "java.util.ArrayList<java.lang.String>",
-      "title": "The {@link java.util.Arraylist} of subscribed trades."
+      "title": "The {@link java.util.ArrayList} of subscribed trades."
     },
     "quotes": {
       "existingJavaType": "java.util.ArrayList<java.lang.String>",
-      "title": "The {@link java.util.Arraylist} of subscribed quotes."
+      "title": "The {@link java.util.ArrayList} of subscribed quotes."
     },
     "bars": {
       "existingJavaType": "java.util.ArrayList<java.lang.String>",
-      "title": "The {@link java.util.Arraylist} of subscribed bars."
+      "title": "The {@link java.util.ArrayList} of subscribed bars."
     }
   }
 }

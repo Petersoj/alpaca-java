@@ -100,7 +100,7 @@ test {
     doFirst {
         def testPackageArgument = "testPackage"
         filter.includeTestsMatching(project.hasProperty(testPackageArgument) &&
-                project.getProperty(testPackageArgument).equals("live") ? "live.*" : "mock.*")
+                project.getProperty(testPackageArgument).equals("live") ? "*.live.*" : "*.mock.*")
     }
 }
 

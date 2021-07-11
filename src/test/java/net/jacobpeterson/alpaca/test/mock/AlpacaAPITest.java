@@ -2,7 +2,7 @@ package net.jacobpeterson.alpaca.test.mock;
 
 import net.jacobpeterson.alpaca.model.properties.DataAPIType;
 import net.jacobpeterson.alpaca.model.properties.EndpointAPIType;
-import net.jacobpeterson.alpaca.refactor.AlpacaAPI;
+import net.jacobpeterson.alpaca.AlpacaAPI;
 import okhttp3.OkHttpClient;
 import org.junit.jupiter.api.Test;
 

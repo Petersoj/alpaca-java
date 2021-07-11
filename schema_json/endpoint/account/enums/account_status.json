@@ -8,7 +8,8 @@
     "ACCOUNT_UPDATED",
     "APPROVAL_PENDING",
     "ACTIVE",
-    "REJECTED"
+    "REJECTED",
+    "DISABLED"
   ],
   "javaEnums": [
     {
@@ -31,6 +32,9 @@
     },
     {
       "description": "The account application has been rejected."
+    },
+    {
+      "description": "The account has been disabled."
     }
   ]
 }

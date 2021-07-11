@@ -12,12 +12,13 @@ import net.jacobpeterson.alpaca.model.endpoint.clock.Clock;
 import net.jacobpeterson.alpaca.model.endpoint.common.enums.SortDirection;
 import net.jacobpeterson.alpaca.model.endpoint.order.Order;
 import net.jacobpeterson.alpaca.model.endpoint.order.enums.CurrentOrderStatus;
-import net.jacobpeterson.alpaca.refactor.AlpacaAPI;
-import net.jacobpeterson.alpaca.refactor.rest.AlpacaClientException;
-import net.jacobpeterson.alpaca.refactor.rest.endpoint.AccountConfigurationEndpoint;
-import net.jacobpeterson.alpaca.refactor.rest.endpoint.AccountEndpoint;
-import net.jacobpeterson.alpaca.refactor.rest.endpoint.ClockEndpoint;
-import net.jacobpeterson.alpaca.refactor.rest.endpoint.OrdersEndpoint;
+import net.jacobpeterson.alpaca.AlpacaAPI;
+import net.jacobpeterson.alpaca.rest.AlpacaClientException;
+import net.jacobpeterson.alpaca.rest.endpoint.AccountConfigurationEndpoint;
+import net.jacobpeterson.alpaca.rest.endpoint.AccountEndpoint;
+import net.jacobpeterson.alpaca.rest.endpoint.ClockEndpoint;
+import net.jacobpeterson.alpaca.rest.endpoint.AccountActivitiesEndpoint;
+import net.jacobpeterson.alpaca.rest.endpoint.OrdersEndpoint;
 import org.junit.jupiter.api.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -147,7 +148,7 @@ public class AlpacaAPITest {
     }
 
     /**
-     * Tests @{@link net.jacobpeterson.alpaca.refactor.rest.endpoint.AccountActivitiesEndpoint#get(ZonedDateTime,
+     * Tests @{@link AccountActivitiesEndpoint#get(ZonedDateTime,
      * ZonedDateTime, ZonedDateTime, SortDirection, Integer, String, ActivityType...)} one {@link AccountActivity}
      * exists until now.
      *
