@@ -7,7 +7,9 @@ import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ForkJoinPool;
+import java.util.concurrent.Future;
 
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
@@ -53,6 +55,7 @@ public abstract class AlpacaWebsocket extends WebSocketListener implements Alpac
     protected WebSocket websocket;
     protected boolean connected;
     protected boolean authenticated;
+    protected CompletableFuture<Boolean> authenticationMessageFuture;
     protected boolean intentionalClose;
     protected int reconnectAttempts;
     protected boolean automaticallyReconnect;
@@ -143,7 +146,8 @@ public abstract class AlpacaWebsocket extends WebSocketListener implements Alpac
         }
 
         if (intentionalClose) {
-            LOGGER.info("{} websocket closed. Code: {}, Reason: {}", websocketName, code, reason);
+            LOGGER.info("{} websocket closed.", websocketName);
+            LOGGER.debug("Close code: {}, Reason: {}", code, reason);
             cleanupState();
         } else {
             LOGGER.error("{} websocket closed unintentionally! Code: {}, Reason: {}", websocketName, code, reason);
@@ -191,7 +195,7 @@ public abstract class AlpacaWebsocket extends WebSocketListener implements Alpac
     /**
      * Cleans up this instances state variables.
      */
-    private void cleanupState() {
+    protected void cleanupState() {
         websocket = null;
         connected = false;
         authenticated = false;
@@ -213,6 +217,20 @@ public abstract class AlpacaWebsocket extends WebSocketListener implements Alpac
      * Sends an authentication message to authenticate this websocket stream.
      */
     protected abstract void sendAuthenticationMessage();
+
+    /**
+     * Gets {@link #authenticationMessageFuture}.
+     *
+     * @return a {@link CompletableFuture} {@link Boolean}
+     */
+    @Override
+    public Future<Boolean> getAuthorizationFuture() {
+        if (authenticationMessageFuture == null || authenticationMessageFuture.isDone()) {
+            authenticationMessageFuture = new CompletableFuture<>();
+        }
+
+        return authenticationMessageFuture;
+    }
 
     /**
      * Gets {@link #websocketStateListener}.

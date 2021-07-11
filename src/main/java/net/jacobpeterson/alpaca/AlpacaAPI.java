@@ -6,6 +6,8 @@ import net.jacobpeterson.alpaca.model.properties.EndpointAPIType;
 import net.jacobpeterson.alpaca.properties.AlpacaProperties;
 import net.jacobpeterson.alpaca.rest.AlpacaClient;
 import net.jacobpeterson.alpaca.rest.endpoint.*;
+import net.jacobpeterson.alpaca.websocket.streaming.StreamingWebsocket;
+import net.jacobpeterson.alpaca.websocket.streaming.StreamingWebsocketInterface;
 import okhttp3.OkHttpClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -40,6 +42,7 @@ public class AlpacaAPI {
     private final AccountConfigurationEndpoint accountConfigurationEndpoint;
     private final AccountActivitiesEndpoint accountActivitiesEndpoint;
     private final PortfolioHistoryEndpoint portfolioHistoryEndpoint;
+    private final StreamingWebsocket streamingWebsocket;
 
     /**
      * Instantiates a new {@link AlpacaAPI} using properties specified in <code>alpaca.properties</code> file (or their
@@ -148,6 +151,7 @@ public class AlpacaAPI {
         accountConfigurationEndpoint = new AccountConfigurationEndpoint(brokerClient);
         accountActivitiesEndpoint = new AccountActivitiesEndpoint(brokerClient);
         portfolioHistoryEndpoint = new PortfolioHistoryEndpoint(brokerClient);
+        streamingWebsocket = new StreamingWebsocket(okHttpClient, brokerHostSubdomain, keyID, secretKey, oAuthToken);
     }
 
     /**
@@ -225,6 +229,13 @@ public class AlpacaAPI {
      */
     public PortfolioHistoryEndpoint portfolioHistory() {
         return portfolioHistoryEndpoint;
+    }
+
+    /**
+     * @return the {@link StreamingWebsocketInterface}
+     */
+    public StreamingWebsocketInterface streaming() {
+        return streamingWebsocket;
     }
 
     /**

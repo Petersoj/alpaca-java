@@ -165,15 +165,4 @@ public class AlpacaClientException extends Exception {
     public String getAPIResponseMessage() {
         return apiResponseMessage;
     }
-
-    @Override
-    public String toString() {
-        return "AlpacaClientException{" +
-                "response=" + response +
-                ", requestStatusCode=" + requestStatusCode +
-                ", requestStatusMessage='" + requestStatusMessage + '\'' +
-                ", apiResponseCode=" + apiResponseCode +
-                ", apiResponseMessage='" + apiResponseMessage + '\'' +
-                "}";
-    }
 }

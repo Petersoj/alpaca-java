@@ -17,6 +17,9 @@ public interface StreamingWebsocketInterface extends AlpacaWebsocketInterface {
 
     /**
      * Adds a {@link StreamingListener}.
+     * <br>
+     * Note that this will call {@link StreamingWebsocket#connect()} if the {@link StreamingWebsocket} is not connected
+     * already.
      *
      * @param streamingListener the {@link StreamingListener}
      */
@@ -24,6 +27,8 @@ public interface StreamingWebsocketInterface extends AlpacaWebsocketInterface {
 
     /**
      * Remove a {@link StreamingListener}.
+     * <br>
+     * Note that this will call {@link StreamingWebsocket#disconnect()} if this is the last listener being removed.
      *
      * @param streamingListener the {@link StreamingListener}
      */

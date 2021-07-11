@@ -141,7 +141,7 @@ public class OrdersEndpoint extends AbstractEndpoint {
 
         JSONBodyBuilder jsonBodyBuilder = new JSONBodyBuilder();
         jsonBodyBuilder.appendJSONBodyProperty("symbol", symbol);
-        jsonBodyBuilder.appendJSONBodyProperty("qty", side.toString());
+        jsonBodyBuilder.appendJSONBodyProperty("side", side.toString());
         jsonBodyBuilder.appendJSONBodyProperty("type", type.toString());
         jsonBodyBuilder.appendJSONBodyProperty("time_in_force", timeInForce.toString());
 
@@ -210,7 +210,7 @@ public class OrdersEndpoint extends AbstractEndpoint {
      * most likely method of filling an order. Market orders fill nearly instantaneously. This method calls {@link
      * #requestOrder(String, Double, Double, OrderSide, OrderType, OrderTimeInForce, Double, Double, Double, Double,
      * Boolean, String, OrderClass, Double, Double, Double)} with {@link OrderType#MARKET} so check the Javadoc for that
-     * method for the parameter details.
+     * method for parameter details.
      *
      * @return the requested {@link Order}
      *
@@ -227,7 +227,7 @@ public class OrdersEndpoint extends AbstractEndpoint {
      * most likely method of filling an order. Market orders fill nearly instantaneously. This method calls {@link
      * #requestOrder(String, Double, Double, OrderSide, OrderType, OrderTimeInForce, Double, Double, Double, Double,
      * Boolean, String, OrderClass, Double, Double, Double)} with {@link OrderType#MARKET} and {@link
-     * OrderTimeInForce#DAY} with a fractional quantity so check the Javadoc for that method for the parameter details.
+     * OrderTimeInForce#DAY} with a fractional quantity so check the Javadoc for that method for parameter details.
      *
      * @return the requested {@link Order}
      *
@@ -283,7 +283,7 @@ public class OrdersEndpoint extends AbstractEndpoint {
      * orders with a limit price that is 4% higher than a stop price &lt; $50 (or 2.5% higher than a stop price &gt;=
      * $50). Sell stop orders are not converted into stop limit orders. This method calls {@link #requestOrder(String,
      * Double, Double, OrderSide, OrderType, OrderTimeInForce, Double, Double, Double, Double, Boolean, String,
-     * OrderClass, Double, Double, Double)} with {@link OrderType#STOP} so check the Javadoc for that method for the
+     * OrderClass, Double, Double, Double)} with {@link OrderType#STOP} so check the Javadoc for that method for
      * parameter details.
      *
      * @return the requested {@link Order}
@@ -303,7 +303,7 @@ public class OrdersEndpoint extends AbstractEndpoint {
      * becomes a limit order to buy or sell at the limit price or better. This method calls {@link #requestOrder(String,
      * Double, Double, OrderSide, OrderType, OrderTimeInForce, Double, Double, Double, Double, Boolean, String,
      * OrderClass, Double, Double, Double)} with {@link OrderType#STOP_LIMIT} so check the Javadoc for that method for
-     * the parameter details.
+     * parameter details.
      *
      * @return the requested {@link Order}
      *
@@ -320,7 +320,7 @@ public class OrdersEndpoint extends AbstractEndpoint {
      * common use case of an OTOCO (One Triggers OCO {One Cancels Other}) order. This method calls {@link
      * #requestOrder(String, Double, Double, OrderSide, OrderType, OrderTimeInForce, Double, Double, Double, Double,
      * Boolean, String, OrderClass, Double, Double, Double)} with {@link OrderType#MARKET} and with parameters for a
-     * bracket order so check the Javadoc for that method for the parameter details.
+     * bracket order so check the Javadoc for that method for parameter details.
      *
      * @return the requested {@link Order}
      *
@@ -339,7 +339,7 @@ public class OrdersEndpoint extends AbstractEndpoint {
      * common use case of an OTOCO (One Triggers OCO {One Cancels Other}) order. This method calls {@link
      * #requestOrder(String, Double, Double, OrderSide, OrderType, OrderTimeInForce, Double, Double, Double, Double,
      * Boolean, String, OrderClass, Double, Double, Double)} with {@link OrderType#LIMIT} and with parameters for a
-     * bracket order so check the Javadoc for that method for the parameter details.
+     * bracket order so check the Javadoc for that method for parameter details.
      *
      * @return the requested {@link Order}
      *
@@ -379,7 +379,7 @@ public class OrdersEndpoint extends AbstractEndpoint {
      * addition to the entry order. This method calls {@link #requestOrder(String, Double, Double, OrderSide, OrderType,
      * OrderTimeInForce, Double, Double, Double, Double, Boolean, String, OrderClass, Double, Double, Double)} with
      * {@link OrderType#LIMIT} and with parameters for a {@link OrderClass#ONE_CANCELS_OTHER} so check the Javadoc for
-     * that method for the parameter details.
+     * that method for parameter details.
      *
      * @return the requested {@link Order}
      *
@@ -398,7 +398,7 @@ public class OrdersEndpoint extends AbstractEndpoint {
      * addition to the entry order. This method calls {@link #requestOrder(String, Double, Double, OrderSide, OrderType,
      * OrderTimeInForce, Double, Double, Double, Double, Boolean, String, OrderClass, Double, Double, Double)} with
      * {@link OrderType#LIMIT} and with parameters for a {@link OrderClass#ONE_CANCELS_OTHER} so check the Javadoc for
-     * that method for the parameter details.
+     * that method for parameter details.
      *
      * @return the requested {@link Order}
      *
@@ -417,7 +417,7 @@ public class OrdersEndpoint extends AbstractEndpoint {
      * addition to the entry order. This method calls {@link #requestOrder(String, Double, Double, OrderSide, OrderType,
      * OrderTimeInForce, Double, Double, Double, Double, Boolean, String, OrderClass, Double, Double, Double)} with
      * {@link OrderType#STOP} and with parameters for a {@link OrderClass#ONE_CANCELS_OTHER} so check the Javadoc for
-     * that method for the parameter details.
+     * that method for parameter details.
      *
      * @return the requested {@link Order}
      *
@@ -436,7 +436,7 @@ public class OrdersEndpoint extends AbstractEndpoint {
      * addition to the entry order. This method calls {@link #requestOrder(String, Double, Double, OrderSide, OrderType,
      * OrderTimeInForce, Double, Double, Double, Double, Boolean, String, OrderClass, Double, Double, Double)} with
      * {@link OrderType#STOP_LIMIT} and with parameters for a {@link OrderClass#ONE_CANCELS_OTHER} so check the Javadoc
-     * for that method for the parameter details.
+     * for that method for parameter details.
      *
      * @return the requested {@link Order}
      *
@@ -456,7 +456,7 @@ public class OrdersEndpoint extends AbstractEndpoint {
      * the stock price movement. This method calls {@link #requestOrder(String, Double, Double, OrderSide, OrderType,
      * OrderTimeInForce, Double, Double, Double, Double, Boolean, String, OrderClass, Double, Double, Double)} with
      * {@link OrderType#TRAILING_STOP} and with parameters for a {@link OrderType#TRAILING_STOP} so check the Javadoc
-     * for that method for the parameter details.
+     * for that method for parameter details.
      *
      * @return the requested {@link Order}
      *
@@ -473,7 +473,7 @@ public class OrdersEndpoint extends AbstractEndpoint {
      * the stock price movement. This method calls {@link #requestOrder(String, Double, Double, OrderSide, OrderType,
      * OrderTimeInForce, Double, Double, Double, Double, Boolean, String, OrderClass, Double, Double, Double)} with
      * {@link OrderType#TRAILING_STOP} and with parameters for a {@link OrderType#TRAILING_STOP} so check the Javadoc
-     * for that method for the parameter details.
+     * for that method for parameter details.
      *
      * @return the requested {@link Order}
      *

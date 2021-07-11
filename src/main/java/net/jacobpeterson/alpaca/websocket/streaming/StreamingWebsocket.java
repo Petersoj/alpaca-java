@@ -18,6 +18,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import static com.google.common.base.Preconditions.checkArgument;
@@ -28,6 +30,8 @@ public class StreamingWebsocket extends AlpacaWebsocket implements StreamingWebs
 
     private static final Logger LOGGER = LoggerFactory.getLogger(StreamingWebsocket.class);
     private static final String STREAM_ELEMENT_KEY = "stream";
+    private static final List<StreamingMessageType> SUBSCRIBABLE_STREAMING_MESSAGE_TYPES = Collections.singletonList(
+            StreamingMessageType.TRADE_UPDATES);
 
     /**
      * Creates a {@link HttpUrl} for {@link StreamingWebsocket} for the given <code>alpacaSubdomain</code>.
@@ -38,7 +42,7 @@ public class StreamingWebsocket extends AlpacaWebsocket implements StreamingWebs
      */
     private static HttpUrl createWebsocketURL(String alpacaSubdomain) {
         return new HttpUrl.Builder()
-                .scheme("wss")
+                .scheme("https") // HttpUrl.Builder doesn't recognize "wss" scheme, so "https" works fine
                 .host(alpacaSubdomain + ".alpaca.markets")
                 .addPathSegment("stream")
                 .build();
@@ -76,6 +80,15 @@ public class StreamingWebsocket extends AlpacaWebsocket implements StreamingWebs
     @Override
     protected void onReconnection() {
         sendAuthenticationMessage();
+    }
+
+    @Override
+    protected void cleanupState() {
+        super.cleanupState();
+
+        listeners.clear();
+        listenersToAdd.clear();
+        listenersToRemove.clear();
     }
 
     @Override
@@ -126,26 +139,31 @@ public class StreamingWebsocket extends AlpacaWebsocket implements StreamingWebs
             case AUTHORIZATION:
                 AuthorizationMessage authorizationMessage =
                         GsonUtil.GSON.fromJson(messageObject, AuthorizationMessage.class);
-                callListeners(streamingMessageType, authorizationMessage);
 
                 authenticated = isAuthorizationMessageSuccess(authorizationMessage);
+
+                if (authenticationMessageFuture != null) {
+                    authenticationMessageFuture.complete(authenticated);
+                }
+
                 if (!authenticated) {
-                    LOGGER.error("{} websocket not authenticated! Received: {}. Disconnecting...",
-                            websocketName, authorizationMessage);
-                    disconnect();
+                    LOGGER.error("{} websocket not authenticated! Received: {}.", websocketName, authorizationMessage);
                 } else {
                     LOGGER.info("{} websocket authenticated.", websocketName);
+                    LOGGER.debug("{}", authorizationMessage);
                 }
+
+                callListeners(streamingMessageType, authorizationMessage);
                 break;
             case LISTENING:
                 ListeningMessage listeningMessage = GsonUtil.GSON.fromJson(messageObject, ListeningMessage.class);
-                callListeners(streamingMessageType, listeningMessage);
                 LOGGER.debug("{}", listeningMessage);
+                callListeners(streamingMessageType, listeningMessage);
                 break;
             case TRADE_UPDATES:
                 TradeUpdateMessage tradeUpdateMessage = GsonUtil.GSON.fromJson(messageObject, TradeUpdateMessage.class);
-                callListeners(streamingMessageType, tradeUpdateMessage);
                 LOGGER.debug("{}", tradeUpdateMessage);
+                callListeners(streamingMessageType, tradeUpdateMessage);
                 break;
             default:
                 throw new UnsupportedOperationException();
@@ -191,6 +209,7 @@ public class StreamingWebsocket extends AlpacaWebsocket implements StreamingWebs
 
     @Override
     public void subscriptions(StreamingMessageType... streamingMessageTypes) {
+        checkState(isConnected(), "Websocket must be connected before requesting subscriptions!");
         checkNotNull(streamingMessageTypes);
         checkArgument(streamingMessageTypes.length > 0, "'streamingMessageTypes' must be have at least one element.");
 
@@ -198,7 +217,7 @@ public class StreamingWebsocket extends AlpacaWebsocket implements StreamingWebs
         // {
         //     "action": "listen",
         //     "data": {
-        //         "streams": ["account_updates", "trade_updates"]
+        //         "streams": ["trade_updates"]
         //     }
         // }
 
@@ -206,8 +225,12 @@ public class StreamingWebsocket extends AlpacaWebsocket implements StreamingWebs
         requestObject.addProperty("action", "listen");
 
         JsonArray streamsArray = new JsonArray();
-        for (StreamingMessageType streamingMessageType : streamingMessageTypes) {
-            streamsArray.add(streamingMessageType.toString());
+        Arrays.stream(streamingMessageTypes)
+                .filter(SUBSCRIBABLE_STREAMING_MESSAGE_TYPES::contains)
+                .forEach((type) -> streamsArray.add(type.toString()));
+
+        if (streamsArray.isEmpty()) {
+            return;
         }
 
         JsonObject dataObject = new JsonObject();
@@ -224,12 +247,21 @@ public class StreamingWebsocket extends AlpacaWebsocket implements StreamingWebs
         synchronized (listenersLock) {
             listenersToAdd.add(streamingListener);
         }
+
+        if (!isConnected()) {
+            connect();
+            waitForAuthorization();
+        }
     }
 
     @Override
     public void removeListener(StreamingListener streamingListener) {
         synchronized (listenersLock) {
             listenersToRemove.add(streamingListener);
+        }
+
+        if (listeners.size() == 1 && listeners.contains(streamingListener)) {
+            disconnect();
         }
     }
 }
