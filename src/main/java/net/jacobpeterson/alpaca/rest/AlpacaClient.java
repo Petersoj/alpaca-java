@@ -66,7 +66,8 @@ public class AlpacaClient {
             String alpacaSubdomain, String versionPathSegment) {
         checkNotNull(okHttpClient);
         checkArgument((keyID != null && secretKey != null) ^ oAuthToken != null,
-                "You must specify a (KeyID and Secret Key) or an OAuthToken!");
+                "You must specify a (KeyID (%s) and Secret Key (%s)) or an OAuthToken (%s)!",
+                keyID, secretKey, oAuthToken);
         checkNotNull(alpacaSubdomain);
         checkNotNull(versionPathSegment);
 

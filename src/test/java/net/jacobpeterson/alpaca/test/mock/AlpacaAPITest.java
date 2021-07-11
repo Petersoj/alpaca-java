@@ -1,8 +1,8 @@
 package net.jacobpeterson.alpaca.test.mock;
 
+import net.jacobpeterson.alpaca.AlpacaAPI;
 import net.jacobpeterson.alpaca.model.properties.DataAPIType;
 import net.jacobpeterson.alpaca.model.properties.EndpointAPIType;
-import net.jacobpeterson.alpaca.AlpacaAPI;
 import okhttp3.OkHttpClient;
 import org.junit.jupiter.api.Test;
 
@@ -60,12 +60,15 @@ public class AlpacaAPITest {
      * Tests {@link AlpacaAPI#AlpacaAPI(OkHttpClient, String, String, String, EndpointAPIType, DataAPIType)}.
      */
     @Test
-    public void testAlpacaAPIConstructor_keyID_secret_oAuthToken_endpointAPIType_dataAPIType() {
+    public void testAlpacaAPIConstructor_okHttpClient_keyID_secret_oAuthToken_endpointAPIType_dataAPIType() {
+        OkHttpClient okHttpClient = new OkHttpClient();
         String keyID = "ABCDEFGHIJKLM";
         String secret = "NOPQURSTUVWXYZ";
         String oAuthToken = "ABCDEFGHIJKLMNOPQURSTUVWXYZ";
 
-        new AlpacaAPI(null, keyID, secret, oAuthToken, EndpointAPIType.PAPER, DataAPIType.IEX);
-        new AlpacaAPI(null, keyID, secret, oAuthToken, EndpointAPIType.LIVE, DataAPIType.SIP);
+        new AlpacaAPI(okHttpClient, null, null, oAuthToken, EndpointAPIType.PAPER, DataAPIType.IEX);
+        new AlpacaAPI(okHttpClient, keyID, secret, null, EndpointAPIType.LIVE, DataAPIType.SIP);
+        new AlpacaAPI(okHttpClient, null, null, oAuthToken, EndpointAPIType.PAPER, DataAPIType.IEX);
+        new AlpacaAPI(okHttpClient, keyID, secret, null, EndpointAPIType.LIVE, DataAPIType.SIP);
     }
 }

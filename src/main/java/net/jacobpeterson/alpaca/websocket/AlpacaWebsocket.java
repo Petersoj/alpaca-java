@@ -76,7 +76,8 @@ public abstract class AlpacaWebsocket extends WebSocketListener implements Alpac
         checkNotNull(websocketURL);
         checkNotNull(websocketName);
         checkArgument((keyID != null && secretKey != null) ^ oAuthToken != null,
-                "You must specify a (KeyID and Secret Key) or an OAuthToken!");
+                "You must specify a (KeyID (%s) and Secret Key (%s)) or an OAuthToken (%s)!",
+                keyID, secretKey, oAuthToken);
 
         this.okHttpClient = okHttpClient;
         this.websocketURL = websocketURL;
@@ -218,11 +219,6 @@ public abstract class AlpacaWebsocket extends WebSocketListener implements Alpac
      */
     protected abstract void sendAuthenticationMessage();
 
-    /**
-     * Gets {@link #authenticationMessageFuture}.
-     *
-     * @return a {@link CompletableFuture} {@link Boolean}
-     */
     @Override
     public Future<Boolean> getAuthorizationFuture() {
         if (authenticationMessageFuture == null || authenticationMessageFuture.isDone()) {
