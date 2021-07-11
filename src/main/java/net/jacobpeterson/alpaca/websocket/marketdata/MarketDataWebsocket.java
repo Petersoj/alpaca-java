@@ -284,7 +284,10 @@ public class MarketDataWebsocket extends AlpacaWebsocket<MarketDataMessageType, 
      */
     private void sendSubscriptionUpdate(Collection<String> tradeSymbols, Collection<String> quoteSymbols,
             Collection<String> barSymbols, boolean subscribe) {
-        checkState(isConnected(), "{} websocket must be connected before requesting streams!", websocketName);
+        if (!isConnected()) {
+            connect();
+            waitForAuthorization();
+        }
 
         /* Format of message is:
          * {

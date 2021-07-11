@@ -12,6 +12,10 @@ public interface StreamingWebsocketInterface extends AlpacaWebsocketInterface<St
 
     /**
      * Sets the {@link StreamingMessageType}s to <code>streamingMessageTypes</code>.
+     * <br>
+     * Note that this will call {@link StreamingWebsocketInterface#connect()} and {@link
+     * StreamingWebsocketInterface#waitForAuthorization()} if {@link StreamingWebsocketInterface#isConnected()} returns
+     * false.
      *
      * @param streamingMessageTypes the {@link StreamingMessageType}s
      */

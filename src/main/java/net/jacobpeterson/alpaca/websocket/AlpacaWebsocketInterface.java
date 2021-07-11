@@ -65,9 +65,6 @@ public interface AlpacaWebsocketInterface<L extends AlpacaWebsocketMessageListen
 
     /**
      * Adds a {@link AlpacaWebsocketMessageListener}.
-     * <br>
-     * Note that this will call {@link AlpacaWebsocketInterface#connect()} if the {@link AlpacaWebsocketMessageListener}
-     * is not connected already.
      *
      * @param listener the {@link AlpacaWebsocketMessageListener}
      */

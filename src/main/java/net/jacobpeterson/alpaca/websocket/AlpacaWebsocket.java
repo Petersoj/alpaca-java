@@ -134,10 +134,6 @@ public abstract class AlpacaWebsocket<T, M, L extends AlpacaWebsocketMessageList
 
     @Override
     public void onOpen(@NotNull WebSocket webSocket, @NotNull Response response) {
-        if (websocketStateListener != null) {
-            websocketStateListener.onOpen(response);
-        }
-
         LOGGER.info("{} websocket opened.", websocketName);
         LOGGER.debug("{} websocket response: {}", websocketName, response);
 
@@ -149,14 +145,14 @@ public abstract class AlpacaWebsocket<T, M, L extends AlpacaWebsocketMessageList
         } else {
             onConnection();
         }
+
+        if (websocketStateListener != null) {
+            websocketStateListener.onOpen(response);
+        }
     }
 
     @Override
     public void onClosed(@NotNull WebSocket webSocket, int code, @NotNull String reason) {
-        if (websocketStateListener != null) {
-            websocketStateListener.onClosed(code, reason);
-        }
-
         if (intentionalClose) {
             LOGGER.info("{} websocket closed.", websocketName);
             LOGGER.debug("Close code: {}, Reason: {}", code, reason);
@@ -165,20 +161,24 @@ public abstract class AlpacaWebsocket<T, M, L extends AlpacaWebsocketMessageList
             LOGGER.error("{} websocket closed unintentionally! Code: {}, Reason: {}", websocketName, code, reason);
             handleReconnectionAttempt();
         }
+
+        if (websocketStateListener != null) {
+            websocketStateListener.onClosed(code, reason);
+        }
     }
 
     @Override
     public void onFailure(@NotNull WebSocket webSocket, @NotNull Throwable cause, @Nullable Response response) {
+        LOGGER.error("{} websocket failure! Response: {}", websocketName, response, cause);
+        handleReconnectionAttempt();
+
         if (websocketStateListener != null) {
             websocketStateListener.onFailure(cause);
         }
-
-        LOGGER.error("{} websocket failure! Response: {}", websocketName, response, cause);
-        handleReconnectionAttempt();
     }
 
     /**
-     * Attempts to reconnect the disconnected {@link #websocket}.
+     * Attempts to reconnect the disconnected {@link #websocket} asynchronously.
      */
     private void handleReconnectionAttempt() {
         if (!automaticallyReconnect) {
@@ -271,11 +271,6 @@ public abstract class AlpacaWebsocket<T, M, L extends AlpacaWebsocketMessageList
     public void addListener(L listener) {
         synchronized (listenersLock) {
             listenersToAdd.add(listener);
-        }
-
-        if (!isConnected()) {
-            connect();
-            waitForAuthorization();
         }
     }
 

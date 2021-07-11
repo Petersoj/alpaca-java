@@ -193,9 +193,13 @@ public class StreamingWebsocket extends AlpacaWebsocket<StreamingMessageType, St
 
     @Override
     public void streams(StreamingMessageType... streamingMessageTypes) {
-        checkState(isConnected(), "{} websocket must be connected before requesting streams!", websocketName);
         if (streamingMessageTypes == null || streamingMessageTypes.length == 0) {
             return;
+        }
+
+        if (!isConnected()) {
+            connect();
+            waitForAuthorization();
         }
 
         // Stream request format:
