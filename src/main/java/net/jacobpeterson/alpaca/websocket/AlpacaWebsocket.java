@@ -194,7 +194,9 @@ public abstract class AlpacaWebsocket<T, M, L extends AlpacaWebsocketMessageList
             ForkJoinPool.commonPool().execute(() -> {
                 try {
                     Thread.sleep(RECONNECT_SLEEP_INTERVAL);
-                } catch (InterruptedException ignored) {}
+                } catch (InterruptedException ignored) {
+                    return;
+                }
 
                 connect();
             });

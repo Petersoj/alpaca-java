@@ -70,7 +70,7 @@ String oAuthToken = "<some OAuth token>";
 AlpacaAPI alpacaAPI = new AlpacaAPI(oAuthToken);
 ```
 
-Note that this library uses [OkHttp](https://square.github.io/okhttp/) as its HTTP client which creates background threads to service requests. These threads persist even if the main thread exists so if you want to destroy these threads when you're done using [`AlpacaAPI`](src/main/java/net/jacobpeterson/alpaca/AlpacaAPI.java) so your program can exit without calling `System.exit()`, use the following snippet:
+Note that this library uses [OkHttp](https://square.github.io/okhttp/) as its HTTP client library which creates background threads to service requests. These threads persist even if the main thread exists so if you want to destroy these threads when you're done using [`AlpacaAPI`](src/main/java/net/jacobpeterson/alpaca/AlpacaAPI.java) so your program can exit without calling `System.exit()`, use the following snippet:
 ```java
 alpacaAPI.getOkHttpClient().dispatcher().executorService().shutdown();
 alpacaAPI.getOkHttpClient().connectionPool().evictAll();
@@ -168,7 +168,7 @@ try {
             tslaLimitOrder.getSubmittedAt());
 
     // Check if TSLA limit order has filled 5 seconds later and if it hasn't
-    // replace it with a market order so it fills!
+    // replace it with a higher limit order so it fills!
     Thread.sleep(5000);
     tslaLimitOrder = alpacaAPI.orders().get(tslaLimitOrder.getId(), false);
     if (tslaLimitOrder.getFilledAt() == null && tslaLimitOrder.getStatus().equals(OrderStatus.NEW)) {
@@ -176,7 +176,8 @@ try {
                 tslaLimitOrder.getId(),
                 100,
                 OrderTimeInForce.DAY,
-                null, null, null, null);
+                655.00,
+                null, null, null);
         System.out.printf("Replaced TSLA order: %s\n", replacedOrder);
     }
 

@@ -88,20 +88,20 @@ public class AlpacaClient {
     }
 
     /**
-     * Gets a new {@link HttpUrl.Builder}.
+     * Gets a new {@link okhttp3.HttpUrl.Builder}.
      *
-     * @return a {@link HttpUrl.Builder}
+     * @return a {@link okhttp3.HttpUrl.Builder}
      */
     public HttpUrl.Builder urlBuilder() {
         return baseURL.newBuilder();
     }
 
     /**
-     * Gets a new {@link Request.Builder} with {@link #requestHeaders}.
+     * Gets a new {@link okhttp3.Request.Builder} with {@link #requestHeaders}.
      *
-     * @param httpUrl the {@link HttpUrl}
+     * @param httpUrl the {@link okhttp3.HttpUrl}
      *
-     * @return a {@link Request.Builder}
+     * @return a {@link okhttp3.Request.Builder}
      */
     public Request.Builder requestBuilder(HttpUrl httpUrl) {
         return new Request.Builder().headers(requestHeaders).url(httpUrl);
