@@ -26,11 +26,11 @@ import static com.google.common.base.Preconditions.checkState;
 import static net.jacobpeterson.alpaca.util.gson.GsonUtil.GSON;
 
 /**
- * {@link AbstractEndpoint} for
+ * {@link AlpacaEndpoint} for
  * <a href="https://docs.alpaca.markets/api-documentation/api-v2/account-activities/">Account
  * Activities</a>.
  */
-public class AccountActivitiesEndpoint extends AbstractEndpoint {
+public class AccountActivitiesEndpoint extends AlpacaEndpoint {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(AccountActivitiesEndpoint.class);
 

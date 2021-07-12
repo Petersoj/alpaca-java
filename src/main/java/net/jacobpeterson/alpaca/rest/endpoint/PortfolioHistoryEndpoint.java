@@ -19,11 +19,11 @@ import java.util.ArrayList;
 import static com.google.common.base.Preconditions.checkState;
 
 /**
- * {@link AbstractEndpoint} for
+ * {@link AlpacaEndpoint} for
  * <a href="https://alpaca.markets/docs/api-documentation/api-v2/portfolio-history/">Portfolio
  * History</a>.
  */
-public class PortfolioHistoryEndpoint extends AbstractEndpoint {
+public class PortfolioHistoryEndpoint extends AlpacaEndpoint {
 
     /**
      * Instantiates a new {@link PortfolioHistoryEndpoint}.

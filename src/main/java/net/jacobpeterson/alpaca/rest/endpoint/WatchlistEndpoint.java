@@ -18,10 +18,10 @@ import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
- * {@link AbstractEndpoint} for <a href="https://docs.alpaca.markets/api-documentation/api-v2/watchlist/">Watchlists</a>
+ * {@link AlpacaEndpoint} for <a href="https://docs.alpaca.markets/api-documentation/api-v2/watchlist/">Watchlists</a>
  * .
  */
-public class WatchlistEndpoint extends AbstractEndpoint {
+public class WatchlistEndpoint extends AlpacaEndpoint {
 
     /**
      * Instantiates a new {@link WatchlistEndpoint}.

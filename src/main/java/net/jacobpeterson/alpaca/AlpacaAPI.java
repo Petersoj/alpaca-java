@@ -19,10 +19,10 @@ import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
- * {@link AlpacaAPI} contains several instances of various {@link AbstractEndpoint}s and {@link AlpacaWebsocket}s that
- * enable you to interface with Alpaca. You will generally only need one instance of this class in your application.
- * Note that many methods inside the various {@link AbstractEndpoint}s allow <code>null<code/> to be passed in as a
- * parameter if it is optional.
+ * The {@link AlpacaAPI} class contains several instances of various {@link AlpacaEndpoint}s and {@link
+ * AlpacaWebsocket}s to interface with Alpaca. You will generally only need one instance of this class in your
+ * application. Note that many methods inside the various {@link AlpacaEndpoint}s allow <code>null<code/> to be passed
+ * in as a parameter if it is optional.
  *
  * @see <a href="https://docs.alpaca.markets/api-documentation/api-v2/">Alpaca API Documentation</a>
  */

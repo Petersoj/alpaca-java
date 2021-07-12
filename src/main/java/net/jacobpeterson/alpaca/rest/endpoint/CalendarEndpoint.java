@@ -13,9 +13,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * {@link AbstractEndpoint} for <a href="https://docs.alpaca.markets/api-documentation/api-v2/calendar/">Calendar</a>.
+ * {@link AlpacaEndpoint} for <a href="https://docs.alpaca.markets/api-documentation/api-v2/calendar/">Calendar</a>.
  */
-public class CalendarEndpoint extends AbstractEndpoint {
+public class CalendarEndpoint extends AlpacaEndpoint {
 
     /**
      * Instantiates a new {@link CalendarEndpoint}.

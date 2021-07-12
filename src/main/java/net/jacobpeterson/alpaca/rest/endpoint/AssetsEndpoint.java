@@ -14,9 +14,9 @@ import java.util.List;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
- * {@link AbstractEndpoint} for <a href="https://docs.alpaca.markets/api-documentation/api-v2/assets/">Assets</a>.
+ * {@link AlpacaEndpoint} for <a href="https://docs.alpaca.markets/api-documentation/api-v2/assets/">Assets</a>.
  */
-public class AssetsEndpoint extends AbstractEndpoint {
+public class AssetsEndpoint extends AlpacaEndpoint {
 
     /**
      * Instantiates a new {@link AssetsEndpoint}.

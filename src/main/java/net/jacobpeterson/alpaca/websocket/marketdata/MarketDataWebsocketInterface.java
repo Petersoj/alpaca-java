@@ -15,13 +15,13 @@ import java.util.Collection;
 public interface MarketDataWebsocketInterface extends AlpacaWebsocketInterface<MarketDataListener> {
 
     /**
-     * Subscribe to a specific {@link MarketDataMessage}. That is, {@link ErrorMessage}, {@link SubscriptionsMessage},
-     * or {@link SuccessMessage}.
+     * Subscribe to a specific control {@link MarketDataMessage}. That is, {@link ErrorMessage}, {@link
+     * SubscriptionsMessage}, or {@link SuccessMessage}.
      *
      * @param marketDataMessageTypes array of any of: {@link MarketDataMessageType#SUCCESS}, {@link
      *                               MarketDataMessageType#ERROR}, or {@link MarketDataMessageType#SUBSCRIPTION}
      */
-    void subscribeToTypes(MarketDataMessageType... marketDataMessageTypes);
+    void subscribeToControl(MarketDataMessageType... marketDataMessageTypes);
 
     /**
      * Subscribes to trades, quotes, or bars according to the given {@link Collection} of symbols.
@@ -58,11 +58,11 @@ public interface MarketDataWebsocketInterface extends AlpacaWebsocketInterface<M
     void unsubscribe(Collection<String> tradeSymbols, Collection<String> quoteSymbols, Collection<String> barSymbols);
 
     /**
-     * Gets all of the currently subscribed {@link MarketDataMessageType}s.
+     * Gets all of the currently subscribed control {@link MarketDataMessageType}s.
      *
      * @return a {@link Collection} of {@link MarketDataMessageType}s
      */
-    Collection<MarketDataMessageType> subscribedTypes();
+    Collection<MarketDataMessageType> subscribedControls();
 
     /**
      * Gets all of the currently subscribed symbols for trade updates.

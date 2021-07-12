@@ -26,11 +26,11 @@ import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
- * {@link AbstractEndpoint} for
+ * {@link AlpacaEndpoint} for
  * <a href="https://alpaca.markets/docs/api-documentation/api-v2/market-data/alpaca-data-api-v2/historical/">Historical
  * Market Data API v2</a>.
  */
-public class MarketDataEndpoint extends AbstractEndpoint {
+public class MarketDataEndpoint extends AlpacaEndpoint {
 
     /**
      * Instantiates a new {@link MarketDataEndpoint}.

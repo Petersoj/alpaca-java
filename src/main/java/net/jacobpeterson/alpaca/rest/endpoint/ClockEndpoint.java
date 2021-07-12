@@ -7,9 +7,9 @@ import okhttp3.HttpUrl;
 import okhttp3.Request;
 
 /**
- * {@link AbstractEndpoint} for <a href="https://docs.alpaca.markets/api-documentation/api-v2/clock/">Clock</a>.
+ * {@link AlpacaEndpoint} for <a href="https://docs.alpaca.markets/api-documentation/api-v2/clock/">Clock</a>.
  */
-public class ClockEndpoint extends AbstractEndpoint {
+public class ClockEndpoint extends AlpacaEndpoint {
 
     /**
      * Instantiates a new {@link ClockEndpoint}.

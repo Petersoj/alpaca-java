@@ -11,10 +11,10 @@ import static com.google.common.base.Preconditions.checkNotNull;
 import static net.jacobpeterson.alpaca.util.gson.GsonUtil.GSON;
 
 /**
- * {@link AbstractEndpoint} for
+ * {@link AlpacaEndpoint} for
  * <a href="https://alpaca.markets/docs/api-documentation/api-v2/account-configuration/">Account Configuration</a>.
  */
-public class AccountConfigurationEndpoint extends AbstractEndpoint {
+public class AccountConfigurationEndpoint extends AlpacaEndpoint {
 
     /**
      * Instantiates a new {@link AccountConfigurationEndpoint}.

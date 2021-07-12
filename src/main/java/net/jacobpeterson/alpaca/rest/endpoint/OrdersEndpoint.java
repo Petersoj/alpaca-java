@@ -23,9 +23,9 @@ import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.base.Preconditions.checkState;
 
 /**
- * {@link AbstractEndpoint} for <a href="https://alpaca.markets/docs/api-documentation/api-v2/orders/">Orders</a>.
+ * {@link AlpacaEndpoint} for <a href="https://alpaca.markets/docs/api-documentation/api-v2/orders/">Orders</a>.
  */
-public class OrdersEndpoint extends AbstractEndpoint {
+public class OrdersEndpoint extends AlpacaEndpoint {
 
     /**
      * Instantiates a new {@link OrdersEndpoint}.

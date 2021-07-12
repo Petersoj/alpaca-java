@@ -104,7 +104,7 @@ public class MarketDataWebsocket extends AlpacaWebsocket<MarketDataMessageType, 
     protected void onReconnection() {
         sendAuthenticationMessage();
         if (waitForAuthorization()) {
-            subscribeToTypes(Iterables.toArray(listenedMarketDataMessageTypes, MarketDataMessageType.class));
+            subscribeToControl(Iterables.toArray(listenedMarketDataMessageTypes, MarketDataMessageType.class));
             subscribe(subscribedTrades, subscribedQuotes, subscribedBars);
         }
     }
@@ -252,7 +252,7 @@ public class MarketDataWebsocket extends AlpacaWebsocket<MarketDataMessageType, 
     }
 
     @Override
-    public void subscribeToTypes(MarketDataMessageType... marketDataMessageTypes) {
+    public void subscribeToControl(MarketDataMessageType... marketDataMessageTypes) {
         if (marketDataMessageTypes == null) {
             return;
         }
@@ -329,7 +329,7 @@ public class MarketDataWebsocket extends AlpacaWebsocket<MarketDataMessageType, 
     }
 
     @Override
-    public Collection<MarketDataMessageType> subscribedTypes() {
+    public Collection<MarketDataMessageType> subscribedControls() {
         return new HashSet<>(listenedMarketDataMessageTypes);
     }
 

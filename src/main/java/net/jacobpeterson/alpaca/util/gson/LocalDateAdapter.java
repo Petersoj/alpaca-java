@@ -7,7 +7,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
 /**
- * The GSON {@link LocalDateAdapter} (de)serialization adapter.
+ * {@link LocalDateAdapter} is a {@link Gson} adapter for {@link LocalDate}s.
  */
 public class LocalDateAdapter implements JsonSerializer<LocalDate>, JsonDeserializer<LocalDate> {
 

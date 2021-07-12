@@ -7,9 +7,9 @@ import okhttp3.HttpUrl;
 import okhttp3.Request;
 
 /**
- * {@link AbstractEndpoint} for <a href="https://docs.alpaca.markets/api-documentation/api-v2/account/">Account</a>.
+ * {@link AlpacaEndpoint} for <a href="https://docs.alpaca.markets/api-documentation/api-v2/account/">Account</a>.
  */
-public class AccountEndpoint extends AbstractEndpoint {
+public class AccountEndpoint extends AlpacaEndpoint {
 
     /**
      * Instantiates a new {@link AccountEndpoint}.
