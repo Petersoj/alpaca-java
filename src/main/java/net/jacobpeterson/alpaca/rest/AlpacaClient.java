@@ -152,13 +152,16 @@ public class AlpacaClient {
      */
     public JsonElement requestJSON(Request request, Predicate<Integer> isSuccessCode) throws AlpacaClientException {
         try (Response response = request(request, isSuccessCode)) {
-            ResponseBody responseBody = response.body();
-            checkState(responseBody != null);
+            try (ResponseBody responseBody = response.body()) {
+                // Throw exception if 'responseBody' is ever null since we never want to use cachedResponse or
+                // other types of responses.
+                checkState(responseBody != null);
 
-            try (Reader charStream = responseBody.charStream()) {
-                return JsonParser.parseReader(charStream);
-            } catch (IOException ioException) {
-                throw new AlpacaClientException(ioException);
+                try (Reader charStream = responseBody.charStream()) {
+                    return JsonParser.parseReader(charStream);
+                } catch (IOException ioException) {
+                    throw new AlpacaClientException(ioException);
+                }
             }
         }
     }
@@ -173,6 +176,8 @@ public class AlpacaClient {
      * @throws AlpacaClientException thrown for {@link AlpacaClientException}s
      */
     public void requestVoid(Request request, Predicate<Integer> isSuccessCode) throws AlpacaClientException {
+        // close() will throw an exception if cachedResponse or others were used which is fine
+        // since we never want to use those types of responses.
         request(request, isSuccessCode).close();
     }
 

@@ -6,19 +6,14 @@ import com.google.gson.JsonParser;
 import okhttp3.Response;
 import okhttp3.ResponseBody;
 
-import java.io.IOException;
-import java.io.Reader;
-
-import static com.google.common.base.Preconditions.checkState;
-
 public class AlpacaClientException extends Exception {
 
     private static final String CODE_KEY = "code";
     private static final String MESSAGE_KEY = "message";
 
-    private Response response;
-    private Integer requestStatusCode;
-    private String requestStatusMessage;
+    private String responseBody;
+    private Integer responseStatusCode;
+    private String responseStatusMessage;
     private Integer apiResponseCode;
     private String apiResponseMessage;
 
@@ -56,17 +51,21 @@ public class AlpacaClientException extends Exception {
      * @param response the {@link Response} containing an API response code and message JSON
      */
     protected AlpacaClientException(Response response) {
-        this.response = response;
+        responseStatusCode = response.code();
+        responseStatusMessage = response.message();
+
+        try (ResponseBody clientResponseBody = response.body()) {
+            if (clientResponseBody != null) {
+                this.responseBody = clientResponseBody.string();
+            }
+        } catch (Exception ignored) {}
     }
 
     @Override
     public String getMessage() {
-        if (response == null) {
+        if (responseBody == null) {
             return super.getMessage();
         } else {
-            requestStatusCode = response.code();
-            requestStatusMessage = response.message();
-
             try {
                 return parseAPIErrorResponse();
             } catch (Exception ignored) {
@@ -86,66 +85,59 @@ public class AlpacaClientException extends Exception {
      * and sets {@link #apiResponseCode} and {@link #apiResponseMessage} accordingly.
      *
      * @return a formatted message of the error response
-     *
-     * @throws IOException thrown for {@link IOException}s
      */
-    private String parseAPIErrorResponse() throws IOException {
-        ResponseBody responseBody = response.body();
-        checkState(responseBody != null);
+    private String parseAPIErrorResponse() {
+        JsonElement responseJsonElement = JsonParser.parseString(responseBody);
 
-        try (Reader charStream = responseBody.charStream()) {
-            JsonElement responseJsonElement = JsonParser.parseReader(charStream);
+        if (responseJsonElement instanceof JsonObject) {
+            JsonObject responseJsonObject = responseJsonElement.getAsJsonObject();
 
-            if (responseJsonElement instanceof JsonObject) {
-                JsonObject responseJsonObject = responseJsonElement.getAsJsonObject();
-
-                if (responseJsonObject.has(CODE_KEY)) {
-                    apiResponseCode = responseJsonObject.get(CODE_KEY).getAsInt();
-                }
-
-                if (responseJsonObject.has(MESSAGE_KEY)) {
-                    apiResponseMessage = responseJsonObject.get(MESSAGE_KEY).getAsString();
-                }
+            if (responseJsonObject.has(CODE_KEY)) {
+                apiResponseCode = responseJsonObject.get(CODE_KEY).getAsInt();
             }
 
-            // Just use the response JSON if the message could not be parsed.
-            if (apiResponseMessage == null) {
-                apiResponseMessage = responseJsonElement.toString();
+            if (responseJsonObject.has(MESSAGE_KEY)) {
+                apiResponseMessage = responseJsonObject.get(MESSAGE_KEY).getAsString();
             }
-
-            // Build message
-            StringBuilder messageBuilder = new StringBuilder();
-            messageBuilder.append("Status Code: ").append(requestStatusCode);
-            messageBuilder.append(", Status Message: \"").append(requestStatusMessage).append("\"");
-
-            if (apiResponseCode != null) {
-                messageBuilder.append(", API Response Code: ").append(apiResponseCode);
-            }
-
-            if (apiResponseMessage != null) {
-                messageBuilder.append(", API Response Message: \"").append(apiResponseMessage).append("\"");
-            }
-
-            return messageBuilder.toString();
         }
+
+        // Just use the response JSON if the message could not be parsed.
+        if (apiResponseMessage == null) {
+            apiResponseMessage = responseJsonElement.toString();
+        }
+
+        // Build message
+        StringBuilder messageBuilder = new StringBuilder();
+        messageBuilder.append("Status Code: ").append(responseStatusCode);
+        messageBuilder.append(", Status Message: \"").append(responseStatusMessage).append("\"");
+
+        if (apiResponseCode != null) {
+            messageBuilder.append(", API Response Code: ").append(apiResponseCode);
+        }
+
+        if (apiResponseMessage != null) {
+            messageBuilder.append(", API Response Message: \"").append(apiResponseMessage).append("\"");
+        }
+
+        return messageBuilder.toString();
     }
 
     /**
-     * Gets the {@link #requestStatusCode}.
+     * Gets the {@link #responseStatusCode}.
      *
      * @return an {@link Integer}
      */
-    public Integer getRequestStatusCode() {
-        return requestStatusCode;
+    public Integer getResponseStatusCode() {
+        return responseStatusCode;
     }
 
     /**
-     * Gets the {@link #requestStatusMessage}.
+     * Gets the {@link #responseStatusMessage}.
      *
      * @return a {@link String}
      */
-    public String getRequestStatusMessage() {
-        return requestStatusMessage;
+    public String getResponseStatusMessage() {
+        return responseStatusMessage;
     }
 
     /**
