@@ -30,7 +30,7 @@ tasks.getByName("generateJsonSchema2Pojo").enabled(false) // Disable default 'js
 
 archivesBaseName = 'alpaca-java'
 group = 'net.jacobpeterson'
-version = '8.0.1-SNAPSHOT'
+version = '8.0.2-SNAPSHOT'
 
 repositories {
     mavenCentral()
