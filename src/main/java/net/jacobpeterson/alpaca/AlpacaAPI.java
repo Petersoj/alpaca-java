@@ -131,7 +131,7 @@ public class AlpacaAPI {
         String brokerHostSubdomain;
         switch (endpointAPIType) {
             case LIVE:
-                brokerHostSubdomain = "live";
+                brokerHostSubdomain = "api";
                 break;
             case PAPER:
                 brokerHostSubdomain = "paper-api";
