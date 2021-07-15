@@ -81,11 +81,14 @@ public class PropertyUtil {
      * @return the properties
      */
     public synchronized static Properties loadPropertyFile(String propertyFile, String defaultPropertyFile) {
-        Properties properties = null;
+        ClassLoader classLoader = PropertyUtil.class.getClassLoader();
+        if (classLoader == null) {
+            classLoader = ClassLoader.getSystemClassLoader();
+        }
 
         // Load the default property file if exists
         Properties defaultProperties = null;
-        InputStream defaultPropertyStream = ClassLoader.getSystemClassLoader().getResourceAsStream(defaultPropertyFile);
+        InputStream defaultPropertyStream = classLoader.getResourceAsStream(defaultPropertyFile);
 
         if (defaultPropertyStream != null) {
             defaultProperties = new Properties();
@@ -110,7 +113,8 @@ public class PropertyUtil {
         }
 
         // Load the property file
-        InputStream propertyStream = ClassLoader.getSystemClassLoader().getResourceAsStream(propertyFile);
+        Properties properties = null;
+        InputStream propertyStream = classLoader.getResourceAsStream(propertyFile);
 
         if (propertyStream != null) {
             // Add default properties if they were found
