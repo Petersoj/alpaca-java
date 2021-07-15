@@ -85,7 +85,7 @@ public class PropertyUtil {
 
         // Load the default property file if exists
         Properties defaultProperties = null;
-        InputStream defaultPropertyStream = PropertyUtil.class.getClassLoader().getResourceAsStream(defaultPropertyFile);
+        InputStream defaultPropertyStream = getClassLoader().getResourceAsStream(defaultPropertyFile);
 
         if (defaultPropertyStream != null) {
             defaultProperties = new Properties();
@@ -110,7 +110,7 @@ public class PropertyUtil {
         }
 
         // Load the property file
-        InputStream propertyStream = PropertyUtil.class.getClassLoader().getResourceAsStream(propertyFile);
+        InputStream propertyStream = getClassLoader().getResourceAsStream(propertyFile);
 
         if (propertyStream != null) {
             // Add default properties if they were found
@@ -140,5 +140,13 @@ public class PropertyUtil {
         }
 
         return properties;
+    }
+
+    private static ClassLoader getClassLoader() {
+        ClassLoader classLoader = PropertyUtil.class.getClassLoader();
+        if (classLoader == null) {
+            classLoader = ClassLoader.getSystemClassLoader();
+        }
+        return classLoader;
     }
 }
