@@ -17,7 +17,8 @@
     "stopped",
     "rejected",
     "suspended",
-    "calculated"
+    "calculated",
+    "held"
   ],
   "javaEnums": [
     {
@@ -67,6 +68,9 @@
     },
     {
       "description": "The order has been completed for the day (either filled or done for day), but remaining settlement calculations are still pending. This state only occurs on rare occasions."
+    },
+    {
+      "description": "The order is part of a bracket leg that is waiting for the initial order to be filled."
     }
   ]
 }
