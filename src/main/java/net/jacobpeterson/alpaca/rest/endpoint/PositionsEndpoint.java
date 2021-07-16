@@ -89,8 +89,8 @@ public class PositionsEndpoint extends AlpacaEndpoint {
         Request request = alpacaClient.requestBuilder(urlBuilder.build())
                 .delete()
                 .build();
-        // TODO response code might be 207 instead of 200
-        return alpacaClient.requestObject(request, new TypeToken<ArrayList<ClosePositionOrder>>() {}.getType());
+        return alpacaClient.requestObject(request, (code) -> code == 200 || code == 207,
+                new TypeToken<ArrayList<ClosePositionOrder>>() {}.getType());
     }
 
     /**

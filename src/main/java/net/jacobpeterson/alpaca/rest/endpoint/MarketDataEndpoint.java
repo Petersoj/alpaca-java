@@ -18,8 +18,8 @@ import okhttp3.HttpUrl;
 import okhttp3.Request;
 
 import java.time.ZonedDateTime;
+import java.util.Collection;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import static com.google.common.base.Preconditions.checkArgument;
@@ -228,13 +228,13 @@ public class MarketDataEndpoint extends AlpacaEndpoint {
      * The Snapshot API for one ticker provides the latest trade, latest quote, minute bar daily bar, and previous daily
      * bar data for a given ticker symbol
      *
-     * @param symbols a {@link List} of symbols to query for
+     * @param symbols a {@link Collection} of symbols to query for
      *
      * @return a {@link Map} with they keys being the symbol and their values being the {@link Snapshot}
      *
      * @throws AlpacaClientException thrown for {@link AlpacaClientException}s
      */
-    public Map<String, Snapshot> getSnapshots(List<String> symbols) throws AlpacaClientException {
+    public Map<String, Snapshot> getSnapshots(Collection<String> symbols) throws AlpacaClientException {
         checkNotNull(symbols);
         checkArgument(!symbols.isEmpty(), "'symbols' cannot be empty!");
 

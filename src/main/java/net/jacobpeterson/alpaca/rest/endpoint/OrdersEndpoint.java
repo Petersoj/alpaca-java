@@ -17,6 +17,7 @@ import okhttp3.Request;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import static com.google.common.base.Preconditions.checkNotNull;
@@ -46,14 +47,14 @@ public class OrdersEndpoint extends AlpacaEndpoint {
      * @param direction the chronological order of response based on the submission time. Defaults to {@link
      *                  SortDirection#DESCENDING}.
      * @param nested    if true, the result will roll up multi-leg orders under the legs field of primary order.
-     * @param symbols   a {@link List} of symbols to filter the result by (null for no filter).
+     * @param symbols   a {@link Collection} of symbols to filter the result by (null for no filter).
      *
      * @return a {@link List} of {@link Order}s
      *
      * @throws AlpacaClientException thrown for {@link AlpacaClientException}s
      */
     public List<Order> get(CurrentOrderStatus status, Integer limit, ZonedDateTime after, ZonedDateTime until,
-            SortDirection direction, Boolean nested, List<String> symbols) throws AlpacaClientException {
+            SortDirection direction, Boolean nested, Collection<String> symbols) throws AlpacaClientException {
         HttpUrl.Builder urlBuilder = alpacaClient.urlBuilder()
                 .addPathSegment(endpointPathSegment);
 
@@ -600,7 +601,7 @@ public class OrdersEndpoint extends AlpacaEndpoint {
      *
      * @throws AlpacaClientException thrown for {@link AlpacaClientException}s
      */
-    public ArrayList<CancelledOrder> cancelAll() throws AlpacaClientException {
+    public List<CancelledOrder> cancelAll() throws AlpacaClientException {
         HttpUrl.Builder urlBuilder = alpacaClient.urlBuilder()
                 .addPathSegment(endpointPathSegment);
         Request request = alpacaClient.requestBuilder(urlBuilder.build())
