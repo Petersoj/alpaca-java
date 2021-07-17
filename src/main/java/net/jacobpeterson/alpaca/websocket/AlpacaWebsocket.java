@@ -1,7 +1,12 @@
 package net.jacobpeterson.alpaca.websocket;
 
 import net.jacobpeterson.alpaca.util.okhttp.WebsocketStateListener;
-import okhttp3.*;
+import okhttp3.HttpUrl;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
+import okhttp3.WebSocket;
+import okhttp3.WebSocketListener;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;

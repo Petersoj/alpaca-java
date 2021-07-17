@@ -34,8 +34,8 @@ public class PropertyUtil {
 
     /**
      * Gets a string property from a property file. Will try to IO load the properties in the property file if not
-     * cached already. If the desired property is not found in the 'propertyFile', then the 'defaultPropertyFile' is
-     * searched.
+     * cached already. If the desired property is not found in the <code>propertyFile</code>, then the
+     * <code>defaultPropertyFile</code> is searched.
      *
      * @param propertyFile        the property file
      * @param defaultPropertyFile the default property file
@@ -49,8 +49,8 @@ public class PropertyUtil {
 
     /**
      * Gets a string property from a property file. Will try to IO load the properties in the property file if not
-     * cached already. If the desired property is not found in the 'propertyFile', then the 'defaultPropertyFile' is
-     * searched, and if it's not there, then 'defaultValue' is returned.
+     * cached already. If the desired property is not found in the <code>propertyFile</code>, then the
+     * <code>defaultPropertyFile</code> is searched, and if it's not there, then <code>defaultValue</code> is returned.
      *
      * @param propertyFile        the property file
      * @param defaultPropertyFile the default property file
