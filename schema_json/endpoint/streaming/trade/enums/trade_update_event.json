@@ -27,37 +27,13 @@
       "description": "Sent when your order has been completely filled."
     },
     {
-      "description": "The time at which the order was filled."
-    },
-    {
-      "description": "The average price per share at which the order was filled."
-    },
-    {
-      "description": "The size of your total position, after this fill event, in shares. Positive for long positions, negative for short positions."
-    },
-    {
       "description": "Sent when a number of shares less than the total remaining quantity on your order has been filled."
-    },
-    {
-      "description": "The time at which the shares were filled."
-    },
-    {
-      "description": "The average price per share at which the shares were filled."
-    },
-    {
-      "description": "The size of your total position, after this fill event, in shares. Positive for long positions, negative for short positions."
     },
     {
       "description": "Sent when your requested cancelation of an order is processed."
     },
     {
-      "description": "The time at which the order was canceled."
-    },
-    {
       "description": "Sent when an order has reached the end of its lifespan, as determined by the order’s time in force value."
-    },
-    {
-      "description": "The time at which the order expired."
     },
     {
       "description": "Sent when the order is done executing for the day, and will not receive further updates until the next trading day."
@@ -66,13 +42,7 @@
       "description": "Sent when your requested replacement of an order is processed."
     },
     {
-      "description": "The time at which the order was replaced."
-    },
-    {
       "description": "Sent when your order has been rejected."
-    },
-    {
-      "description": "The time at which the rejection occurred."
     },
     {
       "description": "Sent when the order has been received by Alpaca and routed to the exchanges, but has not yet been accepted for execution."
@@ -87,7 +57,7 @@
       "description": "Sent when the order is awaiting replacement."
     },
     {
-      "description": "Sent when the order has been completed for the day - it is either “filled” or “done_for_day” - but remaining settlement calculations are still pending."
+      "description": "Sent when the order has been completed for the day - it is either \"filled\" or Z\"done_for_day\" - but remaining settlement calculations are still pending."
     },
     {
       "description": "Sent when the order has been suspended and is not eligible for trading."

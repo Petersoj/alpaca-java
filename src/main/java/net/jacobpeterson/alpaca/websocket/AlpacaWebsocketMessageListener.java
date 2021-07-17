@@ -7,6 +7,7 @@ package net.jacobpeterson.alpaca.websocket;
  * @param <T> the 'message type' type parameter
  * @param <M> the 'message' type parameter
  */
+@FunctionalInterface
 public interface AlpacaWebsocketMessageListener<T, M> {
 
     /**
