@@ -101,6 +101,9 @@ public class StreamingWebsocket extends AlpacaWebsocket<StreamingMessageType, St
 
     @Override
     protected void sendAuthenticationMessage() {
+        // Ensures that 'authenticationMessageFuture' exists
+        getAuthorizationFuture();
+
         /* Authentication message format:
          *  {
          *      "action": "authenticate",
@@ -183,7 +186,7 @@ public class StreamingWebsocket extends AlpacaWebsocket<StreamingMessageType, St
         }
 
         if (listenedStreamMessageTypes.contains(streamingMessageType)) {
-            callListeners(streamingMessageType, streamingMessage);
+            callListener(streamingMessageType, streamingMessage);
         }
     }
 
@@ -208,7 +211,11 @@ public class StreamingWebsocket extends AlpacaWebsocket<StreamingMessageType, St
 
         if (!isConnected()) {
             connect();
-            waitForAuthorization();
+
+            if (!waitForAuthorization()) {
+                LOGGER.error("Not subscribing to streams due to unauthorized {} websocket.", websocketName);
+                return;
+            }
         }
 
         // Stream request format:

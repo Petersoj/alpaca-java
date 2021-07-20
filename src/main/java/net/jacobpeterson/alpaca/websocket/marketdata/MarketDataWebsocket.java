@@ -115,6 +115,9 @@ public class MarketDataWebsocket extends AlpacaWebsocket<MarketDataMessageType, 
 
     @Override
     protected void sendAuthenticationMessage() {
+        // Ensures that 'authenticationMessageFuture' exists
+        getAuthorizationFuture();
+
         /* Format of message is:
          * {
          *   "action": "auth",
@@ -208,7 +211,7 @@ public class MarketDataWebsocket extends AlpacaWebsocket<MarketDataMessageType, 
             }
 
             if (listenedMarketDataMessageTypes.contains(marketDataMessageType)) {
-                callListeners(marketDataMessageType, marketDataMessage);
+                callListener(marketDataMessageType, marketDataMessage);
             }
         }
     }
@@ -290,7 +293,11 @@ public class MarketDataWebsocket extends AlpacaWebsocket<MarketDataMessageType, 
             Collection<String> barSymbols, boolean subscribe) {
         if (!isConnected()) {
             connect();
-            waitForAuthorization();
+
+            if (!waitForAuthorization()) {
+                LOGGER.error("Not subscribing to streams due to unauthorized {} websocket.", websocketName);
+                return;
+            }
         }
 
         /* Format of message is:

@@ -12,8 +12,6 @@ import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ForkJoinPool;
 import java.util.concurrent.Future;
@@ -61,11 +59,8 @@ public abstract class AlpacaWebsocket<T, M, L extends AlpacaWebsocketMessageList
     protected final String secretKey;
     protected final String oAuthToken;
     protected final boolean useOAuth;
-    protected final List<L> listeners;
-    protected final Object listenersLock;
-    protected final List<L> listenersToAdd;
-    protected final List<L> listenersToRemove;
 
+    protected L listener;
     protected WebsocketStateListener websocketStateListener;
     protected WebSocket websocket;
     protected boolean connected;
@@ -98,10 +93,6 @@ public abstract class AlpacaWebsocket<T, M, L extends AlpacaWebsocketMessageList
         this.secretKey = secretKey;
         this.oAuthToken = oAuthToken;
         useOAuth = oAuthToken != null;
-        listeners = new ArrayList<>();
-        listenersLock = new Object();
-        listenersToAdd = new ArrayList<>();
-        listenersToRemove = new ArrayList<>();
 
         automaticallyReconnect = true;
     }
@@ -119,7 +110,7 @@ public abstract class AlpacaWebsocket<T, M, L extends AlpacaWebsocketMessageList
 
     @Override
     public void disconnect() {
-        if (isConnected() && websocket != null) {
+        if (websocket != null && isConnected()) {
             intentionalClose = true;
             websocket.close(WEBSOCKET_NORMAL_CLOSURE_CODE, WEBSOCKET_NORMAL_CLOSURE_MESSAGE);
         } else {
@@ -139,17 +130,21 @@ public abstract class AlpacaWebsocket<T, M, L extends AlpacaWebsocketMessageList
 
     @Override
     public void onOpen(@NotNull WebSocket webSocket, @NotNull Response response) {
+        connected = true;
+
         LOGGER.info("{} websocket opened.", websocketName);
         LOGGER.debug("{} websocket response: {}", websocketName, response);
 
-        connected = true;
-
-        if (reconnectAttempts > 0) {
-            reconnectAttempts = 0;
-            onReconnection();
-        } else {
-            onConnection();
-        }
+        // Call 'onConnection' or 'onReconnection' async to avoid any potential dead-locking since this is called
+        // in sync with 'onMessage' in OkHttp's 'WebSocketListener'
+        ForkJoinPool.commonPool().execute(() -> {
+            if (reconnectAttempts > 0) {
+                reconnectAttempts = 0;
+                onReconnection();
+            } else {
+                onConnection();
+            }
+        });
 
         if (websocketStateListener != null) {
             websocketStateListener.onOpen(response);
@@ -158,6 +153,8 @@ public abstract class AlpacaWebsocket<T, M, L extends AlpacaWebsocketMessageList
 
     @Override
     public void onClosed(@NotNull WebSocket webSocket, int code, @NotNull String reason) {
+        connected = false;
+
         if (intentionalClose) {
             LOGGER.info("{} websocket closed.", websocketName);
             LOGGER.debug("Close code: {}, Reason: {}", code, reason);
@@ -174,7 +171,12 @@ public abstract class AlpacaWebsocket<T, M, L extends AlpacaWebsocketMessageList
 
     @Override
     public void onFailure(@NotNull WebSocket webSocket, @NotNull Throwable cause, @Nullable Response response) {
-        LOGGER.error("{} websocket failure! Response: {}", websocketName, response, cause);
+        LOGGER.error("{} websocket failure!", websocketName, cause);
+
+        // A websocket failure occurs when either there is a connection failure or when the client throws
+        // an Exception when receiving a message. In either case, OkHttp will silently close the websocket
+        // connection, so try to reopen it.
+        connected = false;
         handleReconnectionAttempt();
 
         if (websocketStateListener != null) {
@@ -215,24 +217,24 @@ public abstract class AlpacaWebsocket<T, M, L extends AlpacaWebsocketMessageList
      * Cleans up this instances state variables.
      */
     protected void cleanupState() {
-        listeners.clear();
-        listenersToAdd.clear();
-        listenersToRemove.clear();
-
         websocket = null;
         connected = false;
         authenticated = false;
+        if (authenticationMessageFuture != null && !authenticationMessageFuture.isDone()) {
+            authenticationMessageFuture.complete(false);
+        }
+        authenticationMessageFuture = null;
         intentionalClose = false;
         reconnectAttempts = 0;
     }
 
     /**
-     * Called when a websocket connection is made.
+     * Called asynchronously when a websocket connection is made.
      */
     protected abstract void onConnection();
 
     /**
-     * Called when a websocket reconnection is made after unintentional disconnection.
+     * Called asynchronously when a websocket reconnection is made after unintentional disconnection.
      */
     protected abstract void onReconnection();
 
@@ -243,7 +245,7 @@ public abstract class AlpacaWebsocket<T, M, L extends AlpacaWebsocketMessageList
 
     @Override
     public Future<Boolean> getAuthorizationFuture() {
-        if (authenticationMessageFuture == null || authenticationMessageFuture.isDone()) {
+        if (authenticationMessageFuture == null) {
             authenticationMessageFuture = new CompletableFuture<>();
         }
 
@@ -251,46 +253,22 @@ public abstract class AlpacaWebsocket<T, M, L extends AlpacaWebsocketMessageList
     }
 
     /**
-     * Calls the {@link AlpacaWebsocketMessageListener}s in {@link #listeners}.
+     * Calls the {@link AlpacaWebsocketMessageListener}.
      *
      * @param messageType the message type
      * @param message     the message
      */
-    protected void callListeners(T messageType, M message) {
-        // Remove all listeners that were request to be removed then add all listeners that were request to be added
-        // on the last 'onMessage' call to the listeners.
-        synchronized (listenersLock) {
-            listeners.removeAll(listenersToRemove);
-            listenersToRemove.clear();
-
-            listeners.addAll(listenersToAdd);
-            listenersToAdd.clear();
-        }
-
-        // Note that this doesn't need to acquire 'listenersLock' since 'listeners' is isolated
-        // to this instance and is not modified outside a lock.
-        for (L listener : listeners) {
+    protected void callListener(T messageType, M message) {
+        try {
             listener.onMessage(messageType, message);
+        } catch (Exception exception) {
+            LOGGER.error("{} listener threw exception!", websocketName, exception);
         }
     }
 
     @Override
-    public void addListener(L listener) {
-        synchronized (listenersLock) {
-            listenersToAdd.add(listener);
-        }
-    }
-
-    @Override
-    public void removeListener(L listener) {
-        if (listeners.size() == 1 && listeners.contains(listener)) {
-            disconnect();
-            return;
-        }
-
-        synchronized (listenersLock) {
-            listenersToRemove.add(listener);
-        }
+    public void setListener(L listener) {
+        this.listener = listener;
     }
 
     /**

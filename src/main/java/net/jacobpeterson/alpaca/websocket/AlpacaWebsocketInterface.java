@@ -2,6 +2,8 @@ package net.jacobpeterson.alpaca.websocket;
 
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 
 /**
  * {@link AlpacaWebsocketInterface} defines an interface for Alpaca websockets.
@@ -35,22 +37,23 @@ public interface AlpacaWebsocketInterface<L extends AlpacaWebsocketMessageListen
     boolean isAuthenticated();
 
     /**
-     * Gets a {@link Boolean} {@link Future} that completes when the next authentication message that is received
-     * indicates a successful websocket authorization or not.
+     * Gets a {@link Boolean} {@link Future} that completes when an authentication message that is received after a new
+     * websocket connection indicates successful authentication.
      *
      * @return a {@link Boolean} {@link Future}
      */
     Future<Boolean> getAuthorizationFuture();
 
     /**
-     * Waits for {@link #getAuthorizationFuture()} to complete and returns its value.
+     * Waits for {@link #getAuthorizationFuture()} to complete and returns its value. This will timeout after 10 seconds
+     * and then return <code>false</code>.
      *
      * @return a boolean
      */
     default boolean waitForAuthorization() {
         try {
-            return getAuthorizationFuture().get();
-        } catch (InterruptedException | ExecutionException ignored) {}
+            return getAuthorizationFuture().get(10, TimeUnit.SECONDS);
+        } catch (InterruptedException | ExecutionException | TimeoutException ignored) {}
         return false;
     }
 
@@ -64,19 +67,9 @@ public interface AlpacaWebsocketInterface<L extends AlpacaWebsocketMessageListen
     }
 
     /**
-     * Adds a {@link AlpacaWebsocketMessageListener}.
+     * Sets the {@link AlpacaWebsocketMessageListener} for this {@link AlpacaWebsocketInterface}.
      *
      * @param listener the {@link AlpacaWebsocketMessageListener}
      */
-    void addListener(L listener);
-
-    /**
-     * Remove a {@link AlpacaWebsocketMessageListener}.
-     * <br>
-     * Note that this will call {@link AlpacaWebsocketInterface#disconnect()} if this is the last listener being
-     * removed.
-     *
-     * @param listener the {@link AlpacaWebsocketMessageListener}
-     */
-    void removeListener(L listener);
+    void setListener(L listener);
 }
