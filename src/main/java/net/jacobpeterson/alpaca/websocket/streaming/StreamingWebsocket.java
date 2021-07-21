@@ -209,6 +209,11 @@ public class StreamingWebsocket extends AlpacaWebsocket<StreamingMessageType, St
             return;
         }
 
+        // Add all non-subscribable 'streamingMessageTypes' before connecting or sending websocket message
+        Arrays.stream(streamingMessageTypes)
+                .filter(not(SUBSCRIBABLE_STREAMING_MESSAGE_TYPES::contains))
+                .forEach(listenedStreamMessageTypes::add);
+
         if (!isConnected()) {
             connect();
 

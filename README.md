@@ -372,7 +372,7 @@ Example usage:
 // Add a 'StreamingListener' that simply prints streaming information
 StreamingListener streamingListener = (messageType, message) ->
         System.out.printf("%s: %s\n", messageType.name(), message);
-alpacaAPI.streaming().addListener(streamingListener);
+alpacaAPI.streaming().setListener(streamingListener);
 
 // Listen to the 'authorization' and 'trade update' streams.
 // Note this will connect the websocket and wait for authorization
@@ -380,13 +380,6 @@ alpacaAPI.streaming().addListener(streamingListener);
 alpacaAPI.streaming().streams(
         StreamingMessageType.AUTHORIZATION,
         StreamingMessageType.TRADE_UPDATES);
-
-// Wait for 5 seconds
-Thread.sleep(5000);
-
-// Note that when the last 'StreamingListener' is removed, the websocket
-// connection is closed.
-alpacaAPI.streaming().removeListener(streamingListener);
 ```
 
 The following methods show how you can control the state of the [`StreamingWebsocket`](src/main/java/net/jacobpeterson/alpaca/websocket/streaming/StreamingWebsocket.java) directly.
@@ -405,7 +398,7 @@ Example usage:
 // Add a 'MarketDataListener' that simply prints market data information
 MarketDataListener marketDataListener = (messageType, message) ->
         System.out.printf("%s: %s\n", messageType.name(), message);
-alpacaAPI.marketDataStreaming().addListener(marketDataListener);
+alpacaAPI.marketDataStreaming().setListener(marketDataListener);
 
 // Listen to 'SubscriptionsMessage', 'SuccessMessage', and 'ErrorMessage' control messages
 // that contain information about the stream's current state.
@@ -420,13 +413,6 @@ alpacaAPI.marketDataStreaming().subscribe(
         Arrays.asList("AAPL", "TSLA"),
         null,
         Arrays.asList("*"));
-
-// Wait for 5 seconds
-Thread.sleep(5000);
-
-// Note that when the last 'MarketDataListener' is removed, the websocket
-// connection is closed.
-alpacaAPI.marketDataStreaming().removeListener(marketDataListener);
 ```
 
 The following methods show how you can control the state of the [`MarketDataWebsocket`](src/main/java/net/jacobpeterson/alpaca/websocket/marketdata/MarketDataWebsocket.java) directly.
