@@ -66,11 +66,7 @@ public class AlpacaClientException extends Exception {
         if (responseBody == null) {
             return super.getMessage();
         } else {
-            try {
-                return parseAPIErrorResponse();
-            } catch (Exception ignored) {
-                return super.getMessage();
-            }
+            return parseAPIErrorResponse();
         }
     }
 
@@ -87,24 +83,26 @@ public class AlpacaClientException extends Exception {
      * @return a formatted message of the error response
      */
     private String parseAPIErrorResponse() {
-        JsonElement responseJsonElement = JsonParser.parseString(responseBody);
+        try {
+            JsonElement responseJsonElement = JsonParser.parseString(responseBody);
 
-        if (responseJsonElement instanceof JsonObject) {
-            JsonObject responseJsonObject = responseJsonElement.getAsJsonObject();
+            if (responseJsonElement instanceof JsonObject) {
+                JsonObject responseJsonObject = responseJsonElement.getAsJsonObject();
 
-            if (responseJsonObject.has(CODE_KEY)) {
-                apiResponseCode = responseJsonObject.get(CODE_KEY).getAsInt();
+                if (responseJsonObject.has(CODE_KEY)) {
+                    apiResponseCode = responseJsonObject.get(CODE_KEY).getAsInt();
+                }
+
+                if (responseJsonObject.has(MESSAGE_KEY)) {
+                    apiResponseMessage = responseJsonObject.get(MESSAGE_KEY).getAsString();
+                }
             }
 
-            if (responseJsonObject.has(MESSAGE_KEY)) {
-                apiResponseMessage = responseJsonObject.get(MESSAGE_KEY).getAsString();
+            // Just use the response JSON if the message could not be parsed.
+            if (apiResponseMessage == null) {
+                apiResponseMessage = responseJsonElement.toString();
             }
-        }
-
-        // Just use the response JSON if the message could not be parsed.
-        if (apiResponseMessage == null) {
-            apiResponseMessage = responseJsonElement.toString();
-        }
+        } catch (Exception ignored) {}
 
         // Build message
         StringBuilder messageBuilder = new StringBuilder();
