@@ -259,10 +259,12 @@ public abstract class AlpacaWebsocket<T, M, L extends AlpacaWebsocketMessageList
      * @param message     the message
      */
     protected void callListener(T messageType, M message) {
-        try {
-            listener.onMessage(messageType, message);
-        } catch (Exception exception) {
-            LOGGER.error("{} listener threw exception!", websocketName, exception);
+        if (listener != null) {
+            try {
+                listener.onMessage(messageType, message);
+            } catch (Exception exception) {
+                LOGGER.error("{} listener threw exception!", websocketName, exception);
+            }
         }
     }
 
