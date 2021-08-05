@@ -22,6 +22,7 @@ public class FormatUtil {
     // the 3rd and 4th least significant decimal digits.
     private static final NumberFormat CURRENCY_FORMATTER = new DecimalFormat("#0.00##",
             DecimalFormatSymbols.getInstance(Locale.US));
+
     /**
      * Formats an arbitrary number to a currency format. e.g. $123.45
      *
@@ -35,14 +36,16 @@ public class FormatUtil {
 
     /**
      * Formats a {@link TemporalAccessor} using {@link DateTimeFormatter#ISO_OFFSET_DATE_TIME}.
+     * <br>
+     * Alpaca requires <code>RFC 3339</code> formatted timestamps to be provided which includes the timezone. <code>ISO
+     * 8601</code> is compatible with <code>RFC 3339</code> which is what {@link DateTimeFormatter#ISO_OFFSET_DATE_TIME}
+     * uses.
      *
      * @param zonedDateTime the {@link ZonedDateTime}
      *
      * @return the formatted string
      */
     public static String toRFC3339Format(ZonedDateTime zonedDateTime) {
-        //Alpaca requires RFC 3339 (https://www.ietf.org/rfc/rfc3339.txt) date time to be provided which includes time zone.
-        // ISO 8601 is compatible with RFC 3339.
         return DateTimeFormatter.ISO_OFFSET_DATE_TIME.format(zonedDateTime);
     }
 }
