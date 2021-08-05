@@ -384,9 +384,13 @@ alpacaAPI.streaming().streams(
 
 The following methods show how you can control the state of the [`StreamingWebsocket`](src/main/java/net/jacobpeterson/alpaca/websocket/streaming/StreamingWebsocket.java) directly.
 ```java
+// Note that you usually won't need to call connect() and waitForAuthorization() 
+// directly, as they are automatically called when subscribing to streams.
 alpacaAPI.streaming().connect();
 alpacaAPI.streaming().waitForAuthorization();
 System.out.println(alpacaAPI.streaming().isValid());
+
+// You can manually disconnect the websocket as needed
 alpacaAPI.streaming().disconnect();
 ```
 
@@ -417,9 +421,13 @@ alpacaAPI.marketDataStreaming().subscribe(
 
 The following methods show how you can control the state of the [`MarketDataWebsocket`](src/main/java/net/jacobpeterson/alpaca/websocket/marketdata/MarketDataWebsocket.java) directly.
 ```java
+// Note that you usually won't need to call connect() and waitForAuthorization() 
+// directly, as they are automatically called when subscribing to streams.
 alpacaAPI.marketDataStreaming().connect();
 alpacaAPI.marketDataStreaming().waitForAuthorization();
 System.out.println(alpacaAPI.marketDataStreaming().isValid());
+
+// You can manually disconnect the websocket as needed
 alpacaAPI.marketDataStreaming().disconnect();
 ```
 
