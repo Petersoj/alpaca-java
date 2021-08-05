@@ -39,14 +39,17 @@ public interface AlpacaWebsocketInterface<L extends AlpacaWebsocketMessageListen
     /**
      * Gets a {@link Boolean} {@link Future} that completes when an authentication message that is received after a new
      * websocket connection indicates successful authentication.
+     * <br>
+     * Note that if this {@link AlpacaWebsocketInterface} is already authorized, the returned {@link Future} will likely
+     * never complete.
      *
      * @return a {@link Boolean} {@link Future}
      */
     Future<Boolean> getAuthorizationFuture();
 
     /**
-     * Waits for {@link #getAuthorizationFuture()} to complete and returns its value. This will timeout after 10 seconds
-     * and then return <code>false</code>.
+     * Waits for {@link #getAuthorizationFuture()} to complete and returns its value. After 10 seconds of waiting, this
+     * will timeout then return <code>false</code>.
      *
      * @return a boolean
      */

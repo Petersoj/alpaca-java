@@ -15,11 +15,11 @@ import java.util.Collection;
 public interface MarketDataWebsocketInterface extends AlpacaWebsocketInterface<MarketDataListener> {
 
     /**
-     * Subscribe to a specific control {@link MarketDataMessage}. That is, {@link ErrorMessage}, {@link
-     * SubscriptionsMessage}, or {@link SuccessMessage}.
+     * Subscribe to a specific control {@link MarketDataMessage} which contain information about the stream's current
+     * state. That is, an {@link ErrorMessage}, {@link SubscriptionsMessage}, or {@link SuccessMessage}.
      *
-     * @param marketDataMessageTypes array of any of: {@link MarketDataMessageType#SUCCESS}, {@link
-     *                               MarketDataMessageType#ERROR}, or {@link MarketDataMessageType#SUBSCRIPTION}
+     * @param marketDataMessageTypes array containing any of the following: {@link MarketDataMessageType#SUCCESS},
+     *                               {@link MarketDataMessageType#ERROR}, or {@link MarketDataMessageType#SUBSCRIPTION}
      */
     void subscribeToControl(MarketDataMessageType... marketDataMessageTypes);
 
@@ -44,7 +44,7 @@ public interface MarketDataWebsocketInterface extends AlpacaWebsocketInterface<M
     /**
      * Unsubscribes from trades, quotes, or bars according to the given {@link Collection} of symbols.
      * <br>
-     * Note that any one of the given {@link Collection}s can contain the wildcard character e.g. "*" to unsubscribe
+     * Note that any one of the given {@link Collection}s can contain the wildcard character (e.g. "*") to unsubscribe
      * from a previously subscribed wildcard.
      *
      * @param tradeSymbols a {@link Collection} of symbols to unsubscribe from trades or <code>null</code> for no
@@ -58,28 +58,28 @@ public interface MarketDataWebsocketInterface extends AlpacaWebsocketInterface<M
     void unsubscribe(Collection<String> tradeSymbols, Collection<String> quoteSymbols, Collection<String> barSymbols);
 
     /**
-     * Gets all of the currently subscribed control {@link MarketDataMessageType}s.
+     * Gets all the currently subscribed control {@link MarketDataMessageType}s.
      *
      * @return a {@link Collection} of {@link MarketDataMessageType}s
      */
     Collection<MarketDataMessageType> subscribedControls();
 
     /**
-     * Gets all of the currently subscribed symbols for trade updates.
+     * Gets all the currently subscribed symbols for trade updates.
      *
      * @return a {@link Collection} of {@link String}s
      */
     Collection<String> subscribedTrades();
 
     /**
-     * Gets all of the currently subscribed symbols for quote updates.
+     * Gets all the currently subscribed symbols for quote updates.
      *
      * @return a {@link Collection} of {@link String}s
      */
     Collection<String> subscribedQuotes();
 
     /**
-     * Gets all of the currently subscribed symbols for bar updates.
+     * Gets all the currently subscribed symbols for bar updates.
      *
      * @return a {@link Collection} of {@link String}s
      */
