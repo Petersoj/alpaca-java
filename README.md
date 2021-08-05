@@ -375,7 +375,9 @@ StreamingListener streamingListener = (messageType, message) ->
 alpacaAPI.streaming().setListener(streamingListener);
 
 // Listen 'AuthorizationMessage' and 'ListeningMessage' messages that contain 
-// information about the stream's current state.
+// information about the stream's current state. Note that these are subscribed
+// to before the websocket is connected since these messages usually are sent
+// upon websocket connection. 
 alpacaAPI.streaming().streams(StreamingMessageType.AUTHORIZATION,
         StreamingMessageType.LISTENING);
 
@@ -408,7 +410,9 @@ MarketDataListener marketDataListener = (messageType, message) ->
 alpacaAPI.marketDataStreaming().setListener(marketDataListener);
 
 // Listen to 'SubscriptionsMessage', 'SuccessMessage', and 'ErrorMessage' control messages
-// that contain information about the stream's current state.
+// that contain information about the stream's current state. Note that these are subscribed
+// to before the websocket is connected since these messages usually are sent
+// upon websocket connection. 
 alpacaAPI.marketDataStreaming().subscribeToControl(
         MarketDataMessageType.SUCCESS,
         MarketDataMessageType.SUBSCRIPTION,

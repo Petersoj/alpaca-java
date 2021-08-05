@@ -37,6 +37,15 @@ public interface AlpacaWebsocketInterface<L extends AlpacaWebsocketMessageListen
     boolean isAuthenticated();
 
     /**
+     * True if {@link #isConnected()} and {@link #isAuthenticated()}.
+     *
+     * @return a boolean
+     */
+    default boolean isValid() {
+        return isConnected() && isAuthenticated();
+    }
+
+    /**
      * Gets a {@link Boolean} {@link Future} that completes when an authentication message that is received after a new
      * websocket connection indicates successful authentication.
      * <br>
@@ -61,15 +70,6 @@ public interface AlpacaWebsocketInterface<L extends AlpacaWebsocketMessageListen
             return getAuthorizationFuture().get(timeout, unit);
         } catch (InterruptedException | ExecutionException | TimeoutException ignored) {}
         return false;
-    }
-
-    /**
-     * True if {@link #isConnected()} and {@link #isAuthenticated()}.
-     *
-     * @return a boolean
-     */
-    default boolean isValid() {
-        return isConnected() && isAuthenticated();
     }
 
     /**
