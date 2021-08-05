@@ -374,28 +374,31 @@ StreamingListener streamingListener = (messageType, message) ->
         System.out.printf("%s: %s\n", messageType.name(), message);
 alpacaAPI.streaming().setListener(streamingListener);
 
-// Listen to the 'authorization' and 'trade update' streams.
-// Note this will connect the websocket and wait for authorization
-// if it isn't already connected.
-alpacaAPI.streaming().streams(
-        StreamingMessageType.AUTHORIZATION,
-        StreamingMessageType.TRADE_UPDATES);
-```
+// Listen 'AuthorizationMessage' and 'ListeningMessage' messages that contain 
+// information about the stream's current state.
+alpacaAPI.streaming().streams(StreamingMessageType.AUTHORIZATION,
+        StreamingMessageType.LISTENING);
 
-The following methods show how you can control the state of the [`StreamingWebsocket`](src/main/java/net/jacobpeterson/alpaca/websocket/streaming/StreamingWebsocket.java) directly.
-```java
-// Note that you usually won't need to call connect() and waitForAuthorization() 
-// directly, as they are automatically called when subscribing to streams.
+// Connect the websocket and confirm authentication
 alpacaAPI.streaming().connect();
-alpacaAPI.streaming().waitForAuthorization();
-System.out.println(alpacaAPI.streaming().isValid());
+alpacaAPI.streaming().waitForAuthorization(5, TimeUnit.SECONDS);
+if (!alpacaAPI.streaming().isValid()) {
+    System.out.println("Websocket not valid!");
+    return;
+}
 
-// You can manually disconnect the websocket as needed
+// Listen to the 'trade update' streams.
+alpacaAPI.streaming().streams(StreamingMessageType.TRADE_UPDATES);
+
+// Wait a few seconds
+Thread.sleep(5000);
+
+// Manually disconnect the websocket
 alpacaAPI.streaming().disconnect();
 ```
 
 ## [`MarketDataWebsocket`](src/main/java/net/jacobpeterson/alpaca/websocket/marketdata/MarketDataWebsocket.java)
-Alpaca's Data API v2 provides websocket streaming for trades, quotes, and minute bars. This helps receive the most up to date market information that could help your trading strategy to act upon certain market movement.
+Alpaca's Data API v2 provides websocket streaming for trades, quotes, and minute bars. This helps receive the most up-to-date market information that could help your trading strategy to act upon certain market movement.
 
 Example usage:
 ```java
@@ -410,24 +413,25 @@ alpacaAPI.marketDataStreaming().subscribeToControl(
         MarketDataMessageType.SUCCESS,
         MarketDataMessageType.SUBSCRIPTION,
         MarketDataMessageType.ERROR);
+
+// Connect the websocket and confirm authentication
+alpacaAPI.marketDataStreaming().connect();
+alpacaAPI.marketDataStreaming().waitForAuthorization(5, TimeUnit.SECONDS);
+if (!alpacaAPI.marketDataStreaming().isValid()) {
+    System.out.println("Websocket not valid!");
+    return;
+}
+
 // Listen to the AAPL and TSLA trades and all ('*') bars.
-// Note this will connect the websocket and wait for authorization
-// if it isn't already connected.
 alpacaAPI.marketDataStreaming().subscribe(
         Arrays.asList("AAPL", "TSLA"),
         null,
         Arrays.asList("*"));
-```
 
-The following methods show how you can control the state of the [`MarketDataWebsocket`](src/main/java/net/jacobpeterson/alpaca/websocket/marketdata/MarketDataWebsocket.java) directly.
-```java
-// Note that you usually won't need to call connect() and waitForAuthorization() 
-// directly, as they are automatically called when subscribing to streams.
-alpacaAPI.marketDataStreaming().connect();
-alpacaAPI.marketDataStreaming().waitForAuthorization();
-System.out.println(alpacaAPI.marketDataStreaming().isValid());
+// Wait a few seconds
+Thread.sleep(5000);
 
-// You can manually disconnect the websocket as needed
+// Manually disconnect the websocket
 alpacaAPI.marketDataStreaming().disconnect();
 ```
 

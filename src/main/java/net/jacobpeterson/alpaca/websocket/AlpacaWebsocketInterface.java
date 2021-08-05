@@ -48,14 +48,17 @@ public interface AlpacaWebsocketInterface<L extends AlpacaWebsocketMessageListen
     Future<Boolean> getAuthorizationFuture();
 
     /**
-     * Waits for {@link #getAuthorizationFuture()} to complete and returns its value. After 10 seconds of waiting, this
-     * will timeout then return <code>false</code>.
+     * Waits for {@link #getAuthorizationFuture()} to complete and returns its value, except when <code>timeout</code>
+     * time has elapsed, then this will return <code>false</code>.
+     *
+     * @param timeout the timeout time
+     * @param unit    the timeout {@link TimeUnit}
      *
      * @return a boolean
      */
-    default boolean waitForAuthorization() {
+    default boolean waitForAuthorization(long timeout, TimeUnit unit) {
         try {
-            return getAuthorizationFuture().get(10, TimeUnit.SECONDS);
+            return getAuthorizationFuture().get(timeout, unit);
         } catch (InterruptedException | ExecutionException | TimeoutException ignored) {}
         return false;
     }

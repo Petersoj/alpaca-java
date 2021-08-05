@@ -27,6 +27,7 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.TimeUnit;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.base.Preconditions.checkState;
@@ -107,7 +108,7 @@ public class MarketDataWebsocket extends AlpacaWebsocket<MarketDataMessageType, 
     @Override
     protected void onReconnection() {
         sendAuthenticationMessage();
-        if (waitForAuthorization()) {
+        if (waitForAuthorization(5, TimeUnit.SECONDS)) {
             subscribeToControl(Iterables.toArray(listenedMarketDataMessageTypes, MarketDataMessageType.class));
             subscribe(subscribedTrades, subscribedQuotes, subscribedBars);
         }
@@ -292,12 +293,7 @@ public class MarketDataWebsocket extends AlpacaWebsocket<MarketDataMessageType, 
     private void sendSubscriptionUpdate(Collection<String> tradeSymbols, Collection<String> quoteSymbols,
             Collection<String> barSymbols, boolean subscribe) {
         if (!isConnected()) {
-            connect();
-
-            if (!waitForAuthorization()) {
-                LOGGER.error("Not subscribing to streams due to unauthorized {} websocket.", websocketName);
-                return;
-            }
+            throw new IllegalStateException("This websocket must be connected before sending subscription updates!");
         }
 
         /* Format of message is:

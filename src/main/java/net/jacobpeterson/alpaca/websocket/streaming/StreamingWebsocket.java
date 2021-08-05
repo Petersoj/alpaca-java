@@ -27,6 +27,7 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.TimeUnit;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.base.Preconditions.checkState;
@@ -94,7 +95,7 @@ public class StreamingWebsocket extends AlpacaWebsocket<StreamingMessageType, St
     @Override
     protected void onReconnection() {
         sendAuthenticationMessage();
-        if (waitForAuthorization()) {
+        if (waitForAuthorization(5, TimeUnit.SECONDS)) {
             streams(Iterables.toArray(listenedStreamMessageTypes, StreamingMessageType.class));
         }
     }
@@ -214,15 +215,6 @@ public class StreamingWebsocket extends AlpacaWebsocket<StreamingMessageType, St
                 .filter(not(SUBSCRIBABLE_STREAMING_MESSAGE_TYPES::contains))
                 .forEach(listenedStreamMessageTypes::add);
 
-        if (!isConnected()) {
-            connect();
-
-            if (!waitForAuthorization()) {
-                LOGGER.error("Not subscribing to streams due to unauthorized {} websocket.", websocketName);
-                return;
-            }
-        }
-
         // Stream request format:
         // {
         //     "action": "listen",
@@ -241,6 +233,8 @@ public class StreamingWebsocket extends AlpacaWebsocket<StreamingMessageType, St
 
         if (streamsArray.isEmpty()) {
             return;
+        } else if (!isConnected()) {
+            throw new IllegalStateException("This websocket must be connected before subscribing to streams!");
         }
 
         JsonObject dataObject = new JsonObject();

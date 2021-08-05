@@ -28,10 +28,6 @@ public interface MarketDataWebsocketInterface extends AlpacaWebsocketInterface<M
      * <br>
      * Note that any one of the given {@link Collection}s can contain the wildcard character e.g. "*" to subscribe to
      * ALL available symbols.
-     * <br>
-     * Note that this will call {@link MarketDataWebsocketInterface#connect()} and {@link
-     * MarketDataWebsocketInterface#waitForAuthorization()} if {@link MarketDataWebsocketInterface#isConnected()}
-     * returns false.
      *
      * @param tradeSymbols a {@link Collection} of symbols to subscribe to trades or <code>null</code> for no change
      * @param quoteSymbols a {@link Collection} of symbols to subscribe to quotes or <code>null</code> for no change
