@@ -101,7 +101,7 @@ The Data API v2 provides market data through an easy-to-use API for historical d
 Example usage:
 ```java
 try {
-    // Get AAPL one hour bars from 7/6/2021 market open
+    // Get AAPL one hour, split-adjusted bars from 7/6/2021 market open
     // to 7/8/2021 market close and print them out
     BarsResponse aaplBarsResponse = alpacaAPI.marketData().getBars(
             "AAPL",
@@ -109,7 +109,9 @@ try {
             ZonedDateTime.of(2021, 7, 8, 12 + 4, 0, 0, 0, ZoneId.of("America/New_York")),
             null,
             null,
-            BarsTimeFrame.ONE_HOUR);
+            1,
+            BarTimePeriod.HOUR,
+            BarAdjustment.SPLIT);
     aaplBarsResponse.getBars().forEach(System.out::println);
 
     // Get AAPL first 10 trades on 7/8/2021 at market open and print them out

@@ -2,19 +2,23 @@
   "type": "string",
   "title": "See <a href=\"https://alpaca.markets/docs/api-documentation/api-v2/market-data/alpaca-data-api-v2/historical/\">Historical Data</a>.",
   "enum": [
-    "1Min",
-    "1Hour",
-    "1Day"
+    "raw",
+    "split",
+    "dividend",
+    "all"
   ],
   "javaEnums": [
     {
-      "name": "ONE_MINUTE"
+      "name": "RAW"
     },
     {
-      "name": "ONE_HOUR"
+      "name": "SPLIT"
     },
     {
-      "name": "ONE_DAY"
+      "name": "DIVIDEND"
+    },
+    {
+      "name": "ALL"
     }
   ]
 }

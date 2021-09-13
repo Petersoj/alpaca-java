@@ -13,7 +13,6 @@ import okhttp3.Request;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
@@ -98,6 +97,11 @@ public class PositionsEndpoint extends AlpacaEndpoint {
      * positions.
      *
      * @param symbolOrAssetID the symbol or {@link Asset#getId()}
+     * @param quantity        the number of shares to liquidate. Can accept up to <code>9</code> decimal points. Cannot
+     *                        work with <code>percentage</code>.
+     * @param percentage      the percentage of the position to liquidate. Must be between <code>0</code> and
+     *                        <code>100</code>. Would only sell fractional if position is originally fractional. Can
+     *                        accept up to <code>9</code> decimal points. Cannot work with <code>quantity</code>.
      *
      * @return a closing {@link Position} {@link Order}
      *
@@ -105,7 +109,6 @@ public class PositionsEndpoint extends AlpacaEndpoint {
      */
     public Order close(String symbolOrAssetID, Integer quantity, Double percentage) throws AlpacaClientException {
         checkNotNull(symbolOrAssetID);
-        checkArgument(quantity != null ^ percentage != null, "Either 'quantity' or 'percentage' are required.");
 
         HttpUrl.Builder urlBuilder = alpacaClient.urlBuilder()
                 .addPathSegment(endpointPathSegment)
