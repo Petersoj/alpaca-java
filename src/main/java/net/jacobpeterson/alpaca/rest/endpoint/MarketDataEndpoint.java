@@ -279,7 +279,7 @@ public class MarketDataEndpoint extends AlpacaEndpoint {
         HttpUrl.Builder urlBuilder = alpacaClient.urlBuilder()
                 .addPathSegment(endpointPathSegment)
                 .addPathSegment(symbol)
-                .addPathSegment("shapshot");
+                .addPathSegment("snapshot");
 
         Request request = alpacaClient.requestBuilder(urlBuilder.build())
                 .get()
