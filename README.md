@@ -45,7 +45,7 @@ data_api_type = <must be either "iex" or "sip">
 The default values for `alpaca.properties` can be found [here](src/main/resources/alpaca.default.properties).
 
 # Logger
-For logging, this library uses [SLF4j](http://www.slf4j.org/) which serves as an interface for various logging frameworks. This enables you to use whatever logging framework you would like. However, if you do not add a logging framework as a dependency in your project, the console will output a message stating that SLF4j is defaulting to a no-operation (NOP) logger implementation. To enable logging, add a logging framework of your choice as a dependency to your project such as [Log4j 2](http://logging.apache.org/log4j/2.x/index.html), [SLF4j-simple](http://www.slf4j.org/manual.html), or [Apache Commons Logging](https://commons.apache.org/proper/commons-logging/).
+For logging, this library uses [SLF4j](http://www.slf4j.org/) which serves as an interface for various logging frameworks. This enables you to use whatever logging framework you would like. However, if you do not add a logging framework as a dependency in your project, the console will output a message stating that SLF4j is defaulting to a no-operation (NOP) logger implementation. To enable logging, add a logging framework of your choice as a dependency to your project such as [Logback](http://logback.qos.ch/), [Log4j 2](http://logging.apache.org/log4j/2.x/index.html), [SLF4j-simple](http://www.slf4j.org/manual.html), or [Apache Commons Logging](https://commons.apache.org/proper/commons-logging/).
 
 # Examples
 Note that the examples below are not exhaustive. Refer to the [Javadoc](https://javadoc.io/doc/net.jacobpeterson/alpaca-java) for all classes and method signatures.
@@ -471,6 +471,7 @@ Note that the live tests will modify your account minimally. It's meant to test 
 - Use [TA4j](https://github.com/ta4j/ta4j) `Num` interface instead of `Double` for number variables so that users can use either `Double` or `BigDecimal` for performance or precision in price data.
 - Add [TimeSeriesDataStore](https://github.com/Petersoj/TimeSeriesDataStore) using Alpaca Data API
 
+# Contributing
 Contributions are welcome!
 
 If you are creating a Pull Request, be sure to create a new branch in your forked repository for your feature or bug fix instead of committing directly to the `master` branch in your fork. 

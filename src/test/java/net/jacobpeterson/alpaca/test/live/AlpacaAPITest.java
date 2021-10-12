@@ -1,5 +1,6 @@
 package net.jacobpeterson.alpaca.test.live;
 
+import net.jacobpeterson.alpaca.AlpacaAPI;
 import net.jacobpeterson.alpaca.model.endpoint.account.Account;
 import net.jacobpeterson.alpaca.model.endpoint.accountactivities.AccountActivity;
 import net.jacobpeterson.alpaca.model.endpoint.accountactivities.NonTradeActivity;
@@ -12,21 +13,28 @@ import net.jacobpeterson.alpaca.model.endpoint.clock.Clock;
 import net.jacobpeterson.alpaca.model.endpoint.common.enums.SortDirection;
 import net.jacobpeterson.alpaca.model.endpoint.order.Order;
 import net.jacobpeterson.alpaca.model.endpoint.order.enums.CurrentOrderStatus;
-import net.jacobpeterson.alpaca.AlpacaAPI;
 import net.jacobpeterson.alpaca.rest.AlpacaClientException;
+import net.jacobpeterson.alpaca.rest.endpoint.AccountActivitiesEndpoint;
 import net.jacobpeterson.alpaca.rest.endpoint.AccountConfigurationEndpoint;
 import net.jacobpeterson.alpaca.rest.endpoint.AccountEndpoint;
 import net.jacobpeterson.alpaca.rest.endpoint.ClockEndpoint;
-import net.jacobpeterson.alpaca.rest.endpoint.AccountActivitiesEndpoint;
 import net.jacobpeterson.alpaca.rest.endpoint.OrdersEndpoint;
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.MethodOrderer;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestMethodOrder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.time.ZonedDateTime;
+import java.util.Collection;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.fail;
 
 /**
  * {@link AlpacaAPITest} tests live endpoints using Alpaca Paper credentials given in the
@@ -35,13 +43,13 @@ import static org.junit.jupiter.api.Assertions.*;
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class AlpacaAPITest {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(AlpacaAPITest.class);
-    private static final int RATE_LIMIT_MILLIS = 200; // Wait 200ms between every test to prevent rate-limiting
-
     static {
         // Log trace-level
         System.setProperty("org.slf4j.simpleLogger.log.net.jacobpeterson", "trace");
     }
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(AlpacaAPITest.class);
+    private static final int RATE_LIMIT_MILLIS = 200; // Wait 200ms between every test to prevent rate-limiting
 
     private static AlpacaAPI alpacaAPI;
     private static boolean marketOpen;
@@ -83,7 +91,7 @@ public class AlpacaAPITest {
      */
     @Test
     @org.junit.jupiter.api.Order(1)
-    public void test_ClockEndpoint_get() throws AlpacaClientException {
+    public void testClockEndpointGet() throws AlpacaClientException {
         Clock clock = alpacaAPI.clock().get();
         assertNotNull(clock);
 
@@ -110,7 +118,7 @@ public class AlpacaAPITest {
      */
     @Test
     @SuppressWarnings("ResultOfMethodCallIgnored")
-    public void test_AccountEndpoint_get() throws AlpacaClientException, NumberFormatException {
+    public void testAccountEndpointGet() throws AlpacaClientException, NumberFormatException {
         Account account = alpacaAPI.account().get();
         assertNotNull(account);
 
@@ -148,14 +156,13 @@ public class AlpacaAPITest {
     }
 
     /**
-     * Tests @{@link AccountActivitiesEndpoint#get(ZonedDateTime,
-     * ZonedDateTime, ZonedDateTime, SortDirection, Integer, String, ActivityType...)} one {@link AccountActivity}
-     * exists until now.
+     * Tests @{@link AccountActivitiesEndpoint#get(ZonedDateTime, ZonedDateTime, ZonedDateTime, SortDirection, Integer,
+     * String, ActivityType...)} one {@link AccountActivity} exists until now.
      *
      * @throws AlpacaClientException thrown for {@link AlpacaClientException}s
      */
     @Test
-    public void test_AccountActivitiesEndpoint_get_One_Activity_Exists_Until_Now() throws AlpacaClientException {
+    public void testAccountActivitiesEndpointGetOneActivityExistsUntilNow() throws AlpacaClientException {
         List<AccountActivity> accountActivities = alpacaAPI.accountActivities().get(
                 null,
                 ZonedDateTime.now(),
@@ -203,7 +210,7 @@ public class AlpacaAPITest {
      */
     @Test
     @org.junit.jupiter.api.Order(1)
-    public void test_AccountConfigurationEndpoint_get() throws AlpacaClientException {
+    public void testAccountConfigurationEndpointGet() throws AlpacaClientException {
         AccountConfiguration accountConfiguration = alpacaAPI.accountConfiguration().get();
         assertNotNull(accountConfiguration);
 
@@ -224,7 +231,7 @@ public class AlpacaAPITest {
      */
     @Test
     @org.junit.jupiter.api.Order(2)
-    public void test_AccountConfigurationEndpoint_set() throws AlpacaClientException {
+    public void testAccountConfigurationEndpointSet() throws AlpacaClientException {
         if (accountConfiguration == null) {
             AccountConfiguration newAccountConfiguration = new AccountConfiguration(
                     DTBPCheck.BOTH,
@@ -240,12 +247,12 @@ public class AlpacaAPITest {
 
     /**
      * Test {@link OrdersEndpoint#get(CurrentOrderStatus, Integer, ZonedDateTime, ZonedDateTime, SortDirection, Boolean,
-     * List)} one {@link Order} exists until now.
+     * Collection)} one {@link Order} exists until now.
      *
      * @throws AlpacaClientException thrown for {@link AlpacaClientException}s
      */
     @Test
-    public void test_OrdersEndpoint_get_One_Order_Exists_Until_now() throws AlpacaClientException {
+    public void testOrdersEndpointGetOneOrderExistsUntilNow() throws AlpacaClientException {
         List<Order> orders = alpacaAPI.orders().get(
                 CurrentOrderStatus.ALL,
                 1,
