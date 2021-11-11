@@ -60,10 +60,15 @@ Example usage:
 // This constructor uses the 'alpaca.properties' file on the classpath for configuration
 AlpacaAPI alpacaAPI = new AlpacaAPI();
 
-// This constructor passes in a 'keyID' and 'secret' String
+// This constructor passes in a 'keyID' and 'secretKey' and uses the endpoint API type and data API
+// type defined in the 'alpaca.properties' file (which default to 'paper' and 'iex' respectively)
 String keyID = "<some key ID>";
 String secretKey = "<some secret>";
-AlpacaAPI alpacaAPI = new AlpacaAPI(keyID, secret);
+AlpacaAPI alpacaAPI = new AlpacaAPI(keyID, secretKey);
+
+// This constructor passes in a 'keyID' and 'secretKey' and uses the passed in endpoint API type
+// and data API type (which are 'LIVE' and 'SIP' respectively in this example)
+AlpacaAPI alpacaAPI = new AlpacaAPI(keyID, secretKey, EndpointAPIType.LIVE, DataAPIType.SIP);
 
 // This constructor is for OAuth tokens
 String oAuthToken = "<some OAuth token>";

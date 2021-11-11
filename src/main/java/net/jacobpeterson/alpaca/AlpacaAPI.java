@@ -75,11 +75,11 @@ public class AlpacaAPI {
     /**
      * Instantiates a new {@link AlpacaAPI}.
      *
-     * @param keyID  the key ID
-     * @param secret the secret
+     * @param keyID     the key ID
+     * @param secretKey the secret key
      */
-    public AlpacaAPI(String keyID, String secret) {
-        this(null, keyID, secret, null,
+    public AlpacaAPI(String keyID, String secretKey) {
+        this(null, keyID, secretKey, null,
                 AlpacaProperties.ENDPOINT_API_TYPE,
                 AlpacaProperties.DATA_API_TYPE);
     }
@@ -88,12 +88,12 @@ public class AlpacaAPI {
      * Instantiates a new {@link AlpacaAPI}.
      *
      * @param keyID           the key ID
-     * @param secret          the secret
+     * @param secretKey       the secret key
      * @param endpointAPIType the {@link EndpointAPIType}
      * @param dataAPIType     the {@link DataAPIType}
      */
-    public AlpacaAPI(String keyID, String secret, EndpointAPIType endpointAPIType, DataAPIType dataAPIType) {
-        this(null, keyID, secret, null, endpointAPIType, dataAPIType);
+    public AlpacaAPI(String keyID, String secretKey, EndpointAPIType endpointAPIType, DataAPIType dataAPIType) {
+        this(null, keyID, secretKey, null, endpointAPIType, dataAPIType);
     }
 
     /**
@@ -155,11 +155,9 @@ public class AlpacaAPI {
             brokerClient = new AlpacaClient(okHttpClient, keyID, secretKey,
                     brokerHostSubdomain, VERSION_2_PATH_SEGMENT);
             dataClient = new AlpacaClient(okHttpClient, keyID, secretKey, "data", VERSION_2_PATH_SEGMENT);
-            marketDataWebsocket = new MarketDataWebsocket(okHttpClient, dataAPIType, keyID, secretKey);
         } else {
             brokerClient = new AlpacaClient(okHttpClient, oAuthToken, brokerHostSubdomain, VERSION_2_PATH_SEGMENT);
             dataClient = null;
-            marketDataWebsocket = null;
         }
 
         accountEndpoint = new AccountEndpoint(brokerClient);
@@ -174,10 +172,12 @@ public class AlpacaAPI {
         accountActivitiesEndpoint = new AccountActivitiesEndpoint(brokerClient);
         portfolioHistoryEndpoint = new PortfolioHistoryEndpoint(brokerClient);
         streamingWebsocket = new StreamingWebsocket(okHttpClient, brokerHostSubdomain, keyID, secretKey, oAuthToken);
+        marketDataWebsocket = dataClient == null ? null :
+                new MarketDataWebsocket(okHttpClient, dataAPIType, keyID, secretKey);
     }
 
     /**
-     * @return {@link AccountEndpoint}
+     * @return the {@link AccountEndpoint}
      */
     public AccountEndpoint account() {
         return accountEndpoint;
@@ -191,42 +191,42 @@ public class AlpacaAPI {
     }
 
     /**
-     * @return {@link OrdersEndpoint}
+     * @return the {@link OrdersEndpoint}
      */
     public OrdersEndpoint orders() {
         return ordersEndpoint;
     }
 
     /**
-     * @return {@link PositionsEndpoint}
+     * @return the {@link PositionsEndpoint}
      */
     public PositionsEndpoint positions() {
         return positionsEndpoint;
     }
 
     /**
-     * @return {@link AssetsEndpoint}
+     * @return the {@link AssetsEndpoint}
      */
     public AssetsEndpoint assets() {
         return assetsEndpoint;
     }
 
     /**
-     * @return {@link WatchlistEndpoint}
+     * @return the {@link WatchlistEndpoint}
      */
     public WatchlistEndpoint watchlist() {
         return watchlistEndpoint;
     }
 
     /**
-     * @return {@link CalendarEndpoint}
+     * @return the {@link CalendarEndpoint}
      */
     public CalendarEndpoint calendar() {
         return calendarEndpoint;
     }
 
     /**
-     * @return {@link ClockEndpoint}
+     * @return the {@link ClockEndpoint}
      */
     public ClockEndpoint clock() {
         return clockEndpoint;
