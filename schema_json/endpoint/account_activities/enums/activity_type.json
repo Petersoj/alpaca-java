@@ -35,7 +35,9 @@
     "FEE",
     "REORG",
     "SC",
-    "SSO"
+    "SSO",
+    "SSP",
+    "SPLIT"
   ],
   "javaEnums": [
     {
@@ -139,6 +141,12 @@
     },
     {
       "description": "Stock spinoff."
+    },
+    {
+      "description": "Stock split."
+    },
+    {
+      "description": "Stock split."
     }
   ]
 }
