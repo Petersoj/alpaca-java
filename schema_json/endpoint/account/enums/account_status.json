@@ -9,7 +9,8 @@
     "APPROVAL_PENDING",
     "ACTIVE",
     "REJECTED",
-    "DISABLED"
+    "DISABLED",
+    "ACTION_REQUIRED"
   ],
   "javaEnums": [
     {
@@ -35,6 +36,9 @@
     },
     {
       "description": "The account has been disabled."
+    },
+    {
+      "description": "The account requires manual attention."
     }
   ]
 }
