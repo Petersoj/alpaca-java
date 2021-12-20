@@ -20,10 +20,12 @@
     },
     "avg_entry_price": {
       "existingJavaType": "java.lang.String",
+      "javaName": "averageEntryPrice",
       "title": "Average entry price of the position."
     },
     "qty": {
       "existingJavaType": "java.lang.String",
+      "javaName": "quantity",
       "title": "The number of shares."
     },
     "side": {
@@ -40,18 +42,22 @@
     },
     "unrealized_pl": {
       "existingJavaType": "java.lang.String",
+      "javaName": "unrealizedProfitLoss",
       "title": "Unrealized profit/loss in dollars."
     },
     "unrealized_plpc": {
       "existingJavaType": "java.lang.String",
+      "javaName": "unrealizedProfitLossPercent",
       "title": "Unrealized profit/loss percent (by a factor of 1)."
     },
     "unrealized_intraday_pl": {
       "existingJavaType": "java.lang.String",
+      "javaName": "unrealizedIntradayProfitLoss",
       "title": "Unrealized profit/loss in dollars for the day."
     },
     "unrealized_intraday_plpc": {
       "existingJavaType": "java.lang.String",
+      "javaName": "unrealizedIntradayProfitLossPercent",
       "title": "Unrealized profit/loss percent (by a factor of 1)."
     },
     "current_price": {

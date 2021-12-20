@@ -16,7 +16,8 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 
 /**
- * The type {@link Documentation2JSONSchema}.
+ * The {@link Documentation2JSONSchema} is used strictly to expedite the process of creating JSON schemas for POJO
+ * generation in this library using Alpaca's website documentation.
  */
 public class Documentation2JSONSchema {
 

@@ -7,7 +7,7 @@
   "properties": {
     "ax": {
       "existingJavaType": "java.lang.String",
-      "javaName": "askExchangeCode",
+      "javaName": "askExchange",
       "title": "Ask exchange code."
     },
     "ap": {
@@ -22,7 +22,7 @@
     },
     "bx": {
       "existingJavaType": "java.lang.String",
-      "javaName": "bidExchangeCode",
+      "javaName": "bidExchange",
       "title": "Bid exchange code."
     },
     "bp": {

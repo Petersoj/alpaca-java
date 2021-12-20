@@ -81,7 +81,7 @@ public class PortfolioHistoryEndpoint extends AlpacaEndpoint {
         // Check if any response arrays differ in size
         checkState(response.getTimestamp().size() == response.getEquity().size() &&
                         response.getEquity().size() == response.getProfitLoss().size() &&
-                        response.getProfitLoss().size() == response.getProfitLossPct().size(),
+                        response.getProfitLoss().size() == response.getProfitLossPercent().size(),
                 "Response arrays should not differ in size!");
 
         // Add all data points into one POJO
@@ -91,7 +91,7 @@ public class PortfolioHistoryEndpoint extends AlpacaEndpoint {
                     Instant.ofEpochSecond(response.getTimestamp().get(index)).atZone(FormatUtil.NEW_YORK_ZONED_ID),
                     response.getEquity().get(index),
                     response.getProfitLoss().get(index),
-                    response.getProfitLossPct().get(index)));
+                    response.getProfitLossPercent().get(index)));
         }
 
         return new PortfolioHistory(

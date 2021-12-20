@@ -42,7 +42,9 @@ public abstract class AlpacaWebsocket<T, M, L extends AlpacaWebsocketMessageList
      */
     public static final String WEBSOCKET_NORMAL_CLOSURE_MESSAGE = "Normal closure";
 
-    /** Defines the maximum number of reconnection attempts to be made by an {@link AlpacaWebsocket}. */
+    /**
+     * Defines the maximum number of reconnection attempts to be made by an {@link AlpacaWebsocket}.
+     */
     public static int MAX_RECONNECT_ATTEMPTS = 5;
 
     /**

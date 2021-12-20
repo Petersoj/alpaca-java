@@ -10,7 +10,9 @@ import okhttp3.RequestBody;
  */
 public class JSONBodyBuilder {
 
-    /** The UTF-8 JSON {@link MediaType}. */
+    /**
+     * The UTF-8 JSON {@link MediaType}.
+     */
     public static final MediaType JSON_MEDIA_TYPE = MediaType.get("application/json; charset=UTF-8");
 
     private String bodyJSON;

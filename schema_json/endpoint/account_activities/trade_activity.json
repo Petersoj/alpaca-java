@@ -7,10 +7,12 @@
   "properties": {
     "cum_qty": {
       "existingJavaType": "java.lang.String",
+      "javaName": "cumulativeQuantity",
       "title": "The cumulative quantity of shares involved in the execution."
     },
     "leaves_qty": {
       "existingJavaType": "java.lang.String",
+      "javaName": "remainingQuantity",
       "title": "For partially_filled orders, the quantity of shares that are left to be filled."
     },
     "price": {
@@ -19,6 +21,7 @@
     },
     "qty": {
       "existingJavaType": "java.lang.String",
+      "javaName": "quantity",
       "title": "The number of shares involved in the trade execution."
     },
     "side": {

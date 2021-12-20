@@ -1,4 +1,4 @@
-package net.jacobpeterson.alpaca.util.gson;
+package net.jacobpeterson.alpaca.util.gson.adapters;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonDeserializationContext;

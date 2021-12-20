@@ -68,23 +68,22 @@
     },
     "qty": {
       "existingJavaType": "java.lang.String",
+      "javaName": "quantity",
       "title": "Ordered quantity. If entered, notional will be null. Can take up to 9 decimal points."
     },
     "filled_qty": {
       "existingJavaType": "java.lang.String",
+      "javaName": "filledQuantity",
       "title": "Filled quantity."
     },
     "filled_avg_price": {
       "existingJavaType": "java.lang.String",
+      "javaName": "averageFillPrice",
       "title": "Filled average price."
     },
     "order_class": {
       "existingJavaType": "net.jacobpeterson.alpaca.model.endpoint.order.enums.OrderClass",
       "title": "The {@link net.jacobpeterson.alpaca.model.endpoint.order.enums.OrderClass}. For details of non-simple order classes, please see Bracket Order Overview."
-    },
-    "order_type": {
-      "existingJavaType": "java.lang.String",
-      "title": "(Deprecated with just type field below.)."
     },
     "type": {
       "existingJavaType": "net.jacobpeterson.alpaca.model.endpoint.order.enums.OrderType",
@@ -128,6 +127,7 @@
     },
     "hwm": {
       "existingJavaType": "java.lang.String",
+      "javaName": "highWaterMark",
       "title": "High Water Mark - The highest (lowest) market price seen since the trailing stop order was submitted."
     }
   }

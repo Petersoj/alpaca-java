@@ -35,7 +35,7 @@ If you are using Maven as your build tool, add the following dependency to your 
 Note that you don't have to use the Maven Central artifacts and instead can just install a clone of this project to your local Maven repository as shown in the [Building](#building) section.
 
 # Configuration
-Creating an `alpaca.properties` file on the classpath with the following format allows you to easily load properties using the `AlpacaAPI` default constructor:
+Creating an `alpaca.properties` file on the classpath (e.g. in `src/main/resources/alpaca.properties`) with the following format allows you to easily load properties using the `AlpacaAPI` default constructor:
 ```
 key_id = <your Key ID>
 secret_key = <your Secret Key>

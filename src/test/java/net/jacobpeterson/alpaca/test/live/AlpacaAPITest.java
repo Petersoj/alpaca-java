@@ -181,10 +181,10 @@ public class AlpacaAPITest {
             TradeActivity tradeActivity = (TradeActivity) accountActivity;
             assertNotNull(tradeActivity.getActivityType());
             assertNotNull(tradeActivity.getId());
-            assertNotNull(tradeActivity.getCumQty());
-            assertNotNull(tradeActivity.getLeavesQty());
+            assertNotNull(tradeActivity.getCumulativeQuantity());
+            assertNotNull(tradeActivity.getRemainingQuantity());
             assertNotNull(tradeActivity.getPrice());
-            assertNotNull(tradeActivity.getQty());
+            assertNotNull(tradeActivity.getQuantity());
             assertNotNull(tradeActivity.getSide());
             assertNotNull(tradeActivity.getSymbol());
             assertNotNull(tradeActivity.getTransactionTime());
@@ -197,7 +197,7 @@ public class AlpacaAPITest {
             assertNotNull(nonTradeActivity.getDate());
             assertNotNull(nonTradeActivity.getNetAmount());
             assertNotNull(nonTradeActivity.getSymbol());
-            assertNotNull(nonTradeActivity.getQty());
+            assertNotNull(nonTradeActivity.getQuantity());
             assertNotNull(nonTradeActivity.getPerShareAmount());
             assertNotNull(nonTradeActivity.getDescription());
         }
@@ -277,8 +277,8 @@ public class AlpacaAPITest {
         assertNotNull(order.getAssetId());
         assertNotNull(order.getSymbol());
         assertNotNull(order.getAssetClass());
-        assertNotNull(order.getQty());
-        assertNotNull(order.getFilledQty());
+        assertNotNull(order.getQuantity());
+        assertNotNull(order.getFilledQuantity());
         assertNotNull(order.getType());
         assertNotNull(order.getSide());
         assertNotNull(order.getTimeInForce());

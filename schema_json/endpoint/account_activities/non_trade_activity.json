@@ -19,6 +19,7 @@
     },
     "qty": {
       "existingJavaType": "java.lang.String",
+      "javaName": "quantity",
       "title": "For dividend activities, the number of shares that contributed to the payment. Not present for other activity types."
     },
     "per_share_amount": {

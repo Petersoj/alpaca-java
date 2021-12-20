@@ -14,7 +14,9 @@ import java.util.Locale;
  */
 public class FormatUtil {
 
-    /** The {@link ZoneId} for <code>America/New_York</code>. */
+    /**
+     * The {@link ZoneId} for <code>America/New_York</code>.
+     */
     public static final ZoneId NEW_YORK_ZONED_ID = ZoneId.of("America/New_York");
 
     // Alpaca uses the following rounding mechanics with respect to buy orders: (1) rounded down to two decimal

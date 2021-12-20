@@ -16,6 +16,7 @@
     },
     "profit_loss_pct": {
       "existingJavaType": "java.util.ArrayList<java.lang.Double>",
+      "javaName": "profitLossPercent",
       "title": "Profit/loss in percentage from the base value."
     },
     "base_value": {

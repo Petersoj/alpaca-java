@@ -16,6 +16,7 @@
     },
     "position_qty": {
       "existingJavaType": "java.lang.String",
+      "javaName": "positionQuantity",
       "title": "The position quantity."
     },
     "order": {
