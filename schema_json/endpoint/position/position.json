@@ -12,7 +12,7 @@
     },
     "exchange": {
       "existingJavaType": "java.lang.String",
-      "title": "Exchange name of the asset."
+      "title": "Exchange name of the asset (\"ErisX\" for crypto)."
     },
     "asset_class": {
       "existingJavaType": "java.lang.String",

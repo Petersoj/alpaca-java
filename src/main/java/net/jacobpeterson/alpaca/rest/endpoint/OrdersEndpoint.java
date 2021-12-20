@@ -52,7 +52,9 @@ public class OrdersEndpoint extends AlpacaEndpoint {
      * @param direction the chronological order of response based on the submission time. Defaults to {@link
      *                  SortDirection#DESCENDING}.
      * @param nested    if true, the result will roll up multi-leg orders under the legs field of primary order.
-     * @param symbols   a {@link Collection} of symbols to filter the result by (null for no filter).
+     * @param symbols   a {@link Collection} of symbols to filter by (e.g. "AAPL,TSLA,MSFT"). A currency pair is
+     *                  required for crypto orders (e.g. "BTCUSD,BCHUSD,LTCUSD,ETCUSD"). <code>null</code> for no
+     *                  filter.
      *
      * @return a {@link List} of {@link Order}s
      *

@@ -222,20 +222,10 @@ public class AlpacaClient {
         return okHttpClient.newCall(request).execute();
     }
 
-    /**
-     * Gets {@link #baseURL}.
-     *
-     * @return the base {@link HttpUrl}
-     */
     public HttpUrl getBaseURL() {
         return baseURL;
     }
 
-    /**
-     * Gets {@link #requestHeaders}.
-     *
-     * @return the request {@link Headers}
-     */
     public Headers getRequestHeaders() {
         return requestHeaders;
     }

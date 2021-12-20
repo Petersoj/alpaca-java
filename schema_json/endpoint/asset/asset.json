@@ -7,8 +7,9 @@
       "title": "Asset ID."
     },
     "class": {
-      "existingJavaType": "java.lang.String",
-      "title": "\"us_equity\""
+      "existingJavaType": "net.jacobpeterson.alpaca.model.endpoint.asset.enums.AssetClass",
+      "javaName": "assetClass",
+      "title": "The {@link net.jacobpeterson.alpaca.model.endpoint.asset.enums.AssetClass}."
     },
     "exchange": {
       "existingJavaType": "java.lang.String",

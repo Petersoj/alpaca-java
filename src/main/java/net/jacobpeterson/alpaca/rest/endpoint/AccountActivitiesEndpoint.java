@@ -56,7 +56,7 @@ public class AccountActivitiesEndpoint extends AlpacaEndpoint {
      * @param sortDirection the {@link SortDirection} (defaults to {@link SortDirection#DESCENDING} if unspecified.)
      * @param pageSize      the maximum number of entries to return in the response. (See the section on paging.)
      * @param pageToken     the ID of the end of your current page of results. (See the section on paging.)
-     * @param activityTypes the {@link ActivityType}s (null for all {@link ActivityType}s)
+     * @param activityTypes the {@link ActivityType}s (<code>null</code> for all {@link ActivityType}s)
      *
      * @return a {@link List} of {@link AccountActivity}s
      *

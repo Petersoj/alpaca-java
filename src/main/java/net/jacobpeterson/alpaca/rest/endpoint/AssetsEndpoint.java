@@ -2,6 +2,7 @@ package net.jacobpeterson.alpaca.rest.endpoint;
 
 import com.google.gson.reflect.TypeToken;
 import net.jacobpeterson.alpaca.model.endpoint.asset.Asset;
+import net.jacobpeterson.alpaca.model.endpoint.asset.enums.AssetClass;
 import net.jacobpeterson.alpaca.model.endpoint.asset.enums.AssetStatus;
 import net.jacobpeterson.alpaca.rest.AlpacaClient;
 import net.jacobpeterson.alpaca.rest.AlpacaClientException;
@@ -31,13 +32,13 @@ public class AssetsEndpoint extends AlpacaEndpoint {
      * Get a list of {@link Asset}s.
      *
      * @param assetStatus the {@link AssetStatus}. By default, all {@link AssetStatus}es are included.
-     * @param assetClass  the asset class. Defaults to "us_equity".
+     * @param assetClass  the {@link AssetClass} (<code>null</code> for {@link AssetClass#US_EQUITY})
      *
      * @return a {@link List} of {@link Asset}s
      *
      * @throws AlpacaClientException thrown for {@link AlpacaClientException}s
      */
-    public List<Asset> get(AssetStatus assetStatus, String assetClass) throws AlpacaClientException {
+    public List<Asset> get(AssetStatus assetStatus, AssetClass assetClass) throws AlpacaClientException {
         HttpUrl.Builder urlBuilder = alpacaClient.urlBuilder()
                 .addPathSegment(endpointPathSegment);
 
@@ -46,7 +47,7 @@ public class AssetsEndpoint extends AlpacaEndpoint {
         }
 
         if (assetClass != null) {
-            urlBuilder.addQueryParameter("asset_class", assetClass);
+            urlBuilder.addQueryParameter("asset_class", assetClass.toString());
         }
 
         Request request = alpacaClient.requestBuilder(urlBuilder.build())

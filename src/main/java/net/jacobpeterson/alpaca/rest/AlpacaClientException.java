@@ -120,38 +120,18 @@ public class AlpacaClientException extends Exception {
         return messageBuilder.toString();
     }
 
-    /**
-     * Gets the {@link #responseStatusCode}.
-     *
-     * @return an {@link Integer}
-     */
     public Integer getResponseStatusCode() {
         return responseStatusCode;
     }
 
-    /**
-     * Gets the {@link #responseStatusMessage}.
-     *
-     * @return a {@link String}
-     */
     public String getResponseStatusMessage() {
         return responseStatusMessage;
     }
 
-    /**
-     * Gets the {@link #apiResponseCode}.
-     *
-     * @return an {@link Integer}
-     */
     public Integer getAPIResponseCode() {
         return apiResponseCode;
     }
 
-    /**
-     * Gets the {@link #apiResponseMessage}.
-     *
-     * @return a {@link String}
-     */
     public String getAPIResponseMessage() {
         return apiResponseMessage;
     }

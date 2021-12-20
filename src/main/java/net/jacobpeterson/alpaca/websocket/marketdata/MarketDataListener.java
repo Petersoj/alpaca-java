@@ -1,7 +1,7 @@
 package net.jacobpeterson.alpaca.websocket.marketdata;
 
-import net.jacobpeterson.alpaca.model.endpoint.marketdata.realtime.MarketDataMessage;
-import net.jacobpeterson.alpaca.model.endpoint.marketdata.realtime.enums.MarketDataMessageType;
+import net.jacobpeterson.alpaca.model.endpoint.marketdata.stock.realtime.MarketDataMessage;
+import net.jacobpeterson.alpaca.model.endpoint.marketdata.stock.realtime.enums.MarketDataMessageType;
 import net.jacobpeterson.alpaca.websocket.AlpacaWebsocketMessageListener;
 
 /**

@@ -1,10 +1,10 @@
 package net.jacobpeterson.alpaca.websocket.marketdata;
 
-import net.jacobpeterson.alpaca.model.endpoint.marketdata.realtime.MarketDataMessage;
-import net.jacobpeterson.alpaca.model.endpoint.marketdata.realtime.control.ErrorMessage;
-import net.jacobpeterson.alpaca.model.endpoint.marketdata.realtime.control.SubscriptionsMessage;
-import net.jacobpeterson.alpaca.model.endpoint.marketdata.realtime.control.SuccessMessage;
-import net.jacobpeterson.alpaca.model.endpoint.marketdata.realtime.enums.MarketDataMessageType;
+import net.jacobpeterson.alpaca.model.endpoint.marketdata.stock.realtime.MarketDataMessage;
+import net.jacobpeterson.alpaca.model.endpoint.marketdata.stock.realtime.control.ErrorMessage;
+import net.jacobpeterson.alpaca.model.endpoint.marketdata.stock.realtime.control.SubscriptionsMessage;
+import net.jacobpeterson.alpaca.model.endpoint.marketdata.stock.realtime.control.SuccessMessage;
+import net.jacobpeterson.alpaca.model.endpoint.marketdata.stock.realtime.enums.MarketDataMessageType;
 import net.jacobpeterson.alpaca.websocket.AlpacaWebsocketInterface;
 
 import java.util.Collection;

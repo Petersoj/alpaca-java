@@ -1,0 +1,20 @@
+{
+  "type": "string",
+  "title": "See <a href=\"https://alpaca.markets/docs/api-documentation/api-v2/market-data/\">Market Data</a>.",
+  "enum": [
+    "Min",
+    "Hour",
+    "Day"
+  ],
+  "javaEnums": [
+    {
+      "name": "MINUTE"
+    },
+    {
+      "name": "HOUR"
+    },
+    {
+      "name": "DAY"
+    }
+  ]
+}

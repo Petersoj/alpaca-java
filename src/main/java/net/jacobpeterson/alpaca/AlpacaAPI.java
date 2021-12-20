@@ -12,11 +12,12 @@ import net.jacobpeterson.alpaca.rest.endpoint.AlpacaEndpoint;
 import net.jacobpeterson.alpaca.rest.endpoint.AssetsEndpoint;
 import net.jacobpeterson.alpaca.rest.endpoint.CalendarEndpoint;
 import net.jacobpeterson.alpaca.rest.endpoint.ClockEndpoint;
-import net.jacobpeterson.alpaca.rest.endpoint.MarketDataEndpoint;
 import net.jacobpeterson.alpaca.rest.endpoint.OrdersEndpoint;
 import net.jacobpeterson.alpaca.rest.endpoint.PortfolioHistoryEndpoint;
 import net.jacobpeterson.alpaca.rest.endpoint.PositionsEndpoint;
 import net.jacobpeterson.alpaca.rest.endpoint.WatchlistEndpoint;
+import net.jacobpeterson.alpaca.rest.endpoint.marketdata.CryptoMarketDataEndpoint;
+import net.jacobpeterson.alpaca.rest.endpoint.marketdata.StockMarketDataEndpoint;
 import net.jacobpeterson.alpaca.websocket.AlpacaWebsocket;
 import net.jacobpeterson.alpaca.websocket.marketdata.MarketDataWebsocket;
 import net.jacobpeterson.alpaca.websocket.marketdata.MarketDataWebsocketInterface;
@@ -42,13 +43,16 @@ public class AlpacaAPI {
     private static final Logger LOGGER = LoggerFactory.getLogger(AlpacaAPI.class);
 
     private static final String VERSION_2_PATH_SEGMENT = "v2";
+    private static final String VERSION_1_BETA_1_PATH_SEGMENT = "v1beta1";
 
     private final OkHttpClient okHttpClient;
     private final AlpacaClient brokerClient;
-    private final AlpacaClient dataClient;
+    private final AlpacaClient cryptoDataClient;
+    private final AlpacaClient stockDataClient;
     // Ordering of fields/methods below are analogous to the ordering in the Alpaca documentation
     private final AccountEndpoint accountEndpoint;
-    private final MarketDataEndpoint marketDataEndpoint;
+    private final CryptoMarketDataEndpoint cryptoMarketDataEndpoint;
+    private final StockMarketDataEndpoint stockMarketDataEndpoint;
     private final OrdersEndpoint ordersEndpoint;
     private final PositionsEndpoint positionsEndpoint;
     private final AssetsEndpoint assetsEndpoint;
@@ -154,14 +158,17 @@ public class AlpacaAPI {
         if (oAuthToken == null) {
             brokerClient = new AlpacaClient(okHttpClient, keyID, secretKey,
                     brokerHostSubdomain, VERSION_2_PATH_SEGMENT);
-            dataClient = new AlpacaClient(okHttpClient, keyID, secretKey, "data", VERSION_2_PATH_SEGMENT);
+            cryptoDataClient = new AlpacaClient(okHttpClient, keyID, secretKey, "data", VERSION_1_BETA_1_PATH_SEGMENT);
+            stockDataClient = new AlpacaClient(okHttpClient, keyID, secretKey, "data", VERSION_2_PATH_SEGMENT);
         } else {
             brokerClient = new AlpacaClient(okHttpClient, oAuthToken, brokerHostSubdomain, VERSION_2_PATH_SEGMENT);
-            dataClient = null;
+            cryptoDataClient = null;
+            stockDataClient = null;
         }
 
         accountEndpoint = new AccountEndpoint(brokerClient);
-        marketDataEndpoint = dataClient == null ? null : new MarketDataEndpoint(dataClient);
+        cryptoMarketDataEndpoint = cryptoDataClient == null ? null : new CryptoMarketDataEndpoint(cryptoDataClient);
+        stockMarketDataEndpoint = stockDataClient == null ? null : new StockMarketDataEndpoint(stockDataClient);
         ordersEndpoint = new OrdersEndpoint(brokerClient);
         positionsEndpoint = new PositionsEndpoint(brokerClient);
         assetsEndpoint = new AssetsEndpoint(brokerClient);
@@ -172,7 +179,7 @@ public class AlpacaAPI {
         accountActivitiesEndpoint = new AccountActivitiesEndpoint(brokerClient);
         portfolioHistoryEndpoint = new PortfolioHistoryEndpoint(brokerClient);
         streamingWebsocket = new StreamingWebsocket(okHttpClient, brokerHostSubdomain, keyID, secretKey, oAuthToken);
-        marketDataWebsocket = dataClient == null ? null :
+        marketDataWebsocket = stockDataClient == null ? null :
                 new MarketDataWebsocket(okHttpClient, dataAPIType, keyID, secretKey);
     }
 
@@ -184,10 +191,17 @@ public class AlpacaAPI {
     }
 
     /**
-     * @return the {@link MarketDataEndpoint}
+     * @return the {@link CryptoMarketDataEndpoint}
      */
-    public MarketDataEndpoint marketData() {
-        return marketDataEndpoint;
+    public CryptoMarketDataEndpoint cryptoMarketData() {
+        return cryptoMarketDataEndpoint;
+    }
+
+    /**
+     * @return the {@link StockMarketDataEndpoint}
+     */
+    public StockMarketDataEndpoint stockMarketData() {
+        return stockMarketDataEndpoint;
     }
 
     /**
@@ -267,30 +281,19 @@ public class AlpacaAPI {
         return marketDataWebsocket;
     }
 
-    /**
-     * Gets {@link #okHttpClient}.
-     *
-     * @return the {@link OkHttpClient}
-     */
     public OkHttpClient getOkHttpClient() {
         return okHttpClient;
     }
 
-    /**
-     * Gets {@link #brokerClient}.
-     *
-     * @return the broker {@link AlpacaClient}
-     */
     public AlpacaClient getBrokerClient() {
         return brokerClient;
     }
 
-    /**
-     * Gets {@link #dataClient}.
-     *
-     * @return the data {@link AlpacaClient}
-     */
-    public AlpacaClient getDataClient() {
-        return dataClient;
+    public AlpacaClient getCryptoDataClient() {
+        return cryptoDataClient;
+    }
+
+    public AlpacaClient getStockDataClient() {
+        return stockDataClient;
     }
 }

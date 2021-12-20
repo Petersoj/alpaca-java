@@ -275,38 +275,18 @@ public abstract class AlpacaWebsocket<T, M, L extends AlpacaWebsocketMessageList
         this.listener = listener;
     }
 
-    /**
-     * Gets {@link #websocketStateListener}.
-     *
-     * @return the {@link WebsocketStateListener}
-     */
     public WebsocketStateListener getWebsocketStateListener() {
         return websocketStateListener;
     }
 
-    /**
-     * Sets {@link #websocketStateListener}.
-     *
-     * @param websocketStateListener an {@link WebsocketStateListener}
-     */
     public void setWebsocketStateListener(WebsocketStateListener websocketStateListener) {
         this.websocketStateListener = websocketStateListener;
     }
 
-    /**
-     * Gets {@link #automaticallyReconnect}.
-     *
-     * @return a boolean
-     */
     public boolean doesAutomaticallyReconnect() {
         return automaticallyReconnect;
     }
 
-    /**
-     * Sets {@link #automaticallyReconnect}.
-     *
-     * @param automaticallyReconnect the boolean
-     */
     public void setAutomaticallyReconnect(boolean automaticallyReconnect) {
         this.automaticallyReconnect = automaticallyReconnect;
     }

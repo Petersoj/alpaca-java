@@ -100,15 +100,42 @@ try {
 }
 ```
 
-## [`MarketDataEndpoint`](src/main/java/net/jacobpeterson/alpaca/rest/endpoint/MarketDataEndpoint.java)
-The Data API v2 provides market data through an easy-to-use API for historical data.
+## [`CryptoMarketDataEndpoint`](src/main/java/net/jacobpeterson/alpaca/rest/endpoint/marketdata/CryptoMarketDataEndpoint.java)
+Alpaca provides cryptocurrency data from multiple venues/exchanges, namely: Coinbase, ErisX, and FTX. Note that it does not route orders to all venues.
+
+Example usage:
+```java
+try {
+    // Get BTCUSD 50 one-hour bars starting on 12/18/2021 from Coinbase and print them out
+    BarsResponse btcBarsResponse = alpacaAPI.cryptoMarketData().getBars(
+            "BTCUSD",
+            Arrays.asList(Exchange.COINBASE),
+            ZonedDateTime.of(2021, 12, 18, 0, 0, 0, 0, ZoneId.of("America/New_York")),
+            50,
+            null,
+            1,
+            BarTimePeriod.HOUR);
+    btcBarsResponse.getBars().forEach(System.out::println);
+
+    // Get the Best Bid and Offer across multiple exchanges (XBBO) and print it out
+    XbboResponse etcXBBO = alpacaAPI.cryptoMarketData().getXBBO(
+            "ETHUSD",
+            null);
+    System.out.println(etcXBBO);
+} catch (AlpacaClientException exception) {
+    exception.printStackTrace();
+}
+```
+
+## [`StockMarketDataEndpoint`](src/main/java/net/jacobpeterson/alpaca/rest/endpoint/marketdata/StockMarketDataEndpoint.java)
+The Data API v2 provides market data through an easy-to-use API for historical stock market data.
 
 Example usage:
 ```java
 try {
     // Get AAPL one hour, split-adjusted bars from 7/6/2021 market open
     // to 7/8/2021 market close and print them out
-    BarsResponse aaplBarsResponse = alpacaAPI.marketData().getBars(
+    BarsResponse aaplBarsResponse = alpacaAPI.stockMarketData().getBars(
             "AAPL",
             ZonedDateTime.of(2021, 7, 6, 9, 30, 0, 0, ZoneId.of("America/New_York")),
             ZonedDateTime.of(2021, 7, 8, 12 + 4, 0, 0, 0, ZoneId.of("America/New_York")),
@@ -120,7 +147,7 @@ try {
     aaplBarsResponse.getBars().forEach(System.out::println);
 
     // Get AAPL first 10 trades on 7/8/2021 at market open and print them out
-    TradesResponse aaplTradesResponse = alpacaAPI.marketData().getTrades(
+    TradesResponse aaplTradesResponse = alpacaAPI.stockMarketData().getTrades(
             "AAPL",
             ZonedDateTime.of(2021, 7, 8, 9, 30, 0, 0, ZoneId.of("America/New_York")),
             ZonedDateTime.of(2021, 7, 8, 9, 31, 0, 0, ZoneId.of("America/New_York")),
@@ -129,11 +156,11 @@ try {
     aaplTradesResponse.getTrades().forEach(System.out::println);
 
     // Print out latest AAPL trade
-    Trade latestAAPLTrade = alpacaAPI.marketData().getLatestTrade("AAPL").getTrade();
+    Trade latestAAPLTrade = alpacaAPI.stockMarketData().getLatestTrade("AAPL").getTrade();
     System.out.printf("Latest AAPL Trade: %s\n", latestAAPLTrade);
 
     // Print out snapshot of AAPL, GME, and TSLA
-    Map<String, Snapshot> snapshots = alpacaAPI.marketData()
+    Map<String, Snapshot> snapshots = alpacaAPI.stockMarketData()
             .getSnapshots(Arrays.asList("AAPL", "GME", "TSLA"));
     snapshots.forEach((symbol, snapshot) ->
             System.out.printf("Symbol: %s\nSnapshot: %s\n\n", symbol, snapshot));
@@ -229,8 +256,8 @@ The Assets API serves as the master list of assets available for trade and data 
 Example usage:
 ```java
 try {
-    // Print out a CSV of all active US equity 'Asset's
-    List<Asset> activeUSEquities = alpacaAPI.assets().get(AssetStatus.ACTIVE, null);
+    // Print out a CSV of all active US Equity 'Asset's
+    List<Asset> activeUSEquities = alpacaAPI.assets().get(AssetStatus.ACTIVE, AssetClass.US_EQUITY);
     System.out.println(activeUSEquities
             .stream().map(Asset::getSymbol)
             .collect(Collectors.joining(", ")));
