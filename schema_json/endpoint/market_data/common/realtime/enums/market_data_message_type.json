@@ -1,0 +1,32 @@
+{
+  "type": "string",
+  "title": "See <a href=\"https://alpaca.markets/docs/api-documentation/api-v2/market-data/\">Market Data</a>.",
+  "enum": [
+    "success",
+    "error",
+    "subscription",
+    "t",
+    "q",
+    "b"
+  ],
+  "javaEnums": [
+    {
+      "name": "SUCCESS"
+    },
+    {
+      "name": "ERROR"
+    },
+    {
+      "name": "SUBSCRIPTION"
+    },
+    {
+      "name": "TRADE"
+    },
+    {
+      "name": "QUOTE"
+    },
+    {
+      "name": "BAR"
+    }
+  ]
+}

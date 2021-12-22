@@ -1,0 +1,18 @@
+{
+  "type": "object",
+  "title": "See <a href=\"https://alpaca.markets/docs/api-documentation/api-v2/market-data/alpaca-crypto-data/historical/\">Historical Crypto Data</a>.",
+  "properties": {
+    "trades": {
+      "existingJavaType": "java.util.ArrayList<net.jacobpeterson.alpaca.model.endpoint.marketdata.crypto.historical.trade.CryptoTrade>",
+      "title": "The {@link java.util.ArrayList} of {@link net.jacobpeterson.alpaca.model.endpoint.marketdata.crypto.historical.trade.CryptoTrade}s."
+    },
+    "symbol": {
+      "existingJavaType": "java.lang.String",
+      "title": "Symbol that was queried."
+    },
+    "next_page_token": {
+      "existingJavaType": "java.lang.String",
+      "title": "Token that can be used to query the next page."
+    }
+  }
+}

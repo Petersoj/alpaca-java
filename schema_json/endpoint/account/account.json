@@ -56,11 +56,11 @@
     },
     "long_market_value": {
       "existingJavaType": "java.lang.String",
-      "title": "Real-time MtM value of all long positions held in the account."
+      "title": "Realtime MtM value of all long positions held in the account."
     },
     "short_market_value": {
       "existingJavaType": "java.lang.String",
-      "title": "Real-time MtM value of all short positions held in the account."
+      "title": "Realtime MtM value of all short positions held in the account."
     },
     "equity": {
       "existingJavaType": "java.lang.String",

@@ -1,0 +1,19 @@
+{
+  "type": "object",
+  "extends": {
+    "existingJavaType": "net.jacobpeterson.alpaca.model.endpoint.marketdata.common.historical.bar.Bar"
+  },
+  "title": "See <a href=\"https://alpaca.markets/docs/api-documentation/api-v2/market-data/alpaca-crypto-data/historical/\">Historical Crypto Data</a>.",
+  "properties": {
+    "x": {
+      "existingJavaType": "net.jacobpeterson.alpaca.model.endpoint.marketdata.crypto.common.enums.Exchange",
+      "javaName": "exchange",
+      "title": "Exchange."
+    },
+    "v": {
+      "existingJavaType": "java.lang.Double",
+      "javaName": "volume",
+      "title": "Volume."
+    }
+  }
+}

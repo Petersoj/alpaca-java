@@ -1,0 +1,134 @@
+{
+  "type": "object",
+  "title": "See <a href=\"https://alpaca.markets/docs/api-documentation/api-v2/orders/\">Orders</a>.",
+  "properties": {
+    "id": {
+      "existingJavaType": "java.lang.String",
+      "title": "Order ID."
+    },
+    "client_order_id": {
+      "existingJavaType": "java.lang.String",
+      "title": "Client unique order ID."
+    },
+    "created_at": {
+      "existingJavaType": "java.time.ZonedDateTime",
+      "title": "Created at."
+    },
+    "updated_at": {
+      "existingJavaType": "java.time.ZonedDateTime",
+      "title": "Updated at."
+    },
+    "submitted_at": {
+      "existingJavaType": "java.time.ZonedDateTime",
+      "title": "Submitted at."
+    },
+    "filled_at": {
+      "existingJavaType": "java.time.ZonedDateTime",
+      "title": "Filled at."
+    },
+    "expired_at": {
+      "existingJavaType": "java.time.ZonedDateTime",
+      "title": "Expired at."
+    },
+    "canceled_at": {
+      "existingJavaType": "java.time.ZonedDateTime",
+      "title": "Canceled at."
+    },
+    "failed_at": {
+      "existingJavaType": "java.time.ZonedDateTime",
+      "title": "Failed at."
+    },
+    "replaced_at": {
+      "existingJavaType": "java.time.ZonedDateTime",
+      "title": "Replaced at."
+    },
+    "replaced_by": {
+      "existingJavaType": "java.lang.String",
+      "title": "The order ID that this order was replaced by."
+    },
+    "replaces": {
+      "existingJavaType": "java.lang.String",
+      "title": "The order ID that this order replaces."
+    },
+    "asset_id": {
+      "existingJavaType": "java.lang.String",
+      "title": "Asset ID."
+    },
+    "symbol": {
+      "existingJavaType": "java.lang.String",
+      "title": "Asset symbol."
+    },
+    "asset_class": {
+      "existingJavaType": "java.lang.String",
+      "title": "Asset class."
+    },
+    "notional": {
+      "existingJavaType": "java.lang.String",
+      "title": "Ordered notional amount. If entered, qty will be null. Can take up to 9 decimal points."
+    },
+    "qty": {
+      "existingJavaType": "java.lang.String",
+      "javaName": "quantity",
+      "title": "Ordered quantity. If entered, notional will be null. Can take up to 9 decimal points."
+    },
+    "filled_qty": {
+      "existingJavaType": "java.lang.String",
+      "javaName": "filledQuantity",
+      "title": "Filled quantity."
+    },
+    "filled_avg_price": {
+      "existingJavaType": "java.lang.String",
+      "javaName": "averageFillPrice",
+      "title": "Filled average price."
+    },
+    "order_class": {
+      "existingJavaType": "net.jacobpeterson.alpaca.model.endpoint.orders.enums.OrderClass",
+      "title": "The {@link net.jacobpeterson.alpaca.model.endpoint.orders.enums.OrderClass}. For details of non-simple order classes, please see Bracket Order Overview."
+    },
+    "type": {
+      "existingJavaType": "net.jacobpeterson.alpaca.model.endpoint.orders.enums.OrderType",
+      "title": "The {@link net.jacobpeterson.alpaca.model.endpoint.orders.enums.OrderType}."
+    },
+    "side": {
+      "existingJavaType": "net.jacobpeterson.alpaca.model.endpoint.orders.enums.OrderSide",
+      "title": "The {@link net.jacobpeterson.alpaca.model.endpoint.orders.enums.OrderSide}."
+    },
+    "time_in_force": {
+      "existingJavaType": "net.jacobpeterson.alpaca.model.endpoint.orders.enums.OrderTimeInForce",
+      "title": "The {@link net.jacobpeterson.alpaca.model.endpoint.orders.enums.OrderTimeInForce}."
+    },
+    "limit_price": {
+      "existingJavaType": "java.lang.String",
+      "title": "Limit price."
+    },
+    "stop_price": {
+      "existingJavaType": "java.lang.String",
+      "title": "Stop price."
+    },
+    "status": {
+      "existingJavaType": "net.jacobpeterson.alpaca.model.endpoint.orders.enums.OrderStatus",
+      "title": "The {@link net.jacobpeterson.alpaca.model.endpoint.orders.enums.OrderStatus}."
+    },
+    "extended_hours": {
+      "existingJavaType": "java.lang.Boolean",
+      "title": "If true, eligible for execution outside regular trading hours."
+    },
+    "legs": {
+      "existingJavaType": "java.util.ArrayList<net.jacobpeterson.alpaca.model.endpoint.orders.Order>",
+      "title": "When querying non-simple order_class orders in a nested style, an {@link java.util.ArrayList} of {@link net.jacobpeterson.alpaca.model.endpoint.orders.Order} entities associated with this order. Otherwise, null."
+    },
+    "trail_percent": {
+      "existingJavaType": "java.lang.String",
+      "title": "The percent value away from the high water mark for trailing stop orders."
+    },
+    "trail_price": {
+      "existingJavaType": "java.lang.String",
+      "title": "The dollar value away from the high water mark for trailing stop orders."
+    },
+    "hwm": {
+      "existingJavaType": "java.lang.String",
+      "javaName": "highWaterMark",
+      "title": "High Water Mark - The highest (lowest) market price seen since the trailing stop order was submitted."
+    }
+  }
+}

@@ -1,26 +1,26 @@
 {
   "type": "object",
-  "title": "See <a href=\"https://alpaca.markets/docs/api-documentation/api-v2/market-data/alpaca-data-api-v2/historical/\">Historical Data</a>.",
+  "title": "See <a href=\"https://alpaca.markets/docs/api-documentation/api-v2/market-data/alpaca-data-api-v2/historical/\">Historical Stock Data</a>.",
   "properties": {
     "latestTrade": {
-      "existingJavaType": "net.jacobpeterson.alpaca.model.endpoint.marketdata.stock.historical.trade.Trade",
-      "title": "The latest {@link net.jacobpeterson.alpaca.model.endpoint.marketdata.stock.historical.trade.Trade}."
+      "existingJavaType": "net.jacobpeterson.alpaca.model.endpoint.marketdata.stock.historical.trade.StockTrade",
+      "title": "The latest {@link net.jacobpeterson.alpaca.model.endpoint.marketdata.stock.historical.trade.StockTrade}."
     },
     "latestQuote": {
-      "existingJavaType": "net.jacobpeterson.alpaca.model.endpoint.marketdata.stock.historical.quote.Quote",
-      "title": "The latest {@link net.jacobpeterson.alpaca.model.endpoint.marketdata.stock.historical.quote.Quote}."
+      "existingJavaType": "net.jacobpeterson.alpaca.model.endpoint.marketdata.stock.historical.quote.StockQuote",
+      "title": "The latest {@link net.jacobpeterson.alpaca.model.endpoint.marketdata.stock.historical.quote.StockQuote}."
     },
     "minuteBar": {
-      "existingJavaType": "net.jacobpeterson.alpaca.model.endpoint.marketdata.stock.historical.bar.Bar",
-      "title": "The minute {@link net.jacobpeterson.alpaca.model.endpoint.marketdata.stock.historical.bar.Bar}."
+      "existingJavaType": "net.jacobpeterson.alpaca.model.endpoint.marketdata.stock.historical.bar.StockBar",
+      "title": "The minute {@link net.jacobpeterson.alpaca.model.endpoint.marketdata.stock.historical.bar.StockBar}."
     },
     "dailyBar": {
-      "existingJavaType": "net.jacobpeterson.alpaca.model.endpoint.marketdata.stock.historical.bar.Bar",
-      "title": "The daily {@link net.jacobpeterson.alpaca.model.endpoint.marketdata.stock.historical.bar.Bar}."
+      "existingJavaType": "net.jacobpeterson.alpaca.model.endpoint.marketdata.stock.historical.bar.StockBar",
+      "title": "The daily {@link net.jacobpeterson.alpaca.model.endpoint.marketdata.stock.historical.bar.StockBar}."
     },
     "prevDailyBar": {
-      "existingJavaType": "net.jacobpeterson.alpaca.model.endpoint.marketdata.stock.historical.bar.Bar",
-      "title": "The previous daily {@link net.jacobpeterson.alpaca.model.endpoint.marketdata.stock.historical.bar.Bar}."
+      "existingJavaType": "net.jacobpeterson.alpaca.model.endpoint.marketdata.stock.historical.bar.StockBar",
+      "title": "The previous daily {@link net.jacobpeterson.alpaca.model.endpoint.marketdata.stock.historical.bar.StockBar}."
     }
   }
 }

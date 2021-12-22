@@ -1,0 +1,11 @@
+{
+  "type": "object",
+  "title": "See <a href=\"https://alpaca.markets/docs/api-documentation/api-v2/market-data/\">Market Data</a>.",
+  "properties": {
+    "T": {
+      "existingJavaType": "net.jacobpeterson.alpaca.model.endpoint.marketdata.common.realtime.enums.MarketDataMessageType",
+      "javaName": "messageType",
+      "title": "The {@link net.jacobpeterson.alpaca.model.endpoint.marketdata.common.realtime.enums.MarketDataMessageType}."
+    }
+  }
+}

@@ -5,15 +5,14 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import net.jacobpeterson.alpaca.model.endpoint.marketdata.stock.realtime.MarketDataMessage;
-import net.jacobpeterson.alpaca.model.endpoint.marketdata.stock.realtime.bar.BarMessage;
-import net.jacobpeterson.alpaca.model.endpoint.marketdata.stock.realtime.control.ErrorMessage;
-import net.jacobpeterson.alpaca.model.endpoint.marketdata.stock.realtime.control.SubscriptionsMessage;
-import net.jacobpeterson.alpaca.model.endpoint.marketdata.stock.realtime.control.SuccessMessage;
-import net.jacobpeterson.alpaca.model.endpoint.marketdata.stock.realtime.enums.MarketDataMessageType;
-import net.jacobpeterson.alpaca.model.endpoint.marketdata.stock.realtime.quote.QuoteMessage;
-import net.jacobpeterson.alpaca.model.endpoint.marketdata.stock.realtime.trade.TradeMessage;
-import net.jacobpeterson.alpaca.model.properties.DataAPIType;
+import net.jacobpeterson.alpaca.model.endpoint.marketdata.common.realtime.MarketDataMessage;
+import net.jacobpeterson.alpaca.model.endpoint.marketdata.common.realtime.bar.BarMessage;
+import net.jacobpeterson.alpaca.model.endpoint.marketdata.common.realtime.control.ErrorMessage;
+import net.jacobpeterson.alpaca.model.endpoint.marketdata.common.realtime.control.SubscriptionsMessage;
+import net.jacobpeterson.alpaca.model.endpoint.marketdata.common.realtime.control.SuccessMessage;
+import net.jacobpeterson.alpaca.model.endpoint.marketdata.common.realtime.enums.MarketDataMessageType;
+import net.jacobpeterson.alpaca.model.endpoint.marketdata.common.realtime.quote.QuoteMessage;
+import net.jacobpeterson.alpaca.model.endpoint.marketdata.common.realtime.trade.TradeMessage;
 import net.jacobpeterson.alpaca.websocket.AlpacaWebsocket;
 import okhttp3.HttpUrl;
 import okhttp3.OkHttpClient;
@@ -22,6 +21,7 @@ import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.lang.reflect.Type;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
@@ -37,10 +37,11 @@ import static net.jacobpeterson.alpaca.util.gson.GsonUtil.GSON;
 /**
  * {@link MarketDataWebsocket} is an {@link AlpacaWebsocket} implementation and provides the {@link
  * MarketDataWebsocketInterface} interface for
- * <a href="https://alpaca.markets/docs/api-documentation/api-v2/market-data/alpaca-data-api-v2/real-time/">Real-time
- * Market Data</a>
+ * <a href="https://alpaca.markets/docs/api-documentation/api-v2/market-data/">Realtime Market Data</a> for both crypto
+ * and stocks.
  */
-public class MarketDataWebsocket extends AlpacaWebsocket<MarketDataMessageType, MarketDataMessage, MarketDataListener>
+public abstract class MarketDataWebsocket
+        extends AlpacaWebsocket<MarketDataMessageType, MarketDataMessage, MarketDataListener>
         implements MarketDataWebsocketInterface {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(MarketDataWebsocket.class);
@@ -55,18 +56,17 @@ public class MarketDataWebsocket extends AlpacaWebsocket<MarketDataMessageType, 
             MarketDataMessageType.BAR);
 
     /**
-     * Creates a {@link HttpUrl} for {@link MarketDataWebsocket} with the given <code>dataAPIType</code>.
+     * Creates a {@link HttpUrl} for {@link MarketDataWebsocket} with the given <code>websocketURLPathSegments</code>.
      *
-     * @param dataAPIType the {@link DataAPIType}
+     * @param websocketURLPathSegments the websocket URL path segments
      *
      * @return a {@link HttpUrl}
      */
-    private static HttpUrl createWebsocketURL(DataAPIType dataAPIType) {
+    private static HttpUrl createWebsocketURL(String websocketURLPathSegments) {
         return new HttpUrl.Builder()
                 .scheme("https") // HttpUrl.Builder doesn't recognize "wss" scheme, but "https" works fine
                 .host("stream.data.alpaca.markets")
-                .addPathSegment("v2")
-                .addPathSegment(dataAPIType.toString())
+                .addPathSegments(websocketURLPathSegments)
                 .build();
     }
 
@@ -74,23 +74,37 @@ public class MarketDataWebsocket extends AlpacaWebsocket<MarketDataMessageType, 
     private final Set<String> subscribedTrades;
     private final Set<String> subscribedQuotes;
     private final Set<String> subscribedBars;
+    private final Type tradeClassType;
+    private final Type quoteClassType;
+    private final Type barClassType;
 
     /**
      * Instantiates a new {@link MarketDataWebsocket}.
      *
-     * @param okHttpClient the {@link OkHttpClient}
-     * @param dataAPIType  the {@link DataAPIType}
-     * @param keyID        the key ID
-     * @param secretKey    the secret key
+     * @param okHttpClient                the {@link OkHttpClient}
+     * @param websocketURLPathSegments    the websocket URL path segments
+     * @param websocketMarketDataTypeName the websocket market data type name {@link String}
+     * @param keyID                       the key ID
+     * @param secretKey                   the secret key
+     * @param tradeClass                  the {@link TradeMessage} {@link Class} to deserialize data into
+     * @param quoteClass                  the {@link QuoteMessage} {@link Class} to deserialize data into
+     * @param barClass                    the {@link BarMessage} {@link Class} to deserialize data into
      */
-    public MarketDataWebsocket(OkHttpClient okHttpClient, DataAPIType dataAPIType,
-            String keyID, String secretKey) {
-        super(okHttpClient, createWebsocketURL(dataAPIType), "Market Data", keyID, secretKey, null);
+    public MarketDataWebsocket(OkHttpClient okHttpClient, String websocketURLPathSegments,
+            String websocketMarketDataTypeName, String keyID, String secretKey,
+            Class<? extends TradeMessage> tradeClass, Class<? extends QuoteMessage> quoteClass,
+            Class<? extends BarMessage> barClass) {
+        super(okHttpClient, createWebsocketURL(websocketURLPathSegments), websocketMarketDataTypeName + " Market Data",
+                keyID, secretKey, null);
 
         listenedMarketDataMessageTypes = new HashSet<>();
         subscribedTrades = new HashSet<>();
         subscribedQuotes = new HashSet<>();
         subscribedBars = new HashSet<>();
+
+        this.tradeClassType = tradeClass;
+        this.quoteClassType = quoteClass;
+        this.barClassType = barClass;
     }
 
     @Override
@@ -139,6 +153,8 @@ public class MarketDataWebsocket extends AlpacaWebsocket<MarketDataMessageType, 
     // This websocket uses string frames and not binary frames.
     @Override
     public void onMessage(@NotNull WebSocket webSocket, @NotNull String message) {
+        LOGGER.trace("{}", message);
+
         JsonElement messageElement = JsonParser.parseString(message);
         checkState(messageElement instanceof JsonArray, "Message must be a JsonArray! Received: %s", messageElement);
 
@@ -198,13 +214,13 @@ public class MarketDataWebsocket extends AlpacaWebsocket<MarketDataMessageType, 
                             subscribedBars);
                     break;
                 case TRADE:
-                    marketDataMessage = GSON.fromJson(messageObject, TradeMessage.class);
+                    marketDataMessage = GSON.fromJson(messageObject, tradeClassType);
                     break;
                 case QUOTE:
-                    marketDataMessage = GSON.fromJson(messageObject, QuoteMessage.class);
+                    marketDataMessage = GSON.fromJson(messageObject, quoteClassType);
                     break;
                 case BAR:
-                    marketDataMessage = GSON.fromJson(messageObject, BarMessage.class);
+                    marketDataMessage = GSON.fromJson(messageObject, barClassType);
                     break;
                 default:
                     LOGGER.error("Message type {} not implemented!", marketDataMessageType);

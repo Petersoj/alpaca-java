@@ -101,7 +101,7 @@ try {
 ```
 
 ## [`CryptoMarketDataEndpoint`](src/main/java/net/jacobpeterson/alpaca/rest/endpoint/marketdata/CryptoMarketDataEndpoint.java)
-Alpaca provides cryptocurrency data from multiple venues/exchanges, namely: Coinbase, ErisX, and FTX. Note that it does not route orders to all venues.
+Alpaca provides cryptocurrency data from multiple venues/exchanges, namely: Coinbase, ErisX, and FTX.
 
 Example usage:
 ```java

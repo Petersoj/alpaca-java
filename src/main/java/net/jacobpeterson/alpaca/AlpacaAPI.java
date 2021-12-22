@@ -5,22 +5,23 @@ import net.jacobpeterson.alpaca.model.properties.DataAPIType;
 import net.jacobpeterson.alpaca.model.properties.EndpointAPIType;
 import net.jacobpeterson.alpaca.properties.AlpacaProperties;
 import net.jacobpeterson.alpaca.rest.AlpacaClient;
-import net.jacobpeterson.alpaca.rest.endpoint.AccountActivitiesEndpoint;
-import net.jacobpeterson.alpaca.rest.endpoint.AccountConfigurationEndpoint;
-import net.jacobpeterson.alpaca.rest.endpoint.AccountEndpoint;
+import net.jacobpeterson.alpaca.rest.endpoint.accountactivities.AccountActivitiesEndpoint;
+import net.jacobpeterson.alpaca.rest.endpoint.accountconfiguration.AccountConfigurationEndpoint;
+import net.jacobpeterson.alpaca.rest.endpoint.account.AccountEndpoint;
 import net.jacobpeterson.alpaca.rest.endpoint.AlpacaEndpoint;
-import net.jacobpeterson.alpaca.rest.endpoint.AssetsEndpoint;
-import net.jacobpeterson.alpaca.rest.endpoint.CalendarEndpoint;
-import net.jacobpeterson.alpaca.rest.endpoint.ClockEndpoint;
-import net.jacobpeterson.alpaca.rest.endpoint.OrdersEndpoint;
-import net.jacobpeterson.alpaca.rest.endpoint.PortfolioHistoryEndpoint;
-import net.jacobpeterson.alpaca.rest.endpoint.PositionsEndpoint;
-import net.jacobpeterson.alpaca.rest.endpoint.WatchlistEndpoint;
-import net.jacobpeterson.alpaca.rest.endpoint.marketdata.CryptoMarketDataEndpoint;
-import net.jacobpeterson.alpaca.rest.endpoint.marketdata.StockMarketDataEndpoint;
+import net.jacobpeterson.alpaca.rest.endpoint.assets.AssetsEndpoint;
+import net.jacobpeterson.alpaca.rest.endpoint.calendar.CalendarEndpoint;
+import net.jacobpeterson.alpaca.rest.endpoint.clock.ClockEndpoint;
+import net.jacobpeterson.alpaca.rest.endpoint.orders.OrdersEndpoint;
+import net.jacobpeterson.alpaca.rest.endpoint.portfoliohistory.PortfolioHistoryEndpoint;
+import net.jacobpeterson.alpaca.rest.endpoint.positions.PositionsEndpoint;
+import net.jacobpeterson.alpaca.rest.endpoint.watchlist.WatchlistEndpoint;
+import net.jacobpeterson.alpaca.rest.endpoint.marketdata.crypto.CryptoMarketDataEndpoint;
+import net.jacobpeterson.alpaca.rest.endpoint.marketdata.stock.StockMarketDataEndpoint;
 import net.jacobpeterson.alpaca.websocket.AlpacaWebsocket;
-import net.jacobpeterson.alpaca.websocket.marketdata.MarketDataWebsocket;
 import net.jacobpeterson.alpaca.websocket.marketdata.MarketDataWebsocketInterface;
+import net.jacobpeterson.alpaca.websocket.marketdata.crypto.CryptoMarketDataWebsocket;
+import net.jacobpeterson.alpaca.websocket.marketdata.stock.StockMarketDataWebsocket;
 import net.jacobpeterson.alpaca.websocket.streaming.StreamingWebsocket;
 import net.jacobpeterson.alpaca.websocket.streaming.StreamingWebsocketInterface;
 import okhttp3.OkHttpClient;
@@ -63,7 +64,8 @@ public class AlpacaAPI {
     private final AccountActivitiesEndpoint accountActivitiesEndpoint;
     private final PortfolioHistoryEndpoint portfolioHistoryEndpoint;
     private final StreamingWebsocket streamingWebsocket;
-    private final MarketDataWebsocket marketDataWebsocket;
+    private final CryptoMarketDataWebsocket cryptoMarketDataWebsocket;
+    private final StockMarketDataWebsocket stockMarketDataWebsocket;
 
     /**
      * Instantiates a new {@link AlpacaAPI} using properties specified in <code>alpaca.properties</code> file (or their
@@ -178,9 +180,12 @@ public class AlpacaAPI {
         accountConfigurationEndpoint = new AccountConfigurationEndpoint(brokerClient);
         accountActivitiesEndpoint = new AccountActivitiesEndpoint(brokerClient);
         portfolioHistoryEndpoint = new PortfolioHistoryEndpoint(brokerClient);
+
         streamingWebsocket = new StreamingWebsocket(okHttpClient, brokerHostSubdomain, keyID, secretKey, oAuthToken);
-        marketDataWebsocket = stockDataClient == null ? null :
-                new MarketDataWebsocket(okHttpClient, dataAPIType, keyID, secretKey);
+        cryptoMarketDataWebsocket = cryptoDataClient == null ? null :
+                new CryptoMarketDataWebsocket(okHttpClient, keyID, secretKey);
+        stockMarketDataWebsocket = stockDataClient == null ? null :
+                new StockMarketDataWebsocket(okHttpClient, dataAPIType, keyID, secretKey);
     }
 
     /**
@@ -275,10 +280,17 @@ public class AlpacaAPI {
     }
 
     /**
-     * @return the {@link MarketDataWebsocketInterface}
+     * @return the Crypto {@link MarketDataWebsocketInterface}
      */
-    public MarketDataWebsocketInterface marketDataStreaming() {
-        return marketDataWebsocket;
+    public MarketDataWebsocketInterface cryptoMarketDataStreaming() {
+        return cryptoMarketDataWebsocket;
+    }
+
+    /**
+     * @return the Stock {@link MarketDataWebsocketInterface}
+     */
+    public MarketDataWebsocketInterface stockMarketDataStreaming() {
+        return stockMarketDataWebsocket;
     }
 
     public OkHttpClient getOkHttpClient() {

@@ -1,6 +1,6 @@
 {
   "type": "object",
-  "title": "See <a href=\"https://alpaca.markets/docs/api-documentation/api-v2/market-data/alpaca-crypto-data/historical/\">Crypto Historical Data</a>.",
+  "title": "See <a href=\"https://alpaca.markets/docs/api-documentation/api-v2/market-data/alpaca-crypto-data/historical/\">Historical Crypto Data</a>.",
   "properties": {
     "symbol": {
       "existingJavaType": "java.lang.String",

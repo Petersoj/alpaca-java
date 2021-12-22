@@ -1,0 +1,24 @@
+{
+  "type": "object",
+  "extends": {
+    "existingJavaType": "net.jacobpeterson.alpaca.model.endpoint.marketdata.common.realtime.SymbolMessage"
+  },
+  "title": "See <a href=\"https://alpaca.markets/docs/api-documentation/api-v2/market-data/\">Market Data</a>.",
+  "properties": {
+    "i": {
+      "existingJavaType": "java.lang.Integer",
+      "javaName": "tradeID",
+      "title": "Trade ID."
+    },
+    "p": {
+      "existingJavaType": "java.lang.Double",
+      "javaName": "price",
+      "title": "Trade price."
+    },
+    "t": {
+      "existingJavaType": "java.time.ZonedDateTime",
+      "javaName": "timestamp",
+      "title": "Timestamp with nanosecond precision."
+    }
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "type": "string",
+  "title": "See <a href=\"https://alpaca.markets/docs/api-documentation/api-v2/market-data/alpaca-crypto-data/\">Crypto Data</a>.",
+  "enum": [
+    "B",
+    "S"
+  ],
+  "javaEnums": [
+    {
+      "name": "BUY"
+    },
+    {
+      "name": "SELL"
+    }
+  ]
+}

@@ -1,0 +1,21 @@
+{
+  "type": "object",
+  "title": "See <a href=\"https://alpaca.markets/docs/api-documentation/api-v2/market-data/\">Market Data</a>.",
+  "properties": {
+    "t": {
+      "existingJavaType": "java.time.ZonedDateTime",
+      "javaName": "timestamp",
+      "title": "Timestamp with nanosecond precision."
+    },
+    "ap": {
+      "existingJavaType": "java.lang.Double",
+      "javaName": "askPrice",
+      "title": "Ask price."
+    },
+    "bp": {
+      "existingJavaType": "java.lang.Double",
+      "javaName": "bidPrice",
+      "title": "Bid price."
+    }
+  }
+}

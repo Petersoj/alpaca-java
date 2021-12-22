@@ -1,6 +1,6 @@
 {
   "type": "object",
-  "title": "See <a href=\"https://alpaca.markets/docs/api-documentation/api-v2/market-data/alpaca-crypto-data/historical/\">Crypto Historical Data</a>.",
+  "title": "See <a href=\"https://alpaca.markets/docs/api-documentation/api-v2/market-data/alpaca-crypto-data/historical/\">Historical Crypto Data</a>.",
   "properties": {
     "t": {
       "existingJavaType": "java.time.ZonedDateTime",
@@ -8,7 +8,7 @@
       "title": "Timestamp with nanosecond precision."
     },
     "ax": {
-      "existingJavaType": "net.jacobpeterson.alpaca.model.endpoint.marketdata.crypto.historical.enums.Exchange",
+      "existingJavaType": "net.jacobpeterson.alpaca.model.endpoint.marketdata.crypto.common.enums.Exchange",
       "javaName": "askExchange",
       "title": "Ask Exchange."
     },
@@ -23,7 +23,7 @@
       "title": "Ask size."
     },
     "bx": {
-      "existingJavaType": "net.jacobpeterson.alpaca.model.endpoint.marketdata.crypto.historical.enums.Exchange",
+      "existingJavaType": "net.jacobpeterson.alpaca.model.endpoint.marketdata.crypto.common.enums.Exchange",
       "javaName": "bidExchange",
       "title": "Bid Exchange."
     },

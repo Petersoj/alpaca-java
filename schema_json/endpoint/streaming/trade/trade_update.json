@@ -20,8 +20,8 @@
       "title": "The position quantity."
     },
     "order": {
-      "existingJavaType": "net.jacobpeterson.alpaca.model.endpoint.order.Order",
-      "title": "The {@link net.jacobpeterson.alpaca.model.endpoint.order.Order}."
+      "existingJavaType": "net.jacobpeterson.alpaca.model.endpoint.orders.Order",
+      "title": "The {@link net.jacobpeterson.alpaca.model.endpoint.orders.Order}."
     }
   }
 }

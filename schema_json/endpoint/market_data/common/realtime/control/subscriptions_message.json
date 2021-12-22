@@ -1,0 +1,21 @@
+{
+  "type": "object",
+  "extends": {
+    "existingJavaType": "net.jacobpeterson.alpaca.model.endpoint.marketdata.common.realtime.MarketDataMessage"
+  },
+  "title": "See <a href=\"https://alpaca.markets/docs/api-documentation/api-v2/market-data/\">Market Data</a>.",
+  "properties": {
+    "trades": {
+      "existingJavaType": "java.util.ArrayList<java.lang.String>",
+      "title": "The {@link java.util.ArrayList} of subscribed trades."
+    },
+    "quotes": {
+      "existingJavaType": "java.util.ArrayList<java.lang.String>",
+      "title": "The {@link java.util.ArrayList} of subscribed quotes."
+    },
+    "bars": {
+      "existingJavaType": "java.util.ArrayList<java.lang.String>",
+      "title": "The {@link java.util.ArrayList} of subscribed bars."
+    }
+  }
+}

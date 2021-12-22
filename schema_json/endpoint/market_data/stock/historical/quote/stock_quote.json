@@ -1,0 +1,34 @@
+{
+  "type": "object",
+  "extends": {
+    "existingJavaType": "net.jacobpeterson.alpaca.model.endpoint.marketdata.common.historical.quote.Quote"
+  },
+  "title": "See <a href=\"https://alpaca.markets/docs/api-documentation/api-v2/market-data/alpaca-data-api-v2/historical/\">Historical Stock Data</a>.",
+  "properties": {
+    "ax": {
+      "existingJavaType": "java.lang.String",
+      "javaName": "askExchange",
+      "title": "Ask exchange."
+    },
+    "as": {
+      "existingJavaType": "java.lang.Integer",
+      "javaName": "askSize",
+      "title": "Ask size."
+    },
+    "bx": {
+      "existingJavaType": "java.lang.String",
+      "javaName": "bidExchange",
+      "title": "Bid exchange."
+    },
+    "bs": {
+      "existingJavaType": "java.lang.Integer",
+      "javaName": "bidSize",
+      "title": "Bid size."
+    },
+    "c": {
+      "existingJavaType": "java.util.ArrayList<String>",
+      "javaName": "conditions",
+      "title": "The {@link java.util.ArrayList} of quote conditions."
+    }
+  }
+}

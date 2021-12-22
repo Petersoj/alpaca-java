@@ -1,0 +1,51 @@
+{
+  "type": "object",
+  "title": "See <a href=\"https://alpaca.markets/docs/api-documentation/api-v2/assets/\">Assets</a>.",
+  "properties": {
+    "id": {
+      "existingJavaType": "java.lang.String",
+      "title": "Asset ID."
+    },
+    "class": {
+      "existingJavaType": "net.jacobpeterson.alpaca.model.endpoint.assets.enums.AssetClass",
+      "javaName": "assetClass",
+      "title": "The {@link net.jacobpeterson.alpaca.model.endpoint.assets.enums.AssetClass}."
+    },
+    "exchange": {
+      "existingJavaType": "java.lang.String",
+      "title": "AMEX, ARCA, BATS, NYSE, NASDAQ or NYSEARCA."
+    },
+    "symbol": {
+      "existingJavaType": "java.lang.String",
+      "title": "The symbol."
+    },
+    "name": {
+      "existingJavaType": "java.lang.String",
+      "title": "The official name of the asset."
+    },
+    "status": {
+      "existingJavaType": "net.jacobpeterson.alpaca.model.endpoint.assets.enums.AssetStatus",
+      "title": "The {@link net.jacobpeterson.alpaca.model.endpoint.assets.enums.AssetStatus}."
+    },
+    "tradable": {
+      "existingJavaType": "java.lang.Boolean",
+      "title": "Asset is tradable on Alpaca or not."
+    },
+    "marginable": {
+      "existingJavaType": "java.lang.Boolean",
+      "title": "Asset is marginable or not."
+    },
+    "shortable": {
+      "existingJavaType": "java.lang.Boolean",
+      "title": "Asset is shortable or not."
+    },
+    "easy_to_borrow": {
+      "existingJavaType": "java.lang.Boolean",
+      "title": "Asset is easy-to-borrow or not (filtering for easy_to_borrow = True is the best way to check whether the name is currently available to short at Alpaca)."
+    },
+    "fractionable": {
+      "existingJavaType": "java.lang.Boolean",
+      "title": "Asset is fractionable or not."
+    }
+  }
+}
