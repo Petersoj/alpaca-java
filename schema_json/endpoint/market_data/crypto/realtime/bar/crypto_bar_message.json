@@ -14,16 +14,6 @@
       "existingJavaType": "java.lang.Double",
       "javaName": "volume",
       "title": "Volume."
-    },
-    "n": {
-      "existingJavaType": "java.lang.Long",
-      "javaName": "tradeCount",
-      "title": "Trade count."
-    },
-    "vw": {
-      "existingJavaType": "java.lang.Double",
-      "javaName": "vwap",
-      "title": "VWAP (Volume Weighted Average Price)."
     }
   }
 }

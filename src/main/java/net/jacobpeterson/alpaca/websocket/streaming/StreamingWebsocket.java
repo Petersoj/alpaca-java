@@ -136,7 +136,8 @@ public class StreamingWebsocket extends AlpacaWebsocket<StreamingMessageType, St
     // This websocket uses binary frames and not text frames.
     @Override
     public void onMessage(@NotNull WebSocket webSocket, @NotNull ByteString byteString) {
-        String message = byteString.utf8();
+        final String message = byteString.utf8();
+        LOGGER.trace("{}", message);
 
         JsonElement messageElement = JsonParser.parseString(message);
         checkState(messageElement instanceof JsonObject, "Message must be a JsonObject! Received: %s", messageElement);
@@ -160,7 +161,6 @@ public class StreamingWebsocket extends AlpacaWebsocket<StreamingMessageType, St
                     LOGGER.error("{} websocket not authenticated! Received: {}.", websocketName, streamingMessage);
                 } else {
                     LOGGER.info("{} websocket authenticated.", websocketName);
-                    LOGGER.debug("{}", streamingMessage);
                 }
 
                 if (authenticationMessageFuture != null) {
@@ -169,7 +169,6 @@ public class StreamingWebsocket extends AlpacaWebsocket<StreamingMessageType, St
                 break;
             case LISTENING:
                 streamingMessage = GSON.fromJson(messageObject, ListeningMessage.class);
-                LOGGER.debug("{}", streamingMessage);
 
                 // Remove all 'StreamingMessageType's that are no longer listened to and add new ones
                 List<StreamingMessageType> currentTypes = ((ListeningMessage) streamingMessage).getData().getStreams();
@@ -180,7 +179,6 @@ public class StreamingWebsocket extends AlpacaWebsocket<StreamingMessageType, St
                 break;
             case TRADE_UPDATES:
                 streamingMessage = GSON.fromJson(messageObject, TradeUpdateMessage.class);
-                LOGGER.debug("{}", streamingMessage);
                 break;
             default:
                 throw new UnsupportedOperationException();

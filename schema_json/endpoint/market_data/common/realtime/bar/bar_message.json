@@ -29,6 +29,16 @@
       "existingJavaType": "java.time.ZonedDateTime",
       "javaName": "timestamp",
       "title": "The timestamp."
+    },
+    "n": {
+      "existingJavaType": "java.lang.Long",
+      "javaName": "tradeCount",
+      "title": "Trade count."
+    },
+    "vw": {
+      "existingJavaType": "java.lang.Double",
+      "javaName": "vwap",
+      "title": "VWAP (Volume Weighted Average Price)."
     }
   }
 }

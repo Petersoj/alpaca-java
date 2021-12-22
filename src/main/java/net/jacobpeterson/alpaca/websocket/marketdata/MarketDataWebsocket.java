@@ -172,7 +172,6 @@ public abstract class MarketDataWebsocket
             switch (marketDataMessageType) {
                 case SUCCESS:
                     marketDataMessage = GSON.fromJson(messageObject, SuccessMessage.class);
-                    LOGGER.debug("{}", marketDataMessage);
 
                     if (isSuccessMessageAuthenticated((SuccessMessage) marketDataMessage)) {
                         LOGGER.info("{} websocket authenticated.", websocketName);
@@ -202,7 +201,6 @@ public abstract class MarketDataWebsocket
                     break;
                 case SUBSCRIPTION:
                     marketDataMessage = GSON.fromJson(messageObject, SubscriptionsMessage.class);
-                    LOGGER.debug("{}", marketDataMessage);
 
                     // Update 'listenedMarketDataMessageTypes' and the associated subscribed symbols lists
                     SubscriptionsMessage subscriptionsMessage = (SubscriptionsMessage) marketDataMessage;

@@ -86,7 +86,7 @@ See the [OkHttpClient Documentation](https://square.github.io/okhttp/4.x/okhttp/
 ## [`AlpacaClientException`](src/main/java/net/jacobpeterson/alpaca/rest/AlpacaClientException.java)
 [`AlpacaClientException`](src/main/java/net/jacobpeterson/alpaca/rest/AlpacaClientException.java) is thrown anytime an exception occurs when using various [`AlpacaEndpoints`](src/main/java/net/jacobpeterson/alpaca/rest/endpoint/AlpacaEndpoint.java). It should be caught and handled within your trading algorithm application accordingly.
 
-## [`AccountEndpoint`](src/main/java/net/jacobpeterson/alpaca/rest/endpoint/AccountEndpoint.java)
+## [`AccountEndpoint`](src/main/java/net/jacobpeterson/alpaca/rest/endpoint/account/AccountEndpoint.java)
 The Account API serves important information related to an account, including account status, funds available for trade, funds available for withdrawal, and various flags relevant to an account's ability to trade.
 
 Example usage:
@@ -100,14 +100,14 @@ try {
 }
 ```
 
-## [`CryptoMarketDataEndpoint`](src/main/java/net/jacobpeterson/alpaca/rest/endpoint/marketdata/CryptoMarketDataEndpoint.java)
+## [`CryptoMarketDataEndpoint`](src/main/java/net/jacobpeterson/alpaca/rest/endpoint/marketdata/crypto/CryptoMarketDataEndpoint.java)
 Alpaca provides cryptocurrency data from multiple venues/exchanges, namely: Coinbase, ErisX, and FTX.
 
 Example usage:
 ```java
 try {
     // Get BTCUSD 50 one-hour bars starting on 12/18/2021 from Coinbase and print them out
-    BarsResponse btcBarsResponse = alpacaAPI.cryptoMarketData().getBars(
+    CryptoBarsResponse btcBarsResponse = alpacaAPI.cryptoMarketData().getBars(
             "BTCUSD",
             Arrays.asList(Exchange.COINBASE),
             ZonedDateTime.of(2021, 12, 18, 0, 0, 0, 0, ZoneId.of("America/New_York")),
@@ -127,7 +127,7 @@ try {
 }
 ```
 
-## [`StockMarketDataEndpoint`](src/main/java/net/jacobpeterson/alpaca/rest/endpoint/marketdata/StockMarketDataEndpoint.java)
+## [`StockMarketDataEndpoint`](src/main/java/net/jacobpeterson/alpaca/rest/endpoint/marketdata/stock/StockMarketDataEndpoint.java)
 The Data API v2 provides market data through an easy-to-use API for historical stock market data.
 
 Example usage:
@@ -135,7 +135,7 @@ Example usage:
 try {
     // Get AAPL one hour, split-adjusted bars from 7/6/2021 market open
     // to 7/8/2021 market close and print them out
-    BarsResponse aaplBarsResponse = alpacaAPI.stockMarketData().getBars(
+    StockBarsResponse aaplBarsResponse = alpacaAPI.stockMarketData().getBars(
             "AAPL",
             ZonedDateTime.of(2021, 7, 6, 9, 30, 0, 0, ZoneId.of("America/New_York")),
             ZonedDateTime.of(2021, 7, 8, 12 + 4, 0, 0, 0, ZoneId.of("America/New_York")),
@@ -147,7 +147,7 @@ try {
     aaplBarsResponse.getBars().forEach(System.out::println);
 
     // Get AAPL first 10 trades on 7/8/2021 at market open and print them out
-    TradesResponse aaplTradesResponse = alpacaAPI.stockMarketData().getTrades(
+    StockTradesResponse aaplTradesResponse = alpacaAPI.stockMarketData().getTrades(
             "AAPL",
             ZonedDateTime.of(2021, 7, 8, 9, 30, 0, 0, ZoneId.of("America/New_York")),
             ZonedDateTime.of(2021, 7, 8, 9, 31, 0, 0, ZoneId.of("America/New_York")),
@@ -169,7 +169,7 @@ try {
 }
 ```
 
-## [`OrdersEndpoint`](src/main/java/net/jacobpeterson/alpaca/rest/endpoint/OrdersEndpoint.java)
+## [`OrdersEndpoint`](src/main/java/net/jacobpeterson/alpaca/rest/endpoint/orders/OrdersEndpoint.java)
 The Orders API allows a user to monitor, place, and cancel their orders with Alpaca.
 
 Example usage:
@@ -229,7 +229,7 @@ try {
 }
 ```
 
-## [`PositionsEndpoint`](src/main/java/net/jacobpeterson/alpaca/rest/endpoint/PositionsEndpoint.java)
+## [`PositionsEndpoint`](src/main/java/net/jacobpeterson/alpaca/rest/endpoint/positions/PositionsEndpoint.java)
 The Positions API provides information about an account's current open positions.
 
 Example usage:
@@ -250,7 +250,7 @@ try {
 }
 ```
 
-## [`AssetsEndpoint`](src/main/java/net/jacobpeterson/alpaca/rest/endpoint/AssetsEndpoint.java)
+## [`AssetsEndpoint`](src/main/java/net/jacobpeterson/alpaca/rest/endpoint/assets/AssetsEndpoint.java)
 The Assets API serves as the master list of assets available for trade and data consumption from Alpaca.
 
 Example usage:
@@ -270,7 +270,7 @@ try {
 }
 ```
 
-## [`WatchlistEndpoint`](src/main/java/net/jacobpeterson/alpaca/rest/endpoint/WatchlistEndpoint.java)
+## [`WatchlistEndpoint`](src/main/java/net/jacobpeterson/alpaca/rest/endpoint/watchlist/WatchlistEndpoint.java)
 The Watchlist API provides CRUD operation for the account's watchlist.
 
 Example usage:
@@ -304,7 +304,7 @@ try {
 }
 ```
 
-## [`CalendarEndpoint`](src/main/java/net/jacobpeterson/alpaca/rest/endpoint/CalendarEndpoint.java)
+## [`CalendarEndpoint`](src/main/java/net/jacobpeterson/alpaca/rest/endpoint/calendar/CalendarEndpoint.java)
 The calendar API serves the full list of market days from 1970 to 2029.
 
 Example usage:
@@ -320,7 +320,7 @@ try {
 }
 ```
 
-## [`ClockEndpoint`](src/main/java/net/jacobpeterson/alpaca/rest/endpoint/ClockEndpoint.java)
+## [`ClockEndpoint`](src/main/java/net/jacobpeterson/alpaca/rest/endpoint/clock/ClockEndpoint.java)
 The clock API serves the current market timestamp, whether the market is currently open, as well as the times of the next market open and close.
 
 Example usage:
@@ -334,7 +334,7 @@ try {
 }
 ```
 
-## [`AccountConfigurationEndpoint`](src/main/java/net/jacobpeterson/alpaca/rest/endpoint/AccountConfigurationEndpoint.java)
+## [`AccountConfigurationEndpoint`](src/main/java/net/jacobpeterson/alpaca/rest/endpoint/accountconfiguration/AccountConfigurationEndpoint.java)
 The Account Configuration API provides custom configurations about your trading account settings. These configurations control various allow you to modify settings to suit your trading needs.
 
 Example usage:
@@ -349,7 +349,7 @@ try {
 }
 ```
 
-## [`AccountActivitiesEndpoint`](src/main/java/net/jacobpeterson/alpaca/rest/endpoint/AccountActivitiesEndpoint.java)
+## [`AccountActivitiesEndpoint`](src/main/java/net/jacobpeterson/alpaca/rest/endpoint/accountactivities/AccountActivitiesEndpoint.java)
 The Account Activities API provides access to a historical record of transaction activities that have impacted your account.
 
 Example usage:
@@ -376,7 +376,7 @@ try {
 }
 ```
 
-## [`PortfolioHistoryEndpoint`](src/main/java/net/jacobpeterson/alpaca/rest/endpoint/PortfolioHistoryEndpoint.java)
+## [`PortfolioHistoryEndpoint`](src/main/java/net/jacobpeterson/alpaca/rest/endpoint/portfoliohistory/PortfolioHistoryEndpoint.java)
 The Portfolio History API returns the timeseries data for equity and profit loss information of the account.
 
 Example usage:
@@ -399,7 +399,7 @@ try {
 ```
 
 ## [`StreamingWebsocket`](src/main/java/net/jacobpeterson/alpaca/websocket/streaming/StreamingWebsocket.java)
-Alpaca offers WebSocket streaming of order updates.
+Alpaca offers websocket streaming of order updates.
 
 Example usage:
 ```java
@@ -433,7 +433,7 @@ Thread.sleep(5000);
 alpacaAPI.streaming().disconnect();
 ```
 
-## [`MarketDataWebsocket`](src/main/java/net/jacobpeterson/alpaca/websocket/marketdata/MarketDataWebsocket.java)
+## [`StockMarketDataWebsocket`](src/main/java/net/jacobpeterson/alpaca/websocket/marketdata/stock/StockMarketDataWebsocket.java)
 Alpaca's Data API v2 provides websocket streaming for trades, quotes, and minute bars. This helps receive the most up-to-date market information that could help your trading strategy to act upon certain market movement.
 
 Example usage:
@@ -441,27 +441,27 @@ Example usage:
 // Add a 'MarketDataListener' that simply prints market data information
 MarketDataListener marketDataListener = (messageType, message) ->
         System.out.printf("%s: %s\n", messageType.name(), message);
-alpacaAPI.marketDataStreaming().setListener(marketDataListener);
+alpacaAPI.stockMarketDataStreaming().setListener(marketDataListener);
 
 // Listen to 'SubscriptionsMessage', 'SuccessMessage', and 'ErrorMessage' control messages
 // that contain information about the stream's current state. Note that these are subscribed
 // to before the websocket is connected since these messages usually are sent
-// upon websocket connection. 
-alpacaAPI.marketDataStreaming().subscribeToControl(
+// upon websocket connection.
+alpacaAPI.stockMarketDataStreaming().subscribeToControl(
         MarketDataMessageType.SUCCESS,
         MarketDataMessageType.SUBSCRIPTION,
         MarketDataMessageType.ERROR);
 
 // Connect the websocket and confirm authentication
-alpacaAPI.marketDataStreaming().connect();
-alpacaAPI.marketDataStreaming().waitForAuthorization(5, TimeUnit.SECONDS);
-if (!alpacaAPI.marketDataStreaming().isValid()) {
+alpacaAPI.stockMarketDataStreaming().connect();
+alpacaAPI.stockMarketDataStreaming().waitForAuthorization(5, TimeUnit.SECONDS);
+if (!alpacaAPI.stockMarketDataStreaming().isValid()) {
     System.out.println("Websocket not valid!");
     return;
 }
 
-// Listen to the AAPL and TSLA trades and all ('*') bars.
-alpacaAPI.marketDataStreaming().subscribe(
+// Listen to AAPL and TSLA trades and all bars via the wildcard operator ('*').
+alpacaAPI.stockMarketDataStreaming().subscribe(
         Arrays.asList("AAPL", "TSLA"),
         null,
         Arrays.asList("*"));
@@ -470,7 +470,23 @@ alpacaAPI.marketDataStreaming().subscribe(
 Thread.sleep(5000);
 
 // Manually disconnect the websocket
-alpacaAPI.marketDataStreaming().disconnect();
+alpacaAPI.stockMarketDataStreaming().disconnect();
+```
+
+## [`CryptoMarketDataWebsocket`](src/main/java/net/jacobpeterson/alpaca/websocket/marketdata/crypto/CryptoMarketDataWebsocket.java)
+Alpaca also offers cryptocurrency websocket streaming for trades, quotes, and minute bars.
+
+The usage is identical to the [`StockMarketDataWebsocket`](https://github.com/Petersoj/alpaca-java/#stockmarketdatawebsocket) usage except that accessing the websocket instance via the `AlpacaAPI` instance is done using: `alpacaAPI.cryptoMarketDataStreaming()` instead of `alpacaAPI.stockMarketDataStreaming()`.
+
+Example usage:
+```java
+// The 'CryptoMarketDataWebsocket' setup is identical to the 'StockMarketDataWebsocket' setup 
+
+// Listen to BTCUSD and ETHUSD trades and all bars via the wildcard operator ('*').
+alpacaAPI.cryptoMarketDataStreaming().subscribe(
+        Arrays.asList("BTCUSD", "ETHUSD"),
+        null,
+        Arrays.asList("*"));
 ```
 
 # Building
