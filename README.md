@@ -17,7 +17,7 @@ If you are using Gradle as your build tool, add the following dependency to your
 
 ```
 dependencies {
-    implementation group: 'net.jacobpeterson', name: 'alpaca-java', version: '9.0.0'
+    implementation group: 'net.jacobpeterson', name: 'alpaca-java', version: '9.1.0'
 }
 ```
 
@@ -27,7 +27,7 @@ If you are using Maven as your build tool, add the following dependency to your 
 <dependency>
     <groupId>net.jacobpeterson</groupId>
     <artifactId>alpaca-java</artifactId>
-    <version>9.0.0</version>
+    <version>9.1.0</version>
     <scope>compile</scope>
 </dependency>
 ```
