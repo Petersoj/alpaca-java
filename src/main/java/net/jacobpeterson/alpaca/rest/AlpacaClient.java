@@ -25,6 +25,9 @@ import static net.jacobpeterson.alpaca.util.gson.GsonUtil.GSON;
  */
 public class AlpacaClient {
 
+    public static final Predicate<Integer> STATUS_CODE_200_OR_207 = (code) -> code == 200 || code == 207;
+    public static final Predicate<Integer> STATUS_CODE_200_OR_204 = (code) -> code == 200 || code == 204;
+
     private final OkHttpClient okHttpClient;
     private final HttpUrl baseURL;
     private final Headers requestHeaders;

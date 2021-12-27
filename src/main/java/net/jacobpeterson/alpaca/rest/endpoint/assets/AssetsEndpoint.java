@@ -10,6 +10,7 @@ import net.jacobpeterson.alpaca.rest.endpoint.AlpacaEndpoint;
 import okhttp3.HttpUrl;
 import okhttp3.Request;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,6 +20,8 @@ import static com.google.common.base.Preconditions.checkNotNull;
  * {@link AlpacaEndpoint} for <a href="https://docs.alpaca.markets/api-documentation/api-v2/assets/">Assets</a>.
  */
 public class AssetsEndpoint extends AlpacaEndpoint {
+
+    private static final Type ASSET_ARRAYLIST_TYPE = new TypeToken<ArrayList<Asset>>() {}.getType();
 
     /**
      * Instantiates a new {@link AssetsEndpoint}.
@@ -54,7 +57,7 @@ public class AssetsEndpoint extends AlpacaEndpoint {
         Request request = alpacaClient.requestBuilder(urlBuilder.build())
                 .get()
                 .build();
-        return alpacaClient.requestObject(request, new TypeToken<ArrayList<Asset>>() {}.getType());
+        return alpacaClient.requestObject(request, ASSET_ARRAYLIST_TYPE);
     }
 
     /**

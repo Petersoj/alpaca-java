@@ -2,9 +2,11 @@ package net.jacobpeterson.alpaca.rest.endpoint.marketdata.stock;
 
 import com.google.gson.reflect.TypeToken;
 import net.jacobpeterson.alpaca.model.endpoint.marketdata.common.historical.bar.enums.BarTimePeriod;
+import net.jacobpeterson.alpaca.model.endpoint.marketdata.stock.historical.bar.MultiStockBarsResponse;
 import net.jacobpeterson.alpaca.model.endpoint.marketdata.stock.historical.bar.StockBar;
 import net.jacobpeterson.alpaca.model.endpoint.marketdata.stock.historical.bar.StockBarsResponse;
 import net.jacobpeterson.alpaca.model.endpoint.marketdata.stock.historical.bar.enums.BarAdjustment;
+import net.jacobpeterson.alpaca.model.endpoint.marketdata.stock.historical.bar.enums.BarFeed;
 import net.jacobpeterson.alpaca.model.endpoint.marketdata.stock.historical.quote.LatestStockQuoteResponse;
 import net.jacobpeterson.alpaca.model.endpoint.marketdata.stock.historical.quote.StockQuote;
 import net.jacobpeterson.alpaca.model.endpoint.marketdata.stock.historical.quote.StockQuotesResponse;
@@ -19,6 +21,7 @@ import net.jacobpeterson.alpaca.util.format.FormatUtil;
 import okhttp3.HttpUrl;
 import okhttp3.Request;
 
+import java.lang.reflect.Type;
 import java.time.ZonedDateTime;
 import java.util.Collection;
 import java.util.HashMap;
@@ -33,6 +36,9 @@ import static com.google.common.base.Preconditions.checkNotNull;
  * Market Data API v2</a>.
  */
 public class StockMarketDataEndpoint extends AlpacaEndpoint {
+
+    private static final Type SNAPSHOTS_OF_STRINGS_HASHMAP_TYPE =
+            new TypeToken<HashMap<String, Snapshot>>() {}.getType();
 
     /**
      * Instantiates a new {@link StockMarketDataEndpoint}.
@@ -193,19 +199,21 @@ public class StockMarketDataEndpoint extends AlpacaEndpoint {
      * @param barTimePeriodDuration the duration for the given <code>barTimePeriod</code> parameter. e.g. for
      *                              <code>15Min</code> bars, you would supply <code>15</code> for this parameter and
      *                              {@link BarTimePeriod#MINUTE} for the <code>barTimePeriod</code> parameter.
-     * @param barTimePeriod         the {@link BarTimePeriod} e.g. for <code>15Min</code> bars, you would supply {@link
+     * @param barTimePeriod         the {@link BarTimePeriod}. e.g. for <code>15Min</code> bars, you would supply {@link
      *                              BarTimePeriod#MINUTE} for this parameter and <code>15</code> for the
      *                              <code>barTimePeriodDuration</code> parameter.
      * @param barAdjustment         specifies the corporate action adjustment for the stocks. Default value is {@link
-     *                              BarAdjustment#RAW}.
+     *                              BarAdjustment#RAW}
+     * @param barFeed               defaults to {@link BarFeed#IEX} for Free users and {@link BarFeed#SIP} for users
+     *                              with an Unlimited subscription
      *
      * @return the {@link StockBarsResponse}
      *
      * @throws AlpacaClientException thrown for {@link AlpacaClientException}s
      */
     public StockBarsResponse getBars(String symbol, ZonedDateTime start, ZonedDateTime end, Integer limit,
-            String pageToken, int barTimePeriodDuration, BarTimePeriod barTimePeriod, BarAdjustment barAdjustment)
-            throws AlpacaClientException {
+            String pageToken, int barTimePeriodDuration, BarTimePeriod barTimePeriod, BarAdjustment barAdjustment,
+            BarFeed barFeed) throws AlpacaClientException {
         checkNotNull(symbol);
         checkNotNull(start);
         checkNotNull(end);
@@ -233,10 +241,81 @@ public class StockMarketDataEndpoint extends AlpacaEndpoint {
             urlBuilder.addQueryParameter("adjustment", barAdjustment.toString());
         }
 
+        if (barFeed != null) {
+            urlBuilder.addQueryParameter("feed", barFeed.toString());
+        }
+
         Request request = alpacaClient.requestBuilder(urlBuilder.build())
                 .get()
                 .build();
         return alpacaClient.requestObject(request, StockBarsResponse.class);
+    }
+
+    /**
+     * Gets {@link StockBar} aggregate historical data for the requested securities.
+     *
+     * @param symbols               a {@link Collection} of symbols to query for
+     * @param start                 filter data equal to or after this {@link ZonedDateTime}. Fractions of a second are
+     *                              not accepted.
+     * @param end                   filter data equal to or before this {@link ZonedDateTime}. Fractions of a second are
+     *                              not accepted.
+     * @param limit                 number of data points to return. Must be in range 1-10000, defaults to 1000 if
+     *                              <code>null</code> is given
+     * @param pageToken             pagination token to continue from
+     * @param barTimePeriodDuration the duration for the given <code>barTimePeriod</code> parameter. e.g. for
+     *                              <code>15Min</code> bars, you would supply <code>15</code> for this parameter and
+     *                              {@link BarTimePeriod#MINUTE} for the <code>barTimePeriod</code> parameter.
+     * @param barTimePeriod         the {@link BarTimePeriod}. e.g. for <code>15Min</code> bars, you would supply {@link
+     *                              BarTimePeriod#MINUTE} for this parameter and <code>15</code> for the
+     *                              <code>barTimePeriodDuration</code> parameter.
+     * @param barAdjustment         specifies the corporate action adjustment for the stocks. Default value is {@link
+     *                              BarAdjustment#RAW}
+     * @param barFeed               defaults to {@link BarFeed#IEX} for Free users and {@link BarFeed#SIP} for users
+     *                              with an Unlimited subscription
+     *
+     * @return the {@link MultiStockBarsResponse}
+     *
+     * @throws AlpacaClientException thrown for {@link AlpacaClientException}s
+     */
+    public MultiStockBarsResponse getBars(Collection<String> symbols, ZonedDateTime start, ZonedDateTime end,
+            Integer limit, String pageToken, int barTimePeriodDuration, BarTimePeriod barTimePeriod,
+            BarAdjustment barAdjustment, BarFeed barFeed) throws AlpacaClientException {
+        checkNotNull(symbols);
+        checkArgument(!symbols.isEmpty(), "'symbols' cannot be empty!");
+        checkNotNull(start);
+        checkNotNull(end);
+        checkNotNull(barTimePeriod);
+
+        HttpUrl.Builder urlBuilder = alpacaClient.urlBuilder()
+                .addPathSegment(endpointPathSegment)
+                .addPathSegment("bars");
+
+        urlBuilder.addQueryParameter("symbols", String.join(",", symbols));
+        urlBuilder.addQueryParameter("start", FormatUtil.toRFC3339Format(start));
+        urlBuilder.addQueryParameter("end", FormatUtil.toRFC3339Format(end));
+
+        if (limit != null) {
+            urlBuilder.addQueryParameter("limit", limit.toString());
+        }
+
+        if (pageToken != null) {
+            urlBuilder.addQueryParameter("page_token", pageToken);
+        }
+
+        urlBuilder.addQueryParameter("timeframe", barTimePeriodDuration + barTimePeriod.toString());
+
+        if (barAdjustment != null) {
+            urlBuilder.addQueryParameter("adjustment", barAdjustment.toString());
+        }
+
+        if (barFeed != null) {
+            urlBuilder.addQueryParameter("feed", barFeed.toString());
+        }
+
+        Request request = alpacaClient.requestBuilder(urlBuilder.build())
+                .get()
+                .build();
+        return alpacaClient.requestObject(request, MultiStockBarsResponse.class);
     }
 
     /**
@@ -261,7 +340,7 @@ public class StockMarketDataEndpoint extends AlpacaEndpoint {
         Request request = alpacaClient.requestBuilder(urlBuilder.build())
                 .get()
                 .build();
-        return alpacaClient.requestObject(request, new TypeToken<HashMap<String, Snapshot>>() {}.getType());
+        return alpacaClient.requestObject(request, SNAPSHOTS_OF_STRINGS_HASHMAP_TYPE);
     }
 
     /**

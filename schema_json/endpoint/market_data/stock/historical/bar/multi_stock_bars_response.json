@@ -1,0 +1,14 @@
+{
+  "type": "object",
+  "title": "See <a href=\"https://alpaca.markets/docs/api-documentation/api-v2/market-data/alpaca-data-api-v2/historical/\">Historical Stock Data</a>.",
+  "properties": {
+    "bars": {
+      "existingJavaType": "java.util.HashMap<java.lang.String, java.util.ArrayList<net.jacobpeterson.alpaca.model.endpoint.marketdata.stock.historical.bar.StockBar>>",
+      "title": "The {@link net.jacobpeterson.alpaca.model.endpoint.marketdata.stock.historical.bar.StockBar}s of {@link java.lang.String} symbols {@link java.util.HashMap}."
+    },
+    "next_page_token": {
+      "existingJavaType": "java.lang.String",
+      "title": "Token that can be used to query the next page."
+    }
+  }
+}

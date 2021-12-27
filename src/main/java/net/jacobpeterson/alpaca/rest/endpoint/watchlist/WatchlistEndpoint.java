@@ -11,18 +11,22 @@ import net.jacobpeterson.alpaca.util.okhttp.JSONBodyBuilder;
 import okhttp3.HttpUrl;
 import okhttp3.Request;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
+import static net.jacobpeterson.alpaca.rest.AlpacaClient.STATUS_CODE_200_OR_204;
 
 /**
  * {@link AlpacaEndpoint} for <a href="https://docs.alpaca.markets/api-documentation/api-v2/watchlist/">Watchlists</a>
  * .
  */
 public class WatchlistEndpoint extends AlpacaEndpoint {
+
+    private static final Type WATCHLIST_ARRAYLIST_TYPE = new TypeToken<ArrayList<Watchlist>>() {}.getType();
 
     /**
      * Instantiates a new {@link WatchlistEndpoint}.
@@ -46,7 +50,7 @@ public class WatchlistEndpoint extends AlpacaEndpoint {
         Request request = alpacaClient.requestBuilder(urlBuilder.build())
                 .get()
                 .build();
-        return alpacaClient.requestObject(request, new TypeToken<ArrayList<Watchlist>>() {}.getType());
+        return alpacaClient.requestObject(request, WATCHLIST_ARRAYLIST_TYPE);
     }
 
     /**
@@ -183,7 +187,7 @@ public class WatchlistEndpoint extends AlpacaEndpoint {
         Request request = alpacaClient.requestBuilder(urlBuilder.build())
                 .delete()
                 .build();
-        alpacaClient.requestVoid(request, (code) -> code == 200 || code == 204);
+        alpacaClient.requestVoid(request, STATUS_CODE_200_OR_204);
     }
 
     /**
@@ -207,6 +211,6 @@ public class WatchlistEndpoint extends AlpacaEndpoint {
         Request request = alpacaClient.requestBuilder(urlBuilder.build())
                 .delete()
                 .build();
-        return alpacaClient.requestObject(request, (code) -> code == 200 || code == 204, Watchlist.class);
+        return alpacaClient.requestObject(request, STATUS_CODE_200_OR_204, Watchlist.class);
     }
 }

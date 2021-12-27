@@ -1,0 +1,8 @@
+{
+  "type": "string",
+  "title": "See <a href=\"https://alpaca.markets/docs/api-documentation/api-v2/market-data/alpaca-data-api-v2/historical/\">Historical Stock Data</a>.",
+  "enum": [
+    "IEX",
+    "SIP"
+  ]
+}

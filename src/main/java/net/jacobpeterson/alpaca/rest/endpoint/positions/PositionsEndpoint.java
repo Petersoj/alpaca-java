@@ -11,15 +11,21 @@ import net.jacobpeterson.alpaca.rest.endpoint.AlpacaEndpoint;
 import okhttp3.HttpUrl;
 import okhttp3.Request;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
 import static com.google.common.base.Preconditions.checkNotNull;
+import static net.jacobpeterson.alpaca.rest.AlpacaClient.STATUS_CODE_200_OR_207;
 
 /**
  * {@link AlpacaEndpoint} for <a href="https://alpaca.markets/docs/api-documentation/api-v2/positions/">Positions</a>.
  */
 public class PositionsEndpoint extends AlpacaEndpoint {
+
+    private static final Type POSITION_ARRAYLIST_TYPE = new TypeToken<ArrayList<Position>>() {}.getType();
+    private static final Type CLOSED_POSITION_ORDER_ARRAYLIST_TYPE =
+            new TypeToken<ArrayList<ClosePositionOrder>>() {}.getType();
 
     /**
      * Instantiates a new {@link PositionsEndpoint}.
@@ -43,7 +49,7 @@ public class PositionsEndpoint extends AlpacaEndpoint {
         Request request = alpacaClient.requestBuilder(urlBuilder.build())
                 .get()
                 .build();
-        return alpacaClient.requestObject(request, new TypeToken<ArrayList<Position>>() {}.getType());
+        return alpacaClient.requestObject(request, POSITION_ARRAYLIST_TYPE);
     }
 
     /**
@@ -89,8 +95,7 @@ public class PositionsEndpoint extends AlpacaEndpoint {
         Request request = alpacaClient.requestBuilder(urlBuilder.build())
                 .delete()
                 .build();
-        return alpacaClient.requestObject(request, (code) -> code == 200 || code == 207,
-                new TypeToken<ArrayList<ClosePositionOrder>>() {}.getType());
+        return alpacaClient.requestObject(request, STATUS_CODE_200_OR_207, CLOSED_POSITION_ORDER_ARRAYLIST_TYPE);
     }
 
     /**

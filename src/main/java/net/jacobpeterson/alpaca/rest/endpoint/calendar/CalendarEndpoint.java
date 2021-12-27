@@ -8,6 +8,7 @@ import net.jacobpeterson.alpaca.rest.endpoint.AlpacaEndpoint;
 import okhttp3.HttpUrl;
 import okhttp3.Request;
 
+import java.lang.reflect.Type;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -17,6 +18,8 @@ import java.util.List;
  * {@link AlpacaEndpoint} for <a href="https://docs.alpaca.markets/api-documentation/api-v2/calendar/">Calendar</a>.
  */
 public class CalendarEndpoint extends AlpacaEndpoint {
+
+    private static final Type CALENDAR_ARRAYLIST_TYPE = new TypeToken<ArrayList<Calendar>>() {}.getType();
 
     /**
      * Instantiates a new {@link CalendarEndpoint}.
@@ -63,6 +66,6 @@ public class CalendarEndpoint extends AlpacaEndpoint {
         Request request = alpacaClient.requestBuilder(urlBuilder.build())
                 .get()
                 .build();
-        return alpacaClient.requestObject(request, new TypeToken<ArrayList<Calendar>>() {}.getType());
+        return alpacaClient.requestObject(request, CALENDAR_ARRAYLIST_TYPE);
     }
 }

@@ -134,7 +134,7 @@ Example usage:
 ```java
 try {
     // Get AAPL one hour, split-adjusted bars from 7/6/2021 market open
-    // to 7/8/2021 market close and print them out
+    // to 7/8/2021 market close from the SIP feed and print them out
     StockBarsResponse aaplBarsResponse = alpacaAPI.stockMarketData().getBars(
             "AAPL",
             ZonedDateTime.of(2021, 7, 6, 9, 30, 0, 0, ZoneId.of("America/New_York")),
@@ -143,7 +143,8 @@ try {
             null,
             1,
             BarTimePeriod.HOUR,
-            BarAdjustment.SPLIT);
+            BarAdjustment.SPLIT,
+            BarFeed.SIP);
     aaplBarsResponse.getBars().forEach(System.out::println);
 
     // Get AAPL first 10 trades on 7/8/2021 at market open and print them out

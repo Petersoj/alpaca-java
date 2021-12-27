@@ -20,6 +20,7 @@ import net.jacobpeterson.alpaca.util.okhttp.JSONBodyBuilder;
 import okhttp3.HttpUrl;
 import okhttp3.Request;
 
+import java.lang.reflect.Type;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -28,11 +29,16 @@ import java.util.List;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.base.Preconditions.checkState;
+import static net.jacobpeterson.alpaca.rest.AlpacaClient.STATUS_CODE_200_OR_204;
+import static net.jacobpeterson.alpaca.rest.AlpacaClient.STATUS_CODE_200_OR_207;
 
 /**
  * {@link AlpacaEndpoint} for <a href="https://alpaca.markets/docs/api-documentation/api-v2/orders/">Orders</a>.
  */
 public class OrdersEndpoint extends AlpacaEndpoint {
+
+    private static final Type ORDER_ARRAYLIST_TYPE = new TypeToken<ArrayList<Order>>() {}.getType();
+    private static final Type CANCELLED_ORDER_ARRAYLIST_TYPE = new TypeToken<ArrayList<CancelledOrder>>() {}.getType();
 
     /**
      * Instantiates a new {@link OrdersEndpoint}.
@@ -97,7 +103,7 @@ public class OrdersEndpoint extends AlpacaEndpoint {
         Request request = alpacaClient.requestBuilder(urlBuilder.build())
                 .get()
                 .build();
-        return alpacaClient.requestObject(request, new TypeToken<ArrayList<Order>>() {}.getType());
+        return alpacaClient.requestObject(request, ORDER_ARRAYLIST_TYPE);
     }
 
     /**
@@ -615,8 +621,7 @@ public class OrdersEndpoint extends AlpacaEndpoint {
         Request request = alpacaClient.requestBuilder(urlBuilder.build())
                 .delete()
                 .build();
-        return alpacaClient.requestObject(request, (code) -> code == 200 || code == 207,
-                new TypeToken<ArrayList<CancelledOrder>>() {}.getType());
+        return alpacaClient.requestObject(request, STATUS_CODE_200_OR_207, CANCELLED_ORDER_ARRAYLIST_TYPE);
     }
 
     /**
@@ -637,6 +642,6 @@ public class OrdersEndpoint extends AlpacaEndpoint {
         Request request = alpacaClient.requestBuilder(urlBuilder.build())
                 .delete()
                 .build();
-        alpacaClient.requestVoid(request, (code) -> code == 200 || code == 204);
+        alpacaClient.requestVoid(request, STATUS_CODE_200_OR_204);
     }
 }
