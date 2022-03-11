@@ -4,7 +4,7 @@
     <a href="https://javadoc.io/doc/net.jacobpeterson/alpaca-java" target="_blank"><img src="https://javadoc.io/badge/net.jacobpeterson/alpaca-java.svg" alt="Javadocs"></a>
     <a href="https://travis-ci.com/github/Petersoj/alpaca-java" target="_blank"><img src="https://travis-ci.com/Petersoj/alpaca-java.svg?branch=master" alt="Build Status"></a>
     <a href="https://codecov.io/gh/petersoj/alpaca-java"><img src="https://codecov.io/gh/petersoj/alpaca-java/branch/master/graph/badge.svg" alt="CodeCov badge"/></a>
-    <a href="https://opensource.org/licenses/MIT" target="_blank"><img alt="GitHub" src="https://img.shields.io/github/license/petersoj/alpaca-java"></a>    
+    <a href="https://opensource.org/licenses/MIT" target="_blank"><img alt="GitHub" src="https://img.shields.io/github/license/petersoj/alpaca-java"></a>
 </p>
 
 # Overview
@@ -51,7 +51,7 @@ For logging, this library uses [SLF4j](http://www.slf4j.org/) which serves as an
 Note that the examples below are not exhaustive. Refer to the [Javadoc](https://javadoc.io/doc/net.jacobpeterson/alpaca-java) for all classes and method signatures.
 
 ## [`AlpacaAPI`](src/main/java/net/jacobpeterson/alpaca/AlpacaAPI.java)
-The [`AlpacaAPI`](src/main/java/net/jacobpeterson/alpaca/AlpacaAPI.java) class contains several instances of various [`AlpacaEndpoints`](src/main/java/net/jacobpeterson/alpaca/rest/endpoint/AlpacaEndpoint.java) and [`AlpacaWebsockets`](src/main/java/net/jacobpeterson/alpaca/websocket/AlpacaWebsocket.java) to interface with Alpaca. You will generally only need one instance of this class in your application. Note that many methods inside the various [`AlpacaEndpoints`](src/main/java/net/jacobpeterson/alpaca/rest/endpoint/AlpacaEndpoint.java) allow `null` to be passed in as a parameter if it is optional. 
+The [`AlpacaAPI`](src/main/java/net/jacobpeterson/alpaca/AlpacaAPI.java) class contains several instances of various [`AlpacaEndpoints`](src/main/java/net/jacobpeterson/alpaca/rest/endpoint/AlpacaEndpoint.java) and [`AlpacaWebsockets`](src/main/java/net/jacobpeterson/alpaca/websocket/AlpacaWebsocket.java) to interface with Alpaca. You will generally only need one instance of this class in your application. Note that many methods inside the various [`AlpacaEndpoints`](src/main/java/net/jacobpeterson/alpaca/rest/endpoint/AlpacaEndpoint.java) allow `null` to be passed in as a parameter if it is optional.
 
 The Alpaca API specification is located [here](https://docs.alpaca.markets/api-documentation/api-v2/) and the [`AlpacaAPI`](src/main/java/net/jacobpeterson/alpaca/AlpacaAPI.java) Javadoc is located [here](https://javadoc.io/doc/net.jacobpeterson/alpaca-java/latest/net/jacobpeterson/alpaca/AlpacaAPI.html).
 
@@ -409,10 +409,10 @@ StreamingListener streamingListener = (messageType, message) ->
         System.out.printf("%s: %s\n", messageType.name(), message);
 alpacaAPI.streaming().setListener(streamingListener);
 
-// Listen 'AuthorizationMessage' and 'ListeningMessage' messages that contain 
+// Listen 'AuthorizationMessage' and 'ListeningMessage' messages that contain
 // information about the stream's current state. Note that these are subscribed
 // to before the websocket is connected since these messages usually are sent
-// upon websocket connection. 
+// upon websocket connection.
 alpacaAPI.streaming().streams(StreamingMessageType.AUTHORIZATION,
         StreamingMessageType.LISTENING);
 
@@ -481,7 +481,7 @@ The usage is identical to the [`StockMarketDataWebsocket`](https://github.com/Pe
 
 Example usage:
 ```java
-// The 'CryptoMarketDataWebsocket' setup is identical to the 'StockMarketDataWebsocket' setup 
+// The 'CryptoMarketDataWebsocket' setup is identical to the 'StockMarketDataWebsocket' setup
 
 // Listen to BTCUSD and ETHUSD trades and all bars via the wildcard operator ('*').
 alpacaAPI.cryptoMarketDataStreaming().subscribe(
@@ -523,4 +523,4 @@ Note that the live tests will modify your account minimally. It's meant to test 
 # Contributing
 Contributions are welcome!
 
-If you are creating a Pull Request, be sure to create a new branch in your forked repository for your feature or bug fix instead of committing directly to the `master` branch in your fork. 
+If you are creating a Pull Request, be sure to create a new branch in your forked repository for your feature or bug fix instead of committing directly to the `master` branch in your fork.

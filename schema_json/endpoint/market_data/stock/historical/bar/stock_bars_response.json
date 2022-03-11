@@ -4,7 +4,7 @@
   "properties": {
     "bars": {
       "existingJavaType": "java.util.ArrayList<net.jacobpeterson.alpaca.model.endpoint.marketdata.stock.historical.bar.StockBar>",
-      "title": "The {@link java.util.ArrayList} of {@link net.jacobpeterson.alpaca.model.endpoint.marketdata.stock.historical.bar.StockBar}s."
+      "title": "The {@link java.util.ArrayList} of {@link net.jacobpeterson.alpaca.model.endpoint.marketdata.stock.historical.bar.StockBar}s. This may be <code>null</code> if no bars exist."
     },
     "symbol": {
       "existingJavaType": "java.lang.String",

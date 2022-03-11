@@ -26,7 +26,6 @@ plugins {
 }
 
 apply plugin: 'jsonschema2pojo'
-tasks.getByName("generateJsonSchema2Pojo").enabled(false) // Disable default 'jsonSchema2Pojo' task
 
 archivesBaseName = 'alpaca-java'
 group = 'net.jacobpeterson'
@@ -38,7 +37,7 @@ repositories {
 
 dependencies {
     // Logging framework
-    implementation group: 'org.slf4j', name: 'slf4j-api', version: '1.7.31'
+    implementation group: 'org.slf4j', name: 'slf4j-api', version: '1.7.32'
     // This is a bridge for the Apache Jakarta Commons Logging library used in dependencies to actually use SLF4j instead
     implementation group: 'org.slf4j', name: 'jcl-over-slf4j', version: '1.7.31'
 
@@ -178,6 +177,9 @@ processResources {
 // START POJO generation
 //
 
+// Disable default 'jsonSchema2Pojo' task
+tasks.getByName("generateJsonSchema2Pojo").enabled(false)
+
 // The generated POJOs will be in a package structure analogous to the path in the 'schema_json/' directory
 // See: https://github.com/joelittlejohn/jsonschema2pojo/wiki/Reference
 
@@ -240,6 +242,7 @@ jsonSchema2Pojo {
     includeGetters = true
     includeSetters = true
     includeCopyConstructor = true
+    generateBuilders = true
 }
 
 //
