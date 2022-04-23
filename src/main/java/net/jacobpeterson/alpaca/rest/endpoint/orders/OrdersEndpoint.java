@@ -285,9 +285,9 @@ public class OrdersEndpoint extends AlpacaEndpoint {
      *
      * @throws AlpacaClientException thrown for {@link AlpacaClientException}s
      */
-    public Order requestLimitOrder(String symbol, Integer quantity, OrderSide side, OrderTimeInForce timeInForce,
+    public Order requestLimitOrder(String symbol, Double quantity, OrderSide side, OrderTimeInForce timeInForce,
             Double limitPrice, Boolean extendedHours) throws AlpacaClientException {
-        return requestOrder(symbol, quantity.doubleValue(), null, side, OrderType.LIMIT, timeInForce, limitPrice,
+        return requestOrder(symbol, quantity, null, side, OrderType.LIMIT, timeInForce, limitPrice,
                 null, null, null, extendedHours, null, OrderClass.SIMPLE, null, null, null);
     }
 
