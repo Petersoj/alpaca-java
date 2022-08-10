@@ -113,7 +113,7 @@ public class PositionsEndpoint extends AlpacaEndpoint {
      *
      * @throws AlpacaClientException thrown for {@link AlpacaClientException}s
      */
-    public Order close(String symbolOrAssetID, Integer quantity, Double percentage) throws AlpacaClientException {
+    public Order close(String symbolOrAssetID, Double quantity, Double percentage) throws AlpacaClientException {
         checkNotNull(symbolOrAssetID);
 
         HttpUrl.Builder urlBuilder = alpacaClient.urlBuilder()
