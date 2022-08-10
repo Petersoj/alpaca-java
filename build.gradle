@@ -29,7 +29,7 @@ apply plugin: 'jsonschema2pojo'
 
 archivesBaseName = 'alpaca-java'
 group = 'net.jacobpeterson'
-version = '9.1.0-SNAPSHOT'
+version = '9.1.1-SNAPSHOT'
 
 repositories {
     mavenCentral()
