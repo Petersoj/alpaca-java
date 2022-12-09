@@ -3,6 +3,9 @@ package net.jacobpeterson.alpaca.rest;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+
+import javax.annotation.Nullable;
+
 import okhttp3.Response;
 import okhttp3.ResponseBody;
 
@@ -11,10 +14,15 @@ public class AlpacaClientException extends Exception {
     private static final String CODE_KEY = "code";
     private static final String MESSAGE_KEY = "message";
 
+    @Nullable
     private String responseBody;
+    @Nullable
     private Integer responseStatusCode;
+    @Nullable
     private String responseStatusMessage;
+    @Nullable
     private Integer apiResponseCode;
+    @Nullable
     private String apiResponseMessage;
 
     /**
@@ -120,18 +128,22 @@ public class AlpacaClientException extends Exception {
         return messageBuilder.toString();
     }
 
+    @Nullable
     public Integer getResponseStatusCode() {
         return responseStatusCode;
     }
 
+    @Nullable
     public String getResponseStatusMessage() {
         return responseStatusMessage;
     }
 
+    @Nullable
     public Integer getAPIResponseCode() {
         return apiResponseCode;
     }
 
+    @Nullable
     public String getAPIResponseMessage() {
         return apiResponseMessage;
     }
