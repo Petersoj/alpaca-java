@@ -6,6 +6,8 @@ import com.google.gson.JsonParser;
 import okhttp3.Response;
 import okhttp3.ResponseBody;
 
+import javax.annotation.Nullable;
+
 public class AlpacaClientException extends Exception {
 
     private static final String CODE_KEY = "code";
@@ -120,18 +122,22 @@ public class AlpacaClientException extends Exception {
         return messageBuilder.toString();
     }
 
+    @Nullable
     public Integer getResponseStatusCode() {
         return responseStatusCode;
     }
 
+    @Nullable
     public String getResponseStatusMessage() {
         return responseStatusMessage;
     }
 
+    @Nullable
     public Integer getAPIResponseCode() {
         return apiResponseCode;
     }
 
+    @Nullable
     public String getAPIResponseMessage() {
         return apiResponseMessage;
     }
