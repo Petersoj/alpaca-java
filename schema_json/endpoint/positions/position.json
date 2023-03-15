@@ -30,7 +30,7 @@
     },
     "qty_available": {
       "existingJavaType": "java.lang.String",
-      "javaName": "quantity",
+      "javaName": "quantityAvailable",
       "title": "Total number of shares available minus open orders."
     },
     "side": {
