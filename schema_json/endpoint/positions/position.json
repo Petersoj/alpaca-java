@@ -28,6 +28,11 @@
       "javaName": "quantity",
       "title": "The number of shares."
     },
+    "qty_available": {
+      "existingJavaType": "java.lang.String",
+      "javaName": "quantity",
+      "title": "Total number of shares available minus open orders."
+    },
     "side": {
       "existingJavaType": "java.lang.String",
       "title": "\"long\"."
