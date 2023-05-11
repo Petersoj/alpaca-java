@@ -4,7 +4,9 @@
   "enum": [
     "Min",
     "Hour",
-    "Day"
+    "Day",
+    "Week",
+    "Month"
   ],
   "javaEnums": [
     {
@@ -15,6 +17,12 @@
     },
     {
       "name": "DAY"
+    },
+    {
+      "name": "WEEK"
+    },
+    {
+      "name": "MONTH"
     }
   ]
 }
