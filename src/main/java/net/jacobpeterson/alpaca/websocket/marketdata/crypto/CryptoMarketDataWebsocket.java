@@ -8,7 +8,7 @@ import okhttp3.OkHttpClient;
 
 /**
  * {@link CryptoMarketDataWebsocket} is a {@link MarketDataWebsocket} for
- * <a href="https://alpaca.markets/docs/api-documentation/api-v2/market-data/alpaca-crypto-data/real-time/">Realtime
+ * <a href="https://docs.alpaca.markets/docs/real-time-crypto-pricing-data">Realtime
  * Crypto Market Data</a>
  */
 public class CryptoMarketDataWebsocket extends MarketDataWebsocket {
@@ -21,7 +21,7 @@ public class CryptoMarketDataWebsocket extends MarketDataWebsocket {
      * @param secretKey    the secret key
      */
     public CryptoMarketDataWebsocket(OkHttpClient okHttpClient, String keyID, String secretKey) {
-        super(okHttpClient, "v1beta1/crypto", "Crypto", keyID, secretKey, CryptoTradeMessage.class,
+        super(okHttpClient, "v1beta3/crypto/us", "Crypto", keyID, secretKey, CryptoTradeMessage.class,
                 CryptoQuoteMessage.class, CryptoBarMessage.class);
     }
 }

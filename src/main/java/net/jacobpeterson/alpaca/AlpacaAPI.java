@@ -44,7 +44,7 @@ public class AlpacaAPI {
     private static final Logger LOGGER = LoggerFactory.getLogger(AlpacaAPI.class);
 
     private static final String VERSION_2_PATH_SEGMENT = "v2";
-    private static final String VERSION_1_BETA_1_PATH_SEGMENT = "v1beta1";
+    private static final String VERSION_1_BETA_3_PATH_SEGMENT = "v1beta3";
 
     private final OkHttpClient okHttpClient;
     private final AlpacaClient brokerClient;
@@ -160,7 +160,7 @@ public class AlpacaAPI {
         if (oAuthToken == null) {
             brokerClient = new AlpacaClient(okHttpClient, keyID, secretKey,
                     brokerHostSubdomain, VERSION_2_PATH_SEGMENT);
-            cryptoDataClient = new AlpacaClient(okHttpClient, keyID, secretKey, "data", VERSION_1_BETA_1_PATH_SEGMENT);
+            cryptoDataClient = new AlpacaClient(okHttpClient, keyID, secretKey, "data", VERSION_1_BETA_3_PATH_SEGMENT);
             stockDataClient = new AlpacaClient(okHttpClient, keyID, secretKey, "data", VERSION_2_PATH_SEGMENT);
         } else {
             brokerClient = new AlpacaClient(okHttpClient, oAuthToken, brokerHostSubdomain, VERSION_2_PATH_SEGMENT);

@@ -1,7 +1,6 @@
 package net.jacobpeterson.alpaca.rest.endpoint.marketdata.crypto;
 
 import net.jacobpeterson.alpaca.model.endpoint.marketdata.common.historical.bar.enums.BarTimePeriod;
-import net.jacobpeterson.alpaca.model.endpoint.marketdata.crypto.common.enums.Exchange;
 import net.jacobpeterson.alpaca.model.endpoint.marketdata.crypto.historical.bar.CryptoBar;
 import net.jacobpeterson.alpaca.model.endpoint.marketdata.crypto.historical.bar.CryptoBarsResponse;
 import net.jacobpeterson.alpaca.model.endpoint.marketdata.crypto.historical.quote.CryptoQuote;
@@ -10,7 +9,6 @@ import net.jacobpeterson.alpaca.model.endpoint.marketdata.crypto.historical.quot
 import net.jacobpeterson.alpaca.model.endpoint.marketdata.crypto.historical.trade.CryptoTrade;
 import net.jacobpeterson.alpaca.model.endpoint.marketdata.crypto.historical.trade.CryptoTradesResponse;
 import net.jacobpeterson.alpaca.model.endpoint.marketdata.crypto.historical.trade.LatestCryptoTradeResponse;
-import net.jacobpeterson.alpaca.model.endpoint.marketdata.crypto.historical.xbbo.XbboResponse;
 import net.jacobpeterson.alpaca.rest.AlpacaClient;
 import net.jacobpeterson.alpaca.rest.AlpacaClientException;
 import net.jacobpeterson.alpaca.rest.endpoint.AlpacaEndpoint;
@@ -26,10 +24,11 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
  * {@link AlpacaEndpoint} for
- * <a href="https://alpaca.markets/docs/api-documentation/api-v2/market-data/alpaca-crypto-data/historical/">Historical
+ * <a href="https://docs.alpaca.markets/docs/crypto-pricing-data">Historical
  * Crypto Market Data API</a>.
  */
 public class CryptoMarketDataEndpoint extends AlpacaEndpoint {
+    public static final String LOCALE = "us";
 
     /**
      * Instantiates a new {@link CryptoMarketDataEndpoint}.
@@ -43,8 +42,7 @@ public class CryptoMarketDataEndpoint extends AlpacaEndpoint {
     /**
      * Gets {@link CryptoTrade} historical data for the requested crypto symbol.
      *
-     * @param symbol    the symbol to query for
-     * @param exchanges a {@link Collection} of {@link Exchange}s to filter by. <code>null</code> for all exchanges.
+     * @param symbols   a {@link Collection} of symbols to query for
      * @param start     filter data equal to or after this {@link ZonedDateTime}. Fractions of a second are not
      *                  accepted. <code>null</code> for the current day in Central Time.
      * @param end       filter data equal to or before this {@link ZonedDateTime}. Fractions of a second are not
@@ -57,20 +55,16 @@ public class CryptoMarketDataEndpoint extends AlpacaEndpoint {
      *
      * @throws AlpacaClientException thrown for {@link AlpacaClientException}s
      */
-    public CryptoTradesResponse getTrades(String symbol, Collection<Exchange> exchanges, ZonedDateTime start,
+    public CryptoTradesResponse getTrades(Collection<String> symbols, ZonedDateTime start,
             ZonedDateTime end, Integer limit, String pageToken) throws AlpacaClientException {
-        checkNotNull(symbol);
+        checkNotNull(symbols);
 
         HttpUrl.Builder urlBuilder = alpacaClient.urlBuilder()
                 .addPathSegment(endpointPathSegment)
-                .addPathSegment(symbol)
+                .addPathSegment(LOCALE)
                 .addPathSegment("trades");
 
-        if (exchanges != null) {
-            urlBuilder.addQueryParameter("exchanges", exchanges.stream()
-                    .map(Exchange::value)
-                    .collect(Collectors.joining(",")));
-        }
+        urlBuilder.addQueryParameter("symbols", String.join(",", symbols));
 
         if (start != null) {
             urlBuilder.addQueryParameter("start", FormatUtil.toRFC3339Format(start));
@@ -97,24 +91,22 @@ public class CryptoMarketDataEndpoint extends AlpacaEndpoint {
     /**
      * Gets the latest {@link CryptoTrade} for the requested security.
      *
-     * @param symbol   the symbol to query for
-     * @param exchange the {@link Exchange} to filter the latest {@link CryptoTrade} by.
+     * @param symbols   a {@link Collection} of symbols to query for
      *
      * @return the {@link LatestCryptoTradeResponse}
      *
      * @throws AlpacaClientException thrown for {@link AlpacaClientException}s
      */
-    public LatestCryptoTradeResponse getLatestTrade(String symbol, Exchange exchange) throws AlpacaClientException {
-        checkNotNull(symbol);
-        checkNotNull(exchange);
+    public LatestCryptoTradeResponse getLatestTrade(Collection<String> symbols) throws AlpacaClientException {
+        checkNotNull(symbols);
 
         HttpUrl.Builder urlBuilder = alpacaClient.urlBuilder()
                 .addPathSegment(endpointPathSegment)
-                .addPathSegment(symbol)
+                .addPathSegment(LOCALE)
                 .addPathSegment("trades")
                 .addPathSegment("latest");
 
-        urlBuilder.addQueryParameter("exchange", exchange.toString());
+        urlBuilder.addQueryParameter("symbols", String.join(",", symbols));
 
         Request request = alpacaClient.requestBuilder(urlBuilder.build())
                 .get()
@@ -125,8 +117,7 @@ public class CryptoMarketDataEndpoint extends AlpacaEndpoint {
     /**
      * Gets {@link CryptoQuote} historical data for the requested crypto symbol.
      *
-     * @param symbol    the symbol to query for
-     * @param exchanges a {@link Collection} of {@link Exchange}s to filter by. <code>null</code> for all exchanges.
+     * @param symbols   a {@link Collection} of symbols to query for
      * @param start     filter data equal to or after this {@link ZonedDateTime}. Fractions of a second are not
      *                  accepted. <code>null</code> for the current day in Central Time.
      * @param end       filter data equal to or before this {@link ZonedDateTime}. Fractions of a second are not
@@ -139,20 +130,16 @@ public class CryptoMarketDataEndpoint extends AlpacaEndpoint {
      *
      * @throws AlpacaClientException thrown for {@link AlpacaClientException}s
      */
-    public CryptoQuotesResponse getQuotes(String symbol, Collection<Exchange> exchanges, ZonedDateTime start,
+    public CryptoQuotesResponse getQuotes(Collection<String> symbols, ZonedDateTime start,
             ZonedDateTime end, Integer limit, String pageToken) throws AlpacaClientException {
-        checkNotNull(symbol);
+        checkNotNull(symbols);
 
         HttpUrl.Builder urlBuilder = alpacaClient.urlBuilder()
                 .addPathSegment(endpointPathSegment)
-                .addPathSegment(symbol)
+                .addPathSegment(LOCALE)
                 .addPathSegment("quotes");
 
-        if (exchanges != null) {
-            urlBuilder.addQueryParameter("exchanges", exchanges.stream()
-                    .map(Exchange::value)
-                    .collect(Collectors.joining(",")));
-        }
+        urlBuilder.addQueryParameter("symbols", String.join(",", symbols));
 
         if (start != null) {
             urlBuilder.addQueryParameter("start", FormatUtil.toRFC3339Format(start));
@@ -179,24 +166,22 @@ public class CryptoMarketDataEndpoint extends AlpacaEndpoint {
     /**
      * Gets the latest {@link CryptoQuote} for the requested security.
      *
-     * @param symbol   the symbol to query for
-     * @param exchange the {@link Exchange} to filter the latest {@link CryptoQuote} by.
+     * @param symbols   a {@link Collection} of symbols to query for
      *
      * @return the {@link LatestCryptoQuoteResponse}
      *
      * @throws AlpacaClientException thrown for {@link AlpacaClientException}s
      */
-    public LatestCryptoQuoteResponse getLatestQuote(String symbol, Exchange exchange) throws AlpacaClientException {
-        checkNotNull(symbol);
-        checkNotNull(exchange);
+    public LatestCryptoQuoteResponse getLatestQuote(Collection<String> symbols) throws AlpacaClientException {
+        checkNotNull(symbols);
 
         HttpUrl.Builder urlBuilder = alpacaClient.urlBuilder()
                 .addPathSegment(endpointPathSegment)
-                .addPathSegment(symbol)
+                .addPathSegment(LOCALE)
                 .addPathSegment("quotes")
                 .addPathSegment("latest");
 
-        urlBuilder.addQueryParameter("exchange", exchange.toString());
+        urlBuilder.addQueryParameter("symbols", String.join(",", symbols));
 
         Request request = alpacaClient.requestBuilder(urlBuilder.build())
                 .get()
@@ -207,9 +192,7 @@ public class CryptoMarketDataEndpoint extends AlpacaEndpoint {
     /**
      * Gets {@link CryptoBar} aggregate historical data for the requested crypto.
      *
-     * @param symbol                the symbol to query for
-     * @param exchanges             a {@link Collection} of {@link Exchange}s to filter by. <code>null</code> for all
-     *                              exchanges.
+     * @param symbols               a {@link Collection} of symbols to query for
      * @param start                 filter data equal to or after this {@link ZonedDateTime}. Fractions of a second are
      *                              not accepted. <code>null</code> for now.
      * @param limit                 number of data points to return. Must be in range 1-10000, defaults to 1000 if
@@ -226,21 +209,17 @@ public class CryptoMarketDataEndpoint extends AlpacaEndpoint {
      *
      * @throws AlpacaClientException thrown for {@link AlpacaClientException}s
      */
-    public CryptoBarsResponse getBars(String symbol, Collection<Exchange> exchanges, ZonedDateTime start, Integer limit,
+    public CryptoBarsResponse getBars(Collection<String> symbols, ZonedDateTime start, Integer limit,
             String pageToken, int barTimePeriodDuration, BarTimePeriod barTimePeriod) throws AlpacaClientException {
-        checkNotNull(symbol);
+        checkNotNull(symbols);
         checkNotNull(barTimePeriod);
 
         HttpUrl.Builder urlBuilder = alpacaClient.urlBuilder()
                 .addPathSegment(endpointPathSegment)
-                .addPathSegment(symbol)
+                .addPathSegment(LOCALE)
                 .addPathSegment("bars");
 
-        if (exchanges != null) {
-            urlBuilder.addQueryParameter("exchanges", exchanges.stream()
-                    .map(Exchange::value)
-                    .collect(Collectors.joining(",")));
-        }
+        urlBuilder.addQueryParameter("symbols", String.join(",", symbols));
 
         if (start != null) {
             urlBuilder.addQueryParameter("start", FormatUtil.toRFC3339Format(start));
@@ -260,37 +239,5 @@ public class CryptoMarketDataEndpoint extends AlpacaEndpoint {
                 .get()
                 .build();
         return alpacaClient.requestObject(request, CryptoBarsResponse.class);
-    }
-
-    /**
-     * Returns the XBBO for a crypto symbol that calculates the Best Bid and Offer across multiple exchanges.
-     *
-     * @param symbol    the symbol to query for
-     * @param exchanges a {@link Collection} of {@link Exchange}s to filter by. If <code>null</code>, then only the
-     *                  exchanges that can be traded on Alpaca are included in the calculation.
-     *
-     * @return the {@link XbboResponse}
-     *
-     * @throws AlpacaClientException thrown for {@link AlpacaClientException}s
-     */
-    public XbboResponse getXBBO(String symbol, Collection<Exchange> exchanges) throws AlpacaClientException {
-        checkNotNull(symbol);
-
-        HttpUrl.Builder urlBuilder = alpacaClient.urlBuilder()
-                .addPathSegment(endpointPathSegment)
-                .addPathSegment(symbol)
-                .addPathSegment("xbbo")
-                .addPathSegment("latest");
-
-        if (exchanges != null) {
-            urlBuilder.addQueryParameter("exchanges", exchanges.stream()
-                    .map(Exchange::value)
-                    .collect(Collectors.joining(",")));
-        }
-
-        Request request = alpacaClient.requestBuilder(urlBuilder.build())
-                .get()
-                .build();
-        return alpacaClient.requestObject(request, XbboResponse.class);
     }
 }
