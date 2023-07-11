@@ -1,0 +1,10 @@
+{
+  "type": "object",
+  "title": "See <a href=\"https://alpaca.markets/docs/api-references/market-data-api/crypto-pricing-data/historical/\">Historical Crypto Data</a>.",
+  "properties": {
+    "bars": {
+      "existingJavaType": "java.util.Map<String, net.jacobpeterson.alpaca.model.endpoint.marketdata.crypto.historical.bar.CryptoBar>",
+      "title": "The {@link java.util.Map} of {@link net.jacobpeterson.alpaca.model.endpoint.marketdata.crypto.historical.bar.CryptoBar}s."
+    }
+  }
+}

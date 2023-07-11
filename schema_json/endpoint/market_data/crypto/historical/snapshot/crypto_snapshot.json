@@ -1,0 +1,31 @@
+{
+  "type": "object",
+  "title": "See <a href=\"https://docs.alpaca.markets/reference/v1beta3cryptosnapshots\">Snapshots</a>.",
+  "properties": {
+    "dailyBar": {
+      "existingJavaType": "net.jacobpeterson.alpaca.model.endpoint.marketdata.crypto.historical.bar.CryptoBar",
+      "javaName": "dailyBar",
+      "title": "OHLC aggregate of all the trades in a given interval."
+    },
+    "latestQuote": {
+      "existingJavaType": "net.jacobpeterson.alpaca.model.endpoint.marketdata.crypto.historical.quote.CryptoQuote",
+      "javaName": "latestQuote",
+      "title": "The best bid and ask information for a given security."
+    },
+    "latestTrade": {
+      "existingJavaType": "net.jacobpeterson.alpaca.model.endpoint.marketdata.crypto.historical.trade.CryptoTrade",
+      "javaName": "latestTrade",
+      "title": "A crypto trade"
+    },
+    "minuteBar": {
+      "existingJavaType": "net.jacobpeterson.alpaca.model.endpoint.marketdata.crypto.historical.bar.CryptoBar",
+      "javaName": "minuteBar",
+      "title": "OHLC aggregate of all the trades in a given interval."
+    },
+    "prevDailyBar": {
+      "existingJavaType": "net.jacobpeterson.alpaca.model.endpoint.marketdata.crypto.historical.bar.CryptoBar",
+      "javaName": "prevDailyBar",
+      "title": "OHLC aggregate of all the trades in a given interval."
+    }
+  }
+}

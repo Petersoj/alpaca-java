@@ -1,0 +1,16 @@
+{
+  "type": "object",
+  "title": "See <a href=\"https://docs.alpaca.markets/reference/v1beta3cryptolatestorderbooks\">Latest Orderbook</a>.",
+  "properties": {
+    "p": {
+      "existingJavaType": "java.lang.Double",
+      "javaName": "price",
+      "title": "Price."
+    },
+    "s": {
+      "existingJavaType": "java.lang.Double",
+      "javaName": "size",
+      "title": "Size."
+    }
+  }
+}
