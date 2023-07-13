@@ -7,7 +7,6 @@ import net.jacobpeterson.alpaca.model.endpoint.marketdata.crypto.historical.bar.
 import net.jacobpeterson.alpaca.model.endpoint.marketdata.crypto.historical.orderbook.CryptoOrderbook;
 import net.jacobpeterson.alpaca.model.endpoint.marketdata.crypto.historical.orderbook.LatestCryptoOrderbooksResponse;
 import net.jacobpeterson.alpaca.model.endpoint.marketdata.crypto.historical.quote.CryptoQuote;
-import net.jacobpeterson.alpaca.model.endpoint.marketdata.crypto.historical.quote.CryptoQuotesResponse;
 import net.jacobpeterson.alpaca.model.endpoint.marketdata.crypto.historical.quote.LatestCryptoQuotesResponse;
 import net.jacobpeterson.alpaca.model.endpoint.marketdata.crypto.historical.snapshot.CryptoSnapshot;
 import net.jacobpeterson.alpaca.model.endpoint.marketdata.crypto.historical.snapshot.CryptoSnapshotsResponse;
@@ -151,58 +150,6 @@ public class CryptoMarketDataEndpoint extends AlpacaEndpoint {
                 .get()
                 .build();
         return alpacaClient.requestObject(request, LatestCryptoBarsResponse.class);
-    }
-
-    /**
-     * Gets {@link CryptoQuote} historical data for the requested crypto symbols.
-     *
-     * @param symbols   a {@link Collection} of symbols to query for
-     * @param start     filter data equal to or after this {@link ZonedDateTime}. Fractions of a second are not
-     *                  accepted. <code>null</code> for the current day in Central Time.
-     * @param end       filter data equal to or before this {@link ZonedDateTime}. Fractions of a second are not
-     *                  accepted. <code>null</code> for now.
-     * @param limit     number of data points to return. Must be in range 1-10000, defaults to 1000 if <code>null</code>
-     *                  is given
-     * @param pageToken pagination token to continue from
-     *
-     * @return the {@link CryptoQuotesResponse}
-     *
-     * @throws AlpacaClientException thrown for {@link AlpacaClientException}s
-     */
-    public CryptoQuotesResponse getQuotes(Collection<String> symbols, ZonedDateTime start,
-            ZonedDateTime end, Integer limit, String pageToken) throws AlpacaClientException {
-        checkNotNull(symbols);
-        if (symbols.isEmpty()) {
-            throw new AlpacaClientException("Collection symbols must not be empty.");
-        }
-
-        HttpUrl.Builder urlBuilder = alpacaClient.urlBuilder()
-                .addPathSegment(endpointPathSegment)
-                .addPathSegment(LOCALE)
-                .addPathSegment("quotes");
-
-        urlBuilder.addQueryParameter("symbols", String.join(",", symbols));
-
-        if (start != null) {
-            urlBuilder.addQueryParameter("start", FormatUtil.toRFC3339Format(start));
-        }
-
-        if (end != null) {
-            urlBuilder.addQueryParameter("end", FormatUtil.toRFC3339Format(end));
-        }
-
-        if (limit != null) {
-            urlBuilder.addQueryParameter("limit", limit.toString());
-        }
-
-        if (pageToken != null) {
-            urlBuilder.addQueryParameter("page_token", pageToken);
-        }
-
-        Request request = alpacaClient.requestBuilder(urlBuilder.build())
-                .get()
-                .build();
-        return alpacaClient.requestObject(request, CryptoQuotesResponse.class);
     }
 
     /**
