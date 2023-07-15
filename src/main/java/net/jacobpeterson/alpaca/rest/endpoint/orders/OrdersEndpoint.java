@@ -242,7 +242,7 @@ public class OrdersEndpoint extends AlpacaEndpoint {
      * most likely method of filling an order. Market orders fill nearly instantaneously. This method calls {@link
      * #requestOrder(String, Double, Double, OrderSide, OrderType, OrderTimeInForce, Double, Double, Double, Double,
      * Boolean, String, OrderClass, Double, Double, Double)} with {@link OrderType#MARKET} and {@link
-     * OrderTimeInForce#DAY} with a fractional quantity so check the Javadoc for that method for parameter details.
+     * OrderTimeInForce#GOOD_UNTIL_CANCELLED} with a fractional quantity so check the Javadoc for that method for parameter details.
      *
      * @return the requested {@link Order}
      *
@@ -250,7 +250,7 @@ public class OrdersEndpoint extends AlpacaEndpoint {
      */
     public Order requestFractionalMarketOrder(String symbol, Double quantity, OrderSide side)
             throws AlpacaClientException {
-        return requestOrder(symbol, quantity, null, side, OrderType.MARKET, OrderTimeInForce.DAY, null, null, null,
+        return requestOrder(symbol, quantity, null, side, OrderType.MARKET, OrderTimeInForce.GOOD_UNTIL_CANCELLED, null, null, null,
                 null, null, null, null, null, null, null);
     }
 
@@ -259,7 +259,7 @@ public class OrdersEndpoint extends AlpacaEndpoint {
      * most likely method of filling an order. Market orders fill nearly instantaneously. This method calls {@link
      * #requestOrder(String, Double, Double, OrderSide, OrderType, OrderTimeInForce, Double, Double, Double, Double,
      * Boolean, String, OrderClass, Double, Double, Double)} with {@link OrderType#MARKET} and {@link
-     * OrderTimeInForce#DAY} with a notional dollar amount so check the Javadoc for that method for the parameter
+     * OrderTimeInForce#GOOD_UNTIL_CANCELLED} with a notional dollar amount so check the Javadoc for that method for the parameter
      * details.
      *
      * @return the requested {@link Order}
@@ -268,7 +268,7 @@ public class OrdersEndpoint extends AlpacaEndpoint {
      */
     public Order requestNotionalMarketOrder(String symbol, Double notional, OrderSide side)
             throws AlpacaClientException {
-        return requestOrder(symbol, null, notional, side, OrderType.MARKET, OrderTimeInForce.DAY, null, null, null,
+        return requestOrder(symbol, null, notional, side, OrderType.MARKET, OrderTimeInForce.GOOD_UNTIL_CANCELLED, null, null, null,
                 null, null, null, null, null, null, null);
     }
 
