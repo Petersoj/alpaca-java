@@ -79,6 +79,17 @@ public class AlpacaAPI {
     }
 
     /**
+     * Instantiates a new {@link AlpacaAPI} using properties specified in <code>Builder</code>, otherwise from
+     * <code>alpaca.properties</code> file (or their associated defaults).
+     */
+    private AlpacaAPI(Builder builder) {
+        this(builder.keyID,
+                builder.secretKey,
+                builder.endpointAPIType,
+                builder.dataAPIType);
+    }
+
+    /**
      * Instantiates a new {@link AlpacaAPI}.
      *
      * @param keyID     the key ID
@@ -307,5 +318,47 @@ public class AlpacaAPI {
 
     public AlpacaClient getStockDataClient() {
         return stockDataClient;
+    }
+
+    public static Builder builder() {
+        return new Builder();
+    }
+
+    public static final class Builder {
+        private String keyID;
+        private String secretKey;
+        private EndpointAPIType endpointAPIType;
+        private DataAPIType dataAPIType;
+
+        private Builder() {
+            this.keyID = AlpacaProperties.KEY_ID;
+            this.secretKey = AlpacaProperties.SECRET_KEY;
+            this.endpointAPIType = AlpacaProperties.ENDPOINT_API_TYPE;
+            this.dataAPIType = AlpacaProperties.DATA_API_TYPE;
+        }
+
+        public Builder withKeyID(String val) {
+            keyID = val;
+            return this;
+        }
+
+        public Builder withSecretKey(String val) {
+            secretKey = val;
+            return this;
+        }
+
+        public Builder withEndpointAPIType(EndpointAPIType val) {
+            endpointAPIType = val;
+            return this;
+        }
+
+        public Builder withDataAPIType(DataAPIType val) {
+            dataAPIType = val;
+            return this;
+        }
+
+        public AlpacaAPI build() {
+            return new AlpacaAPI(this);
+        }
     }
 }
