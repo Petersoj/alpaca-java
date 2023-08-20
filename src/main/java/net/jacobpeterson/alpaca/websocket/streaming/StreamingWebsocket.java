@@ -35,8 +35,8 @@ import static com.google.common.base.Predicates.not;
 import static net.jacobpeterson.alpaca.util.gson.GsonUtil.GSON;
 
 /**
- * {@link StreamingWebsocket} is an {@link AlpacaWebsocket} implementation and provides the {@link
- * StreamingWebsocketInterface} interface for
+ * {@link StreamingWebsocket} is an {@link AlpacaWebsocket} implementation and provides the
+ * {@link StreamingWebsocketInterface} interface for
  * <a href="https://alpaca.markets/docs/api-documentation/api-v2/streaming/">Streaming</a>
  */
 public class StreamingWebsocket extends AlpacaWebsocket<StreamingMessageType, StreamingMessage, StreamingListener>

@@ -15,7 +15,6 @@ import net.jacobpeterson.alpaca.model.endpoint.orders.Order;
 import net.jacobpeterson.alpaca.model.endpoint.orders.enums.CurrentOrderStatus;
 import net.jacobpeterson.alpaca.rest.AlpacaClientException;
 import net.jacobpeterson.alpaca.rest.endpoint.account.AccountEndpoint;
-import net.jacobpeterson.alpaca.rest.endpoint.accountactivities.AccountActivitiesEndpoint;
 import net.jacobpeterson.alpaca.rest.endpoint.accountconfiguration.AccountConfigurationEndpoint;
 import net.jacobpeterson.alpaca.rest.endpoint.clock.ClockEndpoint;
 import net.jacobpeterson.alpaca.rest.endpoint.orders.OrdersEndpoint;
@@ -156,8 +155,9 @@ public class AlpacaAPITest {
     }
 
     /**
-     * Tests @{@link AccountActivitiesEndpoint#get(ZonedDateTime, ZonedDateTime, ZonedDateTime, SortDirection, Integer,
-     * String, ActivityType...)} one {@link AccountActivity} exists until now.
+     * Tests
+     * @{@link AccountActivitiesEndpoint#get(ZonedDateTime, ZonedDateTime, ZonedDateTime, SortDirection, Integer,
+     *String, ActivityType...)} one {@link AccountActivity} exists until now.
      *
      * @throws AlpacaClientException thrown for {@link AlpacaClientException}s
      */
@@ -246,7 +246,8 @@ public class AlpacaAPITest {
     }
 
     /**
-     * Test {@link OrdersEndpoint#get(CurrentOrderStatus, Integer, ZonedDateTime, ZonedDateTime, SortDirection, Boolean,
+     * Test
+     * {@link OrdersEndpoint#get(CurrentOrderStatus, Integer, ZonedDateTime, ZonedDateTime, SortDirection, Boolean,
      * Collection)} one {@link Order} exists until now.
      *
      * @throws AlpacaClientException thrown for {@link AlpacaClientException}s

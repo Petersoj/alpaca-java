@@ -127,8 +127,8 @@ public class AlpacaClient {
      *
      * @param <T>           the type of object
      * @param request       the {@link Request}
-     * @param isSuccessCode throws {@link AlpacaClientException} if passed in {@link Response#code()} to the {@link
-     *                      Predicate#test(Object)} returns false
+     * @param isSuccessCode throws {@link AlpacaClientException} if passed in {@link Response#code()} to the
+     *                      {@link Predicate#test(Object)} returns false
      * @param type          the object {@link Type}
      *
      * @return the requested object
@@ -151,8 +151,8 @@ public class AlpacaClient {
      * Requests a {@link JsonElement} given a {@link Request}.
      *
      * @param request       the {@link Request}
-     * @param isSuccessCode throws {@link AlpacaClientException} if passed in {@link Response#code()} to the {@link
-     *                      Predicate#test(Object)} returns false
+     * @param isSuccessCode throws {@link AlpacaClientException} if passed in {@link Response#code()} to the
+     *                      {@link Predicate#test(Object)} returns false
      *
      * @return the {@link JsonElement}
      *
@@ -178,8 +178,8 @@ public class AlpacaClient {
      * Sends a {@link Request} and ignores any {@link ResponseBody}.
      *
      * @param request       the {@link Request}
-     * @param isSuccessCode throws {@link AlpacaClientException} if passed in {@link Response#code()} to the {@link
-     *                      Predicate#test(Object)} returns false
+     * @param isSuccessCode throws {@link AlpacaClientException} if passed in {@link Response#code()} to the
+     *                      {@link Predicate#test(Object)} returns false
      *
      * @throws AlpacaClientException thrown for {@link AlpacaClientException}s
      */
@@ -193,8 +193,8 @@ public class AlpacaClient {
      * Sends a {@link Request} and returns a {@link Response}.
      *
      * @param request       the {@link Request}
-     * @param isSuccessCode throws {@link AlpacaClientException} if passed in {@link Response#code()} to the {@link
-     *                      Predicate#test(Object)} returns false
+     * @param isSuccessCode throws {@link AlpacaClientException} if passed in {@link Response#code()} to the
+     *                      {@link Predicate#test(Object)} returns false
      *
      * @return the {@link Response}. <strong>Be sure to call {@link Response#close()} after use.</strong>
      *

@@ -199,11 +199,11 @@ public class StockMarketDataEndpoint extends AlpacaEndpoint {
      * @param barTimePeriodDuration the duration for the given <code>barTimePeriod</code> parameter. e.g. for
      *                              <code>15Min</code> bars, you would supply <code>15</code> for this parameter and
      *                              {@link BarTimePeriod#MINUTE} for the <code>barTimePeriod</code> parameter.
-     * @param barTimePeriod         the {@link BarTimePeriod}. e.g. for <code>15Min</code> bars, you would supply {@link
-     *                              BarTimePeriod#MINUTE} for this parameter and <code>15</code> for the
+     * @param barTimePeriod         the {@link BarTimePeriod}. e.g. for <code>15Min</code> bars, you would supply
+     *                              {@link BarTimePeriod#MINUTE} for this parameter and <code>15</code> for the
      *                              <code>barTimePeriodDuration</code> parameter.
-     * @param barAdjustment         specifies the corporate action adjustment for the stocks. Default value is {@link
-     *                              BarAdjustment#RAW}
+     * @param barAdjustment         specifies the corporate action adjustment for the stocks. Default value is
+     *                              {@link BarAdjustment#RAW}
      * @param barFeed               defaults to {@link BarFeed#IEX} for Free users and {@link BarFeed#SIP} for users
      *                              with an Unlimited subscription
      *
@@ -265,11 +265,11 @@ public class StockMarketDataEndpoint extends AlpacaEndpoint {
      * @param barTimePeriodDuration the duration for the given <code>barTimePeriod</code> parameter. e.g. for
      *                              <code>15Min</code> bars, you would supply <code>15</code> for this parameter and
      *                              {@link BarTimePeriod#MINUTE} for the <code>barTimePeriod</code> parameter.
-     * @param barTimePeriod         the {@link BarTimePeriod}. e.g. for <code>15Min</code> bars, you would supply {@link
-     *                              BarTimePeriod#MINUTE} for this parameter and <code>15</code> for the
+     * @param barTimePeriod         the {@link BarTimePeriod}. e.g. for <code>15Min</code> bars, you would supply
+     *                              {@link BarTimePeriod#MINUTE} for this parameter and <code>15</code> for the
      *                              <code>barTimePeriodDuration</code> parameter.
-     * @param barAdjustment         specifies the corporate action adjustment for the stocks. Default value is {@link
-     *                              BarAdjustment#RAW}
+     * @param barAdjustment         specifies the corporate action adjustment for the stocks. Default value is
+     *                              {@link BarAdjustment#RAW}
      * @param barFeed               defaults to {@link BarFeed#IEX} for Free users and {@link BarFeed#SIP} for users
      *                              with an Unlimited subscription
      *
