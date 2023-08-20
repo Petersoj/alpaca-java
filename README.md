@@ -74,7 +74,7 @@ AlpacaAPI alpacaAPI = new AlpacaAPI(keyID, secretKey, EndpointAPIType.LIVE, Data
 String oAuthToken = "<some OAuth token>";
 AlpacaAPI alpacaAPI = new AlpacaAPI(oAuthToken);
 
-// The following approach uses builder pattern. Attributes not provided explicitly are retrieved from 'alpaca.properties' file
+// This approach uses a builder pattern. Attributes not provided explicitly are retrieved from 'alpaca.properties' file
 AlpacaAPI alpacaAPI = AlpacaAPI.builder()
     .withEndpointAPIType(EndpointAPIType.PAPER)
     .build();

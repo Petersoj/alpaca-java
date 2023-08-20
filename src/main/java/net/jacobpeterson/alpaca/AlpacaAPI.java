@@ -5,19 +5,19 @@ import net.jacobpeterson.alpaca.model.properties.DataAPIType;
 import net.jacobpeterson.alpaca.model.properties.EndpointAPIType;
 import net.jacobpeterson.alpaca.properties.AlpacaProperties;
 import net.jacobpeterson.alpaca.rest.AlpacaClient;
+import net.jacobpeterson.alpaca.rest.endpoint.AlpacaEndpoint;
+import net.jacobpeterson.alpaca.rest.endpoint.account.AccountEndpoint;
 import net.jacobpeterson.alpaca.rest.endpoint.accountactivities.AccountActivitiesEndpoint;
 import net.jacobpeterson.alpaca.rest.endpoint.accountconfiguration.AccountConfigurationEndpoint;
-import net.jacobpeterson.alpaca.rest.endpoint.account.AccountEndpoint;
-import net.jacobpeterson.alpaca.rest.endpoint.AlpacaEndpoint;
 import net.jacobpeterson.alpaca.rest.endpoint.assets.AssetsEndpoint;
 import net.jacobpeterson.alpaca.rest.endpoint.calendar.CalendarEndpoint;
 import net.jacobpeterson.alpaca.rest.endpoint.clock.ClockEndpoint;
+import net.jacobpeterson.alpaca.rest.endpoint.marketdata.crypto.CryptoMarketDataEndpoint;
+import net.jacobpeterson.alpaca.rest.endpoint.marketdata.stock.StockMarketDataEndpoint;
 import net.jacobpeterson.alpaca.rest.endpoint.orders.OrdersEndpoint;
 import net.jacobpeterson.alpaca.rest.endpoint.portfoliohistory.PortfolioHistoryEndpoint;
 import net.jacobpeterson.alpaca.rest.endpoint.positions.PositionsEndpoint;
 import net.jacobpeterson.alpaca.rest.endpoint.watchlist.WatchlistEndpoint;
-import net.jacobpeterson.alpaca.rest.endpoint.marketdata.crypto.CryptoMarketDataEndpoint;
-import net.jacobpeterson.alpaca.rest.endpoint.marketdata.stock.StockMarketDataEndpoint;
 import net.jacobpeterson.alpaca.websocket.AlpacaWebsocket;
 import net.jacobpeterson.alpaca.websocket.marketdata.MarketDataWebsocketInterface;
 import net.jacobpeterson.alpaca.websocket.marketdata.crypto.CryptoMarketDataWebsocket;
@@ -32,8 +32,8 @@ import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
- * The {@link AlpacaAPI} class contains several instances of various {@link AlpacaEndpoint}s and {@link
- * AlpacaWebsocket}s to interface with Alpaca. You will generally only need one instance of this class in your
+ * The {@link AlpacaAPI} class contains several instances of various {@link AlpacaEndpoint}s and
+ * {@link AlpacaWebsocket}s to interface with Alpaca. You will generally only need one instance of this class in your
  * application. Note that many methods inside the various {@link AlpacaEndpoint}s allow <code>null<code/> to be passed
  * in as a parameter if it is optional.
  *
@@ -79,7 +79,7 @@ public class AlpacaAPI {
     }
 
     /**
-     * Instantiates a new {@link AlpacaAPI} using properties specified in <code>Builder</code>, otherwise from
+     * Instantiates a new {@link AlpacaAPI} using properties specified in the given {@link Builder}, otherwise from
      * <code>alpaca.properties</code> file (or their associated defaults).
      */
     private AlpacaAPI(Builder builder) {
@@ -320,11 +320,20 @@ public class AlpacaAPI {
         return stockDataClient;
     }
 
+    /**
+     * Creates a {@link Builder} for {@link AlpacaAPI}.
+     *
+     * @return a {@link Builder}
+     */
     public static Builder builder() {
         return new Builder();
     }
 
+    /**
+     * A builder for {@link AlpacaAPI}
+     */
     public static final class Builder {
+
         private String keyID;
         private String secretKey;
         private EndpointAPIType endpointAPIType;
