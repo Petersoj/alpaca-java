@@ -31,6 +31,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
  * Crypto Market Data API</a>.
  */
 public class CryptoMarketDataEndpoint extends AlpacaEndpoint {
+
     public static final String LOCALE = "us";
 
     /**
@@ -97,7 +98,7 @@ public class CryptoMarketDataEndpoint extends AlpacaEndpoint {
     /**
      * Gets the latest {@link CryptoTrade}s for the requested securities.
      *
-     * @param symbols   a {@link Collection} of symbols to query for
+     * @param symbols a {@link Collection} of symbols to query for
      *
      * @return the {@link LatestCryptoTradesResponse}
      *
@@ -126,7 +127,7 @@ public class CryptoMarketDataEndpoint extends AlpacaEndpoint {
     /**
      * Gets the latest {@link CryptoBar}s for the requested securities.
      *
-     * @param symbols   a {@link Collection} of symbols to query for
+     * @param symbols a {@link Collection} of symbols to query for
      *
      * @return the {@link LatestCryptoBarsResponse}
      *
@@ -155,7 +156,7 @@ public class CryptoMarketDataEndpoint extends AlpacaEndpoint {
     /**
      * Gets the latest {@link CryptoQuote}s for the requested securities.
      *
-     * @param symbols   a {@link Collection} of symbols to query for
+     * @param symbols a {@link Collection} of symbols to query for
      *
      * @return the {@link LatestCryptoQuotesResponse}
      *
@@ -184,7 +185,7 @@ public class CryptoMarketDataEndpoint extends AlpacaEndpoint {
     /**
      * Gets the latest {@link CryptoSnapshot} for the requested securities.
      *
-     * @param symbols   a {@link Collection} of symbols to query for
+     * @param symbols a {@link Collection} of symbols to query for
      *
      * @return the {@link CryptoSnapshotsResponse}
      *
@@ -212,7 +213,7 @@ public class CryptoMarketDataEndpoint extends AlpacaEndpoint {
     /**
      * Gets the latest {@link CryptoOrderbook}s for the requested securities.
      *
-     * @param symbols   a {@link Collection} of symbols to query for
+     * @param symbols a {@link Collection} of symbols to query for
      *
      * @return the {@link LatestCryptoOrderbooksResponse}
      *
@@ -252,8 +253,8 @@ public class CryptoMarketDataEndpoint extends AlpacaEndpoint {
      * @param barTimePeriodDuration the duration for the given <code>barTimePeriod</code> parameter. e.g. for
      *                              <code>15Min</code> bars, you would supply <code>15</code> for this parameter and
      *                              {@link BarTimePeriod#MINUTE} for the <code>barTimePeriod</code> parameter.
-     * @param barTimePeriod         the {@link BarTimePeriod} e.g. for <code>15Min</code> bars, you would supply {@link
-     *                              BarTimePeriod#MINUTE} for this parameter and <code>15</code> for the
+     * @param barTimePeriod         the {@link BarTimePeriod} e.g. for <code>15Min</code> bars, you would supply
+     *                              {@link BarTimePeriod#MINUTE} for this parameter and <code>15</code> for the
      *                              <code>barTimePeriodDuration</code> parameter.
      *
      * @return the {@link CryptoBarsResponse}

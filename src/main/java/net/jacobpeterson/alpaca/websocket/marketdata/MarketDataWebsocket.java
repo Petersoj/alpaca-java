@@ -35,8 +35,8 @@ import static com.google.common.base.Predicates.not;
 import static net.jacobpeterson.alpaca.util.gson.GsonUtil.GSON;
 
 /**
- * {@link MarketDataWebsocket} is an {@link AlpacaWebsocket} implementation and provides the {@link
- * MarketDataWebsocketInterface} interface for
+ * {@link MarketDataWebsocket} is an {@link AlpacaWebsocket} implementation and provides the
+ * {@link MarketDataWebsocketInterface} interface for
  * <a href="https://alpaca.markets/docs/api-documentation/api-v2/market-data/">Realtime Market Data</a> for both crypto
  * and stocks.
  */
@@ -243,8 +243,8 @@ public abstract class MarketDataWebsocket
     }
 
     /**
-     * Handles a {@link SubscriptionsMessage} for updating {@link #listenedMarketDataMessageTypes} and returns a {@link
-     * List} of currently subscribe symbols or <code>null</code>.
+     * Handles a {@link SubscriptionsMessage} for updating {@link #listenedMarketDataMessageTypes} and returns a
+     * {@link List} of currently subscribe symbols or <code>null</code>.
      *
      * @param marketDataMessageType   the {@link MarketDataMessageType}
      * @param newSubscribedSymbols    the new subscribed symbols from {@link SubscriptionsMessage}

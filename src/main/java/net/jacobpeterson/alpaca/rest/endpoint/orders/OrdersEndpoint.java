@@ -56,8 +56,8 @@ public class OrdersEndpoint extends AlpacaEndpoint {
      * @param limit     the maximum number of orders in response. Defaults to 50 and max is 500.
      * @param after     the response will include only ones submitted after this timestamp (exclusive)
      * @param until     the response will include only ones submitted until this timestamp (exclusive)
-     * @param direction the chronological order of response based on the submission time. Defaults to {@link
-     *                  SortDirection#DESCENDING}.
+     * @param direction the chronological order of response based on the submission time. Defaults to
+     *                  {@link SortDirection#DESCENDING}.
      * @param nested    if true, the result will roll up multi-leg orders under the legs field of primary order.
      * @param symbols   a {@link Collection} of symbols to filter by (e.g. "AAPL,TSLA,MSFT"). A currency pair is
      *                  required for crypto orders (e.g. "BTCUSD,BCHUSD,LTCUSD,ETCUSD"). <code>null</code> for no
@@ -120,19 +120,19 @@ public class OrdersEndpoint extends AlpacaEndpoint {
      * @param timeInForce          the {@link OrderTimeInForce}
      * @param limitPrice           required if type is {@link OrderType#LIMIT} or {@link OrderType#STOP_LIMIT}
      * @param stopPrice            required if type is {@link OrderType#STOP} or {@link OrderType#STOP_LIMIT}
-     * @param trailPrice           this or <code>trail_percent</code> is required if type is {@link
-     *                             OrderType#TRAILING_STOP}
-     * @param trailPercent         this or <code>trail_price</code> is required if type is {@link
-     *                             OrderType#TRAILING_STOP}
+     * @param trailPrice           this or <code>trail_percent</code> is required if type is
+     *                             {@link OrderType#TRAILING_STOP}
+     * @param trailPercent         this or <code>trail_price</code> is required if type is
+     *                             {@link OrderType#TRAILING_STOP}
      * @param extendedHours        (default) false. If true, order will be eligible to execute in premarket/afterhours.
      *                             Only works with type {@link OrderType#LIMIT} and {@link OrderTimeInForce#DAY}.
      * @param clientOrderId        a unique identifier for the order. Automatically generated if <code>null</code>.
      * @param orderClass           the {@link OrderClass}. For details of non-simple order classes, please see "Bracket
      *                             Order Overview" on the Alpaca Docs.
-     * @param takeProfitLimitPrice additional parameter for take-profit leg of advanced orders. Required for {@link
-     *                             OrderClass#BRACKET}.
-     * @param stopLossStopPrice    additional parameters for stop-loss leg of advanced orders. Required for {@link
-     *                             OrderClass#BRACKET}.
+     * @param takeProfitLimitPrice additional parameter for take-profit leg of advanced orders. Required for
+     *                             {@link OrderClass#BRACKET}.
+     * @param stopLossStopPrice    additional parameters for stop-loss leg of advanced orders. Required for
+     *                             {@link OrderClass#BRACKET}.
      * @param stopLossLimitPrice   additional parameters for stop-loss leg of advanced orders. The stop-loss order
      *                             becomes a stop-limit order if specified.
      *
@@ -222,10 +222,10 @@ public class OrdersEndpoint extends AlpacaEndpoint {
 
     /**
      * A market order is a request to buy or sell a security at the currently available market price. It provides the
-     * most likely method of filling an order. Market orders fill nearly instantaneously. This method calls {@link
-     * #requestOrder(String, Double, Double, OrderSide, OrderType, OrderTimeInForce, Double, Double, Double, Double,
-     * Boolean, String, OrderClass, Double, Double, Double)} with {@link OrderType#MARKET} so check the Javadoc for that
-     * method for parameter details.
+     * most likely method of filling an order. Market orders fill nearly instantaneously. This method calls
+     * {@link #requestOrder(String, Double, Double, OrderSide, OrderType, OrderTimeInForce, Double, Double, Double,
+     * Double, Boolean, String, OrderClass, Double, Double, Double)} with {@link OrderType#MARKET} so check the Javadoc
+     * for that method for parameter details.
      *
      * @return the requested {@link Order}
      *
@@ -239,10 +239,11 @@ public class OrdersEndpoint extends AlpacaEndpoint {
 
     /**
      * A market order is a request to buy or sell a security at the currently available market price. It provides the
-     * most likely method of filling an order. Market orders fill nearly instantaneously. This method calls {@link
-     * #requestOrder(String, Double, Double, OrderSide, OrderType, OrderTimeInForce, Double, Double, Double, Double,
-     * Boolean, String, OrderClass, Double, Double, Double)} with {@link OrderType#MARKET} and {@link
-     * OrderTimeInForce#GOOD_UNTIL_CANCELLED} with a fractional quantity so check the Javadoc for that method for parameter details.
+     * most likely method of filling an order. Market orders fill nearly instantaneously. This method calls
+     * {@link #requestOrder(String, Double, Double, OrderSide, OrderType, OrderTimeInForce, Double, Double, Double,
+     * Double, Boolean, String, OrderClass, Double, Double, Double)} with {@link OrderType#MARKET} and
+     * {@link OrderTimeInForce#GOOD_UNTIL_CANCELLED} with a fractional quantity so check the Javadoc for that method for
+     * parameter details.
      *
      * @return the requested {@link Order}
      *
@@ -250,17 +251,18 @@ public class OrdersEndpoint extends AlpacaEndpoint {
      */
     public Order requestFractionalMarketOrder(String symbol, Double quantity, OrderSide side)
             throws AlpacaClientException {
-        return requestOrder(symbol, quantity, null, side, OrderType.MARKET, OrderTimeInForce.GOOD_UNTIL_CANCELLED, null, null, null,
+        return requestOrder(symbol, quantity, null, side, OrderType.MARKET, OrderTimeInForce.GOOD_UNTIL_CANCELLED, null,
+                null, null,
                 null, null, null, null, null, null, null);
     }
 
     /**
      * A market order is a request to buy or sell a security at the currently available market price. It provides the
-     * most likely method of filling an order. Market orders fill nearly instantaneously. This method calls {@link
-     * #requestOrder(String, Double, Double, OrderSide, OrderType, OrderTimeInForce, Double, Double, Double, Double,
-     * Boolean, String, OrderClass, Double, Double, Double)} with {@link OrderType#MARKET} and {@link
-     * OrderTimeInForce#GOOD_UNTIL_CANCELLED} with a notional dollar amount so check the Javadoc for that method for the parameter
-     * details.
+     * most likely method of filling an order. Market orders fill nearly instantaneously. This method calls
+     * {@link #requestOrder(String, Double, Double, OrderSide, OrderType, OrderTimeInForce, Double, Double, Double,
+     * Double, Boolean, String, OrderClass, Double, Double, Double)} with {@link OrderType#MARKET} and
+     * {@link OrderTimeInForce#GOOD_UNTIL_CANCELLED} with a notional dollar amount so check the Javadoc for that method
+     * for the parameter details.
      *
      * @return the requested {@link Order}
      *
@@ -268,7 +270,8 @@ public class OrdersEndpoint extends AlpacaEndpoint {
      */
     public Order requestNotionalMarketOrder(String symbol, Double notional, OrderSide side)
             throws AlpacaClientException {
-        return requestOrder(symbol, null, notional, side, OrderType.MARKET, OrderTimeInForce.GOOD_UNTIL_CANCELLED, null, null, null,
+        return requestOrder(symbol, null, notional, side, OrderType.MARKET, OrderTimeInForce.GOOD_UNTIL_CANCELLED, null,
+                null, null,
                 null, null, null, null, null, null, null);
     }
 
@@ -276,10 +279,10 @@ public class OrdersEndpoint extends AlpacaEndpoint {
      * A limit order is an order to buy or sell at a specified price or better. A buy limit order (a limit order to buy)
      * is executed at the specified limit price or lower (i.e., better). Conversely, a sell limit order (a limit order
      * to sell) is executed at the specified limit price or higher (better). Unlike a market order, you have to specify
-     * the limit price parameter when submitting your order. This method calls {@link #requestOrder(String, Double,
-     * Double, OrderSide, OrderType, OrderTimeInForce, Double, Double, Double, Double, Boolean, String, OrderClass,
-     * Double, Double, Double)} with {@link OrderType#LIMIT} so check the Javadoc for that method for the parameter
-     * details.
+     * the limit price parameter when submitting your order. This method calls
+     * {@link #requestOrder(String, Double, Double, OrderSide, OrderType, OrderTimeInForce, Double, Double, Double,
+     * Double, Boolean, String, OrderClass, Double, Double, Double)} with {@link OrderType#LIMIT} so check the Javadoc
+     * for that method for the parameter details.
      *
      * @return the requested {@link Order}
      *
@@ -296,10 +299,10 @@ public class OrdersEndpoint extends AlpacaEndpoint {
      * ensuring a higher probability of achieving a predetermined entry or exit price. Once the market price crosses the
      * specified stop price, the stop order becomes a market order. Alpaca converts buy stop orders into stop limit
      * orders with a limit price that is 4% higher than a stop price &lt; $50 (or 2.5% higher than a stop price &gt;=
-     * $50). Sell stop orders are not converted into stop limit orders. This method calls {@link #requestOrder(String,
-     * Double, Double, OrderSide, OrderType, OrderTimeInForce, Double, Double, Double, Double, Boolean, String,
-     * OrderClass, Double, Double, Double)} with {@link OrderType#STOP} so check the Javadoc for that method for
-     * parameter details.
+     * $50). Sell stop orders are not converted into stop limit orders. This method calls
+     * {@link #requestOrder(String, Double, Double, OrderSide, OrderType, OrderTimeInForce, Double, Double, Double,
+     * Double, Boolean, String, OrderClass, Double, Double, Double)} with {@link OrderType#STOP} so check the Javadoc
+     * for that method for parameter details.
      *
      * @return the requested {@link Order}
      *
@@ -315,10 +318,10 @@ public class OrdersEndpoint extends AlpacaEndpoint {
      * A stop-limit order is a conditional trade over a set time frame that combines the features of a stop order with
      * those of a limit order and is used to mitigate risk. The stop-limit order will be executed at a specified limit
      * price, or better, after a given stop price has been reached. Once the stop price is reached, the stop-limit order
-     * becomes a limit order to buy or sell at the limit price or better. This method calls {@link #requestOrder(String,
-     * Double, Double, OrderSide, OrderType, OrderTimeInForce, Double, Double, Double, Double, Boolean, String,
-     * OrderClass, Double, Double, Double)} with {@link OrderType#STOP_LIMIT} so check the Javadoc for that method for
-     * parameter details.
+     * becomes a limit order to buy or sell at the limit price or better. This method calls
+     * {@link #requestOrder(String, Double, Double, OrderSide, OrderType, OrderTimeInForce, Double, Double, Double,
+     * Double, Boolean, String, OrderClass, Double, Double, Double)} with {@link OrderType#STOP_LIMIT} so check the
+     * Javadoc for that method for parameter details.
      *
      * @return the requested {@link Order}
      *
@@ -332,10 +335,10 @@ public class OrdersEndpoint extends AlpacaEndpoint {
 
     /**
      * A bracket order is a chain of three orders that can be used to manage your position entry and exit. It is a
-     * common use case of an OTOCO (One Triggers OCO {One Cancels Other}) order. This method calls {@link
-     * #requestOrder(String, Double, Double, OrderSide, OrderType, OrderTimeInForce, Double, Double, Double, Double,
-     * Boolean, String, OrderClass, Double, Double, Double)} with {@link OrderType#MARKET} and with parameters for a
-     * bracket order so check the Javadoc for that method for parameter details.
+     * common use case of an OTOCO (One Triggers OCO {One Cancels Other}) order. This method calls
+     * {@link #requestOrder(String, Double, Double, OrderSide, OrderType, OrderTimeInForce, Double, Double, Double,
+     * Double, Boolean, String, OrderClass, Double, Double, Double)} with {@link OrderType#MARKET} and with parameters
+     * for a bracket order so check the Javadoc for that method for parameter details.
      *
      * @return the requested {@link Order}
      *
@@ -351,10 +354,10 @@ public class OrdersEndpoint extends AlpacaEndpoint {
 
     /**
      * A bracket order is a chain of three orders that can be used to manage your position entry and exit. It is a
-     * common use case of an OTOCO (One Triggers OCO {One Cancels Other}) order. This method calls {@link
-     * #requestOrder(String, Double, Double, OrderSide, OrderType, OrderTimeInForce, Double, Double, Double, Double,
-     * Boolean, String, OrderClass, Double, Double, Double)} with {@link OrderType#LIMIT} and with parameters for a
-     * bracket order so check the Javadoc for that method for parameter details.
+     * common use case of an OTOCO (One Triggers OCO {One Cancels Other}) order. This method calls
+     * {@link #requestOrder(String, Double, Double, OrderSide, OrderType, OrderTimeInForce, Double, Double, Double,
+     * Double, Boolean, String, OrderClass, Double, Double, Double)} with {@link OrderType#LIMIT} and with parameters
+     * for a bracket order so check the Javadoc for that method for parameter details.
      *
      * @return the requested {@link Order}
      *
@@ -372,10 +375,10 @@ public class OrdersEndpoint extends AlpacaEndpoint {
      * OCO (One-Cancels-Other) is another type of advanced order type. This is a set of two orders with the same side
      * (buy/buy or sell/sell) and currently only exit order is supported. In other words, this is the second part of the
      * bracket orders where the entry order is already filled, and you can submit the take-profit and stop-loss in one
-     * order submission. This method calls {@link #requestOrder(String, Double, Double, OrderSide, OrderType,
-     * OrderTimeInForce, Double, Double, Double, Double, Boolean, String, OrderClass, Double, Double, Double)} with
-     * parameters for a {@link OrderClass#ONE_CANCELS_OTHER} so check the Javadoc for that method for the parameter
-     * details.
+     * order submission. This method calls
+     * {@link #requestOrder(String, Double, Double, OrderSide, OrderType, OrderTimeInForce, Double, Double, Double,
+     * Double, Boolean, String, OrderClass, Double, Double, Double)} with parameters for a
+     * {@link OrderClass#ONE_CANCELS_OTHER} so check the Javadoc for that method for the parameter details.
      *
      * @return the requested {@link Order}
      *
@@ -391,10 +394,10 @@ public class OrdersEndpoint extends AlpacaEndpoint {
 
     /**
      * OTO (One-Triggers-Other) is a variant of bracket order. It takes one of the take-profit or stop-loss order in
-     * addition to the entry order. This method calls {@link #requestOrder(String, Double, Double, OrderSide, OrderType,
-     * OrderTimeInForce, Double, Double, Double, Double, Boolean, String, OrderClass, Double, Double, Double)} with
-     * {@link OrderType#LIMIT} and with parameters for a {@link OrderClass#ONE_CANCELS_OTHER} so check the Javadoc for
-     * that method for parameter details.
+     * addition to the entry order. This method calls
+     * {@link #requestOrder(String, Double, Double, OrderSide, OrderType, OrderTimeInForce, Double, Double, Double,
+     * Double, Boolean, String, OrderClass, Double, Double, Double)} with {@link OrderType#LIMIT} and with parameters
+     * for a {@link OrderClass#ONE_CANCELS_OTHER} so check the Javadoc for that method for parameter details.
      *
      * @return the requested {@link Order}
      *
@@ -410,10 +413,10 @@ public class OrdersEndpoint extends AlpacaEndpoint {
 
     /**
      * OTO (One-Triggers-Other) is a variant of bracket order. It takes one of the take-profit or stop-loss order in
-     * addition to the entry order. This method calls {@link #requestOrder(String, Double, Double, OrderSide, OrderType,
-     * OrderTimeInForce, Double, Double, Double, Double, Boolean, String, OrderClass, Double, Double, Double)} with
-     * {@link OrderType#LIMIT} and with parameters for a {@link OrderClass#ONE_CANCELS_OTHER} so check the Javadoc for
-     * that method for parameter details.
+     * addition to the entry order. This method calls
+     * {@link #requestOrder(String, Double, Double, OrderSide, OrderType, OrderTimeInForce, Double, Double, Double,
+     * Double, Boolean, String, OrderClass, Double, Double, Double)} with {@link OrderType#LIMIT} and with parameters
+     * for a {@link OrderClass#ONE_CANCELS_OTHER} so check the Javadoc for that method for parameter details.
      *
      * @return the requested {@link Order}
      *
@@ -429,10 +432,10 @@ public class OrdersEndpoint extends AlpacaEndpoint {
 
     /**
      * OTO (One-Triggers-Other) is a variant of bracket order. It takes one of the take-profit or stop-loss order in
-     * addition to the entry order. This method calls {@link #requestOrder(String, Double, Double, OrderSide, OrderType,
-     * OrderTimeInForce, Double, Double, Double, Double, Boolean, String, OrderClass, Double, Double, Double)} with
-     * {@link OrderType#STOP} and with parameters for a {@link OrderClass#ONE_CANCELS_OTHER} so check the Javadoc for
-     * that method for parameter details.
+     * addition to the entry order. This method calls
+     * {@link #requestOrder(String, Double, Double, OrderSide, OrderType, OrderTimeInForce, Double, Double, Double,
+     * Double, Boolean, String, OrderClass, Double, Double, Double)} with {@link OrderType#STOP} and with parameters for
+     * a {@link OrderClass#ONE_CANCELS_OTHER} so check the Javadoc for that method for parameter details.
      *
      * @return the requested {@link Order}
      *
@@ -448,10 +451,11 @@ public class OrdersEndpoint extends AlpacaEndpoint {
 
     /**
      * OTO (One-Triggers-Other) is a variant of bracket order. It takes one of the take-profit or stop-loss order in
-     * addition to the entry order. This method calls {@link #requestOrder(String, Double, Double, OrderSide, OrderType,
-     * OrderTimeInForce, Double, Double, Double, Double, Boolean, String, OrderClass, Double, Double, Double)} with
-     * {@link OrderType#STOP_LIMIT} and with parameters for a {@link OrderClass#ONE_CANCELS_OTHER} so check the Javadoc
-     * for that method for parameter details.
+     * addition to the entry order. This method calls
+     * {@link #requestOrder(String, Double, Double, OrderSide, OrderType, OrderTimeInForce, Double, Double, Double,
+     * Double, Boolean, String, OrderClass, Double, Double, Double)} with {@link OrderType#STOP_LIMIT} and with
+     * parameters for a {@link OrderClass#ONE_CANCELS_OTHER} so check the Javadoc for that method for parameter
+     * details.
      *
      * @return the requested {@link Order}
      *
@@ -468,10 +472,10 @@ public class OrdersEndpoint extends AlpacaEndpoint {
 
     /**
      * Trailing stop orders allow you to continuously and automatically keep updating the stop price threshold based on
-     * the stock price movement. This method calls {@link #requestOrder(String, Double, Double, OrderSide, OrderType,
-     * OrderTimeInForce, Double, Double, Double, Double, Boolean, String, OrderClass, Double, Double, Double)} with
-     * {@link OrderType#TRAILING_STOP} and with parameters for a {@link OrderType#TRAILING_STOP} so check the Javadoc
-     * for that method for parameter details.
+     * the stock price movement. This method calls
+     * {@link #requestOrder(String, Double, Double, OrderSide, OrderType, OrderTimeInForce, Double, Double, Double,
+     * Double, Boolean, String, OrderClass, Double, Double, Double)} with {@link OrderType#TRAILING_STOP} and with
+     * parameters for a {@link OrderType#TRAILING_STOP} so check the Javadoc for that method for parameter details.
      *
      * @return the requested {@link Order}
      *
@@ -485,10 +489,10 @@ public class OrdersEndpoint extends AlpacaEndpoint {
 
     /**
      * Trailing stop orders allow you to continuously and automatically keep updating the stop price threshold based on
-     * the stock price movement. This method calls {@link #requestOrder(String, Double, Double, OrderSide, OrderType,
-     * OrderTimeInForce, Double, Double, Double, Double, Boolean, String, OrderClass, Double, Double, Double)} with
-     * {@link OrderType#TRAILING_STOP} and with parameters for a {@link OrderType#TRAILING_STOP} so check the Javadoc
-     * for that method for parameter details.
+     * the stock price movement. This method calls
+     * {@link #requestOrder(String, Double, Double, OrderSide, OrderType, OrderTimeInForce, Double, Double, Double,
+     * Double, Boolean, String, OrderClass, Double, Double, Double)} with {@link OrderType#TRAILING_STOP} and with
+     * parameters for a {@link OrderType#TRAILING_STOP} so check the Javadoc for that method for parameter details.
      *
      * @return the requested {@link Order}
      *
@@ -625,8 +629,8 @@ public class OrdersEndpoint extends AlpacaEndpoint {
     }
 
     /**
-     * Attempts to cancel an open {@link Order}. If the {@link Order} is no longer cancelable (example: {@link
-     * Order#getStatus()} <code>==</code> {@link OrderStatus#FILLED}), the server will respond with status
+     * Attempts to cancel an open {@link Order}. If the {@link Order} is no longer cancelable (example:
+     * {@link Order#getStatus()} <code>==</code> {@link OrderStatus#FILLED}), the server will respond with status
      * <code>422</code>, and reject the request.
      *
      * @param orderID the {@link Order#getId()}
