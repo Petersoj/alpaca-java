@@ -73,6 +73,12 @@ AlpacaAPI alpacaAPI = new AlpacaAPI(keyID, secretKey, EndpointAPIType.LIVE, Data
 // This constructor is for OAuth tokens
 String oAuthToken = "<some OAuth token>";
 AlpacaAPI alpacaAPI = new AlpacaAPI(oAuthToken);
+
+// This approach uses a builder pattern. Attributes not provided explicitly are retrieved from 'alpaca.properties' file
+AlpacaAPI alpacaAPI = AlpacaAPI.builder()
+    .withEndpointAPIType(EndpointAPIType.PAPER)
+    .build();
+
 ```
 
 Note that this library uses [OkHttp](https://square.github.io/okhttp/) as its HTTP client library which creates background threads to service requests. These threads persist even if the main thread exists so if you want to destroy these threads when you're done using [`AlpacaAPI`](src/main/java/net/jacobpeterson/alpaca/AlpacaAPI.java) so your program can exit without calling `System.exit()`, use the following snippet:
