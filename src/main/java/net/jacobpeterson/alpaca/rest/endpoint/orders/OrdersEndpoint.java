@@ -251,7 +251,7 @@ public class OrdersEndpoint extends AlpacaEndpoint {
      */
     public Order requestFractionalMarketOrder(String symbol, Double quantity, OrderSide side)
             throws AlpacaClientException {
-        return requestOrder(symbol, quantity, null, side, OrderType.MARKET, OrderTimeInForce.GOOD_UNTIL_CANCELLED, null,
+        return requestOrder(symbol, quantity, null, side, OrderType.MARKET, OrderTimeInForce.DAY, null,
                 null, null,
                 null, null, null, null, null, null, null);
     }
