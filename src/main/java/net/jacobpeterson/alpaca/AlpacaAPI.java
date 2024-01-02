@@ -12,6 +12,7 @@ import net.jacobpeterson.alpaca.rest.endpoint.accountconfiguration.AccountConfig
 import net.jacobpeterson.alpaca.rest.endpoint.assets.AssetsEndpoint;
 import net.jacobpeterson.alpaca.rest.endpoint.calendar.CalendarEndpoint;
 import net.jacobpeterson.alpaca.rest.endpoint.clock.ClockEndpoint;
+import net.jacobpeterson.alpaca.rest.endpoint.corporateactions.CorporateActionsEndpoint;
 import net.jacobpeterson.alpaca.rest.endpoint.marketdata.crypto.CryptoMarketDataEndpoint;
 import net.jacobpeterson.alpaca.rest.endpoint.marketdata.stock.StockMarketDataEndpoint;
 import net.jacobpeterson.alpaca.rest.endpoint.orders.OrdersEndpoint;
@@ -67,6 +68,7 @@ public class AlpacaAPI {
     private final CryptoMarketDataWebsocket cryptoMarketDataWebsocket;
     private final StockMarketDataWebsocket stockMarketDataWebsocket;
 
+    private final CorporateActionsEndpoint corporateActionsEndpoint;
     /**
      * Instantiates a new {@link AlpacaAPI} using properties specified in <code>alpaca.properties</code> file (or their
      * associated defaults).
@@ -197,6 +199,7 @@ public class AlpacaAPI {
                 new CryptoMarketDataWebsocket(okHttpClient, keyID, secretKey);
         stockMarketDataWebsocket = stockDataClient == null ? null :
                 new StockMarketDataWebsocket(okHttpClient, dataAPIType, keyID, secretKey);
+        corporateActionsEndpoint = new CorporateActionsEndpoint(brokerClient);
     }
 
     /**
@@ -320,6 +323,12 @@ public class AlpacaAPI {
         return stockDataClient;
     }
 
+    /**
+     * @return the {@link CorporateActionsEndpoint}
+     */
+    public CorporateActionsEndpoint corporateActions() {
+        return corporateActionsEndpoint;
+    }
     /**
      * Creates a {@link Builder} for {@link AlpacaAPI}.
      *

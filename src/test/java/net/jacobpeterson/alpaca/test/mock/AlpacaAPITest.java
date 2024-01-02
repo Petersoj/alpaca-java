@@ -6,6 +6,8 @@ import net.jacobpeterson.alpaca.model.properties.EndpointAPIType;
 import okhttp3.OkHttpClient;
 import org.junit.jupiter.api.Test;
 
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+
 /**
  * {@link AlpacaAPITest} tests {@link AlpacaAPI} using mocked objects with Mockito.
  */
@@ -70,5 +72,16 @@ public class AlpacaAPITest {
         new AlpacaAPI(okHttpClient, keyID, secret, null, EndpointAPIType.LIVE, DataAPIType.SIP);
         new AlpacaAPI(okHttpClient, null, null, oAuthToken, EndpointAPIType.PAPER, DataAPIType.IEX);
         new AlpacaAPI(okHttpClient, keyID, secret, null, EndpointAPIType.LIVE, DataAPIType.SIP);
+    }
+
+    @Test
+    public void testAlpacaAPIConstructor_corporateActionsEndpoint() {
+        OkHttpClient okHttpClient = new OkHttpClient();
+        String keyID = "ABCDEFGHIJKLM";
+        String secret = "NOPQURSTUVWXYZ";
+
+        AlpacaAPI api = new AlpacaAPI(okHttpClient, keyID, secret, null, EndpointAPIType.LIVE, DataAPIType.SIP);
+
+        assertNotNull(api.corporateActions());
     }
 }
