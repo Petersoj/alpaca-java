@@ -16,6 +16,10 @@
     "bars": {
       "existingJavaType": "java.util.ArrayList<java.lang.String>",
       "title": "The {@link java.util.ArrayList} of subscribed bars."
+    },
+    "news": {
+      "existingJavaType": "java.util.ArrayList<java.lang.String>",
+      "title": "The {@link java.util.ArrayList} of subscribed news."
     }
   }
 }

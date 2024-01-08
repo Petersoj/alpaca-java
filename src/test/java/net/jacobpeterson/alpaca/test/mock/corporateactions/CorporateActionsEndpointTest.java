@@ -45,21 +45,24 @@ public class CorporateActionsEndpointTest {
     void getAnnouncements_validation_caTypes() {
         CorporateActionsEndpoint newsEndpoint = setupEndpoint(mockMultipleAnnouncementsResponse());
 
-        assertThrows(Exception.class, () -> newsEndpoint.getAnnouncements(null, LocalDate.now(), LocalDate.now(), null, null, null));
+        assertThrows(Exception.class,
+                () -> newsEndpoint.getAnnouncements(null, LocalDate.now(), LocalDate.now(), null, null, null));
     }
 
     @Test
     void getAnnouncements_validation_since() {
         CorporateActionsEndpoint newsEndpoint = setupEndpoint(mockMultipleAnnouncementsResponse());
 
-        assertThrows(Exception.class, () -> newsEndpoint.getAnnouncements(new ArrayList<>(), null, LocalDate.now(), null, null, null));
+        assertThrows(Exception.class,
+                () -> newsEndpoint.getAnnouncements(new ArrayList<>(), null, LocalDate.now(), null, null, null));
     }
 
     @Test
     void getAnnouncements_validation_until() {
         CorporateActionsEndpoint newsEndpoint = setupEndpoint(mockMultipleAnnouncementsResponse());
 
-        assertThrows(Exception.class, () -> newsEndpoint.getAnnouncements(new ArrayList<>(), LocalDate.now(), null, null, null, null));
+        assertThrows(Exception.class,
+                () -> newsEndpoint.getAnnouncements(new ArrayList<>(), LocalDate.now(), null, null, null, null));
     }
 
     @Test
@@ -76,7 +79,7 @@ public class CorporateActionsEndpointTest {
         Announcement announcement = newsEndpoint.getAnnouncement("1");
 
         assertNotNull(announcement);
-        assertEquals(announcement.getId(), "cd0cb768-889f-47a1-a94b-1438017dad77");
+        assertEquals("cd0cb768-889f-47a1-a94b-1438017dad77", announcement.getId());
     }
 
     private static CorporateActionsEndpoint setupEndpoint(String response) {

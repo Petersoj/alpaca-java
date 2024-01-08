@@ -1,0 +1,12 @@
+{
+    "type": "object",
+    "title": "See <a href=\"https://docs.alpaca.markets/reference/news-1\">News</a>.",
+    "properties": {
+      "news": {
+        "existingJavaType": "java.util.ArrayList<net.jacobpeterson.alpaca.model.endpoint.marketdata.news.common.NewsArticle>"
+      },
+      "next_page_token": {
+        "existingJavaType": "java.lang.String"
+      }
+    }
+}

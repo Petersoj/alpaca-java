@@ -33,9 +33,9 @@ public interface MarketDataWebsocketInterface extends AlpacaWebsocketInterface<M
      * @param quoteSymbols a {@link Collection} of symbols to subscribe to quotes or <code>null</code> for no change
      * @param barSymbols   a {@link Collection} of symbols to subscribe to bars or <code>null</code> for no change
      *
-     * @see #unsubscribe(Collection, Collection, Collection)
+     * @see #unsubscribe(Collection, Collection, Collection, Collection)
      */
-    void subscribe(Collection<String> tradeSymbols, Collection<String> quoteSymbols, Collection<String> barSymbols);
+    void subscribe(Collection<String> tradeSymbols, Collection<String> quoteSymbols, Collection<String> barSymbols, Collection<String> newsSymbols);
 
     /**
      * Unsubscribes from trades, quotes, or bars according to the given {@link Collection} of symbols.
@@ -49,9 +49,9 @@ public interface MarketDataWebsocketInterface extends AlpacaWebsocketInterface<M
      *                     change
      * @param barSymbols   a {@link Collection} of symbols to unsubscribe from bars or <code>null</code> for no change
      *
-     * @see #subscribe(Collection, Collection, Collection)
+     * @see #subscribe(Collection, Collection, Collection, Collection)
      */
-    void unsubscribe(Collection<String> tradeSymbols, Collection<String> quoteSymbols, Collection<String> barSymbols);
+    void unsubscribe(Collection<String> tradeSymbols, Collection<String> quoteSymbols, Collection<String> barSymbols, Collection<String> newsSymbols);
 
     /**
      * Gets all the currently subscribed control {@link MarketDataMessageType}s.
@@ -80,4 +80,7 @@ public interface MarketDataWebsocketInterface extends AlpacaWebsocketInterface<M
      * @return a {@link Collection} of {@link String}s
      */
     Collection<String> subscribedBars();
+
+    Collection<String> subscribedNews();
+
 }

@@ -23,6 +23,8 @@ import net.jacobpeterson.alpaca.websocket.AlpacaWebsocket;
 import net.jacobpeterson.alpaca.websocket.marketdata.MarketDataWebsocketInterface;
 import net.jacobpeterson.alpaca.websocket.marketdata.crypto.CryptoMarketDataWebsocket;
 import net.jacobpeterson.alpaca.websocket.marketdata.stock.StockMarketDataWebsocket;
+import net.jacobpeterson.alpaca.rest.endpoint.marketdata.news.NewsEndpoint;
+import net.jacobpeterson.alpaca.websocket.marketdata.news.NewsMarketDataWebsocket;
 import net.jacobpeterson.alpaca.websocket.streaming.StreamingWebsocket;
 import net.jacobpeterson.alpaca.websocket.streaming.StreamingWebsocketInterface;
 import okhttp3.OkHttpClient;
@@ -46,11 +48,13 @@ public class AlpacaAPI {
 
     private static final String VERSION_2_PATH_SEGMENT = "v2";
     private static final String VERSION_1_BETA_3_PATH_SEGMENT = "v1beta3";
+    private static final String VERSION_1_BETA_1_PATH_SEGMENT = "v1beta1";
 
     private final OkHttpClient okHttpClient;
     private final AlpacaClient brokerClient;
     private final AlpacaClient cryptoDataClient;
     private final AlpacaClient stockDataClient;
+    private final AlpacaClient newsDataClient;
     // Ordering of fields/methods below are analogous to the ordering in the Alpaca documentation
     private final AccountEndpoint accountEndpoint;
     private final CryptoMarketDataEndpoint cryptoMarketDataEndpoint;
@@ -67,8 +71,10 @@ public class AlpacaAPI {
     private final StreamingWebsocket streamingWebsocket;
     private final CryptoMarketDataWebsocket cryptoMarketDataWebsocket;
     private final StockMarketDataWebsocket stockMarketDataWebsocket;
-
     private final CorporateActionsEndpoint corporateActionsEndpoint;
+    private final NewsMarketDataWebsocket newsMarketDataWebsocket;
+    private final NewsEndpoint newsEndpoint;
+
     /**
      * Instantiates a new {@link AlpacaAPI} using properties specified in <code>alpaca.properties</code> file (or their
      * associated defaults).
@@ -175,10 +181,12 @@ public class AlpacaAPI {
                     brokerHostSubdomain, VERSION_2_PATH_SEGMENT);
             cryptoDataClient = new AlpacaClient(okHttpClient, keyID, secretKey, "data", VERSION_1_BETA_3_PATH_SEGMENT);
             stockDataClient = new AlpacaClient(okHttpClient, keyID, secretKey, "data", VERSION_2_PATH_SEGMENT);
+            newsDataClient = new AlpacaClient(okHttpClient, keyID, secretKey, "data", VERSION_1_BETA_1_PATH_SEGMENT);
         } else {
             brokerClient = new AlpacaClient(okHttpClient, oAuthToken, brokerHostSubdomain, VERSION_2_PATH_SEGMENT);
             cryptoDataClient = null;
             stockDataClient = null;
+            newsDataClient = null;
         }
 
         accountEndpoint = new AccountEndpoint(brokerClient);
@@ -200,6 +208,8 @@ public class AlpacaAPI {
         stockMarketDataWebsocket = stockDataClient == null ? null :
                 new StockMarketDataWebsocket(okHttpClient, dataAPIType, keyID, secretKey);
         corporateActionsEndpoint = new CorporateActionsEndpoint(brokerClient);
+        newsEndpoint = newsDataClient == null ? null :  new NewsEndpoint(newsDataClient);
+        newsMarketDataWebsocket = newsDataClient == null ? null : new NewsMarketDataWebsocket(okHttpClient,  keyID, secretKey);
     }
 
     /**
@@ -323,12 +333,32 @@ public class AlpacaAPI {
         return stockDataClient;
     }
 
+    public AlpacaClient getNewsDataClient() {
+        return newsDataClient;
+    }
+
     /**
      * @return the {@link CorporateActionsEndpoint}
      */
     public CorporateActionsEndpoint corporateActions() {
         return corporateActionsEndpoint;
     }
+
+    /**
+     * @return the {@link NewsEndpoint}
+     */
+    public NewsEndpoint newsEndpoint() {
+        return newsEndpoint;
+    }
+
+    /**
+     * @return the News {@link MarketDataWebsocketInterface}
+     */
+    public MarketDataWebsocketInterface newsMarketDataStreaming() {
+        return newsMarketDataWebsocket;
+    }
+
+
     /**
      * Creates a {@link Builder} for {@link AlpacaAPI}.
      *
