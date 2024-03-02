@@ -1,5 +1,7 @@
 import org.openapitools.generator.gradle.plugin.tasks.GenerateTask
 
+import java.nio.file.Paths
+
 plugins {
     id "java"
     id "java-library"
@@ -62,14 +64,16 @@ java {
     withJavadocJar()
     withSourcesJar()
 }
+javadocJar.dependsOn generatePOJOs
+sourcesJar.dependsOn generatePOJOs
 
 [compileJava, compileTestJava]*.options*.encoding = "UTF-8"
 
 javadoc {
     options.addStringOption("source", "17")
-    options.addStringOption("Xdoclint:none", "-quiet") // Suppress Javadoc linting warnings
     options.addStringOption("charset", "UTF-8")
-    options.addStringOption("link", "https://docs.oracle.com/javase/8/docs/api/")
+    options.addStringOption("Xdoclint:none", "-quiet") // Suppress Javadoc linting warnings
+    options.addStringOption("link", "https://docs.oracle.com/en/java/javase/17/docs/api/")
 }
 
 //
@@ -86,12 +90,15 @@ final File specDownloadPath = new File(project.layout.buildDirectory.get().getAs
 final File generatedClientLibrariesPath = new File(project.layout.buildDirectory.get().getAsFile(),
         "/generated/openapi/")
 
-final def generateAllOpenAPIClientsTasks = tasks.register("generateAllOpenAPIClients") {
+final def generateOpenAPIClientsTasks = tasks.register("generateOpenAPIClients") {
     doLast {
-        fixOpenAPIGeneratedClientIssues(generatedClientLibrariesPath)
+        fixOpenAPIGeneratedClientIssues(specIDsOfFileNames, generatedClientLibrariesPath)
     }
 }
-compileJava.dependsOn generateAllOpenAPIClientsTasks
+compileJava.dependsOn generateOpenAPIClientsTasks
+jar.dependsOn generateOpenAPIClientsTasks
+javadocJar.dependsOn generateOpenAPIClientsTasks
+sourcesJar.dependsOn generateOpenAPIClientsTasks
 
 def downloadOpenAPISpecFilesTask = tasks.register("downloadOpenAPISpecFiles") {
     configure {
@@ -165,7 +172,9 @@ for (def specFileName : specIDsOfFileNames.keySet()) {
                 "apiPackage", destinationPackage + ".api",
                 "modelPackage", destinationPackage + ".model",
                 "library", "okhttp-gson",
-                "documentationProvider", "none"))
+                "documentationProvider", "none",
+                "useBeanValidation", "false",
+                "performBeanValidation", "false"))
         cleanupOutput.set(true)
         validateSpec.set(false)
         skipValidateSpec.set(true)
@@ -174,22 +183,41 @@ for (def specFileName : specIDsOfFileNames.keySet()) {
         generateApiTests.set(false)
         generateApiDocumentation.set(false)
     }
-    generateAllOpenAPIClientsTasks.configure {
+    generateOpenAPIClientsTasks.configure {
         dependsOn generateTask
     }
 }
 
-static void fixOpenAPIGeneratedClientIssues(File generatedClientLibrariesPath) {
+static void fixOpenAPIGeneratedClientIssues(Map<String, String> specIDsOfFileNames, File generatedClientLibrariesPath) {
+    // TODO remove these manual fixes once OpenAPI fixes these issues
+
+    final def sourceFilesPath = "src/main/java/net/jacobpeterson/alpaca/openapi"
+
     // Fix broker spec generated client issues with discriminators
     // on some enums: https://github.com/OpenAPITools/openapi-generator/issues/806
     final def brokerTransferDataJavaFile = new File(generatedClientLibrariesPath,
-            "broker/src/main/java/net/jacobpeterson/alpaca/openapi/broker/model/TransferData.java")
+            "broker/${sourceFilesPath}/broker/model/TransferData.java")
     brokerTransferDataJavaFile.text = brokerTransferDataJavaFile.text
             .replace("this.transferType = this.getClass().getSimpleName();", "")
     final def brokerTransferResourceJavaFile = new File(generatedClientLibrariesPath,
-            "broker/src/main/java/net/jacobpeterson/alpaca/openapi/broker/model/TransferResource.java")
+            "broker/${sourceFilesPath}/broker/model/TransferResource.java")
     brokerTransferResourceJavaFile.text = brokerTransferResourceJavaFile.text
             .replace("this.type = this.getClass().getSimpleName();", "")
+
+    // Remove the JSON validation that the generated client models always run (there isn't an option to
+    // disable it for some reason)
+    specIDsOfFileNames.keySet().stream().map { it.replace(".json", "") }.forEach {
+        for (File modelFile : Paths.get(generatedClientLibrariesPath.getPath(),
+                it, sourceFilesPath, it.replace("-", ""), "model").toFile().listFiles()) {
+            modelFile.text = modelFile.text
+                    .replaceAll("/\\*\\*\\n {2}\\* Validates the JSON Element and throws an exception if issues found" +
+                            "[\\s\\S]*?\\*/", "")
+                    .replace("public static void validateJsonElement(JsonElement jsonElement) throws IOException {",
+                            "public static boolean validate = false;\n public static void " +
+                                    "validateJsonElement(JsonElement jsonElement) throws IOException {\n" +
+                                    "  if (!validate) return;")
+        }
+    }
 }
 
 //
@@ -206,6 +234,7 @@ publishing {
             groupId = projectGroup
             artifactId = projectArtifactID
             version = projectVersion
+            from(components["java"])
 
             pom {
                 name = projectArtifactID
