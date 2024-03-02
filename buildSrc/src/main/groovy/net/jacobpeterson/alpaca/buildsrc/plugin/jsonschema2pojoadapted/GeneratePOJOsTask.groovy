@@ -19,7 +19,6 @@ import static com.google.common.base.Preconditions.checkArgument
 /**
  * {@link GeneratePOJOsTask} is a Gradle task that invokes <code>jsonschema2pojo</code> with special configurations
  * and generation logic.
- * TODO publish this plugin somewhere so the code doesn't have to be copied between 'cli' and 'system' Gradle projects.
  * @see <a href="https://github.com/joelittlejohn/jsonschema2pojo/blob/master/jsonschema2pojo-gradle-plugin/src/main/groovy/org/jsonschema2pojo/gradle/GenerateJsonSchemaJavaTask.groovy">GenerateJsonSchemaJavaTask</a>
  */
 class GeneratePOJOsTask extends DefaultTask {
@@ -39,69 +38,63 @@ class GeneratePOJOsTask extends DefaultTask {
         group = "Build"
         description = "Generates Java POJOs from JSON schemas."
 
-        project.afterEvaluate {
-            // Validate plugin configuration
-            configuration = project.extensions.getByName(EXTENSION_KEY) as GenerationConfig
-            checkArgument(!configuration.source.hasNext(), "'source' should not be set for '${name}'.")
-            checkArgument(configuration.targetDirectory == null, "'targetDirectory' should not be set for '${name}'.")
+        // Validate plugin configuration
+        configuration = project.extensions.getByName(EXTENSION_KEY) as GenerationConfig
+        checkArgument(!configuration.source.hasNext(), "'source' should not be set for '${name}'.")
+        checkArgument(configuration.targetDirectory == null, "'targetDirectory' should not be set for '${name}'.")
 
-            // Set custom defaults on plugin configuration
-            configuration.targetDirectory = project.file(
-                    "${project.layout.buildDirectory.getAsFile().get().getPath()}/generated-sources/jsonschema2pojo")
-            configuration.targetPackage = configuration.targetPackage == "" ?
-                    "${project.group}.model" : configuration.targetPackage
-            configuration.propertyWordDelimiters = ["-", "_"] as char[]
-            configuration.annotationStyle = "gson"
-            configuration.sourceType = "jsonschema"
-            configuration.customDateTimePattern = "yyyy-MM-ddTHH:mm:ssZ"
-            configuration.includeConstructors = true
-            configuration.serializable = true
-            configuration.includeGetters = true
-            configuration.includeSetters = true
-            configuration.includeCopyConstructor = true
-            configuration.generateBuilders = true
+        // Set custom defaults on plugin configuration
+        configuration.targetDirectory = project.file(
+                "${project.layout.buildDirectory.getAsFile().get().getPath()}/generated-sources/jsonschema2pojo")
+        configuration.targetPackage = configuration.targetPackage == "" ?
+                "${project.group}.model" : configuration.targetPackage
+        configuration.propertyWordDelimiters = ["-", "_"] as char[]
+        configuration.annotationStyle = "gson"
+        configuration.sourceType = "jsonschema"
+        configuration.customDateTimePattern = "yyyy-MM-ddTHH:mm:ssZ"
+        configuration.includeConstructors = true
+        configuration.serializable = true
+        configuration.includeGetters = true
+        configuration.includeSetters = true
+        configuration.includeCopyConstructor = true
+        configuration.generateBuilders = true
 
-            // Get project main java source set
-            final def projectMainJavaSourceSet =
-                    project.extensions.getByType(SourceSetContainer).named("main").get().java
+        // Get project main java source set
+        final def projectMainJavaSourceSet =
+                project.extensions.getByType(SourceSetContainer).named("main").get().java
 
-            // Set task dependents and dependencies
-            project.tasks.named("compileJava").get().dependsOn(this)
-            dependsOn(project.tasks.named("processResources").get())
+        // Walk through source files to create a list of JSON schema files to process
+        jsonSchemaFileConfigs = new ArrayList<>()
+        projectMainJavaSourceSet.srcDirs.each { srcDir ->
+            if (!srcDir.exists()) {
+                return
+            }
+            final def sourceDirPath = srcDir.getAbsolutePath()
+            srcDir.eachFileRecurse { sourceFile ->
+                final def sourceFilePath = sourceFile.getAbsolutePath()
+                if (sourceFilePath.endsWith(".json")) {
+                    def targetPackage = sourceFile.getParentFile().getAbsolutePath()
+                            .substring(sourceDirPath.length())
+                            .replace(File.separator, ".").replace("-", "").replace("_", "")
+                            .toLowerCase()
+                    targetPackage = targetPackage.replace("${project.group}", "")
+                    targetPackage = targetPackage.startsWith(".") ? targetPackage.substring(1) : targetPackage
+                    targetPackage = configuration.targetPackage +
+                            (targetPackage.isEmpty() ? "" : targetPackage)
+                    jsonSchemaFileConfigs.add(new JSONSchemaFileConfig(sourceFile, targetPackage))
 
-            // Walk through source files to create a list of JSON schema files to process
-            jsonSchemaFileConfigs = new ArrayList<>()
-            projectMainJavaSourceSet.srcDirs.each { srcDir ->
-                if (!srcDir.exists()) {
-                    return
-                }
-                final def sourceDirPath = srcDir.getAbsolutePath()
-                srcDir.eachFileRecurse { sourceFile ->
-                    final def sourceFilePath = sourceFile.getAbsolutePath()
-                    if (sourceFilePath.endsWith(".json")) {
-                        def targetPackage = sourceFile.getParentFile().getAbsolutePath()
-                                .substring(sourceDirPath.length())
-                                .replace(File.separator, ".").replace("-", "").replace("_", "")
-                                .toLowerCase()
-                        targetPackage = targetPackage.replace("${project.group}", "")
-                        targetPackage = targetPackage.startsWith(".") ? targetPackage.substring(1) : targetPackage
-                        targetPackage = configuration.targetPackage +
-                                (targetPackage.isEmpty() ? "" : targetPackage)
-                        jsonSchemaFileConfigs.add(new JSONSchemaFileConfig(sourceFile, targetPackage))
-
-                        inputs.file(sourceFile)
-                        outputs.file(project.file(configuration.targetDirectory.getAbsolutePath() + File.separator +
-                                targetPackage.replace(".", File.separator) + File.separator +
-                                sourceFile.getName().replace(".json", ".java")))
-                    }
+                    inputs.file(sourceFile)
+                    outputs.file(project.file(configuration.targetDirectory.getAbsolutePath() + File.separator +
+                            targetPackage.replace(".", File.separator) + File.separator +
+                            sourceFile.getName().replace(".json", ".java")))
                 }
             }
-
-            outputs.dir(configuration.targetDirectory)
-            outputs.cacheIf { true }
-
-            projectMainJavaSourceSet.srcDirs(configuration.targetDirectory)
         }
+
+        outputs.dir(configuration.targetDirectory)
+        outputs.cacheIf { true }
+
+        projectMainJavaSourceSet.srcDirs(configuration.targetDirectory)
     }
 
     @TaskAction

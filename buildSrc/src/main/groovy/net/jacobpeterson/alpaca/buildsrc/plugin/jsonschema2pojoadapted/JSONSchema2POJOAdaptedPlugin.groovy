@@ -17,8 +17,8 @@ class JSONSchema2POJOAdaptedPlugin implements Plugin<Project> {
     void apply(Project project) {
         project.extensions.create(EXTENSION_KEY, JsonSchemaExtension)
         if (project.plugins.hasPlugin("java")) {
-            final def generatePOJOsTask = project.tasks.register("generatePOJOs", GeneratePOJOsTask)
-            generatePOJOsTask.get().enabled = true
+            project.tasks.register("generatePOJOs", GeneratePOJOsTask)
+            project.tasks.compileJava.dependsOn "generatePOJOs"
         } else {
             throw new GradleException("'java' Gradle plugin required.")
         }
