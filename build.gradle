@@ -53,7 +53,6 @@ dependencies {
     testImplementation group: 'org.slf4j', name: 'slf4j-simple', version: '1.7.36'
     testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter', version: '5.8.2'
     testImplementation group: 'org.mockito', name: 'mockito-core', version: '4.6.1'
-    testImplementation group: 'com.github.gmazzo.okhttp.mock', name: 'mock-client', version: '2.0.0'
 }
 
 // Exclude any SLF4j-implementation transitive dependencies so users can use a logging framework of their choice
