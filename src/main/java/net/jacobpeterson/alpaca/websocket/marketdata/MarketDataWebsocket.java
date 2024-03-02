@@ -13,6 +13,8 @@ import net.jacobpeterson.alpaca.model.endpoint.marketdata.common.realtime.contro
 import net.jacobpeterson.alpaca.model.endpoint.marketdata.common.realtime.enums.MarketDataMessageType;
 import net.jacobpeterson.alpaca.model.endpoint.marketdata.common.realtime.quote.QuoteMessage;
 import net.jacobpeterson.alpaca.model.endpoint.marketdata.common.realtime.trade.TradeMessage;
+import net.jacobpeterson.alpaca.model.endpoint.marketdata.news.common.NewsArticle;
+import net.jacobpeterson.alpaca.model.endpoint.marketdata.news.realtime.NewsMessage;
 import net.jacobpeterson.alpaca.websocket.AlpacaWebsocket;
 import okhttp3.HttpUrl;
 import okhttp3.OkHttpClient;
@@ -53,7 +55,8 @@ public abstract class MarketDataWebsocket
     private static final List<MarketDataMessageType> SUBSCRIBABLE_MARKET_DATA_MESSAGE_TYPES = Arrays.asList(
             MarketDataMessageType.TRADE,
             MarketDataMessageType.QUOTE,
-            MarketDataMessageType.BAR);
+            MarketDataMessageType.BAR,
+            MarketDataMessageType.NEWS);
 
     /**
      * Creates a {@link HttpUrl} for {@link MarketDataWebsocket} with the given <code>websocketURLPathSegments</code>.
@@ -74,9 +77,11 @@ public abstract class MarketDataWebsocket
     private final Set<String> subscribedTrades;
     private final Set<String> subscribedQuotes;
     private final Set<String> subscribedBars;
+    private final Set<String> subscribedNews;
     private final Type tradeClassType;
     private final Type quoteClassType;
     private final Type barClassType;
+    private final Type newsClassType = NewsMessage.class;
 
     /**
      * Instantiates a new {@link MarketDataWebsocket}.
@@ -101,7 +106,7 @@ public abstract class MarketDataWebsocket
         subscribedTrades = new HashSet<>();
         subscribedQuotes = new HashSet<>();
         subscribedBars = new HashSet<>();
-
+        subscribedNews = new HashSet<>();
         this.tradeClassType = tradeClass;
         this.quoteClassType = quoteClass;
         this.barClassType = barClass;
@@ -124,7 +129,7 @@ public abstract class MarketDataWebsocket
         sendAuthenticationMessage();
         if (waitForAuthorization(5, TimeUnit.SECONDS)) {
             subscribeToControl(Iterables.toArray(listenedMarketDataMessageTypes, MarketDataMessageType.class));
-            subscribe(subscribedTrades, subscribedQuotes, subscribedBars);
+            subscribe(subscribedTrades, subscribedQuotes, subscribedBars, subscribedNews);
         }
     }
 
@@ -210,6 +215,8 @@ public abstract class MarketDataWebsocket
                             subscribedQuotes);
                     handleSubscriptionMessageList(MarketDataMessageType.BAR, subscriptionsMessage.getBars(),
                             subscribedBars);
+                    handleSubscriptionMessageList(MarketDataMessageType.NEWS, subscriptionsMessage.getNews(),
+                            subscribedNews);
                     break;
                 case TRADE:
                     marketDataMessage = GSON.fromJson(messageObject, tradeClassType);
@@ -219,6 +226,9 @@ public abstract class MarketDataWebsocket
                     break;
                 case BAR:
                     marketDataMessage = GSON.fromJson(messageObject, barClassType);
+                    break;
+                case NEWS:
+                    marketDataMessage = GSON.fromJson(messageObject, newsClassType);
                     break;
                 default:
                     LOGGER.error("Message type {} not implemented!", marketDataMessageType);
@@ -286,14 +296,14 @@ public abstract class MarketDataWebsocket
 
     @Override
     public void subscribe(Collection<String> tradeSymbols, Collection<String> quoteSymbols,
-            Collection<String> barSymbols) {
-        sendSubscriptionUpdate(tradeSymbols, quoteSymbols, barSymbols, true);
+            Collection<String> barSymbols, Collection<String> newsSymbols) {
+        sendSubscriptionUpdate(tradeSymbols, quoteSymbols, barSymbols, newsSymbols, true);
     }
 
     @Override
     public void unsubscribe(Collection<String> tradeSymbols, Collection<String> quoteSymbols,
-            Collection<String> barSymbols) {
-        sendSubscriptionUpdate(tradeSymbols, quoteSymbols, barSymbols, false);
+            Collection<String> barSymbols, Collection<String> newsSymbols) {
+        sendSubscriptionUpdate(tradeSymbols, quoteSymbols, barSymbols, newsSymbols, false);
     }
 
     /**
@@ -305,7 +315,7 @@ public abstract class MarketDataWebsocket
      * @param subscribe    true to subscribe, false to unsubscribe
      */
     private void sendSubscriptionUpdate(Collection<String> tradeSymbols, Collection<String> quoteSymbols,
-            Collection<String> barSymbols, boolean subscribe) {
+            Collection<String> barSymbols, Collection<String> newsSymbols, boolean subscribe) {
         if (!isConnected()) {
             throw new IllegalStateException("This websocket must be connected before sending subscription updates!");
         }
@@ -325,6 +335,7 @@ public abstract class MarketDataWebsocket
         addSubscriptionUpdateList(subscriptionUpdateObject, "trades", tradeSymbols);
         addSubscriptionUpdateList(subscriptionUpdateObject, "quotes", quoteSymbols);
         addSubscriptionUpdateList(subscriptionUpdateObject, "bars", barSymbols);
+        addSubscriptionUpdateList(subscriptionUpdateObject, "news", newsSymbols);
 
         boolean updateExists = subscriptionUpdateObject.size() > 1;
         if (updateExists) {
@@ -367,5 +378,10 @@ public abstract class MarketDataWebsocket
     @Override
     public Collection<String> subscribedBars() {
         return new HashSet<>(subscribedBars);
+    }
+
+    @Override
+    public Collection<String> subscribedNews() {
+        return new HashSet<>(subscribedNews);
     }
 }

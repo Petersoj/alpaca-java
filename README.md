@@ -495,6 +495,39 @@ alpacaAPI.cryptoMarketDataStreaming().subscribe(
         Arrays.asList("*"));
 ```
 
+## [`NewsMarketDataWebsocket`](src/main/java/net/jacobpeterson/alpaca/websocket/marketdata/news/NewsMarketDataWebsocket.java)
+Alpaca also offers news websocket streaming for symbols.
+
+The usage is identical to the [`StockMarketDataWebsocket`](https://github.com/Petersoj/alpaca-java/#stockmarketdatawebsocket) usage except that accessing the websocket instance via the `AlpacaAPI` instance is done using: `alpacaAPI.newsMarketDataStreaming()` instead of `alpacaAPI.stockMarketDataStreaming()`.
+
+Example usage:
+```java
+MarketDataListener marketDataListener = (messageType, message) ->
+                System.out.printf("%s: %s\n", messageType.name(), message);
+
+MarketDataWebsocketInterface newsWebsocket = alpacaAPI.newsMarketDataStreaming();
+
+newsWebsocket.setListener(marketDataListener);
+newsWebsocket.subscribeToControl(
+                MarketDataMessageType.SUCCESS,
+                MarketDataMessageType.SUBSCRIPTION,
+                MarketDataMessageType.ERROR);
+
+newsWebsocket.connect();
+newsWebsocket.waitForAuthorization(5, TimeUnit.SECONDS);
+if (!newsWebsocket.isValid()) {
+            System.out.println("Websocket not valid!");
+            return;
+}
+newsWebsocket.subscribe(null, null, null, Arrays.asList("*"));
+
+// Wait a few seconds
+Thread.sleep(5000);
+
+// Manually disconnect the websocket
+newsWebsocket.disconnect();
+```
+
 # Building
 To build this project yourself, clone this repository and run:
 ```

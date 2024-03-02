@@ -1,0 +1,39 @@
+{
+    "type": "object",
+    "title": "See <a href=\"https://docs.alpaca.markets/reference/news-1\">News</a>.",
+    "properties": {
+      "author": {
+        "existingJavaType": "java.lang.String"
+      },
+      "content": {
+        "existingJavaType": "java.lang.String"
+      },
+      "created_at": {
+        "existingJavaType": "java.time.ZonedDateTime"
+      },
+      "headline": {
+        "existingJavaType": "java.lang.String"
+      },
+      "id": {
+        "existingJavaType": "java.lang.Long"
+      },
+      "images": {
+        "existingJavaType": "java.util.ArrayList<net.jacobpeterson.alpaca.model.endpoint.marketdata.news.common.Image>"
+      },
+      "source": {
+        "existingJavaType": "java.lang.String"
+      },
+      "summary": {
+        "existingJavaType": "java.lang.String"
+      },
+      "symbols": {
+        "existingJavaType": "java.util.ArrayList<java.lang.String>"
+      },
+      "updated_at": {
+        "existingJavaType": "java.time.ZonedDateTime"
+      },
+      "url": {
+        "existingJavaType": "java.lang.String"
+      }
+    }
+  }

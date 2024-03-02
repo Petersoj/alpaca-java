@@ -7,7 +7,8 @@
     "subscription",
     "t",
     "q",
-    "b"
+    "b",
+    "n"
   ],
   "javaEnums": [
     {
@@ -27,6 +28,9 @@
     },
     {
       "name": "BAR"
+    },
+    {
+      "name": "NEWS"
     }
   ]
 }

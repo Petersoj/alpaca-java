@@ -1,0 +1,13 @@
+{
+    "type": "object",
+    "title": "See <a href=\"https://docs.alpaca.markets/reference/news-1\">News</a>.",
+    "properties": {
+      "size": {
+        "existingJavaType": "java.lang.String"
+      },
+      "url": {
+        "existingJavaType": "java.lang.String"
+      }
+    }
+  }
+  
