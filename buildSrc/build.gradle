@@ -1,0 +1,29 @@
+plugins {
+    id "groovy-gradle-plugin"
+}
+
+gradlePlugin {
+    plugins {
+        jsonschema2pojoAdapted {
+            id = "jsonschema2pojo-adapted"
+            implementationClass =
+                    "net.jacobpeterson.alpaca.buildsrc.plugin.jsonschema2pojoadapted.JSONSchema2POJOAdaptedPlugin"
+        }
+    }
+}
+
+repositories {
+    mavenCentral()
+    gradlePluginPortal()
+}
+
+dependencies {
+    gradleApi()
+
+    // Google Guava
+    implementation group: "com.google.guava", name: "guava", version: "33.0.0-jre"
+
+    // JsonSchema2Pojo
+    implementation group: "org.jsonschema2pojo", name: "jsonschema2pojo-core", version: "1.2.1"
+    implementation group: "org.jsonschema2pojo", name: "jsonschema2pojo-gradle-plugin", version: "1.2.1"
+}

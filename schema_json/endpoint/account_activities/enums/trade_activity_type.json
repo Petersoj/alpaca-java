@@ -1,8 +1,0 @@
-{
-  "type": "string",
-  "title": "See <a href=\"https://alpaca.markets/docs/api-documentation/api-v2/account-activities/\">Account Activities</a>.",
-  "enum": [
-    "fill",
-    "partial_fill"
-  ]
-}

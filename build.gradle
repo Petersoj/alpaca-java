@@ -1,35 +1,29 @@
-import org.jsonschema2pojo.gradle.GenerateJsonSchemaJavaTask
-
-buildscript {
-    repositories {
-        mavenCentral()
-    }
-
-    dependencies {
-        // For Maven and Maven Central support
-        classpath group: 'com.bmuschko', name: 'gradle-nexus-plugin', version: '2.3.1'
-        // For JSONSchema2POJO
-        classpath group: 'org.jsonschema2pojo', name: 'jsonschema2pojo-gradle-plugin', version: '1.1.1'
-    }
-}
+import org.openapitools.generator.gradle.plugin.tasks.GenerateTask
 
 plugins {
-    id 'java'
+    id "java"
+    id "java-library"
 
-    // For Maven and Maven Central support
-    id 'maven-publish'
-    id 'com.bmuschko.nexus' version '2.3.1'
-    id 'io.codearte.nexus-staging' version '0.11.0'
+    // Adapted JSONSchema2POJO plugin
+    id "jsonschema2pojo-adapted"
 
-    // For code coverage reports
-    id 'jacoco'
+    // OpenAPI Generator
+    id "org.openapi.generator" version "7.3.0"
+
+    // Gradle versions plugin
+    id "com.github.ben-manes.versions" version "0.51.0"
+
+    // For Maven Central publishing
+    id "maven-publish"
+    id "signing"
 }
 
-apply plugin: 'jsonschema2pojo'
+final def projectGroup = "net.jacobpeterson.alpaca"
+final def projectArtifactID = "alpaca-java"
+final def projectVersion = "10.0.0-SNAPSHOT"
 
-archivesBaseName = 'alpaca-java'
-group = 'net.jacobpeterson'
-version = '9.2.0-SNAPSHOT'
+group = projectGroup
+version = projectVersion
 
 repositories {
     mavenCentral()
@@ -37,215 +31,237 @@ repositories {
 
 dependencies {
     // Logging framework
-    implementation group: 'org.slf4j', name: 'slf4j-api', version: '1.7.36'
-    // This is a bridge for the Apache Jakarta Commons Logging library used in dependencies to actually use SLF4j instead
-    implementation group: 'org.slf4j', name: 'jcl-over-slf4j', version: '1.7.36'
+    implementation group: "org.slf4j", name: "slf4j-api", version: "2.1.0-alpha1"
+    // Require dependencies that use the Apache Jakarta Commons Logging library to use SLF4j instead
+    implementation group: "org.slf4j", name: "jcl-over-slf4j", version: "2.1.0-alpha1"
 
-    // Guava and GSON
-    implementation group: 'com.google.guava', name: 'guava', version: '31.1-jre'
-    implementation group: 'com.google.code.gson', name: 'gson', version: '2.9.0'
+    // Google Guava
+    implementation group: "com.google.guava", name: "guava", version: "33.0.0-jre"
+
+    // GSON
+    implementation group: "com.google.code.gson", name: "gson", version: "2.10.1"
 
     // OkHttp
-    implementation group: 'com.squareup.okhttp3', name: 'okhttp', version: '4.10.0'
-    implementation group: 'com.github.devcsrj', name: 'slf4j-okhttp3-logging-interceptor', version: '1.0.1'
+    implementation group: "com.squareup.okhttp3", name: "okhttp", version: "5.0.0-alpha.12"
+    implementation group: "com.squareup.okhttp3", name: "logging-interceptor", version: "5.0.0-alpha.12"
 
-    // Unit test dependencies
-    testImplementation group: 'org.slf4j', name: 'slf4j-simple', version: '1.7.36'
-    testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter', version: '5.8.2'
-    testImplementation group: 'org.mockito', name: 'mockito-core', version: '4.6.1'
+    // Libraries used by the OpenAPI generated client libraries
+    implementation group: "jakarta.annotation", name: "jakarta.annotation-api", version: "1.3.5"
+    implementation group: "org.openapitools", name: "jackson-databind-nullable", version: "0.2.6"
+    implementation group: "io.gsonfire", name: "gson-fire", version: "1.9.0"
 }
 
 // Exclude any SLF4j-implementation transitive dependencies so users can use a logging framework of their choice
 configurations.implementation {
-    exclude group: 'commons-logging', module: 'commons-logging'
+    exclude group: "commons-logging", module: "commons-logging"
 }
 
-sourceSets {
-    main {
-        java {
-            srcDirs 'src/main/java'
-        }
-    }
-    test {
-        java {
-            srcDirs 'src/test/java'
-        }
-    }
+java {
+    sourceCompatibility = JavaVersion.VERSION_17
+    targetCompatibility = JavaVersion.VERSION_17
+    withJavadocJar()
+    withSourcesJar()
 }
 
-sourceCompatibility = 1.8
-targetCompatibility = 1.8
-[compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
+[compileJava, compileTestJava]*.options*.encoding = "UTF-8"
 
 javadoc {
-    // Explicitly define source version
-    options.addStringOption('source', '8')
-    // Used to suppress Javadoc linting warnings
-    options.addStringOption('Xdoclint:none', '-quiet')
-    // Explicitly define Charset for Javadocs
-    options.addStringOption('charset', 'UTF-8')
-    // Add Java SE 8 link
-    options.addStringOption('link', 'https://docs.oracle.com/javase/8/docs/api/')
+    options.addStringOption("source", "17")
+    options.addStringOption("Xdoclint:none", "-quiet") // Suppress Javadoc linting warnings
+    options.addStringOption("charset", "UTF-8")
+    options.addStringOption("link", "https://docs.oracle.com/javase/8/docs/api/")
 }
-
-test {
-    useJUnitPlatform()
-
-    testLogging {
-        events "passed", "skipped", "failed"
-        exceptionFormat "full"
-    }
-
-    doFirst {
-        def testPackageArgument = "testPackage"
-        filter.includeTestsMatching(project.hasProperty(testPackageArgument) &&
-                project.getProperty(testPackageArgument).equals("live") ? "*.live.*" : "*.mock.*")
-    }
-}
-
-jacocoTestReport {
-    reports {
-        xml.enabled true
-        html.enabled false
-    }
-}
-jacocoTestReport.dependsOn check
 
 //
-// START publishing
+// BEGIN Alpaca OpenAPI Specification (OAS) client generation
 //
-modifyPom {
-    project {
-        name = 'alpaca-java'
-        description = 'Java API for Alpaca'
-        url = 'https://github.com/Petersoj/alpaca-java'
-        inceptionYear = '2018'
 
-        licenses {
-            license {
-                name = 'MIT License'
-                url = 'https://opensource.org/licenses/MIT'
+// These IDs come from the URLs on this page: https://docs.alpaca.markets/v1.1/openapi
+final def specIDsOfFileNames = Map.of(
+        "trader.json", "657760422129f9005cf4bd58",
+        "broker.json", "657771fc2471d20070183049",
+        "market-data.json", "6577704d1fb6b9007032bf39")
+final File specDownloadPath = new File(project.layout.buildDirectory.get().getAsFile(),
+        "/download/openapi/")
+final File generatedClientLibrariesPath = new File(project.layout.buildDirectory.get().getAsFile(),
+        "/generated/openapi/")
+
+final def generateAllOpenAPIClientsTasks = tasks.register("generateAllOpenAPIClients") {
+    doLast {
+        fixOpenAPIGeneratedClientIssues(generatedClientLibrariesPath)
+    }
+}
+compileJava.dependsOn generateAllOpenAPIClientsTasks
+
+def downloadOpenAPISpecFilesTask = tasks.register("downloadOpenAPISpecFiles") {
+    configure {
+        outputs.dir(specDownloadPath)
+    }
+
+    doLast {
+        // Download spec files
+        specIDsOfFileNames.forEach { fileName, alpacaSpecID ->
+            final def outputFile = new File(specDownloadPath, fileName)
+            final def specURL = "https://docs.alpaca.markets/v1.1/openapi/${alpacaSpecID}"
+            outputFile.getParentFile().mkdirs()
+            try {
+                logger.info("Downloading OpenAPI spec file from: {}", specURL)
+                new URL(specURL).withInputStream { inputStream -> outputFile.withOutputStream { it << inputStream } }
+                logger.info("Successfully downloaded OpenAPI spec file to: {}", outputFile.getPath())
+            } catch (IOException ioException) {
+                throw new RuntimeException("Could not download OpenAPI spec file!", ioException)
             }
         }
 
-        developers {
-            developer {
-                id = 'Petersoj'
-                name = 'Jacob Peterson'
-            }
+        // Fix an issue in the Broker spec file that uses an empty string as an object key for some reason
+        // TODO remove this when issue is fixed by Alpaca
+        final def brokerSpecFile = new File(specDownloadPath, "broker.json")
+        brokerSpecFile.text = brokerSpecFile.text
+                .replace(",\"\":{\"type\":\"string\",\"x-stoplight\":{\"id\":\"1zg5jnb6rzdoo\"}}", "")
+    }
+}
 
-            developer {
-                id = 'mainstringargs'
-                name = 'main(String[] args)'
+for (def specFileName : specIDsOfFileNames.keySet()) {
+    final def specName = specFileName.replace(".json", "")
+    final def inputSpecFile = new File(specDownloadPath, specFileName)
+    final def outputDirectory = new File(generatedClientLibrariesPath, specName)
+
+    // Add source set of OpenAPI generated client library
+    sourceSets {
+        main {
+            java {
+                srcDir new File(outputDirectory, "src/main/java/").getPath()
             }
         }
+    }
 
-        scm {
-            url = "https://github.com/Petersoj/alpaca-java.git"
-            connection = "scm:git:https://github.com/Petersoj/alpaca-java.git"
-            developerConnection = "scm:git:git@github.com/Petersoj/alpaca-java.git"
+    // Register and configure OpenAPI generate task
+    final def generateTask = tasks.register("generateOpenAPIClientFor-" + specName, GenerateTask) {
+        dependsOn {
+            downloadOpenAPISpecFilesTask
+        }
+
+        it.onlyIf {
+            !downloadOpenAPISpecFilesTask.get().state.upToDate &&
+                    downloadOpenAPISpecFilesTask.get().state.failure == null &&
+                    !downloadOpenAPISpecFilesTask.get().state.skipped &&
+                    downloadOpenAPISpecFilesTask.get().state.executed
+        }
+
+        configure {
+            inputs.file(inputSpecFile)
+            outputs.dir(outputDirectory)
+        }
+
+        generatorName.set("java")
+        inputSpec.set(inputSpecFile.getPath())
+        outputDir.set(outputDirectory.getPath())
+        final def destinationPackage = projectGroup + ".openapi." + specName.replace("-", "")
+        configOptions.set(Map.of(
+                "artifactId", specName,
+                "artifactVersion", "1.0.0-SNAPSHOT",
+                "groupId", destinationPackage,
+                "invokerPackage", destinationPackage,
+                "apiPackage", destinationPackage + ".api",
+                "modelPackage", destinationPackage + ".model",
+                "library", "okhttp-gson",
+                "documentationProvider", "none"))
+        cleanupOutput.set(true)
+        validateSpec.set(false)
+        skipValidateSpec.set(true)
+        generateModelTests.set(false)
+        generateModelDocumentation.set(false)
+        generateApiTests.set(false)
+        generateApiDocumentation.set(false)
+    }
+    generateAllOpenAPIClientsTasks.configure {
+        dependsOn generateTask
+    }
+}
+
+static void fixOpenAPIGeneratedClientIssues(File generatedClientLibrariesPath) {
+    // Fix broker spec generated client issues with discriminators
+    // on some enums: https://github.com/OpenAPITools/openapi-generator/issues/806
+    final def brokerTransferDataJavaFile = new File(generatedClientLibrariesPath,
+            "broker/src/main/java/net/jacobpeterson/alpaca/openapi/broker/model/TransferData.java")
+    brokerTransferDataJavaFile.text = brokerTransferDataJavaFile.text
+            .replace("this.transferType = this.getClass().getSimpleName();", "")
+    final def brokerTransferResourceJavaFile = new File(generatedClientLibrariesPath,
+            "broker/src/main/java/net/jacobpeterson/alpaca/openapi/broker/model/TransferResource.java")
+    brokerTransferResourceJavaFile.text = brokerTransferResourceJavaFile.text
+            .replace("this.type = this.getClass().getSimpleName();", "")
+}
+
+//
+// END Alpaca OpenAPI Specification (OAS) client generation
+//
+
+//
+// BEGIN Publishing
+//
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            groupId = projectGroup
+            artifactId = projectArtifactID
+            version = projectVersion
+
+            pom {
+                name = projectArtifactID
+                description = "A Java API for Alpaca, the commission free, algo friendly, stock trading broker."
+                url = "https://github.com/Petersoj/alpaca-java"
+                inceptionYear = "2018"
+
+                licenses {
+                    license {
+                        name = "MIT License"
+                        url = "https://opensource.org/licenses/MIT"
+                    }
+                }
+
+                developers {
+                    developer {
+                        id = "Petersoj"
+                        name = "Jacob Peterson"
+                    }
+                    developer {
+                        id = "mainstringargs"
+                        name = "main(String[] args)"
+                    }
+                }
+
+                scm {
+                    url = "https://github.com/Petersoj/alpaca-java.git"
+                    connection = "scm:git:https://github.com/Petersoj/alpaca-java.git"
+                    developerConnection = "scm:git:git@github.com/Petersoj/alpaca-java.git"
+                }
+            }
+        }
+    }
+
+    repositories {
+        maven {
+            name = "OSSRH"
+            url = projectVersion.contains("SNAPSHOT") ? "https://oss.sonatype.org/content/repositories/snapshots/" :
+                    "https://oss.sonatype.org/service/local/staging/deploy/maven2/"
+            credentials {
+                username = project.property("nexus.username")
+                password = project.property("nexus.password")
+            }
         }
     }
 }
 
-extraArchive {
-    sources = true
-    tests = true
-    javadoc = true
-}
-
-nexus {
-    sign = true
-    repositoryUrl = 'https://oss.sonatype.org/service/local/staging/deploy/maven2/'
-    snapshotRepositoryUrl = 'https://oss.sonatype.org/content/repositories/snapshots/'
-}
-
-nexusStaging {
-    packageGroup = "net.jacobpeterson"
+signing {
+    sign publishing.publications.mavenJava
 }
 
 // Used to prevent accidental publication of Alpaca keys
 processResources {
-    exclude('alpaca.properties')
+    exclude("alpaca.properties")
 }
 
 //
-// END publishing
-//
-
-//
-// START POJO generation
-//
-
-// Disable default 'jsonSchema2Pojo' task
-tasks.getByName("generateJsonSchema2Pojo").enabled(false)
-
-// The generated POJOs will be in a package structure analogous to the path in the 'schema_json/' directory
-// See: https://github.com/joelittlejohn/jsonschema2pojo/wiki/Reference
-
-final def targetDirectoryPath = file("${project.buildDir}/generated-sources/schemajson").getPath()
-
-task generatePOJOs() {
-    final def jsonSourceDirectory = file("${project.projectDir}/schema_json").getPath()
-    final def jsonPackageNamePrefix = "net.jacobpeterson.alpaca.model"
-
-    // Loop through all files in schema JSON file tree
-    file(jsonSourceDirectory).eachFileRecurse { jsonFile ->
-        if (jsonFile.getName().endsWith(".json")) {
-            def startPackageIndex = jsonFile.getAbsolutePath().indexOf(jsonSourceDirectory) + jsonSourceDirectory.length()
-            def targetPackage = jsonPackageNamePrefix + jsonFile.getParentFile().getAbsolutePath()
-                    .substring(startPackageIndex)
-                    .replace(File.separator, '.').replace('-', '').replace('_', '')
-                    .toLowerCase()
-
-            def jsonToPOJOTask = tasks.create('json2POJOTask-' + targetPackage + "." + jsonFile.getName(),
-                    GenerateJsonSchemaJavaTask)
-
-            // Configure this task to participate in incremental builds so that it only executes when changes occur
-            jsonToPOJOTask.configure {
-                inputs.file(jsonFile)
-                outputs.dir(targetDirectoryPath)
-            }
-
-            jsonToPOJOTask.doFirst {
-                jsonToPOJOTask.configuration.source = files(jsonFile.getAbsolutePath())
-                jsonToPOJOTask.configuration.targetDirectory = file(targetDirectoryPath)
-                jsonToPOJOTask.configuration.targetPackage = targetPackage
-            }
-
-            dependsOn jsonToPOJOTask
-        }
-    }
-}
-
-compileJava {
-    dependsOn generatePOJOs
-}
-
-sourceSets {
-    main {
-        java {
-            srcDir targetDirectoryPath
-        }
-    }
-}
-
-jsonSchema2Pojo {
-    includeAdditionalProperties = true
-    targetDirectory = file(targetDirectoryPath)
-    propertyWordDelimiters = ['-', '_'] as char[]
-    annotationStyle = 'gson'
-    sourceType = 'jsonschema'
-    customDateTimePattern = "yyyy-MM-ddTHH:mm:ssZ"
-    includeGeneratedAnnotation = false
-    includeConstructors = true
-    serializable = true
-    includeGetters = true
-    includeSetters = true
-    includeCopyConstructor = true
-    generateBuilders = true
-}
-
-//
-// END POJO generation
+// END Publishing
 //

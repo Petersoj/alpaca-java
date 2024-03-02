@@ -12,6 +12,7 @@ import net.jacobpeterson.alpaca.model.endpoint.streaming.authorization.Authoriza
 import net.jacobpeterson.alpaca.model.endpoint.streaming.enums.StreamingMessageType;
 import net.jacobpeterson.alpaca.model.endpoint.streaming.listening.ListeningMessage;
 import net.jacobpeterson.alpaca.model.endpoint.streaming.trade.TradeUpdateMessage;
+import net.jacobpeterson.alpaca.model.properties.EndpointAPIType;
 import net.jacobpeterson.alpaca.websocket.AlpacaWebsocket;
 import okhttp3.HttpUrl;
 import okhttp3.OkHttpClient;
@@ -50,14 +51,19 @@ public class StreamingWebsocket extends AlpacaWebsocket<StreamingMessageType, St
     /**
      * Creates a {@link HttpUrl} for {@link StreamingWebsocket} with the given <code>alpacaSubdomain</code>.
      *
-     * @param alpacaSubdomain the Alpaca subdomain
+     * @param endpointAPIType the {@link EndpointAPIType}
      *
      * @return a {@link HttpUrl}
      */
-    private static HttpUrl createWebsocketURL(String alpacaSubdomain) {
+    @SuppressWarnings("UnnecessaryDefault")
+    private static HttpUrl createWebsocketURL(EndpointAPIType endpointAPIType) {
         return new HttpUrl.Builder()
                 .scheme("https") // HttpUrl.Builder doesn't recognize "wss" scheme, but "https" works fine
-                .host(alpacaSubdomain + ".alpaca.markets")
+                .host((switch (endpointAPIType) {
+                    case LIVE -> "api";
+                    case PAPER -> "paper-api";
+                    default -> throw new UnsupportedOperationException();
+                }) + ".alpaca.markets")
                 .addPathSegment("stream")
                 .build();
     }
@@ -68,14 +74,14 @@ public class StreamingWebsocket extends AlpacaWebsocket<StreamingMessageType, St
      * Instantiates a new {@link StreamingWebsocket}.
      *
      * @param okHttpClient    the {@link OkHttpClient}
-     * @param alpacaSubdomain the Alpaca subdomain
+     * @param endpointAPIType the {@link EndpointAPIType}
      * @param keyID           the key ID
      * @param secretKey       the secret key
      * @param oAuthToken      the OAuth token
      */
-    public StreamingWebsocket(OkHttpClient okHttpClient, String alpacaSubdomain,
+    public StreamingWebsocket(OkHttpClient okHttpClient, EndpointAPIType endpointAPIType,
             String keyID, String secretKey, String oAuthToken) {
-        super(okHttpClient, createWebsocketURL(alpacaSubdomain), "Streaming", keyID, secretKey, oAuthToken);
+        super(okHttpClient, createWebsocketURL(endpointAPIType), "Streaming", keyID, secretKey, oAuthToken);
 
         listenedStreamMessageTypes = new HashSet<>();
     }

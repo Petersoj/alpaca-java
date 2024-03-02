@@ -1,33 +1,16 @@
 package net.jacobpeterson.alpaca;
 
-import devcsrj.okhttp3.logging.HttpLoggingInterceptor;
 import net.jacobpeterson.alpaca.model.properties.DataAPIType;
 import net.jacobpeterson.alpaca.model.properties.EndpointAPIType;
 import net.jacobpeterson.alpaca.properties.AlpacaProperties;
-import net.jacobpeterson.alpaca.rest.AlpacaClient;
-import net.jacobpeterson.alpaca.rest.endpoint.AlpacaEndpoint;
-import net.jacobpeterson.alpaca.rest.endpoint.account.AccountEndpoint;
-import net.jacobpeterson.alpaca.rest.endpoint.accountactivities.AccountActivitiesEndpoint;
-import net.jacobpeterson.alpaca.rest.endpoint.accountconfiguration.AccountConfigurationEndpoint;
-import net.jacobpeterson.alpaca.rest.endpoint.assets.AssetsEndpoint;
-import net.jacobpeterson.alpaca.rest.endpoint.calendar.CalendarEndpoint;
-import net.jacobpeterson.alpaca.rest.endpoint.clock.ClockEndpoint;
-import net.jacobpeterson.alpaca.rest.endpoint.corporateactions.CorporateActionsEndpoint;
-import net.jacobpeterson.alpaca.rest.endpoint.marketdata.crypto.CryptoMarketDataEndpoint;
-import net.jacobpeterson.alpaca.rest.endpoint.marketdata.stock.StockMarketDataEndpoint;
-import net.jacobpeterson.alpaca.rest.endpoint.orders.OrdersEndpoint;
-import net.jacobpeterson.alpaca.rest.endpoint.portfoliohistory.PortfolioHistoryEndpoint;
-import net.jacobpeterson.alpaca.rest.endpoint.positions.PositionsEndpoint;
-import net.jacobpeterson.alpaca.rest.endpoint.watchlist.WatchlistEndpoint;
-import net.jacobpeterson.alpaca.websocket.AlpacaWebsocket;
 import net.jacobpeterson.alpaca.websocket.marketdata.MarketDataWebsocketInterface;
 import net.jacobpeterson.alpaca.websocket.marketdata.crypto.CryptoMarketDataWebsocket;
-import net.jacobpeterson.alpaca.websocket.marketdata.stock.StockMarketDataWebsocket;
-import net.jacobpeterson.alpaca.rest.endpoint.marketdata.news.NewsEndpoint;
 import net.jacobpeterson.alpaca.websocket.marketdata.news.NewsMarketDataWebsocket;
+import net.jacobpeterson.alpaca.websocket.marketdata.stock.StockMarketDataWebsocket;
 import net.jacobpeterson.alpaca.websocket.streaming.StreamingWebsocket;
 import net.jacobpeterson.alpaca.websocket.streaming.StreamingWebsocketInterface;
 import okhttp3.OkHttpClient;
+import okhttp3.logging.HttpLoggingInterceptor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -35,45 +18,20 @@ import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
- * The {@link AlpacaAPI} class contains several instances of various {@link AlpacaEndpoint}s and
- * {@link AlpacaWebsocket}s to interface with Alpaca. You will generally only need one instance of this class in your
- * application. Note that many methods inside the various {@link AlpacaEndpoint}s allow <code>null<code/> to be passed
- * in as a parameter if it is optional.
+ * {@link AlpacaAPI} is the main class used to interface with the various Alpaca API endpoints. You will generally only
+ * need one instance of this class in your application.
  *
- * @see <a href="https://docs.alpaca.markets/api-documentation/api-v2/">Alpaca API Documentation</a>
+ * @see <a href="https://docs.alpaca.markets">Alpaca Docs</a>
  */
 public class AlpacaAPI {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(AlpacaAPI.class);
 
-    private static final String VERSION_2_PATH_SEGMENT = "v2";
-    private static final String VERSION_1_BETA_3_PATH_SEGMENT = "v1beta3";
-    private static final String VERSION_1_BETA_1_PATH_SEGMENT = "v1beta1";
-
     private final OkHttpClient okHttpClient;
-    private final AlpacaClient brokerClient;
-    private final AlpacaClient cryptoDataClient;
-    private final AlpacaClient stockDataClient;
-    private final AlpacaClient newsDataClient;
-    // Ordering of fields/methods below are analogous to the ordering in the Alpaca documentation
-    private final AccountEndpoint accountEndpoint;
-    private final CryptoMarketDataEndpoint cryptoMarketDataEndpoint;
-    private final StockMarketDataEndpoint stockMarketDataEndpoint;
-    private final OrdersEndpoint ordersEndpoint;
-    private final PositionsEndpoint positionsEndpoint;
-    private final AssetsEndpoint assetsEndpoint;
-    private final WatchlistEndpoint watchlistEndpoint;
-    private final CalendarEndpoint calendarEndpoint;
-    private final ClockEndpoint clockEndpoint;
-    private final AccountConfigurationEndpoint accountConfigurationEndpoint;
-    private final AccountActivitiesEndpoint accountActivitiesEndpoint;
-    private final PortfolioHistoryEndpoint portfolioHistoryEndpoint;
     private final StreamingWebsocket streamingWebsocket;
     private final CryptoMarketDataWebsocket cryptoMarketDataWebsocket;
     private final StockMarketDataWebsocket stockMarketDataWebsocket;
-    private final CorporateActionsEndpoint corporateActionsEndpoint;
     private final NewsMarketDataWebsocket newsMarketDataWebsocket;
-    private final NewsEndpoint newsEndpoint;
 
     /**
      * Instantiates a new {@link AlpacaAPI} using properties specified in <code>alpaca.properties</code> file (or their
@@ -154,146 +112,17 @@ public class AlpacaAPI {
         if (okHttpClient == null) {
             OkHttpClient.Builder clientBuilder = new OkHttpClient.Builder()
                     .cache(null); // Ensure response caching is disabled
-
             if (LOGGER.isDebugEnabled()) {
-                clientBuilder.addInterceptor(new HttpLoggingInterceptor(LOGGER));
+                clientBuilder.addInterceptor(new HttpLoggingInterceptor(LOGGER::debug));
             }
-
             okHttpClient = clientBuilder.build();
         }
-
         this.okHttpClient = okHttpClient;
 
-        String brokerHostSubdomain;
-        switch (endpointAPIType) {
-            case LIVE:
-                brokerHostSubdomain = "api";
-                break;
-            case PAPER:
-                brokerHostSubdomain = "paper-api";
-                break;
-            default:
-                throw new UnsupportedOperationException();
-        }
-
-        if (oAuthToken == null) {
-            brokerClient = new AlpacaClient(okHttpClient, keyID, secretKey,
-                    brokerHostSubdomain, VERSION_2_PATH_SEGMENT);
-            cryptoDataClient = new AlpacaClient(okHttpClient, keyID, secretKey, "data", VERSION_1_BETA_3_PATH_SEGMENT);
-            stockDataClient = new AlpacaClient(okHttpClient, keyID, secretKey, "data", VERSION_2_PATH_SEGMENT);
-            newsDataClient = new AlpacaClient(okHttpClient, keyID, secretKey, "data", VERSION_1_BETA_1_PATH_SEGMENT);
-        } else {
-            brokerClient = new AlpacaClient(okHttpClient, oAuthToken, brokerHostSubdomain, VERSION_2_PATH_SEGMENT);
-            cryptoDataClient = null;
-            stockDataClient = null;
-            newsDataClient = null;
-        }
-
-        accountEndpoint = new AccountEndpoint(brokerClient);
-        cryptoMarketDataEndpoint = cryptoDataClient == null ? null : new CryptoMarketDataEndpoint(cryptoDataClient);
-        stockMarketDataEndpoint = stockDataClient == null ? null : new StockMarketDataEndpoint(stockDataClient);
-        ordersEndpoint = new OrdersEndpoint(brokerClient);
-        positionsEndpoint = new PositionsEndpoint(brokerClient);
-        assetsEndpoint = new AssetsEndpoint(brokerClient);
-        watchlistEndpoint = new WatchlistEndpoint(brokerClient);
-        calendarEndpoint = new CalendarEndpoint(brokerClient);
-        clockEndpoint = new ClockEndpoint(brokerClient);
-        accountConfigurationEndpoint = new AccountConfigurationEndpoint(brokerClient);
-        accountActivitiesEndpoint = new AccountActivitiesEndpoint(brokerClient);
-        portfolioHistoryEndpoint = new PortfolioHistoryEndpoint(brokerClient);
-
-        streamingWebsocket = new StreamingWebsocket(okHttpClient, brokerHostSubdomain, keyID, secretKey, oAuthToken);
-        cryptoMarketDataWebsocket = cryptoDataClient == null ? null :
-                new CryptoMarketDataWebsocket(okHttpClient, keyID, secretKey);
-        stockMarketDataWebsocket = stockDataClient == null ? null :
-                new StockMarketDataWebsocket(okHttpClient, dataAPIType, keyID, secretKey);
-        corporateActionsEndpoint = new CorporateActionsEndpoint(brokerClient);
-        newsEndpoint = newsDataClient == null ? null :  new NewsEndpoint(newsDataClient);
-        newsMarketDataWebsocket = newsDataClient == null ? null : new NewsMarketDataWebsocket(okHttpClient,  keyID, secretKey);
-    }
-
-    /**
-     * @return the {@link AccountEndpoint}
-     */
-    public AccountEndpoint account() {
-        return accountEndpoint;
-    }
-
-    /**
-     * @return the {@link CryptoMarketDataEndpoint}
-     */
-    public CryptoMarketDataEndpoint cryptoMarketData() {
-        return cryptoMarketDataEndpoint;
-    }
-
-    /**
-     * @return the {@link StockMarketDataEndpoint}
-     */
-    public StockMarketDataEndpoint stockMarketData() {
-        return stockMarketDataEndpoint;
-    }
-
-    /**
-     * @return the {@link OrdersEndpoint}
-     */
-    public OrdersEndpoint orders() {
-        return ordersEndpoint;
-    }
-
-    /**
-     * @return the {@link PositionsEndpoint}
-     */
-    public PositionsEndpoint positions() {
-        return positionsEndpoint;
-    }
-
-    /**
-     * @return the {@link AssetsEndpoint}
-     */
-    public AssetsEndpoint assets() {
-        return assetsEndpoint;
-    }
-
-    /**
-     * @return the {@link WatchlistEndpoint}
-     */
-    public WatchlistEndpoint watchlist() {
-        return watchlistEndpoint;
-    }
-
-    /**
-     * @return the {@link CalendarEndpoint}
-     */
-    public CalendarEndpoint calendar() {
-        return calendarEndpoint;
-    }
-
-    /**
-     * @return the {@link ClockEndpoint}
-     */
-    public ClockEndpoint clock() {
-        return clockEndpoint;
-    }
-
-    /**
-     * @return the {@link AccountConfigurationEndpoint}
-     */
-    public AccountConfigurationEndpoint accountConfiguration() {
-        return accountConfigurationEndpoint;
-    }
-
-    /**
-     * @return the {@link AccountActivitiesEndpoint}
-     */
-    public AccountActivitiesEndpoint accountActivities() {
-        return accountActivitiesEndpoint;
-    }
-
-    /**
-     * @return the {@link PortfolioHistoryEndpoint}
-     */
-    public PortfolioHistoryEndpoint portfolioHistory() {
-        return portfolioHistoryEndpoint;
+        streamingWebsocket = new StreamingWebsocket(okHttpClient, endpointAPIType, keyID, secretKey, oAuthToken);
+        cryptoMarketDataWebsocket = new CryptoMarketDataWebsocket(okHttpClient, keyID, secretKey);
+        stockMarketDataWebsocket = new StockMarketDataWebsocket(okHttpClient, dataAPIType, keyID, secretKey);
+        newsMarketDataWebsocket = new NewsMarketDataWebsocket(okHttpClient, keyID, secretKey);
     }
 
     /**
@@ -317,40 +146,6 @@ public class AlpacaAPI {
         return stockMarketDataWebsocket;
     }
 
-    public OkHttpClient getOkHttpClient() {
-        return okHttpClient;
-    }
-
-    public AlpacaClient getBrokerClient() {
-        return brokerClient;
-    }
-
-    public AlpacaClient getCryptoDataClient() {
-        return cryptoDataClient;
-    }
-
-    public AlpacaClient getStockDataClient() {
-        return stockDataClient;
-    }
-
-    public AlpacaClient getNewsDataClient() {
-        return newsDataClient;
-    }
-
-    /**
-     * @return the {@link CorporateActionsEndpoint}
-     */
-    public CorporateActionsEndpoint corporateActions() {
-        return corporateActionsEndpoint;
-    }
-
-    /**
-     * @return the {@link NewsEndpoint}
-     */
-    public NewsEndpoint newsEndpoint() {
-        return newsEndpoint;
-    }
-
     /**
      * @return the News {@link MarketDataWebsocketInterface}
      */
@@ -358,11 +153,14 @@ public class AlpacaAPI {
         return newsMarketDataWebsocket;
     }
 
+    public OkHttpClient getOkHttpClient() {
+        return okHttpClient;
+    }
 
     /**
      * Creates a {@link Builder} for {@link AlpacaAPI}.
      *
-     * @return a {@link Builder}
+     * @return the {@link Builder}
      */
     public static Builder builder() {
         return new Builder();
@@ -385,23 +183,23 @@ public class AlpacaAPI {
             this.dataAPIType = AlpacaProperties.DATA_API_TYPE;
         }
 
-        public Builder withKeyID(String val) {
-            keyID = val;
+        public Builder withKeyID(String keyID) {
+            this.keyID = keyID;
             return this;
         }
 
-        public Builder withSecretKey(String val) {
-            secretKey = val;
+        public Builder withSecretKey(String secretKey) {
+            this.secretKey = secretKey;
             return this;
         }
 
-        public Builder withEndpointAPIType(EndpointAPIType val) {
-            endpointAPIType = val;
+        public Builder withEndpointAPIType(EndpointAPIType endpointAPIType) {
+            this.endpointAPIType = endpointAPIType;
             return this;
         }
 
-        public Builder withDataAPIType(DataAPIType val) {
-            dataAPIType = val;
+        public Builder withDataAPIType(DataAPIType dataAPIType) {
+            this.dataAPIType = dataAPIType;
             return this;
         }
 

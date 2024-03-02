@@ -1,14 +1,13 @@
-<p align="center"><a href="https://petersoj.github.io/alpaca-java/" target="_blank"><img src="https://i.imgur.com/D8XzGvJ.png" alt="Logo"></a></p>
+<p align="center"><a href="https://petersoj.github.io/alpaca-java/" target="_blank"><img src=".github/image/logo.png" alt="Logo"></a></p>
 <p align="center">
+    <a href="https://github.com/Petersoj/alpaca-java" target="_blank"><img alt="GitHub Repository" src="https://img.shields.io/badge/GitHub-000000?logo=github"></a>
     <a href="https://search.maven.org/artifact/net.jacobpeterson/alpaca-java" target="_blank"><img alt="Maven Central" src="https://img.shields.io/maven-central/v/net.jacobpeterson/alpaca-java"></a>
     <a href="https://javadoc.io/doc/net.jacobpeterson/alpaca-java" target="_blank"><img src="https://javadoc.io/badge/net.jacobpeterson/alpaca-java.svg" alt="Javadocs"></a>
-    <a href="https://travis-ci.com/github/Petersoj/alpaca-java" target="_blank"><img src="https://travis-ci.com/Petersoj/alpaca-java.svg?branch=master" alt="Build Status"></a>
-    <a href="https://codecov.io/gh/petersoj/alpaca-java"><img src="https://codecov.io/gh/petersoj/alpaca-java/branch/master/graph/badge.svg" alt="CodeCov badge"/></a>
     <a href="https://opensource.org/licenses/MIT" target="_blank"><img alt="GitHub" src="https://img.shields.io/github/license/petersoj/alpaca-java"></a>
 </p>
 
 # Overview
-This is a Java implementation for the <a href="https://alpaca.markets/">Alpaca</a> API. Alpaca lets you trade with algorithms, connect with apps, and build services all with a commission-free stock trading API. This library is community developed and if you have any questions, please ask them on [Github Discussions](https://github.com/Petersoj/alpaca-java/discussions), the [Alpaca Slack #dev-alpaca-java channel](https://alpaca.markets/slack), or on the [Alpaca Forums](https://forum.alpaca.markets/).
+This library is a Java client implementation of the <a href="https://alpaca.markets/">Alpaca</a> API. Alpaca lets you trade with algorithms, connect with apps, and build services all with a commission-free trading API for stocks, crypto, and options. This library uses the [Alpaca OpenAPI Specifications](https://docs.alpaca.markets/v1.1/openapi) to generate REST API clients and implements the websocket streaming interface using [OkHttp](https://square.github.io/okhttp/). This library is community developed and if you have any questions, please ask them on [Github Discussions](https://github.com/Petersoj/alpaca-java/discussions), the [Alpaca Slack #dev-alpaca-java channel](https://alpaca.markets/slack), or on the [Alpaca Forums](https://forum.alpaca.markets/).
 
 Give this repository a star ⭐ if it helped you build a trading algorithm in Java!
 
@@ -16,19 +15,16 @@ Give this repository a star ⭐ if it helped you build a trading algorithm in Ja
 If you are using Gradle as your build tool, add the following dependency to your `build.gradle` file:
 
 ```
-dependencies {
-    implementation group: 'net.jacobpeterson', name: 'alpaca-java', version: '9.2.0'
-}
+implementation group: "net.jacobpeterson.alpaca", name: "alpaca-java", version: "10.0.0"
 ```
 
 If you are using Maven as your build tool, add the following dependency to your `pom.xml` file:
 
 ```
 <dependency>
-    <groupId>net.jacobpeterson</groupId>
+    <groupId>net.jacobpeterson.alpaca</groupId>
     <artifactId>alpaca-java</artifactId>
-    <version>9.2.0</version>
-    <scope>compile</scope>
+    <version>10.0.0</version>
 </dependency>
 ```
 
@@ -516,8 +512,8 @@ newsWebsocket.subscribeToControl(
 newsWebsocket.connect();
 newsWebsocket.waitForAuthorization(5, TimeUnit.SECONDS);
 if (!newsWebsocket.isValid()) {
-            System.out.println("Websocket not valid!");
-            return;
+    System.out.println("Websocket not valid!");
+    return;
 }
 newsWebsocket.subscribe(null, null, null, Arrays.asList("*"));
 
@@ -534,31 +530,18 @@ To build this project yourself, clone this repository and run:
 ./gradlew build
 ```
 
-To install built artifacts to your local maven repo, run:
+To install the built artifacts to your local Maven repository on your machine (the `~/.m2/` directory), run:
 ```
-./gradlew install -x test
+./gradlew install
 ```
-
-# Testing
-
-To run mocked tests using Mockito, run:
-```
-./gradlew test
-```
-Note that mocked tests never send real API requests to Alpaca. Mocked tests are meant to test the basic integrity of this API locally.
-
-To run live endpoint tests with Alpaca Paper credentials, create the `alpaca.properties` file in `src/test/resources` with the corresponding credentials. Then run:
-```
-./gradlew test -PtestPackage=live
-```
-Note that the live tests will modify your account minimally. It's meant to test live endpoints on a real paper account during market hours to confirm that API methods are working properly. Please read through the live endpoint tests [here](https://github.com/Petersoj/alpaca-java/tree/master/src/test/java/live/net/jacobpeterson/alpaca) before running this testing suite on your own paper account.
 
 # TODO
-- Finish Unit Testing (both live and mocked)
-- Use [TA4j](https://github.com/ta4j/ta4j) `Num` interface instead of `Double` for number variables so that users can use either `Double` or `BigDecimal` for performance or precision in price data.
-- Add [TimeSeriesDataStore](https://github.com/Petersoj/TimeSeriesDataStore) using Alpaca Data API
+- Implement Unit Testing for REST API and Websocket streaming (both live and mocked)
+- Implement Broker API websockets
 
 # Contributing
 Contributions are welcome!
 
-If you are creating a Pull Request, be sure to create a new branch in your forked repository for your feature or bug fix instead of committing directly to the `master` branch in your fork.
+When creating a Pull Request, keep the following in mind:
+1. Create a new branch in your forked repository for your feature or bug fix instead of committing directly to the `master` branch in your fork.
+2. Use the `dev` branch in this repository as the base branch in your Pull Request.

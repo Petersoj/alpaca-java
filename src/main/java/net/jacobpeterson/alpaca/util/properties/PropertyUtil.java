@@ -11,9 +11,9 @@ import java.util.Map;
 import java.util.Properties;
 
 /**
- * {@link PropertyUtil} is a util class for all things {@link Properties}.
+ * {@link PropertyUtil} is a utility class for all {@link Properties}-related handling.
  */
-public class PropertyUtil {
+public final class PropertyUtil {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(PropertyUtil.class);
 
@@ -60,15 +60,13 @@ public class PropertyUtil {
      * @return the string
      */
     public static String getProperty(String propertyFile, String defaultPropertyFile, String key, String defaultValue) {
-        Properties properties;
-
+        final Properties properties;
         if (!CACHED_PROPERTIES.containsKey(propertyFile)) {
             properties = loadPropertyFile(propertyFile, defaultPropertyFile);
             CACHED_PROPERTIES.put(propertyFile, properties);
         } else {
             properties = CACHED_PROPERTIES.get(propertyFile);
         }
-
         return properties == null ? defaultValue : properties.getProperty(key, defaultValue);
     }
 
@@ -88,53 +86,53 @@ public class PropertyUtil {
 
         // Load the default property file if exists
         Properties defaultProperties = null;
-        InputStream defaultPropertyStream = classLoader.getResourceAsStream(defaultPropertyFile);
+        if (defaultPropertyFile != null) {
+            try (InputStream defaultPropertyStream = classLoader.getResourceAsStream(defaultPropertyFile)) {
+                if (defaultPropertyStream == null) {
+                    LOGGER.warn("No default property file \"{}\" exists on the classpath.", defaultPropertyFile);
+                } else {
 
-        if (defaultPropertyStream != null) {
-            defaultProperties = new Properties();
-
-            // Load the properties
-            try {
-                defaultProperties.load(defaultPropertyStream);
-                LOGGER.debug("Loaded default properties file: {}", defaultPropertyFile);
-            } catch (IOException exception) {
-                LOGGER.error("Could not load default property file: {}\n{}", defaultPropertyFile, exception);
+                    defaultProperties = new Properties();
+                    try {
+                        defaultProperties.load(defaultPropertyStream);
+                        LOGGER.debug("Loaded default properties file: {}", defaultPropertyFile);
+                    } catch (IOException exception) {
+                        LOGGER.error("Could not load default property file: {}", defaultPropertyFile, exception);
+                    }
+                }
+            } catch (Exception exception) {
+                LOGGER.error("Could not read default property file stream: {}", defaultPropertyFile, exception);
             }
-
-            // Close the InputStream
-            try {
-                defaultPropertyStream.close();
-            } catch (IOException exception) {
-                LOGGER.error("Could not close default property file stream: {}\n{}", defaultPropertyFile, exception);
-            }
-
         } else {
-            LOGGER.warn("No default property file found for: {}", propertyFile);
+            LOGGER.warn("No default property file given for: {}", propertyFile);
         }
 
-        // Load the property file
+        // Load the property file if exists
         Properties properties = null;
-        InputStream propertyStream = classLoader.getResourceAsStream(propertyFile);
+        if (propertyFile != null) {
+            try (InputStream propertyStream = classLoader.getResourceAsStream(propertyFile)) {
+                if (propertyStream == null) {
+                    LOGGER.warn("No property file \"{}\" exists on the classpath.", propertyFile);
+                } else {
+                    // Add default properties if they were found
+                    properties = defaultProperties == null ? new Properties() : new Properties(defaultProperties);
 
-        if (propertyStream != null) {
-            // Add default properties if they were found
-            properties = defaultProperties == null ? new Properties() : new Properties(defaultProperties);
-
-            // Load the properties
-            try {
-                properties.load(propertyStream);
-                LOGGER.info("Loaded properties file: {}", propertyFile);
-            } catch (IOException exception) {
-                LOGGER.error("Could not load property file: {}\n{}", propertyFile, exception);
+                    // Load the properties
+                    try {
+                        properties.load(propertyStream);
+                        LOGGER.info("Loaded properties file: {}", propertyFile);
+                    } catch (IOException exception) {
+                        LOGGER.error("Could not load property file: {}", propertyFile, exception);
+                    }
+                }
+            } catch (Exception exception) {
+                LOGGER.error("Could not read property file stream: {}", propertyFile, exception);
             }
+        } else if (defaultProperties == null) {
+            throw new IllegalStateException("No property files were found!");
+        }
 
-            // Close the InputStream
-            try {
-                propertyStream.close();
-            } catch (IOException exception) {
-                LOGGER.error("Could not close property file stream: {}\n{}", propertyFile, exception);
-            }
-        } else {
+        if (properties == null) {
             LOGGER.debug("Could not find property file: {}", propertyFile);
 
             if (defaultProperties != null) {

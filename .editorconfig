@@ -509,7 +509,7 @@ ij_typescript_finally_on_new_line = false
 ij_typescript_for_brace_force = always
 ij_typescript_for_statement_new_line_after_left_paren = false
 ij_typescript_for_statement_right_paren_on_new_line = false
-ij_typescript_for_statement_wrap = split_into_lines
+ij_typescript_for_statement_wrap = normal
 ij_typescript_force_quote_style = true
 ij_typescript_force_semicolon_style = true
 ij_typescript_function_expression_brace_style = end_of_line
@@ -519,7 +519,7 @@ ij_typescript_import_prefer_absolute_path = global
 ij_typescript_import_sort_members = true
 ij_typescript_import_sort_module_name = false
 ij_typescript_import_use_node_resolution = true
-ij_typescript_imports_wrap = normal
+ij_typescript_imports_wrap = on_every_item
 ij_typescript_indent_case_from_switch = true
 ij_typescript_indent_chained_calls = true
 ij_typescript_indent_package_children = 0
@@ -1023,7 +1023,7 @@ ij_json_wrap_long_lines = false
 
 [{*.htm,*.html,*.ng,*.peb,*.sht,*.shtm,*.shtml}]
 ij_html_add_new_line_before_tags = body,div,p,form,h1,h2,h3
-ij_html_align_attributes = true
+ij_html_align_attributes = false
 ij_html_align_text = false
 ij_html_attribute_wrap = normal
 ij_html_block_comment_add_space = false
@@ -1182,8 +1182,8 @@ ij_prototext_spaces_within_brackets = false
 
 [{*.properties,spring.handlers,spring.schemas}]
 ij_properties_align_group_field_declarations = false
-ij_properties_keep_blank_lines = false
-ij_properties_key_value_delimiter = equals
+ij_properties_keep_blank_lines = true
+ij_properties_key_value_delimiter = colon
 ij_properties_spaces_around_key_value_delimiter = false
 
 [{*.qute.htm,*.qute.html,*.qute.json,*.qute.txt,*.qute.yaml,*.qute.yml}]
