@@ -9,7 +9,6 @@ import net.jacobpeterson.alpaca.openapi.broker.api.ClockApi;
 import net.jacobpeterson.alpaca.openapi.broker.api.CorporateActionsApi;
 import net.jacobpeterson.alpaca.openapi.broker.api.CountryInfoApi;
 import net.jacobpeterson.alpaca.openapi.broker.api.DocumentsApi;
-import net.jacobpeterson.alpaca.openapi.broker.api.EventsApi;
 import net.jacobpeterson.alpaca.openapi.broker.api.FundingApi;
 import net.jacobpeterson.alpaca.openapi.broker.api.FundingWalletsApi;
 import net.jacobpeterson.alpaca.openapi.broker.api.JournalsApi;
@@ -20,6 +19,7 @@ import net.jacobpeterson.alpaca.openapi.broker.api.RebalancingApi;
 import net.jacobpeterson.alpaca.openapi.broker.api.ReportingApi;
 import net.jacobpeterson.alpaca.openapi.broker.api.TradingApi;
 import net.jacobpeterson.alpaca.openapi.broker.api.WatchlistApi;
+import net.jacobpeterson.alpaca.rest.broker.EventsApiSSE;
 import okhttp3.OkHttpClient;
 
 import static com.google.common.base.Preconditions.checkNotNull;
@@ -39,7 +39,7 @@ public class AlpacaBrokerAPI {
     private CorporateActionsApi corporateActions;
     private CountryInfoApi countryInfo;
     private DocumentsApi documents;
-    private EventsApi events;
+    private EventsApiSSE events;
     private FundingApi funding;
     private FundingWalletsApi fundingWallets;
     private JournalsApi journals;
@@ -60,8 +60,8 @@ public class AlpacaBrokerAPI {
      * @param okHttpClient          an existing {@link OkHttpClient} or <code>null</code> to create a new default
      *                              instance
      */
-    @SuppressWarnings("UnnecessaryDefault")
-    AlpacaBrokerAPI(String brokerAPIKey, String brokerAPISecret, BrokerAPIEndpointType brokerAPIEndpointType,
+    @SuppressWarnings("UnnecessaryDefault") AlpacaBrokerAPI(String brokerAPIKey, String brokerAPISecret,
+            BrokerAPIEndpointType brokerAPIEndpointType,
             OkHttpClient okHttpClient) {
         checkNotNull(brokerAPIKey);
         checkNotNull(brokerAPISecret);
@@ -74,7 +74,8 @@ public class AlpacaBrokerAPI {
             case PRODUCTION -> 1;
             default -> throw new UnsupportedOperationException();
         });
-        apiClient.addDefaultHeader("Authorization", createBrokerAPIAuthKey(brokerAPIKey, brokerAPISecret));
+        apiClient.addDefaultHeader("Authorization", "Basic " +
+                createBrokerAPIAuthKey(brokerAPIKey, brokerAPISecret));
     }
 
     /**
@@ -171,13 +172,13 @@ public class AlpacaBrokerAPI {
     }
 
     /**
-     * Gets the {@link EventsApi}. Lazily instantiated.
+     * Gets the {@link EventsApiSSE}. Lazily instantiated.
      *
-     * @return the {@link EventsApi}
+     * @return the {@link EventsApiSSE}
      */
-    public synchronized EventsApi events() {
+    public synchronized EventsApiSSE events() {
         if (events == null) {
-            events = new EventsApi(apiClient);
+            events = new EventsApiSSE(apiClient);
         }
         return events;
     }

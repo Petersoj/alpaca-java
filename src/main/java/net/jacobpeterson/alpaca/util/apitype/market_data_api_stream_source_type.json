@@ -1,6 +1,6 @@
 {
   "type": "string",
-  "javaName": "MarketDataAPISourceType",
+  "javaName": "MarketDataAPIStreamSourceType",
   "enum": [
     "iex",
     "sip"

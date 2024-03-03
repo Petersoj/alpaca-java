@@ -4,5 +4,3 @@ build/
 .settings
 .DS_Store
 .idea/
-*.properties
-!*.default.properties

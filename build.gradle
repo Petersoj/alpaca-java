@@ -48,6 +48,7 @@ dependencies {
 
     // OkHttp
     implementation group: "com.squareup.okhttp3", name: "okhttp", version: "5.0.0-alpha.12"
+    implementation group: "com.squareup.okhttp3", name: "okhttp-sse", version: "5.0.0-alpha.12"
     implementation group: "com.squareup.okhttp3", name: "logging-interceptor", version: "5.0.0-alpha.12"
 
     // Libraries used by the OpenAPI generated client libraries
@@ -69,6 +70,9 @@ java {
 }
 javadocJar.dependsOn generatePOJOs
 sourcesJar.dependsOn generatePOJOs
+jar.dependsOn compileJava
+javadocJar.dependsOn compileJava
+sourcesJar.dependsOn compileJava
 
 [compileJava, compileTestJava]*.options*.encoding = "UTF-8"
 
@@ -93,19 +97,10 @@ final File specDownloadPath = new File(project.layout.buildDirectory.get().getAs
 final File generatedClientLibrariesPath = new File(project.layout.buildDirectory.get().getAsFile(),
         "/generated/openapi/")
 
-final def generateOpenAPIClientsTasks = tasks.register("generateOpenAPIClients") {
-    doLast {
-        fixOpenAPIGeneratedClientIssues(specIDsOfFileNames, generatedClientLibrariesPath)
-    }
-}
-compileJava.dependsOn generateOpenAPIClientsTasks
-jar.dependsOn generateOpenAPIClientsTasks
-javadocJar.dependsOn generateOpenAPIClientsTasks
-sourcesJar.dependsOn generateOpenAPIClientsTasks
-
 def downloadOpenAPISpecFilesTask = tasks.register("downloadOpenAPISpecFiles") {
     configure {
         outputs.dir(specDownloadPath)
+        outputs.cacheIf { true }
     }
 
     doLast {
@@ -131,6 +126,16 @@ def downloadOpenAPISpecFilesTask = tasks.register("downloadOpenAPISpecFiles") {
     }
 }
 
+final def generateOpenAPIClientsTask = tasks.register("generateOpenAPIClients") {
+    it.onlyIf {
+        !downloadOpenAPISpecFilesTask.get().state.upToDate &&
+                downloadOpenAPISpecFilesTask.get().state.failure == null &&
+                !downloadOpenAPISpecFilesTask.get().state.skipped &&
+                downloadOpenAPISpecFilesTask.get().state.executed
+    }
+}
+compileJava.dependsOn generateOpenAPIClientsTask
+
 for (def specFileName : specIDsOfFileNames.keySet()) {
     final def specName = specFileName.replace(".json", "")
     final def inputSpecFile = new File(specDownloadPath, specFileName)
@@ -151,16 +156,10 @@ for (def specFileName : specIDsOfFileNames.keySet()) {
             downloadOpenAPISpecFilesTask
         }
 
-        it.onlyIf {
-            !downloadOpenAPISpecFilesTask.get().state.upToDate &&
-                    downloadOpenAPISpecFilesTask.get().state.failure == null &&
-                    !downloadOpenAPISpecFilesTask.get().state.skipped &&
-                    downloadOpenAPISpecFilesTask.get().state.executed
-        }
-
         configure {
             inputs.file(inputSpecFile)
             outputs.dir(outputDirectory)
+            outputs.cacheIf { true }
         }
 
         generatorName.set("java")
@@ -186,51 +185,63 @@ for (def specFileName : specIDsOfFileNames.keySet()) {
         generateApiTests.set(false)
         generateApiDocumentation.set(false)
     }
-    generateOpenAPIClientsTasks.configure {
+    generateOpenAPIClientsTask.configure {
         dependsOn generateTask
     }
 }
 
-static void fixOpenAPIGeneratedClientIssues(Map<String, String> specIDsOfFileNames, File generatedClientLibrariesPath) {
-    // TODO remove these manual fixes once OpenAPI fixes these issues
+final def fixOpenAPIGeneratedClientIssuesTask = tasks.register("fixOpenAPIGeneratedClientIssues") {
+    it.onlyIf {
+        !generateOpenAPIClientsTask.get().state.upToDate &&
+                generateOpenAPIClientsTask.get().state.failure == null &&
+                !generateOpenAPIClientsTask.get().state.skipped &&
+                generateOpenAPIClientsTask.get().state.executed
+    }
 
-    final def sourceFilesPath = "src/main/java/net/jacobpeterson/alpaca/openapi"
+    doLast {
+        // TODO remove these manual fixes once OpenAPI fixes these issues
 
-    // Fix broker spec generated client issues with discriminators
-    // on some enums: https://github.com/OpenAPITools/openapi-generator/issues/806
-    final def brokerTransferDataJavaFile = new File(generatedClientLibrariesPath,
-            "broker/${sourceFilesPath}/broker/model/TransferData.java")
-    brokerTransferDataJavaFile.text = brokerTransferDataJavaFile.text
-            .replace("this.transferType = this.getClass().getSimpleName();", "")
-    final def brokerTransferResourceJavaFile = new File(generatedClientLibrariesPath,
-            "broker/${sourceFilesPath}/broker/model/TransferResource.java")
-    brokerTransferResourceJavaFile.text = brokerTransferResourceJavaFile.text
-            .replace("this.type = this.getClass().getSimpleName();", "")
+        final def sourceFilesPath = "src/main/java/net/jacobpeterson/alpaca/openapi"
 
-    // Remove the JSON validation that the generated client models always run (there isn't an option to
-    // disable it for some reason)
-    specIDsOfFileNames.keySet().stream().map { it.replace(".json", "") }.forEach {
-        for (File modelFile : Paths.get(generatedClientLibrariesPath.getPath(),
-                it, sourceFilesPath, it.replace("-", ""), "model").toFile().listFiles()) {
-            modelFile.text = modelFile.text
-                    .replaceAll("/\\*\\*\\n {2}\\* Validates the JSON Element and throws an exception if issues found" +
-                            "[\\s\\S]*?\\*/", "")
-                    .replace("public static void validateJsonElement(JsonElement jsonElement) throws IOException {",
-                            "public static boolean validate = false;\n  public static void " +
-                                    "validateJsonElement(JsonElement jsonElement) throws IOException {\n" +
-                                    "    if (!validate) return;")
+        // Fix broker spec generated client issues with discriminators
+        // on some enums: https://github.com/OpenAPITools/openapi-generator/issues/806
+        final def brokerTransferDataJavaFile = new File(generatedClientLibrariesPath,
+                "broker/${sourceFilesPath}/broker/model/TransferData.java")
+        brokerTransferDataJavaFile.text = brokerTransferDataJavaFile.text
+                .replace("this.transferType = this.getClass().getSimpleName();", "")
+        final def brokerTransferResourceJavaFile = new File(generatedClientLibrariesPath,
+                "broker/${sourceFilesPath}/broker/model/TransferResource.java")
+        brokerTransferResourceJavaFile.text = brokerTransferResourceJavaFile.text
+                .replace("this.type = this.getClass().getSimpleName();", "")
+
+        // Remove the JSON validation that the generated client models always run (there isn't an option to
+        // disable it for some reason)
+        specIDsOfFileNames.keySet().stream().map { it.replace(".json", "") }.forEach {
+            for (File modelFile : Paths.get(generatedClientLibrariesPath.getPath(),
+                    it, sourceFilesPath, it.replace("-", ""), "model").toFile().listFiles()) {
+                modelFile.text = modelFile.text
+                        .replaceAll("/\\*\\*\\n {2}\\* Validates the JSON Element and throws an exception if issues " +
+                                "found[\\s\\S]*?\\*/", "")
+                        .replace("public static void validateJsonElement(JsonElement jsonElement) throws IOException {",
+                                "public static boolean validate = false;\n  public static void " +
+                                        "validateJsonElement(JsonElement jsonElement) throws IOException {\n" +
+                                        "    if (!validate) return;")
+            }
+        }
+
+        // Remove the necessary authentication header logic from the generate client's ApiClient
+        specIDsOfFileNames.keySet().stream().map { it.replace(".json", "") }.forEach {
+            final def apiClientFile = Paths.get(generatedClientLibrariesPath.getPath(), it, sourceFilesPath,
+                    it.replace("-", ""), "ApiClient.java").toFile()
+            apiClientFile.text = apiClientFile.text
+                    .replaceAll("// Setup authentications \\(key: authentication name, value: authentication\\)" +
+                            "[\\s\\S]*?authentications\\);", "")
+                    .replaceAll("for \\(String authName : authNames\\)[\\s\\S]*?uri\\);\\n. {7}}", "")
         }
     }
-
-    // Remove the necessary authentication header logic from the generate client's ApiClient
-    specIDsOfFileNames.keySet().stream().map { it.replace(".json", "") }.forEach {
-        final def apiClientFile = Paths.get(generatedClientLibrariesPath.getPath(), it, sourceFilesPath,
-                it.replace("-", ""), "ApiClient.java").toFile()
-        apiClientFile.text = apiClientFile.text
-                .replaceAll("// Setup authentications \\(key: authentication name, value: authentication\\)" +
-                        "[\\s\\S]*?authentications\\);", "")
-                .replaceAll("for \\(String authName : authNames\\)[\\s\\S]*?uri\\);\\n. {7}}", "")
-    }
+}
+generateOpenAPIClientsTask.configure {
+    finalizedBy fixOpenAPIGeneratedClientIssuesTask
 }
 
 //
@@ -297,11 +308,6 @@ publishing {
 
 signing {
     sign publishing.publications.mavenJava
-}
-
-// Used to prevent accidental publication of Alpaca keys
-processResources {
-    exclude("alpaca.properties")
 }
 
 //

@@ -7,7 +7,7 @@
 </p>
 
 # Overview
-This library is a Java client implementation of the <a href="https://alpaca.markets/">Alpaca</a> API. Alpaca lets you trade with algorithms, connect with apps, and build services all with a commission-free trading API for stocks, crypto, and options. This library uses the [Alpaca OpenAPI Specifications](https://docs.alpaca.markets/v1.1/openapi) to generate REST API clients and implements the websocket streaming interface using [OkHttp](https://square.github.io/okhttp/). This library is community developed and if you have any questions, please ask them on [Github Discussions](https://github.com/Petersoj/alpaca-java/discussions), the [Alpaca Slack #dev-alpaca-java channel](https://alpaca.markets/slack), or on the [Alpaca Forums](https://forum.alpaca.markets/).
+This library is a Java client implementation of the <a href="https://alpaca.markets/">Alpaca</a> API. Alpaca lets you trade with algorithms, connect with apps, and build services all with a commission-free trading API for stocks, crypto, and options. This library uses the [Alpaca OpenAPI Specifications](https://docs.alpaca.markets/v1.1/openapi) to generate clients for the REST API with the [OkHttp](https://square.github.io/okhttp/) library, but implements the websocket and SSE streaming interface using a custom implementation with [OkHttp](https://square.github.io/okhttp/) library. This library is community developed and if you have any questions, please ask them on [Github Discussions](https://github.com/Petersoj/alpaca-java/discussions), the [Alpaca Slack #dev-alpaca-java channel](https://alpaca.markets/slack), or on the [Alpaca Forums](https://forum.alpaca.markets/).
 
 Give this repository a star ⭐ if it helped you build a trading algorithm in Java!
 
@@ -28,17 +28,7 @@ If you are using Maven as your build tool, add the following dependency to your 
 </dependency>
 ```
 
-Note that you don't have to use the Maven Central artifacts and instead can just install a clone of this project to your local Maven repository as shown in the [Building](#building) section.
-
-# Configuration
-Creating an `alpaca.properties` file on the classpath (e.g. in `src/main/resources/alpaca.properties`) with the following format allows you to easily load properties using the `AlpacaAPI` default constructor:
-```
-key_id = <your Key ID>
-secret_key = <your Secret Key>
-endpoint_api_type = <must be either "paper" or "live">
-data_api_type = <must be either "iex" or "sip">
-```
-The default values for `alpaca.properties` can be found [here](src/main/resources/alpaca.default.properties).
+Note that you don't have to use the Maven Central artifacts. Instead, you can clone this repository, build this project, and install the artifacts to your local Maven repository as shown in the [Building](#building) section.
 
 # Logger
 For logging, this library uses [SLF4j](http://www.slf4j.org/) which serves as an interface for various logging frameworks. This enables you to use whatever logging framework you would like. However, if you do not add a logging framework as a dependency in your project, the console will output a message stating that SLF4j is defaulting to a no-operation (NOP) logger implementation. To enable logging, add a logging framework of your choice as a dependency to your project such as [Logback](http://logback.qos.ch/), [Log4j 2](http://logging.apache.org/log4j/2.x/index.html), [SLF4j-simple](http://www.slf4j.org/manual.html), or [Apache Commons Logging](https://commons.apache.org/proper/commons-logging/).
@@ -76,11 +66,7 @@ AlpacaAPI alpacaAPI = AlpacaAPI.builder()
     .build();
 ```
 
-Note that this library uses [OkHttp](https://square.github.io/okhttp/) as its HTTP client library which creates background threads to service requests. These threads persist even if the main thread exists so if you want to destroy these threads when you're done using [`AlpacaAPI`](src/main/java/net/jacobpeterson/alpaca/AlpacaAPI.java) so your program can exit without calling `System.exit()`, use the following snippet:
-```java
-alpacaAPI.getOkHttpClient().dispatcher().executorService().shutdown();
-alpacaAPI.getOkHttpClient().connectionPool().evictAll();
-```
+Note that this library uses [OkHttp](https://square.github.io/okhttp/) as its HTTP client library which creates background threads to service requests via a connection pool. These threads persist even if the main thread exits, so if you want to destroy these threads when you're done using [`AlpacaAPI`](src/main/java/net/jacobpeterson/alpaca/AlpacaAPI.java), call `alpacaAPI.closeOkHttpClient();`.
 
 See the [OkHttpClient Documentation](https://square.github.io/okhttp/4.x/okhttp/okhttp3/-ok-http-client/#shutdown-isnt-necessary) for more information.
 
@@ -532,16 +518,15 @@ To build this project yourself, clone this repository and run:
 
 To install the built artifacts to your local Maven repository on your machine (the `~/.m2/` directory), run:
 ```
-./gradlew install
+./gradlew publishToMavenLocal
 ```
 
 # TODO
 - Implement Unit Testing for REST API and Websocket streaming (both live and mocked)
-- Implement Broker API websockets
 
 # Contributing
 Contributions are welcome!
 
-When creating a Pull Request, keep the following in mind:
+Do the following before starting your Pull Request:
 1. Create a new branch in your forked repository for your feature or bug fix instead of committing directly to the `master` branch in your fork.
-2. Use the `dev` branch in this repository as the base branch in your Pull Request.
+2. Use the `dev` branch as the base branch in your Pull Request.

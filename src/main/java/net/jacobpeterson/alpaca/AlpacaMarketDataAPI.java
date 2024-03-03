@@ -53,7 +53,8 @@ public class AlpacaMarketDataAPI {
             apiClient.addDefaultHeader("APCA-API-KEY-ID", traderKeyID);
             apiClient.addDefaultHeader("APCA-API-SECRET-KEY", traderSecretKey);
         } else {
-            apiClient.addDefaultHeader("Authorization", createBrokerAPIAuthKey(brokerAPIKey, brokerAPISecret));
+            apiClient.addDefaultHeader("Authorization", "Basic " +
+                    createBrokerAPIAuthKey(brokerAPIKey, brokerAPISecret));
         }
     }
 
