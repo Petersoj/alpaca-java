@@ -43,6 +43,9 @@ dependencies {
     // GSON
     implementation group: "com.google.code.gson", name: "gson", version: "2.10.1"
 
+    // Jetbrains Annotations
+    implementation group: "org.jetbrains", name: "annotations", version: "24.1.0"
+
     // OkHttp
     implementation group: "com.squareup.okhttp3", name: "okhttp", version: "5.0.0-alpha.12"
     implementation group: "com.squareup.okhttp3", name: "logging-interceptor", version: "5.0.0-alpha.12"
@@ -213,10 +216,20 @@ static void fixOpenAPIGeneratedClientIssues(Map<String, String> specIDsOfFileNam
                     .replaceAll("/\\*\\*\\n {2}\\* Validates the JSON Element and throws an exception if issues found" +
                             "[\\s\\S]*?\\*/", "")
                     .replace("public static void validateJsonElement(JsonElement jsonElement) throws IOException {",
-                            "public static boolean validate = false;\n public static void " +
+                            "public static boolean validate = false;\n  public static void " +
                                     "validateJsonElement(JsonElement jsonElement) throws IOException {\n" +
-                                    "  if (!validate) return;")
+                                    "    if (!validate) return;")
         }
+    }
+
+    // Remove the necessary authentication header logic from the generate client's ApiClient
+    specIDsOfFileNames.keySet().stream().map { it.replace(".json", "") }.forEach {
+        final def apiClientFile = Paths.get(generatedClientLibrariesPath.getPath(), it, sourceFilesPath,
+                it.replace("-", ""), "ApiClient.java").toFile()
+        apiClientFile.text = apiClientFile.text
+                .replaceAll("// Setup authentications \\(key: authentication name, value: authentication\\)" +
+                        "[\\s\\S]*?authentications\\);", "")
+                .replaceAll("for \\(String authName : authNames\\)[\\s\\S]*?uri\\);\\n. {7}}", "")
     }
 }
 

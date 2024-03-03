@@ -1,9 +1,0 @@
-{
-  "type": "string",
-  "javaName": "EndpointAPIType",
-  "title": "Defines the API endpoints to use with Alpaca.",
-  "enum": [
-    "live",
-    "paper"
-  ]
-}

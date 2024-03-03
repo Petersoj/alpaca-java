@@ -1,25 +1,24 @@
 package net.jacobpeterson.alpaca;
 
-import net.jacobpeterson.alpaca.model.properties.DataAPIType;
-import net.jacobpeterson.alpaca.model.properties.EndpointAPIType;
-import net.jacobpeterson.alpaca.properties.AlpacaProperties;
-import net.jacobpeterson.alpaca.websocket.marketdata.MarketDataWebsocketInterface;
-import net.jacobpeterson.alpaca.websocket.marketdata.crypto.CryptoMarketDataWebsocket;
-import net.jacobpeterson.alpaca.websocket.marketdata.news.NewsMarketDataWebsocket;
-import net.jacobpeterson.alpaca.websocket.marketdata.stock.StockMarketDataWebsocket;
-import net.jacobpeterson.alpaca.websocket.streaming.StreamingWebsocket;
-import net.jacobpeterson.alpaca.websocket.streaming.StreamingWebsocketInterface;
+import net.jacobpeterson.alpaca.model.util.apitype.BrokerAPIEndpointType;
+import net.jacobpeterson.alpaca.model.util.apitype.MarketDataAPISourceType;
+import net.jacobpeterson.alpaca.model.util.apitype.TraderAPIEndpointType;
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import static com.google.common.base.Preconditions.checkArgument;
-import static com.google.common.base.Preconditions.checkNotNull;
+import static net.jacobpeterson.alpaca.model.util.apitype.BrokerAPIEndpointType.SANDBOX;
+import static net.jacobpeterson.alpaca.model.util.apitype.MarketDataAPISourceType.IEX;
+import static net.jacobpeterson.alpaca.model.util.apitype.TraderAPIEndpointType.PAPER;
 
 /**
- * {@link AlpacaAPI} is the main class used to interface with the various Alpaca API endpoints. You will generally only
- * need one instance of this class in your application.
+ * {@link AlpacaAPI} is the main class used to interface with the various Alpaca API endpoints. If you are using the
+ * Trading or Market Data APIs for a single Alpaca account or if you are using the Broker API, you will generally only
+ * need one instance of this class. However, if you are using the Trading API with OAuth to act on behalf of an Alpaca
+ * account, this class is optimized so that it can be instantiated quickly, especially when an existing
+ * {@link OkHttpClient} is given in the constructor. Additionally, all API endpoint instances are instantiated lazily.
+ * This class is thread-safe.
  *
  * @see <a href="https://docs.alpaca.markets">Alpaca Docs</a>
  */
@@ -27,134 +26,186 @@ public class AlpacaAPI {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(AlpacaAPI.class);
 
+    private final String traderKeyID;
+    private final String traderSecretKey;
+    private final String traderOAuthToken;
+    private final TraderAPIEndpointType traderAPIEndpointType;
+    private final MarketDataAPISourceType marketDataAPISourceType;
+    private final String brokerAPIKey;
+    private final String brokerAPISecret;
+    private final BrokerAPIEndpointType brokerAPIEndpointType;
     private final OkHttpClient okHttpClient;
-    private final StreamingWebsocket streamingWebsocket;
-    private final CryptoMarketDataWebsocket cryptoMarketDataWebsocket;
-    private final StockMarketDataWebsocket stockMarketDataWebsocket;
-    private final NewsMarketDataWebsocket newsMarketDataWebsocket;
+
+    private AlpacaTraderAPI trader;
+    private AlpacaMarketDataAPI marketData;
+    private AlpacaBrokerAPI broker;
 
     /**
-     * Instantiates a new {@link AlpacaAPI} using properties specified in <code>alpaca.properties</code> file (or their
-     * associated defaults).
+     * Instantiates a new {@link AlpacaAPI}. Use this constructor if you are using the Trading or Market Data APIs for a
+     * single Alpaca account.
+     *
+     * @param traderKeyID             the Trader key ID
+     * @param traderSecretKey         the Trader secret key
+     * @param traderAPIEndpointType   the {@link TraderAPIEndpointType}
+     * @param marketDataAPISourceType the {@link MarketDataAPISourceType}
      */
-    public AlpacaAPI() {
-        this(AlpacaProperties.KEY_ID,
-                AlpacaProperties.SECRET_KEY,
-                AlpacaProperties.ENDPOINT_API_TYPE,
-                AlpacaProperties.DATA_API_TYPE);
+    public AlpacaAPI(String traderKeyID, String traderSecretKey, TraderAPIEndpointType traderAPIEndpointType,
+            MarketDataAPISourceType marketDataAPISourceType) {
+        this(traderKeyID, traderSecretKey, null, traderAPIEndpointType, marketDataAPISourceType, null, null, null,
+                null);
     }
 
     /**
-     * Instantiates a new {@link AlpacaAPI} using properties specified in the given {@link Builder}, otherwise from
-     * <code>alpaca.properties</code> file (or their associated defaults).
+     * Instantiates a new {@link AlpacaAPI}. Use this constructor if you are using the Trading or Market Data APIs for a
+     * single Alpaca account and a custom {@link OkHttpClient} instance.
+     *
+     * @param traderKeyID             the Trader key ID
+     * @param traderSecretKey         the Trader secret key
+     * @param traderAPIEndpointType   the {@link TraderAPIEndpointType}
+     * @param marketDataAPISourceType the {@link MarketDataAPISourceType}
+     * @param okHttpClient            an existing {@link OkHttpClient} or <code>null</code> to create a new default
+     *                                instance
      */
-    private AlpacaAPI(Builder builder) {
-        this(builder.keyID,
-                builder.secretKey,
-                builder.endpointAPIType,
-                builder.dataAPIType);
+    public AlpacaAPI(String traderKeyID, String traderSecretKey, TraderAPIEndpointType traderAPIEndpointType,
+            MarketDataAPISourceType marketDataAPISourceType, OkHttpClient okHttpClient) {
+        this(traderKeyID, traderSecretKey, null, traderAPIEndpointType, marketDataAPISourceType, null, null, null,
+                okHttpClient);
+    }
+
+    /**
+     * Instantiates a new {@link AlpacaAPI}. Use this constructor if you are using the Trading API with OAuth to act on
+     * behalf of an Alpaca account.
+     *
+     * @param traderOAuthToken      the Trader OAuth token
+     * @param traderAPIEndpointType the {@link TraderAPIEndpointType}
+     */
+    public AlpacaAPI(String traderOAuthToken, TraderAPIEndpointType traderAPIEndpointType) {
+        this(null, null, traderOAuthToken, traderAPIEndpointType, null, null, null, null, null);
+    }
+
+    /**
+     * Instantiates a new {@link AlpacaAPI}. Use this constructor if you are using the Trading API with OAuth to act on
+     * behalf of an Alpaca account and a custom {@link OkHttpClient} instance.
+     *
+     * @param traderOAuthToken      the Trader OAuth token
+     * @param traderAPIEndpointType the {@link TraderAPIEndpointType}
+     * @param okHttpClient          an existing {@link OkHttpClient} or <code>null</code> to create a new default
+     *                              instance
+     */
+    public AlpacaAPI(String traderOAuthToken, TraderAPIEndpointType traderAPIEndpointType, OkHttpClient okHttpClient) {
+        this(null, null, traderOAuthToken, traderAPIEndpointType, null, null, null, null, okHttpClient);
+    }
+
+    /**
+     * Instantiates a new {@link AlpacaAPI}. Use this constructor if you are using the Broker API.
+     *
+     * @param brokerAPIKey          the Broker API key
+     * @param brokerAPISecret       the Broker API secret
+     * @param brokerAPIEndpointType the {@link BrokerAPIEndpointType}
+     */
+    public AlpacaAPI(String brokerAPIKey, String brokerAPISecret, BrokerAPIEndpointType brokerAPIEndpointType) {
+        this(null, null, null, null, null, brokerAPIKey, brokerAPISecret, brokerAPIEndpointType, null);
+    }
+
+    /**
+     * Instantiates a new {@link AlpacaAPI}. Use this constructor if you are using the Broker API and a custom
+     * {@link OkHttpClient} instance.
+     *
+     * @param brokerAPIKey          the Broker API key
+     * @param brokerAPISecret       the Broker API secret
+     * @param brokerAPIEndpointType the {@link BrokerAPIEndpointType}
+     * @param okHttpClient          an existing {@link OkHttpClient} or <code>null</code> to create a new default
+     *                              instance
+     */
+    public AlpacaAPI(String brokerAPIKey, String brokerAPISecret, BrokerAPIEndpointType brokerAPIEndpointType,
+            OkHttpClient okHttpClient) {
+        this(null, null, null, null, null, brokerAPIKey, brokerAPISecret, brokerAPIEndpointType, okHttpClient);
     }
 
     /**
      * Instantiates a new {@link AlpacaAPI}.
      *
-     * @param keyID     the key ID
-     * @param secretKey the secret key
+     * @param traderKeyID             the Trader key ID
+     * @param traderSecretKey         the Trader secret key
+     * @param traderOAuthToken        the Trader OAuth token
+     * @param traderAPIEndpointType   the {@link TraderAPIEndpointType}
+     * @param marketDataAPISourceType the {@link MarketDataAPISourceType}
+     * @param brokerAPIKey            the Broker API key
+     * @param brokerAPISecret         the Broker API secret
+     * @param brokerAPIEndpointType   the {@link BrokerAPIEndpointType}
+     * @param okHttpClient            an existing {@link OkHttpClient} or <code>null</code> to create a new default
+     *                                instance
      */
-    public AlpacaAPI(String keyID, String secretKey) {
-        this(null, keyID, secretKey, null,
-                AlpacaProperties.ENDPOINT_API_TYPE,
-                AlpacaProperties.DATA_API_TYPE);
-    }
+    public AlpacaAPI(String traderKeyID, String traderSecretKey,
+            String traderOAuthToken, TraderAPIEndpointType traderAPIEndpointType,
+            MarketDataAPISourceType marketDataAPISourceType,
+            String brokerAPIKey, String brokerAPISecret, BrokerAPIEndpointType brokerAPIEndpointType,
+            OkHttpClient okHttpClient) {
+        this.traderKeyID = traderKeyID;
+        this.traderSecretKey = traderSecretKey;
+        this.traderOAuthToken = traderOAuthToken;
+        this.traderAPIEndpointType = traderAPIEndpointType != null ? traderAPIEndpointType : PAPER;
+        this.marketDataAPISourceType = marketDataAPISourceType != null ? marketDataAPISourceType : IEX;
+        this.brokerAPIKey = brokerAPIKey;
+        this.brokerAPISecret = brokerAPISecret;
+        this.brokerAPIEndpointType = brokerAPIEndpointType != null ? brokerAPIEndpointType : SANDBOX;
 
-    /**
-     * Instantiates a new {@link AlpacaAPI}.
-     *
-     * @param keyID           the key ID
-     * @param secretKey       the secret key
-     * @param endpointAPIType the {@link EndpointAPIType}
-     * @param dataAPIType     the {@link DataAPIType}
-     */
-    public AlpacaAPI(String keyID, String secretKey, EndpointAPIType endpointAPIType, DataAPIType dataAPIType) {
-        this(null, keyID, secretKey, null, endpointAPIType, dataAPIType);
-    }
-
-    /**
-     * Instantiates a new {@link AlpacaAPI}.
-     *
-     * @param oAuthToken the OAuth token. Note that the Data API v2 does not work with OAuth tokens.
-     */
-    public AlpacaAPI(String oAuthToken) {
-        this(null, null, null, oAuthToken,
-                AlpacaProperties.ENDPOINT_API_TYPE,
-                AlpacaProperties.DATA_API_TYPE);
-    }
-
-    /**
-     * Instantiates a new {@link AlpacaAPI}.
-     *
-     * @param okHttpClient    the {@link OkHttpClient} or <code>null</code> to create a default instance
-     * @param keyID           the key ID
-     * @param secretKey       the secret key
-     * @param oAuthToken      the OAuth token
-     * @param endpointAPIType the {@link EndpointAPIType}
-     * @param dataAPIType     the {@link DataAPIType}
-     */
-    public AlpacaAPI(OkHttpClient okHttpClient, String keyID, String secretKey, String oAuthToken,
-            EndpointAPIType endpointAPIType, DataAPIType dataAPIType) {
-        checkArgument((keyID != null && secretKey != null) ^ oAuthToken != null,
-                "You must specify a (KeyID (%s) and Secret Key (%s)) or an OAuthToken (%s)!",
-                keyID, secretKey, oAuthToken);
-        checkNotNull(endpointAPIType);
-        checkNotNull(dataAPIType);
-
-        // Create default 'okHttpClient'
+        // Create default OkHttpClient instance
         if (okHttpClient == null) {
-            OkHttpClient.Builder clientBuilder = new OkHttpClient.Builder()
-                    .cache(null); // Ensure response caching is disabled
+            OkHttpClient.Builder clientBuilder = new OkHttpClient.Builder();
             if (LOGGER.isDebugEnabled()) {
                 clientBuilder.addInterceptor(new HttpLoggingInterceptor(LOGGER::debug));
             }
             okHttpClient = clientBuilder.build();
         }
         this.okHttpClient = okHttpClient;
-
-        streamingWebsocket = new StreamingWebsocket(okHttpClient, endpointAPIType, keyID, secretKey, oAuthToken);
-        cryptoMarketDataWebsocket = new CryptoMarketDataWebsocket(okHttpClient, keyID, secretKey);
-        stockMarketDataWebsocket = new StockMarketDataWebsocket(okHttpClient, dataAPIType, keyID, secretKey);
-        newsMarketDataWebsocket = new NewsMarketDataWebsocket(okHttpClient, keyID, secretKey);
     }
 
     /**
-     * @return the {@link StreamingWebsocketInterface}
+     * Gets the {@link OkHttpClient}.
+     *
+     * @return the {@link OkHttpClient}
      */
-    public StreamingWebsocketInterface streaming() {
-        return streamingWebsocket;
-    }
-
-    /**
-     * @return the Crypto {@link MarketDataWebsocketInterface}
-     */
-    public MarketDataWebsocketInterface cryptoMarketDataStreaming() {
-        return cryptoMarketDataWebsocket;
-    }
-
-    /**
-     * @return the Stock {@link MarketDataWebsocketInterface}
-     */
-    public MarketDataWebsocketInterface stockMarketDataStreaming() {
-        return stockMarketDataWebsocket;
-    }
-
-    /**
-     * @return the News {@link MarketDataWebsocketInterface}
-     */
-    public MarketDataWebsocketInterface newsMarketDataStreaming() {
-        return newsMarketDataWebsocket;
-    }
-
     public OkHttpClient getOkHttpClient() {
         return okHttpClient;
+    }
+
+    /**
+     * Gets the {@link AlpacaTraderAPI}. Lazily instantiated.
+     *
+     * @return the {@link AlpacaTraderAPI}
+     */
+    public synchronized AlpacaTraderAPI trader() {
+        if (trader == null) {
+            trader = new AlpacaTraderAPI(traderKeyID, traderSecretKey, traderOAuthToken, traderAPIEndpointType,
+                    okHttpClient);
+        }
+        return trader;
+    }
+
+    /**
+     * Gets the {@link AlpacaMarketDataAPI}. Lazily instantiated.
+     *
+     * @return the {@link AlpacaMarketDataAPI}
+     */
+    public synchronized AlpacaMarketDataAPI marketData() {
+        if (marketData == null) {
+            marketData = new AlpacaMarketDataAPI(traderKeyID, traderSecretKey, brokerAPIKey, brokerAPISecret,
+                    okHttpClient);
+        }
+        return marketData;
+    }
+
+    /**
+     * Gets the {@link AlpacaBrokerAPI}. Lazily instantiated.
+     *
+     * @return the {@link AlpacaBrokerAPI}
+     */
+    public synchronized AlpacaBrokerAPI broker() {
+        if (broker == null) {
+            broker = new AlpacaBrokerAPI(brokerAPIKey, brokerAPISecret, brokerAPIEndpointType, okHttpClient);
+        }
+        return broker;
     }
 
     /**
@@ -171,40 +222,66 @@ public class AlpacaAPI {
      */
     public static final class Builder {
 
-        private String keyID;
-        private String secretKey;
-        private EndpointAPIType endpointAPIType;
-        private DataAPIType dataAPIType;
+        private String traderKeyID;
+        private String traderSecretKey;
+        private String traderOAuthToken;
+        private TraderAPIEndpointType traderAPIEndpointType;
+        private MarketDataAPISourceType marketDataAPISourceType;
+        private String brokerAPIKey;
+        private String brokerAPISecret;
+        private BrokerAPIEndpointType brokerAPIEndpointType;
+        private OkHttpClient okHttpClient;
 
-        private Builder() {
-            this.keyID = AlpacaProperties.KEY_ID;
-            this.secretKey = AlpacaProperties.SECRET_KEY;
-            this.endpointAPIType = AlpacaProperties.ENDPOINT_API_TYPE;
-            this.dataAPIType = AlpacaProperties.DATA_API_TYPE;
-        }
+        private Builder() {}
 
-        public Builder withKeyID(String keyID) {
-            this.keyID = keyID;
+        public Builder withTraderKeyID(String traderKeyID) {
+            this.traderKeyID = traderKeyID;
             return this;
         }
 
-        public Builder withSecretKey(String secretKey) {
-            this.secretKey = secretKey;
+        public Builder withTraderSecretKey(String traderSecretKey) {
+            this.traderSecretKey = traderSecretKey;
             return this;
         }
 
-        public Builder withEndpointAPIType(EndpointAPIType endpointAPIType) {
-            this.endpointAPIType = endpointAPIType;
+        public Builder withTraderOAuthToken(String traderOAuthToken) {
+            this.traderOAuthToken = traderOAuthToken;
             return this;
         }
 
-        public Builder withDataAPIType(DataAPIType dataAPIType) {
-            this.dataAPIType = dataAPIType;
+        public Builder withTraderAPIEndpointType(TraderAPIEndpointType traderAPIEndpointType) {
+            this.traderAPIEndpointType = traderAPIEndpointType;
+            return this;
+        }
+
+        public Builder withMarketDataAPISourceType(MarketDataAPISourceType marketDataAPISourceType) {
+            this.marketDataAPISourceType = marketDataAPISourceType;
+            return this;
+        }
+
+        public Builder withBrokerAPIKey(String brokerAPIKey) {
+            this.brokerAPIKey = brokerAPIKey;
+            return this;
+        }
+
+        public Builder withBrokerAPISecret(String brokerAPISecret) {
+            this.brokerAPISecret = brokerAPISecret;
+            return this;
+        }
+
+        public Builder withBrokerAPIEndpointType(BrokerAPIEndpointType brokerAPIEndpointType) {
+            this.brokerAPIEndpointType = brokerAPIEndpointType;
+            return this;
+        }
+
+        public Builder withOkHttpClient(OkHttpClient okHttpClient) {
+            this.okHttpClient = okHttpClient;
             return this;
         }
 
         public AlpacaAPI build() {
-            return new AlpacaAPI(this);
+            return new AlpacaAPI(traderKeyID, traderSecretKey, traderOAuthToken, traderAPIEndpointType,
+                    marketDataAPISourceType, brokerAPIKey, brokerAPISecret, brokerAPIEndpointType, okHttpClient);
         }
     }
 }

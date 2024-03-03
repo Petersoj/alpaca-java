@@ -1,0 +1,8 @@
+{
+  "type": "string",
+  "javaName": "TraderAPIEndpointType",
+  "enum": [
+    "paper",
+    "live"
+  ]
+}

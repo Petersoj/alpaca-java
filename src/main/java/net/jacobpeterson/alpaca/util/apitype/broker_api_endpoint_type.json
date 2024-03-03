@@ -1,0 +1,8 @@
+{
+  "type": "string",
+  "javaName": "BrokerAPIEndpointType",
+  "enum": [
+    "sandbox",
+    "production"
+  ]
+}
