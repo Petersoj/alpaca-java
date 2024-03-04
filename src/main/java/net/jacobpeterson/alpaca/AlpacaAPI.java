@@ -3,6 +3,8 @@ package net.jacobpeterson.alpaca;
 import net.jacobpeterson.alpaca.model.util.apitype.BrokerAPIEndpointType;
 import net.jacobpeterson.alpaca.model.util.apitype.MarketDataAPIStreamSourceType;
 import net.jacobpeterson.alpaca.model.util.apitype.TraderAPIEndpointType;
+import net.jacobpeterson.alpaca.websocket.trades.TradesWebsocket;
+import net.jacobpeterson.alpaca.websocket.trades.TradesWebsocketInterface;
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
 import org.slf4j.Logger;
@@ -40,6 +42,7 @@ public class AlpacaAPI {
     private AlpacaTraderAPI trader;
     private AlpacaMarketDataAPI marketData;
     private AlpacaBrokerAPI broker;
+    private TradesWebsocket tradesWebsocket;
 
     /**
      * Instantiates a new {@link AlpacaAPI}. Use this constructor if you are using the Trading or Market Data APIs for a
@@ -218,6 +221,19 @@ public class AlpacaAPI {
             broker = new AlpacaBrokerAPI(brokerAPIKey, brokerAPISecret, brokerAPIEndpointType, okHttpClient);
         }
         return broker;
+    }
+
+    /**
+     * Gets the {@link TradesWebsocketInterface}. Lazily instantiated.
+     *
+     * @return the {@link TradesWebsocketInterface}
+     */
+    public synchronized TradesWebsocketInterface tradesStream() {
+        if (tradesWebsocket == null) {
+            tradesWebsocket = new TradesWebsocket(okHttpClient, traderAPIEndpointType,
+                    traderKeyID, traderSecretKey, traderOAuthToken);
+        }
+        return tradesWebsocket;
     }
 
     /**

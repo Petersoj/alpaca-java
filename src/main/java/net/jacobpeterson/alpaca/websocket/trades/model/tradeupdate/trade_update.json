@@ -1,0 +1,35 @@
+{
+  "type": "object",
+  "properties": {
+    "event": {
+      "existingJavaType": "net.jacobpeterson.alpaca.model.websocket.trades.model.tradeupdate.TradeUpdateEvent",
+      "title": "The {@link net.jacobpeterson.alpaca.model.websocket.trades.model.tradeupdate.TradeUpdateEvent}."
+    },
+    "execution_id": {
+      "existingJavaType": "java.lang.String",
+      "title": "The execution ID."
+    },
+    "price": {
+      "existingJavaType": "java.lang.String",
+      "title": "The price."
+    },
+    "position_qty": {
+      "existingJavaType": "java.lang.String",
+      "javaName": "positionQuantity",
+      "title": "The position quantity."
+    },
+    "qty": {
+      "existingJavaType": "java.lang.String",
+      "javaName": "quantity",
+      "title": "The quantity."
+    },
+    "timestamp": {
+      "existingJavaType": "java.time.OffsetDateTime",
+      "title": "The timestamp."
+    },
+    "order": {
+      "existingJavaType": "net.jacobpeterson.alpaca.openapi.trader.model.Order",
+      "title": "The {@link net.jacobpeterson.alpaca.openapi.trader.model.Order}."
+    }
+  }
+}

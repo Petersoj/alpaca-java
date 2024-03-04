@@ -23,11 +23,11 @@ public class SSEListenerAdapter<T> implements SSEListener<T> {
         LOGGER.info("SSE connection closed.");
     }
 
-    public void onFailure(@Nullable Throwable throwable, @Nullable Response response) {
-        LOGGER.error("SSE connection failed! {}", response, throwable);
+    public void onError(@Nullable Throwable throwable, @Nullable Response response) {
+        LOGGER.error("SSE connection error! {}", response, throwable);
     }
 
-    public void onEvent(@NotNull T data) {
-        LOGGER.info("SSE event received: {}", data);
+    public void onMessage(@NotNull T message) {
+        LOGGER.info("SSE message received: {}", message);
     }
 }

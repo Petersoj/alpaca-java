@@ -60,8 +60,8 @@ public class AlpacaBrokerAPI {
      * @param okHttpClient          an existing {@link OkHttpClient} or <code>null</code> to create a new default
      *                              instance
      */
-    @SuppressWarnings("UnnecessaryDefault") AlpacaBrokerAPI(String brokerAPIKey, String brokerAPISecret,
-            BrokerAPIEndpointType brokerAPIEndpointType,
+    @SuppressWarnings("UnnecessaryDefault")
+    AlpacaBrokerAPI(String brokerAPIKey, String brokerAPISecret, BrokerAPIEndpointType brokerAPIEndpointType,
             OkHttpClient okHttpClient) {
         checkNotNull(brokerAPIKey);
         checkNotNull(brokerAPISecret);

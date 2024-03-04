@@ -23,7 +23,6 @@ import org.jetbrains.annotations.Nullable;
 import java.lang.reflect.Type;
 import java.time.LocalDate;
 import java.time.OffsetDateTime;
-import java.util.List;
 
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static net.jacobpeterson.alpaca.openapi.broker.JSON.getGson;
@@ -54,13 +53,13 @@ public class EventsApiSSE {
      *
      * @return a {@link SSERequest}
      */
-    public SSERequest subscribeToV1EventsNta(String id, String since, String until, Integer sinceId, Integer untilId,
-            String sinceUlid, String untilUlid, Boolean includePreprocessing,
-            SSEListener<List<Object>> sseListener) throws ApiException { // TODO OpenAPI response type is broken
+    public SSERequest subscribeToNonTradingActivitiesEvents(String id, String since, String until, Integer sinceId,
+            Integer untilId, String sinceUlid, String untilUlid, Boolean includePreprocessing,
+            SSEListener<Object> sseListener) throws ApiException { // TODO OpenAPI response type is broken
         final Request request = eventsAPI.getV1EventsNtaCall(id, since, until, sinceId, untilId, sinceUlid, untilUlid,
                 includePreprocessing, null).request();
         return new SSERequest(eventSourceFactory.newEventSource(request, createEventSourceListener(sseListener,
-                new TypeToken<List<Object>>() {}.getType()))); // TODO OpenAPI response type is broken
+                new TypeToken<Object>() {}.getType()))); // TODO OpenAPI response type is broken
     }
 
     /**
@@ -69,10 +68,10 @@ public class EventsApiSSE {
      * @return a {@link SSERequest}
      */
     public SSERequest subscribeToAdminAction(OffsetDateTime since, OffsetDateTime until, String sinceId,
-            String untilId, SSEListener<List<AccountStatusEvent>> sseListener) throws ApiException {
+            String untilId, SSEListener<AccountStatusEvent> sseListener) throws ApiException {
         final Request request = eventsAPI.subscribeToAdminActionSSECall(since, until, sinceId, untilId, null).request();
         return new SSERequest(eventSourceFactory.newEventSource(request, createEventSourceListener(sseListener,
-                new TypeToken<List<SubscribeToAdminActionSSE200ResponseInner>>() {}.getType())));
+                new TypeToken<SubscribeToAdminActionSSE200ResponseInner>() {}.getType())));
     }
 
     /**
@@ -84,11 +83,11 @@ public class EventsApiSSE {
      */
     public SSERequest subscribeToJournalStatus(OffsetDateTime since, OffsetDateTime until, Integer sinceId,
             Integer untilId, String sinceUlid, String untilUlid, String id,
-            SSEListener<List<AccountStatusEvent>> sseListener) throws ApiException {
+            SSEListener<AccountStatusEvent> sseListener) throws ApiException {
         final Request request = eventsAPI.subscribeToJournalStatusSSECall(since, until, sinceId, untilId, sinceUlid,
                 untilUlid, id, null).request();
         return new SSERequest(eventSourceFactory.newEventSource(request, createEventSourceListener(sseListener,
-                new TypeToken<List<JournalStatusEvent>>() {}.getType())));
+                new TypeToken<JournalStatusEvent>() {}.getType())));
     }
 
     /**
@@ -97,12 +96,12 @@ public class EventsApiSSE {
      * @return a {@link SSERequest}
      */
     public SSERequest subscribeToTrade(OffsetDateTime since, OffsetDateTime until, Integer sinceId,
-            Integer untilId, String sinceUlid, String untilUlid, SSEListener<List<AccountStatusEvent>> sseListener)
+            Integer untilId, String sinceUlid, String untilUlid, SSEListener<AccountStatusEvent> sseListener)
             throws ApiException {
         final Request request = eventsAPI.subscribeToTradeSSECall(since, until, sinceId, untilId, sinceUlid, untilUlid,
                 null).request();
         return new SSERequest(eventSourceFactory.newEventSource(request, createEventSourceListener(sseListener,
-                new TypeToken<List<TradeUpdateEvent>>() {}.getType())));
+                new TypeToken<TradeUpdateEvent>() {}.getType())));
     }
 
     /**
@@ -111,10 +110,10 @@ public class EventsApiSSE {
      * @return a {@link SSERequest}
      */
     public SSERequest subscribeToTradeV2(OffsetDateTime since, OffsetDateTime until, String sinceId,
-            String untilId, SSEListener<List<AccountStatusEvent>> sseListener) throws ApiException {
+            String untilId, SSEListener<AccountStatusEvent> sseListener) throws ApiException {
         final Request request = eventsAPI.subscribeToTradeV2SSECall(since, until, sinceId, untilId, null).request();
         return new SSERequest(eventSourceFactory.newEventSource(request, createEventSourceListener(sseListener,
-                new TypeToken<List<TradeUpdateEventV2>>() {}.getType())));
+                new TypeToken<TradeUpdateEventV2>() {}.getType())));
     }
 
     /**
@@ -125,12 +124,12 @@ public class EventsApiSSE {
      * @return a {@link SSERequest}
      */
     public SSERequest subscribeToTransferStatus(OffsetDateTime since, OffsetDateTime until, Integer sinceId,
-            Integer untilId, String sinceUlid, String untilUlid, SSEListener<List<AccountStatusEvent>> sseListener)
+            Integer untilId, String sinceUlid, String untilUlid, SSEListener<AccountStatusEvent> sseListener)
             throws ApiException {
         final Request request = eventsAPI.subscribeToTransferStatusSSECall(since, until, sinceId, untilId, sinceUlid,
                 untilUlid, null).request();
         return new SSERequest(eventSourceFactory.newEventSource(request, createEventSourceListener(sseListener,
-                new TypeToken<List<TransferStatusEvent>>() {}.getType())));
+                new TypeToken<TransferStatusEvent>() {}.getType())));
     }
 
     /**
@@ -140,12 +139,12 @@ public class EventsApiSSE {
      * @return a {@link SSERequest}
      */
     public SSERequest subscribeToAccountStatus(LocalDate since, LocalDate until, Integer sinceId, Integer untilId,
-            String sinceUlid, String untilUlid, String id, SSEListener<List<AccountStatusEvent>> sseListener)
+            String sinceUlid, String untilUlid, String id, SSEListener<AccountStatusEvent> sseListener)
             throws ApiException {
         final Request request = eventsAPI.suscribeToAccountStatusSSECall(since, until, sinceId, untilId, sinceUlid,
                 untilUlid, id, null).request();
         return new SSERequest(eventSourceFactory.newEventSource(request, createEventSourceListener(sseListener,
-                new TypeToken<List<AccountStatusEvent>>() {}.getType())));
+                new TypeToken<AccountStatusEvent>() {}.getType())));
     }
 
     private <T> EventSourceListener createEventSourceListener(SSEListener<T> sseListener, Type responseTypeToken) {
@@ -158,7 +157,7 @@ public class EventsApiSSE {
             @Override
             public void onEvent(@NotNull EventSource eventSource, @Nullable String id, @Nullable String type,
                     @NotNull String data) {
-                sseListener.onEvent(getGson().fromJson(data, responseTypeToken));
+                sseListener.onMessage(getGson().fromJson(data, responseTypeToken));
             }
 
             @Override
@@ -168,7 +167,7 @@ public class EventsApiSSE {
                     sseListener.onClose();
                     return;
                 }
-                sseListener.onFailure(throwable, response);
+                sseListener.onError(throwable, response);
             }
 
             @Override

@@ -12,27 +12,27 @@ import org.jetbrains.annotations.Nullable;
 public interface SSEListener<T> {
 
     /**
-     * Called on SSE request open.
+     * Called on SSE open.
      */
     void onOpen();
 
     /**
-     * Called on SSE request close.
+     * Called on SSE close.
      */
     void onClose();
 
     /**
-     * Called on SSE request failure.
+     * Called on SSE error.
      *
      * @param throwable the {@link Throwable}
      * @param response  the {@link Response}
      */
-    void onFailure(@Nullable Throwable throwable, @Nullable Response response);
+    void onError(@Nullable Throwable throwable, @Nullable Response response);
 
     /**
-     * Called on SSE request data receive event.
+     * Called on SSE message received.
      *
-     * @param data the {@link T} data
+     * @param message the {@link T} message
      */
-    void onEvent(@NotNull T data);
+    void onMessage(@NotNull T message);
 }

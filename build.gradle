@@ -238,6 +238,14 @@ final def fixOpenAPIGeneratedClientIssuesTask = tasks.register("fixOpenAPIGenera
                             "[\\s\\S]*?authentications\\);", "")
                     .replaceAll("for \\(String authName : authNames\\)[\\s\\S]*?uri\\);\\n. {7}}", "")
         }
+
+        // Make the 'JSON' classes of the generate clients have a static Gson initializer
+        specIDsOfFileNames.keySet().stream().map { it.replace(".json", "") }.forEach {
+            final def jsonClientFile = Paths.get(generatedClientLibrariesPath.getPath(), it, sourceFilesPath,
+                    it.replace("-", ""), "JSON.java").toFile()
+            jsonClientFile.text = jsonClientFile.text
+                    .replaceAll("\\{\\n {8}GsonBuilder", "static {\n        GsonBuilder")
+        }
     }
 }
 generateOpenAPIClientsTask.configure {
