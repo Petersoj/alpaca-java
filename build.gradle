@@ -215,7 +215,8 @@ final def fixOpenAPIGeneratedClientIssuesTask = tasks.register("fixOpenAPIGenera
                 .replace("this.type = this.getClass().getSimpleName();", "")
 
         // Remove the JSON validation that the generated client models always run (there isn't an option to
-        // disable it for some reason)
+        // disable it for some reason). Also, remove throwing an IllegalArgumentException for a null/empty string
+        // given to enum 'fromValue' methods.
         specIDsOfFileNames.keySet().stream().map { it.replace(".json", "") }.forEach {
             for (File modelFile : Paths.get(generatedClientLibrariesPath.getPath(),
                     it, sourceFilesPath, it.replace("-", ""), "model").toFile().listFiles()) {
@@ -223,9 +224,11 @@ final def fixOpenAPIGeneratedClientIssuesTask = tasks.register("fixOpenAPIGenera
                         .replaceAll("/\\*\\*\\n {2}\\* Validates the JSON Element and throws an exception if issues " +
                                 "found[\\s\\S]*?\\*/", "")
                         .replace("public static void validateJsonElement(JsonElement jsonElement) throws IOException {",
-                                "public static boolean validate = false;\n  public static void " +
+                                "public static boolean validate = false;\n    public static void " +
                                         "validateJsonElement(JsonElement jsonElement) throws IOException {\n" +
-                                        "    if (!validate) return;")
+                                        "      if (!validate) return;")
+                        .replace("throw new IllegalArgumentException(\"Unexpected value '\" + value + \"'\");",
+                                "return null;")
             }
         }
 

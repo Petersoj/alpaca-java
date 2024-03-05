@@ -19,6 +19,8 @@ import okhttp3.sse.EventSourceListener;
 import okhttp3.sse.EventSources;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.Type;
 import java.time.LocalDate;
@@ -31,6 +33,8 @@ import static net.jacobpeterson.alpaca.openapi.broker.JSON.getGson;
  * {@link EventsApiSSE} add SSE support to {@link EventsApi}.
  */
 public class EventsApiSSE {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(EventsApiSSE.class);
 
     private final EventsApi eventsAPI;
     private final EventSource.Factory eventSourceFactory;
@@ -151,18 +155,22 @@ public class EventsApiSSE {
         return new EventSourceListener() {
             @Override
             public void onClosed(@NotNull EventSource eventSource) {
+                LOGGER.info("Event source closed: {}", eventSource);
                 sseListener.onClose();
             }
 
             @Override
             public void onEvent(@NotNull EventSource eventSource, @Nullable String id, @Nullable String type,
                     @NotNull String data) {
+                LOGGER.trace("Event source event: eventSource={} id={}, type={}, data={}", eventSource, id, type, data);
                 sseListener.onMessage(getGson().fromJson(data, responseTypeToken));
             }
 
             @Override
             public void onFailure(@NotNull EventSource eventSource, @Nullable Throwable throwable,
                     @Nullable Response response) {
+                LOGGER.error("Event source failure: eventSource={} throwable={}, response={}",
+                        eventSource, throwable, response);
                 if (throwable != null && throwable.getMessage().equals("canceled")) {
                     sseListener.onClose();
                     return;
@@ -172,6 +180,7 @@ public class EventsApiSSE {
 
             @Override
             public void onOpen(@NotNull EventSource eventSource, @NotNull Response response) {
+                LOGGER.info("Event source opened: {}", eventSource);
                 sseListener.onOpen();
             }
         };
