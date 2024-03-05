@@ -1,0 +1,17 @@
+{
+  "type": "object",
+  "extends": {
+    "existingJavaType": "net.jacobpeterson.alpaca.model.websocket.marketdata.model.MarketDataMessage"
+  },
+  "properties": {
+    "code": {
+      "existingJavaType": "java.lang.Integer",
+      "title": "The error code."
+    },
+    "msg": {
+      "existingJavaType": "java.lang.String",
+      "javaName": "message",
+      "title": "The error message."
+    }
+  }
+}

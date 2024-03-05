@@ -1,0 +1,15 @@
+{
+  "type": "object",
+  "properties": {
+    "p": {
+      "existingJavaType": "java.lang.Double",
+      "javaName": "price",
+      "title": "The price."
+    },
+    "s": {
+      "existingJavaType": "java.lang.Double",
+      "javaName": "size",
+      "title": "The size."
+    }
+  }
+}

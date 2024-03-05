@@ -1,0 +1,55 @@
+{
+  "type": "string",
+  "enum": [
+    "success",
+    "error",
+    "subscription",
+    "t",
+    "q",
+    "b",
+    "d",
+    "u",
+    "c",
+    "x",
+    "l",
+    "s"
+  ],
+  "javaEnums": [
+    {
+      "name": "SUCCESS"
+    },
+    {
+      "name": "ERROR"
+    },
+    {
+      "name": "SUBSCRIPTION"
+    },
+    {
+      "name": "TRADES"
+    },
+    {
+      "name": "QUOTES"
+    },
+    {
+      "name": "MINUTE_BARS"
+    },
+    {
+      "name": "DAILY_BARS"
+    },
+    {
+      "name": "UPDATED_BARS"
+    },
+    {
+      "name": "TRADE_CORRECTIONS"
+    },
+    {
+      "name": "TRADE_CANCEL_ERRORS"
+    },
+    {
+      "name": "LIMIT_UP_LIMIT_DOWN_BANDS"
+    },
+    {
+      "name": "TRADING_STATUSES"
+    }
+  ]
+}

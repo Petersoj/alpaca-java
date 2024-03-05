@@ -1,0 +1,38 @@
+{
+  "type": "object",
+  "extends": {
+    "existingJavaType": "net.jacobpeterson.alpaca.model.websocket.marketdata.streams.crypto.model.CryptoMarketDataMessage"
+  },
+  "properties": {
+    "S": {
+      "existingJavaType": "java.lang.String",
+      "javaName": "symbol",
+      "title": "The symbol."
+    },
+    "i": {
+      "existingJavaType": "java.lang.Long",
+      "javaName": "tradeID",
+      "title": "The trade ID."
+    },
+    "p": {
+      "existingJavaType": "java.lang.Double",
+      "javaName": "price",
+      "title": "The trade price."
+    },
+    "s": {
+      "existingJavaType": "java.lang.Double",
+      "javaName": "size",
+      "title": "The trade size."
+    },
+    "t": {
+      "existingJavaType": "java.time.OffsetDateTime",
+      "javaName": "timestamp",
+      "title": "The timestamp with nanosecond precision."
+    },
+    "tks": {
+      "existingJavaType": "net.jacobpeterson.alpaca.model.websocket.marketdata.streams.crypto.model.trade.CryptoTradeTakerSide",
+      "javaName": "takerSide",
+      "title": "The taker side."
+    }
+  }
+}

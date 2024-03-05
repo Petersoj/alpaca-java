@@ -1,0 +1,13 @@
+{
+  "type": "object",
+  "extends": {
+    "existingJavaType": "net.jacobpeterson.alpaca.model.websocket.marketdata.model.MarketDataMessage"
+  },
+  "properties": {
+    "msg": {
+      "existingJavaType": "net.jacobpeterson.alpaca.model.websocket.marketdata.model.control.SuccessMessageType",
+      "javaName": "messageType",
+      "title": "The success message type."
+    }
+  }
+}

@@ -1,0 +1,48 @@
+{
+  "type": "object",
+  "extends": {
+    "existingJavaType": "net.jacobpeterson.alpaca.model.websocket.marketdata.streams.stock.model.StockMarketDataMessage"
+  },
+  "properties": {
+    "S": {
+      "existingJavaType": "java.lang.String",
+      "javaName": "symbol",
+      "title": "The symbol."
+    },
+    "i": {
+      "existingJavaType": "java.lang.Long",
+      "javaName": "tradeID",
+      "title": "The trade ID."
+    },
+    "x": {
+      "existingJavaType": "java.lang.String",
+      "javaName": "exchange",
+      "title": "The exchange code where the trade cancel/error occurred."
+    },
+    "p": {
+      "existingJavaType": "java.lang.Double",
+      "javaName": "price",
+      "title": "The trade price."
+    },
+    "s": {
+      "existingJavaType": "java.lang.Integer",
+      "javaName": "size",
+      "title": "The trade size."
+    },
+    "a": {
+      "existingJavaType": "net.jacobpeterson.alpaca.model.websocket.marketdata.streams.stock.model.tradecancelerror.StockTradeCancelErrorAction",
+      "javaName": "action",
+      "title": "The trade cancel/error action."
+    },
+    "t": {
+      "existingJavaType": "java.time.OffsetDateTime",
+      "javaName": "timestamp",
+      "title": "The timestamp with nanosecond precision."
+    },
+    "z": {
+      "existingJavaType": "java.lang.String",
+      "javaName": "tape",
+      "title": "The tape."
+    }
+  }
+}

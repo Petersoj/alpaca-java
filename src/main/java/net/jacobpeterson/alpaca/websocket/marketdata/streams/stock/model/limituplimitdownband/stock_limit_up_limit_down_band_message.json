@@ -1,0 +1,38 @@
+{
+  "type": "object",
+  "extends": {
+    "existingJavaType": "net.jacobpeterson.alpaca.model.websocket.marketdata.streams.stock.model.StockMarketDataMessage"
+  },
+  "properties": {
+    "S": {
+      "existingJavaType": "java.lang.String",
+      "javaName": "symbol",
+      "title": "The symbol."
+    },
+    "u": {
+      "existingJavaType": "java.lang.Double",
+      "javaName": "limitUpPrice",
+      "title": "The upper limit price band of a security."
+    },
+    "d": {
+      "existingJavaType": "java.lang.Double",
+      "javaName": "limitDownPrice",
+      "title": "The lower limit price band of a security."
+    },
+    "i": {
+      "existingJavaType": "java.lang.String",
+      "javaName": "indicator",
+      "title": "The indicator."
+    },
+    "t": {
+      "existingJavaType": "java.time.OffsetDateTime",
+      "javaName": "timestamp",
+      "title": "The timestamp with nanosecond precision."
+    },
+    "z": {
+      "existingJavaType": "java.lang.String",
+      "javaName": "tape",
+      "title": "The tape."
+    }
+  }
+}

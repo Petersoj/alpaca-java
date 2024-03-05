@@ -1,0 +1,58 @@
+{
+  "type": "object",
+  "extends": {
+    "existingJavaType": "net.jacobpeterson.alpaca.model.websocket.marketdata.streams.stock.model.StockMarketDataMessage"
+  },
+  "properties": {
+    "S": {
+      "existingJavaType": "java.lang.String",
+      "javaName": "symbol",
+      "title": "The symbol."
+    },
+    "ax": {
+      "existingJavaType": "java.lang.String",
+      "javaName": "askExchange",
+      "title": "The ask exchange code."
+    },
+    "ap": {
+      "existingJavaType": "java.lang.Double",
+      "javaName": "askPrice",
+      "title": "The ask price."
+    },
+    "as": {
+      "existingJavaType": "java.lang.Integer",
+      "javaName": "askSize",
+      "title": "The ask size."
+    },
+    "bx": {
+      "existingJavaType": "java.lang.String",
+      "javaName": "bidExchange",
+      "title": "The bid exchange code."
+    },
+    "bp": {
+      "existingJavaType": "java.lang.Double",
+      "javaName": "bidPrice",
+      "title": "The bid price."
+    },
+    "bs": {
+      "existingJavaType": "java.lang.Integer",
+      "javaName": "bidSize",
+      "title": "The bid size."
+    },
+    "c": {
+      "existingJavaType": "java.util.ArrayList<String>",
+      "javaName": "conditions",
+      "title": "The {@link java.util.ArrayList} of quote conditions."
+    },
+    "t": {
+      "existingJavaType": "java.time.OffsetDateTime",
+      "javaName": "timestamp",
+      "title": "The timestamp with nanosecond precision."
+    },
+    "z": {
+      "existingJavaType": "java.lang.String",
+      "javaName": "tape",
+      "title": "The tape."
+    }
+  }
+}

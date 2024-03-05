@@ -1,0 +1,53 @@
+{
+  "type": "object",
+  "extends": {
+    "existingJavaType": "net.jacobpeterson.alpaca.model.websocket.marketdata.streams.crypto.model.CryptoMarketDataMessage"
+  },
+  "properties": {
+    "S": {
+      "existingJavaType": "java.lang.String",
+      "javaName": "symbol",
+      "title": "The symbol."
+    },
+    "o": {
+      "existingJavaType": "java.lang.Double",
+      "javaName": "open",
+      "title": "The open price."
+    },
+    "h": {
+      "existingJavaType": "java.lang.Double",
+      "javaName": "high",
+      "title": "The high price."
+    },
+    "l": {
+      "existingJavaType": "java.lang.Double",
+      "javaName": "low",
+      "title": "The low price."
+    },
+    "c": {
+      "existingJavaType": "java.lang.Double",
+      "javaName": "close",
+      "title": "The close price."
+    },
+    "t": {
+      "existingJavaType": "java.time.OffsetDateTime",
+      "javaName": "timestamp",
+      "title": "The timestamp."
+    },
+    "v": {
+      "existingJavaType": "java.lang.Long",
+      "javaName": "volume",
+      "title": "The volume."
+    },
+    "n": {
+      "existingJavaType": "java.lang.Long",
+      "javaName": "tradeCount",
+      "title": "The trade count."
+    },
+    "vw": {
+      "existingJavaType": "java.lang.Double",
+      "javaName": "vwap",
+      "title": "The VWAP (Volume Weighted Average Price)."
+    }
+  }
+}

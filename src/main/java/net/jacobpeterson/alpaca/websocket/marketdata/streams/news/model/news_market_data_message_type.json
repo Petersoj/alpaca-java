@@ -1,0 +1,23 @@
+{
+  "type": "string",
+  "enum": [
+    "success",
+    "error",
+    "subscription",
+    "n"
+  ],
+  "javaEnums": [
+    {
+      "name": "SUCCESS"
+    },
+    {
+      "name": "ERROR"
+    },
+    {
+      "name": "SUBSCRIPTION"
+    },
+    {
+      "name": "NEWS"
+    }
+  ]
+}

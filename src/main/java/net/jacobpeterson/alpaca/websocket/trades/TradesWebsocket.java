@@ -31,7 +31,6 @@ import static com.google.common.base.Preconditions.checkState;
 import static com.google.common.base.Predicates.not;
 import static com.google.common.collect.Iterables.toArray;
 import static com.google.gson.JsonParser.parseString;
-import static java.lang.String.format;
 import static java.util.Collections.singletonList;
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static net.jacobpeterson.alpaca.model.websocket.trades.model.TradesStreamMessageType.TRADE_UPDATES;
@@ -127,7 +126,7 @@ public class TradesWebsocket extends AlpacaWebsocket<TradesStreamMessageType, Tr
     }
 
     @Override
-    public void onMessage(@NotNull WebSocket webSocket, @NotNull ByteString byteString) {
+    public void onMessage(@NotNull WebSocket webSocket, @NotNull ByteString byteString) { // Binary framing
         final String messageString = byteString.utf8();
         LOGGER.trace("Websocket message received: {}", messageString);
 
@@ -147,11 +146,10 @@ public class TradesWebsocket extends AlpacaWebsocket<TradesStreamMessageType, Tr
             case AUTHORIZATION:
                 message = getGson().fromJson(messageObject, AuthorizationMessage.class);
                 final AuthorizationData authorizationData = ((AuthorizationMessage) message).getData();
-                authenticated = authorizationData.getStatus().equalsIgnoreCase("authorized") &&
-                        authorizationData.getAction().equalsIgnoreCase("authenticate");
+                authenticated = authorizationData.getAction().equalsIgnoreCase("authenticate") &&
+                        authorizationData.getStatus().equalsIgnoreCase("authorized");
                 if (!authenticated) {
-                    throw new RuntimeException(format("%s websocket not authenticated! Received: %s.",
-                            websocketName, message));
+                    throw new RuntimeException(websocketName + " websocket authentication failed!");
                 } else {
                     LOGGER.info("{} websocket authenticated.", websocketName);
                 }

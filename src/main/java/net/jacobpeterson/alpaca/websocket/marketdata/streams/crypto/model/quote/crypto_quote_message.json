@@ -1,0 +1,38 @@
+{
+  "type": "object",
+  "extends": {
+    "existingJavaType": "net.jacobpeterson.alpaca.model.websocket.marketdata.streams.crypto.model.CryptoMarketDataMessage"
+  },
+  "properties": {
+    "S": {
+      "existingJavaType": "java.lang.String",
+      "javaName": "symbol",
+      "title": "The symbol."
+    },
+    "ap": {
+      "existingJavaType": "java.lang.Double",
+      "javaName": "askPrice",
+      "title": "The ask price."
+    },
+    "as": {
+      "existingJavaType": "java.lang.Double",
+      "javaName": "askSize",
+      "title": "The ask size."
+    },
+    "bp": {
+      "existingJavaType": "java.lang.Double",
+      "javaName": "bidPrice",
+      "title": "The bid price."
+    },
+    "bs": {
+      "existingJavaType": "java.lang.Double",
+      "javaName": "bidSize",
+      "title": "The bid size."
+    },
+    "t": {
+      "existingJavaType": "java.time.OffsetDateTime",
+      "javaName": "timestamp",
+      "title": "The timestamp with nanosecond precision."
+    }
+  }
+}
