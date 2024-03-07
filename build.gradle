@@ -125,17 +125,9 @@ def downloadOpenAPISpecFilesTask = tasks.register("downloadOpenAPISpecFiles") {
                 .replace(",\"\":{\"type\":\"string\",\"x-stoplight\":{\"id\":\"1zg5jnb6rzdoo\"}}", "")
     }
 }
+compileJava.dependsOn downloadOpenAPISpecFilesTask
 
-final def generateOpenAPIClientsTask = tasks.register("generateOpenAPIClients") {
-    it.onlyIf {
-        !downloadOpenAPISpecFilesTask.get().state.upToDate &&
-                downloadOpenAPISpecFilesTask.get().state.failure == null &&
-                !downloadOpenAPISpecFilesTask.get().state.skipped &&
-                downloadOpenAPISpecFilesTask.get().state.executed
-    }
-}
-compileJava.dependsOn generateOpenAPIClientsTask
-
+final def generateTasks = []
 for (def specFileName : specIDsOfFileNames.keySet()) {
     final def specName = specFileName.replace(".json", "")
     final def inputSpecFile = new File(specDownloadPath, specFileName)
@@ -185,17 +177,22 @@ for (def specFileName : specIDsOfFileNames.keySet()) {
         generateApiTests.set(false)
         generateApiDocumentation.set(false)
     }
-    generateOpenAPIClientsTask.configure {
-        dependsOn generateTask
-    }
+    compileJava.dependsOn generateTask
+    generateTasks.add(generateTask)
 }
 
 final def fixOpenAPIGeneratedClientIssuesTask = tasks.register("fixOpenAPIGeneratedClientIssues") {
+    configure {
+        mustRunAfter(generateTasks)
+    }
+
     it.onlyIf {
-        !generateOpenAPIClientsTask.get().state.upToDate &&
-                generateOpenAPIClientsTask.get().state.failure == null &&
-                !generateOpenAPIClientsTask.get().state.skipped &&
-                generateOpenAPIClientsTask.get().state.executed
+        generateTasks.stream().allMatch { generateTask ->
+            !generateTask.get().state.upToDate &&
+                    generateTask.get().state.failure == null &&
+                    !generateTask.get().state.skipped &&
+                    generateTask.get().state.executed
+        }
     }
 
     doLast {
@@ -251,9 +248,7 @@ final def fixOpenAPIGeneratedClientIssuesTask = tasks.register("fixOpenAPIGenera
         }
     }
 }
-generateOpenAPIClientsTask.configure {
-    finalizedBy fixOpenAPIGeneratedClientIssuesTask
-}
+compileJava.dependsOn fixOpenAPIGeneratedClientIssuesTask
 
 //
 // END Alpaca OpenAPI Specification (OAS) client generation

@@ -75,6 +75,7 @@ To install the built artifacts to your local Maven repository on your machine (t
 ```
 
 # TODO
+- Implement better reconnect logic for Websockets and SSE streaming
 - Implement Unit Testing for REST API and Websocket streaming (both live and mocked)
 
 # Contributing
