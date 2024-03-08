@@ -229,6 +229,22 @@ final def fixOpenAPIGeneratedClientIssuesTask = tasks.register("fixOpenAPIGenera
             }
         }
 
+        // Make certain method signatures in the generated client API classes 'protected' instead of 'public'
+        specIDsOfFileNames.keySet().stream().map { it.replace(".json", "") }.forEach {
+            for (File apiFile : Paths.get(generatedClientLibrariesPath.getPath(),
+                    it, sourceFilesPath, it.replace("-", ""), "api").toFile().listFiles()) {
+                // Don't make replacements in the broker 'events' API as that class is wrapped
+                if (apiFile.name == "EventsApi.java") {
+                    continue
+                }
+                // Make replacements
+                apiFile.text = apiFile.text
+                        .replace("public okhttp3.Call", "protected okhttp3.Call")
+                        .replace("public ApiResponse", "protected ApiResponse")
+                        .replaceAll("\\n.*public ApiClient[\\s\\S]*?customBaseUrl;\\n {4}}", "")
+            }
+        }
+
         // Remove the necessary authentication header logic from the generate client's ApiClient
         specIDsOfFileNames.keySet().stream().map { it.replace(".json", "") }.forEach {
             final def apiClientFile = Paths.get(generatedClientLibrariesPath.getPath(), it, sourceFilesPath,

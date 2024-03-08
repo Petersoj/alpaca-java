@@ -169,12 +169,12 @@ public class EventsApiSSE {
             @Override
             public void onFailure(@NotNull EventSource eventSource, @Nullable Throwable throwable,
                     @Nullable Response response) {
-                LOGGER.error("Event source failure: eventSource={} throwable={}, response={}",
-                        eventSource, throwable, response);
                 if (throwable != null && throwable.getMessage().equals("canceled")) {
                     sseListener.onClose();
                     return;
                 }
+                LOGGER.error("Event source failure: eventSource={} throwable={}, response={}",
+                        eventSource, throwable, response);
                 sseListener.onError(throwable, response);
             }
 

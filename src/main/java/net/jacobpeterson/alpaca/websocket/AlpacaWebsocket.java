@@ -147,6 +147,11 @@ public abstract class AlpacaWebsocket extends WebSocketListener implements Alpac
 
     @Override
     public void onFailure(@NotNull WebSocket webSocket, @NotNull Throwable cause, @Nullable Response response) {
+        if (intentionalClose) {
+            onClosed(webSocket, WEBSOCKET_NORMAL_CLOSURE_CODE, WEBSOCKET_NORMAL_CLOSURE_MESSAGE);
+            return;
+        }
+
         LOGGER.error("{} websocket failure!", websocketName, cause);
         // A websocket failure occurs when either there is a connection failure or when the client throws
         // an exception when receiving a message. In either case, OkHttp will close the websocket connection,
