@@ -1,0 +1,34 @@
+{
+  "type": "object",
+  "extends": {
+    "existingJavaType": "net.jacobpeterson.alpaca.model.websocket.marketdata.streams.crypto.model.CryptoMarketDataMessage"
+  },
+  "properties": {
+    "trades": {
+      "existingJavaType": "java.util.Set<java.lang.String>",
+      "title": "The {@link java.util.Set} of symbols subscribed to trades."
+    },
+    "quotes": {
+      "existingJavaType": "java.util.Set<java.lang.String>",
+      "title": "The {@link java.util.Set} of symbols subscribed to quotes."
+    },
+    "bars": {
+      "existingJavaType": "java.util.Set<java.lang.String>",
+      "javaName": "minuteBars",
+      "title": "The {@link java.util.Set} of symbols subscribed to minute bars."
+    },
+    "dailyBars": {
+      "existingJavaType": "java.util.Set<java.lang.String>",
+      "title": "The {@link java.util.Set} of symbols subscribed to daily bars."
+    },
+    "updatedBars": {
+      "existingJavaType": "java.util.Set<java.lang.String>",
+      "title": "The {@link java.util.Set} of symbols subscribed to updated bars."
+    },
+    "orderbooks": {
+      "existingJavaType": "java.util.Set<java.lang.String>",
+      "javaName": "orderBooks",
+      "title": "The {@link java.util.Set} of symbols subscribed to order books."
+    }
+  }
+}

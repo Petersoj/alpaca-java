@@ -30,9 +30,9 @@
       "title": "The trade size."
     },
     "c": {
-      "existingJavaType": "java.util.ArrayList<String>",
+      "existingJavaType": "java.util.Set<String>",
       "javaName": "conditions",
-      "title": "The {@link java.util.ArrayList} of trade conditions."
+      "title": "The {@link java.util.Set} of trade conditions."
     },
     "t": {
       "existingJavaType": "java.time.OffsetDateTime",

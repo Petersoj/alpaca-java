@@ -30,9 +30,9 @@
       "title": "The original trade size."
     },
     "oc": {
-      "existingJavaType": "java.util.ArrayList<String>",
+      "existingJavaType": "java.util.Set<String>",
       "javaName": "originalConditions",
-      "title": "The {@link java.util.ArrayList} of original trade conditions."
+      "title": "The {@link java.util.Set} of original trade conditions."
     },
     "ci": {
       "existingJavaType": "java.lang.Integer",
@@ -50,9 +50,9 @@
       "title": "The corrected trade size."
     },
     "cc": {
-      "existingJavaType": "java.util.ArrayList<String>",
+      "existingJavaType": "java.util.Set<String>",
       "javaName": "correctedConditions",
-      "title": "The {@link java.util.ArrayList} of original trade conditions."
+      "title": "The {@link java.util.Set} of original trade conditions."
     },
     "t": {
       "existingJavaType": "java.time.OffsetDateTime",

@@ -40,9 +40,9 @@
       "title": "The bid size."
     },
     "c": {
-      "existingJavaType": "java.util.ArrayList<String>",
+      "existingJavaType": "java.util.Set<String>",
       "javaName": "conditions",
-      "title": "The {@link java.util.ArrayList} of quote conditions."
+      "title": "The {@link java.util.Set} of quote conditions."
     },
     "t": {
       "existingJavaType": "java.time.OffsetDateTime",

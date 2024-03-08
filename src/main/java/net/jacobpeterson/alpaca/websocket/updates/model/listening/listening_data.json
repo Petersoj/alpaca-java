@@ -1,0 +1,9 @@
+{
+  "type": "object",
+  "properties": {
+    "streams": {
+      "existingJavaType": "java.util.Set<net.jacobpeterson.alpaca.model.websocket.updates.model.UpdatesMessageType>",
+      "title": "The {@link java.util.Set} of {@link net.jacobpeterson.alpaca.model.websocket.updates.model.UpdatesMessageType}s."
+    }
+  }
+}

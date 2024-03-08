@@ -24,10 +24,10 @@ public class SSEListenerAdapter<T> implements SSEListener<T> {
     }
 
     public void onError(@Nullable Throwable throwable, @Nullable Response response) {
-        LOGGER.error("SSE connection error! {}", response, throwable);
+        LOGGER.error("SSE connection error! response={}", response, throwable);
     }
 
     public void onMessage(@NotNull T message) {
-        LOGGER.info("SSE message received: {}", message);
+        LOGGER.info("SSE message received: message={}", message);
     }
 }

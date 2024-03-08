@@ -155,7 +155,7 @@ public class EventsApiSSE {
         return new EventSourceListener() {
             @Override
             public void onClosed(@NotNull EventSource eventSource) {
-                LOGGER.info("Event source closed: {}", eventSource);
+                LOGGER.info("Event source closed: eventSource={}", eventSource);
                 sseListener.onClose();
             }
 

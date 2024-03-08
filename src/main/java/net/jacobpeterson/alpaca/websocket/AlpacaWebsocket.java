@@ -20,13 +20,8 @@ import static java.util.concurrent.ForkJoinPool.commonPool;
 
 /**
  * {@link AlpacaWebsocket} represents an abstract websocket for Alpaca.
- *
- * @param <L> the {@link AlpacaWebsocketMessageListener} type parameter
- * @param <T> the 'message type' type parameter
- * @param <M> the 'message' type parameter
  */
-public abstract class AlpacaWebsocket<T, M, L extends AlpacaWebsocketMessageListener<T, M>> extends WebSocketListener
-        implements AlpacaWebsocketInterface<L> {
+public abstract class AlpacaWebsocket extends WebSocketListener implements AlpacaWebsocketInterface {
 
     /**
      * Defines a websocket normal closure code.
@@ -45,7 +40,7 @@ public abstract class AlpacaWebsocket<T, M, L extends AlpacaWebsocketMessageList
     /**
      * Defines the maximum number of reconnection attempts to be made by an {@link AlpacaWebsocket}.
      */
-    public static int MAX_RECONNECT_ATTEMPTS = 10;
+    public static int MAX_RECONNECT_ATTEMPTS = 5;
 
     /**
      * Defines the sleep interval {@link Duration} between reconnection attempts made by an {@link AlpacaWebsocket}.
@@ -57,13 +52,8 @@ public abstract class AlpacaWebsocket<T, M, L extends AlpacaWebsocketMessageList
     protected final OkHttpClient okHttpClient;
     protected final HttpUrl websocketURL;
     protected final String websocketName;
-    protected final String keyID;
-    protected final String secretKey;
-    protected final String oAuthToken;
-    protected final boolean useOAuth;
-    protected L listener;
     protected AlpacaWebsocketStateListener alpacaWebsocketStateListener;
-    protected WebSocket websocket;
+    private WebSocket websocket;
     protected boolean connected;
     protected boolean authenticated;
     protected CompletableFuture<Boolean> authenticationMessageFuture;
@@ -78,12 +68,8 @@ public abstract class AlpacaWebsocket<T, M, L extends AlpacaWebsocketMessageList
      * @param okHttpClient  the {@link OkHttpClient}
      * @param websocketURL  the websocket {@link HttpUrl}
      * @param websocketName the websocket name
-     * @param keyID         the key ID
-     * @param secretKey     the secret key
-     * @param oAuthToken    the OAuth token
      */
-    public AlpacaWebsocket(OkHttpClient okHttpClient, HttpUrl websocketURL, String websocketName,
-            String keyID, String secretKey, String oAuthToken) {
+    protected AlpacaWebsocket(OkHttpClient okHttpClient, HttpUrl websocketURL, String websocketName) {
         checkNotNull(okHttpClient);
         checkNotNull(websocketURL);
         checkNotNull(websocketName);
@@ -91,10 +77,6 @@ public abstract class AlpacaWebsocket<T, M, L extends AlpacaWebsocketMessageList
         this.okHttpClient = okHttpClient;
         this.websocketURL = websocketURL;
         this.websocketName = websocketName;
-        this.keyID = keyID;
-        this.secretKey = secretKey;
-        this.oAuthToken = oAuthToken;
-        useOAuth = oAuthToken != null;
 
         automaticallyReconnect = true;
     }
@@ -133,10 +115,7 @@ public abstract class AlpacaWebsocket<T, M, L extends AlpacaWebsocketMessageList
     @Override
     public void onOpen(@NotNull WebSocket webSocket, @NotNull Response response) {
         connected = true;
-
-        LOGGER.info("{} websocket opened.", websocketName);
-        LOGGER.debug("{} websocket response: {}", websocketName, response);
-
+        LOGGER.info("{} websocket response: response={}", websocketName, response);
         // Call 'onConnection' or 'onReconnection' async to avoid any potential deadlocking since this is called
         // in sync with 'onMessage' in OkHttp's 'WebSocketListener'
         commonPool().execute(() -> {
@@ -146,7 +125,6 @@ public abstract class AlpacaWebsocket<T, M, L extends AlpacaWebsocketMessageList
                 onConnection();
             }
         });
-
         if (alpacaWebsocketStateListener != null) {
             alpacaWebsocketStateListener.onOpen(response);
         }
@@ -155,16 +133,13 @@ public abstract class AlpacaWebsocket<T, M, L extends AlpacaWebsocketMessageList
     @Override
     public void onClosed(@NotNull WebSocket webSocket, int code, @NotNull String reason) {
         connected = false;
-
         if (intentionalClose) {
-            LOGGER.info("{} websocket closed.", websocketName);
-            LOGGER.debug("Close code: {}, Reason: {}", code, reason);
+            LOGGER.info("{} websocket closed. code={}, reason={}", websocketName, code, reason);
             cleanupState();
         } else {
-            LOGGER.error("{} websocket closed unintentionally! Code: {}, Reason: {}", websocketName, code, reason);
+            LOGGER.error("{} websocket closed unintentionally! code={}, reason={}", websocketName, code, reason);
             handleReconnectionAttempt();
         }
-
         if (alpacaWebsocketStateListener != null) {
             alpacaWebsocketStateListener.onClosed(code, reason);
         }
@@ -173,13 +148,11 @@ public abstract class AlpacaWebsocket<T, M, L extends AlpacaWebsocketMessageList
     @Override
     public void onFailure(@NotNull WebSocket webSocket, @NotNull Throwable cause, @Nullable Response response) {
         LOGGER.error("{} websocket failure!", websocketName, cause);
-
         // A websocket failure occurs when either there is a connection failure or when the client throws
         // an exception when receiving a message. In either case, OkHttp will close the websocket connection,
         // so try to reopen it.
         connected = false;
         handleReconnectionAttempt();
-
         if (alpacaWebsocketStateListener != null) {
             alpacaWebsocketStateListener.onFailure(cause);
         }
@@ -226,6 +199,16 @@ public abstract class AlpacaWebsocket<T, M, L extends AlpacaWebsocketMessageList
     }
 
     /**
+     * Sends a message to the underlying {@link #websocket}.
+     *
+     * @param message the message
+     */
+    protected void sendWebsocketMessage(String message) {
+        LOGGER.trace("Websocket message sent: {}", message);
+        websocket.send(message);
+    }
+
+    /**
      * Called asynchronously when a websocket connection is made.
      */
     protected abstract void onConnection();
@@ -248,40 +231,30 @@ public abstract class AlpacaWebsocket<T, M, L extends AlpacaWebsocketMessageList
         return authenticationMessageFuture;
     }
 
-    /**
-     * Calls the {@link AlpacaWebsocketMessageListener}.
-     *
-     * @param messageType the message type
-     * @param message     the message
-     */
-    protected void callListener(T messageType, M message) {
-        if (listener != null) {
-            try {
-                listener.onMessage(messageType, message);
-            } catch (Exception exception) {
-                LOGGER.error("{} listener threw exception!", websocketName, exception);
-            }
-        }
-    }
-
     @Override
-    public void setListener(L listener) {
-        this.listener = listener;
-    }
-
-    public AlpacaWebsocketStateListener getWebsocketStateListener() {
-        return alpacaWebsocketStateListener;
-    }
-
     public void setAlpacaWebsocketStateListener(AlpacaWebsocketStateListener alpacaWebsocketStateListener) {
         this.alpacaWebsocketStateListener = alpacaWebsocketStateListener;
     }
 
+    @Override
     public boolean doesAutomaticallyReconnect() {
         return automaticallyReconnect;
     }
 
+    @Override
     public void setAutomaticallyReconnect(boolean automaticallyReconnect) {
         this.automaticallyReconnect = automaticallyReconnect;
+    }
+
+    public OkHttpClient getOkHttpClient() {
+        return okHttpClient;
+    }
+
+    public HttpUrl getWebsocketURL() {
+        return websocketURL;
+    }
+
+    public WebSocket getWebsocket() {
+        return websocket;
     }
 }

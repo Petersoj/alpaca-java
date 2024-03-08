@@ -26,7 +26,7 @@
       "existingJavaType": "java.lang.String"
     },
     "symbols": {
-      "existingJavaType": "java.util.ArrayList<java.lang.String>"
+      "existingJavaType": "java.util.Set<java.lang.String>"
     },
     "created_at": {
       "existingJavaType": "java.time.OffsetDateTime"

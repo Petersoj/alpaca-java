@@ -46,7 +46,6 @@ public class AlpacaMarketDataAPI {
         checkNotNull(okHttpClient);
 
         final boolean traderKeysGiven = traderKeyID != null && traderSecretKey != null;
-
         apiClient = new ApiClient(okHttpClient);
         apiClient.setServerIndex(traderKeysGiven ? 0 : 1);
         if (traderKeysGiven) {

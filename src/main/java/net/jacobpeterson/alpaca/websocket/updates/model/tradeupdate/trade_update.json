@@ -2,8 +2,8 @@
   "type": "object",
   "properties": {
     "event": {
-      "existingJavaType": "net.jacobpeterson.alpaca.model.websocket.trades.model.tradeupdate.TradeUpdateEvent",
-      "title": "The {@link net.jacobpeterson.alpaca.model.websocket.trades.model.tradeupdate.TradeUpdateEvent}."
+      "existingJavaType": "net.jacobpeterson.alpaca.model.websocket.updates.model.tradeupdate.TradeUpdateEvent",
+      "title": "The {@link net.jacobpeterson.alpaca.model.websocket.updates.model.tradeupdate.TradeUpdateEvent}."
     },
     "execution_id": {
       "existingJavaType": "java.lang.String",

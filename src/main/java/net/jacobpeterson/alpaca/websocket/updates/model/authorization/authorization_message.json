@@ -1,0 +1,12 @@
+{
+  "type": "object",
+  "extends": {
+    "existingJavaType": "net.jacobpeterson.alpaca.model.websocket.updates.model.UpdatesMessage"
+  },
+  "properties": {
+    "data": {
+      "existingJavaType": "net.jacobpeterson.alpaca.model.websocket.updates.model.authorization.AuthorizationData",
+      "title": "The {@link net.jacobpeterson.alpaca.model.websocket.updates.model.authorization.AuthorizationData}."
+    }
+  }
+}

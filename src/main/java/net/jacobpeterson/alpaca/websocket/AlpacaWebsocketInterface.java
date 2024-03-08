@@ -7,10 +7,8 @@ import java.util.concurrent.TimeoutException;
 
 /**
  * {@link AlpacaWebsocketInterface} defines an interface for Alpaca websockets.
- *
- * @param <L> the {@link AlpacaWebsocketMessageListener} type parameter
  */
-public interface AlpacaWebsocketInterface<L extends AlpacaWebsocketMessageListener<?, ?>> {
+public interface AlpacaWebsocketInterface {
 
     /**
      * Connects this Websocket.
@@ -74,9 +72,23 @@ public interface AlpacaWebsocketInterface<L extends AlpacaWebsocketMessageListen
     }
 
     /**
-     * Sets the {@link AlpacaWebsocketMessageListener} for this {@link AlpacaWebsocketInterface}.
+     * Sets the {@link AlpacaWebsocketStateListener}.
      *
-     * @param listener the {@link AlpacaWebsocketMessageListener}
+     * @param alpacaWebsocketStateListener the {@link AlpacaWebsocketStateListener}
      */
-    void setListener(L listener);
+    void setAlpacaWebsocketStateListener(AlpacaWebsocketStateListener alpacaWebsocketStateListener);
+
+    /**
+     * Returns <code>true</code> if this websocket automatically reconnects, <code>false</code> otherwise.
+     *
+     * @return a boolean
+     */
+    boolean doesAutomaticallyReconnect();
+
+    /**
+     * Sets whether to automatically reconnect and reauthenticate on a websocket failure. <code>true</code> by default.
+     *
+     * @param automaticallyReconnect <code>true</code> to automatically reconnect, <code>false</code> otherwise
+     */
+    void setAutomaticallyReconnect(boolean automaticallyReconnect);
 }
