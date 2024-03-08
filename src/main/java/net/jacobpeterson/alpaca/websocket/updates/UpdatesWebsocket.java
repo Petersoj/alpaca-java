@@ -153,9 +153,6 @@ public class UpdatesWebsocket extends AlpacaWebsocket implements UpdatesWebsocke
     }
 
     private void sendTradeUpdatesListenMessage() {
-        if (!isConnected()) {
-            throw new IllegalStateException("This websocket must be connected before subscribing to streams!");
-        }
         final JsonObject requestObject = new JsonObject();
         requestObject.addProperty("action", "listen");
         final JsonArray streamsArray = new JsonArray();

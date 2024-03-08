@@ -162,6 +162,7 @@ alpacaAPI.broker().trading()
                         .side(OrderSide.SELL)
                         .timeInForce(TimeInForce.GTC)
                         .type(OrderType.MARKET));
+
 // Wait to be filled
 Thread.sleep(2000);
 

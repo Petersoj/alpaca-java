@@ -209,6 +209,9 @@ public abstract class AlpacaWebsocket extends WebSocketListener implements Alpac
      * @param message the message
      */
     protected void sendWebsocketMessage(String message) {
+        if (!isConnected()) {
+            throw new IllegalStateException("This websocket must be connected before send a message!");
+        }
         LOGGER.trace("Websocket message sent: {}", message);
         websocket.send(message);
     }
