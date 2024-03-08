@@ -1,4 +1,4 @@
-package net.jacobpeterson.alpaca;
+package net.jacobpeterson.alpaca.rest.broker;
 
 import net.jacobpeterson.alpaca.model.util.apitype.BrokerAPIEndpointType;
 import net.jacobpeterson.alpaca.openapi.broker.ApiClient;
@@ -19,7 +19,7 @@ import net.jacobpeterson.alpaca.openapi.broker.api.RebalancingApi;
 import net.jacobpeterson.alpaca.openapi.broker.api.ReportingApi;
 import net.jacobpeterson.alpaca.openapi.broker.api.TradingApi;
 import net.jacobpeterson.alpaca.openapi.broker.api.WatchlistApi;
-import net.jacobpeterson.alpaca.rest.broker.EventsApiSSE;
+import net.jacobpeterson.alpaca.rest.broker.events.EventsApiSSE;
 import okhttp3.OkHttpClient;
 
 import static com.google.common.base.Preconditions.checkNotNull;
@@ -61,7 +61,7 @@ public class AlpacaBrokerAPI {
      *                              instance
      */
     @SuppressWarnings("UnnecessaryDefault")
-    AlpacaBrokerAPI(String brokerAPIKey, String brokerAPISecret, BrokerAPIEndpointType brokerAPIEndpointType,
+    public AlpacaBrokerAPI(String brokerAPIKey, String brokerAPISecret, BrokerAPIEndpointType brokerAPIEndpointType,
             OkHttpClient okHttpClient) {
         checkNotNull(brokerAPIKey);
         checkNotNull(brokerAPISecret);

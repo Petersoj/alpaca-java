@@ -1,4 +1,4 @@
-package net.jacobpeterson.alpaca;
+package net.jacobpeterson.alpaca.rest.trader;
 
 import net.jacobpeterson.alpaca.model.util.apitype.TraderAPIEndpointType;
 import net.jacobpeterson.alpaca.openapi.trader.ApiClient;
@@ -48,7 +48,7 @@ public class AlpacaTraderAPI {
      *                              instance
      */
     @SuppressWarnings("UnnecessaryDefault")
-    AlpacaTraderAPI(String traderKeyID, String traderSecretKey, String traderOAuthToken,
+    public AlpacaTraderAPI(String traderKeyID, String traderSecretKey, String traderOAuthToken,
             TraderAPIEndpointType traderAPIEndpointType, OkHttpClient okHttpClient) {
         checkArgument((traderKeyID != null && traderSecretKey != null) ^ (traderOAuthToken != null),
                 "You must specify a (trader key ID and secret key) or an (OAuth token)!");

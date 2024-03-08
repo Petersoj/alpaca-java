@@ -1,4 +1,4 @@
-package net.jacobpeterson.alpaca;
+package net.jacobpeterson.alpaca.rest.marketdata;
 
 import net.jacobpeterson.alpaca.openapi.marketdata.ApiClient;
 import net.jacobpeterson.alpaca.openapi.marketdata.api.CorporateActionsApi;
@@ -38,7 +38,7 @@ public class AlpacaMarketDataAPI {
      * @param brokerAPISecret the Broker API secret
      * @param okHttpClient    an existing {@link OkHttpClient} or <code>null</code> to create a new default instance
      */
-    AlpacaMarketDataAPI(String traderKeyID, String traderSecretKey,
+    public AlpacaMarketDataAPI(String traderKeyID, String traderSecretKey,
             String brokerAPIKey, String brokerAPISecret, OkHttpClient okHttpClient) {
         checkArgument((traderKeyID != null && traderSecretKey != null) ^
                         (brokerAPIKey != null && brokerAPISecret != null),

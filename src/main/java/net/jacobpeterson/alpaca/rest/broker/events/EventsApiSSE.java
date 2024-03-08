@@ -1,4 +1,4 @@
-package net.jacobpeterson.alpaca.rest.broker;
+package net.jacobpeterson.alpaca.rest.broker.events;
 
 import com.google.gson.reflect.TypeToken;
 import net.jacobpeterson.alpaca.openapi.broker.ApiClient;
