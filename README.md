@@ -34,7 +34,7 @@ Note that you don't have to use the Maven Central artifacts. Instead, you can cl
 For logging, this library uses [SLF4j](http://www.slf4j.org/) which serves as an interface for various logging frameworks. This enables you to use whatever logging framework you would like. However, if you do not add a logging framework as a dependency in your project, the console will output a message stating that SLF4j is defaulting to a no-operation (NOP) logger implementation. To enable logging, add a logging framework of your choice as a dependency to your project such as [Logback](http://logback.qos.ch/), [Log4j 2](http://logging.apache.org/log4j/2.x/index.html), [SLF4j-simple](http://www.slf4j.org/manual.html), or [Apache Commons Logging](https://commons.apache.org/proper/commons-logging/).
 
 # `BigDecimal` vs. `Double`
-It is generally considered bad practice to represent currency values in floating-point data types such as `float` or `double` because it can lead to [rounding errors](https://ta4j.github.io/ta4j-wiki/Num.html) and [precision loss](https://stackoverflow.com/a/3730040/4352701) in calculations. However, using floating-point data types can have significant performance benefits compared to using arbitrary-precision number data types, especially in a quantitative finance and algorithmic trading environment. Because of this, `alpaca-java` uses the `Double` data type (the `double` boxed type) when using the Market Data APIs and the `BigDecimal` type when using the Trading or Broker APIs. The thinking behind this is that exact decimal quantities are important when placing real trades with real money, but less important when performing calculations of financial indicators. The best solution would be to use the [TA4j](https://github.com/ta4j/ta4j) `Num` interface so that you can decide what data type to use based on your use case, but that is on the [TODO list](#todo) for now.
+It is generally considered bad practice to represent currency values in floating-point data types such as `float` or `double` because it can lead to [rounding errors](https://ta4j.github.io/ta4j-wiki/Num.html) and [precision loss](https://stackoverflow.com/a/3730040/4352701) in calculations. However, using floating-point data types can have significant performance benefits compared to using arbitrary-precision number data types, especially in a quantitative finance and algorithmic trading environment. Because of this, `alpaca-java` uses the `Double` data type (the `double` boxed type) when using the Market Data APIs and the `BigDecimal` data type when using the Trading or Broker APIs. The thinking behind this is that exact decimal quantities are important when placing real trades with real money, but less important when performing calculations of financial indicators. The best solution would be to use the [TA4j](https://github.com/ta4j/ta4j) `Num` interface so that you can decide what data type to use based on your use case, but that is on the [TODO list](#todo) for now. By the way, using `BigDecimal` wouldn't matter if Alpaca used floating-point data types in their internal systems or in their REST APIs, but the fact that they use `String` data types in some of the REST API JSON responses and their Trading and Broker OpenAPI specifications don't use the `double` data type, this leads me to believe that using `BigDecimal` does actually matter. 
 
 # Examples
 Note that the examples below are not exhaustive. Refer to the [Javadoc](https://javadoc.io/doc/net.jacobpeterson.alpaca/alpaca-java) for all classes and method signatures.
@@ -228,15 +228,15 @@ alpacaAPI.stockMarketDataStream().setListener(new StockMarketDataListenerAdapter
 });
 
 // Subscribe to AAPL trades
-System.out.println("Subscribed to Apple trades.");
 alpacaAPI.stockMarketDataStream().setTradeSubscriptions(Set.of("AAPL"));
+System.out.println("Subscribed to Apple trades.");
 
 // Wait a few seconds
 Thread.sleep(5000);
 
 // Unsubscribe from AAPL and subscribe to TSLA and MSFT
-System.out.println("Subscribed to Tesla and Microsoft trades.");
 alpacaAPI.stockMarketDataStream().setTradeSubscriptions(Set.of("TSLA", "MSFT"));
+System.out.println("Subscribed to Tesla and Microsoft trades.");
 
 // Wait a few seconds
 Thread.sleep(5000);
