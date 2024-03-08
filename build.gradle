@@ -22,7 +22,7 @@ plugins {
 
 final def projectGroup = "net.jacobpeterson.alpaca"
 final def projectArtifactID = "alpaca-java"
-final def projectVersion = "9.2.0-SNAPSHOT"
+final def projectVersion = "10.0.0-SNAPSHOT"
 
 group = projectGroup
 version = projectVersion

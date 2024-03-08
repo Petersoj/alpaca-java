@@ -15,7 +15,7 @@ Give this repository a star ⭐ if it helped you build a trading algorithm in Ja
 If you are using Gradle as your build tool, add the following dependency to your `build.gradle` file:
 
 ```
-implementation group: "net.jacobpeterson.alpaca", name: "alpaca-java", version: "9.2.0"
+implementation group: "net.jacobpeterson.alpaca", name: "alpaca-java", version: "10.0.0"
 ```
 
 If you are using Maven as your build tool, add the following dependency to your `pom.xml` file:
@@ -24,7 +24,7 @@ If you are using Maven as your build tool, add the following dependency to your 
 <dependency>
     <groupId>net.jacobpeterson.alpaca</groupId>
     <artifactId>alpaca-java</artifactId>
-    <version>9.2.0</version>
+    <version>10.0.0</version>
 </dependency>
 ```
 
