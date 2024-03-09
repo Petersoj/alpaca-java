@@ -13,6 +13,8 @@ import net.jacobpeterson.alpaca.openapi.trader.api.OrdersApi;
 import net.jacobpeterson.alpaca.openapi.trader.api.PortfolioHistoryApi;
 import net.jacobpeterson.alpaca.openapi.trader.api.PositionsApi;
 import net.jacobpeterson.alpaca.openapi.trader.api.WatchlistsApi;
+import net.jacobpeterson.alpaca.openapi.trader.model.NonTradeActivities;
+import net.jacobpeterson.alpaca.openapi.trader.model.TradingActivities;
 import okhttp3.OkHttpClient;
 
 import static com.google.common.base.Preconditions.checkArgument;
@@ -23,6 +25,13 @@ import static com.google.common.base.Preconditions.checkNotNull;
  * thread-safe.
  */
 public class AlpacaTraderAPI {
+
+    // Set validation predicates for 'anyOf' and 'oneOf' models
+    static {
+        // 'AccountConfigurationsApi' models
+        TradingActivities.isValid = jsonElement -> jsonElement.getAsJsonObject().has("type");
+        NonTradeActivities.isValid = jsonElement -> !jsonElement.getAsJsonObject().has("type");
+    }
 
     private final ApiClient apiClient;
     private AccountActivitiesApi accountActivities;

@@ -1,5 +1,6 @@
 package net.jacobpeterson.alpaca.rest.broker;
 
+import com.google.gson.JsonElement;
 import net.jacobpeterson.alpaca.model.util.apitype.BrokerAPIEndpointType;
 import net.jacobpeterson.alpaca.openapi.broker.ApiClient;
 import net.jacobpeterson.alpaca.openapi.broker.api.AccountsApi;
@@ -19,8 +20,17 @@ import net.jacobpeterson.alpaca.openapi.broker.api.RebalancingApi;
 import net.jacobpeterson.alpaca.openapi.broker.api.ReportingApi;
 import net.jacobpeterson.alpaca.openapi.broker.api.TradingApi;
 import net.jacobpeterson.alpaca.openapi.broker.api.WatchlistApi;
+import net.jacobpeterson.alpaca.openapi.broker.model.AdminActionLegacyNote;
+import net.jacobpeterson.alpaca.openapi.broker.model.AdminActionLiquidation;
+import net.jacobpeterson.alpaca.openapi.broker.model.AdminActionTransactionCancel;
+import net.jacobpeterson.alpaca.openapi.broker.model.JNLC;
+import net.jacobpeterson.alpaca.openapi.broker.model.JNLS;
+import net.jacobpeterson.alpaca.openapi.broker.model.NonTradeActivity;
+import net.jacobpeterson.alpaca.openapi.broker.model.TradeActivity;
 import net.jacobpeterson.alpaca.rest.broker.events.EventsApiSSE;
 import okhttp3.OkHttpClient;
+
+import java.util.function.BiFunction;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 import static net.jacobpeterson.alpaca.util.apikey.APIKeyUtil.createBrokerAPIAuthKey;
@@ -30,6 +40,29 @@ import static net.jacobpeterson.alpaca.util.apikey.APIKeyUtil.createBrokerAPIAut
  * thread-safe.
  */
 public class AlpacaBrokerAPI {
+
+    // Set validation predicates for 'anyOf' and 'oneOf' models
+    static {
+        // 'AccountsApi' models
+        TradeActivity.isValid = jsonElement -> jsonElement.getAsJsonObject().has("type");
+        NonTradeActivity.isValid = jsonElement -> !jsonElement.getAsJsonObject().has("type");
+
+        // 'JournalsApi' models
+        final BiFunction<Boolean, JsonElement, Boolean> transferPredicate = (jnlc, jsonElement) -> {
+            final String entryType = jsonElement.getAsJsonObject().get("entry_type").getAsString();
+            return jnlc ? entryType.equals("JNLC") : entryType.equals("JNLS");
+        };
+        JNLS.isValid = jsonElement -> transferPredicate.apply(true, jsonElement);
+        JNLC.isValid = jsonElement -> transferPredicate.apply(false, jsonElement);
+
+        // 'EventsApi' models
+        AdminActionLegacyNote.isValid = jsonElement -> jsonElement.getAsJsonObject()
+                .get("type").getAsString().contains("note_admin_event");
+        AdminActionLiquidation.isValid = jsonElement -> jsonElement.getAsJsonObject()
+                .get("type").getAsString().equals("liquidation_admin_event");
+        AdminActionTransactionCancel.isValid = jsonElement -> jsonElement.getAsJsonObject()
+                .get("type").getAsString().equals("transaction_cancel_admin_event");
+    }
 
     private final ApiClient apiClient;
     private AccountsApi accounts;

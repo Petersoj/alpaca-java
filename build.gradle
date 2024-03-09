@@ -220,10 +220,15 @@ final def fixOpenAPIGeneratedClientIssuesTask = tasks.register("fixOpenAPIGenera
                 modelFile.text = modelFile.text
                         .replaceAll("/\\*\\*\\n {2}\\* Validates the JSON Element and throws an exception if issues " +
                                 "found[\\s\\S]*?\\*/", "")
+                        .replace("import java.io.IOException;",
+                                "import java.io.IOException;\nimport java.util.function.Predicate;")
                         .replace("public static void validateJsonElement(JsonElement jsonElement) throws IOException {",
-                                "public static boolean validate = false;\n    public static void " +
-                                        "validateJsonElement(JsonElement jsonElement) throws IOException {\n" +
-                                        "      if (!validate) return;")
+                                "public static boolean validate = false;\n" +
+                                        "    public static Predicate<JsonElement> isValid = jsonElement -> true;\n" +
+                                        "    public static void validateJsonElement(JsonElement jsonElement) " +
+                                        "throws IOException {\n" +
+                                        "      if (!isValid.test(jsonElement)) throw new RuntimeException();\n" +
+                                        "      if (!validate) return;\n")
                         .replace("throw new IllegalArgumentException(\"Unexpected value '\" + value + \"'\");",
                                 "return null;")
             }
@@ -255,12 +260,19 @@ final def fixOpenAPIGeneratedClientIssuesTask = tasks.register("fixOpenAPIGenera
                     .replaceAll("for \\(String authName : authNames\\)[\\s\\S]*?uri\\);\\n. {7}}", "")
         }
 
-        // Make the 'JSON' classes of the generate clients have a static Gson initializer
+        // Make the 'JSON' classes of the generate clients have a static Gson initializer. Also fix the OffsetDateTime
+        // Gson type adapter to accommodate ISO local dates.
         specIDsOfFileNames.keySet().stream().map { it.replace(".json", "") }.forEach {
             final def jsonClientFile = Paths.get(generatedClientLibrariesPath.getPath(), it, sourceFilesPath,
                     it.replace("-", ""), "JSON.java").toFile()
             jsonClientFile.text = jsonClientFile.text
                     .replaceAll("\\{\\n {8}GsonBuilder", "static {\n        GsonBuilder")
+                    .replaceAll("}[\\s\\S].*return OffsetDateTime\\.parse\\(date, formatter\\);",
+                            "} else if (!date.contains(\"T\")) {\n" +
+                                    "return LocalDate.parse(date, DateTimeFormatter.ISO_LOCAL_DATE)" +
+                                    ".atTime(java.time.LocalTime.MIN.atOffset(java.time.ZoneOffset.UTC));\n" +
+                                    "}\n" +
+                                    "return OffsetDateTime.parse(date, formatter);")
         }
     }
 }
