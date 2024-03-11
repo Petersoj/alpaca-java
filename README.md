@@ -91,7 +91,7 @@ System.out.println("Opening Apple order: " + openingOrder);
 Thread.sleep(10_000);
 
 // Close the Apple position
-Order closingOrder = alpacaAPI.trader().positions()
+final Order closingOrder = alpacaAPI.trader().positions()
         .deleteOpenPosition("AAPL", null, new BigDecimal("100"));
 System.out.println("Closing Apple order: " + openingOrder);
 
