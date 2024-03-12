@@ -23,6 +23,11 @@
       "existingJavaType": "java.time.OffsetDateTime",
       "javaName": "timestamp",
       "title": "The timestamp with nanosecond precision."
+    },
+    "r": {
+      "existingJavaType": "java.lang.Boolean",
+      "javaName": "reset",
+      "title": "Whether this particular {@link net.jacobpeterson.alpaca.model.websocket.marketdata.streams.crypto.model.orderbook.CryptoOrderBookMessage} contains the whole order book and not just an update. Typically <code>true</code> for the first message and <code>false</code> for subsequent messages."
     }
   }
 }

@@ -110,7 +110,7 @@ System.out.println("PnL from Apple trade: " +
 ```
 
 ## [`Market Data API`](src/main/java/net/jacobpeterson/alpaca/rest/marketdata/AlpacaMarketDataAPI.java)
-The [`Market Data API`](src/main/java/net/jacobpeterson/alpaca/rest/marketdata/AlpacaMarketDataAPI.java) is used getting market data for stocks, cryptocurrencies, options, and more. Refer to the [Javadoc](https://javadoc.io/doc/net.jacobpeterson.alpaca/alpaca-java/latest/net/jacobpeterson/alpaca/rest/marketdata/AlpacaMarketDataAPI.html) for a list of all available method signatures.
+The [`Market Data API`](src/main/java/net/jacobpeterson/alpaca/rest/marketdata/AlpacaMarketDataAPI.java) is used for getting market data for stocks, cryptocurrencies, options, and more. Refer to the [Javadoc](https://javadoc.io/doc/net.jacobpeterson.alpaca/alpaca-java/latest/net/jacobpeterson/alpaca/rest/marketdata/AlpacaMarketDataAPI.html) for a list of all available method signatures.
 
 Example usage:
 ```java
