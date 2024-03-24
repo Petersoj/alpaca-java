@@ -87,7 +87,7 @@ javadoc {
 // BEGIN Alpaca OpenAPI Specification (OAS) client generation
 //
 
-// These IDs come from the URLs on this page: https://docs.alpaca.markets/v1.1/openapi
+// These IDs come from the URLs on this page: https://docs.alpaca.markets/openapi
 final def specIDsOfFileNames = Map.of(
         "trader.json", "657760422129f9005cf4bd58",
         "broker.json", "657771fc2471d20070183049",
@@ -107,7 +107,7 @@ def downloadOpenAPISpecFilesTask = tasks.register("downloadOpenAPISpecFiles") {
         // Download spec files
         specIDsOfFileNames.forEach { fileName, alpacaSpecID ->
             final def outputFile = new File(specDownloadPath, fileName)
-            final def specURL = "https://docs.alpaca.markets/v1.1/openapi/${alpacaSpecID}"
+            final def specURL = "https://docs.alpaca.markets/openapi/${alpacaSpecID}"
             outputFile.getParentFile().mkdirs()
             try {
                 logger.info("Downloading OpenAPI spec file from: {}", specURL)

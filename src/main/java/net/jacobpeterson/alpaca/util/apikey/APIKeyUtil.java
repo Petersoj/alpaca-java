@@ -15,7 +15,7 @@ public class APIKeyUtil {
      *
      * @return the key {@link String}
      *
-     * @see <a href="https://docs.alpaca.markets/v1.1/docs/getting-started-with-broker-api#api-keys">Alpaca Docs</a>
+     * @see <a href="https://docs.alpaca.markets/docs/getting-started-with-broker-api#api-keys">Alpaca Docs</a>
      */
     public static String createBrokerAPIAuthKey(String brokerAPIKey, String brokerAPISecret) {
         return Base64.getEncoder().encodeToString((brokerAPIKey + ":" + brokerAPISecret).getBytes());
