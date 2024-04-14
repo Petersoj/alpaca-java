@@ -1,4 +1,4 @@
-<p align="center"><a href="https://petersoj.github.io/alpaca-java/" target="_blank"><img src=".github/image/logo.png" alt="Logo"></a></p>
+<p align="center"><a href="https://petersoj.github.io/alpaca-java/" target="_blank"><img src="https://raw.githubusercontent.com/Petersoj/alpaca-java/master/.github/image/logo.png" alt="Logo"></a></p>
 <p align="center">
     <a href="https://github.com/Petersoj/alpaca-java" target="_blank"><img alt="GitHub Repository" src="https://img.shields.io/badge/GitHub-000000?logo=github"></a>
     <a href="https://search.maven.org/artifact/net.jacobpeterson.alpaca/alpaca-java" target="_blank"><img alt="Maven Central" src="https://img.shields.io/maven-central/v/net.jacobpeterson.alpaca/alpaca-java"></a>

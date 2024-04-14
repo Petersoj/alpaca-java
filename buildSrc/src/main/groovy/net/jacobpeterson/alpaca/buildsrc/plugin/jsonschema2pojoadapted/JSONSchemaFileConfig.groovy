@@ -7,7 +7,6 @@ class JSONSchemaFileConfig {
 
     private File sourceFile
     private String targetPackage
-    private String outputFilePath
 
     /**
      * Instantiates a new {@link JSONSchemaFileConfig}.
@@ -18,7 +17,6 @@ class JSONSchemaFileConfig {
     JSONSchemaFileConfig(File sourceFile, String targetPackage) {
         this.sourceFile = sourceFile
         this.targetPackage = targetPackage
-        this.outputFilePath = outputFilePath
     }
 
     File getSourceFile() {
