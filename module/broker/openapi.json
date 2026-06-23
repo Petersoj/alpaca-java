@@ -7586,13 +7586,6 @@
           }
         ],
         "description": "Represents a cash or security transfer between accounts, as specified by the `entry_type` parameter.",
-        "discriminator": {
-          "mapping": {
-            "JNLC": "#/components/schemas/JNLC",
-            "JNLS": "#/components/schemas/JNLS"
-          },
-          "propertyName": "entry_type"
-        },
         "example": {
           "entry_type": "JNLS",
           "from_account": "8fjkjn-4483-4199-840f-6c5fe0b7ca24",
