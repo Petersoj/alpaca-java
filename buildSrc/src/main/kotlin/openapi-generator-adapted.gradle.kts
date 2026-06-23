@@ -20,7 +20,7 @@ val extension = extensions.create("openApiGeneratorAdapted", OpenApiGeneratorAda
 tasks.openApiGenerate.configure {
     inputSpec = file("openapi.json")
     generatorName = "java"
-    val outputPackageName = "${project.group}.${project.name.replace("-", "")}"
+    val outputPackageName = "${project.group}.${project.name}".replace("-", "")
     configOptions.put("invokerPackage", outputPackageName)
     val apiPackageName = "api"
     configOptions.put("apiPackage", "$outputPackageName.$apiPackageName")
@@ -38,7 +38,7 @@ tasks.openApiGenerate.configure {
     val projectName = project.name
     val projectDescription = project.description
     val environmentUrlProduction = extension.environmentUrlProduction.get()
-    val environmentUrlSandbox = extension.environmentUrlSandbox.get()
+    val environmentUrlDevelopment = extension.environmentUrlDevelopment.get()
     doLast {
         val srcMainJava = outputDir.get().asFile.resolve("src/main/java/")
         srcMainJava.walkTopDown().filter { it.isFile }.forEach {
@@ -88,9 +88,9 @@ tasks.openApiGenerate.configure {
             public static final String ENVIRONMENT_URL_PRODUCTION ="$environmentUrlProduction";
 
             /**
-             * The URL for {@link ApiEnvironment#SANDBOX}: <code>"$environmentUrlSandbox"</code>
+             * The URL for {@link ApiEnvironment#DEVELOPMENT}: <code>"$environmentUrlDevelopment"</code>
              */
-            public static final String ENVIRONMENT_URL_SANDBOX = "$environmentUrlSandbox";
+            public static final String ENVIRONMENT_URL_DEVELOPMENT = "$environmentUrlDevelopment";
 
             private final HttpClient httpClient;
             private final ApiClient apiClient;
@@ -125,8 +125,9 @@ tasks.openApiGenerate.configure {
              * @param authenticationSecretKey  the {@link AlpacaHeader#API_SECRET_KEY} value
              * @param authorizationBearerToken the {@link AlpacaHeader#AUTHORIZATION_TOKEN_BEARER_PREFIX} suffix value
              * @param apiEnvironment           the {@link ApiEnvironment}. If {@link ApiEnvironment#PRODUCTION}, then
-             *                                 {@link #ENVIRONMENT_URL_PRODUCTION} is used. If {@link ApiEnvironment#SANDBOX},
-             *                                 then {@link #ENVIRONMENT_URL_SANDBOX} is used.
+             *                                 {@link #ENVIRONMENT_URL_PRODUCTION} is used. If
+             *                                 {@link ApiEnvironment#DEVELOPMENT}, then {@link #ENVIRONMENT_URL_DEVELOPMENT}
+             *                                 is used.
              * @param requestInterceptor       the {@link HttpRequest.Builder} {@link Consumer} to invoke before sending a
              *                                 request
              * @param responseInterceptor      the {@link HttpResponse} {@link Consumer} to invoke before processing a response
@@ -138,7 +139,7 @@ tasks.openApiGenerate.configure {
                     final @Nullable Consumer<HttpResponse<InputStream>> responseInterceptor) {
                 this.httpClient = httpClient != null ? httpClient :
                         HttpClient.newBuilder().connectTimeout(ofSeconds(10)).build();
-                final var baseUri = apiEnvironment == PRODUCTION ? ENVIRONMENT_URL_PRODUCTION : ENVIRONMENT_URL_SANDBOX;
+                final var baseUri = apiEnvironment == PRODUCTION ? ENVIRONMENT_URL_PRODUCTION : ENVIRONMENT_URL_DEVELOPMENT;
                 apiClient = new ApiClient(null, objectMapper != null ? objectMapper :
                         ApiClient.createDefaultObjectMapper(), null) {
 

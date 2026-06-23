@@ -14,7 +14,7 @@ public enum ApiEnvironment {
     PRODUCTION,
 
     /**
-     * Sandbox/testing/paper environment.
+     * Development/sandbox/paper environment.
      */
-    SANDBOX
+    DEVELOPMENT
 }

@@ -39,7 +39,6 @@ jreleaser {
         }
     }
 }
-
 subprojects {
     tasks.configureEach {
         rootProject.tasks.jreleaserFullRelease.configure {

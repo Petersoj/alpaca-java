@@ -74,8 +74,6 @@ tasks.withType(Javadoc::class).configureEach {
                 "https://guava.dev/releases/$guavaVersion/api/docs/",
                 "https://errorprone.info/api/latest/")
     }
-}
-tasks.withType(Javadoc::class).configureEach {
     project.configurations.flatMap { it.dependencies.withType(ProjectDependency::class) }.forEach {
         project(it.path).tasks.withType(Javadoc::class).forEach { dependencyJavadocTask ->
             this@configureEach.dependsOn(dependencyJavadocTask)

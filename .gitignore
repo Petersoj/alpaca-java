@@ -1,6 +1,5 @@
-/bin/
-build/
-.gradle/
-.settings
 .DS_Store
+.gradle/
+.kotlin/
 .idea/
+build/

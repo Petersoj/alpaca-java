@@ -11,5 +11,5 @@ dependencies {
 
 openApiGeneratorAdapted {
     environmentUrlProduction = "https://broker-api.alpaca.markets"
-    environmentUrlSandbox = "https://broker-api.sandbox.alpaca.markets"
+    environmentUrlDevelopment = "https://broker-api.sandbox.alpaca.markets"
 }
