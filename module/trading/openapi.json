@@ -301,7 +301,7 @@
         "name": "page_token",
         "required": false,
         "schema": {
-          "example": "MA==",
+          "example": "eyJpZCI6IjU1MGU4NDAwLWUyOWItNDFkNC1hNzE2LTQ0NjY1NTQ0MDAwMCJ9Cg",
           "type": "string"
         }
       },
@@ -508,6 +508,9 @@
             "description": "Timestamp this account was created at\n",
             "format": "date-time",
             "type": "string"
+          },
+          "crypto_status": {
+            "$ref": "#/components/schemas/AccountStatus"
           },
           "currency": {
             "description": "USD\n",
@@ -789,13 +792,20 @@
       "AccountStatus": {
         "description": "An enum representing the various possible account status values.\n\nMost likely, the account status is ACTIVE unless there is any problem. The account status may get in ACCOUNT_UPDATED when personal information is being updated from the dashboard, in which case you may not be allowed trading for a short period of time until the change is approved.\n\n- ONBOARDING\n  The account is onboarding.\n- SUBMISSION_FAILED\n  The account application submission failed for some reason.\n- SUBMITTED\n  The account application has been submitted for review.\n- ACCOUNT_UPDATED\n  The account information is being updated.\n- APPROVAL_PENDING\n  The final account approval is pending.\n- ACTIVE\n  The account is active for trading.\n- REJECTED\n  The account application has been rejected.",
         "enum": [
+          "INACTIVE",
+          "PAPER_ONLY",
           "ONBOARDING",
           "SUBMISSION_FAILED",
           "SUBMITTED",
           "ACCOUNT_UPDATED",
           "APPROVAL_PENDING",
           "ACTIVE",
-          "REJECTED"
+          "REJECTED",
+          "ACCOUNT_CLOSED",
+          "APPROVED",
+          "ACCOUNT_CLOSED_PENDING",
+          "ACTION_REQUIRED",
+          "LIMITED"
         ],
         "example": "ACTIVE",
         "title": "AccountStatus",
@@ -1333,9 +1343,24 @@
             "description": "Asset is marginable or not",
             "type": "boolean"
           },
+          "min_order_size": {
+            "description": "Minimum order size. Field available for crypto only.",
+            "format": "decimal",
+            "type": "string"
+          },
+          "min_trade_increment": {
+            "description": "Amount a trade quantity can be incremented by. Field available for crypto only.",
+            "format": "decimal",
+            "type": "string"
+          },
           "name": {
             "description": "The official name of the asset",
             "minLength": 1,
+            "type": "string"
+          },
+          "price_increment": {
+            "description": "Amount the price can be incremented by. Field available for crypto only.",
+            "format": "decimal",
             "type": "string"
           },
           "shortable": {
@@ -1971,6 +1996,46 @@
         "title": "CreateCryptoTransferRequest",
         "type": "object"
       },
+      "CreateLocateRequest": {
+        "description": "Request to locate shares for a short sale.",
+        "example": {
+          "all_or_none": false,
+          "limit_price": "0.05",
+          "qty": 100,
+          "symbol": "TSLA"
+        },
+        "properties": {
+          "all_or_none": {
+            "default": false,
+            "description": "Reject the locate unless the full requested quantity is available.",
+            "example": false,
+            "type": "boolean"
+          },
+          "limit_price": {
+            "description": "Maximum acceptable locate fee per share, as a decimal string in USD.\nIf omitted, any quoted fee is accepted.\n",
+            "example": "0.05",
+            "nullable": true,
+            "type": "string"
+          },
+          "qty": {
+            "description": "Number of shares to locate. Must be positive and in round lots of 100; invalid quantities return HTTP 400.",
+            "example": 100,
+            "format": "int64",
+            "minimum": 1,
+            "type": "integer"
+          },
+          "symbol": {
+            "description": "Stock symbol.",
+            "example": "TSLA",
+            "type": "string"
+          }
+        },
+        "required": [
+          "symbol",
+          "qty"
+        ],
+        "type": "object"
+      },
       "CryptoTransfer": {
         "description": "Transfers allow you to transfer assets into your end customer's account (deposits) or out (withdrawal).",
         "properties": {
@@ -2180,6 +2245,16 @@
         "title": "Error",
         "type": "object"
       },
+      "ErrorResponse": {
+        "description": "API error response.",
+        "properties": {
+          "message": {
+            "example": "Internal Server Error",
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
       "Exchange": {
         "description": "Represents the current exchanges Alpaca supports. List is currently:\n\n- AMEX\n- ARCA\n- BATS\n- NYSE\n- NASDAQ\n- NYSEARCA\n- OTC",
         "enum": [
@@ -2284,6 +2359,7 @@
             "properties": {
               "ca_id": {
                 "description": "The unique identifier for this corporate action",
+                "format": "uuid",
                 "type": "string"
               },
               "cash_payout": {
@@ -2385,6 +2461,295 @@
           }
         ],
         "description": "Journal entry (stock)",
+        "type": "object"
+      },
+      "ListLocateQuotesResponse": {
+        "description": "Response to a successful request for locate quotes.",
+        "example": {
+          "errors": [
+            {
+              "code": "symbol_not_found",
+              "message": "symbol not found",
+              "symbol": "META"
+            }
+          ],
+          "quotes": [
+            {
+              "available_qty": 1000,
+              "price": "0.0123",
+              "quoted_at": "2026-01-02T15:04:05Z",
+              "symbol": "TSLA"
+            }
+          ]
+        },
+        "properties": {
+          "errors": {
+            "description": "Symbols that could not be quoted.",
+            "items": {
+              "$ref": "#/components/schemas/LocateQuoteError"
+            },
+            "type": "array"
+          },
+          "quotes": {
+            "description": "Locate quotes returned for requested symbols.",
+            "items": {
+              "$ref": "#/components/schemas/LocateQuote"
+            },
+            "type": "array"
+          }
+        },
+        "required": [
+          "quotes"
+        ],
+        "type": "object"
+      },
+      "ListLocatesResponse": {
+        "description": "Response to a successful request for a list of locates.",
+        "example": {
+          "locates": [
+            {
+              "all_or_none": false,
+              "created_at": "2026-01-02T15:04:05Z",
+              "expires_at": "2026-01-03T01:00:00Z",
+              "id": "550e8400-e29b-41d4-a716-446655440000",
+              "limit_price": "0.05",
+              "located_price": "0.05",
+              "located_qty": 100,
+              "requested_qty": 100,
+              "status": "active",
+              "symbol": "TSLA",
+              "total_fee": "5.00"
+            }
+          ],
+          "next_page_token": "eyJpZCI6IjU1MGU4NDAwLWUyOWItNDFkNC1hNzE2LTQ0NjY1NTQ0MDAwMCJ9Cg"
+        },
+        "properties": {
+          "locates": {
+            "description": "Locates matching the filter criteria.",
+            "items": {
+              "$ref": "#/components/schemas/Locate"
+            },
+            "type": "array"
+          },
+          "next_page_token": {
+            "description": "The token to use to retrieve the next page of results. If `null`, there are no more pages.",
+            "nullable": true,
+            "type": "string"
+          }
+        },
+        "required": [
+          "locates",
+          "next_page_token"
+        ],
+        "type": "object"
+      },
+      "Locate": {
+        "description": "A locate request and its current lifecycle status.",
+        "example": {
+          "all_or_none": false,
+          "created_at": "2026-01-02T15:04:05Z",
+          "expires_at": "2026-01-03T01:00:00Z",
+          "id": "550e8400-e29b-41d4-a716-446655440000",
+          "limit_price": "0.05",
+          "located_price": "0.05",
+          "located_qty": 100,
+          "requested_qty": 100,
+          "status": "active",
+          "symbol": "TSLA",
+          "total_fee": "5.00"
+        },
+        "properties": {
+          "all_or_none": {
+            "description": "Whether the request required the full quantity.",
+            "example": false,
+            "type": "boolean"
+          },
+          "created_at": {
+            "description": "Time when the locate was created.",
+            "example": "2026-01-02T15:04:05Z",
+            "format": "date-time",
+            "type": "string"
+          },
+          "expires_at": {
+            "description": "Time when the active locate expires. Omitted when rejected.",
+            "example": "2026-01-03T01:00:00Z",
+            "format": "date-time",
+            "nullable": true,
+            "type": "string"
+          },
+          "id": {
+            "description": "Locate ID.",
+            "example": "550e8400-e29b-41d4-a716-446655440000",
+            "format": "uuid",
+            "type": "string"
+          },
+          "limit_price": {
+            "description": "Maximum acceptable fee per share from the request.",
+            "example": "0.05",
+            "nullable": true,
+            "type": "string"
+          },
+          "located_price": {
+            "description": "Locate fee per share in USD. Omitted when rejected.",
+            "example": "0.05",
+            "nullable": true,
+            "type": "string"
+          },
+          "located_qty": {
+            "description": "Number of shares located. Omitted when rejected.",
+            "example": 100,
+            "format": "int64",
+            "nullable": true,
+            "type": "integer"
+          },
+          "rejection_reason": {
+            "description": "Machine-readable rejection reason.",
+            "example": "inventory_unavailable",
+            "nullable": true,
+            "type": "string"
+          },
+          "requested_qty": {
+            "description": "Number of shares requested.",
+            "example": 100,
+            "format": "int64",
+            "type": "integer"
+          },
+          "status": {
+            "description": "Locate status.",
+            "enum": [
+              "active",
+              "expired",
+              "rejected"
+            ],
+            "example": "active",
+            "type": "string"
+          },
+          "symbol": {
+            "description": "Stock symbol.",
+            "example": "TSLA",
+            "type": "string"
+          },
+          "total_fee": {
+            "description": "Total locate fee in USD. Omitted when rejected.",
+            "example": "5.00",
+            "nullable": true,
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "symbol",
+          "requested_qty",
+          "all_or_none",
+          "status",
+          "created_at"
+        ],
+        "type": "object"
+      },
+      "LocateError": {
+        "description": "Locates API error response. Locate-specific 400 and create locate 422 errors include a machine-readable `code`.",
+        "properties": {
+          "code": {
+            "description": "Machine-readable error code. Present on locate-specific 400 and create locate 422 errors.",
+            "enum": [
+              "invalid_input",
+              "invalid_request_body",
+              "invalid_limit_price",
+              "invalid_symbols",
+              "symbol_not_found",
+              "security_not_found",
+              "insufficient_buying_power",
+              "easy_to_borrow",
+              "threshold_security"
+            ],
+            "example": "invalid_symbols",
+            "type": "string"
+          },
+          "message": {
+            "description": "Error message.",
+            "example": "symbols must contain at most 100 unique symbols",
+            "type": "string"
+          }
+        },
+        "required": [
+          "message"
+        ],
+        "type": "object"
+      },
+      "LocateQuote": {
+        "description": "Current locate pricing and availability for a symbol.",
+        "example": {
+          "available_qty": 1000,
+          "price": "0.0123",
+          "quoted_at": "2026-01-02T15:04:05Z",
+          "symbol": "TSLA"
+        },
+        "properties": {
+          "available_qty": {
+            "description": "Available locate quantity.",
+            "example": 1000,
+            "format": "int64",
+            "type": "integer"
+          },
+          "price": {
+            "description": "Locate fee per share. Omitted when no quantity is available.",
+            "example": "0.0123",
+            "type": "string"
+          },
+          "quoted_at": {
+            "description": "Time when the quote was issued.",
+            "example": "2026-01-02T15:04:05Z",
+            "format": "date-time",
+            "type": "string"
+          },
+          "symbol": {
+            "description": "Stock symbol.",
+            "example": "TSLA",
+            "type": "string"
+          }
+        },
+        "required": [
+          "symbol",
+          "available_qty",
+          "quoted_at"
+        ],
+        "type": "object"
+      },
+      "LocateQuoteError": {
+        "description": "Error returned for a symbol that could not be quoted.",
+        "example": {
+          "code": "symbol_not_found",
+          "message": "symbol not found",
+          "symbol": "META"
+        },
+        "properties": {
+          "code": {
+            "description": "Error code.",
+            "enum": [
+              "symbol_not_found",
+              "easy_to_borrow",
+              "threshold_security",
+              "corporate_action"
+            ],
+            "example": "symbol_not_found",
+            "type": "string"
+          },
+          "message": {
+            "description": "Error message.",
+            "example": "symbol not found",
+            "type": "string"
+          },
+          "symbol": {
+            "description": "Requested stock symbol that could not be quoted.",
+            "example": "FB",
+            "type": "string"
+          }
+        },
+        "required": [
+          "symbol",
+          "code",
+          "message"
+        ],
         "type": "object"
       },
       "MAActivityV2": {
@@ -2491,6 +2856,11 @@
             "format": "date-time",
             "type": "string"
           },
+          "currency": {
+            "description": "Currency denomination of the activity (e.g. USD). Included in NTA stream events and activity responses.",
+            "example": "USD",
+            "type": "string"
+          },
           "cusip": {
             "description": "The CUSIP of the security involved with the activity. Not present for all activity types.",
             "type": "string"
@@ -2541,6 +2911,7 @@
             "activity_sub_type": "SDIV",
             "activity_type": "DIV",
             "created_at": "2021-05-10T14:01:04.650275Z",
+            "currency": "USD",
             "date": "2019-08-01",
             "id": "20190801011955195::5f596936-6f23-4cef-bdf1-3806aae57dbf",
             "net_amount": "1.02",
@@ -2809,11 +3180,13 @@
           "id": {
             "description": "The unique identifier of the option contract.",
             "example": "98359ef7-5124-49f3-85ea-5cf02df6defa",
+            "format": "uuid",
             "type": "string"
           },
           "multiplier": {
             "description": "The multiplier of the option contract is crucial for calculating both the trade premium and the extended strike price. In standard contracts, the multiplier is always set to 100.\nFor instance, if a contract is traded at $1.50 and the multiplier is 100, the total amount debited when buying the contract would be $150.00.\nSimilarly, when exercising a call contract, the total cost will be equal to the strike price times the multiplier.",
             "example": "100",
+            "format": "decimal",
             "type": "string"
           },
           "name": {
@@ -2854,6 +3227,7 @@
           "strike_price": {
             "description": "The strike price of the option contract.",
             "example": "100",
+            "format": "decimal",
             "type": "string"
           },
           "style": {
@@ -2887,6 +3261,7 @@
           "underlying_asset_id": {
             "description": "The unique identifier of the underlying asset.",
             "example": "b0b6dd9d-8b9b-48a9-ba46-b9d54906e415",
+            "format": "uuid",
             "type": "string"
           },
           "underlying_symbol": {
@@ -2927,6 +3302,7 @@
           "asset_id": {
             "description": "Unique identifier of the deliverable asset. For standard contracts, this is equivalent to underlying_asset_id of the contracts.\nThis field is not returned for cash deliverables.\n",
             "example": "b0b6dd9d-8b9b-48a9-ba46-b9d54906e415",
+            "format": "uuid",
             "type": "string"
           },
           "delayed_settlement": {
@@ -3014,6 +3390,10 @@
             "nullable": true,
             "type": "string"
           },
+          "expires_at": {
+            "format": "date-time",
+            "type": "string"
+          },
           "extended_hours": {
             "description": "If true, eligible for execution outside regular trading hours.",
             "type": "boolean"
@@ -3045,6 +3425,7 @@
           },
           "id": {
             "description": "Order ID",
+            "format": "uuid",
             "type": "string"
           },
           "legs": {
@@ -3080,6 +3461,12 @@
           "qty": {
             "description": "Ordered quantity. If entered, notional will be null. Can take up to 9 decimal points. Required if order class is `mleg`.",
             "minLength": 1,
+            "nullable": true,
+            "type": "string"
+          },
+          "ratio_qty": {
+            "description": "The proportional quantity of this leg in relation to the overall multi-leg order quantity.",
+            "format": "decimal",
             "nullable": true,
             "type": "string"
           },
@@ -3226,6 +3613,7 @@
           },
           "id": {
             "description": "Order ID",
+            "format": "uuid",
             "type": "string"
           },
           "legs": {
@@ -3327,11 +3715,11 @@
         },
         "required": [
           "symbol",
+          "type",
+          "time_in_force",
           "notional",
           "qty",
-          "type",
-          "side",
-          "time_in_force"
+          "side"
         ],
         "title": "Order",
         "type": "object"
@@ -3364,7 +3752,8 @@
           "stopped",
           "rejected",
           "suspended",
-          "calculated"
+          "calculated",
+          "held"
         ],
         "example": "new",
         "title": "OrderStatus",
@@ -3709,6 +4098,11 @@
             "minLength": 1,
             "type": "string"
           },
+          "avg_entry_swap_rate": {
+            "description": "The weighted-average exchange rate at the time the position was entered.",
+            "format": "decimal",
+            "type": "string"
+          },
           "change_today": {
             "description": "Percent change from last day price (by a factor of 1)",
             "minLength": 1,
@@ -3737,6 +4131,11 @@
             "minLength": 1,
             "type": "string"
           },
+          "prev_swap_rate": {
+            "description": "The exchange rate as of the previous close (i.e. yesterday's rate)",
+            "format": "decimal",
+            "type": "string"
+          },
           "qty": {
             "description": "The number of shares",
             "minLength": 1,
@@ -3749,7 +4148,15 @@
           },
           "side": {
             "description": "long",
-            "minLength": 1,
+            "enum": [
+              "long",
+              "short"
+            ],
+            "type": "string"
+          },
+          "swap_rate": {
+            "description": "The current exchange rate (without mark-up) used to convert local-currency position values into USD. Present only for LCT (Local Currency Trading) accounts",
+            "format": "decimal",
             "type": "string"
           },
           "symbol": {
@@ -3776,6 +4183,9 @@
             "description": "Unrealized profit/loss percent (by a factor of 1)",
             "minLength": 1,
             "type": "string"
+          },
+          "usd": {
+            "$ref": "#/components/schemas/USDPositionValues"
           }
         },
         "required": [
@@ -4414,6 +4824,77 @@
         "example": "INCOMING",
         "type": "string"
       },
+      "USDPositionValues": {
+        "description": "Position values in USD. This is returned for LCT (non-USD) accounts only.",
+        "properties": {
+          "avg_entry_price": {
+            "description": "Average entry price of the position in USD",
+            "example": "71.43",
+            "format": "decimal",
+            "type": "string"
+          },
+          "change_today": {
+            "description": "Percent change from last day price (by a factor of 1)",
+            "example": "0.67",
+            "format": "decimal",
+            "type": "string"
+          },
+          "cost_basis": {
+            "description": "Total cost basis in USD",
+            "example": "333.33",
+            "format": "decimal",
+            "type": "string"
+          },
+          "current_price": {
+            "description": "Current asset price per share in USD",
+            "example": "80.0",
+            "format": "decimal",
+            "type": "string"
+          },
+          "lastday_price": {
+            "description": "Last day's asset price per share based on the closing value of the last trading day in USD",
+            "example": "79.33",
+            "format": "decimal",
+            "type": "string"
+          },
+          "market_value": {
+            "description": "Total market value of the position in USD",
+            "example": "400.00",
+            "format": "decimal",
+            "type": "string"
+          },
+          "unrealized_intraday_pl": {
+            "description": "Unrealized profit/loss in USD for the day",
+            "example": "6.67",
+            "format": "decimal",
+            "type": "string"
+          },
+          "unrealized_intraday_plpc": {
+            "description": "Unrealized intraday profit/loss percent (by a factor of 1)",
+            "example": "0.0084",
+            "format": "decimal",
+            "type": "string"
+          },
+          "unrealized_pl": {
+            "description": "Unrealized profit/loss in USD",
+            "example": "66.67",
+            "format": "decimal",
+            "type": "string"
+          },
+          "unrealized_plpc": {
+            "description": "Unrealized profit/loss percent (by a factor of 1)",
+            "example": "0.2",
+            "format": "decimal",
+            "type": "string"
+          }
+        },
+        "required": [
+          "avg_entry_price",
+          "cost_basis"
+        ],
+        "title": "USDPositionValues",
+        "type": "object"
+      },
       "UnitSplitActivityV2": {
         "allOf": [
           {
@@ -4518,6 +4999,22 @@
           }
         ],
         "description": "Worthless Removal",
+        "type": "object"
+      },
+      "WalletFeeEstimateResponse": {
+        "description": "Estimated on-chain fee breakdown for a proposed crypto withdrawal, including the total fee and the underlying network (gas) fee.",
+        "properties": {
+          "fee": {
+            "example": "0.0505",
+            "format": "decimal",
+            "type": "string"
+          },
+          "network_fee": {
+            "example": "0.0825",
+            "format": "decimal",
+            "type": "string"
+          }
+        },
         "type": "object"
       },
       "WarrantExerciseElectionActivityV2": {
@@ -5588,6 +6085,479 @@
   },
   "openapi": "3.0.0",
   "paths": {
+    "/v1/locates": {
+      "get": {
+        "description": "Returns locates filtered by status, symbol, or date range. Results are sorted by `created_at` descending, with `id` descending as the tie-breaker.",
+        "operationId": "listLocates",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/PageToken"
+          },
+          {
+            "description": "Maximum number of results to return.",
+            "in": "query",
+            "name": "limit",
+            "required": false,
+            "schema": {
+              "default": 1000,
+              "maximum": 10000,
+              "minimum": 1,
+              "type": "integer"
+            }
+          },
+          {
+            "description": "Filter by locate status.",
+            "example": "active",
+            "in": "query",
+            "name": "status",
+            "required": false,
+            "schema": {
+              "enum": [
+                "active",
+                "expired",
+                "rejected"
+              ],
+              "type": "string"
+            }
+          },
+          {
+            "description": "Filter by stock symbol.",
+            "example": "TSLA",
+            "in": "query",
+            "name": "symbol",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Filter locates with locate trading date on or after this date. Format: YYYY-MM-DD. The locate trading date uses America/New_York and rolls at 8pm ET.",
+            "in": "query",
+            "name": "start",
+            "required": false,
+            "schema": {
+              "format": "date",
+              "type": "string"
+            }
+          },
+          {
+            "description": "Filter locates with locate trading date before this date (exclusive). Format: YYYY-MM-DD. The locate trading date uses America/New_York and rolls at 8pm ET.",
+            "in": "query",
+            "name": "end",
+            "required": false,
+            "schema": {
+              "format": "date",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ListLocatesResponse"
+                }
+              }
+            },
+            "description": "Returns a list of locates for the account, or an empty list if no locates are found."
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "examples": {
+                  "invalid_input": {
+                    "value": {
+                      "code": "invalid_input",
+                      "message": "invalid input"
+                    }
+                  }
+                },
+                "schema": {
+                  "$ref": "#/components/schemas/LocateError"
+                }
+              }
+            },
+            "description": "Invalid locate request."
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "example": {
+                  "message": "Unauthorized"
+                },
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Authentication headers are missing or invalid. Make sure you authenticate your request with a valid API key."
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "example": {
+                  "message": "Forbidden"
+                },
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "User has no access to a resource."
+          },
+          "500": {
+            "content": {
+              "application/json": {
+                "example": {
+                  "message": "Internal Server Error"
+                },
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Internal server error. We recommend retrying these later. If the issue persists, please contact us on Slack or on the Community Forum."
+          }
+        },
+        "summary": "List Locates",
+        "tags": [
+          "Locates"
+        ]
+      },
+      "post": {
+        "description": "Creates a locate request for a short sale.",
+        "operationId": "createLocates",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateLocateRequest"
+              }
+            }
+          },
+          "description": "Locate request details.",
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Locate"
+                }
+              }
+            },
+            "description": "Created"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "examples": {
+                  "invalid_input": {
+                    "value": {
+                      "code": "invalid_input",
+                      "message": "invalid input: quantity must be in round lots of 100"
+                    }
+                  },
+                  "invalid_limit_price": {
+                    "value": {
+                      "code": "invalid_limit_price",
+                      "message": "invalid limit_price"
+                    }
+                  },
+                  "invalid_request_body": {
+                    "value": {
+                      "code": "invalid_request_body",
+                      "message": "invalid request body"
+                    }
+                  }
+                },
+                "schema": {
+                  "$ref": "#/components/schemas/LocateError"
+                }
+              }
+            },
+            "description": "Invalid locate request."
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "example": {
+                  "message": "Unauthorized"
+                },
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Authentication headers are missing or invalid. Make sure you authenticate your request with a valid API key."
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "example": {
+                  "message": "Forbidden"
+                },
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "User has no access to a resource."
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "examples": {
+                  "easy_to_borrow": {
+                    "value": {
+                      "code": "easy_to_borrow",
+                      "message": "security is easy-to-borrow and does not require a locate"
+                    }
+                  },
+                  "insufficient_buying_power": {
+                    "value": {
+                      "code": "insufficient_buying_power",
+                      "message": "insufficient buying power to cover locate fee"
+                    }
+                  },
+                  "symbol_not_found": {
+                    "value": {
+                      "code": "symbol_not_found",
+                      "message": "symbol not found"
+                    }
+                  },
+                  "threshold_security": {
+                    "value": {
+                      "code": "threshold_security",
+                      "message": "security is on the threshold list and cannot be located"
+                    }
+                  }
+                },
+                "schema": {
+                  "$ref": "#/components/schemas/LocateError"
+                }
+              }
+            },
+            "description": "Cannot complete locate request."
+          },
+          "500": {
+            "content": {
+              "application/json": {
+                "example": {
+                  "message": "Internal Server Error"
+                },
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Internal server error. We recommend retrying these later. If the issue persists, please contact us on Slack or on the Community Forum."
+          }
+        },
+        "summary": "Create Locate",
+        "tags": [
+          "Locates"
+        ]
+      }
+    },
+    "/v1/locates/{locate_id}": {
+      "get": {
+        "description": "Returns a locate by ID.",
+        "operationId": "getLocate",
+        "parameters": [
+          {
+            "description": "The locate ID.",
+            "example": "550e8400-e29b-41d4-a716-446655440000",
+            "in": "path",
+            "name": "locate_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Locate"
+                }
+              }
+            },
+            "description": "Returns the requested locate."
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "examples": {
+                  "invalid_input": {
+                    "value": {
+                      "code": "invalid_input",
+                      "message": "invalid input"
+                    }
+                  }
+                },
+                "schema": {
+                  "$ref": "#/components/schemas/LocateError"
+                }
+              }
+            },
+            "description": "Invalid locate request."
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "example": {
+                  "message": "Unauthorized"
+                },
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Authentication headers are missing or invalid. Make sure you authenticate your request with a valid API key."
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "example": {
+                  "message": "Forbidden"
+                },
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "User has no access to a resource."
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "example": {
+                  "message": "locate not found"
+                },
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Not found"
+          },
+          "500": {
+            "content": {
+              "application/json": {
+                "example": {
+                  "message": "Internal Server Error"
+                },
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Internal server error. We recommend retrying these later. If the issue persists, please contact us on Slack or on the Community Forum."
+          }
+        },
+        "summary": "Get Locate",
+        "tags": [
+          "Locates"
+        ]
+      }
+    },
+    "/v1/locates/quotes": {
+      "get": {
+        "description": "Returns locate availability and pricing for one or more symbols.",
+        "operationId": "listLocateQuotes",
+        "parameters": [
+          {
+            "description": "Comma-separated list of stock symbols. Maximum 100 unique symbols.",
+            "example": "TSLA,AAPL",
+            "in": "query",
+            "name": "symbols",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ListLocateQuotesResponse"
+                }
+              }
+            },
+            "description": "Returns locate quotes for the requested symbols."
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "examples": {
+                  "invalid_symbols": {
+                    "value": {
+                      "code": "invalid_symbols",
+                      "message": "symbols must contain at most 100 unique symbols"
+                    }
+                  }
+                },
+                "schema": {
+                  "$ref": "#/components/schemas/LocateError"
+                }
+              }
+            },
+            "description": "Invalid locate quote request."
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "example": {
+                  "message": "Unauthorized"
+                },
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Authentication headers are missing or invalid. Make sure you authenticate your request with a valid API key."
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "example": {
+                  "message": "Forbidden"
+                },
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "User has no access to a resource."
+          },
+          "500": {
+            "content": {
+              "application/json": {
+                "example": {
+                  "message": "Internal Server Error"
+                },
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Internal server error. We recommend retrying these later. If the issue persists, please contact us on Slack or on the Community Forum."
+          }
+        },
+        "summary": "Get Locate Quotes",
+        "tags": [
+          "Locates"
+        ]
+      }
+    },
     "/v2beta1/events/activities": {
       "get": {
         "description": "The Events API sends the real-time events and provides historical queries with SSE (Server Sent Events).\n\nThis endpoint streams events on account activities.\n\nHistorical events are streamed immediately if queried, and updates are pushed as events occur.\n\nQuery parameter rules:\n- If `until` is specified, `since` is required.\n- If `until_id` is specified, `since_id` is required.\n- You cannot use `since` and `since_id` together.\nBehavior:\n- If `since` or `since_id` is not specified, this will not return any historic data.\n- If `until` or `until_id` is specified, stream will end at the specified point with status 200.\n\n---\n\nWarning: Currently, OAS-3 does not fully support responses from an SSE API.\n\nIn case the client code is generated from this OAS spec, please do not specify `since` and `until`, as the generated client may hang forever waiting for the response to end.\n\nIf you require the streaming capabilities, we recommend not using the generated clients for this specific endpoint until the OAS-3 standards define how to represent this behavior.\n\n---\n\n###  Comment messages\nAccording to the SSE specification, any line that starts with a colon is a comment which does not contain data.  It is typically a free text that does not follow any data schema. A few examples mentioned below for comment messages.\n\n#####  Slow client\n\nThe server sends a comment when the client is not consuming messages fast enough. Example: `: you are reading too slowly, dropped 10000 messages`\n\n##### Internal server error\n\nAn error message is sent as a comment when the server closes the connection on an internal server error (only sent by the v2 and v2beta1 endpoints). Example: `: internal server error`\n\n---",
@@ -6471,7 +7441,7 @@
         },
         "summary": "Get US Market Clock",
         "tags": [
-          "Calendar"
+          "Clock"
         ]
       }
     },
@@ -7084,6 +8054,13 @@
                   "us_equity",
                   "us_option",
                   "crypto",
+                  "crypto_perp",
+                  "treasury",
+                  "corporate",
+                  "global_equity",
+                  "us_index",
+                  "us_equity_chain",
+                  "ipo",
                   "all"
                 ],
                 "type": "string"
@@ -8537,12 +9514,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "properties": {
-                    "fee": {
-                      "type": "string"
-                    }
-                  },
-                  "type": "object"
+                  "$ref": "#/components/schemas/WalletFeeEstimateResponse"
                 }
               }
             },
@@ -9209,7 +10181,7 @@
         },
         "summary": "Get Market Clock",
         "tags": [
-          "Calendar"
+          "Clock"
         ]
       }
     }
@@ -9279,6 +10251,10 @@
     {
       "description": "Request minting of tokenized assets and list tokenization requests on the Instant Tokenization Network (ITN).",
       "name": "Tokenization"
+    },
+    {
+      "description": "Endpoints for locate requests and quotes.",
+      "name": "Locates"
     },
     {
       "name": "Events"

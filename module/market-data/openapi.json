@@ -2614,6 +2614,10 @@
             "format": "double",
             "type": "number"
           },
+          "new_symbol": {
+            "description": "The post-split ticker. Empty when the reverse split does not change the\nticker (the most common case); only populated when the issuer assigns a\ndifferent symbol after the split.\n",
+            "type": "string"
+          },
           "old_cusip": {
             "type": "string"
           },
