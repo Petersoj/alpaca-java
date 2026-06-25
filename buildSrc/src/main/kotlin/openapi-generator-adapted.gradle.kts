@@ -69,6 +69,7 @@ tasks.openApiGenerate.configure {
         import java.net.http.HttpResponse;
         import java.util.function.Consumer;
 
+        import static com.google.common.net.HttpHeaders.ACCEPT_ENCODING;
         import static com.google.common.net.HttpHeaders.AUTHORIZATION;
         import static java.time.Duration.ofSeconds;
         import static net.jacobpeterson.alpacajava.common.AlpacaHeader.API_KEY_ID;
@@ -156,6 +157,7 @@ tasks.openApiGenerate.configure {
                 };
                 apiClient.setReadTimeout(ofSeconds(10));
                 apiClient.setRequestInterceptor(builder -> {
+                    builder.header(ACCEPT_ENCODING, "gzip");
                     if (authenticationKeyID != null) {
                         builder.header(API_KEY_ID, authenticationKeyID);
                     }
