@@ -3,7 +3,7 @@ package net.jacobpeterson.alpacajava.common;
 import org.jspecify.annotations.NullMarked;
 
 /**
- * {@link ApiEnvironment} is an enum that represents the API environment to use.
+ * {@link ApiEnvironment} is an enum that represents an API environment.
  */
 @NullMarked
 public enum ApiEnvironment {

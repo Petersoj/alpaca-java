@@ -150,7 +150,7 @@ tasks.openApiGenerate.configure {
         package ${outputPackageName};
 
         import com.google.errorprone.annotations.concurrent.LazyInit;
-        import net.jacobpeterson.alpacajava.common.AlpacaHeader;
+        import net.jacobpeterson.alpacajava.common.ApiHeader;
         import net.jacobpeterson.alpacajava.common.ApiEnvironment;
         import ${outputPackageName}.${apiPackageName}.*;
         import org.jspecify.annotations.NullMarked;
@@ -166,9 +166,6 @@ tasks.openApiGenerate.configure {
 
         import static java.time.Duration.ofSeconds;
         import static java.util.concurrent.Executors.newVirtualThreadPerTaskExecutor;
-        import static net.jacobpeterson.alpacajava.common.AlpacaHeader.API_KEY_ID;
-        import static net.jacobpeterson.alpacajava.common.AlpacaHeader.API_SECRET_KEY;
-        import static net.jacobpeterson.alpacajava.common.ApiEnvironment.PRODUCTION;
 
         /**
          * {@link ${className}}: $projectDescription
@@ -214,11 +211,11 @@ tasks.openApiGenerate.configure {
              *
              * @param httpClient               the {@link HttpClient}, or <code>null</code> to use a new default instance
              * @param objectMapper             the {@link ObjectMapper}, or <code>null</code> to use a new default instance
-             * @param authenticationKeyID      the {@link AlpacaHeader#API_KEY_ID} value
-             * @param authenticationSecretKey  the {@link AlpacaHeader#API_SECRET_KEY} value
-             * @param authorizationToken       the {@link HttpHeader#AUTHORIZATION} value (should start with
-             *                                 {@link AlpacaHeader#AUTHORIZATION_BASIC_PREFIX} or
-             *                                 {@link AlpacaHeader#AUTHORIZATION_BEARER_PREFIX})
+             * @param authenticationKeyID      the {@link ApiHeader#API_KEY_ID} value
+             * @param authenticationSecretKey  the {@link ApiHeader#API_SECRET_KEY} value
+             * @param authorizationToken       the {@link HttpHeaders#AUTHORIZATION} value (should start with
+             *                                 {@link ApiHeader#AUTHORIZATION_BASIC_PREFIX} or
+             *                                 {@link ApiHeader#AUTHORIZATION_BEARER_PREFIX})
              * @param apiEnvironment           the {@link ApiEnvironment}. If {@link ApiEnvironment#PRODUCTION}, then
              *                                 {@link #ENVIRONMENT_URL_PRODUCTION} is used. If
              *                                 {@link ApiEnvironment#DEVELOPMENT}, then {@link #ENVIRONMENT_URL_DEVELOPMENT}
@@ -236,7 +233,8 @@ tasks.openApiGenerate.configure {
                         .connectTimeout(ofSeconds(10))
                         .executor(newVirtualThreadPerTaskExecutor())
                         .build();
-                final var baseUri = apiEnvironment == PRODUCTION ? ENVIRONMENT_URL_PRODUCTION : ENVIRONMENT_URL_DEVELOPMENT;
+                final var baseUri = apiEnvironment == ApiEnvironment.PRODUCTION ? ENVIRONMENT_URL_PRODUCTION :
+                        ENVIRONMENT_URL_DEVELOPMENT;
                 apiClient = new ApiClient(null, objectMapper != null ? objectMapper :
                         ApiClient.createDefaultObjectMapper(), null) {
 
@@ -254,10 +252,10 @@ tasks.openApiGenerate.configure {
                 apiClient.setReadTimeout(ofSeconds(10));
                 apiClient.setRequestInterceptor(builder -> {
                     if (authenticationKeyID != null) {
-                        builder.header(API_KEY_ID, authenticationKeyID);
+                        builder.header(ApiHeader.API_KEY_ID, authenticationKeyID);
                     }
                     if (authenticationSecretKey != null) {
-                        builder.header(API_SECRET_KEY, authenticationSecretKey);
+                        builder.header(ApiHeader.API_SECRET_KEY, authenticationSecretKey);
                     }
                     if (authorizationToken != null) {
                         builder.header(HttpHeaders.AUTHORIZATION, authorizationToken);

@@ -4,10 +4,10 @@ import com.google.common.net.HttpHeaders;
 import org.jspecify.annotations.NullMarked;
 
 /**
- * {@link AlpacaHeader} contains Alpaca header {@link String} constants.
+ * {@link ApiHeader} contains API header {@link String} constants.
  */
 @NullMarked
-public final class AlpacaHeader {
+public final class ApiHeader {
 
     /**
      * The API Key ID header {@link String}: <code>"APCA-API-KEY-ID"</code>
@@ -29,5 +29,5 @@ public final class AlpacaHeader {
      */
     public static final String AUTHORIZATION_BEARER_PREFIX = "Bearer ";
 
-    private AlpacaHeader() {}
+    private ApiHeader() {}
 }
