@@ -1,9 +1,10 @@
 import com.google.common.base.CaseFormat.LOWER_CAMEL
 import com.google.common.base.CaseFormat.LOWER_HYPHEN
 import com.google.common.base.CaseFormat.UPPER_CAMEL
+import com.google.common.base.Splitter
 
 plugins {
-    java
+    `java-library`
     id("org.openapi.generator")
 }
 
@@ -11,9 +12,9 @@ val jacksonVersion = "3.2.0"
 val jacksonAnnotationsVersion = "2.22"
 
 dependencies {
-    implementation("tools.jackson.core:jackson-core:$jacksonVersion")
-    implementation("tools.jackson.core:jackson-databind:$jacksonVersion")
-    implementation("com.fasterxml.jackson.core:jackson-annotations:$jacksonAnnotationsVersion")
+    api("tools.jackson.core:jackson-core:$jacksonVersion")
+    api("tools.jackson.core:jackson-databind:$jacksonVersion")
+    api("com.fasterxml.jackson.core:jackson-annotations:$jacksonAnnotationsVersion")
 }
 
 val extension = extensions.create("openApiGeneratorAdapted", OpenApiGeneratorAdaptedExtension::class)
@@ -41,13 +42,106 @@ tasks.openApiGenerate.configure {
     val environmentUrlDevelopment = extension.environmentUrlDevelopment.get()
     doLast {
         val srcMainJava = outputDir.get().asFile.resolve("src/main/java/")
-        srcMainJava.walkTopDown().filter { it.isFile }.forEach {
-            it.writeText(it.readText()
-                    .replace("@javax.annotation.Nullable", "@org.jspecify.annotations.Nullable")
-                    .replace("@javax.annotation.Nonnull", "@org.jspecify.annotations.NonNull")
-                    .replace("@javax.annotation.Generated", "@javax.annotation.processing.Generated"))
+        srcMainJava.walkTopDown().filter { it.isFile }.forEach { sourceFile ->
+            var source = sourceFile.readText()
+                    .replaceFirst("\nimport", """
+                    import org.jspecify.annotations.*;
+                    import net.jacobpeterson.alpacajava.common.sse.*;
+                    import
+                    """.trimIndent())
+                    .replace("@javax.annotation.Nullable", "@Nullable")
+                    .replace("@javax.annotation.Nonnull", "@NonNull")
+                    .replace("@javax.annotation.Generated", "@javax.annotation.processing.Generated")
+                    .replace("if (memberVarResponseInterceptor != null) {\n        " +
+                            "memberVarResponseInterceptor.accept(localVarResponse);\n      }\n      " +
+                            "InputStream localVarResponseBody = null;\n      try {",
+                            "InputStream localVarResponseBody = null;\n      try {\n        " +
+                                    "if (memberVarResponseInterceptor != null) {\n          " +
+                                    "memberVarResponseInterceptor.accept(localVarResponse);\n        }")
+            val headersCall = ".headers()"
+            source = source.replace("$headersCall.map()", headersCall)
+            val httpRequestNewBuilder = "HttpRequest.newBuilder()"
+            source = source.replace(httpRequestNewBuilder,
+                    "$httpRequestNewBuilder.header(\"Accept-Encoding\", \"gzip\")")
+            var acceptCommaTextEventStreamIndex = 0
+            while (source.indexOf("\"Accept\", \"text/event-stream\"", acceptCommaTextEventStreamIndex + 1)
+                            .also { acceptCommaTextEventStreamIndex = it } != -1) {
+                val privateHttpRequestBuilder = "private HttpRequest.Builder "
+                val methodNameStartIndex = source.lastIndexOf(privateHttpRequestBuilder,
+                        acceptCommaTextEventStreamIndex)
+                val methodName = source.substring(methodNameStartIndex + privateHttpRequestBuilder.length,
+                        source.indexOf("RequestBuilder(", methodNameStartIndex))
+                val methodIndex = source.indexOf(" $methodName(")
+                val methodJavadocAndAnnotations = source.substring(source.lastIndexOf("/**", methodIndex),
+                        source.lastIndexOf("public", methodIndex))
+                val methodLine = source.substring(source.lastIndexOf('\n', methodIndex) + 1,
+                        source.indexOf('\n', methodIndex))
+                val methodReturnType = Regex(" (?:List<)?([\\w_]*)>? $methodName").find(methodLine)!!.groupValues[1]
+                val methodArguments = Regex("$methodName\\((.*)\\)").find(methodLine)!!.groupValues[1]
+                val methodArgumentNames = Splitter.on(", ").split(methodArguments)
+                        .joinToString { it.substring(it.lastIndexOf(' ')) }
+                val methodEndBrace = "\n  }"
+                val methodRemove = IntRange(source.lastIndexOf("/**", methodIndex),
+                        source.indexOf(methodEndBrace, source.indexOf(methodEndBrace, methodIndex) + 1) +
+                                methodEndBrace.length)
+                source = source.removeRange(methodRemove)
+                acceptCommaTextEventStreamIndex -= methodRemove.last - methodRemove.first
+                val methodHttpInfoIndex = source.indexOf(" ${methodName}WithHttpInfo(")
+                val methodHttpInfoRemove = IntRange(source.lastIndexOf("/**", methodHttpInfoIndex),
+                        source.indexOf(methodEndBrace, source.indexOf(methodEndBrace, methodHttpInfoIndex) + 1) +
+                                methodEndBrace.length)
+                val sseMethods = """
+                $methodJavadocAndAnnotations
+                public SseResponse $methodName($methodArguments, SseListener<$methodReturnType> sseListener)
+                        throws ApiException {
+                    return $methodName($methodArgumentNames, sseListener, null);
+                }
+
+                $methodJavadocAndAnnotations
+                public SseResponse $methodName($methodArguments, SseListener<$methodReturnType> sseListener,
+                        @Nullable Map<String, String> headers) throws ApiException {
+                    try {
+                        var response = memberVarHttpClient.send(
+                                ${methodName}RequestBuilder($methodArgumentNames, headers)
+                                        .setHeader("Accept-Encoding", "identity").build(),
+                                HttpResponse.BodyHandlers.ofInputStream());
+                        try {
+                            if (memberVarResponseInterceptor != null) {
+                                memberVarResponseInterceptor.accept(response);
+                            }
+                            if (response.statusCode() / 100 != 2) {
+                                throw getApiException("$methodName", response);
+                            }
+                            return new SseResponse(memberVarHttpClient, response, sseListener, s -> {
+                                try {
+                                    return memberVarObjectMapper.readValue(s, new TypeReference<$methodReturnType>() {}); 
+                                } catch (JacksonException e) {
+                                    throw new ApiException(e);
+                                }
+                            });
+                        } catch (Throwable throwable) {
+                            response.body().close();
+                            throw throwable;
+                        }
+                    } catch (IOException e) {
+                        throw new ApiException(e);
+                    } catch (InterruptedException e) {
+                        Thread.currentThread().interrupt();
+                        throw new ApiException(e);
+                    }
+                }
+                """.trimIndent()
+                source = source.replaceRange(methodHttpInfoRemove, sseMethods)
+                acceptCommaTextEventStreamIndex -= methodHttpInfoRemove.last - methodHttpInfoRemove.first
+                acceptCommaTextEventStreamIndex += sseMethods.length
+            }
+            sourceFile.writeText(source)
         }
         val outputPackageDirectory = srcMainJava.resolve(outputPackageName.replace('.', '/'))
+        outputPackageDirectory.resolve("ApiException.java").apply { writeText(readText()
+                .replace("extends Exception {", "extends RuntimeException {")) }
+        outputPackageDirectory.resolve("ApiResponse.java").apply { writeText(readText()
+                .replace("Map<String, List<String>>", "java.net.http.HttpHeaders")) }
         val apiClassNamesOfMethodNames = outputPackageDirectory.resolve(apiPackageName).list()
                 .map { it.replace(".java", "") }
                 .associateBy { UPPER_CAMEL.to(LOWER_CAMEL, it.substring(0, it.length - 3)) }
@@ -62,6 +156,7 @@ tasks.openApiGenerate.configure {
         import org.jspecify.annotations.NullMarked;
         import org.jspecify.annotations.Nullable;
         import tools.jackson.databind.ObjectMapper;
+        import com.google.common.net.HttpHeaders;
 
         import java.io.InputStream;
         import java.net.http.HttpClient;
@@ -69,12 +164,10 @@ tasks.openApiGenerate.configure {
         import java.net.http.HttpResponse;
         import java.util.function.Consumer;
 
-        import static com.google.common.net.HttpHeaders.ACCEPT_ENCODING;
-        import static com.google.common.net.HttpHeaders.AUTHORIZATION;
         import static java.time.Duration.ofSeconds;
+        import static java.util.concurrent.Executors.newVirtualThreadPerTaskExecutor;
         import static net.jacobpeterson.alpacajava.common.AlpacaHeader.API_KEY_ID;
         import static net.jacobpeterson.alpacajava.common.AlpacaHeader.API_SECRET_KEY;
-        import static net.jacobpeterson.alpacajava.common.AlpacaHeader.AUTHORIZATION_TOKEN_BEARER_PREFIX;
         import static net.jacobpeterson.alpacajava.common.ApiEnvironment.PRODUCTION;
 
         /**
@@ -110,11 +203,10 @@ tasks.openApiGenerate.configure {
 
             /**
              * Calls {@link #${className}(HttpClient, ObjectMapper, String, String, String, ApiEnvironment, Consumer, Consumer)}
-             * with everything set to <code>null</code> except <code>authorizationBearerToken</code> and
-             * <code>apiEnvironment</code>.
+             * with everything set to <code>null</code> except <code>authorizationToken</code> and <code>apiEnvironment</code>.
              */
-            public ${className}(final @Nullable String authorizationBearerToken, final @Nullable ApiEnvironment apiEnvironment) {
-                this(null, null, null, null, authorizationBearerToken, apiEnvironment, null, null);
+            public ${className}(final @Nullable String authorizationToken, final @Nullable ApiEnvironment apiEnvironment) {
+                this(null, null, null, null, authorizationToken, apiEnvironment, null, null);
             }
 
             /**
@@ -124,7 +216,9 @@ tasks.openApiGenerate.configure {
              * @param objectMapper             the {@link ObjectMapper}, or <code>null</code> to use a new default instance
              * @param authenticationKeyID      the {@link AlpacaHeader#API_KEY_ID} value
              * @param authenticationSecretKey  the {@link AlpacaHeader#API_SECRET_KEY} value
-             * @param authorizationBearerToken the {@link AlpacaHeader#AUTHORIZATION_TOKEN_BEARER_PREFIX} suffix value
+             * @param authorizationToken       the {@link HttpHeader#AUTHORIZATION} value (should start with
+             *                                 {@link AlpacaHeader#AUTHORIZATION_BASIC_PREFIX} or
+             *                                 {@link AlpacaHeader#AUTHORIZATION_BEARER_PREFIX})
              * @param apiEnvironment           the {@link ApiEnvironment}. If {@link ApiEnvironment#PRODUCTION}, then
              *                                 {@link #ENVIRONMENT_URL_PRODUCTION} is used. If
              *                                 {@link ApiEnvironment#DEVELOPMENT}, then {@link #ENVIRONMENT_URL_DEVELOPMENT}
@@ -135,11 +229,13 @@ tasks.openApiGenerate.configure {
              */
             public ${className}(final @Nullable HttpClient httpClient, final @Nullable ObjectMapper objectMapper,
                     final @Nullable String authenticationKeyID, final @Nullable String authenticationSecretKey,
-                    final @Nullable String authorizationBearerToken, final @Nullable ApiEnvironment apiEnvironment,
+                    final @Nullable String authorizationToken, final @Nullable ApiEnvironment apiEnvironment,
                     final @Nullable Consumer<HttpRequest.Builder> requestInterceptor,
                     final @Nullable Consumer<HttpResponse<InputStream>> responseInterceptor) {
-                this.httpClient = httpClient != null ? httpClient :
-                        HttpClient.newBuilder().connectTimeout(ofSeconds(10)).build();
+                this.httpClient = httpClient != null ? httpClient : HttpClient.newBuilder()
+                        .connectTimeout(ofSeconds(10))
+                        .executor(newVirtualThreadPerTaskExecutor())
+                        .build();
                 final var baseUri = apiEnvironment == PRODUCTION ? ENVIRONMENT_URL_PRODUCTION : ENVIRONMENT_URL_DEVELOPMENT;
                 apiClient = new ApiClient(null, objectMapper != null ? objectMapper :
                         ApiClient.createDefaultObjectMapper(), null) {
@@ -157,15 +253,14 @@ tasks.openApiGenerate.configure {
                 };
                 apiClient.setReadTimeout(ofSeconds(10));
                 apiClient.setRequestInterceptor(builder -> {
-                    builder.header(ACCEPT_ENCODING, "gzip");
                     if (authenticationKeyID != null) {
                         builder.header(API_KEY_ID, authenticationKeyID);
                     }
                     if (authenticationSecretKey != null) {
                         builder.header(API_SECRET_KEY, authenticationSecretKey);
                     }
-                    if (authorizationBearerToken != null) {
-                        builder.header(AUTHORIZATION, AUTHORIZATION_TOKEN_BEARER_PREFIX + authorizationBearerToken);
+                    if (authorizationToken != null) {
+                        builder.header(HttpHeaders.AUTHORIZATION, authorizationToken);
                     }
                     if (requestInterceptor != null) {
                         requestInterceptor.accept(builder);

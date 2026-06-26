@@ -20,9 +20,14 @@ public final class AlpacaHeader {
     public static final String API_SECRET_KEY = "APCA-API-SECRET-KEY";
 
     /**
-     * The {@link HttpHeaders#AUTHORIZATION} token bearer prefix: <code>"Bearer "</code>
+     * The {@link HttpHeaders#AUTHORIZATION} basic prefix: <code>"Basic "</code>
      */
-    public static final String AUTHORIZATION_TOKEN_BEARER_PREFIX = "Bearer ";
+    public static final String AUTHORIZATION_BASIC_PREFIX = "Basic ";
+
+    /**
+     * The {@link HttpHeaders#AUTHORIZATION} bearer prefix: <code>"Bearer "</code>
+     */
+    public static final String AUTHORIZATION_BEARER_PREFIX = "Bearer ";
 
     private AlpacaHeader() {}
 }
