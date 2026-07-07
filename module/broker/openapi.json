@@ -1357,22 +1357,6 @@
             "description": "If true, overnight trading is disabled.",
             "type": "boolean"
           },
-          "dtbp_check": {
-            "deprecated": true,
-            "description": "both, entry, or exit. Controls Day Trading Margin Call (DTMC) checks.",
-            "enum": [
-              "both",
-              "entry",
-              "exit"
-            ],
-            "example": "both",
-            "type": "string",
-            "x-deprecation": {
-              "reason": "See https://docs.alpaca.markets/us/docs/understanding-finras-new-intraday-margin-rule-and-the-end-of-pdt",
-              "since": "2026-04-27T00:00:00Z",
-              "sunset": "2026-07-06T00:00:00Z"
-            }
-          },
           "fractional_trading": {
             "description": "If true, account is able to participate in fractional trading",
             "type": "boolean"
@@ -1394,16 +1378,6 @@
           "no_shorting": {
             "description": "If true, account becomes long-only mode.",
             "type": "boolean"
-          },
-          "pdt_check": {
-            "deprecated": true,
-            "example": "entry",
-            "type": "string",
-            "x-deprecation": {
-              "reason": "See https://docs.alpaca.markets/us/docs/understanding-finras-new-intraday-margin-rule-and-the-end-of-pdt",
-              "since": "2026-04-27T00:00:00Z",
-              "sunset": "2026-07-06T00:00:00Z"
-            }
           },
           "ptp_no_exception_entry": {
             "description": "If set to true then Alpaca will accept orders for PTP symbols with no exception. Default is false.",
@@ -2012,7 +1986,7 @@
             "type": "string"
           },
           "admin_configurations": {
-            "$ref": "#/components/schemas/AdminConfigurations"
+            "$ref": "#/components/schemas/AdminConfigurationsEvent"
           },
           "at": {
             "description": "timestamp of event",
@@ -2047,16 +2021,6 @@
           },
           "options": {
             "$ref": "#/components/schemas/OptionsApprovalEvent"
-          },
-          "pattern_day_trader": {
-            "deprecated": true,
-            "description": "If true the pattern_day_trader flag was set for the account, if false, the flag was reset.",
-            "type": "boolean",
-            "x-deprecation": {
-              "reason": "See https://docs.alpaca.markets/us/docs/understanding-finras-new-intraday-margin-rule-and-the-end-of-pdt",
-              "since": "2026-04-27T00:00:00Z",
-              "sunset": "2026-07-06T00:00:00Z"
-            }
           },
           "reason": {
             "deprecated": true,
@@ -2923,7 +2887,7 @@
         ]
       },
       "AdminConfigurations": {
-        "description": "These configurations show account properties that are overriden either by Alpaca Broker Operations or an automated process.\n\nThese values cannot be modified by the Broker Partners.\n\n\nFor the **events** interface we are only broadcasting changes to admin configurations. In case nothing changed for a flag that will not be included in unrelated update events.\n\nDepending on the type of the Admin Configurations the sent event will behave differently. For bool flags we are only sending the new value.\n\nFor example the following payload means, that the disable_shorting flag was set to true from false:\n\n```\n{\n  \"disable_shorting\": false\n}\n```\n\nFor other data types, we are embeding the old and new values into the payload. For example changing the max_margin_multiplier from 4 to 1 will yield this payload:\n\n```\n{\n  \"max_margin_multiplier\": {\n    \"old\": 4,\n    \"new\": 1,\n  }\n}\n```\n\nIntroducing an override value from the default will yield a null value as old. For example restricting the max_margin_multipler to 1 from default will yield the following payload:\n\n```\n{\n  \"max_margin_multiplier\": {\n    \"old\": null,\n    \"new\": 1,\n  }\n}\n```",
+        "description": "These configurations show account properties that are overriden either by Alpaca Broker Operations or an automated process.\n\nThese values cannot be modified by the Broker Partners.\n\nThis schema represents the current, effective value of each configuration (e.g. as returned by the get trading account endpoint). For the shape of the payloads broadcast by the **events** streaming API when these values change, see [AdminConfigurationsEvent](#/components/schemas/AdminConfigurationsEvent).",
         "properties": {
           "acct_daily_transfer_limit": {
             "description": "Override the correspondent level daily transfer limits",
@@ -2963,7 +2927,81 @@
             "type": "boolean"
           },
           "max_margin_multiplier": {
-            "description": "Max margin multipler is set by admin to this value",
+            "description": "The max margin multiplier set by admin for this account. Can be \"1\", \"2\", or \"4\".",
+            "type": "string"
+          },
+          "max_options_trading_level": {
+            "description": "The max options trading level set by admin for this account.\n0=disabled, 1=Covered Call/Cash-Secured Put, 2=Long Call/Put, 3=Spreads/Straddles.\n",
+            "enum": [
+              0,
+              1,
+              2,
+              3
+            ],
+            "type": "integer"
+          },
+          "outgoing_transfers_blocked": {
+            "description": "If true, outgoing transfers from this account are rejected",
+            "type": "boolean"
+          },
+          "restrict_to_liquidation_reasons": {
+            "$ref": "#/components/schemas/RestrictToLiquidationReasons"
+          }
+        },
+        "title": "AdminConfigurations",
+        "type": "object"
+      },
+      "AdminConfigurationsEvent": {
+        "description": "Represents a change to admin configurations, as broadcast over the **events** streaming API. Only fields whose value changed are included; unrelated update events will not include a flag that did not change.\n\nDepending on the type of the Admin Configuration, the sent event will behave differently. For bool flags we are only sending the new value.\n\nFor example, the following payload means that the disable_shorting flag was set to true:\n\n```\n{\n  \"disable_shorting\": true\n}\n```\n\nFor other data types, we are embedding the old and new values into the payload. For example changing the max_margin_multiplier from 4 to 1 will yield this payload:\n\n```\n{\n  \"max_margin_multiplier\": {\n    \"from\": 4,\n    \"to\": 1\n  }\n}\n```\n\nIntroducing an override value from the default will yield a null value as `from`. For example restricting the max_margin_multiplier to 1 from default will yield the following payload:\n\n```\n{\n  \"max_margin_multiplier\": {\n    \"from\": null,\n    \"to\": 1\n  }\n}\n```",
+        "properties": {
+          "acct_daily_transfer_limit": {
+            "description": "The correspondent level daily transfer limit override was changed",
+            "properties": {
+              "from": {
+                "description": "Old value of the daily transfer limit",
+                "type": "string"
+              },
+              "to": {
+                "description": "New value of the daily transfer limit",
+                "type": "string"
+              }
+            },
+            "type": "object"
+          },
+          "allow_instant_ach": {
+            "description": "If true, the account is allowed to perform instant ACH",
+            "type": "boolean"
+          },
+          "disable_algodash_access": {
+            "description": "If true, the account is allowed to access algo dash",
+            "type": "boolean"
+          },
+          "disable_api_key": {
+            "description": "If true, the account's API key will be disabled",
+            "type": "boolean"
+          },
+          "disable_crypto": {
+            "description": "If true, the account is not allowed to trade cryptos",
+            "type": "boolean"
+          },
+          "disable_day_trading": {
+            "description": "If true, the account is not allowed to day trade (e.g. buy and sell the same security on the same day)",
+            "type": "boolean"
+          },
+          "disable_fractional": {
+            "description": "If true, the account cannot create orders for fractional share positions",
+            "type": "boolean"
+          },
+          "disable_shorting": {
+            "description": "If true the account is not allowed to create short position orders",
+            "type": "boolean"
+          },
+          "incoming_transfers_blocked": {
+            "description": "If true, incoming transfers to this account are rejected",
+            "type": "boolean"
+          },
+          "max_margin_multiplier": {
+            "description": "Max margin multiplier was changed by admin to this value",
             "properties": {
               "from": {
                 "description": "Old value of margin multiplier",
@@ -2977,10 +3015,10 @@
             "type": "object"
           },
           "max_options_trading_level": {
-            "description": "Max options trading level is set by admin to this value. It can be 0, 1 or 2.",
+            "description": "Max options trading level was changed by admin to this value. It can be 0, 1, 2, or 3.",
             "properties": {
               "from": {
-                "description": "New value of max options trading level",
+                "description": "Old value of max options trading level",
                 "type": "string"
               },
               "to": {
@@ -2994,21 +3032,11 @@
             "description": "If true, outgoing transfers from this account are rejected",
             "type": "boolean"
           },
-          "pdt_check_mode": {
-            "deprecated": true,
-            "description": "PDT check mode",
-            "type": "string",
-            "x-deprecation": {
-              "reason": "See https://docs.alpaca.markets/us/docs/understanding-finras-new-intraday-margin-rule-and-the-end-of-pdt",
-              "since": "2026-04-27T00:00:00Z",
-              "sunset": "2026-07-06T00:00:00Z"
-            }
-          },
           "restrict_to_liquidation_reasons": {
             "$ref": "#/components/schemas/RestrictToLiquidationReasons"
           }
         },
-        "title": "AdminConfigurations",
+        "title": "AdminConfigurationsEvent",
         "type": "object"
       },
       "AggregatePositionResponse": {
@@ -3416,30 +3444,6 @@
       "AssetEntryRequirements": {
         "description": "Defines the necessary conditions that must be met to initiate a position for a specific asset",
         "properties": {
-          "dtbp_long": {
-            "deprecated": true,
-            "description": "The percentage of the asset's market value required as Day Trading (4x) buying power to open a long position",
-            "example": "0.25",
-            "format": "decimal",
-            "type": "string",
-            "x-deprecation": {
-              "reason": "See https://docs.alpaca.markets/us/docs/understanding-finras-new-intraday-margin-rule-and-the-end-of-pdt",
-              "since": "2026-04-27T00:00:00Z",
-              "sunset": "2026-07-06T00:00:00Z"
-            }
-          },
-          "dtbp_short": {
-            "deprecated": true,
-            "description": "The percentage of the asset's market value required as Day Trading (4x) buying power to open a short position",
-            "example": "0.3",
-            "format": "decimal",
-            "type": "string",
-            "x-deprecation": {
-              "reason": "See https://docs.alpaca.markets/us/docs/understanding-finras-new-intraday-margin-rule-and-the-end-of-pdt",
-              "since": "2026-04-27T00:00:00Z",
-              "sunset": "2026-07-06T00:00:00Z"
-            }
-          },
           "regt_long": {
             "description": "The percentage of the asset's market value required as Reg T (2x) buying power to open a long position",
             "example": "0.5",
@@ -7650,11 +7654,12 @@
         "type": "string"
       },
       "JournalStatus": {
-        "description": "Represents the status that a Journal instance can be in.\n\n**Current Values**\n\nqueued\tJournal in queue to be processed. Journal is not processed yet.\n\nsent_to_clearing\tJournal sent to be processed by Alpaca's booking system. The journal is not processed yet.\n\npending\t    Journal pending to be processed as it requires manual approval from Alpaca operations (for example due to hitting JNLC daily limits).\n\nexecuted\tJournal executed and balances updated for both sides of \nthe journal transaction. This is not a final status, journals can be reversed if there is an error.\n\nrejected\tJournal rejected. Please try again.\n\ncanceled\tJournal canceled. This is a **FINAL** status.\n\nrefused\tJournal refused. Please try again.\n\ndeleted\tJournal deleted. This is a **FINAL** status.\n\ncorrect\tJournal is corrected. Previously executed journal is cancelled and a new journal is corrected amount is created. This is a **FINAL** status.",
+        "description": "Represents the status that a Journal instance can be in.\n\n**Current Values**\n\nqueued\tJournal in queue to be processed. Journal is not processed yet.\n\nsent_to_clearing\tJournal sent to be processed by Alpaca's booking system. The journal is not processed yet.\n\npending\t    Journal pending to be processed as it requires manual approval from Alpaca operations (for example due to hitting JNLC daily limits).\n\nexecuted\tJournal executed and balances updated for both sides of \nthe journal transaction. This is not a final status, journals can be reversed if there is an error.\n\nactivity_created\tNon-trade activity has been created for journal (JNLC v2-only).\n\nrejected\tJournal rejected. Please try again.\n\ncanceled\tJournal canceled. This is a **FINAL** status.\n\nrefused\tJournal refused. Please try again.\n\ndeleted\tJournal deleted. This is a **FINAL** status.\n\ncorrect\tJournal is corrected. Previously executed journal is cancelled and a new journal is corrected amount is created. This is a **FINAL** status.",
         "enum": [
           "pending",
           "canceled",
           "executed",
+          "activity_created",
           "queued",
           "rejected",
           "deleted",
@@ -9539,81 +9544,6 @@
           }
         }
       },
-      "PDTRemoval": {
-        "deprecated": true,
-        "properties": {
-          "account_id": {
-            "description": "Account ID",
-            "example": "93f58d0b-6c53-432d-b8ce-2bad264dbd94",
-            "format": "uuid",
-            "type": "string"
-          },
-          "created_at": {
-            "description": "The request date and time",
-            "format": "date-time",
-            "type": "string"
-          },
-          "id": {
-            "description": "Unique ID",
-            "example": "52f8574c-96d5-49b6-94c1-2570a268434e",
-            "format": "uuid",
-            "type": "string"
-          },
-          "reason": {
-            "description": "Reason of rejection",
-            "example": "account is already approved once",
-            "type": "string"
-          },
-          "status": {
-            "description": "The request status",
-            "enum": [
-              "approved",
-              "rejected"
-            ],
-            "example": "rejected",
-            "type": "string"
-          }
-        },
-        "type": "object",
-        "x-deprecation": {
-          "reason": "See https://docs.alpaca.markets/us/docs/understanding-finras-new-intraday-margin-rule-and-the-end-of-pdt",
-          "since": "2026-04-27T00:00:00Z",
-          "sunset": "2026-07-06T00:00:00Z"
-        }
-      },
-      "PDTStatus": {
-        "deprecated": true,
-        "properties": {
-          "account_id": {
-            "description": "Account ID",
-            "example": "93f58d0b-6c53-432d-b8ce-2bad264dbd94",
-            "format": "uuid",
-            "type": "string"
-          },
-          "pdt": {
-            "description": "Account is currently flagged as Pattern Day Trader",
-            "example": true,
-            "type": "boolean"
-          },
-          "pdt_removed": {
-            "description": "The account has previously utilized its one-time PDT removal entitlement, and is not allowed to submit any further removal requests",
-            "example": true,
-            "type": "boolean"
-          },
-          "pdt_removed_at": {
-            "description": "Date and time when PDT was removed for the account. Null if PDT flag has never been lifted.",
-            "format": "date-time",
-            "nullable": true,
-            "type": "string"
-          }
-        },
-        "type": "object",
-        "x-deprecation": {
-          "reason": "See https://docs.alpaca.markets/us/docs/understanding-finras-new-intraday-margin-rule-and-the-end-of-pdt",
-          "since": "2026-04-27T00:00:00Z",
-          "sunset": "2026-07-06T00:00:00Z"
-        }
-      },
       "Portfolio": {
         "properties": {
           "cooldown_days": {
@@ -10373,16 +10303,6 @@
           "ach_return": {
             "description": "Set when an incoming ACH transfer gets rejected",
             "type": "boolean"
-          },
-          "pattern_day_trading": {
-            "deprecated": true,
-            "description": "Set when the trading account is marked as a PDT, but its equity falls below the $25k treshold",
-            "type": "boolean",
-            "x-deprecation": {
-              "reason": "See https://docs.alpaca.markets/us/docs/understanding-finras-new-intraday-margin-rule-and-the-end-of-pdt",
-              "since": "2026-04-27T00:00:00Z",
-              "sunset": "2026-07-06T00:00:00Z"
-            }
           },
           "position_to_equity_ratio": {
             "description": "Set when the position to equity ration exceeds the maximum limit",
@@ -11398,18 +11318,6 @@
             "example": "2021-04-01",
             "type": "string"
           },
-          "bod_dtbp": {
-            "deprecated": true,
-            "description": "bod_dtbp",
-            "example": "12345.6789",
-            "format": "decimal",
-            "type": "string",
-            "x-deprecation": {
-              "reason": "See https://docs.alpaca.markets/us/docs/understanding-finras-new-intraday-margin-rule-and-the-end-of-pdt",
-              "since": "2026-04-27T00:00:00Z",
-              "sunset": "2026-07-06T00:00:00Z"
-            }
-          },
           "buying_power": {
             "description": "Current available cash buying power. If multiplier = 2 then buying_power = max(equity-initial_margin(0) * 2). If multiplier = 1 then buying_power = cash.",
             "example": "12345.6789",
@@ -11451,29 +11359,6 @@
             "example": "USD",
             "type": "string"
           },
-          "daytrade_count": {
-            "deprecated": true,
-            "description": "The current number of daytrades that have been made in the last 5 trading days (inclusive of today)",
-            "example": 0,
-            "type": "integer",
-            "x-deprecation": {
-              "reason": "See https://docs.alpaca.markets/us/docs/understanding-finras-new-intraday-margin-rule-and-the-end-of-pdt",
-              "since": "2026-04-27T00:00:00Z",
-              "sunset": "2026-07-06T00:00:00Z"
-            }
-          },
-          "daytrading_buying_power": {
-            "deprecated": true,
-            "description": "Your buying power for day trades (continuously updated value)",
-            "example": "12345.6789",
-            "format": "decimal",
-            "type": "string",
-            "x-deprecation": {
-              "reason": "See https://docs.alpaca.markets/us/docs/understanding-finras-new-intraday-margin-rule-and-the-end-of-pdt",
-              "since": "2026-04-27T00:00:00Z",
-              "sunset": "2026-07-06T00:00:00Z"
-            }
-          },
           "effective_buying_power": {
             "description": "Effective buying power (duplicate of buying power)",
             "example": "12345.6789",
@@ -11512,28 +11397,6 @@
             "description": "Value of all cash as of previous trading day at 16:00:00 ET",
             "example": "12345.6789",
             "type": "string"
-          },
-          "last_daytrade_count": {
-            "deprecated": true,
-            "description": "Value of daytrade count as of previous trading day at 16:00:00 ET",
-            "example": 0,
-            "type": "integer",
-            "x-deprecation": {
-              "reason": "See https://docs.alpaca.markets/us/docs/understanding-finras-new-intraday-margin-rule-and-the-end-of-pdt",
-              "since": "2026-04-27T00:00:00Z",
-              "sunset": "2026-07-06T00:00:00Z"
-            }
-          },
-          "last_daytrading_buying_power": {
-            "deprecated": true,
-            "description": "Value of daytrading buying power as of previous trading day at 16:00:00 ET",
-            "example": "12345.6789",
-            "type": "string",
-            "x-deprecation": {
-              "reason": "See https://docs.alpaca.markets/us/docs/understanding-finras-new-intraday-margin-rule-and-the-end-of-pdt",
-              "since": "2026-04-27T00:00:00Z",
-              "sunset": "2026-07-06T00:00:00Z"
-            }
           },
           "last_equity": {
             "description": "Equity as of previous trading day at 16:00:00 ET",
@@ -11629,17 +11492,6 @@
             "example": 3,
             "type": "integer"
           },
-          "pattern_day_trader": {
-            "deprecated": true,
-            "description": "Whether account is flagged as pattern day trader or not",
-            "example": false,
-            "type": "boolean",
-            "x-deprecation": {
-              "reason": "See https://docs.alpaca.markets/us/docs/understanding-finras-new-intraday-margin-rule-and-the-end-of-pdt",
-              "since": "2026-04-27T00:00:00Z",
-              "sunset": "2026-07-06T00:00:00Z"
-            }
-          },
           "pending_reg_taf_fees": {
             "description": "Pending regulatory fees for the account.",
             "example": "0.01",
@@ -11709,7 +11561,14 @@
             "type": "boolean"
           },
           "user_configurations": {
-            "$ref": "#/components/schemas/AccountConfigurations"
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/AccountConfigurations"
+              }
+            ],
+            "description": "Custom user-level configuration overrides for this account.\n\nThis field is always present in the response, but its value will be `null` until user-level configurations have been explicitly set for the account.",
+            "nullable": true,
+            "type": "object"
           }
         },
         "required": [
@@ -11722,13 +11581,10 @@
           "currency",
           "buying_power",
           "regt_buying_power",
-          "daytrading_buying_power",
           "effective_buying_power",
           "non_marginable_buying_power",
-          "bod_dtbp",
           "accrued_fees",
           "portfolio_value",
-          "pattern_day_trader",
           "trading_blocked",
           "transfers_blocked",
           "account_blocked",
@@ -11745,7 +11601,6 @@
           "maintenance_margin",
           "last_maintenance_margin",
           "sma",
-          "daytrade_count",
           "balance_asof",
           "cash"
         ],
@@ -11763,16 +11618,12 @@
             "clearing_broker": "VELOX",
             "created_at": "2021-03-01T13:28:49.270232Z",
             "currency": "USD",
-            "daytrade_count": 0,
-            "daytrading_buying_power": "103556.8572572922",
             "equity": "28059.3882330664",
             "id": "c8f1ef5d-edc0-4f23-9ee4-378f19cb92a4",
             "initial_margin": "1598.7391165332",
             "intraday_adjustments": "0",
             "last_buying_power": "104433.9158860662",
             "last_cash": "23861.91",
-            "last_daytrade_count": 0,
-            "last_daytrading_buying_power": "104433.9158860662",
             "last_equity": "26977.323677655",
             "last_initial_margin": "1557.7068388275",
             "last_long_market_value": "3115.413677655",
@@ -11786,7 +11637,6 @@
             "options_approved_level": 0,
             "options_buying_power": "26460.65",
             "options_trading_level": 0,
-            "pattern_day_trader": true,
             "pending_reg_taf_fees": "0",
             "pending_transfer_out": "0",
             "portfolio_value": "28059.3882330664",
@@ -11813,16 +11663,12 @@
             "created_at": "2022-01-21T21:25:26.713802Z",
             "crypto_status": "PAPER_ONLY",
             "currency": "USD",
-            "daytrade_count": 0,
-            "daytrading_buying_power": "0",
             "equity": "83567.42",
             "id": "56712986-9ff7-4d8f-8e52-077e099e533e",
             "initial_margin": "0",
             "intraday_adjustments": "0",
             "last_buying_power": "41783.71",
             "last_cash": "41783.71",
-            "last_daytrade_count": 0,
-            "last_daytrading_buying_power": "0",
             "last_equity": "41783.71",
             "last_initial_margin": "0",
             "last_long_market_value": "0",
@@ -11837,7 +11683,6 @@
             "options_approved_level": 2,
             "options_buying_power": "83567.42",
             "options_trading_level": 1,
-            "pattern_day_trader": false,
             "pending_reg_taf_fees": "0.01",
             "pending_transfer_in": "0",
             "pending_transfer_out": "0",
@@ -17562,7 +17407,7 @@
     },
     "/v1/events/accounts/status": {
       "get": {
-        "description": "The accounts events API provides streaming of account changes as they occur, via SSE (server sent events). Past events can also be queried.\n\nEvents are generated for changes to the following account properties:\n- account_blocked\n- admin_configurations\n- cash_interest\n- crypto_status\n- kyc_results\n- options\n- pattern_day_trader\n- status\n- trading_blocked\n\nOnly the changed properties are included in the event payload.\n\nQuery Parameter Rules:\n- `since` is required if `until` specified\n- `since_id` is required if `until_id` specified\n- `since_ulid` is required if `until_ulid` specified\n- `since`, `since_id` and `since_ulid` can't be used at the same time\n\nBehavior:\nThis API supports querying a range of events, starting now or in the past. If the end of the range is in the future or not specified, the connection is kept open and future events are pushed.\n\nTo be specific:\n- if `since`, `since_id` or `since_ulid` is not specified, this will not return any historic data\n- if `until`, `until_id` or `until_ulid` is reached, the stream will end with a status of 200\n\n---\n\nNote for people using the clients generated from this OAS spec. Currently OAS-3 doesn't have full support for representing SSE style responses from an API, so if you are using a generated client and don't specify a `since` and `until` there is a good chance the generated clients will hang waiting for the response to end.\n\nIf you require the streaming capabilities we recommend not using the generated clients for this specific usecase until the OAS-3 standards come to a consensus on how to represent this correctly in OAS-3.\n",
+        "description": "The accounts events API provides streaming of account changes as they occur, via SSE (server sent events). Past events can also be queried.\n\nEvents are generated for changes to the following account properties:\n- account_blocked\n- admin_configurations\n- cash_interest\n- crypto_status\n- kyc_results\n- options\n- status\n- trading_blocked\n\nOnly the changed properties are included in the event payload.\n\nQuery Parameter Rules:\n- `since` is required if `until` specified\n- `since_id` is required if `until_id` specified\n- `since_ulid` is required if `until_ulid` specified\n- `since`, `since_id` and `since_ulid` can't be used at the same time\n\nBehavior:\nThis API supports querying a range of events, starting now or in the past. If the end of the range is in the future or not specified, the connection is kept open and future events are pushed.\n\nTo be specific:\n- if `since`, `since_id` or `since_ulid` is not specified, this will not return any historic data\n- if `until`, `until_id` or `until_ulid` is reached, the stream will end with a status of 200\n\n---\n\nNote for people using the clients generated from this OAS spec. Currently OAS-3 doesn't have full support for representing SSE style responses from an API, so if you are using a generated client and don't specify a `since` and `until` there is a good chance the generated clients will hang waiting for the response to end.\n\nIf you require the streaming capabilities we recommend not using the generated clients for this specific usecase until the OAS-3 standards come to a consensus on how to represent this correctly in OAS-3.\n",
         "operationId": "suscribeToAccountStatusSSE",
         "parameters": [
           {
@@ -19031,18 +18876,7 @@
             "in": "query",
             "name": "status",
             "schema": {
-              "enum": [
-                "pending",
-                "canceled",
-                "executed",
-                "queued",
-                "rejected",
-                "deleted",
-                "refused",
-                "sent_to_clearing",
-                "correct"
-              ],
-              "type": "string"
+              "$ref": "#/components/schemas/JournalStatus"
             }
           },
           {
@@ -20704,90 +20538,6 @@
           "Trading"
         ]
       }
-    },
-    "/v1/trading/accounts/{account_id}/account/pdt/one-time-removal": {
-      "parameters": [
-        {
-          "$ref": "#/components/parameters/AccountID"
-        }
-      ],
-      "post": {
-        "deprecated": true,
-        "description": "**Deprecation notice**\n\nFINRA's revised Rule 4210 replaces the legacy Pattern Day Trading (PDT) framework with an intraday margin regime, so this endpoint no longer reflects current regulatory behavior. See https://docs.alpaca.markets/us/docs/understanding-finras-new-intraday-margin-rule-and-the-end-of-pdt\n\nThis endpoint will be sunset July 6, 2026. Please remove calls to PDT-specific endpoints before this date.\n\n---\n\nRequests the exercise of pattern day trader one time removal for given account",
-        "operationId": "pdtOneTimeRemoval",
-        "responses": {
-          "200": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/PDTRemoval"
-                }
-              }
-            },
-            "description": "Response to PDT one time removal request"
-          },
-          "403": {
-            "content": {
-              "application/json": {
-                "examples": {
-                  "Account is not PDT": {
-                    "value": {
-                      "code": 40310000,
-                      "message": "account is not PDT"
-                    }
-                  }
-                },
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            },
-            "description": "Forbidden\n\nAccount is not flagged as PDT."
-          }
-        },
-        "summary": "Exercise PDT one time removal",
-        "tags": [
-          "Accounts"
-        ],
-        "x-deprecation": {
-          "reason": "See https://docs.alpaca.markets/us/docs/understanding-finras-new-intraday-margin-rule-and-the-end-of-pdt",
-          "since": "2026-04-27T00:00:00Z",
-          "sunset": "2026-07-06T00:00:00Z"
-        }
-      }
-    },
-    "/v1/trading/accounts/{account_id}/account/pdt/status": {
-      "get": {
-        "deprecated": true,
-        "description": "**Deprecation notice**\n\nFINRA's revised Rule 4210 replaces the legacy Pattern Day Trading (PDT) framework with an intraday margin regime, so this endpoint no longer reflects current regulatory behavior. See https://docs.alpaca.markets/us/docs/understanding-finras-new-intraday-margin-rule-and-the-end-of-pdt\n\nThis endpoint will be sunset July 6, 2026. Please remove calls to PDT-specific endpoints before this date.\n\n---\n\nRetrieves the account's pattern day trader status",
-        "operationId": "pdtGetStatus",
-        "responses": {
-          "200": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/PDTStatus"
-                }
-              }
-            },
-            "description": "The requested Pattern Day Trader Status"
-          }
-        },
-        "summary": "Get Pattern Day Trader Status for account",
-        "tags": [
-          "Accounts"
-        ],
-        "x-deprecation": {
-          "reason": "See https://docs.alpaca.markets/us/docs/understanding-finras-new-intraday-margin-rule-and-the-end-of-pdt",
-          "since": "2026-04-27T00:00:00Z",
-          "sunset": "2026-07-06T00:00:00Z"
-        }
-      },
-      "parameters": [
-        {
-          "$ref": "#/components/parameters/AccountID"
-        }
-      ]
     },
     "/v1/trading/accounts/{account_id}/account/portfolio/history": {
       "get": {
