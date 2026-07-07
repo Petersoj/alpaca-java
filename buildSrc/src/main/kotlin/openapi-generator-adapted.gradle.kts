@@ -12,6 +12,8 @@ val jacksonVersion = "3.2.0"
 val jacksonAnnotationsVersion = "2.22"
 
 dependencies {
+    api(project(":module:common"))
+
     api("tools.jackson.core:jackson-core:$jacksonVersion")
     api("tools.jackson.core:jackson-databind:$jacksonVersion")
     api("com.fasterxml.jackson.core:jackson-annotations:$jacksonAnnotationsVersion")
