@@ -11,9 +11,9 @@
     <img src="https://img.shields.io/badge/GitHub_Discussions-royalblue?logo=github" alt="GitHub Discussions"></a>
     <br>
     <a href="https://central.sonatype.com/search?namespace=net.jacobpeterson.alpaca-java">
-    <img src="https://img.shields.io/badge/Maven_Central-11.0.0-pre.0-blue?logo=apachemaven" alt="Maven Central"></a>
+    <img src="https://img.shields.io/badge/Maven_Central-11.0.0--pre.0-blue?logo=apachemaven" alt="Maven Central"></a>
     <a href="https://javadoc.io/doc/net.jacobpeterson.alpaca-java">
-    <img src="https://img.shields.io/badge/javadoc-11.0.0-pre.0-brightgreen" alt="javadoc"></a>
+    <img src="https://img.shields.io/badge/javadoc-11.0.0--pre.0-brightgreen" alt="javadoc"></a>
     <br>
     <a href="https://openjdk.org/projects/jdk/25">
     <img src="https://img.shields.io/badge/Java_Version-25-orange?logo=java" alt="Java Version"></a>
