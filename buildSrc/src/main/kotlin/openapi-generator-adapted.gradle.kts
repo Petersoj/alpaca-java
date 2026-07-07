@@ -140,10 +140,17 @@ tasks.openApiGenerate.configure {
             sourceFile.writeText(source)
         }
         val outputPackageDirectory = srcMainJava.resolve(outputPackageName.replace('.', '/'))
-        outputPackageDirectory.resolve("ApiException.java").apply { writeText(readText()
-                .replace("extends Exception {", "extends RuntimeException {")) }
-        outputPackageDirectory.resolve("ApiResponse.java").apply { writeText(readText()
-                .replace("Map<String, List<String>>", "java.net.http.HttpHeaders")) }
+        outputPackageDirectory.resolve("ApiClient.java").apply {
+            val apiClientConstructor = "public ApiClient() {"
+            writeText(readText().replace(apiClientConstructor,
+                    "public ApiClient(ObjectMapper mapper) { this.mapper = mapper; }$apiClientConstructor"))
+        }
+        outputPackageDirectory.resolve("ApiException.java").apply {
+            writeText(readText().replace("extends Exception {", "extends RuntimeException {"))
+        }
+        outputPackageDirectory.resolve("ApiResponse.java").apply {
+            writeText(readText().replace("Map<String, List<String>>", "java.net.http.HttpHeaders"))
+        }
         val apiClassNamesOfMethodNames = outputPackageDirectory.resolve(apiPackageName).list()
                 .map { it.replace(".java", "") }
                 .associateBy { UPPER_CAMEL.to(LOWER_CAMEL, it.substring(0, it.length - 3)) }
@@ -237,8 +244,7 @@ tasks.openApiGenerate.configure {
                         .build();
                 final var baseUri = apiEnvironment == ApiEnvironment.PRODUCTION ? ENVIRONMENT_URL_PRODUCTION :
                         ENVIRONMENT_URL_DEVELOPMENT;
-                apiClient = new ApiClient(null, objectMapper != null ? objectMapper :
-                        ApiClient.createDefaultObjectMapper(), null) {
+                apiClient = new ApiClient(objectMapper != null ? objectMapper : ApiClient.createDefaultObjectMapper()) {
 
                     @Override
                     public HttpClient getHttpClient() {
