@@ -49,6 +49,9 @@ tasks.openApiGenerate.configure {
                     .replaceFirst("\nimport", """
                     import org.jspecify.annotations.*;
                     import net.jacobpeterson.alpacajava.common.sse.*;
+                    import com.google.common.collect.ImmutableMap;
+                    import java.util.Arrays;
+                    import java.util.Locale;
                     import
                     """.trimIndent())
                     .replace("@javax.annotation.Nullable", "@Nullable")
@@ -60,6 +63,17 @@ tasks.openApiGenerate.configure {
                             "InputStream localVarResponseBody = null;\n      try {\n        " +
                                     "if (memberVarResponseInterceptor != null) {\n          " +
                                     "memberVarResponseInterceptor.accept(localVarResponse);\n        }")
+            Regex("@JsonCreator\\n {2}public static ([\\w_]*)[\\s\\S]*?\\n {2}}").find(source)?.run {
+                val type = groupValues[1]
+                source = source.replaceRange(range.first, range.last + 1,  """
+                public static final ImmutableMap<String, $type> VALUES_OF_UPPERCASED_STRINGS = Arrays.stream(values())
+                        .collect(ImmutableMap.toImmutableMap(value -> value.toString().toUpperCase(Locale.ROOT), e -> e));
+                @JsonCreator
+                public static $type fromValue(String value) {
+                    return VALUES_OF_UPPERCASED_STRINGS.get(value.toUpperCase(Locale.ROOT));
+                }
+                """.trimIndent())
+            }
             val headersCall = ".headers()"
             source = source.replace("$headersCall.map()", headersCall)
             val httpRequestNewBuilder = "HttpRequest.newBuilder()"
