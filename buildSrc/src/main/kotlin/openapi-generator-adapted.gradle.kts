@@ -173,6 +173,7 @@ tasks.openApiGenerate.configure {
         package ${outputPackageName};
 
         import com.google.errorprone.annotations.concurrent.LazyInit;
+        import lombok.Getter;
         import net.jacobpeterson.alpacajava.common.ApiHeader;
         import net.jacobpeterson.alpacajava.common.ApiEnvironment;
         import ${outputPackageName}.${apiPackageName}.*;
@@ -194,7 +195,7 @@ tasks.openApiGenerate.configure {
          * {@link ${className}}: $projectDescription
          */
         @NullMarked
-        public class $className implements AutoCloseable {
+        public class $className {
 
             /**
              * The URL for {@link ApiEnvironment#PRODUCTION}: <code>"$environmentUrlProduction"</code>
@@ -206,7 +207,7 @@ tasks.openApiGenerate.configure {
              */
             public static final String ENVIRONMENT_URL_DEVELOPMENT = "$environmentUrlDevelopment";
 
-            private final HttpClient httpClient;
+            private final @Getter HttpClient httpClient;
             private final ApiClient apiClient;
             ${apiClassNamesOfMethodNames.entries.joinToString(separator = "\n    ") { (methodName, apiClassName) ->
                 "private @Nullable @LazyInit $apiClassName $methodName;" }}
@@ -287,11 +288,6 @@ tasks.openApiGenerate.configure {
                     }
                 });
                 apiClient.setResponseInterceptor(responseInterceptor);
-            }
-
-            @Override
-            public void close() {
-                httpClient.close();
             }
 
             ${apiClassNamesOfMethodNames.entries.joinToString(separator = "\n") { (methodName, apiClassName) -> """
