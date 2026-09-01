@@ -56,7 +56,7 @@ Some awesome things about Alpaca Java:
 
 - Exhaustive Javadoc documentation
 - Uses Java's native `HttpClient` (which also enables you to provide a different HTTP client implementation)
-- Lightweight with minimal dependencies (only dependencies are: SLF4j, Guava, Jackson, and MessagePack)
+- Lightweight with minimal dependencies (only dependencies are: SLF4j, Guava, Jackson, MessagePack)
 - Releases are built directly from this source repository using GitHub Actions CI
 - Kotlin friendly
 - MIT licensed
@@ -83,8 +83,8 @@ trading application.
 # ⚠️ WebSocket Support is Coming Soon ⚠️
 
 Version 11 is a pre-release that provides the REST API and SSE support for the latest Alpaca OpenAPI specifications.
-WebSocket support for streaming market data and trade updates is coming soon. Previous version had WebSocket support via
-OkHttp, but this library has switched to using Java's native `HttpClient` and WebSocket support is still a WIP.
+WebSocket support for streaming market data and trade updates is coming soon. Previous versions had WebSocket support
+via OkHttp, but this library has switched to using Java's native `HttpClient` and WebSocket support is still a WIP.
 
 # Modules
 
@@ -166,7 +166,7 @@ public class Launcher {
         System.out.println("Closing Apple order: " + closingOrder);
 
         // Wait for closing trade to fill. For this example, we're sleeping, but in production,
-        // this should be done using polling or listening to the trade updates stream.
+        // this should be done using polling or listening to the trade updates stream
         sleep(ofSeconds(10));
 
         // Print out the PnL of our Apple trade
