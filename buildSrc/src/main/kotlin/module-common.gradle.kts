@@ -74,16 +74,20 @@ tasks.withType(Javadoc::class).configureEach {
                 "https://guava.dev/releases/$guavaVersion/api/docs/",
                 "https://errorprone.info/api/latest/")
     }
-    project.configurations.flatMap { it.dependencies.withType(ProjectDependency::class) }.forEach {
-        project(it.path).tasks.withType(Javadoc::class).forEach { dependencyJavadocTask ->
-            this@configureEach.dependsOn(dependencyJavadocTask)
-            this@configureEach.options {
-                (this as StandardJavadocDocletOptions).linksOffline(
-                        "https://javadoc.io/doc/${it.group}/${it.name}/${it.version}/",
-                        dependencyJavadocTask.destinationDir!!.path)
+    project.configurations
+            .flatMap { it.dependencies.withType(ProjectDependency::class) }
+            .map { project(it.path) }
+            .filter { it != this@configureEach.project }
+            .forEach {
+                it.tasks.withType(Javadoc::class).forEach { dependencyJavadocTask ->
+                    this@configureEach.dependsOn(dependencyJavadocTask)
+                    this@configureEach.options {
+                        (this as StandardJavadocDocletOptions).linksOffline(
+                                "https://javadoc.io/doc/${it.group}/${it.name}/${it.version}/",
+                                dependencyJavadocTask.destinationDir!!.path)
+                    }
+                }
             }
-        }
-    }
 }
 
 publishing {
