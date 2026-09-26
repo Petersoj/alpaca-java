@@ -11,9 +11,9 @@
     <img src="https://img.shields.io/badge/GitHub_Discussions-royalblue?logo=github" alt="GitHub Discussions"></a>
     <br>
     <a href="https://central.sonatype.com/search?namespace=net.jacobpeterson.alpaca-java">
-    <img src="https://img.shields.io/badge/Maven_Central-11.0.0--pre.0-blue?logo=apachemaven" alt="Maven Central"></a>
+    <img src="https://img.shields.io/badge/Maven_Central-11.0.0--pre.1-blue?logo=apachemaven" alt="Maven Central"></a>
     <a href="https://javadoc.io/doc/net.jacobpeterson.alpaca-java">
-    <img src="https://img.shields.io/badge/javadoc-11.0.0--pre.0-brightgreen" alt="javadoc"></a>
+    <img src="https://img.shields.io/badge/javadoc-11.0.0--pre.1-brightgreen" alt="javadoc"></a>
     <br>
     <a href="https://openjdk.org/projects/jdk/25">
     <img src="https://img.shields.io/badge/Java_Version-25-orange?logo=java" alt="Java Version"></a>
@@ -98,7 +98,7 @@ For `build.gradle.kts`:
 
 ```kotlin
 dependencies {
-    implementation("net.jacobpeterson.alpaca-java:trading:11.0.0-pre.0")
+    implementation("net.jacobpeterson.alpaca-java:trading:11.0.0-pre.1")
 }
 ```
 
@@ -106,7 +106,7 @@ For `build.gradle`:
 
 ```groovy
 dependencies {
-    implementation 'net.jacobpeterson.alpaca-java:trading:11.0.0-pre.0'
+    implementation 'net.jacobpeterson.alpaca-java:trading:11.0.0-pre.1'
 }
 ```
 
@@ -116,7 +116,7 @@ For `pom.xml`:
 <dependency>
     <groupId>net.jacobpeterson.alpaca-java</groupId>
     <artifactId>trading</artifactId>
-    <version>11.0.0-pre.0</version>
+    <version>11.0.0-pre.1</version>
 </dependency>
 ```
 
@@ -193,7 +193,7 @@ For `build.gradle.kts`:
 
 ```kotlin
 dependencies {
-    implementation("net.jacobpeterson.alpaca-java:market-data:11.0.0-pre.0")
+    implementation("net.jacobpeterson.alpaca-java:market-data:11.0.0-pre.1")
 }
 ```
 
@@ -201,7 +201,7 @@ For `build.gradle`:
 
 ```groovy
 dependencies {
-    implementation 'net.jacobpeterson.alpaca-java:market-data:11.0.0-pre.0'
+    implementation 'net.jacobpeterson.alpaca-java:market-data:11.0.0-pre.1'
 }
 ```
 
@@ -211,7 +211,7 @@ For `pom.xml`:
 <dependency>
     <groupId>net.jacobpeterson.alpaca-java</groupId>
     <artifactId>market-data</artifactId>
-    <version>11.0.0-pre.0</version>
+    <version>11.0.0-pre.1</version>
 </dependency>
 ```
 
@@ -257,7 +257,7 @@ For `build.gradle.kts`:
 
 ```kotlin
 dependencies {
-    implementation("net.jacobpeterson.alpaca-java:broker:11.0.0-pre.0")
+    implementation("net.jacobpeterson.alpaca-java:broker:11.0.0-pre.1")
 }
 ```
 
@@ -265,7 +265,7 @@ For `build.gradle`:
 
 ```groovy
 dependencies {
-    implementation 'net.jacobpeterson.alpaca-java:broker:11.0.0-pre.0'
+    implementation 'net.jacobpeterson.alpaca-java:broker:11.0.0-pre.1'
 }
 ```
 
@@ -275,7 +275,7 @@ For `pom.xml`:
 <dependency>
     <groupId>net.jacobpeterson.alpaca-java</groupId>
     <artifactId>broker</artifactId>
-    <version>11.0.0-pre.0</version>
+    <version>11.0.0-pre.1</version>
 </dependency>
 ```
 
