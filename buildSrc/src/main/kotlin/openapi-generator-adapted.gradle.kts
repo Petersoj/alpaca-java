@@ -8,7 +8,7 @@ plugins {
     id("org.openapi.generator")
 }
 
-val jacksonVersion = "3.2.0"
+val jacksonVersion = "3.2.3"
 val jacksonAnnotationsVersion = "2.22"
 
 dependencies {
@@ -165,7 +165,7 @@ tasks.openApiGenerate.configure {
         outputPackageDirectory.resolve("ApiResponse.java").apply {
             writeText(readText().replace("Map<String, List<String>>", "java.net.http.HttpHeaders"))
         }
-        val apiClassNamesOfMethodNames = outputPackageDirectory.resolve(apiPackageName).list()
+        val apiClassNamesOfMethodNames = outputPackageDirectory.resolve(apiPackageName).list()!!
                 .map { it.replace(".java", "") }
                 .associateBy { UPPER_CAMEL.to(LOWER_CAMEL, it.substring(0, it.length - 3)) }
         val className = "${LOWER_HYPHEN.to(UPPER_CAMEL, projectName)}Api"
@@ -322,8 +322,7 @@ sourceSets {
 tasks.withType(Javadoc::class).configureEach {
     options {
         (this as StandardJavadocDocletOptions).links(
-                // TODO uncomment once Jackson Core published Javadoc artifact is fixed
-                // "https://javadoc.io/doc/tools.jackson.core/jackson-core/$jacksonVersion",
+                "https://javadoc.io/doc/tools.jackson.core/jackson-core/$jacksonVersion",
                 "https://javadoc.io/doc/tools.jackson.core/jackson-databind/$jacksonVersion",
                 "https://javadoc.io/doc/com.fasterxml.jackson.core/jackson-annotations/$jacksonAnnotationsVersion")
     }

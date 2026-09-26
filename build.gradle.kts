@@ -3,7 +3,7 @@ import org.jreleaser.model.Active.NEVER
 
 plugins {
     java
-    id("org.jreleaser") version "1.24.0"
+    id("org.jreleaser") version "1.26.0"
 }
 
 group = PROJECT_GROUP
